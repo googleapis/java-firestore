@@ -16,14 +16,19 @@
 
 package com.google.cloud.firestore.it;
 
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_BULK_WRITER_COMMIT;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.google.api.gax.rpc.NotFoundException;
+import com.google.cloud.firestore.BulkWriter;
+import com.google.cloud.firestore.BulkWriterOptions;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.opentelemetry.trace.TraceConfiguration;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.cloud.trace.v1.TraceServiceClient;
@@ -44,8 +49,11 @@ import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,6 +69,10 @@ import org.junit.runners.JUnit4;
 public class ITE2ETracingTest extends ITBaseTest {
 
   private static final Logger logger = Logger.getLogger(ITBaseTest.class.getName());
+
+  private static final String SERVICE = "google.firestore.v1.Firestore/";
+
+  private static final String BATCH_WRITE_RPC_NAME = "BatchWrite";
 
   private static final int NUM_TRACE_ID_BYTES = 32;
 
@@ -82,7 +94,10 @@ public class ITE2ETracingTest extends ITBaseTest {
   // Required for reading back traces from Cloud Trace for validation
   private static TraceServiceClient traceClient_v1;
 
-  // Trace received
+  // Custom SpanContext for each test, required for TraceID injection
+  private static SpanContext customSpanContext;
+
+  // Trace read back from Cloud Trace using traceClient_v1 for verification
   private static Trace retrievedTrace;
 
   private static String rootSpanName;
@@ -151,6 +166,10 @@ public class ITE2ETracingTest extends ITBaseTest {
         String.format("%s%d", this.getClass().getSimpleName(), System.currentTimeMillis());
     tracer =
         firestore.getOptions().getOpenTelemetryOptions().getOpenTelemetry().getTracer(rootSpanName);
+
+    // Get up a new SpanContext (ergo TraceId) for each test
+    customSpanContext = getNewSpanContext();
+    assertNotNull(customSpanContext);
     assertNull(retrievedTrace);
   }
 
@@ -159,14 +178,16 @@ public class ITE2ETracingTest extends ITBaseTest {
     rootSpanName = null;
     tracer = null;
     retrievedTrace = null;
+    customSpanContext = null;
   }
 
   @AfterClass
-  public static void teardown() {
+  public static void teardown() throws Exception {
     traceClient_v1.close();
     CompletableResultCode completableResultCode =
         openTelemetrySdk.getSdkTracerProvider().shutdown();
     completableResultCode.join(TRACE_PROVIDER_SHUTDOWN_MILLIS, TimeUnit.MILLISECONDS);
+    firestore.close();
     firestore.shutdown();
   }
 
@@ -216,22 +237,22 @@ public class ITE2ETracingTest extends ITBaseTest {
     return SpanContext.create(traceId, spanId, TraceFlags.getSampled(), TraceState.getDefault());
   }
 
-  protected Span getNewRootSpanWithContext(SpanContext spanContext) {
+  protected Span getNewRootSpanWithContext() {
     // Execute the DB operation in the context of the custom root span.
     return tracer.spanBuilder(rootSpanName)
-        .setParent(Context.root().with(Span.wrap(spanContext)))
+        .setParent(Context.root().with(Span.wrap(customSpanContext)))
         .startSpan();
   }
 
+  protected String grpcSpanName(String rpcName) {
+    return "Sent." + SERVICE + rpcName;
+  }
+
   protected void waitForTracesToComplete() throws Exception {
+    logger.info("Flushing traces...");
     CompletableResultCode completableResultCode =
         openTelemetrySdk.getSdkTracerProvider().forceFlush();
     completableResultCode.join(TRACE_FORCE_FLUSH_MILLIS, TimeUnit.MILLISECONDS);
-
-    // We need to call `firestore.close()` because that will also close the
-    // gRPC channel and hence force the gRPC instrumentation library to flush
-    // its spans.
-    firestore.close();
   }
 
   // Validates `retrievedTrace`
@@ -245,19 +266,20 @@ public class ITE2ETracingTest extends ITBaseTest {
     assertEquals(retrievedTrace.getTraceId(), traceId);
     assertEquals(retrievedTrace.getSpans(0).getName(), rootSpanName);
     for (int i = 0; i < spanNameList.size() ; ++i) {
-      assertEquals(retrievedTrace.getSpans(i+1).getName(), spanNameList.get(i));
+      assertEquals(spanNameList.get(i), retrievedTrace.getSpans(i+1).getName());
     }
   }
 
   @Test
   // Trace an Aggregation.Get request
-  public void aggregateQueryGet() throws Exception {
-    // Create custom span context for trace ID injection
-    SpanContext newCtx = getNewSpanContext();
+  public void aggregateQueryGetTraceTest() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
 
     // Inject new trace ID
-    Span rootSpan = getNewRootSpanWithContext(newCtx);
+    Span rootSpan = getNewRootSpanWithContext();
     try (Scope ss = rootSpan.makeCurrent()) {
+      // Execute the Firestore SDK op
       firestore.collection("col").count().get().get();
     } finally {
       rootSpan.end();
@@ -265,14 +287,40 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(newCtx.getTraceId(), "AggregationQuery.Get");
+    fetchAndValidateTraces(customSpanContext.getTraceId(), "AggregationQuery.Get");
   }
 
-  public void bulkWriterCommit() throws Exception {
+  @Test
+  public void bulkWriterCommitTraceTest() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      // Execute the Firestore SDK op
+      ScheduledExecutorService bulkWriterExecutor = Executors.newSingleThreadScheduledExecutor();
+      BulkWriter bulkWriter =
+          firestore.bulkWriter(BulkWriterOptions.builder().setExecutor(bulkWriterExecutor).build());
+      bulkWriter.set(
+          firestore.collection("col").document("foo"),
+          Collections.singletonMap("bulk-foo", "bulk-bar"));
+      bulkWriter.close();
+      bulkWriterExecutor.awaitTermination(100, TimeUnit.MILLISECONDS);
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(customSpanContext.getTraceId(),
+        SPAN_NAME_BULK_WRITER_COMMIT,
+        grpcSpanName(BATCH_WRITE_RPC_NAME));
   }
 
   @Test
   public void partitionQuery() throws Exception {
+
   }
 
   @Test
