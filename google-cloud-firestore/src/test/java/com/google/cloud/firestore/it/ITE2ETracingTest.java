@@ -57,8 +57,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ITE2ETracingTest extends ITBaseTest {
 
-  private static final Logger logger =
-      Logger.getLogger(ITBaseTest.class.getName());
+  private static final Logger logger = Logger.getLogger(ITBaseTest.class.getName());
 
   private static final int NUM_TRACE_ID_BYTES = 32;
 
@@ -100,16 +99,19 @@ public class ITE2ETracingTest extends ITBaseTest {
         Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
 
     // TODO(jimit) Make it re-usable w/ InMemorySpanExporter
-    traceExporter = TraceExporter.createWithConfiguration(
-        TraceConfiguration.builder().setProjectId(projectId).build());
+    traceExporter =
+        TraceExporter.createWithConfiguration(
+            TraceConfiguration.builder().setProjectId(projectId).build());
 
-    openTelemetrySdk = OpenTelemetrySdk.builder()
-        .setTracerProvider(
-            SdkTracerProvider.builder()
-                .setResource(resource)
-                .addSpanProcessor(BatchSpanProcessor.builder(traceExporter).build())
-                .setSampler(Sampler.alwaysOn())
-                .build()).build();
+    openTelemetrySdk =
+        OpenTelemetrySdk.builder()
+            .setTracerProvider(
+                SdkTracerProvider.builder()
+                    .setResource(resource)
+                    .addSpanProcessor(BatchSpanProcessor.builder(traceExporter).build())
+                    .setSampler(Sampler.alwaysOn())
+                    .build())
+            .build();
 
     traceClient_v1 = TraceServiceClient.create();
 
@@ -119,7 +121,8 @@ public class ITE2ETracingTest extends ITBaseTest {
             .setOpenTelemetryOptions(
                 FirestoreOpenTelemetryOptions.newBuilder()
                     .setOpenTelemetry(openTelemetrySdk)
-                    .setTracingEnabled(true).build());
+                    .setTracingEnabled(true)
+                    .build());
 
     String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
     if (namedDb != null) {
@@ -131,10 +134,11 @@ public class ITE2ETracingTest extends ITBaseTest {
     firestore = optionsBuilder.build().getService();
     Preconditions.checkNotNull(
         firestore,
-        "Error instantiating Firestore. Check that the service account credentials " +
-            "were properly set.");
+        "Error instantiating Firestore. Check that the service account credentials "
+            + "were properly set.");
     random = new Random();
   }
+
   @Before
   public void before() throws Exception {
     rootSpanName =
@@ -201,11 +205,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     String spanId = generateNewSpanId();
     logger.info("traceId=" + traceId + ", spanId=" + spanId);
 
-    return SpanContext.create(
-        traceId,
-        spanId,
-        TraceFlags.getSampled(),
-        TraceState.getDefault());
+    return SpanContext.create(traceId, spanId, TraceFlags.getSampled(), TraceState.getDefault());
   }
 
   protected void waitForTracesToComplete() throws Exception {
@@ -225,9 +225,11 @@ public class ITE2ETracingTest extends ITBaseTest {
     SpanContext newCtx = getNewSpanContext();
 
     // Execute the DB operation in the context of the custom root span.
-    Span rootSpan = tracer.spanBuilder(rootSpanName)
-        .setParent(Context.root().with(Span.wrap(newCtx)))
-        .startSpan();
+    Span rootSpan =
+        tracer
+            .spanBuilder(rootSpanName)
+            .setParent(Context.root().with(Span.wrap(newCtx)))
+            .startSpan();
     try (Scope ss = rootSpan.makeCurrent()) {
       firestore.collection("col").count().get().get();
     } finally {
@@ -240,7 +242,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     String traceId = newCtx.getTraceId();
     Trace t = getTraceWithRetry(projectId, traceId);
     assertEquals(t.getTraceId(), traceId);
-    assertEquals(t.getSpans(0).getName(),rootSpanName);
+    assertEquals(t.getSpans(0).getName(), rootSpanName);
     assertEquals(t.getSpans(1).getName(), "AggregationQuery.Get");
   }
 }
