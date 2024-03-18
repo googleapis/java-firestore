@@ -18,7 +18,6 @@ package com.google.cloud.firestore.it;
 
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import com.google.api.gax.rpc.NotFoundException;
 import com.google.cloud.firestore.Firestore;
@@ -29,7 +28,6 @@ import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.cloud.trace.v1.TraceServiceClient;
 import com.google.common.base.Preconditions;
 import com.google.devtools.cloudtrace.v1.Trace;
-import com.google.devtools.cloudtrace.v1.TraceSpan;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanContext;
 import io.opentelemetry.api.trace.TraceFlags;
@@ -71,6 +69,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   private static final int GET_TRACE_RETRY_BACKOFF_MILLIS = 1000;
 
   private static final int TRACE_FORCE_FLUSH_MILLIS = 1000;
+
   private static final int TRACE_PROVIDER_SHUTDOWN_MILLIS = 1000;
 
   // Random int generator for trace ID and span ID
