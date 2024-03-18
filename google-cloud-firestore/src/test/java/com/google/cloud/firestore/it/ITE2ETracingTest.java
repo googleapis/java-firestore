@@ -18,7 +18,6 @@ package com.google.cloud.firestore.it;
 
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import com.google.api.gax.rpc.NotFoundException;
 import com.google.cloud.firestore.Firestore;
@@ -29,7 +28,6 @@ import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.cloud.trace.v1.TraceServiceClient;
 import com.google.common.base.Preconditions;
 import com.google.devtools.cloudtrace.v1.Trace;
-import com.google.devtools.cloudtrace.v1.TraceSpan;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanContext;
 import io.opentelemetry.api.trace.TraceFlags;
@@ -57,23 +55,21 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class ITE2ETracingTest {
+public class ITE2ETracingTest extends ITBaseTest {
 
   private static final Logger logger =
       Logger.getLogger(ITBaseTest.class.getName());
-
-  // TODO(jimit) Generalize project ID, accept from config
-  private static final String PROJECT_ID = "jimit-test";
 
   private static final int NUM_TRACE_ID_BYTES = 32;
 
   private static final int NUM_SPAN_ID_BYTES = 16;
 
-  private static final int GET_TRACE_RETRY_COUNT = 5;
+  private static final int GET_TRACE_RETRY_COUNT = 10;
 
   private static final int GET_TRACE_RETRY_BACKOFF_MILLIS = 1000;
 
   private static final int TRACE_FORCE_FLUSH_MILLIS = 1000;
+
   private static final int TRACE_PROVIDER_SHUTDOWN_MILLIS = 1000;
 
   // Random int generator for trace ID and span ID
@@ -90,17 +86,22 @@ public class ITE2ETracingTest {
   // Required to set custom-root span
   private static OpenTelemetrySdk openTelemetrySdk;
 
+  private static String projectId;
+
   private static Firestore firestore;
 
   @BeforeClass
   public static void setup() throws IOException {
+    projectId = FirestoreOptions.getDefaultProjectId();
+    logger.info("projectId:" + projectId);
+
     // Set up OTel SDK
     Resource resource =
         Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
 
     // TODO(jimit) Make it re-usable w/ InMemorySpanExporter
     traceExporter = TraceExporter.createWithConfiguration(
-        TraceConfiguration.builder().setProjectId(PROJECT_ID).build());
+        TraceConfiguration.builder().setProjectId(projectId).build());
 
     openTelemetrySdk = OpenTelemetrySdk.builder()
         .setTracerProvider(
@@ -151,6 +152,9 @@ public class ITE2ETracingTest {
   @AfterClass
   public static void teardown() {
     traceClient_v1.close();
+    CompletableResultCode completableResultCode =
+        openTelemetrySdk.getSdkTracerProvider().shutdown();
+    completableResultCode.join(TRACE_PROVIDER_SHUTDOWN_MILLIS, TimeUnit.MILLISECONDS);
     firestore.shutdown();
   }
 
@@ -234,7 +238,7 @@ public class ITE2ETracingTest {
     waitForTracesToComplete();
 
     String traceId = newCtx.getTraceId();
-    Trace t = getTraceWithRetry(PROJECT_ID, traceId);
+    Trace t = getTraceWithRetry(projectId, traceId);
     assertEquals(t.getTraceId(), traceId);
     assertEquals(t.getSpans(0).getName(),rootSpanName);
     assertEquals(t.getSpans(1).getName(), "AggregationQuery.Get");
