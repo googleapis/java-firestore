@@ -16,14 +16,18 @@
 
 package com.google.cloud.firestore.it;
 
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_BULK_WRITER_COMMIT;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.google.api.gax.rpc.NotFoundException;
+import com.google.cloud.firestore.BulkWriter;
+import com.google.cloud.firestore.BulkWriterOptions;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.opentelemetry.trace.TraceConfiguration;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.cloud.trace.v1.TraceServiceClient;
@@ -44,8 +48,11 @@ import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,6 +68,10 @@ import org.junit.runners.JUnit4;
 public class ITE2ETracingTest extends ITBaseTest {
 
   private static final Logger logger = Logger.getLogger(ITBaseTest.class.getName());
+
+  private static final String SERVICE = "google.firestore.v1.Firestore/";
+
+  private static final String BATCH_WRITE_RPC_NAME = "BatchWrite";
 
   private static final int NUM_TRACE_ID_BYTES = 32;
 
@@ -223,6 +234,10 @@ public class ITE2ETracingTest extends ITBaseTest {
         .startSpan();
   }
 
+  protected String grpcSpanName(String rpcName) {
+    return "Sent." + SERVICE + rpcName;
+  }
+
   protected void waitForTracesToComplete() throws Exception {
     CompletableResultCode completableResultCode =
         openTelemetrySdk.getSdkTracerProvider().forceFlush();
@@ -245,13 +260,13 @@ public class ITE2ETracingTest extends ITBaseTest {
     assertEquals(retrievedTrace.getTraceId(), traceId);
     assertEquals(retrievedTrace.getSpans(0).getName(), rootSpanName);
     for (int i = 0; i < spanNameList.size() ; ++i) {
-      assertEquals(retrievedTrace.getSpans(i+1).getName(), spanNameList.get(i));
+      assertEquals(spanNameList.get(i), retrievedTrace.getSpans(i+1).getName());
     }
   }
 
   @Test
   // Trace an Aggregation.Get request
-  public void aggregateQueryGet() throws Exception {
+  public void aggregateQueryGetTraceTest() throws Exception {
     // Create custom span context for trace ID injection
     SpanContext newCtx = getNewSpanContext();
 
@@ -268,7 +283,31 @@ public class ITE2ETracingTest extends ITBaseTest {
     fetchAndValidateTraces(newCtx.getTraceId(), "AggregationQuery.Get");
   }
 
-  public void bulkWriterCommit() throws Exception {
+  @Test
+  public void bulkWriterCommitTraceTest() throws Exception {
+    // Create custom span context for trace ID injection
+    SpanContext newCtx = getNewSpanContext();
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext(newCtx);
+    try (Scope ss = rootSpan.makeCurrent()) {
+      ScheduledExecutorService bulkWriterExecutor = Executors.newSingleThreadScheduledExecutor();
+      BulkWriter bulkWriter =
+          firestore.bulkWriter(BulkWriterOptions.builder().setExecutor(bulkWriterExecutor).build());
+      bulkWriter.set(
+          firestore.collection("col").document("foo"),
+          Collections.singletonMap("bulk-foo", "bulk-bar"));
+      bulkWriter.close();
+      bulkWriterExecutor.awaitTermination(100, TimeUnit.MILLISECONDS);
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(newCtx.getTraceId(),
+        SPAN_NAME_BULK_WRITER_COMMIT,
+        grpcSpanName(BATCH_WRITE_RPC_NAME));
   }
 
   @Test
