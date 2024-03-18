@@ -245,6 +245,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                   .currentSpan()
                   .addEvent(TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": First response received");
             } else if (numResponses % 100 == 0) {
+              // To reduce the size of traces, we only register one event for every 100 responses
+              // that we receive.
               getTraceUtil()
                   .currentSpan()
                   .addEvent(TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": Received 100 responses");

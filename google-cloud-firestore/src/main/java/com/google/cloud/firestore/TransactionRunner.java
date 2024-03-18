@@ -205,7 +205,9 @@ class TransactionRunner<T> {
     ApiException apiException = (ApiException) throwable;
     if (transaction.hasTransactionId() && isRetryableTransactionError(apiException)) {
       if (attemptsRemaining > 0) {
-        getTraceUtil().currentSpan().addEvent("Initiate transaction retry");
+        getTraceUtil()
+            .currentSpan()
+            .addEvent("Initiating transaction retry. Attempts remaining: " + attemptsRemaining);
         return run();
       } else {
         final FirestoreException firestoreException =

@@ -263,7 +263,7 @@ public class ITTracingTest {
     List<EventData> events = spanData.getEvents();
     for (EventData event : events) {
       if (event.getName().equals(eventName)) {
-        if (expectedAttributes == null || expectedAttributes.isEmpty()) {
+        if (expectedAttributes == null) {
           return true;
         }
 
