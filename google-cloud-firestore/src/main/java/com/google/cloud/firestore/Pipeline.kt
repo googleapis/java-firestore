@@ -8,7 +8,6 @@ import com.google.cloud.firestore.pipeline.Collection
 import com.google.cloud.firestore.pipeline.CollectionGroup
 import com.google.cloud.firestore.pipeline.Database
 import com.google.cloud.firestore.pipeline.Expr
-import com.google.cloud.firestore.pipeline.Expr.AllFields
 import com.google.cloud.firestore.pipeline.Expr.Field
 import com.google.cloud.firestore.pipeline.Fields
 import com.google.cloud.firestore.pipeline.Filter
@@ -25,7 +24,8 @@ import com.google.cloud.firestore.pipeline.Projectable
 import com.google.cloud.firestore.pipeline.RemoveFields
 import com.google.cloud.firestore.pipeline.Sort
 import com.google.cloud.firestore.pipeline.UnionWith
-import com.google.cloud.firestore.pipeline.Unnest
+import com.google.cloud.firestore.pipeline.UnnestArray
+import com.google.cloud.firestore.pipeline.UnnestMap
 
 class GroupingPipeline internal constructor(val p: Pipeline, vararg val by: Projectable) {
   fun aggregate(vararg aggregator: Expr.AggregatorTarget): Pipeline {
@@ -305,8 +305,13 @@ class Pipeline {
     return this
   }
 
-  fun unnest(field: Field, mode: Unnest.Mode = Unnest.Mode.FULL_REPLACE): Pipeline {
-    operations.add(Unnest(mode, field))
+  fun unnestMap(field: Field, mode: UnnestMap.Mode = UnnestMap.Mode.FULL_REPLACE): Pipeline {
+    operations.add(UnnestMap(mode, field))
+    return this
+  }
+
+  fun unnestArray(field: Field): Pipeline {
+    operations.add(UnnestArray(field))
     return this
   }
 

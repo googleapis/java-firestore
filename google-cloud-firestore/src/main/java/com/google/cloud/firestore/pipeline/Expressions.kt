@@ -33,6 +33,11 @@ sealed interface Expr {
       }
 
       @JvmStatic
+      fun of(value: Any): Constant {
+        return Constant(value)
+      }
+
+      @JvmStatic
       fun <T> ofArray(value: Iterable<T>): Constant {
         return Constant(value)
       }
@@ -51,6 +56,8 @@ sealed interface Expr {
 
   data class Field(val field: String, var pipeline: Pipeline? = null) : Expr, Projectable {
     companion object {
+      const val DOCUMENT_ID: String = "__path__"
+
       @JvmStatic
       fun of(path: String): Field {
         return Field(path)
@@ -83,15 +90,24 @@ sealed interface Expr {
 
   data class ExprAsAlias(val current: Expr, val alias: String) : Expr, Projectable
 
-  data class AggregatorTarget(val current: Function.Accumulator, val target: String) : Expr,
-                                                                                       Projectable,
-                                                                                       Function.Accumulator
+  data class AggregatorTarget(val current: Function.Accumulator, val target: String,
+                              override var distinct: Boolean
+  ) : Expr,
+      Projectable,
+      Function.Accumulator
 
   sealed class Function(val name: String, val params: Map<String, Expr>?) : Expr {
     interface FilterCondition
 
     interface Accumulator {
-      fun toField(target: String) = AggregatorTarget(this, target)
+      var distinct: Boolean
+
+      fun distinct(on: Boolean): Accumulator {
+        this.distinct = on
+        return this
+      }
+
+      fun toField(target: String) = AggregatorTarget(this, target, this.distinct)
     }
 
     data class Equal internal constructor(val left: Expr, val right: Expr) :
@@ -151,14 +167,15 @@ sealed interface Expr {
     data class IsNull(val value: Expr) : Function("is_null", mapOf("value" to value)),
                                          FilterCondition
 
-    data class Sum(val value: Expr) : Function("sum", mapOf("value" to value)), Accumulator
-    data class Avg(val value: Expr) : Function("avg", mapOf("value" to value)), Accumulator
-    data class Count(val value: Expr) : Function("count", mapOf("value" to value)), Accumulator
+    data class Sum(val value: Expr, override var distinct: Boolean) : Function("sum", mapOf("value" to value)), Accumulator
+    data class Avg(val value: Expr, override var distinct: Boolean) : Function("avg", mapOf("value" to value)), Accumulator
+    data class Count(val value: Expr, override var distinct: Boolean) : Function("count", mapOf("value" to value)), Accumulator
 
     // String manipulation
     data class Concat(val value: List<Expr>) : Function("concat", mapOf("value" to ListOfExprs(value)))
     data class Trim(val value: Expr) : Function("trim", mapOf("value" to value))
     data class ToLower(val value: Expr) : Function("toLower", mapOf("value" to value))
+    data class StartWith(val value: Expr, val query: Expr) : Function("startWith", mapOf("value" to value)), FilterCondition
 
     data class CosineDistance(val vector1: Expr, val vector2: Expr) :
       Function("cosine_distance", mapOf("vector1" to vector1, "vector2" to vector2))
@@ -190,13 +207,15 @@ sealed interface Expr {
   fun arrayContainsAny(vararg elements: Expr) = Function.ArrayContainsAny(this, elements.toList())
   fun isNaN() = Function.IsNaN(this)
   fun isNull() = Function.IsNull(this)
-  fun sum() = Function.Sum(this)
-  fun avg() = Function.Avg(this)
-  fun count() = Function.Count(this)
+  fun sum() = Function.Sum(this, false)
+  fun avg() = Function.Avg(this, false)
+  fun count() = Function.Count(this, false)
 
   fun concatWith(vararg expr: Expr) = Function.Concat(listOf(this) + expr.toList())
-  fun toLower() = Function.Count(this)
-  fun trim() = Function.Count(this)
+  fun toLower() = Function.ToLower(this)
+  fun trim() = Function.Trim(this)
+
+  fun startsWith(expr: Expr) = Function.StartWith(this, expr)
 
   infix fun cosineDistance(other: Expr) = Function.CosineDistance(this, other)
   infix fun cosineDistance(other: DoubleArray) =
@@ -292,13 +311,13 @@ sealed interface Expr {
     fun not(expr: Expr) = Function.Not(expr)
 
     @JvmStatic
-    fun sum(expr: Expr) = Function.Sum(expr)
+    fun sum(expr: Expr) = Function.Sum(expr, false)
 
     @JvmStatic
-    fun avg(expr: Expr) = Function.Avg(expr)
+    fun avg(expr: Expr) = Function.Avg(expr, false)
 
     @JvmStatic
-    fun count(expr: Expr) = Function.Count(expr)
+    fun count(expr: Expr) = Function.Count(expr, false)
 
     @JvmStatic
     fun concat(vararg expr: Expr) = Function.Concat(expr.toList())
@@ -306,6 +325,9 @@ sealed interface Expr {
     fun trim(expr: Expr) = Function.Trim(expr)
     @JvmStatic
     fun toLower(expr: Expr) = Function.ToLower(expr)
+
+    @JvmStatic
+    fun startWith(left: Expr, right: Expr) = Function.StartWith(left, right)
 
     @JvmStatic
     fun cosineDistance(expr: Expr, other: Expr) = Function.CosineDistance(expr, other)

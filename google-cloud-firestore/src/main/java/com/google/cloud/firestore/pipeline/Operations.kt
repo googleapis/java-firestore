@@ -122,13 +122,15 @@ data class Sort(
   }
 }
 
-data class Unnest(val mode: Mode, val field: Expr.Field) : Operation {
+data class UnnestMap(val mode: Mode, val field: Expr.Field) : Operation {
   enum class Mode {
     FULL_REPLACE,
     MERGE_PREFER_NEST,
     MERGE_PREFER_PARENT;
   }
 }
+
+data class UnnestArray(val field: Expr.Field) : Operation
 
 data class GenericOperation(val name: String, val params: Map<String, Any>?) : Operation
 
