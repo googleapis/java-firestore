@@ -18,6 +18,7 @@ package com.google.cloud.firestore.it;
 
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import com.google.api.gax.rpc.NotFoundException;
 import com.google.cloud.firestore.Firestore;
@@ -42,6 +43,8 @@ import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -78,6 +81,9 @@ public class ITE2ETracingTest extends ITBaseTest {
 
   // Required for reading back traces from Cloud Trace for validation
   private static TraceServiceClient traceClient_v1;
+
+  // Trace received
+  private static Trace retrievedTrace;
 
   private static String rootSpanName;
   private static Tracer tracer;
@@ -145,12 +151,14 @@ public class ITE2ETracingTest extends ITBaseTest {
         String.format("%s%d", this.getClass().getSimpleName(), System.currentTimeMillis());
     tracer =
         firestore.getOptions().getOpenTelemetryOptions().getOpenTelemetry().getTracer(rootSpanName);
+    assertNull(retrievedTrace);
   }
 
   @After
   public void after() throws Exception {
     rootSpanName = null;
     tracer = null;
+    retrievedTrace = null;
   }
 
   @AfterClass
@@ -208,6 +216,13 @@ public class ITE2ETracingTest extends ITBaseTest {
     return SpanContext.create(traceId, spanId, TraceFlags.getSampled(), TraceState.getDefault());
   }
 
+  protected Span getNewRootSpanWithContext(SpanContext spanContext) {
+    // Execute the DB operation in the context of the custom root span.
+    return tracer.spanBuilder(rootSpanName)
+        .setParent(Context.root().with(Span.wrap(spanContext)))
+        .startSpan();
+  }
+
   protected void waitForTracesToComplete() throws Exception {
     CompletableResultCode completableResultCode =
         openTelemetrySdk.getSdkTracerProvider().forceFlush();
@@ -219,30 +234,114 @@ public class ITE2ETracingTest extends ITBaseTest {
     firestore.close();
   }
 
+  // Validates `retrievedTrace`
+  protected void fetchAndValidateTraces(String traceId, String... spanNames)
+      throws InterruptedException {
+    // Fetch traces
+    retrievedTrace = getTraceWithRetry(projectId, traceId);
+    List<String> spanNameList = Arrays.asList(spanNames);
+
+    // Validate trace spans
+    assertEquals(retrievedTrace.getTraceId(), traceId);
+    assertEquals(retrievedTrace.getSpans(0).getName(), rootSpanName);
+    for (int i = 0; i < spanNameList.size() ; ++i) {
+      assertEquals(retrievedTrace.getSpans(i+1).getName(), spanNameList.get(i));
+    }
+  }
+
   @Test
   // Trace an Aggregation.Get request
-  public void basicTraceTestWithCustomRootSpan() throws Exception {
+  public void aggregateQueryGet() throws Exception {
+    // Create custom span context for trace ID injection
     SpanContext newCtx = getNewSpanContext();
 
-    // Execute the DB operation in the context of the custom root span.
-    Span rootSpan =
-        tracer
-            .spanBuilder(rootSpanName)
-            .setParent(Context.root().with(Span.wrap(newCtx)))
-            .startSpan();
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext(newCtx);
     try (Scope ss = rootSpan.makeCurrent()) {
       firestore.collection("col").count().get().get();
     } finally {
       rootSpan.end();
     }
-
-    // Ingest traces to Cloud Trace
     waitForTracesToComplete();
 
-    String traceId = newCtx.getTraceId();
-    Trace t = getTraceWithRetry(projectId, traceId);
-    assertEquals(t.getTraceId(), traceId);
-    assertEquals(t.getSpans(0).getName(), rootSpanName);
-    assertEquals(t.getSpans(1).getName(), "AggregationQuery.Get");
+    // Read and validate traces
+    fetchAndValidateTraces(newCtx.getTraceId(), "AggregationQuery.Get");
   }
+
+  public void bulkWriterCommit() throws Exception {
+  }
+
+  @Test
+  public void partitionQuery() throws Exception {
+  }
+
+  @Test
+  public void collectionListDocuments() throws Exception {
+  }
+
+  public void docRefCreate() throws Exception {
+  }
+
+  @Test
+  public void docRefCreate2() throws Exception {
+  }
+
+  @Test
+  public void docRefSet() throws Exception {}
+
+  @Test
+  public void docRefSet2() throws Exception {}
+
+  @Test
+  public void docRefSet3() throws Exception {}
+
+  public void docRefSet4() throws Exception {}
+
+  @Test
+  public void docRefUpdate() throws Exception {}
+
+  @Test
+  public void docRefUpdate2() throws Exception {}
+
+  @Test
+  public void docRefUpdate3() throws Exception {}
+
+  @Test
+  public void docRefUpdate4() throws Exception {}
+
+  @Test
+  public void docRefUpdate5() throws Exception {}
+
+  @Test
+  public void docRefUpdate6() throws Exception {}
+
+  @Test
+  public void docRefDelete() throws Exception {}
+
+  @Test
+  public void docRefDelete2() throws Exception {}
+
+  @Test
+  public void docRefGet() throws Exception {}
+
+  @Test
+  public void docRefGet2() throws Exception {}
+
+  @Test
+  public void docListCollections() throws Exception {}
+
+  @Test
+  public void getAll() throws Exception {}
+
+  @Test
+  public void queryGet() throws Exception {}
+
+  @Test
+  public void transaction() throws Exception {}
+
+  @Test
+  public void transactionRollback() throws Exception {}
+
+  @Test
+  public void writeBatch() throws Exception {}
 }
