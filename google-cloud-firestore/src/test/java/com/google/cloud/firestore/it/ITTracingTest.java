@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -56,7 +57,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ITTracingTest {
   private static final Logger logger =
-      Logger.getLogger(com.google.cloud.firestore.it.ITBaseTest.class.getName());
+      Logger.getLogger(com.google.cloud.firestore.it.ITTracingTest.class.getName());
 
   private static final String SERVICE = "google.firestore.v1.Firestore/";
   private static final String LIST_DOCUMENTS_RPC_NAME = "ListDocuments";
@@ -68,9 +69,9 @@ public class ITTracingTest {
 
   protected Firestore firestore;
 
-  HashMap<String, String> spanNameToSpanId = new HashMap<>();;
-  HashMap<String, String> spanIdToParentSpanId = new HashMap<>();;
-  HashMap<String, SpanData> spanNameToSpanData = new HashMap<>();;
+  Map<String, String> spanNameToSpanId = new HashMap<>();
+  Map<String, String> spanIdToParentSpanId = new HashMap<>();
+  Map<String, SpanData> spanNameToSpanData = new HashMap<>();
 
   @Rule public TestName testName = new TestName();
 
@@ -175,15 +176,17 @@ public class ITTracingTest {
   // Helper to see the spans in standard output while developing tests
   void printSpans() {
     for (SpanData spanData : spanNameToSpanData.values()) {
-      System.out.printf(
-          "SPAN ID:%s, ParentID:%s, KIND:%s, TRACE ID:%s, NAME:%s, ATTRIBUTES:%s, EVENTS:%s\n",
-          spanData.getSpanId(),
-          spanData.getParentSpanId(),
-          spanData.getKind(),
-          spanData.getTraceId(),
-          spanData.getName(),
-          spanData.getAttributes().toString(),
-          spanData.getEvents().toString());
+      logger.log(
+          Level.FINE,
+          String.format(
+              "SPAN ID:%s, ParentID:%s, KIND:%s, TRACE ID:%s, NAME:%s, ATTRIBUTES:%s, EVENTS:%s\n",
+              spanData.getSpanId(),
+              spanData.getParentSpanId(),
+              spanData.getKind(),
+              spanData.getTraceId(),
+              spanData.getName(),
+              spanData.getAttributes().toString(),
+              spanData.getEvents().toString()));
     }
   }
 
@@ -250,7 +253,6 @@ public class ITTracingTest {
     waitForTracesToComplete();
     List<SpanData> spans = inMemorySpanExporter.getFinishedSpanItems();
     buildSpanMaps(spans);
-    printSpans();
     assertEquals(2, spans.size());
     SpanData getSpan = getSpanByName(SPAN_NAME_AGGREGATION_QUERY_GET);
     SpanData grpcSpan = getGrpcSpanByName(SPAN_NAME_RUN_AGGREGATION_QUERY);
