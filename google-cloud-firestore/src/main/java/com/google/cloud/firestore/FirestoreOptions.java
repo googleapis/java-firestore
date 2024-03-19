@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
@@ -60,6 +61,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final TransportChannelProvider channelProvider;
   private final CredentialsProvider credentialsProvider;
   private final String emulatorHost;
+  private final @Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions;
 
   public static class DefaultFirestoreFactory implements FirestoreFactory {
 
@@ -118,12 +120,19 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return emulatorHost;
   }
 
+  @BetaApi
+  @Nonnull
+  public FirestoreOpenTelemetryOptions getOpenTelemetryOptions() {
+    return openTelemetryOptions;
+  }
+
   public static class Builder extends ServiceOptions.Builder<Firestore, FirestoreOptions, Builder> {
 
     @Nullable private String databaseId = null;
     @Nullable private TransportChannelProvider channelProvider = null;
     @Nullable private CredentialsProvider credentialsProvider = null;
     @Nullable private String emulatorHost = null;
+    @Nullable private FirestoreOpenTelemetryOptions openTelemetryOptions = null;
 
     private Builder() {}
 
@@ -133,6 +142,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
       this.channelProvider = options.channelProvider;
       this.credentialsProvider = options.credentialsProvider;
       this.emulatorHost = options.emulatorHost;
+      this.openTelemetryOptions = options.openTelemetryOptions;
     }
 
     /**
@@ -198,6 +208,19 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
      */
     public Builder setDatabaseId(@Nonnull String databaseId) {
       this.databaseId = databaseId;
+      return this;
+    }
+
+    /**
+     * Sets the {@link FirestoreOpenTelemetryOptions} to be used for this Firestore instance.
+     *
+     * @param openTelemetryOptions The `FirestoreOpenTelemetryOptions` to use.
+     */
+    @BetaApi
+    @Nonnull
+    public Builder setOpenTelemetryOptions(
+        @Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions) {
+      this.openTelemetryOptions = openTelemetryOptions;
       return this;
     }
 
@@ -277,6 +300,13 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   @InternalApi("This class should only be extended within google-cloud-java")
   protected FirestoreOptions(Builder builder) {
     super(FirestoreFactory.class, FirestoreRpcFactory.class, builder, new FirestoreDefaults());
+
+    // FirestoreOptions must contain non-null open-telemetry options.
+    // If the builder doesn't have any open-telemetry options, use a default (disabled) one.
+    this.openTelemetryOptions =
+        builder.openTelemetryOptions != null
+            ? builder.openTelemetryOptions
+            : FirestoreOpenTelemetryOptions.newBuilder().build();
 
     this.databaseId =
         builder.databaseId != null
