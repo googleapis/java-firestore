@@ -21,6 +21,7 @@ import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_BULK_WRIT
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_COL_REF_LIST_DOCUMENTS;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_CREATE;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_DELETE;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_GET;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_SET;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_UPDATE;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_PARTITION_QUERY;
@@ -33,6 +34,7 @@ import com.google.api.gax.rpc.NotFoundException;
 import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.BulkWriterOptions;
 import com.google.cloud.firestore.CollectionGroup;
+import com.google.cloud.firestore.FieldMask;
 import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
@@ -59,9 +61,9 @@ import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -83,11 +85,15 @@ public class ITE2ETracingTest extends ITBaseTest {
 
   private static final String SERVICE = "google.firestore.v1.Firestore/";
 
+  private static final String BATCH_GET_DOCUMENTS_RPC_NAME = "BatchGetDocuments";
+
   private static final String BATCH_WRITE_RPC_NAME = "BatchWrite";
 
   private static final String COMMIT_RPC_NAME = "Commit";
 
   private static final String LIST_DOCUMENTS_RPC_NAME = "ListDocuments";
+
+  private static final String RUN_AGGREGATION_QUERY_RPC_NAME = "RunAggregationQuery";
 
   private static final int NUM_TRACE_ID_BYTES = 32;
 
@@ -97,7 +103,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
   private static final int GET_TRACE_RETRY_BACKOFF_MILLIS = 1000;
 
-  private static final int TRACE_FORCE_FLUSH_MILLIS = 1000;
+  private static final int TRACE_FORCE_FLUSH_MILLIS = 3000;
 
   private static final int TRACE_PROVIDER_SHUTDOWN_MILLIS = 1000;
 
@@ -151,7 +157,14 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     traceClient_v1 = TraceServiceClient.create();
 
-    // Initialize the Firestore DB w/ the OTel SDK
+    random = new Random();
+  }
+
+  @Before
+  public void before() throws Exception {
+    // Initialize the Firestore DB w/ the OTel SDK. Ideally we'd do this is the @BeforeAll method
+    // but because gRPC traces need to be deterministically force-flushed, firestore.shutdown()
+    // must be called in @After for each test.
     FirestoreOptions.Builder optionsBuilder =
         FirestoreOptions.newBuilder()
             .setOpenTelemetryOptions(
@@ -172,11 +185,6 @@ public class ITE2ETracingTest extends ITBaseTest {
         firestore,
         "Error instantiating Firestore. Check that the service account credentials "
             + "were properly set.");
-    random = new Random();
-  }
-
-  @Before
-  public void before() throws Exception {
     rootSpanName =
         String.format("%s%d", this.getClass().getSimpleName(), System.currentTimeMillis());
     tracer =
@@ -190,6 +198,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
   @After
   public void after() throws Exception {
+    firestore.shutdown();
     rootSpanName = null;
     tracer = null;
     retrievedTrace = null;
@@ -202,8 +211,6 @@ public class ITE2ETracingTest extends ITBaseTest {
     CompletableResultCode completableResultCode =
         openTelemetrySdk.getSdkTracerProvider().shutdown();
     completableResultCode.join(TRACE_PROVIDER_SHUTDOWN_MILLIS, TimeUnit.MILLISECONDS);
-    firestore.close();
-    firestore.shutdown();
   }
 
   // Generates a random 32-byte hex string
@@ -222,27 +229,6 @@ public class ITE2ETracingTest extends ITBaseTest {
   // Generates a random 16-byte hex string
   protected String generateNewSpanId() {
     return generateRandomHexString(NUM_SPAN_ID_BYTES);
-  }
-
-  // Cloud Trace indexes traces w/ eventual consistency, even when indexing traceId, therefore the
-  // test must retry a few times before the trace is available.
-  protected Trace getTraceWithRetry(String project, String traceId)
-      throws InterruptedException, RuntimeException {
-    int retryCount = GET_TRACE_RETRY_COUNT;
-
-    while (retryCount-- > 0) {
-      try {
-        Trace t = traceClient_v1.getTrace(project, traceId);
-        return t;
-      } catch (NotFoundException notFound) {
-        logger.warning("Trace not found, retrying in " + GET_TRACE_RETRY_BACKOFF_MILLIS + " ms");
-        Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
-      } catch (Exception e) {
-        logger.severe(e.getStackTrace().toString());
-      }
-    }
-    throw new RuntimeException(
-        "Trace " + traceId + " for project " + project + " not found in Cloud Trace.");
   }
 
   // Generates a new SpanContext w/ random traceId,spanId
@@ -273,19 +259,42 @@ public class ITE2ETracingTest extends ITBaseTest {
     completableResultCode.join(TRACE_FORCE_FLUSH_MILLIS, TimeUnit.MILLISECONDS);
   }
 
-  // Validates `retrievedTrace`
+  // Validates `retrievedTrace`. Cloud Trace indexes traces w/ eventual consistency, even when
+  // indexing traceId, therefore the
+  // test must retry a few times before the complete trace is available.
   protected void fetchAndValidateTraces(String traceId, String... spanNames)
       throws InterruptedException {
-    // Fetch traces
-    retrievedTrace = getTraceWithRetry(projectId, traceId);
-    List<String> spanNameList = Arrays.asList(spanNames);
-
-    // Validate trace spans
-    assertEquals(retrievedTrace.getTraceId(), traceId);
-    assertEquals(retrievedTrace.getSpans(0).getName(), rootSpanName);
-    for (int i = 0; i < spanNameList.size(); ++i) {
-      assertEquals(spanNameList.get(i), retrievedTrace.getSpans(i + 1).getName());
-    }
+    int numRetries = GET_TRACE_RETRY_COUNT;
+    do {
+      try {
+        // Fetch traces
+        retrievedTrace = traceClient_v1.getTrace(projectId, traceId);
+        ArrayList<String> spanNameList = new ArrayList<String>(Arrays.asList(spanNames));
+        spanNameList.add(0, rootSpanName);
+        // Validate trace spans
+        assertEquals(traceId, retrievedTrace.getTraceId());
+        for (int i = 0; i < spanNameList.size(); ++i) {
+          assertEquals(spanNameList.get(i), retrievedTrace.getSpans(i).getName());
+        }
+        assertEquals(spanNameList.size(), retrievedTrace.getSpansCount());
+        return;
+      } catch (NotFoundException notFound) {
+        logger.info("Trace not found, retrying in " + GET_TRACE_RETRY_BACKOFF_MILLIS + " ms");
+        Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
+      } catch (IndexOutOfBoundsException outOfBoundsException) {
+        logger.info(
+            "Expected # spans: "
+                + (spanNames.length + 1)
+                + "Actual # spans: "
+                + retrievedTrace.getSpansCount());
+        Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
+      }
+    } while (numRetries-- > 0);
+    throw new RuntimeException(
+        "Expected spans: "
+            + spanNames.toString()
+            + ", Actual spans: "
+            + (retrievedTrace != null ? retrievedTrace.getSpansList().toString() : "null"));
   }
 
   @Test
@@ -305,7 +314,10 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(customSpanContext.getTraceId(), "AggregationQuery.Get");
+    fetchAndValidateTraces(
+        customSpanContext.getTraceId(),
+        "AggregationQuery.Get",
+        grpcSpanName(RUN_AGGREGATION_QUERY_RPC_NAME));
   }
 
   @Test
@@ -713,10 +725,46 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void docRefGet() throws Exception {}
+  public void docRefGet() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore.collection("col").document("doc0").get().get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(
+        customSpanContext.getTraceId(),
+        SPAN_NAME_DOC_REF_GET,
+        grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
+  }
 
   @Test
-  public void docRefGet2() throws Exception {}
+  public void docRefGet2() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore.collection("col").document("doc0").get(FieldMask.of("foo")).get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(
+        customSpanContext.getTraceId(),
+        SPAN_NAME_DOC_REF_GET,
+        grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
+  }
 
   @Test
   public void docListCollections() throws Exception {}
