@@ -22,9 +22,11 @@ import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_COL_REF_L
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_CREATE;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_DELETE;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_GET;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_LIST_COLLECTIONS;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_SET;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_UPDATE;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_PARTITION_QUERY;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_QUERY_GET;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -34,6 +36,7 @@ import com.google.api.gax.rpc.NotFoundException;
 import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.BulkWriterOptions;
 import com.google.cloud.firestore.CollectionGroup;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FieldMask;
 import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.Firestore;
@@ -91,9 +94,13 @@ public class ITE2ETracingTest extends ITBaseTest {
 
   private static final String COMMIT_RPC_NAME = "Commit";
 
+  private static final String LIST_COLLECTIONS_RPC_NAME = "ListCollectionIds";
+
   private static final String LIST_DOCUMENTS_RPC_NAME = "ListDocuments";
 
   private static final String RUN_AGGREGATION_QUERY_RPC_NAME = "RunAggregationQuery";
+
+  private static final String RUN_QUERY_RPC_NAME = "RunQuery";
 
   private static final int NUM_TRACE_ID_BYTES = 32;
 
@@ -767,13 +774,64 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void docListCollections() throws Exception {}
+  public void docListCollections() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore.collection("col").document("doc0").listCollections();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(
+        customSpanContext.getTraceId(),
+        SPAN_NAME_DOC_REF_LIST_COLLECTIONS,
+        grpcSpanName(LIST_COLLECTIONS_RPC_NAME));
+  }
 
   @Test
-  public void getAll() throws Exception {}
+  public void getAll() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      DocumentReference docRef0 = firestore.collection("col").document();
+      DocumentReference docRef1 = firestore.collection("col").document();
+      DocumentReference[] docs = {docRef0, docRef1};
+      firestore.getAll(docs).get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    fetchAndValidateTraces(
+        customSpanContext.getTraceId(), grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
+  }
 
   @Test
-  public void queryGet() throws Exception {}
+  public void queryGet() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore.collection("col").whereEqualTo("foo", "my_non_existent_value").get().get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    fetchAndValidateTraces(
+        customSpanContext.getTraceId(), SPAN_NAME_QUERY_GET, grpcSpanName(RUN_QUERY_RPC_NAME));
+  }
 
   @Test
   public void transaction() throws Exception {}
