@@ -16,8 +16,11 @@
 
 package com.google.cloud.firestore.it;
 
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_BATCH_COMMIT;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_BULK_WRITER_COMMIT;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_COL_REF_LIST_DOCUMENTS;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_CREATE;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_SET;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_PARTITION_QUERY;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
@@ -31,6 +34,8 @@ import com.google.cloud.firestore.CollectionGroup;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.SetOptions;
+import com.google.cloud.firestore.it.ITTracingTest.Pojo;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.opentelemetry.trace.TraceConfiguration;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
@@ -48,6 +53,7 @@ import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.common.CompletableResultCode;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.data.SpanData;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import java.io.IOException;
@@ -64,6 +70,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -76,6 +83,8 @@ public class ITE2ETracingTest extends ITBaseTest {
   private static final String SERVICE = "google.firestore.v1.Firestore/";
 
   private static final String BATCH_WRITE_RPC_NAME = "BatchWrite";
+
+  private static final String COMMIT_RPC_NAME = "Commit";
 
   private static final String LIST_DOCUMENTS_RPC_NAME = "ListDocuments";
 
@@ -227,6 +236,8 @@ public class ITE2ETracingTest extends ITBaseTest {
       } catch (NotFoundException notFound) {
         logger.warning("Trace not found, retrying in " + GET_TRACE_RETRY_BACKOFF_MILLIS + " ms");
         Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
+      } catch (Exception e) {
+        logger.severe(e.getStackTrace().toString());
       }
     }
     throw new RuntimeException(
@@ -363,23 +374,122 @@ public class ITE2ETracingTest extends ITBaseTest {
         SPAN_NAME_COL_REF_LIST_DOCUMENTS, grpcSpanName(LIST_DOCUMENTS_RPC_NAME));
   }
 
-  public void docRefCreate() throws Exception {
+  @Test
+  public void docRefCreateTraceTest() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore.collection("col").document().create(Collections.singletonMap("foo", "bar")).get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(customSpanContext.getTraceId(),
+        SPAN_NAME_DOC_REF_CREATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
-  public void docRefCreate2() throws Exception {
+  public void docRefCreate2TraceTest() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore.collection("col").document().create(new Pojo(1)).get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(customSpanContext.getTraceId(),
+        SPAN_NAME_DOC_REF_CREATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
-  public void docRefSet() throws Exception {}
+  public void docRefSetTraceTest() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore.collection("col").document("foo").set(Collections.singletonMap("foo", "bar")).get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(customSpanContext.getTraceId(),
+        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
 
   @Test
-  public void docRefSet2() throws Exception {}
+  public void docRefSet2TraceTest() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore
+          .collection("col")
+          .document("foo")
+          .set(Collections.singletonMap("foo", "bar"), SetOptions.merge())
+          .get();    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(customSpanContext.getTraceId(),
+        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
 
   @Test
-  public void docRefSet3() throws Exception {}
+  public void docRefSet3TraceTest() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
 
-  public void docRefSet4() throws Exception {}
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore.collection("col").document("foo").set(new Pojo(1)).get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(customSpanContext.getTraceId(),
+        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefSet4TraceTest() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore.collection("col").document("foo").set(new Pojo(1), SetOptions.merge()).get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    // Read and validate traces
+    fetchAndValidateTraces(customSpanContext.getTraceId(),
+        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
 
   @Test
   public void docRefUpdate() throws Exception {}
