@@ -43,6 +43,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.Precondition;
+import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.it.ITTracingTest.Pojo;
 import com.google.cloud.opentelemetry.trace.TraceConfiguration;
@@ -50,6 +51,7 @@ import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.google.cloud.trace.v1.TraceServiceClient;
 import com.google.common.base.Preconditions;
 import com.google.devtools.cloudtrace.v1.Trace;
+import com.google.devtools.cloudtrace.v1.TraceSpan;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanContext;
 import io.opentelemetry.api.trace.TraceFlags;
@@ -67,6 +69,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -834,7 +837,50 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void transaction() throws Exception {}
+  public void transaction() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore
+          .runTransaction(
+              transaction -> {
+                Query q = firestore.collection("col").whereGreaterThan("bla", "");
+                DocumentReference d = firestore.collection("col").document("foo");
+                DocumentReference[] docList = {d, d};
+                // Document Query.
+                transaction.get(q).get();
+
+                // Aggregation Query.
+                transaction.get(q.count());
+
+                // Get multiple documents.
+                transaction.getAll(d, d).get();
+
+                // Commit 2 documents.
+                transaction.set(
+                    firestore.collection("foo").document("bar"),
+                    Collections.singletonMap("foo", "bar"));
+                transaction.set(
+                    firestore.collection("foo").document("bar2"),
+                    Collections.singletonMap("foo2", "bar2"));
+                return 0;
+              })
+          .get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    Thread.sleep(10000);
+    Trace trace = traceClient_v1.getTrace(projectId, customSpanContext.getTraceId());
+    List<TraceSpan> spanList = trace.getSpansList();
+    for (TraceSpan span : spanList) {
+      logger.info("spanName: " + span.getName() + ", spanId: " + span.getSpanId() + ", parentSpanId: " + span.getParentSpanId());
+    }
+  }
 
   @Test
   public void transactionRollback() throws Exception {}
