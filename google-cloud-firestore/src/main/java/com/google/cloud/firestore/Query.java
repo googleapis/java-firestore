@@ -1887,7 +1887,7 @@ public class Query {
               if (documentSnapshots == null && metrics.getExecutionStats() != null) {
                 // This indicates that the query was executed, but no documents
                 // had matched the query. Create an empty list.
-                documentSnapshots = new ArrayList<>();
+                documentSnapshots = Collections.emptyList();
               }
             }
           }

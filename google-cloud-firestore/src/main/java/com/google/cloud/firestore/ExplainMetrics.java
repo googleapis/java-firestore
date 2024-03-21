@@ -20,8 +20,8 @@ import javax.annotation.Nullable;
 
 /** ExplainMetrics contains information about planning and execution of a query. */
 public class ExplainMetrics {
-  @Nonnull private final PlanSummary planSummary;
-  @Nullable private final ExecutionStats executionStats;
+  private final @Nonnull PlanSummary planSummary;
+  private final @Nullable ExecutionStats executionStats;
 
   ExplainMetrics(@Nonnull com.google.firestore.v1.ExplainMetrics metrics) {
     // ExplainMetrics is guaranteed to have a plan summary.

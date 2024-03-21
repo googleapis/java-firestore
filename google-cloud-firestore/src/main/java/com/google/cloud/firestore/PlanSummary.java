@@ -15,21 +15,17 @@
  */
 package com.google.cloud.firestore;
 
-import com.google.protobuf.Struct;
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
 /** A Plan contains information about the planning stage of a query. */
 public final class PlanSummary {
-  private final List<Map<String, Object>> indexesUsed;
+  private final @Nonnull List<Map<String, Object>> indexesUsed;
 
   PlanSummary(com.google.firestore.v1.PlanSummary proto) {
-    indexesUsed = new ArrayList<>();
-    for (Struct index : proto.getIndexesUsedList()) {
-      indexesUsed.add(UserDataConverter.decodeStruct(index));
-    }
+    indexesUsed = Lists.transform(proto.getIndexesUsedList(), UserDataConverter::decodeStruct);
   }
 
   /*

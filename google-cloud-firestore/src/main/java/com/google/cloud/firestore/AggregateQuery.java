@@ -212,7 +212,6 @@ public class AggregateQuery {
       implements ResponseObserver<RunAggregationQueryResponse> {
 
     private final AggregateQueryResponseDeliverer responseDeliverer;
-    private StreamController streamController;
     private Timestamp readTime = Timestamp.MAX_VALUE;
     @Nullable private Map<String, Value> aggregateFieldsMap = null;
     @Nullable private ExplainMetrics metrics = null;
@@ -226,9 +225,7 @@ public class AggregateQuery {
     }
 
     @Override
-    public void onStart(StreamController streamController) {
-      this.streamController = streamController;
-    }
+    public void onStart(StreamController streamController) {}
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
@@ -283,9 +280,6 @@ public class AggregateQuery {
     @Override
     public void onComplete() {
       responseDeliverer.deliverResult(aggregateFieldsMap, readTime, metrics);
-
-      // Close the stream to avoid it dangling, since we're not expecting any more responses.
-      streamController.cancel();
     }
   }
 

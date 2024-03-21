@@ -17,13 +17,14 @@ package com.google.cloud.firestore;
 
 import java.time.Duration;
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 /** A ExecutionStats contains information about the execution of a query. */
 public final class ExecutionStats {
-  final long resultsReturned;
-  final Duration executionDuration;
-  final long readOperations;
-  final Map<String, Object> debugStats;
+  private final long resultsReturned;
+  private final @Nonnull Duration executionDuration;
+  private final long readOperations;
+  private final @Nonnull Map<String, Object> debugStats;
 
   ExecutionStats(com.google.firestore.v1.ExecutionStats proto) {
     this.resultsReturned = proto.getResultsReturned();
@@ -40,6 +41,7 @@ public final class ExecutionStats {
   }
 
   /** Returns the total execution time of the query. */
+  @Nonnull
   public Duration getExecutionDuration() {
     return executionDuration;
   }
@@ -53,6 +55,7 @@ public final class ExecutionStats {
    * Returns a map that contains additional statistics related to query execution. Note: The content
    * of this map are subject to change.
    */
+  @Nonnull
   public Map<String, Object> getDebugStats() {
     return debugStats;
   }
