@@ -24,7 +24,7 @@
     {
       "customType": "regex",
       "fileMatch": [
-        "^.github/workflows/unmanaged_dependency_check.yaml$"
+        "^.github/workflows/unmanaged-dependency-check.yaml$"
       ],
       "matchStrings": ["uses: googleapis/sdk-platform-java/java-shared-dependencies/unmanaged-dependency-check@google-cloud-shared-dependencies/v(?<currentValue>.+?)\\n"],
       "depNameTemplate": "com.google.cloud:sdk-platform-java-config",
