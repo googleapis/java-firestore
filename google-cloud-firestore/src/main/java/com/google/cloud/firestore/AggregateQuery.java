@@ -86,14 +86,14 @@ public class AggregateQuery {
    */
   @Nonnull
   public ApiFuture<ExplainResults<AggregateQuerySnapshot>> explain(ExplainOptions options) {
-    AggregateQueryResponseDeliverer responseDeliverer =
-        new AggregateQueryResponseDeliverer(
+    AggregateQueryExplainResponseDeliverer responseDeliverer =
+        new AggregateQueryExplainResponseDeliverer(
             /* transactionId= */ null,
             /* readTime= */ null,
             /* startTimeNanos= */ query.rpcContext.getClock().nanoTime(),
             /* explainOptions= */ options);
     runQuery(responseDeliverer);
-    return responseDeliverer.getExplainResultsFuture();
+    return responseDeliverer.getFuture();
   }
 
   @Nonnull
@@ -101,22 +101,19 @@ public class AggregateQuery {
       @Nullable final ByteString transactionId, @Nullable com.google.protobuf.Timestamp readTime) {
     AggregateQueryResponseDeliverer responseDeliverer =
         new AggregateQueryResponseDeliverer(
-            transactionId,
-            readTime,
-            /* startTimeNanos= */ query.rpcContext.getClock().nanoTime(),
-            /* explainOptions= */ null);
+            transactionId, readTime, /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());
     runQuery(responseDeliverer);
-    return responseDeliverer.getAggregateQuerySnapshotFuture();
+    return responseDeliverer.getFuture();
   }
 
-  private void runQuery(AggregateQueryResponseDeliverer responseDeliverer) {
+  private <T> void runQuery(ResponseDeliverer<T> responseDeliverer) {
     RunAggregationQueryRequest request =
         toProto(
-            responseDeliverer.transactionId,
-            responseDeliverer.readTime,
-            responseDeliverer.explainOptions);
-    AggregateQueryResponseObserver responseObserver =
-        new AggregateQueryResponseObserver(responseDeliverer);
+            responseDeliverer.getTransactionId(),
+            responseDeliverer.getReadTime(),
+            responseDeliverer.getExplainOptions());
+    AggregateQueryResponseObserver<T> responseObserver =
+        new AggregateQueryResponseObserver<T>(responseDeliverer);
     ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse> callable =
         query.rpcContext.getClient().runAggregationQueryCallable();
     query.rpcContext.streamRequest(request, responseObserver, callable);
@@ -130,98 +127,145 @@ public class AggregateQuery {
     return builder.build();
   }
 
-  private final class AggregateQueryResponseDeliverer {
-
-    @Nullable private final ByteString transactionId;
-    @Nullable private final com.google.protobuf.Timestamp readTime;
+  private abstract static class ResponseDeliverer<T> {
+    private final @Nullable ByteString transactionId;
+    private final @Nullable com.google.protobuf.Timestamp readTime;
     private final long startTimeNanos;
-    @Nullable private final ExplainOptions explainOptions;
-    private final SettableApiFuture<AggregateQuerySnapshot> aggregateQuerySnapshotFuture =
-        SettableApiFuture.create();
-    private final SettableApiFuture<ExplainResults<AggregateQuerySnapshot>> explainFuture =
-        SettableApiFuture.create();
-    private final AtomicBoolean isAggregateQuerySnapshotFutureCompleted = new AtomicBoolean(false);
-    private final AtomicBoolean isExplainFutureCompleted = new AtomicBoolean(false);
+    private final AtomicBoolean futureCompleted = new AtomicBoolean(false);
+    private final SettableApiFuture<T> future = SettableApiFuture.create();
 
-    AggregateQueryResponseDeliverer(
+    ResponseDeliverer(
         @Nullable ByteString transactionId,
         @Nullable com.google.protobuf.Timestamp readTime,
-        long startTimeNanos,
-        @Nullable ExplainOptions explainOptions) {
+        long startTimeNanos) {
       this.transactionId = transactionId;
       this.readTime = readTime;
       this.startTimeNanos = startTimeNanos;
-      this.explainOptions = explainOptions;
     }
 
-    ApiFuture<AggregateQuerySnapshot> getAggregateQuerySnapshotFuture() {
-      return aggregateQuerySnapshotFuture;
+    @Nullable
+    ByteString getTransactionId() {
+      return transactionId;
     }
 
-    ApiFuture<ExplainResults<AggregateQuerySnapshot>> getExplainResultsFuture() {
-      return explainFuture;
+    @Nullable
+    com.google.protobuf.Timestamp getReadTime() {
+      return readTime;
     }
 
+    long getStartTimeNanos() {
+      return startTimeNanos;
+    }
+
+    @Nullable
+    ExplainOptions getExplainOptions() {
+      return null;
+    }
+
+    boolean futureNotCompleted() {
+      return futureCompleted.compareAndSet(false, true);
+    }
+
+    ApiFuture<T> getFuture() {
+      return future;
+    }
+
+    void setFuture(T value) {
+      future.set(value);
+    }
+
+    void deliverError(Throwable throwable) {
+      if (futureNotCompleted()) {
+        future.setException(throwable);
+      }
+    }
+
+    abstract void deliverResult(
+        @Nullable Map<String, Value> serverData,
+        Timestamp readTime,
+        @Nullable ExplainMetrics metrics);
+  }
+
+  private class AggregateQueryResponseDeliverer extends ResponseDeliverer<AggregateQuerySnapshot> {
+    AggregateQueryResponseDeliverer(
+        @Nullable ByteString transactionId,
+        @Nullable com.google.protobuf.Timestamp readTime,
+        long startTimeNanos) {
+      super(transactionId, readTime, startTimeNanos);
+    }
+
+    @Override
     void deliverResult(
         @Nullable Map<String, Value> serverData,
         Timestamp readTime,
         @Nullable ExplainMetrics metrics) {
-      if (explainOptions != null) {
-        if (isExplainFutureCompleted.compareAndSet(false, true)) {
-          // The server is required to provide ExplainMetrics for explain queries.
-          if (metrics == null) {
-            throw new RuntimeException("Did not receive any metrics for explain query.");
-          }
-          AggregateQuerySnapshot snapshot =
-              serverData == null
-                  ? null
-                  : new AggregateQuerySnapshot(
-                      AggregateQuery.this,
-                      readTime,
-                      convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData));
-          explainFuture.set(new ExplainResults<>(metrics, snapshot));
+      if (futureNotCompleted()) {
+        if (serverData == null) {
+          throw new RuntimeException("Did not receive any aggregate query results.");
         }
-      } else {
-        if (isAggregateQuerySnapshotFutureCompleted.compareAndSet(false, true)) {
-          if (serverData == null) {
-            throw new RuntimeException("Did not receive any aggregate query results.");
-          }
-          aggregateQuerySnapshotFuture.set(
-              new AggregateQuerySnapshot(
-                  AggregateQuery.this,
-                  readTime,
-                  convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData)));
-        }
-      }
-    }
-
-    void deliverError(Throwable throwable) {
-      if (explainOptions != null) {
-        if (isExplainFutureCompleted.compareAndSet(false, true)) {
-          explainFuture.setException(throwable);
-        }
-      } else {
-        if (isAggregateQuerySnapshotFutureCompleted.compareAndSet(false, true)) {
-          aggregateQuerySnapshotFuture.setException(throwable);
-        }
+        setFuture(
+            new AggregateQuerySnapshot(
+                AggregateQuery.this,
+                readTime,
+                convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData)));
       }
     }
   }
 
-  private final class AggregateQueryResponseObserver
-      implements ResponseObserver<RunAggregationQueryResponse> {
+  private final class AggregateQueryExplainResponseDeliverer
+      extends ResponseDeliverer<ExplainResults<AggregateQuerySnapshot>> {
+    private final @Nullable ExplainOptions explainOptions;
 
-    private final AggregateQueryResponseDeliverer responseDeliverer;
+    AggregateQueryExplainResponseDeliverer(
+        @Nullable ByteString transactionId,
+        @Nullable com.google.protobuf.Timestamp readTime,
+        long startTimeNanos,
+        @Nullable ExplainOptions explainOptions) {
+      super(transactionId, readTime, startTimeNanos);
+      this.explainOptions = explainOptions;
+    }
+
+    @Override
+    @Nullable
+    ExplainOptions getExplainOptions() {
+      return explainOptions;
+    }
+
+    @Override
+    void deliverResult(
+        @Nullable Map<String, Value> serverData,
+        Timestamp readTime,
+        @Nullable ExplainMetrics metrics) {
+      if (futureNotCompleted()) {
+        // The server is required to provide ExplainMetrics for explain queries.
+        if (metrics == null) {
+          throw new RuntimeException("Did not receive any metrics for explain query.");
+        }
+        AggregateQuerySnapshot snapshot =
+            serverData == null
+                ? null
+                : new AggregateQuerySnapshot(
+                    AggregateQuery.this,
+                    readTime,
+                    convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData));
+        setFuture(new ExplainResults<>(metrics, snapshot));
+      }
+    }
+  }
+
+  private final class AggregateQueryResponseObserver<T>
+      implements ResponseObserver<RunAggregationQueryResponse> {
+    private final ResponseDeliverer<T> responseDeliverer;
     private Timestamp readTime = Timestamp.MAX_VALUE;
     @Nullable private Map<String, Value> aggregateFieldsMap = null;
     @Nullable private ExplainMetrics metrics = null;
 
-    AggregateQueryResponseObserver(AggregateQueryResponseDeliverer responseDeliverer) {
+    AggregateQueryResponseObserver(ResponseDeliverer<T> responseDeliverer) {
       this.responseDeliverer = responseDeliverer;
     }
 
     private boolean isExplainQuery() {
-      return this.responseDeliverer.explainOptions != null;
+      return this.responseDeliverer.getExplainOptions() != null;
     }
 
     @Override
@@ -272,8 +316,8 @@ public class AggregateQuery {
           FirestoreSettings.newBuilder().runAggregationQuerySettings().getRetryableCodes();
       return query.shouldRetryQuery(
           throwable,
-          responseDeliverer.transactionId,
-          responseDeliverer.startTimeNanos,
+          responseDeliverer.getTransactionId(),
+          responseDeliverer.getStartTimeNanos(),
           retryableCodes);
     }
 
