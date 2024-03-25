@@ -41,7 +41,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -131,7 +130,6 @@ public class AggregateQuery {
     private final @Nullable ByteString transactionId;
     private final @Nullable com.google.protobuf.Timestamp readTime;
     private final long startTimeNanos;
-    private final AtomicBoolean futureCompleted = new AtomicBoolean(false);
     private final SettableApiFuture<T> future = SettableApiFuture.create();
 
     ResponseDeliverer(
@@ -162,22 +160,16 @@ public class AggregateQuery {
       return null;
     }
 
-    boolean futureNotCompleted() {
-      return futureCompleted.compareAndSet(false, true);
-    }
-
     ApiFuture<T> getFuture() {
       return future;
     }
 
-    void setFuture(T value) {
+    protected void setFuture(T value) {
       future.set(value);
     }
 
     void deliverError(Throwable throwable) {
-      if (futureNotCompleted()) {
-        future.setException(throwable);
-      }
+      future.setException(throwable);
     }
 
     abstract void deliverResult(
@@ -199,16 +191,15 @@ public class AggregateQuery {
         @Nullable Map<String, Value> serverData,
         Timestamp readTime,
         @Nullable ExplainMetrics metrics) {
-      if (futureNotCompleted()) {
-        if (serverData == null) {
-          throw new RuntimeException("Did not receive any aggregate query results.");
-        }
-        setFuture(
-            new AggregateQuerySnapshot(
-                AggregateQuery.this,
-                readTime,
-                convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData)));
+      if (serverData == null) {
+        deliverError(new RuntimeException("Did not receive any aggregate query results."));
+        return;
       }
+      setFuture(
+          new AggregateQuerySnapshot(
+              AggregateQuery.this,
+              readTime,
+              convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData)));
     }
   }
 
@@ -236,20 +227,19 @@ public class AggregateQuery {
         @Nullable Map<String, Value> serverData,
         Timestamp readTime,
         @Nullable ExplainMetrics metrics) {
-      if (futureNotCompleted()) {
-        // The server is required to provide ExplainMetrics for explain queries.
-        if (metrics == null) {
-          throw new RuntimeException("Did not receive any metrics for explain query.");
-        }
-        AggregateQuerySnapshot snapshot =
-            serverData == null
-                ? null
-                : new AggregateQuerySnapshot(
-                    AggregateQuery.this,
-                    readTime,
-                    convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData));
-        setFuture(new ExplainResults<>(metrics, snapshot));
+      // The server is required to provide ExplainMetrics for explain queries.
+      if (metrics == null) {
+        deliverError(new RuntimeException("Did not receive any metrics for explain query."));
+        return;
       }
+      AggregateQuerySnapshot snapshot =
+          serverData == null
+              ? null
+              : new AggregateQuerySnapshot(
+                  AggregateQuery.this,
+                  readTime,
+                  convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData));
+      setFuture(new ExplainResults<>(metrics, snapshot));
     }
   }
 
