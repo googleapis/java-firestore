@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** ExplainMetrics contains information about planning and execution of a query. */
-public class ExplainMetrics {
+public final class ExplainMetrics {
   private final @Nonnull PlanSummary planSummary;
   private final @Nullable ExecutionStats executionStats;
 
