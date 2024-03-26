@@ -1501,10 +1501,16 @@ public class Query {
             + "Use Query.get() instead.");
 
     internalStream(
-        new QuerySnapshotObserver() {
+        new ApiStreamObserver<RunQueryResponse>() {
           @Override
-          public void onNext(QueryDocumentSnapshot documentSnapshot) {
-            responseObserver.onNext(documentSnapshot);
+          public void onNext(RunQueryResponse runQueryResponse) {
+            if (runQueryResponse.hasDocument()) {
+              Document document = runQueryResponse.getDocument();
+              QueryDocumentSnapshot documentSnapshot =
+                  QueryDocumentSnapshot.fromDocument(
+                      rpcContext, Timestamp.fromProto(runQueryResponse.getReadTime()), document);
+              responseObserver.onNext(documentSnapshot);
+            }
           }
 
           @Override
@@ -1519,7 +1525,66 @@ public class Query {
         },
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         /* transactionId= */ null,
-        /* readTime= */ null);
+        /* readTime= */ null,
+        /* explainOptions= */ null);
+  }
+
+  /**
+   * Executes the query, streams the results as a StreamObserver of DocumentSnapshots, and returns
+   * an ApiFuture that will be resolved with the associated {@link ExplainMetrics}.
+   *
+   * @param options The options that configure the explain request.
+   * @param documentObserver The observer to be notified every time a new document arrives.
+   */
+  @Nonnull
+  public ApiFuture<ExplainMetrics> explainStream(
+      @Nonnull ExplainOptions options,
+      @Nonnull ApiStreamObserver<DocumentSnapshot> documentObserver) {
+    Preconditions.checkState(
+        !LimitType.Last.equals(Query.this.options.getLimitType()),
+        "Query results for queries that include limitToLast() constraints cannot be streamed. "
+            + "Use Query.explain() instead.");
+
+    final SettableApiFuture<ExplainMetrics> metricsFuture = SettableApiFuture.create();
+    internalStream(
+        new ApiStreamObserver<RunQueryResponse>() {
+          @Override
+          public void onNext(RunQueryResponse runQueryResponse) {
+            if (runQueryResponse.hasDocument()) {
+              Document document = runQueryResponse.getDocument();
+              QueryDocumentSnapshot documentSnapshot =
+                  QueryDocumentSnapshot.fromDocument(
+                      rpcContext, Timestamp.fromProto(runQueryResponse.getReadTime()), document);
+              documentObserver.onNext(documentSnapshot);
+            }
+
+            if (runQueryResponse.hasExplainMetrics()) {
+              metricsFuture.set(new ExplainMetrics(runQueryResponse.getExplainMetrics()));
+            }
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            metricsFuture.setException(throwable);
+            documentObserver.onError(throwable);
+          }
+
+          @Override
+          public void onCompleted() {
+            documentObserver.onCompleted();
+            if (!metricsFuture.isDone()) {
+              // This means the gRPC stream completed without any metrics.
+              metricsFuture.setException(
+                  new RuntimeException("Did not receive any explain results."));
+            }
+          }
+        },
+        /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
+        /* transactionId= */ null,
+        /* readTime= */ null,
+        /* explainOptions= */ options);
+
+    return metricsFuture;
   }
 
   /**
@@ -1636,29 +1701,18 @@ public class Query {
     return encodedValue;
   }
 
-  /** Stream observer that captures DocumentSnapshots as well as the Query read time. */
-  private abstract static class QuerySnapshotObserver
-      implements ApiStreamObserver<QueryDocumentSnapshot> {
-
-    private Timestamp readTime;
-
-    void onCompleted(Timestamp readTime) {
-      this.readTime = readTime;
-      this.onCompleted();
-    }
-
-    Timestamp getReadTime() {
-      return readTime;
-    }
-  }
-
   private void internalStream(
-      final QuerySnapshotObserver documentObserver,
+      final ApiStreamObserver<RunQueryResponse> runQueryResponseObserver,
       final long startTimeNanos,
       @Nullable final ByteString transactionId,
-      @Nullable final Timestamp readTime) {
+      @Nullable final Timestamp readTime,
+      @Nullable final ExplainOptions explainOptions) {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
+
+    if (explainOptions != null) {
+      request.setExplainOptions(explainOptions.toProto());
+    }
 
     if (transactionId != null) {
       request.setTransaction(transactionId);
@@ -1678,7 +1732,6 @@ public class Query {
 
     ResponseObserver<RunQueryResponse> observer =
         new ResponseObserver<RunQueryResponse>() {
-          Timestamp readTime;
           boolean firstResponse;
           int numDocuments;
 
@@ -1695,6 +1748,9 @@ public class Query {
               firstResponse = true;
               Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: First response");
             }
+
+            runQueryResponseObserver.onNext(response);
+
             if (response.hasDocument()) {
               numDocuments++;
               if (numDocuments % 100 == 0) {
@@ -1706,12 +1762,7 @@ public class Query {
               QueryDocumentSnapshot documentSnapshot =
                   QueryDocumentSnapshot.fromDocument(
                       rpcContext, Timestamp.fromProto(response.getReadTime()), document);
-              documentObserver.onNext(documentSnapshot);
               lastReceivedDocument.set(documentSnapshot);
-            }
-
-            if (readTime == null) {
-              readTime = Timestamp.fromProto(response.getReadTime());
             }
 
             if (response.getDone()) {
@@ -1736,14 +1787,15 @@ public class Query {
               Query.this
                   .startAfter(cursor)
                   .internalStream(
-                      documentObserver,
+                      runQueryResponseObserver,
                       startTimeNanos,
                       /* transactionId= */ null,
-                      options.getRequireConsistency() ? cursor.getReadTime() : null);
+                      options.getRequireConsistency() ? cursor.getReadTime() : null,
+                      explainOptions);
 
             } else {
               Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: Error");
-              documentObserver.onError(throwable);
+              runQueryResponseObserver.onError(throwable);
             }
           }
 
@@ -1758,13 +1810,20 @@ public class Query {
                     "Firestore.Query: Completed",
                     ImmutableMap.of(
                         "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
-            documentObserver.onCompleted(readTime);
+            runQueryResponseObserver.onCompleted();
           }
 
           boolean shouldRetry(DocumentSnapshot lastDocument, Throwable t) {
             if (lastDocument == null) {
               // Only retry if we have received a single result. Retries for RPCs with initial
               // failure are handled by Google Gax, which also implements backoff.
+              return false;
+            }
+
+            // Do not retry EXPLAIN requests because it'd be executing
+            // multiple queries. This means stats would have to be aggregated,
+            // and that may not even make sense for many statistics.
+            if (explainOptions != null) {
               return false;
             }
 
@@ -1785,6 +1844,80 @@ public class Query {
   @Nonnull
   public ApiFuture<QuerySnapshot> get() {
     return get(null, null);
+  }
+
+  /**
+   * Plans and optionally executes this query. Returns an ApiFuture that will be resolved with the
+   * planner information, statistics from the query execution (if any), and the query results (if
+   * any).
+   *
+   * @return An ApiFuture that will be resolved with the planner information, statistics from the
+   *     query execution (if any), and the query results (if any).
+   */
+  @Nonnull
+  public ApiFuture<ExplainResults<QuerySnapshot>> explain(ExplainOptions options) {
+    final SettableApiFuture<ExplainResults<QuerySnapshot>> result = SettableApiFuture.create();
+
+    internalStream(
+        new ApiStreamObserver<RunQueryResponse>() {
+          @Nullable List<QueryDocumentSnapshot> documentSnapshots = null;
+          Timestamp readTime;
+          ExplainMetrics metrics;
+
+          @Override
+          public void onNext(RunQueryResponse runQueryResponse) {
+            if (runQueryResponse.hasDocument()) {
+              if (documentSnapshots == null) {
+                documentSnapshots = new ArrayList<>();
+              }
+
+              Document document = runQueryResponse.getDocument();
+              QueryDocumentSnapshot documentSnapshot =
+                  QueryDocumentSnapshot.fromDocument(
+                      rpcContext, Timestamp.fromProto(runQueryResponse.getReadTime()), document);
+              documentSnapshots.add(documentSnapshot);
+            }
+
+            if (readTime == null) {
+              readTime = Timestamp.fromProto(runQueryResponse.getReadTime());
+            }
+
+            if (runQueryResponse.hasExplainMetrics()) {
+              metrics = new ExplainMetrics(runQueryResponse.getExplainMetrics());
+              if (documentSnapshots == null && metrics.getExecutionStats() != null) {
+                // This indicates that the query was executed, but no documents
+                // had matched the query. Create an empty list.
+                documentSnapshots = Collections.emptyList();
+              }
+            }
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            result.setException(throwable);
+          }
+
+          @Override
+          public void onCompleted() {
+            @Nullable QuerySnapshot snapshot = null;
+            if (documentSnapshots != null) {
+              // The results for limitToLast queries need to be flipped since we reversed the
+              // ordering constraints before sending the query to the backend.
+              List<QueryDocumentSnapshot> resultView =
+                  LimitType.Last.equals(Query.this.options.getLimitType())
+                      ? reverse(documentSnapshots)
+                      : documentSnapshots;
+              snapshot = QuerySnapshot.withDocuments(Query.this, readTime, resultView);
+            }
+            result.set(new ExplainResults<>(metrics, snapshot));
+          }
+        },
+        /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
+        /* transactionId= */ null,
+        /* readTime= */ null,
+        /* explainOptions= */ options);
+
+    return result;
   }
 
   /**
@@ -1811,16 +1944,27 @@ public class Query {
     return Watch.forQuery(this).runWatch(executor, listener);
   }
 
-  ApiFuture<QuerySnapshot> get(@Nullable ByteString transactionId, @Nullable Timestamp readTime) {
+  ApiFuture<QuerySnapshot> get(
+      @Nullable ByteString transactionId, @Nullable Timestamp requestReadTime) {
     final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
 
     internalStream(
-        new QuerySnapshotObserver() {
+        new ApiStreamObserver<RunQueryResponse>() {
           final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
+          Timestamp responseReadTime;
 
           @Override
-          public void onNext(QueryDocumentSnapshot documentSnapshot) {
-            documentSnapshots.add(documentSnapshot);
+          public void onNext(RunQueryResponse runQueryResponse) {
+            if (runQueryResponse.hasDocument()) {
+              Document document = runQueryResponse.getDocument();
+              QueryDocumentSnapshot documentSnapshot =
+                  QueryDocumentSnapshot.fromDocument(
+                      rpcContext, Timestamp.fromProto(runQueryResponse.getReadTime()), document);
+              documentSnapshots.add(documentSnapshot);
+            }
+            if (responseReadTime == null) {
+              responseReadTime = Timestamp.fromProto(runQueryResponse.getReadTime());
+            }
           }
 
           @Override
@@ -1837,13 +1981,14 @@ public class Query {
                     ? reverse(documentSnapshots)
                     : documentSnapshots;
             QuerySnapshot querySnapshot =
-                QuerySnapshot.withDocuments(Query.this, this.getReadTime(), resultView);
+                QuerySnapshot.withDocuments(Query.this, responseReadTime, resultView);
             result.set(querySnapshot);
           }
         },
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         transactionId,
-        readTime);
+        /* readTime= */ requestReadTime,
+        /* explainOptions= */ null);
 
     return result;
   }
