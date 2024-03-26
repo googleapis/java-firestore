@@ -249,7 +249,11 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
               // that we receive.
               getTraceUtil()
                   .currentSpan()
-                  .addEvent(TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": Received 100 responses");
+                  .addEvent(
+                      TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS
+                          + ": Received "
+                          + numResponses
+                          + " responses");
             }
 
             switch (response.getResultCase()) {
