@@ -29,8 +29,10 @@ import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_PARTITION
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_QUERY_GET;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.google.api.gax.rpc.NotFoundException;
 import com.google.cloud.firestore.BulkWriter;
@@ -70,7 +72,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Stack;
+import java.util.TreeMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -86,6 +91,74 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class ITE2ETracingTest extends ITBaseTest {
+
+  // Helper class to track call-stacks in a trace
+  protected class TraceContainer {
+
+    // Maps Span ID to TraceSpan
+    private Map<Long, TraceSpan> idSpanMap;
+
+    // Maps Parent Span ID to a list of Child SpanIDs, useful for top-down traversal
+    private Map<Long, List<Long>> parentChildIdMap;
+
+    // Tracks the Root Span ID
+    private long rootId;
+
+    public TraceContainer(String rootSpanName, Trace trace) {
+      idSpanMap = new TreeMap<Long, TraceSpan>();
+      parentChildIdMap = new TreeMap<Long, List<Long>>();
+      for (TraceSpan span : trace.getSpansList()) {
+        long spanId = span.getSpanId();
+        idSpanMap.put(spanId, span);
+        if (rootSpanName.equals(span.getName())) {
+          rootId = span.getSpanId();
+        }
+
+        // Add self as a child of the parent span
+        if (!parentChildIdMap.containsKey(span.getParentSpanId())) {
+          parentChildIdMap.put(span.getParentSpanId(), new ArrayList<Long>());
+        }
+        parentChildIdMap.get(span.getParentSpanId()).add(spanId);
+      }
+    }
+
+    String spanName(long spanId) {
+      return idSpanMap.get(spanId).getName();
+    }
+
+    List<Long> childSpans(long spanId) {
+      return parentChildIdMap.get(spanId);
+    }
+
+    boolean containsCallStack(List<String> callStack) throws RuntimeException {
+      if (callStack == null || callStack.isEmpty()) {
+        throw new RuntimeException("Input callStack is empty");
+      }
+      // tracks the callStack
+      int iter = 0;
+      Stack<Long> dfsStack = new Stack<Long>();
+      dfsStack.push(rootId);
+      long topId = -1;
+      while ((iter < callStack.size()) && !dfsStack.isEmpty()) {
+        topId = dfsStack.pop();
+        if (spanName(topId).equals(callStack.get(iter++))) {
+          List<Long> childSpans = childSpans(topId);
+          if (childSpans != null) {
+            for (Long id : childSpans) {
+              dfsStack.push(id);
+            }
+          }
+        }
+      }
+
+      if (iter == callStack.size()) {
+        if (childSpans(topId) == null && spanName(topId).equals(callStack.get(iter - 1))) {
+          return true;
+        }
+      }
+      return false;
+    }
+  }
 
   private static final Logger logger = Logger.getLogger(ITBaseTest.class.getName());
 
@@ -305,6 +378,51 @@ public class ITE2ETracingTest extends ITBaseTest {
             + spanNames.toString()
             + ", Actual spans: "
             + (retrievedTrace != null ? retrievedTrace.getSpansList().toString() : "null"));
+  }
+
+  @Test
+  public void testTraceContainer() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore.collection("col").whereEqualTo("foo", "my_non_existent_value").get().get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    Thread.sleep(4000);
+    Trace traceResp = traceClient_v1.getTrace(projectId, customSpanContext.getTraceId());
+    TraceContainer traceCont = new TraceContainer(rootSpanName, traceResp);
+    List<String> callStack = new ArrayList<String>();
+
+    // Contains exact path
+    callStack.add(rootSpanName);
+    callStack.add(SPAN_NAME_QUERY_GET);
+    callStack.add(grpcSpanName(RUN_QUERY_RPC_NAME));
+    assertTrue(traceCont.containsCallStack(callStack));
+
+    // Top-level mismatch
+    callStack.clear();
+    callStack.add(SPAN_NAME_QUERY_GET);
+    callStack.add(grpcSpanName(RUN_QUERY_RPC_NAME));
+    assertFalse(traceCont.containsCallStack(callStack));
+
+    // Mid-level match
+    callStack.clear();
+    callStack.add(rootSpanName);
+    callStack.add(SPAN_NAME_QUERY_GET);
+    assertFalse(traceCont.containsCallStack(callStack));
+
+    // Leaf-level mismatch/missing
+    callStack.clear();
+    callStack.add(rootSpanName);
+    callStack.add(SPAN_NAME_QUERY_GET);
+    callStack.add(grpcSpanName(RUN_AGGREGATION_QUERY_RPC_NAME));
+    assertFalse(traceCont.containsCallStack(callStack));
   }
 
   @Test
@@ -878,7 +996,13 @@ public class ITE2ETracingTest extends ITBaseTest {
     Trace trace = traceClient_v1.getTrace(projectId, customSpanContext.getTraceId());
     List<TraceSpan> spanList = trace.getSpansList();
     for (TraceSpan span : spanList) {
-      logger.info("spanName: " + span.getName() + ", spanId: " + span.getSpanId() + ", parentSpanId: " + span.getParentSpanId());
+      logger.info(
+          "spanName: "
+              + span.getName()
+              + ", spanId: "
+              + span.getSpanId()
+              + ", parentSpanId: "
+              + span.getParentSpanId());
     }
   }
 
