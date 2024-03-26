@@ -18,9 +18,16 @@ package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.BulkWriter;
+import com.google.cloud.firestore.BulkWriterOptions;
+import com.google.cloud.firestore.CollectionGroup;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
+import com.google.cloud.firestore.FirestoreOptions;
 import com.google.common.base.Preconditions;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
