@@ -220,6 +220,10 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nullable FieldMask fieldMask,
       @Nullable ByteString transactionId,
       final ApiStreamObserver<DocumentSnapshot> apiStreamObserver) {
+    // To reduce the size of traces, we only register one event for every 100 responses
+    // that we receive from the server.
+    final int NUM_RESPONSES_PER_TRACE_EVENT = 100;
+
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
         new ResponseObserver<BatchGetDocumentsResponse>() {
           int numResponses = 0;
@@ -244,9 +248,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
               getTraceUtil()
                   .currentSpan()
                   .addEvent(TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": First response received");
-            } else if (numResponses % 100 == 0) {
-              // To reduce the size of traces, we only register one event for every 100 responses
-              // that we receive.
+            } else if (numResponses % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
               getTraceUtil()
                   .currentSpan()
                   .addEvent(

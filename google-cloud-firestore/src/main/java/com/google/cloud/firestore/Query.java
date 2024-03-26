@@ -1634,6 +1634,9 @@ public class Query {
       @Nullable final Timestamp readTime,
       final boolean isRetryRequestWithCursor) {
     TraceUtil traceUtil = getFirestore().getOptions().getTraceUtil();
+    // To reduce the size of traces, we only register one event for every 100 responses
+    // that we receive from the server.
+    final int NUM_RESPONSES_PER_TRACE_EVENT = 100;
 
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
@@ -1650,7 +1653,7 @@ public class Query {
         .addEvent(
             TraceUtil.SPAN_NAME_RUN_QUERY,
             new ImmutableMap.Builder<String, Object>()
-                .put("transactional", transactionId != null)
+                .put("isTransactional", transactionId != null)
                 .put("isRetryRequestWithCursor", isRetryRequestWithCursor)
                 .build());
 
@@ -1677,10 +1680,14 @@ public class Query {
             }
             if (response.hasDocument()) {
               numDocuments++;
-              if (numDocuments % 100 == 0) {
+              if (numDocuments % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
                 traceUtil
                     .currentSpan()
-                    .addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": Received 100 documents");
+                    .addEvent(
+                        TraceUtil.SPAN_NAME_RUN_QUERY
+                            + ": Received "
+                            + numDocuments
+                            + " documents");
               }
               Document document = response.getDocument();
               QueryDocumentSnapshot documentSnapshot =
