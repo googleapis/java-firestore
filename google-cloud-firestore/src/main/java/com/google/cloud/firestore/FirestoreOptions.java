@@ -62,8 +62,8 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final TransportChannelProvider channelProvider;
   private final CredentialsProvider credentialsProvider;
   private final String emulatorHost;
-  @Nonnull private final FirestoreOpenTelemetryOptions openTelemetryOptions;
-  @Nonnull private final com.google.cloud.firestore.telemetry.TraceUtil traceUtil;
+  private final @Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions;
+  private final @Nonnull com.google.cloud.firestore.telemetry.TraceUtil traceUtil;
 
   public static class DefaultFirestoreFactory implements FirestoreFactory {
 
@@ -312,12 +312,12 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   protected FirestoreOptions(Builder builder) {
     super(FirestoreFactory.class, FirestoreRpcFactory.class, builder, new FirestoreDefaults());
 
-    if (builder.openTelemetryOptions == null) {
-      this.openTelemetryOptions = FirestoreOpenTelemetryOptions.newBuilder().build();
-    } else {
-      this.openTelemetryOptions = builder.openTelemetryOptions;
-    }
-
+    // FirestoreOptions must contain non-null open-telemetry options.
+    // If the builder doesn't have any open-telemetry options, use a default (disabled) one.
+    this.openTelemetryOptions =
+        builder.openTelemetryOptions != null
+            ? builder.openTelemetryOptions
+            : FirestoreOpenTelemetryOptions.newBuilder().build();
     this.traceUtil = com.google.cloud.firestore.telemetry.TraceUtil.getInstance(this);
 
     this.databaseId =

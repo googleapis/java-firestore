@@ -131,6 +131,9 @@ public class CollectionGroup extends Query {
       } catch (ApiException exception) {
         span.end(exception);
         throw FirestoreException.forApiException(exception);
+      } catch (Throwable throwable) {
+        span.end(throwable);
+        throw throwable;
       }
     }
   }

@@ -22,8 +22,7 @@ import javax.annotation.Nullable;
 
 public class FirestoreOpenTelemetryOptions {
   private final boolean enabled;
-
-  @Nullable private final OpenTelemetry openTelemetry;
+  private final @Nullable OpenTelemetry openTelemetry;
 
   FirestoreOpenTelemetryOptions(Builder builder) {
     this.enabled = builder.enabled;

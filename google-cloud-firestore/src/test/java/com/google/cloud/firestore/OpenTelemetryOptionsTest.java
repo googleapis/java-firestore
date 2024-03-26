@@ -24,7 +24,9 @@ import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import javax.annotation.Nullable;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class OpenTelemetryOptionsTest {
   @Nullable private Firestore firestore;
@@ -135,6 +137,7 @@ public class OpenTelemetryOptionsTest {
             .build();
     firestore = firestoreOptions.getService();
     EnabledTraceUtil enabledTraceUtil = (EnabledTraceUtil) firestore.getOptions().getTraceUtil();
+    assertThat(enabledTraceUtil).isNotNull();
     assertThat(enabledTraceUtil.getOpenTelemetry()).isEqualTo(myOpenTelemetrySdk);
   }
 
@@ -151,6 +154,7 @@ public class OpenTelemetryOptionsTest {
             .build();
     firestore = firestoreOptions.getService();
     EnabledTraceUtil enabledTraceUtil = (EnabledTraceUtil) firestore.getOptions().getTraceUtil();
+    assertThat(enabledTraceUtil).isNotNull();
     assertThat(enabledTraceUtil.getOpenTelemetry()).isEqualTo(GlobalOpenTelemetry.get());
   }
 }
