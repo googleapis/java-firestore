@@ -189,9 +189,7 @@ class TransactionRunner<T> {
     return ApiFutures.transform(
         transaction.commit(),
         // The callback that is invoked after the Commit RPC returns. It returns the user result.
-        input -> {
-          return userFunctionResult;
-        },
+        input -> userFunctionResult,
         MoreExecutors.directExecutor());
   }
 

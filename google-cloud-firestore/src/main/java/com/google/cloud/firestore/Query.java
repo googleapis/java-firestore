@@ -1662,8 +1662,8 @@ public class Query {
     ResponseObserver<RunQueryResponse> observer =
         new ResponseObserver<RunQueryResponse>() {
           Timestamp readTime;
-          boolean firstResponse;
-          int numDocuments;
+          boolean firstResponse = false;
+          int numDocuments = 0;
 
           // The stream's `onComplete()` could be called more than once,
           // this flag makes sure only the first one is actually processed.

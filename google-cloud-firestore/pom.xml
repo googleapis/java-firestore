@@ -16,6 +16,7 @@
   </parent>
   <properties>
     <site.installationModule>google-cloud-firestore</site.installationModule>
+    <opentelemetry.version>1.29.0</opentelemetry.version>
   </properties>
   <dependencies>
     <dependency>
@@ -108,17 +109,17 @@
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-api</artifactId>
-      <version>1.29.0</version>
+      <version>${opentelemetry.version}</version>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-context</artifactId>
-      <version>1.29.0</version>
+      <version>${opentelemetry.version}</version>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry.instrumentation</groupId>
       <artifactId>opentelemetry-grpc-1.6</artifactId>
-      <version>1.29.0-alpha</version>
+      <version>${opentelemetry.version}-alpha</version>
     </dependency>
     <!-- END OpenTelemetry -->
 
@@ -184,32 +185,32 @@
     <!-- OpenTelemetry -->
     <dependency>
       <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk</artifactId>
+      <version>${opentelemetry.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk-testing</artifactId>
-      <version>1.32.0</version>
+      <version>${opentelemetry.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-semconv</artifactId>
-      <version>1.29.0-alpha</version>
+      <version>${opentelemetry.version}-alpha</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk-trace</artifactId>
-      <version>1.29.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-sdk</artifactId>
-      <version>1.29.0</version>
+      <version>${opentelemetry.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk-common</artifactId>
-      <version>1.29.0</version>
+      <version>${opentelemetry.version}</version>
       <scope>test</scope>
     </dependency>
     <!-- END OpenTelemetry -->
