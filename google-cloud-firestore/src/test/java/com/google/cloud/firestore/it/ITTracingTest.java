@@ -25,9 +25,13 @@ import static org.junit.Assert.assertTrue;
 import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.BulkWriterOptions;
 import com.google.cloud.firestore.CollectionGroup;
+import com.google.cloud.firestore.FieldMask;
+import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.Precondition;
+import com.google.cloud.firestore.SetOptions;
 import com.google.common.base.Preconditions;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
@@ -67,7 +71,10 @@ public class ITTracingTest {
       Logger.getLogger(com.google.cloud.firestore.it.ITTracingTest.class.getName());
 
   private static final String SERVICE = "google.firestore.v1.Firestore/";
+  private static final String BATCH_GET_DOCUMENTS_RPC_NAME = "BatchGetDocuments";
+  private static final String COMMIT_RPC_NAME = "Commit";
   private static final String LIST_DOCUMENTS_RPC_NAME = "ListDocuments";
+  private static final String LIST_COLLECTIONS_RPC_NAME = "ListCollectionIds";
   private static final String BATCH_WRITE_RPC_NAME = "BatchWrite";
 
   // We use an InMemorySpanExporter for testing which keeps all generated trace spans
@@ -254,6 +261,15 @@ public class ITTracingTest {
     }
   }
 
+  // This is a POJO used for testing APIs that take a POJO.
+  static class Pojo {
+    public int bar;
+
+    Pojo(int bar) {
+      this.bar = bar;
+    }
+  }
+
   @Test
   public void aggregateQueryGet() throws Exception {
     firestore.collection("col").count().get().get();
@@ -309,5 +325,197 @@ public class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(2, spans.size());
     assertSpanHierarchy(SPAN_NAME_COL_REF_LIST_DOCUMENTS, grpcSpanName(LIST_DOCUMENTS_RPC_NAME));
+  }
+
+  @Test
+  public void docRefCreate() throws Exception {
+    firestore.collection("col").document().create(Collections.singletonMap("foo", "bar")).get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_CREATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefCreate2() throws Exception {
+    firestore.collection("col").document().create(new Pojo(1)).get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_CREATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefSet() throws Exception {
+    firestore.collection("col").document("foo").set(Collections.singletonMap("foo", "bar")).get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefSet2() throws Exception {
+    firestore
+        .collection("col")
+        .document("foo")
+        .set(Collections.singletonMap("foo", "bar"), SetOptions.merge())
+        .get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefSet3() throws Exception {
+    firestore.collection("col").document("foo").set(new Pojo(1)).get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefSet4() throws Exception {
+    firestore.collection("col").document("foo").set(new Pojo(1), SetOptions.merge()).get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefUpdate() throws Exception {
+    firestore
+        .collection("col")
+        .document("foo")
+        .update(Collections.singletonMap("foo", "bar"))
+        .get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefUpdate2() throws Exception {
+    firestore
+        .collection("col")
+        .document("foo")
+        .update(Collections.singletonMap("foo", "bar"), Precondition.NONE)
+        .get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefUpdate3() throws Exception {
+    firestore.collection("col").document("foo").update("key", "value", "key2", "value2").get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefUpdate4() throws Exception {
+    firestore
+        .collection("col")
+        .document("foo")
+        .update(FieldPath.of("key"), "value", FieldPath.of("key2"), "value2")
+        .get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefUpdate5() throws Exception {
+    firestore
+        .collection("col")
+        .document("foo")
+        .update(Precondition.NONE, "key", "value", "key2", "value2")
+        .get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefUpdate6() throws Exception {
+    firestore
+        .collection("col")
+        .document("foo")
+        .update(Precondition.NONE, FieldPath.of("key"), "value", FieldPath.of("key2"), "value2")
+        .get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefDelete() throws Exception {
+    firestore.collection("col").document("doc0").delete().get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_DELETE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefDelete2() throws Exception {
+    firestore.collection("col").document("doc0").delete(Precondition.NONE).get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(3, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_DELETE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+  }
+
+  @Test
+  public void docRefGet() throws Exception {
+    firestore.collection("col").document("doc0").get().get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(2, spans.size());
+    assertSpanHierarchy(SPAN_NAME_DOC_REF_GET, grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
+  }
+
+  @Test
+  public void docRefGet2() throws Exception {
+    firestore.collection("col").document("doc0").get(FieldMask.of("foo")).get();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(2, spans.size());
+    assertSpanHierarchy(SPAN_NAME_DOC_REF_GET, grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
+  }
+
+  @Test
+  public void docListCollections() throws Exception {
+    firestore.collection("col").document("doc0").listCollections();
+
+    List<SpanData> spans = prepareSpans();
+    assertEquals(2, spans.size());
+    assertSpanHierarchy(
+        SPAN_NAME_DOC_REF_LIST_COLLECTIONS, grpcSpanName(LIST_COLLECTIONS_RPC_NAME));
   }
 }

@@ -20,6 +20,8 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
+import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.CommitRequest;
@@ -609,24 +611,38 @@ public abstract class UpdateBuilder<T> {
 
     committed = true;
 
-    ApiFuture<CommitResponse> response =
-        firestore.sendRequest(request.build(), firestore.getClient().commitCallable());
+    TraceUtil.Span span =
+        firestore
+            .getOptions()
+            .getTraceUtil()
+            .startSpan(
+                transactionId == null
+                    ? TraceUtil.SPAN_NAME_BATCH_COMMIT
+                    : TraceUtil.SPAN_NAME_TRANSACTION_COMMIT);
+    span.setAttribute("numDocuments", writes.size());
+    try (Scope ignored = span.makeCurrent()) {
+      ApiFuture<CommitResponse> response =
+          firestore.sendRequest(request.build(), firestore.getClient().commitCallable());
 
-    return ApiFutures.transform(
-        response,
-        commitResponse -> {
-          List<com.google.firestore.v1.WriteResult> writeResults =
-              commitResponse.getWriteResultsList();
-
-          List<WriteResult> result = new ArrayList<>();
-
-          for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
-            result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
-          }
-
-          return result;
-        },
-        MoreExecutors.directExecutor());
+      ApiFuture<List<WriteResult>> returnValue =
+          ApiFutures.transform(
+              response,
+              commitResponse -> {
+                List<com.google.firestore.v1.WriteResult> writeResults =
+                    commitResponse.getWriteResultsList();
+                List<WriteResult> result = new ArrayList<>();
+                for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
+                  result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
+                }
+                return result;
+              },
+              MoreExecutors.directExecutor());
+      span.endAtFuture(returnValue);
+      return returnValue;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /** Checks whether any updates have been queued. */
