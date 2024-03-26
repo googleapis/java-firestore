@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.20.0](https://github.com/googleapis/java-firestore/compare/v3.19.3...v3.20.0) (2024-03-26)
+
+
+### Features
+
+* Query Profiling ([#1609](https://github.com/googleapis/java-firestore/issues/1609)) ([55b1a49](https://github.com/googleapis/java-firestore/commit/55b1a49ad3b75835b6b4f8a1cfd8d665c1a56968))
+
+
+### Dependencies
+
+* Update beam.version to v2.55.0 ([#1631](https://github.com/googleapis/java-firestore/issues/1631)) ([bdb2e43](https://github.com/googleapis/java-firestore/commit/bdb2e4314d2eacdff69b538876e69e7007427925))
+
 ## [3.19.3](https://github.com/googleapis/java-firestore/compare/v3.19.2...v3.19.3) (2024-03-21)
 
 
