@@ -20,6 +20,9 @@ import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
+import com.google.api.gax.grpc.ChannelPoolSettings;
+import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider;
+import com.google.api.gax.rpc.TransportChannelProvider;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.common.base.Throwables;
 import io.grpc.ManagedChannelBuilder;
@@ -224,6 +227,30 @@ public class EnabledTraceUtil implements TraceUtil {
                 .build());
 
     if (firestoreOptions.getTransportChannelProvider() != null) {
+      TransportChannelProvider channelProvider = firestoreOptions.getTransportChannelProvider();
+      if (channelProvider instanceof InstantiatingGrpcChannelProvider) {
+        InstantiatingGrpcChannelProvider grpcChannelProvider =
+            (InstantiatingGrpcChannelProvider) channelProvider;
+        ChannelPoolSettings poolSettings = grpcChannelProvider.getChannelPoolSettings();
+        spanBuilder.setAttribute(
+            ATTRIBUTE_SERVICE_PREFIX + "settings.channel.minRpcsPerChannel",
+            poolSettings.getMinRpcsPerChannel());
+        spanBuilder.setAttribute(
+            ATTRIBUTE_SERVICE_PREFIX + "settings.channel.maxRpcsPerChannel",
+            poolSettings.getMaxRpcsPerChannel());
+        spanBuilder.setAttribute(
+            ATTRIBUTE_SERVICE_PREFIX + "settings.channel.minChannelCount",
+            poolSettings.getMinChannelCount());
+        spanBuilder.setAttribute(
+            ATTRIBUTE_SERVICE_PREFIX + "settings.channel.maxChannelCount",
+            poolSettings.getMaxChannelCount());
+        spanBuilder.setAttribute(
+            ATTRIBUTE_SERVICE_PREFIX + "settings.channel.initialChannelCount",
+            poolSettings.getInitialChannelCount());
+        spanBuilder.setAttribute(
+            ATTRIBUTE_SERVICE_PREFIX + "settings.channel.isPreemptiveRefreshEnabled",
+            poolSettings.isPreemptiveRefreshEnabled());
+      }
       spanBuilder =
           spanBuilder.setAllAttributes(
               Attributes.builder()
