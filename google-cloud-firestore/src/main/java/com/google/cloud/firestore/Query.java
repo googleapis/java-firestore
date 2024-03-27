@@ -38,9 +38,12 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
+import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.firestore.bundle.BundledQuery;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.Document;
@@ -1491,7 +1494,8 @@ public class Query {
         },
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         /* transactionId= */ null,
-        /* readTime= */ null);
+        /* readTime= */ null,
+        /* isRetryRequestWithCursor= */ false);
   }
 
   /**
@@ -1627,7 +1631,13 @@ public class Query {
       final QuerySnapshotObserver documentObserver,
       final long startTimeNanos,
       @Nullable final ByteString transactionId,
-      @Nullable final Timestamp readTime) {
+      @Nullable final Timestamp readTime,
+      final boolean isRetryRequestWithCursor) {
+    TraceUtil traceUtil = getFirestore().getOptions().getTraceUtil();
+    // To reduce the size of traces, we only register one event for every 100 responses
+    // that we receive from the server.
+    final int NUM_RESPONSES_PER_TRACE_EVENT = 100;
+
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
 
@@ -1638,11 +1648,22 @@ public class Query {
       request.setReadTime(readTime.toProto());
     }
 
+    traceUtil
+        .currentSpan()
+        .addEvent(
+            TraceUtil.SPAN_NAME_RUN_QUERY,
+            new ImmutableMap.Builder<String, Object>()
+                .put("isTransactional", transactionId != null)
+                .put("isRetryRequestWithCursor", isRetryRequestWithCursor)
+                .build());
+
     final AtomicReference<QueryDocumentSnapshot> lastReceivedDocument = new AtomicReference<>();
 
     ResponseObserver<RunQueryResponse> observer =
         new ResponseObserver<RunQueryResponse>() {
           Timestamp readTime;
+          boolean firstResponse = false;
+          int numDocuments = 0;
 
           // The stream's `onComplete()` could be called more than once,
           // this flag makes sure only the first one is actually processed.
@@ -1653,7 +1674,21 @@ public class Query {
 
           @Override
           public void onResponse(RunQueryResponse response) {
+            if (!firstResponse) {
+              firstResponse = true;
+              traceUtil.currentSpan().addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": First Response");
+            }
             if (response.hasDocument()) {
+              numDocuments++;
+              if (numDocuments % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
+                traceUtil
+                    .currentSpan()
+                    .addEvent(
+                        TraceUtil.SPAN_NAME_RUN_QUERY
+                            + ": Received "
+                            + numDocuments
+                            + " documents");
+              }
               Document document = response.getDocument();
               QueryDocumentSnapshot documentSnapshot =
                   QueryDocumentSnapshot.fromDocument(
@@ -1667,6 +1702,9 @@ public class Query {
             }
 
             if (response.getDone()) {
+              traceUtil
+                  .currentSpan()
+                  .addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
               onComplete();
             }
           }
@@ -1675,15 +1713,27 @@ public class Query {
           public void onError(Throwable throwable) {
             QueryDocumentSnapshot cursor = lastReceivedDocument.get();
             if (shouldRetry(cursor, throwable)) {
+              traceUtil
+                  .currentSpan()
+                  .addEvent(
+                      TraceUtil.SPAN_NAME_RUN_QUERY + ": Retryable Error",
+                      Collections.singletonMap("error.message", throwable.getMessage()));
+
               Query.this
                   .startAfter(cursor)
                   .internalStream(
                       documentObserver,
                       startTimeNanos,
                       /* transactionId= */ null,
-                      options.getRequireConsistency() ? cursor.getReadTime() : null);
+                      options.getRequireConsistency() ? cursor.getReadTime() : null,
+                      /* isRetryRequestWithCursor= */ true);
 
             } else {
+              traceUtil
+                  .currentSpan()
+                  .addEvent(
+                      TraceUtil.SPAN_NAME_RUN_QUERY + ": Error",
+                      Collections.singletonMap("error.message", throwable.getMessage()));
               documentObserver.onError(throwable);
             }
           }
@@ -1692,6 +1742,11 @@ public class Query {
           public void onComplete() {
             if (hasCompleted) return;
             hasCompleted = true;
+            traceUtil
+                .currentSpan()
+                .addEvent(
+                    TraceUtil.SPAN_NAME_RUN_QUERY + ": Completed",
+                    Collections.singletonMap("numDocuments", numDocuments));
             documentObserver.onCompleted(readTime);
           }
 
@@ -1746,40 +1801,54 @@ public class Query {
   }
 
   ApiFuture<QuerySnapshot> get(@Nullable ByteString transactionId) {
-    final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
+    TraceUtil.Span span =
+        getFirestore()
+            .getOptions()
+            .getTraceUtil()
+            .startSpan(
+                transactionId == null
+                    ? TraceUtil.SPAN_NAME_QUERY_GET
+                    : TraceUtil.SPAN_NAME_TRANSACTION_GET_QUERY);
+    try (Scope ignored = span.makeCurrent()) {
+      final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
+      internalStream(
+          new QuerySnapshotObserver() {
+            final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
 
-    internalStream(
-        new QuerySnapshotObserver() {
-          final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
+            @Override
+            public void onNext(QueryDocumentSnapshot documentSnapshot) {
+              documentSnapshots.add(documentSnapshot);
+            }
 
-          @Override
-          public void onNext(QueryDocumentSnapshot documentSnapshot) {
-            documentSnapshots.add(documentSnapshot);
-          }
+            @Override
+            public void onError(Throwable throwable) {
+              result.setException(throwable);
+            }
 
-          @Override
-          public void onError(Throwable throwable) {
-            result.setException(throwable);
-          }
+            @Override
+            public void onCompleted() {
+              // The results for limitToLast queries need to be flipped since we reversed the
+              // ordering constraints before sending the query to the backend.
+              List<QueryDocumentSnapshot> resultView =
+                  LimitType.Last.equals(Query.this.options.getLimitType())
+                      ? reverse(documentSnapshots)
+                      : documentSnapshots;
+              QuerySnapshot querySnapshot =
+                  QuerySnapshot.withDocuments(Query.this, this.getReadTime(), resultView);
+              result.set(querySnapshot);
+            }
+          },
+          /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
+          transactionId,
+          /* readTime= */ null,
+          /* isRetryRequestWithCursor= */ false);
 
-          @Override
-          public void onCompleted() {
-            // The results for limitToLast queries need to be flipped since we reversed the
-            // ordering constraints before sending the query to the backend.
-            List<QueryDocumentSnapshot> resultView =
-                LimitType.Last.equals(Query.this.options.getLimitType())
-                    ? reverse(documentSnapshots)
-                    : documentSnapshots;
-            QuerySnapshot querySnapshot =
-                QuerySnapshot.withDocuments(Query.this, this.getReadTime(), resultView);
-            result.set(querySnapshot);
-          }
-        },
-        /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
-        transactionId,
-        /* readTime= */ null);
-
-    return result;
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   Comparator<QueryDocumentSnapshot> comparator() {

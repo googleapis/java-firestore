@@ -30,6 +30,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
@@ -38,6 +39,7 @@ import com.google.firestore.v1.DatabaseRootName;
 import com.google.protobuf.ByteString;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +84,12 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             + "Please explicitly set your Project ID in FirestoreOptions.");
     this.databasePath =
         ResourcePath.create(DatabaseRootName.of(options.getProjectId(), options.getDatabaseId()));
+  }
+
+  /** Gets the TraceUtil object associated with this Firestore instance. */
+  @Nonnull
+  private TraceUtil getTraceUtil() {
+    return getOptions().getTraceUtil();
   }
 
   /** Lazy-load the Firestore's default BulkWriter. */
@@ -212,6 +220,9 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nullable FieldMask fieldMask,
       @Nullable ByteString transactionId,
       final ApiStreamObserver<DocumentSnapshot> apiStreamObserver) {
+    // To reduce the size of traces, we only register one event for every 100 responses
+    // that we receive from the server.
+    final int NUM_RESPONSES_PER_TRACE_EVENT = 100;
 
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
         new ResponseObserver<BatchGetDocumentsResponse>() {
@@ -219,7 +230,13 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
           boolean hasCompleted = false;
 
           @Override
-          public void onStart(StreamController streamController) {}
+          public void onStart(StreamController streamController) {
+            getTraceUtil()
+                .currentSpan()
+                .addEvent(
+                    TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": Start",
+                    Collections.singletonMap("numDocuments", documentReferences.length));
+          }
 
           @Override
           public void onResponse(BatchGetDocumentsResponse response) {
@@ -227,6 +244,19 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             DocumentSnapshot documentSnapshot;
 
             numResponses++;
+            if (numResponses == 1) {
+              getTraceUtil()
+                  .currentSpan()
+                  .addEvent(TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": First response received");
+            } else if (numResponses % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
+              getTraceUtil()
+                  .currentSpan()
+                  .addEvent(
+                      TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS
+                          + ": Received "
+                          + numResponses
+                          + " responses");
+            }
 
             switch (response.getResultCase()) {
               case FOUND:
@@ -261,6 +291,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
           @Override
           public void onError(Throwable throwable) {
+            getTraceUtil().currentSpan().end(throwable);
             apiStreamObserver.onError(throwable);
           }
 
@@ -268,6 +299,14 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
           public void onComplete() {
             if (hasCompleted) return;
             hasCompleted = true;
+            getTraceUtil()
+                .currentSpan()
+                .addEvent(
+                    TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS
+                        + ": Completed with "
+                        + numResponses
+                        + " responses.",
+                    Collections.singletonMap("numResponses", numResponses));
             apiStreamObserver.onCompleted();
           }
         };

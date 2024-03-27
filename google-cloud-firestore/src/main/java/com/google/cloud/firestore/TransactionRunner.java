@@ -24,11 +24,15 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
+import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
+import com.google.cloud.firestore.telemetry.TraceUtil.Span;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Context;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nonnull;
 
 /**
  * Implements backoff and retry semantics for Firestore transactions.
@@ -51,6 +55,7 @@ class TransactionRunner<T> {
   private TimedAttemptSettings nextBackoffAttempt;
   private Transaction transaction;
   private int attemptsRemaining;
+  private Span runTransactionSpan;
 
   /**
    * @param firestore The active Firestore instance
@@ -79,17 +84,34 @@ class TransactionRunner<T> {
     this.nextBackoffAttempt = backoffAlgorithm.createFirstAttempt();
   }
 
+  @Nonnull
+  private TraceUtil getTraceUtil() {
+    return firestore.getOptions().getTraceUtil();
+  }
+
   ApiFuture<T> run() {
-    this.transaction = new Transaction(firestore, transactionOptions, this.transaction);
+    runTransactionSpan = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_RUN);
+    runTransactionSpan.setAttribute("transactionType", transactionOptions.getType().name());
+    runTransactionSpan.setAttribute("numAttemptsAllowed", transactionOptions.getNumberOfAttempts());
+    runTransactionSpan.setAttribute("attemptsRemaining", attemptsRemaining);
+    try (Scope ignored = runTransactionSpan.makeCurrent()) {
+      this.transaction = new Transaction(firestore, transactionOptions, this.transaction);
 
-    --attemptsRemaining;
+      --attemptsRemaining;
 
-    return ApiFutures.catchingAsync(
-        ApiFutures.transformAsync(
-            maybeRollback(), this::rollbackCallback, MoreExecutors.directExecutor()),
-        Throwable.class,
-        this::restartTransactionCallback,
-        MoreExecutors.directExecutor());
+      ApiFuture<T> result =
+          ApiFutures.catchingAsync(
+              ApiFutures.transformAsync(
+                  maybeRollback(), this::rollbackCallback, MoreExecutors.directExecutor()),
+              Throwable.class,
+              this::restartTransactionCallback,
+              MoreExecutors.directExecutor());
+      runTransactionSpan.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      runTransactionSpan.end(error);
+      throw error;
+    }
   }
 
   private ApiFuture<Void> maybeRollback() {
@@ -181,6 +203,9 @@ class TransactionRunner<T> {
     ApiException apiException = (ApiException) throwable;
     if (transaction.hasTransactionId() && isRetryableTransactionError(apiException)) {
       if (attemptsRemaining > 0) {
+        getTraceUtil()
+            .currentSpan()
+            .addEvent("Initiating transaction retry. Attempts remaining: " + attemptsRemaining);
         return run();
       } else {
         final FirestoreException firestoreException =
@@ -228,8 +253,13 @@ class TransactionRunner<T> {
       transaction
           .rollback()
           .addListener(
-              () -> failedTransaction.setException(throwable), MoreExecutors.directExecutor());
+              () -> {
+                runTransactionSpan.end(throwable);
+                failedTransaction.setException(throwable);
+              },
+              MoreExecutors.directExecutor());
     } else {
+      runTransactionSpan.end(throwable);
       failedTransaction.setException(throwable);
     }
 
