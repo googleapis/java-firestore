@@ -27,6 +27,13 @@ import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_S
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_UPDATE;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_PARTITION_QUERY;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_QUERY_GET;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_BEGIN;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_COMMIT;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_GET_QUERY;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_ROLLBACK;
+import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_RUN;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -47,6 +54,7 @@ import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.Precondition;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.SetOptions;
+import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.it.ITTracingTest.Pojo;
 import com.google.cloud.opentelemetry.trace.TraceConfiguration;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
@@ -74,7 +82,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Stack;
 import java.util.TreeMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -89,6 +96,27 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+// This End-to-End test verifies Client-side Tracing Functionality instrumented using the
+// OpenTelemetry API.
+// The test depends on the following external APIs/Services:
+// 1. Java OpenTelemetry SDK
+// 2. Cloud Trace Exporter
+// 3. TraceServiceClient from Cloud Trace API v1.
+//
+// Permissions required to run this test (https://cloud.google.com/trace/docs/iam#trace-roles):
+// 1. gcloud auth application-default login must be run with the test user.
+// 2. To write traces, test user must have one of roles/cloudtrace.[admin|agent|user] roles.
+// 3. To read traces, test user must have one of roles/cloudtrace.[admin|user] roles.
+//
+// Each test-case has the following workflow:
+// 1. OpenTelemetry SDK is initialized with Cloud Trace Exporter and 100% Trace Sampling
+// 2. On initialization, Firestore client is provided the OpenTelemetry SDK object from (1)
+// 3. A custom TraceID is generated and injected using a custom SpanContext
+// 4. Firestore operations are run inside a root TraceSpan created using the custom SpanContext from
+// (3).
+// 5. Traces are read-back using TraceServiceClient and verified against expected Call Stacks.
+// TODO In the future it would be great to have a single test-driver for this test and
+// ITTracingTest.
 @RunWith(JUnit4.class)
 public class ITE2ETracingTest extends ITBaseTest {
 
@@ -130,30 +158,52 @@ public class ITE2ETracingTest extends ITBaseTest {
       return parentChildIdMap.get(spanId);
     }
 
-    boolean containsCallStack(List<String> callStack) throws RuntimeException {
-      if (callStack == null || callStack.isEmpty()) {
+    // This method only works for matching call stacks with traces which have children of distinct
+    // type at all
+    // levels. This is good enough as the intention is to validate if the e2e path is WAI - the
+    // intention is not to validate Cloud Trace's correctness w.r.t. durability of all kinds of
+    // traces.
+    boolean containsCallStack(String... callStack) throws RuntimeException {
+      ArrayList<String> expectedCallStack = new ArrayList<String>();
+      for (String call : callStack) {
+        expectedCallStack.add(call);
+      }
+      if (expectedCallStack.isEmpty()) {
         throw new RuntimeException("Input callStack is empty");
       }
-      // tracks the callStack
-      int iter = 0;
-      Stack<Long> dfsStack = new Stack<Long>();
-      dfsStack.push(rootId);
-      long topId = -1;
-      while ((iter < callStack.size()) && !dfsStack.isEmpty()) {
-        topId = dfsStack.pop();
-        if (spanName(topId).equals(callStack.get(iter++))) {
-          List<Long> childSpans = childSpans(topId);
-          if (childSpans != null) {
-            for (Long id : childSpans) {
-              dfsStack.push(id);
+      return dfsContainsCallStack(rootId, expectedCallStack);
+    }
+
+    // Depth-first check for call stack in the trace
+    private boolean dfsContainsCallStack(long spanId, List<String> expectedCallStack) {
+      logger.info(
+          "span="
+              + spanName(spanId)
+              + ", expectedCallStack[0]="
+              + (expectedCallStack.isEmpty() ? "null" : expectedCallStack.get(0)));
+      if (!expectedCallStack.isEmpty() && spanName(spanId).equals(expectedCallStack.get(0))) {
+        if (childSpans(spanId) == null) {
+          logger.info("No more chilren for " + spanName(spanId));
+          return true;
+        } else {
+          for (Long childSpan : childSpans(spanId)) {
+            int callStackListSize = expectedCallStack.size();
+            logger.info(
+                "childSpan="
+                    + spanName(childSpan)
+                    + ", expectedCallStackSize="
+                    + callStackListSize);
+            if (dfsContainsCallStack(
+                childSpan,
+                expectedCallStack.subList(
+                    /*fromIndexInclusive=*/ 1, /*toIndexExclusive*/ callStackListSize))) {
+              return true;
             }
           }
         }
-      }
-
-      if (iter == callStack.size()) {
-        if (childSpans(topId) == null && spanName(topId).equals(callStack.get(iter - 1))) {
-          return true;
+      } else {
+        if (!expectedCallStack.isEmpty()) {
+          logger.warning(spanName(spanId) + " didn't match " + expectedCallStack.get(0));
         }
       }
       return false;
@@ -168,11 +218,15 @@ public class ITE2ETracingTest extends ITBaseTest {
 
   private static final String BATCH_WRITE_RPC_NAME = "BatchWrite";
 
+  private static final String BEGIN_TRANSACTION_RPC_NAME = "BeginTransaction";
+
   private static final String COMMIT_RPC_NAME = "Commit";
 
   private static final String LIST_COLLECTIONS_RPC_NAME = "ListCollectionIds";
 
   private static final String LIST_DOCUMENTS_RPC_NAME = "ListDocuments";
+
+  private static final String ROLLBACK_RPC_NAME = "Rollback";
 
   private static final String RUN_AGGREGATION_QUERY_RPC_NAME = "RunAggregationQuery";
 
@@ -345,6 +399,57 @@ public class ITE2ETracingTest extends ITBaseTest {
   // Validates `retrievedTrace`. Cloud Trace indexes traces w/ eventual consistency, even when
   // indexing traceId, therefore the
   // test must retry a few times before the complete trace is available.
+  protected void fetchAndValidateTransactionTrace(
+      String traceId, int numExpectedSpans, String... callStack) throws InterruptedException {
+    // Large enough count to accommodate eventually consistent Cloud Trace backend
+    int numRetries = GET_TRACE_RETRY_COUNT;
+    do {
+      try {
+        // Fetch traces
+        retrievedTrace = traceClient_v1.getTrace(projectId, traceId);
+        assertEquals(traceId, retrievedTrace.getTraceId());
+
+        ArrayList<String> expectedCallStack = new ArrayList<String>(Arrays.asList(callStack));
+
+        // numExpectedSpans should account for rootSpanName (which is not passed in callStack)
+        expectedCallStack.add(0, rootSpanName);
+        numExpectedSpans++;
+
+        System.out.println(
+            "expectedSpanCount="
+                + numExpectedSpans
+                + ", retrievedSpanCount="
+                + retrievedTrace.getSpansCount());
+        // *Maybe* the full trace was returned
+        if (retrievedTrace.getSpansCount() == numExpectedSpans) {
+          System.out.println("Checking if TraceContainer containsCallStack");
+          TraceContainer traceContainer = new TraceContainer(rootSpanName, retrievedTrace);
+          String[] temp = new String[expectedCallStack.size()];
+          if (traceContainer.containsCallStack(expectedCallStack.toArray(temp))) {
+            return;
+          }
+          logger.severe("CallStack not found in TraceContainer.");
+        } // else the trace may not have been fully committed to Cloud Trace storage
+      } catch (NotFoundException notFound) {
+        logger.info("Trace not found, retrying in " + GET_TRACE_RETRY_BACKOFF_MILLIS + " ms");
+        Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
+        // getTrace could fail
+      } catch (IndexOutOfBoundsException outOfBoundsException) {
+        logger.info("Call stack not found in trace. Retrying.");
+        Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
+      }
+      // Retrieved trace doesn't have expected number of spans
+    } while (numRetries-- > 0);
+    throw new RuntimeException(
+        "Expected spans: "
+            + callStack.toString()
+            + ", Actual spans: "
+            + (retrievedTrace != null ? retrievedTrace.getSpansList().toString() : "null"));
+  }
+
+  // Validates `retrievedTrace`. Cloud Trace indexes traces w/ eventual consistency, even when
+  // indexing traceId, therefore the
+  // test must retry a few times before the complete trace is available.
   protected void fetchAndValidateTraces(String traceId, String... spanNames)
       throws InterruptedException {
     int numRetries = GET_TRACE_RETRY_COUNT;
@@ -381,7 +486,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void testTraceContainer() throws Exception {
+  public void traceContainerTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -394,35 +499,40 @@ public class ITE2ETracingTest extends ITBaseTest {
     }
     waitForTracesToComplete();
 
-    Thread.sleep(4000);
-    Trace traceResp = traceClient_v1.getTrace(projectId, customSpanContext.getTraceId());
+    Trace traceResp = null;
+    int expectedSpanCount = 3;
+
+    int numRetries = GET_TRACE_RETRY_COUNT;
+    do {
+      try {
+        traceResp = traceClient_v1.getTrace(projectId, customSpanContext.getTraceId());
+        if (traceResp.getSpansCount() == expectedSpanCount) {
+          break;
+        }
+      } catch (NotFoundException notFoundException) {
+        Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
+        logger.info("Trace not found, retrying in " + GET_TRACE_RETRY_BACKOFF_MILLIS + " ms");
+      }
+      numRetries--;
+    } while (numRetries > 0);
+
     TraceContainer traceCont = new TraceContainer(rootSpanName, traceResp);
-    List<String> callStack = new ArrayList<String>();
 
     // Contains exact path
-    callStack.add(rootSpanName);
-    callStack.add(SPAN_NAME_QUERY_GET);
-    callStack.add(grpcSpanName(RUN_QUERY_RPC_NAME));
-    assertTrue(traceCont.containsCallStack(callStack));
+    assertTrue(
+        traceCont.containsCallStack(
+            rootSpanName, SPAN_NAME_QUERY_GET, grpcSpanName(RUN_QUERY_RPC_NAME)));
 
     // Top-level mismatch
-    callStack.clear();
-    callStack.add(SPAN_NAME_QUERY_GET);
-    callStack.add(grpcSpanName(RUN_QUERY_RPC_NAME));
-    assertFalse(traceCont.containsCallStack(callStack));
+    assertFalse(traceCont.containsCallStack(SPAN_NAME_QUERY_GET, RUN_QUERY_RPC_NAME));
 
     // Mid-level match
-    callStack.clear();
-    callStack.add(rootSpanName);
-    callStack.add(SPAN_NAME_QUERY_GET);
-    assertFalse(traceCont.containsCallStack(callStack));
+    assertFalse(traceCont.containsCallStack(rootSpanName, SPAN_NAME_QUERY_GET));
 
     // Leaf-level mismatch/missing
-    callStack.clear();
-    callStack.add(rootSpanName);
-    callStack.add(SPAN_NAME_QUERY_GET);
-    callStack.add(grpcSpanName(RUN_AGGREGATION_QUERY_RPC_NAME));
-    assertFalse(traceCont.containsCallStack(callStack));
+    assertFalse(
+        traceCont.containsCallStack(
+            rootSpanName, SPAN_NAME_QUERY_GET, RUN_AGGREGATION_QUERY_RPC_NAME));
   }
 
   @Test
@@ -992,23 +1102,105 @@ public class ITE2ETracingTest extends ITBaseTest {
     }
     waitForTracesToComplete();
 
-    Thread.sleep(10000);
-    Trace trace = traceClient_v1.getTrace(projectId, customSpanContext.getTraceId());
-    List<TraceSpan> spanList = trace.getSpansList();
-    for (TraceSpan span : spanList) {
-      logger.info(
-          "spanName: "
-              + span.getName()
-              + ", spanId: "
-              + span.getSpanId()
-              + ", parentSpanId: "
-              + span.getParentSpanId());
-    }
+    fetchAndValidateTransactionTrace(
+        customSpanContext.getTraceId(),
+        /*numExpectedSpans=*/ 11,
+        SPAN_NAME_TRANSACTION_RUN,
+        SPAN_NAME_TRANSACTION_BEGIN,
+        grpcSpanName(BEGIN_TRANSACTION_RPC_NAME));
+
+    fetchAndValidateTransactionTrace(
+        customSpanContext.getTraceId(),
+        /*numExpectedSpans=*/ 11,
+        SPAN_NAME_TRANSACTION_RUN,
+        SPAN_NAME_TRANSACTION_GET_QUERY,
+        grpcSpanName(RUN_QUERY_RPC_NAME));
+
+    fetchAndValidateTransactionTrace(
+        customSpanContext.getTraceId(),
+        /*numExpectedSpans=*/ 11,
+        SPAN_NAME_TRANSACTION_RUN,
+        SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
+        grpcSpanName(RUN_AGGREGATION_QUERY_RPC_NAME));
+
+    fetchAndValidateTransactionTrace(
+        customSpanContext.getTraceId(),
+        /*numExpectedSpans=*/ 11,
+        SPAN_NAME_TRANSACTION_RUN,
+        SPAN_NAME_TRANSACTION_GET_DOCUMENTS,
+        grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
+
+    fetchAndValidateTransactionTrace(
+        customSpanContext.getTraceId(),
+        /*numExpectedSpans=*/ 11,
+        SPAN_NAME_TRANSACTION_RUN,
+        SPAN_NAME_TRANSACTION_COMMIT,
+        grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
-  public void transactionRollback() throws Exception {}
+  public void transactionRollback() throws Exception {
+    String myErrorMessage = "My error message.";
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      firestore
+          .runTransaction(
+              transaction -> {
+                if (true) {
+                  throw (new Exception(myErrorMessage));
+                }
+                return 0;
+              })
+          .get();
+    } catch (Exception e) {
+      // Catch and move on.
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    fetchAndValidateTransactionTrace(
+        customSpanContext.getTraceId(),
+        /*numExpectedSpans=*/ 5,
+        SPAN_NAME_TRANSACTION_RUN,
+        SPAN_NAME_TRANSACTION_BEGIN,
+        grpcSpanName(BEGIN_TRANSACTION_RPC_NAME));
+
+    fetchAndValidateTransactionTrace(
+        customSpanContext.getTraceId(),
+        /*numExpectedSpans=*/ 5,
+        SPAN_NAME_TRANSACTION_RUN,
+        SPAN_NAME_TRANSACTION_ROLLBACK,
+        grpcSpanName(ROLLBACK_RPC_NAME));
+  }
 
   @Test
-  public void writeBatch() throws Exception {}
+  public void writeBatch() throws Exception {
+    // Make sure the test has a new SpanContext (and TraceId for injection)
+    assertNotNull(customSpanContext);
+
+    // Inject new trace ID
+    Span rootSpan = getNewRootSpanWithContext();
+    try (Scope ss = rootSpan.makeCurrent()) {
+      WriteBatch batch = firestore.batch();
+      DocumentReference docRef = firestore.collection("foo").document();
+      batch.create(docRef, Collections.singletonMap("foo", "bar"));
+      batch.update(docRef, Collections.singletonMap("foo", "bar"));
+      batch.delete(docRef);
+      batch.commit().get();
+    } finally {
+      rootSpan.end();
+    }
+    waitForTracesToComplete();
+
+    fetchAndValidateTransactionTrace(
+        customSpanContext.getTraceId(),
+        /*numExpectedSpans=*/ 2,
+        SPAN_NAME_BATCH_COMMIT,
+        grpcSpanName(COMMIT_RPC_NAME));
+  }
 }
