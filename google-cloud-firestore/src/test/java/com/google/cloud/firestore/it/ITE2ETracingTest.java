@@ -438,8 +438,11 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   // Validates `retrievedTrace`. Cloud Trace indexes traces w/ eventual consistency, even when
-  // indexing traceId, therefore the
-  // test must retry a few times before the complete trace is available.
+  // indexing traceId, therefore the test must retry a few times before the complete trace is
+  // available.
+  // For Transaction traces, there may be more spans than in the trace than specified in
+  // `callStack`. So `numExpectedSpans` is the expected total number of spans (and not just the
+  // spans in `callStack`)
   protected void fetchAndValidateTransactionTrace(
       String traceId, int numExpectedSpans, String... callStack) throws InterruptedException {
     // Large enough count to accommodate eventually consistent Cloud Trace backend
@@ -489,9 +492,10 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   // Validates `retrievedTrace`. Cloud Trace indexes traces w/ eventual consistency, even when
-  // indexing traceId, therefore the
-  // test must retry a few times before the complete trace is available.
-  protected void fetchAndValidateTraces(String traceId, String... spanNames)
+  // indexing traceId, therefore the test must retry a few times before the complete trace is
+  // available.
+  // For Non-Transaction traces, there is a 1:1 ratio of spans in `spanNames` and in the trace.
+  protected void fetchAndValidateNonTransactionTrace(String traceId, String... spanNames)
       throws InterruptedException {
     int numRetries = GET_TRACE_RETRY_COUNT;
     do {
@@ -593,7 +597,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         "AggregationQuery.Get",
         grpcSpanName(RUN_AGGREGATION_QUERY_RPC_NAME));
@@ -622,7 +626,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_BULK_WRITER_COMMIT,
         grpcSpanName(BATCH_WRITE_RPC_NAME));
@@ -644,7 +648,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_PARTITION_QUERY,
         grpcSpanName(SPAN_NAME_PARTITION_QUERY));
@@ -665,7 +669,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_COL_REF_LIST_DOCUMENTS,
         grpcSpanName(LIST_DOCUMENTS_RPC_NAME));
@@ -686,7 +690,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_CREATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -708,7 +712,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_CREATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -730,7 +734,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_SET,
         SPAN_NAME_BATCH_COMMIT,
@@ -756,7 +760,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_SET,
         SPAN_NAME_BATCH_COMMIT,
@@ -778,7 +782,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_SET,
         SPAN_NAME_BATCH_COMMIT,
@@ -800,7 +804,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_SET,
         SPAN_NAME_BATCH_COMMIT,
@@ -808,7 +812,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void docRefUpdate() throws Exception {
+  public void docRefUpdateTraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -826,7 +830,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_UPDATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -834,7 +838,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void docRefUpdate2() throws Exception {
+  public void docRefUpdate2TraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -852,7 +856,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_UPDATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -860,7 +864,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void docRefUpdate3() throws Exception {
+  public void docRefUpdate3TraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -874,7 +878,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_UPDATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -882,7 +886,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void docRefUpdate4() throws Exception {
+  public void docRefUpdate4TraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -900,7 +904,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_UPDATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -908,7 +912,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void docRefUpdate5() throws Exception {
+  public void docRefUpdate5TraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -926,7 +930,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_UPDATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -934,7 +938,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void docRefUpdate6() throws Exception {
+  public void docRefUpdate6TraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -952,7 +956,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_UPDATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -960,7 +964,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void docRefDelete() throws Exception {
+  public void docRefDeleteTraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -974,7 +978,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_DELETE,
         SPAN_NAME_BATCH_COMMIT,
@@ -982,7 +986,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void docRefDelete2() throws Exception {
+  public void docRefDelete2TraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -996,7 +1000,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_DELETE,
         SPAN_NAME_BATCH_COMMIT,
@@ -1004,7 +1008,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void docRefGet() throws Exception {
+  public void docRefGetTraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -1018,14 +1022,14 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_GET,
         grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
   }
 
   @Test
-  public void docRefGet2() throws Exception {
+  public void docRefGet2TraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -1039,14 +1043,14 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_GET,
         grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
   }
 
   @Test
-  public void docListCollections() throws Exception {
+  public void docListCollectionsTraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -1060,14 +1064,14 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_LIST_COLLECTIONS,
         grpcSpanName(LIST_COLLECTIONS_RPC_NAME));
   }
 
   @Test
-  public void getAll() throws Exception {
+  public void getAllTraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -1083,12 +1087,12 @@ public class ITE2ETracingTest extends ITBaseTest {
     }
     waitForTracesToComplete();
 
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(), grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
   }
 
   @Test
-  public void queryGet() throws Exception {
+  public void queryGetTraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -1101,12 +1105,12 @@ public class ITE2ETracingTest extends ITBaseTest {
     }
     waitForTracesToComplete();
 
-    fetchAndValidateTraces(
+    fetchAndValidateNonTransactionTrace(
         customSpanContext.getTraceId(), SPAN_NAME_QUERY_GET, grpcSpanName(RUN_QUERY_RPC_NAME));
   }
 
   @Test
-  public void transaction() throws Exception {
+  public void transactionTraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
@@ -1180,7 +1184,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void transactionRollback() throws Exception {
+  public void transactionRollbackTraceTest() throws Exception {
     String myErrorMessage = "My error message.";
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
@@ -1220,7 +1224,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   @Test
-  public void writeBatch() throws Exception {
+  public void writeBatchTraceTest() throws Exception {
     // Make sure the test has a new SpanContext (and TraceId for injection)
     assertNotNull(customSpanContext);
 
