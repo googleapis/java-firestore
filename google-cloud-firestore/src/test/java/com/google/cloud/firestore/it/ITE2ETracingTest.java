@@ -62,6 +62,9 @@ import com.google.cloud.trace.v1.TraceServiceClient;
 import com.google.common.base.Preconditions;
 import com.google.devtools.cloudtrace.v1.Trace;
 import com.google.devtools.cloudtrace.v1.TraceSpan;
+import com.google.testing.junit.testparameterinjector.TestParameter;
+import com.google.testing.junit.testparameterinjector.TestParameterInjector;
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanContext;
 import io.opentelemetry.api.trace.TraceFlags;
@@ -94,7 +97,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 // This End-to-End test verifies Client-side Tracing Functionality instrumented using the
 // OpenTelemetry API.
@@ -117,8 +119,12 @@ import org.junit.runners.JUnit4;
 // 5. Traces are read-back using TraceServiceClient and verified against expected Call Stacks.
 // TODO In the future it would be great to have a single test-driver for this test and
 // ITTracingTest.
-@RunWith(JUnit4.class)
+@RunWith(TestParameterInjector.class)
 public class ITE2ETracingTest extends ITBaseTest {
+
+  protected boolean isUsingGlobalOpenTelemetrySDK() {
+    return useGlobalOpenTelemetrySDK;
+  }
 
   // Helper class to track call-stacks in a trace
   protected class TraceContainer {
@@ -268,29 +274,17 @@ public class ITE2ETracingTest extends ITBaseTest {
 
   private static Firestore firestore;
 
+  @TestParameter boolean useGlobalOpenTelemetrySDK;
+
   @BeforeClass
   public static void setup() throws IOException {
     projectId = FirestoreOptions.getDefaultProjectId();
     logger.info("projectId:" + projectId);
 
-    // Set up OTel SDK
-    Resource resource =
-        Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
-
     // TODO(jimit) Make it re-usable w/ InMemorySpanExporter
     traceExporter =
         TraceExporter.createWithConfiguration(
             TraceConfiguration.builder().setProjectId(projectId).build());
-
-    openTelemetrySdk =
-        OpenTelemetrySdk.builder()
-            .setTracerProvider(
-                SdkTracerProvider.builder()
-                    .setResource(resource)
-                    .addSpanProcessor(BatchSpanProcessor.builder(traceExporter).build())
-                    .setSampler(Sampler.alwaysOn())
-                    .build())
-            .build();
 
     traceClient_v1 = TraceServiceClient.create();
 
@@ -299,16 +293,50 @@ public class ITE2ETracingTest extends ITBaseTest {
 
   @Before
   public void before() throws Exception {
+    // Set up OTel SDK
+    Resource resource =
+        Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
+
+    if (isUsingGlobalOpenTelemetrySDK()) {
+      openTelemetrySdk =
+          OpenTelemetrySdk.builder()
+              .setTracerProvider(
+                  SdkTracerProvider.builder()
+                      .setResource(resource)
+                      .addSpanProcessor(BatchSpanProcessor.builder(traceExporter).build())
+                      .setSampler(Sampler.alwaysOn())
+                      .build())
+              .buildAndRegisterGlobal();
+    } else {
+      openTelemetrySdk =
+          OpenTelemetrySdk.builder()
+              .setTracerProvider(
+                  SdkTracerProvider.builder()
+                      .setResource(resource)
+                      .addSpanProcessor(BatchSpanProcessor.builder(traceExporter).build())
+                      .setSampler(Sampler.alwaysOn())
+                      .build())
+              .build();
+    }
+
     // Initialize the Firestore DB w/ the OTel SDK. Ideally we'd do this is the @BeforeAll method
     // but because gRPC traces need to be deterministically force-flushed, firestore.shutdown()
     // must be called in @After for each test.
-    FirestoreOptions.Builder optionsBuilder =
-        FirestoreOptions.newBuilder()
-            .setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions.newBuilder()
-                    .setOpenTelemetry(openTelemetrySdk)
-                    .setTracingEnabled(true)
-                    .build());
+    FirestoreOptions.Builder optionsBuilder;
+    if (isUsingGlobalOpenTelemetrySDK()) {
+      optionsBuilder =
+          FirestoreOptions.newBuilder()
+              .setOpenTelemetryOptions(
+                  FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build());
+    } else {
+      optionsBuilder =
+          FirestoreOptions.newBuilder()
+              .setOpenTelemetryOptions(
+                  FirestoreOpenTelemetryOptions.newBuilder()
+                      .setOpenTelemetry(openTelemetrySdk)
+                      .setTracingEnabled(true)
+                      .build());
+    }
 
     String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
     if (namedDb != null) {
@@ -322,10 +350,20 @@ public class ITE2ETracingTest extends ITBaseTest {
         firestore,
         "Error instantiating Firestore. Check that the service account credentials "
             + "were properly set.");
+
+    // Set up the tracer for custom TraceID injection
     rootSpanName =
         String.format("%s%d", this.getClass().getSimpleName(), System.currentTimeMillis());
-    tracer =
-        firestore.getOptions().getOpenTelemetryOptions().getOpenTelemetry().getTracer(rootSpanName);
+    if (isUsingGlobalOpenTelemetrySDK()) {
+      tracer = GlobalOpenTelemetry.getTracer(rootSpanName);
+    } else {
+      tracer =
+          firestore
+              .getOptions()
+              .getOpenTelemetryOptions()
+              .getOpenTelemetry()
+              .getTracer(rootSpanName);
+    }
 
     // Get up a new SpanContext (ergo TraceId) for each test
     customSpanContext = getNewSpanContext();
@@ -335,6 +373,9 @@ public class ITE2ETracingTest extends ITBaseTest {
 
   @After
   public void after() throws Exception {
+    if (isUsingGlobalOpenTelemetrySDK()) {
+      GlobalOpenTelemetry.resetForTest();
+    }
     firestore.shutdown();
     rootSpanName = null;
     tracer = null;
