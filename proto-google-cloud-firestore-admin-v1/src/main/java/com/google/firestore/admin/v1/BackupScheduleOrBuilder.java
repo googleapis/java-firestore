@@ -194,7 +194,7 @@ public interface BackupScheduleOrBuilder
    *
    *
    * <pre>
-   * For a schedule that runs daily at a specified time.
+   * For a schedule that runs daily.
    * </pre>
    *
    * <code>.google.firestore.admin.v1.DailyRecurrence daily_recurrence = 7;</code>
@@ -206,7 +206,7 @@ public interface BackupScheduleOrBuilder
    *
    *
    * <pre>
-   * For a schedule that runs daily at a specified time.
+   * For a schedule that runs daily.
    * </pre>
    *
    * <code>.google.firestore.admin.v1.DailyRecurrence daily_recurrence = 7;</code>
@@ -218,7 +218,7 @@ public interface BackupScheduleOrBuilder
    *
    *
    * <pre>
-   * For a schedule that runs daily at a specified time.
+   * For a schedule that runs daily.
    * </pre>
    *
    * <code>.google.firestore.admin.v1.DailyRecurrence daily_recurrence = 7;</code>
@@ -229,7 +229,7 @@ public interface BackupScheduleOrBuilder
    *
    *
    * <pre>
-   * For a schedule that runs weekly on a specific day and time.
+   * For a schedule that runs weekly on a specific day.
    * </pre>
    *
    * <code>.google.firestore.admin.v1.WeeklyRecurrence weekly_recurrence = 8;</code>
@@ -241,7 +241,7 @@ public interface BackupScheduleOrBuilder
    *
    *
    * <pre>
-   * For a schedule that runs weekly on a specific day and time.
+   * For a schedule that runs weekly on a specific day.
    * </pre>
    *
    * <code>.google.firestore.admin.v1.WeeklyRecurrence weekly_recurrence = 8;</code>
@@ -253,7 +253,7 @@ public interface BackupScheduleOrBuilder
    *
    *
    * <pre>
-   * For a schedule that runs weekly on a specific day and time.
+   * For a schedule that runs weekly on a specific day.
    * </pre>
    *
    * <code>.google.firestore.admin.v1.WeeklyRecurrence weekly_recurrence = 8;</code>

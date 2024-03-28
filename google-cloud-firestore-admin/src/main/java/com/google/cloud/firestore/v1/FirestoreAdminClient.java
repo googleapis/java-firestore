@@ -3715,7 +3715,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * }</pre>
    *
-   * @param name Required. The name of backup schedule.
+   * @param name Required. The name of the backup schedule.
    *     <p>Format `projects/{project}/databases/{database}/backupSchedules/{backup_schedule}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -3746,7 +3746,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * }</pre>
    *
-   * @param name Required. The name of backup schedule.
+   * @param name Required. The name of the backup schedule.
    *     <p>Format `projects/{project}/databases/{database}/backupSchedules/{backup_schedule}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
