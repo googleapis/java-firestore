@@ -445,91 +445,81 @@ public class ITE2ETracingTest extends ITBaseTest {
   // For Transaction traces, there may be more spans than in the trace than specified in
   // `callStack`. So `numExpectedSpans` is the expected total number of spans (and not just the
   // spans in `callStack`)
-  protected void fetchAndValidateTransactionTrace(
-      String traceId, int numExpectedSpans, String... callStack) throws InterruptedException {
+  protected void fetchAndValidateTrace(
+      String traceId, int numExpectedSpans, List<List<String>> callStackList)
+      throws InterruptedException {
     // Large enough count to accommodate eventually consistent Cloud Trace backend
     int numRetries = GET_TRACE_RETRY_COUNT;
+    // Account for rootSpanName
+    numExpectedSpans++;
+
+    // Fetch traces
     do {
       try {
-        // Fetch traces
         retrievedTrace = traceClient_v1.getTrace(projectId, traceId);
         assertEquals(traceId, retrievedTrace.getTraceId());
-
-        ArrayList<String> expectedCallStack = new ArrayList<String>(Arrays.asList(callStack));
-
-        // numExpectedSpans should account for rootSpanName (which is not passed in callStack)
-        expectedCallStack.add(0, rootSpanName);
-        numExpectedSpans++;
 
         logger.info(
             "expectedSpanCount="
                 + numExpectedSpans
                 + ", retrievedSpanCount="
                 + retrievedTrace.getSpansCount());
-        // *Maybe* the full trace was returned
-        if (retrievedTrace.getSpansCount() == numExpectedSpans) {
-          logger.info("Checking if TraceContainer containsCallStack");
-          TraceContainer traceContainer = new TraceContainer(rootSpanName, retrievedTrace);
-          String[] temp = new String[expectedCallStack.size()];
-          if (traceContainer.containsCallStack(expectedCallStack.toArray(temp))) {
-            return;
-          }
-          logger.severe("CallStack not found in TraceContainer.");
-        } // else the trace may not have been fully committed to Cloud Trace storage
       } catch (NotFoundException notFound) {
         logger.info("Trace not found, retrying in " + GET_TRACE_RETRY_BACKOFF_MILLIS + " ms");
-        Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
-        // getTrace could fail
       } catch (IndexOutOfBoundsException outOfBoundsException) {
         logger.info("Call stack not found in trace. Retrying.");
+      }
+      if (retrievedTrace == null || numExpectedSpans != retrievedTrace.getSpansCount()) {
         Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
       }
-      // Retrieved trace doesn't have expected number of spans
-    } while (numRetries-- > 0);
-    throw new RuntimeException(
-        "Expected spans: "
-            + callStack.toString()
-            + ", Actual spans: "
-            + (retrievedTrace != null ? retrievedTrace.getSpansList().toString() : "null"));
+    } while (numRetries-- > 0
+        && (retrievedTrace == null || numExpectedSpans != retrievedTrace.getSpansCount()));
+
+    if (retrievedTrace == null || numExpectedSpans != retrievedTrace.getSpansCount()) {
+      throw new RuntimeException(
+          "Expected number of spans: "
+              + numExpectedSpans
+              + ", Actual number of spans: "
+              + (retrievedTrace != null
+                  ? retrievedTrace.getSpansList().toString()
+                  : "Trace NOT_FOUND"));
+    }
+
+    TraceContainer traceContainer = new TraceContainer(rootSpanName, retrievedTrace);
+
+    for (List<String> callStack : callStackList) {
+      // Update all call stacks to be rooted at rootSpanName
+      ArrayList<String> expectedCallStack = new ArrayList<>(callStack);
+
+      // numExpectedSpans should account for rootSpanName (not passed in callStackList)
+      expectedCallStack.add(0, rootSpanName);
+
+      // *May be* the full trace was returned
+      logger.info("Checking if TraceContainer contains the callStack");
+      String[] expectedCallList = new String[expectedCallStack.size()];
+      if (!traceContainer.containsCallStack(expectedCallStack.toArray(expectedCallList))) {
+        throw new RuntimeException(
+            "Expected spans: "
+                + expectedCallList.toString()
+                + ", Actual spans: "
+                + (retrievedTrace != null
+                    ? retrievedTrace.getSpansList().toString()
+                    : "Trace NOT_FOUND"));
+      }
+      logger.severe("CallStack not found in TraceContainer.");
+    }
   }
 
   // Validates `retrievedTrace`. Cloud Trace indexes traces w/ eventual consistency, even when
   // indexing traceId, therefore the test must retry a few times before the complete trace is
   // available.
   // For Non-Transaction traces, there is a 1:1 ratio of spans in `spanNames` and in the trace.
-  protected void fetchAndValidateNonTransactionTrace(String traceId, String... spanNames)
+  protected void fetchAndValidateTrace(String traceId, String... spanNames)
       throws InterruptedException {
     int numRetries = GET_TRACE_RETRY_COUNT;
-    do {
-      try {
-        // Fetch traces
-        retrievedTrace = traceClient_v1.getTrace(projectId, traceId);
-        ArrayList<String> spanNameList = new ArrayList<String>(Arrays.asList(spanNames));
-        spanNameList.add(0, rootSpanName);
-        // Validate trace spans
-        assertEquals(traceId, retrievedTrace.getTraceId());
-        for (int i = 0; i < spanNameList.size(); ++i) {
-          assertEquals(spanNameList.get(i), retrievedTrace.getSpans(i).getName());
-        }
-        assertEquals(spanNameList.size(), retrievedTrace.getSpansCount());
-        return;
-      } catch (NotFoundException notFound) {
-        logger.info("Trace not found, retrying in " + GET_TRACE_RETRY_BACKOFF_MILLIS + " ms");
-        Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
-      } catch (IndexOutOfBoundsException outOfBoundsException) {
-        logger.info(
-            "Expected # spans: "
-                + (spanNames.length + 1)
-                + "Actual # spans: "
-                + retrievedTrace.getSpansCount());
-        Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
-      }
-    } while (numRetries-- > 0);
-    throw new RuntimeException(
-        "Expected spans: "
-            + spanNames.toString()
-            + ", Actual spans: "
-            + (retrievedTrace != null ? retrievedTrace.getSpansList().toString() : "null"));
+    int numSpans = spanNames.length;
+
+    fetchAndValidateTrace(traceId, numSpans, Arrays.asList(Arrays.asList(spanNames)));
   }
 
   @Test
@@ -599,7 +589,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         "AggregationQuery.Get",
         grpcSpanName(RUN_AGGREGATION_QUERY_RPC_NAME));
@@ -628,7 +618,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_BULK_WRITER_COMMIT,
         grpcSpanName(BATCH_WRITE_RPC_NAME));
@@ -650,7 +640,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_PARTITION_QUERY,
         grpcSpanName(SPAN_NAME_PARTITION_QUERY));
@@ -671,7 +661,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_COL_REF_LIST_DOCUMENTS,
         grpcSpanName(LIST_DOCUMENTS_RPC_NAME));
@@ -692,7 +682,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_CREATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -714,7 +704,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_CREATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -736,7 +726,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_SET,
         SPAN_NAME_BATCH_COMMIT,
@@ -762,7 +752,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_SET,
         SPAN_NAME_BATCH_COMMIT,
@@ -784,7 +774,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_SET,
         SPAN_NAME_BATCH_COMMIT,
@@ -806,7 +796,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_SET,
         SPAN_NAME_BATCH_COMMIT,
@@ -832,7 +822,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_UPDATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -858,7 +848,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_UPDATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -880,7 +870,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_UPDATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -906,7 +896,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_UPDATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -932,7 +922,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_UPDATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -958,7 +948,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_UPDATE,
         SPAN_NAME_BATCH_COMMIT,
@@ -980,7 +970,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_DELETE,
         SPAN_NAME_BATCH_COMMIT,
@@ -1002,7 +992,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_DELETE,
         SPAN_NAME_BATCH_COMMIT,
@@ -1024,7 +1014,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_GET,
         grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
@@ -1045,7 +1035,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_GET,
         grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
@@ -1066,7 +1056,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     // Read and validate traces
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         SPAN_NAME_DOC_REF_LIST_COLLECTIONS,
         grpcSpanName(LIST_COLLECTIONS_RPC_NAME));
@@ -1089,7 +1079,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     }
     waitForTracesToComplete();
 
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(), grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
   }
 
@@ -1107,7 +1097,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     }
     waitForTracesToComplete();
 
-    fetchAndValidateNonTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(), SPAN_NAME_QUERY_GET, grpcSpanName(RUN_QUERY_RPC_NAME));
   }
 
@@ -1149,40 +1139,34 @@ public class ITE2ETracingTest extends ITBaseTest {
     }
     waitForTracesToComplete();
 
-    fetchAndValidateTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         /*numExpectedSpans=*/ 11,
-        SPAN_NAME_TRANSACTION_RUN,
-        SPAN_NAME_TRANSACTION_BEGIN,
-        grpcSpanName(BEGIN_TRANSACTION_RPC_NAME));
-
-    fetchAndValidateTransactionTrace(
-        customSpanContext.getTraceId(),
-        /*numExpectedSpans=*/ 11,
-        SPAN_NAME_TRANSACTION_RUN,
-        SPAN_NAME_TRANSACTION_GET_QUERY,
-        grpcSpanName(RUN_QUERY_RPC_NAME));
-
-    fetchAndValidateTransactionTrace(
-        customSpanContext.getTraceId(),
-        /*numExpectedSpans=*/ 11,
-        SPAN_NAME_TRANSACTION_RUN,
-        SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
-        grpcSpanName(RUN_AGGREGATION_QUERY_RPC_NAME));
-
-    fetchAndValidateTransactionTrace(
-        customSpanContext.getTraceId(),
-        /*numExpectedSpans=*/ 11,
-        SPAN_NAME_TRANSACTION_RUN,
-        SPAN_NAME_TRANSACTION_GET_DOCUMENTS,
-        grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
-
-    fetchAndValidateTransactionTrace(
-        customSpanContext.getTraceId(),
-        /*numExpectedSpans=*/ 11,
-        SPAN_NAME_TRANSACTION_RUN,
-        SPAN_NAME_TRANSACTION_COMMIT,
-        grpcSpanName(COMMIT_RPC_NAME));
+        Arrays.asList(
+            Arrays.asList(
+                SPAN_NAME_TRANSACTION_RUN,
+                SPAN_NAME_TRANSACTION_BEGIN,
+                grpcSpanName(BEGIN_TRANSACTION_RPC_NAME)),
+            Arrays.asList(
+                SPAN_NAME_TRANSACTION_RUN,
+                SPAN_NAME_TRANSACTION_BEGIN,
+                grpcSpanName(BEGIN_TRANSACTION_RPC_NAME)),
+            Arrays.asList(
+                SPAN_NAME_TRANSACTION_RUN,
+                SPAN_NAME_TRANSACTION_GET_QUERY,
+                grpcSpanName(RUN_QUERY_RPC_NAME)),
+            Arrays.asList(
+                SPAN_NAME_TRANSACTION_RUN,
+                SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
+                grpcSpanName(RUN_AGGREGATION_QUERY_RPC_NAME)),
+            Arrays.asList(
+                SPAN_NAME_TRANSACTION_RUN,
+                SPAN_NAME_TRANSACTION_GET_DOCUMENTS,
+                grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME)),
+            Arrays.asList(
+                SPAN_NAME_TRANSACTION_RUN,
+                SPAN_NAME_TRANSACTION_COMMIT,
+                grpcSpanName(COMMIT_RPC_NAME))));
   }
 
   @Test
@@ -1210,19 +1194,18 @@ public class ITE2ETracingTest extends ITBaseTest {
     }
     waitForTracesToComplete();
 
-    fetchAndValidateTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         /*numExpectedSpans=*/ 5,
-        SPAN_NAME_TRANSACTION_RUN,
-        SPAN_NAME_TRANSACTION_BEGIN,
-        grpcSpanName(BEGIN_TRANSACTION_RPC_NAME));
-
-    fetchAndValidateTransactionTrace(
-        customSpanContext.getTraceId(),
-        /*numExpectedSpans=*/ 5,
-        SPAN_NAME_TRANSACTION_RUN,
-        SPAN_NAME_TRANSACTION_ROLLBACK,
-        grpcSpanName(ROLLBACK_RPC_NAME));
+        Arrays.asList(
+            Arrays.asList(
+                SPAN_NAME_TRANSACTION_RUN,
+                SPAN_NAME_TRANSACTION_BEGIN,
+                grpcSpanName(BEGIN_TRANSACTION_RPC_NAME)),
+            Arrays.asList(
+                SPAN_NAME_TRANSACTION_RUN,
+                SPAN_NAME_TRANSACTION_ROLLBACK,
+                grpcSpanName(ROLLBACK_RPC_NAME))));
   }
 
   @Test
@@ -1244,10 +1227,9 @@ public class ITE2ETracingTest extends ITBaseTest {
     }
     waitForTracesToComplete();
 
-    fetchAndValidateTransactionTrace(
+    fetchAndValidateTrace(
         customSpanContext.getTraceId(),
         /*numExpectedSpans=*/ 2,
-        SPAN_NAME_BATCH_COMMIT,
-        grpcSpanName(COMMIT_RPC_NAME));
+        Arrays.asList(Arrays.asList(SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME))));
   }
 }
