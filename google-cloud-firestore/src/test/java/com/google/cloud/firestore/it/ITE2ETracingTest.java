@@ -165,10 +165,9 @@ public class ITE2ETracingTest extends ITBaseTest {
     }
 
     // This method only works for matching call stacks with traces which have children of distinct
-    // type at all
-    // levels. This is good enough as the intention is to validate if the e2e path is WAI - the
-    // intention is not to validate Cloud Trace's correctness w.r.t. durability of all kinds of
-    // traces.
+    // type at all levels. This is good enough as the intention is to validate if the e2e path is
+    // WAI - the intention is not to validate Cloud Trace's correctness w.r.t. durability of all
+    // kinds of traces.
     boolean containsCallStack(String... callStack) throws RuntimeException {
       ArrayList<String> expectedCallStack = new ArrayList<String>();
       for (String call : callStack) {
@@ -187,11 +186,16 @@ public class ITE2ETracingTest extends ITBaseTest {
               + spanName(spanId)
               + ", expectedCallStack[0]="
               + (expectedCallStack.isEmpty() ? "null" : expectedCallStack.get(0)));
-      if (!expectedCallStack.isEmpty() && spanName(spanId).equals(expectedCallStack.get(0))) {
+      if (expectedCallStack.isEmpty()) {
+        throw new RuntimeException("Input callStack is empty");
+      }
+      if (spanName(spanId).equals(expectedCallStack.get(0))) {
+        // Recursion termination
         if (childSpans(spanId) == null) {
           logger.info("No more chilren for " + spanName(spanId));
           return true;
         } else {
+          // Examine the child spans
           for (Long childSpan : childSpans(spanId)) {
             int callStackListSize = expectedCallStack.size();
             logger.info(
@@ -208,15 +212,13 @@ public class ITE2ETracingTest extends ITBaseTest {
           }
         }
       } else {
-        if (!expectedCallStack.isEmpty()) {
-          logger.warning(spanName(spanId) + " didn't match " + expectedCallStack.get(0));
-        }
+        logger.info(spanName(spanId) + " didn't match " + expectedCallStack.get(0));
       }
       return false;
     }
   }
 
-  private static final Logger logger = Logger.getLogger(ITBaseTest.class.getName());
+  private static final Logger logger = Logger.getLogger(ITE2ETracingTest.class.getName());
 
   private static final String SERVICE = "google.firestore.v1.Firestore/";
 
@@ -391,7 +393,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     completableResultCode.join(TRACE_PROVIDER_SHUTDOWN_MILLIS, TimeUnit.MILLISECONDS);
   }
 
-  // Generates a random 32-byte hex string
+  // Generates a random hex string of length `numBytes`
   private String generateRandomHexString(int numBytes) {
     StringBuffer newTraceId = new StringBuffer();
     while (newTraceId.length() < numBytes) {
@@ -459,14 +461,14 @@ public class ITE2ETracingTest extends ITBaseTest {
         expectedCallStack.add(0, rootSpanName);
         numExpectedSpans++;
 
-        System.out.println(
+        logger.info(
             "expectedSpanCount="
                 + numExpectedSpans
                 + ", retrievedSpanCount="
                 + retrievedTrace.getSpansCount());
         // *Maybe* the full trace was returned
         if (retrievedTrace.getSpansCount() == numExpectedSpans) {
-          System.out.println("Checking if TraceContainer containsCallStack");
+          logger.info("Checking if TraceContainer containsCallStack");
           TraceContainer traceContainer = new TraceContainer(rootSpanName, retrievedTrace);
           String[] temp = new String[expectedCallStack.size()];
           if (traceContainer.containsCallStack(expectedCallStack.toArray(temp))) {
