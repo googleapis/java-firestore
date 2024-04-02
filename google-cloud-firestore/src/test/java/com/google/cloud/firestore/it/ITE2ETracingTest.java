@@ -169,10 +169,7 @@ public class ITE2ETracingTest extends ITBaseTest {
     // WAI - the intention is not to validate Cloud Trace's correctness w.r.t. durability of all
     // kinds of traces.
     boolean containsCallStack(String... callStack) throws RuntimeException {
-      ArrayList<String> expectedCallStack = new ArrayList<String>();
-      for (String call : callStack) {
-        expectedCallStack.add(call);
-      }
+      List<String> expectedCallStack = Arrays.asList(callStack);
       if (expectedCallStack.isEmpty()) {
         throw new RuntimeException("Input callStack is empty");
       }
