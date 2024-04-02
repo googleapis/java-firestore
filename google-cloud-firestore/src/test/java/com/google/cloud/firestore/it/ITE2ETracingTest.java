@@ -187,7 +187,7 @@ public class ITE2ETracingTest extends ITBaseTest {
               + ", expectedCallStack[0]="
               + (expectedCallStack.isEmpty() ? "null" : expectedCallStack.get(0)));
       if (expectedCallStack.isEmpty()) {
-        throw new RuntimeException("Input callStack is empty");
+        return false;
       }
       if (spanName(spanId).equals(expectedCallStack.get(0))) {
         // Recursion termination
