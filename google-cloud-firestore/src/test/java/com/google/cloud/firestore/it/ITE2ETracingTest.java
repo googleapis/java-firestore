@@ -82,9 +82,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -127,20 +129,20 @@ public class ITE2ETracingTest extends ITBaseTest {
   }
 
   // Helper class to track call-stacks in a trace
-  protected class TraceContainer {
+  protected static class TraceContainer {
 
     // Maps Span ID to TraceSpan
-    private Map<Long, TraceSpan> idSpanMap;
+    private final Map<Long, TraceSpan> idSpanMap;
 
     // Maps Parent Span ID to a list of Child SpanIDs, useful for top-down traversal
-    private Map<Long, List<Long>> parentChildIdMap;
+    private final Map<Long, List<Long>> parentChildIdMap;
 
     // Tracks the Root Span ID
     private long rootId;
 
     public TraceContainer(String rootSpanName, Trace trace) {
-      idSpanMap = new TreeMap<Long, TraceSpan>();
-      parentChildIdMap = new TreeMap<Long, List<Long>>();
+      idSpanMap = new TreeMap<>();
+      parentChildIdMap = new TreeMap<>();
       for (TraceSpan span : trace.getSpansList()) {
         long spanId = span.getSpanId();
         idSpanMap.put(spanId, span);
@@ -150,7 +152,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
         // Add self as a child of the parent span
         if (!parentChildIdMap.containsKey(span.getParentSpanId())) {
-          parentChildIdMap.put(span.getParentSpanId(), new ArrayList<Long>());
+          parentChildIdMap.put(span.getParentSpanId(), new ArrayList<>());
         }
         parentChildIdMap.get(span.getParentSpanId()).add(spanId);
       }
@@ -442,13 +444,15 @@ public class ITE2ETracingTest extends ITBaseTest {
   // For Transaction traces, there may be more spans than in the trace than specified in
   // `callStack`. So `numExpectedSpans` is the expected total number of spans (and not just the
   // spans in `callStack`)
-  protected void fetchAndValidateTrace(
-      String traceId, int numExpectedSpans, List<List<String>> callStackList)
+  protected void fetchAndValidateTrace(String traceId, List<List<String>> callStackList)
       throws InterruptedException {
     // Large enough count to accommodate eventually consistent Cloud Trace backend
     int numRetries = GET_TRACE_RETRY_COUNT;
-    // Account for rootSpanName
-    numExpectedSpans++;
+
+    // Find the number of unique spans, and Add '1' to account for rootSpanName.
+    Set<String> spanNames = new HashSet<>();
+    callStackList.forEach(spanNames::addAll);
+    int numExpectedSpans = spanNames.size() + 1;
 
     // Fetch traces
     do {
@@ -513,10 +517,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   // For Non-Transaction traces, there is a 1:1 ratio of spans in `spanNames` and in the trace.
   protected void fetchAndValidateTrace(String traceId, String... spanNames)
       throws InterruptedException {
-    int numRetries = GET_TRACE_RETRY_COUNT;
-    int numSpans = spanNames.length;
-
-    fetchAndValidateTrace(traceId, numSpans, Arrays.asList(Arrays.asList(spanNames)));
+    fetchAndValidateTrace(traceId, Collections.singletonList(Arrays.asList(spanNames)));
   }
 
   @Test
@@ -526,7 +527,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").whereEqualTo("foo", "my_non_existent_value").get().get();
     } finally {
       rootSpan.end();
@@ -577,7 +578,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       // Execute the Firestore SDK op
       firestore.collection("col").count().get().get();
     } finally {
@@ -599,7 +600,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       // Execute the Firestore SDK op
       ScheduledExecutorService bulkWriterExecutor = Executors.newSingleThreadScheduledExecutor();
       BulkWriter bulkWriter =
@@ -628,7 +629,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       CollectionGroup collectionGroup = firestore.collectionGroup("col");
       collectionGroup.getPartitions(3).get();
     } finally {
@@ -650,7 +651,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").listDocuments();
     } finally {
       rootSpan.end();
@@ -671,7 +672,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").document().create(Collections.singletonMap("foo", "bar")).get();
     } finally {
       rootSpan.end();
@@ -693,7 +694,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").document().create(new Pojo(1)).get();
     } finally {
       rootSpan.end();
@@ -715,7 +716,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").document("foo").set(Collections.singletonMap("foo", "bar")).get();
     } finally {
       rootSpan.end();
@@ -737,7 +738,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore
           .collection("col")
           .document("foo")
@@ -763,7 +764,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").document("foo").set(new Pojo(1)).get();
     } finally {
       rootSpan.end();
@@ -785,7 +786,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").document("foo").set(new Pojo(1), SetOptions.merge()).get();
     } finally {
       rootSpan.end();
@@ -807,7 +808,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore
           .collection("col")
           .document("foo")
@@ -833,7 +834,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore
           .collection("col")
           .document("foo")
@@ -859,7 +860,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").document("foo").update("key", "value", "key2", "value2").get();
     } finally {
       rootSpan.end();
@@ -881,7 +882,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore
           .collection("col")
           .document("foo")
@@ -907,7 +908,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore
           .collection("col")
           .document("foo")
@@ -933,7 +934,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore
           .collection("col")
           .document("foo")
@@ -959,7 +960,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").document("doc0").delete().get();
     } finally {
       rootSpan.end();
@@ -981,7 +982,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").document("doc0").delete(Precondition.NONE).get();
     } finally {
       rootSpan.end();
@@ -1003,7 +1004,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").document("doc0").get().get();
     } finally {
       rootSpan.end();
@@ -1024,7 +1025,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").document("doc0").get(FieldMask.of("foo")).get();
     } finally {
       rootSpan.end();
@@ -1045,7 +1046,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").document("doc0").listCollections();
     } finally {
       rootSpan.end();
@@ -1066,7 +1067,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       DocumentReference docRef0 = firestore.collection("col").document();
       DocumentReference docRef1 = firestore.collection("col").document();
       DocumentReference[] docs = {docRef0, docRef1};
@@ -1087,7 +1088,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore.collection("col").whereEqualTo("foo", "my_non_existent_value").get().get();
     } finally {
       rootSpan.end();
@@ -1105,13 +1106,12 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore
           .runTransaction(
               transaction -> {
                 Query q = firestore.collection("col").whereGreaterThan("bla", "");
                 DocumentReference d = firestore.collection("col").document("foo");
-                DocumentReference[] docList = {d, d};
                 // Document Query.
                 transaction.get(q).get();
 
@@ -1138,7 +1138,6 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        /*numExpectedSpans=*/ 11,
         Arrays.asList(
             Arrays.asList(
                 SPAN_NAME_TRANSACTION_RUN,
@@ -1174,7 +1173,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       firestore
           .runTransaction(
               transaction -> {
@@ -1193,7 +1192,6 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        /*numExpectedSpans=*/ 5,
         Arrays.asList(
             Arrays.asList(
                 SPAN_NAME_TRANSACTION_RUN,
@@ -1212,7 +1210,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     // Inject new trace ID
     Span rootSpan = getNewRootSpanWithContext();
-    try (Scope ss = rootSpan.makeCurrent()) {
+    try (Scope ignored = rootSpan.makeCurrent()) {
       WriteBatch batch = firestore.batch();
       DocumentReference docRef = firestore.collection("foo").document();
       batch.create(docRef, Collections.singletonMap("foo", "bar"));
@@ -1225,8 +1223,6 @@ public class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     fetchAndValidateTrace(
-        customSpanContext.getTraceId(),
-        /*numExpectedSpans=*/ 2,
-        Arrays.asList(Arrays.asList(SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME))));
+        customSpanContext.getTraceId(), SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 }
