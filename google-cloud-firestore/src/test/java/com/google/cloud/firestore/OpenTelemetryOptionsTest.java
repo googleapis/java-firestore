@@ -52,7 +52,7 @@ public class OpenTelemetryOptionsTest {
   public void defaultOptionsDisablesTelemetryCollection() {
     FirestoreOptions firestoreOptions = getBaseOptions().build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOptions().getOpenTelemetryOptions().getTracingEnabled()).isFalse();
+    assertThat(firestore.getOptions().getOpenTelemetryOptions().isTracingEnabled()).isFalse();
     assertThat(firestore.getOptions().getOpenTelemetryOptions().getOpenTelemetry()).isNull();
     assertThat(firestore.getOptions().getTraceUtil()).isNotNull();
     assertThat(firestore.getOptions().getTraceUtil() instanceof DisabledTraceUtil).isTrue();
@@ -66,7 +66,7 @@ public class OpenTelemetryOptionsTest {
                 FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build())
             .build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOptions().getOpenTelemetryOptions().getTracingEnabled()).isTrue();
+    assertThat(firestore.getOptions().getOpenTelemetryOptions().isTracingEnabled()).isTrue();
     assertThat(firestore.getOptions().getOpenTelemetryOptions().getOpenTelemetry()).isNull();
     assertThat(firestore.getOptions().getTraceUtil()).isNotNull();
     assertThat(firestore.getOptions().getTraceUtil() instanceof EnabledTraceUtil).isTrue();
@@ -84,7 +84,7 @@ public class OpenTelemetryOptionsTest {
                     .build())
             .build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOptions().getOpenTelemetryOptions().getTracingEnabled()).isTrue();
+    assertThat(firestore.getOptions().getOpenTelemetryOptions().isTracingEnabled()).isTrue();
     assertThat(firestore.getOptions().getOpenTelemetryOptions().getOpenTelemetry())
         .isEqualTo(openTelemetry);
     assertThat(firestore.getOptions().getTraceUtil()).isNotNull();
@@ -103,7 +103,7 @@ public class OpenTelemetryOptionsTest {
                     .build())
             .build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOptions().getOpenTelemetryOptions().getTracingEnabled()).isFalse();
+    assertThat(firestore.getOptions().getOpenTelemetryOptions().isTracingEnabled()).isFalse();
     assertThat(firestore.getOptions().getOpenTelemetryOptions().getOpenTelemetry())
         .isEqualTo(openTelemetry);
     assertThat(firestore.getOptions().getTraceUtil()).isNotNull();
@@ -118,7 +118,7 @@ public class OpenTelemetryOptionsTest {
     // Make sure Firestore does not use GlobalOpenTelemetry by default.
     FirestoreOptions firestoreOptions = getBaseOptions().build();
     firestore = firestoreOptions.getService();
-    assertThat(firestore.getOptions().getOpenTelemetryOptions().getTracingEnabled()).isFalse();
+    assertThat(firestore.getOptions().getOpenTelemetryOptions().isTracingEnabled()).isFalse();
     assertThat(firestore.getOptions().getOpenTelemetryOptions().getOpenTelemetry()).isNull();
     assertThat(firestore.getOptions().getTraceUtil()).isNotNull();
     assertThat(firestore.getOptions().getTraceUtil() instanceof DisabledTraceUtil).isTrue();

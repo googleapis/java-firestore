@@ -62,7 +62,7 @@ public interface TraceUtil {
    * @return An instance of the TraceUtil class.
    */
   static TraceUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
-    boolean createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().getTracingEnabled();
+    boolean createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().isTracingEnabled();
 
     // The environment variable can override options to enable/disable telemetry collection.
     String enableTracingEnvVar = System.getenv(ENABLE_TRACING_ENV_VAR);

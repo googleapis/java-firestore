@@ -29,7 +29,7 @@ public class FirestoreOpenTelemetryOptions {
     this.openTelemetry = builder.openTelemetry;
   }
 
-  public boolean getTracingEnabled() {
+  public boolean isTracingEnabled() {
     return tracingEnabled;
   }
 
@@ -71,11 +71,11 @@ public class FirestoreOpenTelemetryOptions {
     /**
      * Sets whether tracing should be enabled.
      *
-     * @param enable Whether tracing should be enabled.
+     * @param tracingEnabled Whether tracing should be enabled.
      */
     @Nonnull
-    public FirestoreOpenTelemetryOptions.Builder setTracingEnabled(boolean enable) {
-      this.tracingEnabled = enable;
+    public FirestoreOpenTelemetryOptions.Builder setTracingEnabled(boolean tracingEnabled) {
+      this.tracingEnabled = tracingEnabled;
       return this;
     }
 
