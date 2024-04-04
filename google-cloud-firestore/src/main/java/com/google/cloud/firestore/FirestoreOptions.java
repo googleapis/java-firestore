@@ -62,8 +62,8 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final TransportChannelProvider channelProvider;
   private final CredentialsProvider credentialsProvider;
   private final String emulatorHost;
-  private final @Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions;
-  private final @Nonnull com.google.cloud.firestore.telemetry.TraceUtil traceUtil;
+  private final transient @Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions;
+  private final transient @Nonnull com.google.cloud.firestore.telemetry.TraceUtil traceUtil;
 
   public static class DefaultFirestoreFactory implements FirestoreFactory {
 
