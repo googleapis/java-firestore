@@ -305,6 +305,7 @@ class Pipeline {
     return this
   }
 
+  @JvmOverloads
   fun unnestMap(field: Field, mode: UnnestMap.Mode = UnnestMap.Mode.FULL_REPLACE): Pipeline {
     operations.add(UnnestMap(mode, field))
     return this

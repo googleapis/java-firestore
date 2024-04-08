@@ -64,7 +64,6 @@ public class ITPipelineTest {
   public void projections() throws Exception {
     Pipeline p =
         Pipeline.fromCollection("coll1")
-            .unnestMap(Field.of("foo"))
             .project(
                 Field.of("foo"),
                 Constant.of("emptyValue").asAlias("emptyField"),
