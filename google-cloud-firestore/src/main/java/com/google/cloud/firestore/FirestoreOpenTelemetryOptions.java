@@ -21,16 +21,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class FirestoreOpenTelemetryOptions {
-  private final boolean enabled;
+  private final boolean tracingEnabled;
   private final @Nullable OpenTelemetry openTelemetry;
 
   FirestoreOpenTelemetryOptions(Builder builder) {
-    this.enabled = builder.enabled;
+    this.tracingEnabled = builder.tracingEnabled;
     this.openTelemetry = builder.openTelemetry;
   }
 
-  public boolean getEnabled() {
-    return enabled;
+  public boolean isTracingEnabled() {
+    return tracingEnabled;
   }
 
   public OpenTelemetry getOpenTelemetry() {
@@ -49,17 +49,17 @@ public class FirestoreOpenTelemetryOptions {
 
   public static class Builder {
 
-    private boolean enabled;
+    private boolean tracingEnabled;
 
     @Nullable private OpenTelemetry openTelemetry;
 
     private Builder() {
-      enabled = false;
+      tracingEnabled = false;
       openTelemetry = null;
     }
 
     private Builder(FirestoreOpenTelemetryOptions options) {
-      this.enabled = options.enabled;
+      this.tracingEnabled = options.tracingEnabled;
       this.openTelemetry = options.openTelemetry;
     }
 
@@ -71,11 +71,11 @@ public class FirestoreOpenTelemetryOptions {
     /**
      * Sets whether tracing should be enabled.
      *
-     * @param enable Whether tracing should be enabled.
+     * @param tracingEnabled Whether tracing should be enabled.
      */
     @Nonnull
-    public FirestoreOpenTelemetryOptions.Builder setTracingEnabled(boolean enable) {
-      this.enabled = enable;
+    public FirestoreOpenTelemetryOptions.Builder setTracingEnabled(boolean tracingEnabled) {
+      this.tracingEnabled = tracingEnabled;
       return this;
     }
 
