@@ -5,8 +5,7 @@ import com.google.firestore.v1.Value
 import java.util.Date
 import javax.annotation.Nonnull
 
-data class PipelineResult // Elevated access level for mocking.
-internal constructor(
+data class PipelineResult internal constructor(
   private val rpcContext: FirestoreRpcContext<*>?,
   val reference: DocumentReference?,
   val protoFields: Map<String, Value>?,

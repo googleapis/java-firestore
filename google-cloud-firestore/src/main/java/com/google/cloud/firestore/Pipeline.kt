@@ -3,57 +3,20 @@ package com.google.cloud.firestore
 import com.google.api.core.ApiFuture
 import com.google.api.core.ApiFutures
 import com.google.api.gax.rpc.ApiStreamObserver
-import com.google.cloud.firestore.pipeline.AddFields
+import com.google.cloud.firestore.pipeline.AggregatorTarget
 import com.google.cloud.firestore.pipeline.Collection
 import com.google.cloud.firestore.pipeline.CollectionGroup
-import com.google.cloud.firestore.pipeline.Database
-import com.google.cloud.firestore.pipeline.Expr
-import com.google.cloud.firestore.pipeline.Expr.Field
-import com.google.cloud.firestore.pipeline.Fields
+import com.google.cloud.firestore.pipeline.Field
 import com.google.cloud.firestore.pipeline.Filter
 import com.google.cloud.firestore.pipeline.FindNearest
-import com.google.cloud.firestore.pipeline.GenericOperation
-import com.google.cloud.firestore.pipeline.Group
-import com.google.cloud.firestore.pipeline.Join
+import com.google.cloud.firestore.pipeline.Function
+import com.google.cloud.firestore.pipeline.GenericStage
 import com.google.cloud.firestore.pipeline.Limit
 import com.google.cloud.firestore.pipeline.Offset
-import com.google.cloud.firestore.pipeline.Operation
 import com.google.cloud.firestore.pipeline.Ordering
-import com.google.cloud.firestore.pipeline.Project
 import com.google.cloud.firestore.pipeline.Projectable
-import com.google.cloud.firestore.pipeline.RemoveFields
 import com.google.cloud.firestore.pipeline.Sort
-import com.google.cloud.firestore.pipeline.UnionWith
-import com.google.cloud.firestore.pipeline.UnnestArray
-import com.google.cloud.firestore.pipeline.UnnestMap
-
-class GroupingPipeline internal constructor(val p: Pipeline, vararg val by: Projectable) {
-  fun aggregate(vararg aggregator: Expr.AggregatorTarget): Pipeline {
-    // TODO: this.p.operations.add()
-    return this.p
-  }
-}
-
-class JoiningPipeline internal constructor(
-  val left: Pipeline,
-  val right: Pipeline,
-  val join: Join.Type
-) {
-  fun on(condition: Expr.Function): Pipeline {
-    // TODO: this.p.operations.add()
-    return left
-  }
-
-  fun on(vararg field: Field): Pipeline {
-    // TODO: this.p.operations.add()
-    return left
-  }
-
-  fun on(field: Fields): Pipeline {
-    // TODO: this.p.operations.add()
-    return left
-  }
-}
+import com.google.cloud.firestore.pipeline.Stage
 
 class PaginatingPipeline internal constructor(
   val p: Pipeline,
@@ -61,10 +24,6 @@ class PaginatingPipeline internal constructor(
   orders: Array<out Ordering>
 ) {
   fun firstPage(): Pipeline {
-    return this.p
-  }
-
-  fun page(n:Int): Pipeline {
     return this.p
   }
 
@@ -120,21 +79,16 @@ class PaginatingPipeline internal constructor(
  * ```
  */
 class Pipeline {
-  internal val operations: MutableList<Operation> = mutableListOf()
+  private val stages: MutableList<Stage> = mutableListOf()
   private var name: String
 
-  private constructor(db: Database) {
-    operations.add(db)
-    name = "(database)"
-  }
-
   private constructor(collection: Collection) {
-    operations.add(collection)
+    stages.add(collection)
     name = collection.path
   }
 
   private constructor(group: CollectionGroup) {
-    operations.add(group)
+    stages.add(group)
     name = group.path
   }
 
@@ -158,97 +112,28 @@ class Pipeline {
     fun fromCollectionGroup(group: String): Pipeline {
       return Pipeline(CollectionGroup(group))
     }
-
-    @JvmStatic
-    fun fromDatabase(): Pipeline {
-      return Pipeline(Database())
-    }
-
-    @JvmStatic
-    fun fromDocuments(vararg docPath :String): Pipeline {
-      return Pipeline(Database())
-    }
-
-    @JvmStatic
-    fun fromData(vararg doc: Map<String, Map<String, Expr.Constant>>): Pipeline {
-      return Pipeline(Database())
-    }
-  }
-  // Fluent API
-
-  fun withName(name: String) {
-    this.name = name
-  }
-
-  fun project(projections: Map<Field, Expr>): Pipeline {
-    operations.add(Project(projections))
-    return this
-  }
-
-  // Sugar for project
-  fun project(vararg fields: Field): Pipeline {
-    return this
-  }
-
-  fun project(vararg exprs: Expr.ExprAsAlias): Pipeline {
-    return this
   }
 
   fun project(vararg projections: Projectable): Pipeline {
     return this
   }
 
-  fun addFields(additions: Map<Field, Expr>): Pipeline {
-    operations.add(AddFields(additions))
-    return this
-  }
-
-  // Sugar
-  fun addFields(vararg additions: Expr.ExprAsAlias): Pipeline {
-    return this
-  }
-
-  fun removeFields(vararg removals: Field): Pipeline {
-    operations.add(RemoveFields(removals.toList()))
-    return this
-  }
-
-  fun filter(condition: Expr.Function.FilterCondition): Pipeline {
-    operations.add(Filter(condition))
+  fun filter(condition: Function.FilterCondition): Pipeline {
+    stages.add(Filter(condition))
     return this
   }
 
   fun offset(offset: Int): Pipeline {
-    operations.add(Offset(offset))
+    stages.add(Offset(offset))
     return this
   }
 
   fun limit(limit: Int): Pipeline {
-    operations.add(Limit(limit))
+    stages.add(Limit(limit))
     return this
   }
 
-  fun unionWith(pipeline: Pipeline, distinct: Boolean): Pipeline {
-    operations.add(UnionWith(pipeline, distinct))
-    return this
-  }
-
-  fun group(fields: Map<Field, Expr>, accumulators: Map<Field, Expr>): Pipeline {
-    operations.add(Group(fields, accumulators))
-    return this
-  }
-
-  fun group(by: Fields): GroupingPipeline {
-    // operations.add(Group(fields, accumulators))
-    return GroupingPipeline(this /*TODO*/)
-  }
-
-  fun group(by: Projectable): GroupingPipeline {
-    // operations.add(Group(fields, accumulators))
-    return GroupingPipeline(this /*TODO*/)
-  }
-
-  fun aggregate(vararg aggregator: Expr.AggregatorTarget): Pipeline {
+  fun aggregate(vararg aggregator: AggregatorTarget): Pipeline {
     // operations.add(Group())
     // operations.add(aggregator)
     return this
@@ -259,44 +144,16 @@ class Pipeline {
     vector: DoubleArray,
     options: FindNearest.FindNearestOptions
   ): Pipeline {
-    operations.add(FindNearest(property, vector, options))
+    stages.add(FindNearest(property, vector, options))
     return this
   }
-
-  fun innerJoin(
-    otherPipeline: Pipeline
-  ) = JoiningPipeline(this, otherPipeline, Join.Type.INNER)
-
-  fun crossJoin(otherPipeline: Pipeline): JoiningPipeline =
-    JoiningPipeline(this, otherPipeline, Join.Type.CROSS)
-
-  fun fullJoin(otherPipeline: Pipeline): JoiningPipeline =
-    JoiningPipeline(this, otherPipeline, Join.Type.FULL)
-
-  fun leftJoin(otherPipeline: Pipeline): JoiningPipeline =
-    JoiningPipeline(this, otherPipeline, Join.Type.LEFT)
-
-  fun rightJoin(otherPipeline: Pipeline): JoiningPipeline =
-    JoiningPipeline(this, otherPipeline, Join.Type.RIGHT)
-
-  fun leftSemiJoin(otherPipeline: Pipeline): JoiningPipeline =
-    JoiningPipeline(this, otherPipeline, Join.Type.LEFT_SEMI)
-
-  fun rightSemiJoin(otherPipeline: Pipeline): JoiningPipeline =
-    JoiningPipeline(this, otherPipeline, Join.Type.RIGHT_SEMI)
-
-  fun leftAntiSemiJoin(otherPipeline: Pipeline): JoiningPipeline =
-    JoiningPipeline(this, otherPipeline, Join.Type.LEFT_ANTI_SEMI)
-
-  fun rightAntiSemiJoin(otherPipeline: Pipeline): JoiningPipeline =
-    JoiningPipeline(this, otherPipeline, Join.Type.RIGHT_ANTI_SEMI)
 
   fun sort(
     orders: List<Ordering>,
     density: Sort.Density = Sort.Density.UNSPECIFIED,
     truncation: Sort.Truncation = Sort.Truncation.UNSPECIFIED
   ): Pipeline {
-    operations.add(Sort(orders, density, truncation))
+    stages.add(Sort(orders, density, truncation))
     return this
   }
 
@@ -305,23 +162,12 @@ class Pipeline {
     return this
   }
 
-  @JvmOverloads
-  fun unnestMap(field: Field, mode: UnnestMap.Mode = UnnestMap.Mode.FULL_REPLACE): Pipeline {
-    operations.add(UnnestMap(mode, field))
-    return this
-  }
-
-  fun unnestArray(field: Field): Pipeline {
-    operations.add(UnnestArray(field))
-    return this
-  }
-
   fun paginate(pageSize: Int, vararg orders: Ordering): PaginatingPipeline {
     return PaginatingPipeline(this, pageSize, orders)
   }
 
   fun genericOperation(name: String, params: Map<String, Any>? = null): Pipeline {
-    operations.add(GenericOperation(name, params))
+    stages.add(GenericStage(name, params))
     return this
   }
 
