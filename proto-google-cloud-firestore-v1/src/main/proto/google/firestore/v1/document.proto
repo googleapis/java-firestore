@@ -260,3 +260,4 @@ message Pipeline {
   // Ordered list of stages to evaluate.
   repeated Stage stages = 1;
 }
+

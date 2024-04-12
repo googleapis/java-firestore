@@ -713,6 +713,44 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      */
     com.google.firestore.admin.v1.Index.IndexField.ArrayConfig getArrayConfig();
 
+    /**
+     *
+     *
+     * <pre>
+     * Indicates that this field supports nearest neighbors and distance
+     * operations on vector.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+     *
+     * @return Whether the vectorConfig field is set.
+     */
+    boolean hasVectorConfig();
+    /**
+     *
+     *
+     * <pre>
+     * Indicates that this field supports nearest neighbors and distance
+     * operations on vector.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+     *
+     * @return The vectorConfig.
+     */
+    com.google.firestore.admin.v1.Index.IndexField.VectorConfig getVectorConfig();
+    /**
+     *
+     *
+     * <pre>
+     * Indicates that this field supports nearest neighbors and distance
+     * operations on vector.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+     */
+    com.google.firestore.admin.v1.Index.IndexField.VectorConfigOrBuilder getVectorConfigOrBuilder();
+
     com.google.firestore.admin.v1.Index.IndexField.ValueModeCase getValueModeCase();
   }
   /**
@@ -1053,6 +1091,1451 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       // @@protoc_insertion_point(enum_scope:google.firestore.admin.v1.Index.IndexField.ArrayConfig)
     }
 
+    public interface VectorConfigOrBuilder
+        extends
+        // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.Index.IndexField.VectorConfig)
+        com.google.protobuf.MessageOrBuilder {
+
+      /**
+       *
+       *
+       * <pre>
+       * Required. The vector dimension this configuration applies to.
+       *
+       * The resulting index will only include vectors of this dimension, and
+       * can be used for vector search with the same dimension.
+       * </pre>
+       *
+       * <code>int32 dimension = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+       *
+       * @return The dimension.
+       */
+      int getDimension();
+
+      /**
+       *
+       *
+       * <pre>
+       * Indicates the vector index is a flat index.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+       *
+       * @return Whether the flat field is set.
+       */
+      boolean hasFlat();
+      /**
+       *
+       *
+       * <pre>
+       * Indicates the vector index is a flat index.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+       *
+       * @return The flat.
+       */
+      com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex getFlat();
+      /**
+       *
+       *
+       * <pre>
+       * Indicates the vector index is a flat index.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+       */
+      com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndexOrBuilder
+          getFlatOrBuilder();
+
+      com.google.firestore.admin.v1.Index.IndexField.VectorConfig.TypeCase getTypeCase();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * The index configuration to support vector search operations
+     * </pre>
+     *
+     * Protobuf type {@code google.firestore.admin.v1.Index.IndexField.VectorConfig}
+     */
+    public static final class VectorConfig extends com.google.protobuf.GeneratedMessageV3
+        implements
+        // @@protoc_insertion_point(message_implements:google.firestore.admin.v1.Index.IndexField.VectorConfig)
+        VectorConfigOrBuilder {
+      private static final long serialVersionUID = 0L;
+      // Use VectorConfig.newBuilder() to construct.
+      private VectorConfig(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+        super(builder);
+      }
+
+      private VectorConfig() {}
+
+      @java.lang.Override
+      @SuppressWarnings({"unused"})
+      protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+        return new VectorConfig();
+      }
+
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.google.firestore.admin.v1.IndexProto
+            .internal_static_google_firestore_admin_v1_Index_IndexField_VectorConfig_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.google.firestore.admin.v1.IndexProto
+            .internal_static_google_firestore_admin_v1_Index_IndexField_VectorConfig_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.google.firestore.admin.v1.Index.IndexField.VectorConfig.class,
+                com.google.firestore.admin.v1.Index.IndexField.VectorConfig.Builder.class);
+      }
+
+      public interface FlatIndexOrBuilder
+          extends
+          // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex)
+          com.google.protobuf.MessageOrBuilder {}
+      /**
+       *
+       *
+       * <pre>
+       * An index that stores vectors in a flat data structure, and supports
+       * exhaustive search.
+       * </pre>
+       *
+       * Protobuf type {@code google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex}
+       */
+      public static final class FlatIndex extends com.google.protobuf.GeneratedMessageV3
+          implements
+          // @@protoc_insertion_point(message_implements:google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex)
+          FlatIndexOrBuilder {
+        private static final long serialVersionUID = 0L;
+        // Use FlatIndex.newBuilder() to construct.
+        private FlatIndex(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+          super(builder);
+        }
+
+        private FlatIndex() {}
+
+        @java.lang.Override
+        @SuppressWarnings({"unused"})
+        protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
+          return new FlatIndex();
+        }
+
+        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+          return com.google.firestore.admin.v1.IndexProto
+              .internal_static_google_firestore_admin_v1_Index_IndexField_VectorConfig_FlatIndex_descriptor;
+        }
+
+        @java.lang.Override
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return com.google.firestore.admin.v1.IndexProto
+              .internal_static_google_firestore_admin_v1_Index_IndexField_VectorConfig_FlatIndex_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex.class,
+                  com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex.Builder
+                      .class);
+        }
+
+        private byte memoizedIsInitialized = -1;
+
+        @java.lang.Override
+        public final boolean isInitialized() {
+          byte isInitialized = memoizedIsInitialized;
+          if (isInitialized == 1) return true;
+          if (isInitialized == 0) return false;
+
+          memoizedIsInitialized = 1;
+          return true;
+        }
+
+        @java.lang.Override
+        public void writeTo(com.google.protobuf.CodedOutputStream output)
+            throws java.io.IOException {
+          getUnknownFields().writeTo(output);
+        }
+
+        @java.lang.Override
+        public int getSerializedSize() {
+          int size = memoizedSize;
+          if (size != -1) return size;
+
+          size = 0;
+          size += getUnknownFields().getSerializedSize();
+          memoizedSize = size;
+          return size;
+        }
+
+        @java.lang.Override
+        public boolean equals(final java.lang.Object obj) {
+          if (obj == this) {
+            return true;
+          }
+          if (!(obj
+              instanceof com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex)) {
+            return super.equals(obj);
+          }
+          com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex other =
+              (com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex) obj;
+
+          if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+          return true;
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+          if (memoizedHashCode != 0) {
+            return memoizedHashCode;
+          }
+          int hash = 41;
+          hash = (19 * hash) + getDescriptor().hashCode();
+          hash = (29 * hash) + getUnknownFields().hashCode();
+          memoizedHashCode = hash;
+          return hash;
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            parseFrom(java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data);
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            parseFrom(com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data);
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data);
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            parseFrom(java.io.InputStream input) throws java.io.IOException {
+          return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+          return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+              PARSER, input, extensionRegistry);
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+          return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+              PARSER, input);
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+          return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+              PARSER, input, extensionRegistry);
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+          return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+          return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+              PARSER, input, extensionRegistry);
+        }
+
+        @java.lang.Override
+        public Builder newBuilderForType() {
+          return newBuilder();
+        }
+
+        public static Builder newBuilder() {
+          return DEFAULT_INSTANCE.toBuilder();
+        }
+
+        public static Builder newBuilder(
+            com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex prototype) {
+          return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+
+        @java.lang.Override
+        public Builder toBuilder() {
+          return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
+        }
+
+        @java.lang.Override
+        protected Builder newBuilderForType(
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          Builder builder = new Builder(parent);
+          return builder;
+        }
+        /**
+         *
+         *
+         * <pre>
+         * An index that stores vectors in a flat data structure, and supports
+         * exhaustive search.
+         * </pre>
+         *
+         * Protobuf type {@code google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex}
+         */
+        public static final class Builder
+            extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+            implements
+            // @@protoc_insertion_point(builder_implements:google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex)
+            com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndexOrBuilder {
+          public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+            return com.google.firestore.admin.v1.IndexProto
+                .internal_static_google_firestore_admin_v1_Index_IndexField_VectorConfig_FlatIndex_descriptor;
+          }
+
+          @java.lang.Override
+          protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+              internalGetFieldAccessorTable() {
+            return com.google.firestore.admin.v1.IndexProto
+                .internal_static_google_firestore_admin_v1_Index_IndexField_VectorConfig_FlatIndex_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                    com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex.class,
+                    com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex.Builder
+                        .class);
+          }
+
+          // Construct using
+          // com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex.newBuilder()
+          private Builder() {}
+
+          private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            super(parent);
+          }
+
+          @java.lang.Override
+          public Builder clear() {
+            super.clear();
+            return this;
+          }
+
+          @java.lang.Override
+          public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+            return com.google.firestore.admin.v1.IndexProto
+                .internal_static_google_firestore_admin_v1_Index_IndexField_VectorConfig_FlatIndex_descriptor;
+          }
+
+          @java.lang.Override
+          public com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+              getDefaultInstanceForType() {
+            return com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+                .getDefaultInstance();
+          }
+
+          @java.lang.Override
+          public com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex build() {
+            com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex result =
+                buildPartial();
+            if (!result.isInitialized()) {
+              throw newUninitializedMessageException(result);
+            }
+            return result;
+          }
+
+          @java.lang.Override
+          public com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+              buildPartial() {
+            com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex result =
+                new com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex(this);
+            onBuilt();
+            return result;
+          }
+
+          @java.lang.Override
+          public Builder clone() {
+            return super.clone();
+          }
+
+          @java.lang.Override
+          public Builder setField(
+              com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+            return super.setField(field, value);
+          }
+
+          @java.lang.Override
+          public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
+            return super.clearField(field);
+          }
+
+          @java.lang.Override
+          public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+            return super.clearOneof(oneof);
+          }
+
+          @java.lang.Override
+          public Builder setRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index,
+              java.lang.Object value) {
+            return super.setRepeatedField(field, index, value);
+          }
+
+          @java.lang.Override
+          public Builder addRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+            return super.addRepeatedField(field, value);
+          }
+
+          @java.lang.Override
+          public Builder mergeFrom(com.google.protobuf.Message other) {
+            if (other
+                instanceof com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex) {
+              return mergeFrom(
+                  (com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex) other);
+            } else {
+              super.mergeFrom(other);
+              return this;
+            }
+          }
+
+          public Builder mergeFrom(
+              com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex other) {
+            if (other
+                == com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+                    .getDefaultInstance()) return this;
+            this.mergeUnknownFields(other.getUnknownFields());
+            onChanged();
+            return this;
+          }
+
+          @java.lang.Override
+          public final boolean isInitialized() {
+            return true;
+          }
+
+          @java.lang.Override
+          public Builder mergeFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
+            if (extensionRegistry == null) {
+              throw new java.lang.NullPointerException();
+            }
+            try {
+              boolean done = false;
+              while (!done) {
+                int tag = input.readTag();
+                switch (tag) {
+                  case 0:
+                    done = true;
+                    break;
+                  default:
+                    {
+                      if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                        done = true; // was an endgroup tag
+                      }
+                      break;
+                    } // default:
+                } // switch (tag)
+              } // while (!done)
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              throw e.unwrapIOException();
+            } finally {
+              onChanged();
+            } // finally
+            return this;
+          }
+
+          @java.lang.Override
+          public final Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+            return super.setUnknownFields(unknownFields);
+          }
+
+          @java.lang.Override
+          public final Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+            return super.mergeUnknownFields(unknownFields);
+          }
+
+          // @@protoc_insertion_point(builder_scope:google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex)
+        }
+
+        // @@protoc_insertion_point(class_scope:google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex)
+        private static final com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            DEFAULT_INSTANCE;
+
+        static {
+          DEFAULT_INSTANCE =
+              new com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex();
+        }
+
+        public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            getDefaultInstance() {
+          return DEFAULT_INSTANCE;
+        }
+
+        private static final com.google.protobuf.Parser<FlatIndex> PARSER =
+            new com.google.protobuf.AbstractParser<FlatIndex>() {
+              @java.lang.Override
+              public FlatIndex parsePartialFrom(
+                  com.google.protobuf.CodedInputStream input,
+                  com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                  throws com.google.protobuf.InvalidProtocolBufferException {
+                Builder builder = newBuilder();
+                try {
+                  builder.mergeFrom(input, extensionRegistry);
+                } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                  throw e.setUnfinishedMessage(builder.buildPartial());
+                } catch (com.google.protobuf.UninitializedMessageException e) {
+                  throw e.asInvalidProtocolBufferException()
+                      .setUnfinishedMessage(builder.buildPartial());
+                } catch (java.io.IOException e) {
+                  throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                      .setUnfinishedMessage(builder.buildPartial());
+                }
+                return builder.buildPartial();
+              }
+            };
+
+        public static com.google.protobuf.Parser<FlatIndex> parser() {
+          return PARSER;
+        }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<FlatIndex> getParserForType() {
+          return PARSER;
+        }
+
+        @java.lang.Override
+        public com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            getDefaultInstanceForType() {
+          return DEFAULT_INSTANCE;
+        }
+      }
+
+      private int typeCase_ = 0;
+
+      @SuppressWarnings("serial")
+      private java.lang.Object type_;
+
+      public enum TypeCase
+          implements
+              com.google.protobuf.Internal.EnumLite,
+              com.google.protobuf.AbstractMessage.InternalOneOfEnum {
+        FLAT(2),
+        TYPE_NOT_SET(0);
+        private final int value;
+
+        private TypeCase(int value) {
+          this.value = value;
+        }
+        /**
+         * @param value The number of the enum to look for.
+         * @return The enum associated with the given number.
+         * @deprecated Use {@link #forNumber(int)} instead.
+         */
+        @java.lang.Deprecated
+        public static TypeCase valueOf(int value) {
+          return forNumber(value);
+        }
+
+        public static TypeCase forNumber(int value) {
+          switch (value) {
+            case 2:
+              return FLAT;
+            case 0:
+              return TYPE_NOT_SET;
+            default:
+              return null;
+          }
+        }
+
+        public int getNumber() {
+          return this.value;
+        }
+      };
+
+      public TypeCase getTypeCase() {
+        return TypeCase.forNumber(typeCase_);
+      }
+
+      public static final int DIMENSION_FIELD_NUMBER = 1;
+      private int dimension_ = 0;
+      /**
+       *
+       *
+       * <pre>
+       * Required. The vector dimension this configuration applies to.
+       *
+       * The resulting index will only include vectors of this dimension, and
+       * can be used for vector search with the same dimension.
+       * </pre>
+       *
+       * <code>int32 dimension = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+       *
+       * @return The dimension.
+       */
+      @java.lang.Override
+      public int getDimension() {
+        return dimension_;
+      }
+
+      public static final int FLAT_FIELD_NUMBER = 2;
+      /**
+       *
+       *
+       * <pre>
+       * Indicates the vector index is a flat index.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+       *
+       * @return Whether the flat field is set.
+       */
+      @java.lang.Override
+      public boolean hasFlat() {
+        return typeCase_ == 2;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Indicates the vector index is a flat index.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+       *
+       * @return The flat.
+       */
+      @java.lang.Override
+      public com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex getFlat() {
+        if (typeCase_ == 2) {
+          return (com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex) type_;
+        }
+        return com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            .getDefaultInstance();
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Indicates the vector index is a flat index.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+       */
+      @java.lang.Override
+      public com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndexOrBuilder
+          getFlatOrBuilder() {
+        if (typeCase_ == 2) {
+          return (com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex) type_;
+        }
+        return com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+            .getDefaultInstance();
+      }
+
+      private byte memoizedIsInitialized = -1;
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      @java.lang.Override
+      public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+        if (dimension_ != 0) {
+          output.writeInt32(1, dimension_);
+        }
+        if (typeCase_ == 2) {
+          output.writeMessage(
+              2, (com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex) type_);
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      @java.lang.Override
+      public int getSerializedSize() {
+        int size = memoizedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (dimension_ != 0) {
+          size += com.google.protobuf.CodedOutputStream.computeInt32Size(1, dimension_);
+        }
+        if (typeCase_ == 2) {
+          size +=
+              com.google.protobuf.CodedOutputStream.computeMessageSize(
+                  2, (com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex) type_);
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSize = size;
+        return size;
+      }
+
+      @java.lang.Override
+      public boolean equals(final java.lang.Object obj) {
+        if (obj == this) {
+          return true;
+        }
+        if (!(obj instanceof com.google.firestore.admin.v1.Index.IndexField.VectorConfig)) {
+          return super.equals(obj);
+        }
+        com.google.firestore.admin.v1.Index.IndexField.VectorConfig other =
+            (com.google.firestore.admin.v1.Index.IndexField.VectorConfig) obj;
+
+        if (getDimension() != other.getDimension()) return false;
+        if (!getTypeCase().equals(other.getTypeCase())) return false;
+        switch (typeCase_) {
+          case 2:
+            if (!getFlat().equals(other.getFlat())) return false;
+            break;
+          case 0:
+          default:
+        }
+        if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+        return true;
+      }
+
+      @java.lang.Override
+      public int hashCode() {
+        if (memoizedHashCode != 0) {
+          return memoizedHashCode;
+        }
+        int hash = 41;
+        hash = (19 * hash) + getDescriptor().hashCode();
+        hash = (37 * hash) + DIMENSION_FIELD_NUMBER;
+        hash = (53 * hash) + getDimension();
+        switch (typeCase_) {
+          case 2:
+            hash = (37 * hash) + FLAT_FIELD_NUMBER;
+            hash = (53 * hash) + getFlat().hashCode();
+            break;
+          case 0:
+          default:
+        }
+        hash = (29 * hash) + getUnknownFields().hashCode();
+        memoizedHashCode = hash;
+        return hash;
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig parseFrom(
+          java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig parseFrom(
+          java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig parseFrom(
+          byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig parseFrom(
+          byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig parseFrom(
+          java.io.InputStream input) throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig parseFrom(
+          java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+            PARSER, input, extensionRegistry);
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig parseDelimitedFrom(
+          java.io.InputStream input) throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig parseDelimitedFrom(
+          java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+            PARSER, input, extensionRegistry);
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig parseFrom(
+          com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+            PARSER, input, extensionRegistry);
+      }
+
+      @java.lang.Override
+      public Builder newBuilderForType() {
+        return newBuilder();
+      }
+
+      public static Builder newBuilder() {
+        return DEFAULT_INSTANCE.toBuilder();
+      }
+
+      public static Builder newBuilder(
+          com.google.firestore.admin.v1.Index.IndexField.VectorConfig prototype) {
+        return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+      }
+
+      @java.lang.Override
+      public Builder toBuilder() {
+        return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
+      }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * The index configuration to support vector search operations
+       * </pre>
+       *
+       * Protobuf type {@code google.firestore.admin.v1.Index.IndexField.VectorConfig}
+       */
+      public static final class Builder
+          extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+          implements
+          // @@protoc_insertion_point(builder_implements:google.firestore.admin.v1.Index.IndexField.VectorConfig)
+          com.google.firestore.admin.v1.Index.IndexField.VectorConfigOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+          return com.google.firestore.admin.v1.IndexProto
+              .internal_static_google_firestore_admin_v1_Index_IndexField_VectorConfig_descriptor;
+        }
+
+        @java.lang.Override
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return com.google.firestore.admin.v1.IndexProto
+              .internal_static_google_firestore_admin_v1_Index_IndexField_VectorConfig_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  com.google.firestore.admin.v1.Index.IndexField.VectorConfig.class,
+                  com.google.firestore.admin.v1.Index.IndexField.VectorConfig.Builder.class);
+        }
+
+        // Construct using com.google.firestore.admin.v1.Index.IndexField.VectorConfig.newBuilder()
+        private Builder() {}
+
+        private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          super(parent);
+        }
+
+        @java.lang.Override
+        public Builder clear() {
+          super.clear();
+          bitField0_ = 0;
+          dimension_ = 0;
+          if (flatBuilder_ != null) {
+            flatBuilder_.clear();
+          }
+          typeCase_ = 0;
+          type_ = null;
+          return this;
+        }
+
+        @java.lang.Override
+        public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+          return com.google.firestore.admin.v1.IndexProto
+              .internal_static_google_firestore_admin_v1_Index_IndexField_VectorConfig_descriptor;
+        }
+
+        @java.lang.Override
+        public com.google.firestore.admin.v1.Index.IndexField.VectorConfig
+            getDefaultInstanceForType() {
+          return com.google.firestore.admin.v1.Index.IndexField.VectorConfig.getDefaultInstance();
+        }
+
+        @java.lang.Override
+        public com.google.firestore.admin.v1.Index.IndexField.VectorConfig build() {
+          com.google.firestore.admin.v1.Index.IndexField.VectorConfig result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        @java.lang.Override
+        public com.google.firestore.admin.v1.Index.IndexField.VectorConfig buildPartial() {
+          com.google.firestore.admin.v1.Index.IndexField.VectorConfig result =
+              new com.google.firestore.admin.v1.Index.IndexField.VectorConfig(this);
+          if (bitField0_ != 0) {
+            buildPartial0(result);
+          }
+          buildPartialOneofs(result);
+          onBuilt();
+          return result;
+        }
+
+        private void buildPartial0(
+            com.google.firestore.admin.v1.Index.IndexField.VectorConfig result) {
+          int from_bitField0_ = bitField0_;
+          if (((from_bitField0_ & 0x00000001) != 0)) {
+            result.dimension_ = dimension_;
+          }
+        }
+
+        private void buildPartialOneofs(
+            com.google.firestore.admin.v1.Index.IndexField.VectorConfig result) {
+          result.typeCase_ = typeCase_;
+          result.type_ = this.type_;
+          if (typeCase_ == 2 && flatBuilder_ != null) {
+            result.type_ = flatBuilder_.build();
+          }
+        }
+
+        @java.lang.Override
+        public Builder clone() {
+          return super.clone();
+        }
+
+        @java.lang.Override
+        public Builder setField(
+            com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+          return super.setField(field, value);
+        }
+
+        @java.lang.Override
+        public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
+          return super.clearField(field);
+        }
+
+        @java.lang.Override
+        public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          return super.clearOneof(oneof);
+        }
+
+        @java.lang.Override
+        public Builder setRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field,
+            int index,
+            java.lang.Object value) {
+          return super.setRepeatedField(field, index, value);
+        }
+
+        @java.lang.Override
+        public Builder addRepeatedField(
+            com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
+          return super.addRepeatedField(field, value);
+        }
+
+        @java.lang.Override
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof com.google.firestore.admin.v1.Index.IndexField.VectorConfig) {
+            return mergeFrom((com.google.firestore.admin.v1.Index.IndexField.VectorConfig) other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(
+            com.google.firestore.admin.v1.Index.IndexField.VectorConfig other) {
+          if (other
+              == com.google.firestore.admin.v1.Index.IndexField.VectorConfig.getDefaultInstance())
+            return this;
+          if (other.getDimension() != 0) {
+            setDimension(other.getDimension());
+          }
+          switch (other.getTypeCase()) {
+            case FLAT:
+              {
+                mergeFlat(other.getFlat());
+                break;
+              }
+            case TYPE_NOT_SET:
+              {
+                break;
+              }
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          onChanged();
+          return this;
+        }
+
+        @java.lang.Override
+        public final boolean isInitialized() {
+          return true;
+        }
+
+        @java.lang.Override
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          if (extensionRegistry == null) {
+            throw new java.lang.NullPointerException();
+          }
+          try {
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                case 8:
+                  {
+                    dimension_ = input.readInt32();
+                    bitField0_ |= 0x00000001;
+                    break;
+                  } // case 8
+                case 18:
+                  {
+                    input.readMessage(getFlatFieldBuilder().getBuilder(), extensionRegistry);
+                    typeCase_ = 2;
+                    break;
+                  } // case 18
+                default:
+                  {
+                    if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                      done = true; // was an endgroup tag
+                    }
+                    break;
+                  } // default:
+              } // switch (tag)
+            } // while (!done)
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.unwrapIOException();
+          } finally {
+            onChanged();
+          } // finally
+          return this;
+        }
+
+        private int typeCase_ = 0;
+        private java.lang.Object type_;
+
+        public TypeCase getTypeCase() {
+          return TypeCase.forNumber(typeCase_);
+        }
+
+        public Builder clearType() {
+          typeCase_ = 0;
+          type_ = null;
+          onChanged();
+          return this;
+        }
+
+        private int bitField0_;
+
+        private int dimension_;
+        /**
+         *
+         *
+         * <pre>
+         * Required. The vector dimension this configuration applies to.
+         *
+         * The resulting index will only include vectors of this dimension, and
+         * can be used for vector search with the same dimension.
+         * </pre>
+         *
+         * <code>int32 dimension = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+         *
+         * @return The dimension.
+         */
+        @java.lang.Override
+        public int getDimension() {
+          return dimension_;
+        }
+        /**
+         *
+         *
+         * <pre>
+         * Required. The vector dimension this configuration applies to.
+         *
+         * The resulting index will only include vectors of this dimension, and
+         * can be used for vector search with the same dimension.
+         * </pre>
+         *
+         * <code>int32 dimension = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+         *
+         * @param value The dimension to set.
+         * @return This builder for chaining.
+         */
+        public Builder setDimension(int value) {
+
+          dimension_ = value;
+          bitField0_ |= 0x00000001;
+          onChanged();
+          return this;
+        }
+        /**
+         *
+         *
+         * <pre>
+         * Required. The vector dimension this configuration applies to.
+         *
+         * The resulting index will only include vectors of this dimension, and
+         * can be used for vector search with the same dimension.
+         * </pre>
+         *
+         * <code>int32 dimension = 1 [(.google.api.field_behavior) = REQUIRED];</code>
+         *
+         * @return This builder for chaining.
+         */
+        public Builder clearDimension() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          dimension_ = 0;
+          onChanged();
+          return this;
+        }
+
+        private com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex,
+                com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex.Builder,
+                com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndexOrBuilder>
+            flatBuilder_;
+        /**
+         *
+         *
+         * <pre>
+         * Indicates the vector index is a flat index.
+         * </pre>
+         *
+         * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+         *
+         * @return Whether the flat field is set.
+         */
+        @java.lang.Override
+        public boolean hasFlat() {
+          return typeCase_ == 2;
+        }
+        /**
+         *
+         *
+         * <pre>
+         * Indicates the vector index is a flat index.
+         * </pre>
+         *
+         * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+         *
+         * @return The flat.
+         */
+        @java.lang.Override
+        public com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex getFlat() {
+          if (flatBuilder_ == null) {
+            if (typeCase_ == 2) {
+              return (com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex) type_;
+            }
+            return com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+                .getDefaultInstance();
+          } else {
+            if (typeCase_ == 2) {
+              return flatBuilder_.getMessage();
+            }
+            return com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+                .getDefaultInstance();
+          }
+        }
+        /**
+         *
+         *
+         * <pre>
+         * Indicates the vector index is a flat index.
+         * </pre>
+         *
+         * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+         */
+        public Builder setFlat(
+            com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex value) {
+          if (flatBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            type_ = value;
+            onChanged();
+          } else {
+            flatBuilder_.setMessage(value);
+          }
+          typeCase_ = 2;
+          return this;
+        }
+        /**
+         *
+         *
+         * <pre>
+         * Indicates the vector index is a flat index.
+         * </pre>
+         *
+         * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+         */
+        public Builder setFlat(
+            com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex.Builder
+                builderForValue) {
+          if (flatBuilder_ == null) {
+            type_ = builderForValue.build();
+            onChanged();
+          } else {
+            flatBuilder_.setMessage(builderForValue.build());
+          }
+          typeCase_ = 2;
+          return this;
+        }
+        /**
+         *
+         *
+         * <pre>
+         * Indicates the vector index is a flat index.
+         * </pre>
+         *
+         * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+         */
+        public Builder mergeFlat(
+            com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex value) {
+          if (flatBuilder_ == null) {
+            if (typeCase_ == 2
+                && type_
+                    != com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+                        .getDefaultInstance()) {
+              type_ =
+                  com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex.newBuilder(
+                          (com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex)
+                              type_)
+                      .mergeFrom(value)
+                      .buildPartial();
+            } else {
+              type_ = value;
+            }
+            onChanged();
+          } else {
+            if (typeCase_ == 2) {
+              flatBuilder_.mergeFrom(value);
+            } else {
+              flatBuilder_.setMessage(value);
+            }
+          }
+          typeCase_ = 2;
+          return this;
+        }
+        /**
+         *
+         *
+         * <pre>
+         * Indicates the vector index is a flat index.
+         * </pre>
+         *
+         * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+         */
+        public Builder clearFlat() {
+          if (flatBuilder_ == null) {
+            if (typeCase_ == 2) {
+              typeCase_ = 0;
+              type_ = null;
+              onChanged();
+            }
+          } else {
+            if (typeCase_ == 2) {
+              typeCase_ = 0;
+              type_ = null;
+            }
+            flatBuilder_.clear();
+          }
+          return this;
+        }
+        /**
+         *
+         *
+         * <pre>
+         * Indicates the vector index is a flat index.
+         * </pre>
+         *
+         * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+         */
+        public com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex.Builder
+            getFlatBuilder() {
+          return getFlatFieldBuilder().getBuilder();
+        }
+        /**
+         *
+         *
+         * <pre>
+         * Indicates the vector index is a flat index.
+         * </pre>
+         *
+         * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+         */
+        @java.lang.Override
+        public com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndexOrBuilder
+            getFlatOrBuilder() {
+          if ((typeCase_ == 2) && (flatBuilder_ != null)) {
+            return flatBuilder_.getMessageOrBuilder();
+          } else {
+            if (typeCase_ == 2) {
+              return (com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex) type_;
+            }
+            return com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+                .getDefaultInstance();
+          }
+        }
+        /**
+         *
+         *
+         * <pre>
+         * Indicates the vector index is a flat index.
+         * </pre>
+         *
+         * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex flat = 2;</code>
+         */
+        private com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex,
+                com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex.Builder,
+                com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndexOrBuilder>
+            getFlatFieldBuilder() {
+          if (flatBuilder_ == null) {
+            if (!(typeCase_ == 2)) {
+              type_ =
+                  com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex
+                      .getDefaultInstance();
+            }
+            flatBuilder_ =
+                new com.google.protobuf.SingleFieldBuilderV3<
+                    com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex,
+                    com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex.Builder,
+                    com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndexOrBuilder>(
+                    (com.google.firestore.admin.v1.Index.IndexField.VectorConfig.FlatIndex) type_,
+                    getParentForChildren(),
+                    isClean());
+            type_ = null;
+          }
+          typeCase_ = 2;
+          onChanged();
+          return flatBuilder_;
+        }
+
+        @java.lang.Override
+        public final Builder setUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.setUnknownFields(unknownFields);
+        }
+
+        @java.lang.Override
+        public final Builder mergeUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+          return super.mergeUnknownFields(unknownFields);
+        }
+
+        // @@protoc_insertion_point(builder_scope:google.firestore.admin.v1.Index.IndexField.VectorConfig)
+      }
+
+      // @@protoc_insertion_point(class_scope:google.firestore.admin.v1.Index.IndexField.VectorConfig)
+      private static final com.google.firestore.admin.v1.Index.IndexField.VectorConfig
+          DEFAULT_INSTANCE;
+
+      static {
+        DEFAULT_INSTANCE = new com.google.firestore.admin.v1.Index.IndexField.VectorConfig();
+      }
+
+      public static com.google.firestore.admin.v1.Index.IndexField.VectorConfig
+          getDefaultInstance() {
+        return DEFAULT_INSTANCE;
+      }
+
+      private static final com.google.protobuf.Parser<VectorConfig> PARSER =
+          new com.google.protobuf.AbstractParser<VectorConfig>() {
+            @java.lang.Override
+            public VectorConfig parsePartialFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+              Builder builder = newBuilder();
+              try {
+                builder.mergeFrom(input, extensionRegistry);
+              } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                throw e.setUnfinishedMessage(builder.buildPartial());
+              } catch (com.google.protobuf.UninitializedMessageException e) {
+                throw e.asInvalidProtocolBufferException()
+                    .setUnfinishedMessage(builder.buildPartial());
+              } catch (java.io.IOException e) {
+                throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                    .setUnfinishedMessage(builder.buildPartial());
+              }
+              return builder.buildPartial();
+            }
+          };
+
+      public static com.google.protobuf.Parser<VectorConfig> parser() {
+        return PARSER;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<VectorConfig> getParserForType() {
+        return PARSER;
+      }
+
+      @java.lang.Override
+      public com.google.firestore.admin.v1.Index.IndexField.VectorConfig
+          getDefaultInstanceForType() {
+        return DEFAULT_INSTANCE;
+      }
+    }
+
     private int valueModeCase_ = 0;
 
     @SuppressWarnings("serial")
@@ -1064,6 +2547,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
             com.google.protobuf.AbstractMessage.InternalOneOfEnum {
       ORDER(2),
       ARRAY_CONFIG(3),
+      VECTOR_CONFIG(4),
       VALUEMODE_NOT_SET(0);
       private final int value;
 
@@ -1086,6 +2570,8 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
             return ORDER;
           case 3:
             return ARRAY_CONFIG;
+          case 4:
+            return VECTOR_CONFIG;
           case 0:
             return VALUEMODE_NOT_SET;
           default:
@@ -1270,6 +2756,61 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       return com.google.firestore.admin.v1.Index.IndexField.ArrayConfig.ARRAY_CONFIG_UNSPECIFIED;
     }
 
+    public static final int VECTOR_CONFIG_FIELD_NUMBER = 4;
+    /**
+     *
+     *
+     * <pre>
+     * Indicates that this field supports nearest neighbors and distance
+     * operations on vector.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+     *
+     * @return Whether the vectorConfig field is set.
+     */
+    @java.lang.Override
+    public boolean hasVectorConfig() {
+      return valueModeCase_ == 4;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Indicates that this field supports nearest neighbors and distance
+     * operations on vector.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+     *
+     * @return The vectorConfig.
+     */
+    @java.lang.Override
+    public com.google.firestore.admin.v1.Index.IndexField.VectorConfig getVectorConfig() {
+      if (valueModeCase_ == 4) {
+        return (com.google.firestore.admin.v1.Index.IndexField.VectorConfig) valueMode_;
+      }
+      return com.google.firestore.admin.v1.Index.IndexField.VectorConfig.getDefaultInstance();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Indicates that this field supports nearest neighbors and distance
+     * operations on vector.
+     * </pre>
+     *
+     * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+     */
+    @java.lang.Override
+    public com.google.firestore.admin.v1.Index.IndexField.VectorConfigOrBuilder
+        getVectorConfigOrBuilder() {
+      if (valueModeCase_ == 4) {
+        return (com.google.firestore.admin.v1.Index.IndexField.VectorConfig) valueMode_;
+      }
+      return com.google.firestore.admin.v1.Index.IndexField.VectorConfig.getDefaultInstance();
+    }
+
     private byte memoizedIsInitialized = -1;
 
     @java.lang.Override
@@ -1293,6 +2834,10 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       if (valueModeCase_ == 3) {
         output.writeEnum(3, ((java.lang.Integer) valueMode_));
       }
+      if (valueModeCase_ == 4) {
+        output.writeMessage(
+            4, (com.google.firestore.admin.v1.Index.IndexField.VectorConfig) valueMode_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1314,6 +2859,11 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         size +=
             com.google.protobuf.CodedOutputStream.computeEnumSize(
                 3, ((java.lang.Integer) valueMode_));
+      }
+      if (valueModeCase_ == 4) {
+        size +=
+            com.google.protobuf.CodedOutputStream.computeMessageSize(
+                4, (com.google.firestore.admin.v1.Index.IndexField.VectorConfig) valueMode_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -1340,6 +2890,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         case 3:
           if (getArrayConfigValue() != other.getArrayConfigValue()) return false;
           break;
+        case 4:
+          if (!getVectorConfig().equals(other.getVectorConfig())) return false;
+          break;
         case 0:
         default:
       }
@@ -1364,6 +2917,10 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         case 3:
           hash = (37 * hash) + ARRAY_CONFIG_FIELD_NUMBER;
           hash = (53 * hash) + getArrayConfigValue();
+          break;
+        case 4:
+          hash = (37 * hash) + VECTOR_CONFIG_FIELD_NUMBER;
+          hash = (53 * hash) + getVectorConfig().hashCode();
           break;
         case 0:
         default:
@@ -1512,6 +3069,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
         super.clear();
         bitField0_ = 0;
         fieldPath_ = "";
+        if (vectorConfigBuilder_ != null) {
+          vectorConfigBuilder_.clear();
+        }
         valueModeCase_ = 0;
         valueMode_ = null;
         return this;
@@ -1559,6 +3119,9 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
       private void buildPartialOneofs(com.google.firestore.admin.v1.Index.IndexField result) {
         result.valueModeCase_ = valueModeCase_;
         result.valueMode_ = this.valueMode_;
+        if (valueModeCase_ == 4 && vectorConfigBuilder_ != null) {
+          result.valueMode_ = vectorConfigBuilder_.build();
+        }
       }
 
       @java.lang.Override
@@ -1625,6 +3188,11 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
               setArrayConfigValue(other.getArrayConfigValue());
               break;
             }
+          case VECTOR_CONFIG:
+            {
+              mergeVectorConfig(other.getVectorConfig());
+              break;
+            }
           case VALUEMODE_NOT_SET:
             {
               break;
@@ -1676,6 +3244,12 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
                   valueMode_ = rawValue;
                   break;
                 } // case 24
+              case 34:
+                {
+                  input.readMessage(getVectorConfigFieldBuilder().getBuilder(), extensionRegistry);
+                  valueModeCase_ = 4;
+                  break;
+                } // case 34
               default:
                 {
                   if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -2060,6 +3634,231 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
           onChanged();
         }
         return this;
+      }
+
+      private com.google.protobuf.SingleFieldBuilderV3<
+              com.google.firestore.admin.v1.Index.IndexField.VectorConfig,
+              com.google.firestore.admin.v1.Index.IndexField.VectorConfig.Builder,
+              com.google.firestore.admin.v1.Index.IndexField.VectorConfigOrBuilder>
+          vectorConfigBuilder_;
+      /**
+       *
+       *
+       * <pre>
+       * Indicates that this field supports nearest neighbors and distance
+       * operations on vector.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+       *
+       * @return Whether the vectorConfig field is set.
+       */
+      @java.lang.Override
+      public boolean hasVectorConfig() {
+        return valueModeCase_ == 4;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Indicates that this field supports nearest neighbors and distance
+       * operations on vector.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+       *
+       * @return The vectorConfig.
+       */
+      @java.lang.Override
+      public com.google.firestore.admin.v1.Index.IndexField.VectorConfig getVectorConfig() {
+        if (vectorConfigBuilder_ == null) {
+          if (valueModeCase_ == 4) {
+            return (com.google.firestore.admin.v1.Index.IndexField.VectorConfig) valueMode_;
+          }
+          return com.google.firestore.admin.v1.Index.IndexField.VectorConfig.getDefaultInstance();
+        } else {
+          if (valueModeCase_ == 4) {
+            return vectorConfigBuilder_.getMessage();
+          }
+          return com.google.firestore.admin.v1.Index.IndexField.VectorConfig.getDefaultInstance();
+        }
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Indicates that this field supports nearest neighbors and distance
+       * operations on vector.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+       */
+      public Builder setVectorConfig(
+          com.google.firestore.admin.v1.Index.IndexField.VectorConfig value) {
+        if (vectorConfigBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          valueMode_ = value;
+          onChanged();
+        } else {
+          vectorConfigBuilder_.setMessage(value);
+        }
+        valueModeCase_ = 4;
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Indicates that this field supports nearest neighbors and distance
+       * operations on vector.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+       */
+      public Builder setVectorConfig(
+          com.google.firestore.admin.v1.Index.IndexField.VectorConfig.Builder builderForValue) {
+        if (vectorConfigBuilder_ == null) {
+          valueMode_ = builderForValue.build();
+          onChanged();
+        } else {
+          vectorConfigBuilder_.setMessage(builderForValue.build());
+        }
+        valueModeCase_ = 4;
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Indicates that this field supports nearest neighbors and distance
+       * operations on vector.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+       */
+      public Builder mergeVectorConfig(
+          com.google.firestore.admin.v1.Index.IndexField.VectorConfig value) {
+        if (vectorConfigBuilder_ == null) {
+          if (valueModeCase_ == 4
+              && valueMode_
+                  != com.google.firestore.admin.v1.Index.IndexField.VectorConfig
+                      .getDefaultInstance()) {
+            valueMode_ =
+                com.google.firestore.admin.v1.Index.IndexField.VectorConfig.newBuilder(
+                        (com.google.firestore.admin.v1.Index.IndexField.VectorConfig) valueMode_)
+                    .mergeFrom(value)
+                    .buildPartial();
+          } else {
+            valueMode_ = value;
+          }
+          onChanged();
+        } else {
+          if (valueModeCase_ == 4) {
+            vectorConfigBuilder_.mergeFrom(value);
+          } else {
+            vectorConfigBuilder_.setMessage(value);
+          }
+        }
+        valueModeCase_ = 4;
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Indicates that this field supports nearest neighbors and distance
+       * operations on vector.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+       */
+      public Builder clearVectorConfig() {
+        if (vectorConfigBuilder_ == null) {
+          if (valueModeCase_ == 4) {
+            valueModeCase_ = 0;
+            valueMode_ = null;
+            onChanged();
+          }
+        } else {
+          if (valueModeCase_ == 4) {
+            valueModeCase_ = 0;
+            valueMode_ = null;
+          }
+          vectorConfigBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Indicates that this field supports nearest neighbors and distance
+       * operations on vector.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+       */
+      public com.google.firestore.admin.v1.Index.IndexField.VectorConfig.Builder
+          getVectorConfigBuilder() {
+        return getVectorConfigFieldBuilder().getBuilder();
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Indicates that this field supports nearest neighbors and distance
+       * operations on vector.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+       */
+      @java.lang.Override
+      public com.google.firestore.admin.v1.Index.IndexField.VectorConfigOrBuilder
+          getVectorConfigOrBuilder() {
+        if ((valueModeCase_ == 4) && (vectorConfigBuilder_ != null)) {
+          return vectorConfigBuilder_.getMessageOrBuilder();
+        } else {
+          if (valueModeCase_ == 4) {
+            return (com.google.firestore.admin.v1.Index.IndexField.VectorConfig) valueMode_;
+          }
+          return com.google.firestore.admin.v1.Index.IndexField.VectorConfig.getDefaultInstance();
+        }
+      }
+      /**
+       *
+       *
+       * <pre>
+       * Indicates that this field supports nearest neighbors and distance
+       * operations on vector.
+       * </pre>
+       *
+       * <code>.google.firestore.admin.v1.Index.IndexField.VectorConfig vector_config = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+              com.google.firestore.admin.v1.Index.IndexField.VectorConfig,
+              com.google.firestore.admin.v1.Index.IndexField.VectorConfig.Builder,
+              com.google.firestore.admin.v1.Index.IndexField.VectorConfigOrBuilder>
+          getVectorConfigFieldBuilder() {
+        if (vectorConfigBuilder_ == null) {
+          if (!(valueModeCase_ == 4)) {
+            valueMode_ =
+                com.google.firestore.admin.v1.Index.IndexField.VectorConfig.getDefaultInstance();
+          }
+          vectorConfigBuilder_ =
+              new com.google.protobuf.SingleFieldBuilderV3<
+                  com.google.firestore.admin.v1.Index.IndexField.VectorConfig,
+                  com.google.firestore.admin.v1.Index.IndexField.VectorConfig.Builder,
+                  com.google.firestore.admin.v1.Index.IndexField.VectorConfigOrBuilder>(
+                  (com.google.firestore.admin.v1.Index.IndexField.VectorConfig) valueMode_,
+                  getParentForChildren(),
+                  isClean());
+          valueMode_ = null;
+        }
+        valueModeCase_ = 4;
+        onChanged();
+        return vectorConfigBuilder_;
       }
 
       @java.lang.Override

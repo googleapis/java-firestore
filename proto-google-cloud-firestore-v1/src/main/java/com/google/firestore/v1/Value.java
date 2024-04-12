@@ -80,6 +80,9 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
     GEO_POINT_VALUE(8),
     ARRAY_VALUE(9),
     MAP_VALUE(6),
+    FIELD_REFERENCE_VALUE(19),
+    FUNCTION_VALUE(20),
+    PIPELINE_VALUE(21),
     VALUETYPE_NOT_SET(0);
     private final int value;
 
@@ -120,6 +123,12 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
           return ARRAY_VALUE;
         case 6:
           return MAP_VALUE;
+        case 19:
+          return FIELD_REFERENCE_VALUE;
+        case 20:
+          return FUNCTION_VALUE;
+        case 21:
+          return PIPELINE_VALUE;
         case 0:
           return VALUETYPE_NOT_SET;
         default:
@@ -711,6 +720,280 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
     return com.google.firestore.v1.MapValue.getDefaultInstance();
   }
 
+  public static final int FIELD_REFERENCE_VALUE_FIELD_NUMBER = 19;
+  /**
+   *
+   *
+   * <pre>
+   * Value which references a field.
+   *
+   * This is considered relative (vs absolute) since it only refers to a field
+   * and not a field within a particular document.
+   *
+   * **Requires:**
+   *
+   * * Must follow [field reference][FieldReference.field_path] limitations.
+   *
+   * * Not allowed to be used when writing documents.
+   *
+   * (-- NOTE(batchik): long term, there is no reason this type should not be
+   *     allowed to be used on the write path. --)
+   * </pre>
+   *
+   * <code>string field_reference_value = 19;</code>
+   *
+   * @return Whether the fieldReferenceValue field is set.
+   */
+  public boolean hasFieldReferenceValue() {
+    return valueTypeCase_ == 19;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Value which references a field.
+   *
+   * This is considered relative (vs absolute) since it only refers to a field
+   * and not a field within a particular document.
+   *
+   * **Requires:**
+   *
+   * * Must follow [field reference][FieldReference.field_path] limitations.
+   *
+   * * Not allowed to be used when writing documents.
+   *
+   * (-- NOTE(batchik): long term, there is no reason this type should not be
+   *     allowed to be used on the write path. --)
+   * </pre>
+   *
+   * <code>string field_reference_value = 19;</code>
+   *
+   * @return The fieldReferenceValue.
+   */
+  public java.lang.String getFieldReferenceValue() {
+    java.lang.Object ref = "";
+    if (valueTypeCase_ == 19) {
+      ref = valueType_;
+    }
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      if (valueTypeCase_ == 19) {
+        valueType_ = s;
+      }
+      return s;
+    }
+  }
+  /**
+   *
+   *
+   * <pre>
+   * Value which references a field.
+   *
+   * This is considered relative (vs absolute) since it only refers to a field
+   * and not a field within a particular document.
+   *
+   * **Requires:**
+   *
+   * * Must follow [field reference][FieldReference.field_path] limitations.
+   *
+   * * Not allowed to be used when writing documents.
+   *
+   * (-- NOTE(batchik): long term, there is no reason this type should not be
+   *     allowed to be used on the write path. --)
+   * </pre>
+   *
+   * <code>string field_reference_value = 19;</code>
+   *
+   * @return The bytes for fieldReferenceValue.
+   */
+  public com.google.protobuf.ByteString getFieldReferenceValueBytes() {
+    java.lang.Object ref = "";
+    if (valueTypeCase_ == 19) {
+      ref = valueType_;
+    }
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+      if (valueTypeCase_ == 19) {
+        valueType_ = b;
+      }
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int FUNCTION_VALUE_FIELD_NUMBER = 20;
+  /**
+   *
+   *
+   * <pre>
+   * A value that represents an unevaluated expression.
+   *
+   * **Requires:**
+   *
+   * * Not allowed to be used when writing documents.
+   *
+   * (-- NOTE(batchik): similar to above, there is no reason to not allow
+   *     storing expressions into the database, just no plan to support in
+   *     the near term.
+   *
+   *     This would actually be an interesting way to represent user-defined
+   *     functions or more expressive rules-based systems. --)
+   * </pre>
+   *
+   * <code>.google.firestore.v1.Function function_value = 20;</code>
+   *
+   * @return Whether the functionValue field is set.
+   */
+  @java.lang.Override
+  public boolean hasFunctionValue() {
+    return valueTypeCase_ == 20;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * A value that represents an unevaluated expression.
+   *
+   * **Requires:**
+   *
+   * * Not allowed to be used when writing documents.
+   *
+   * (-- NOTE(batchik): similar to above, there is no reason to not allow
+   *     storing expressions into the database, just no plan to support in
+   *     the near term.
+   *
+   *     This would actually be an interesting way to represent user-defined
+   *     functions or more expressive rules-based systems. --)
+   * </pre>
+   *
+   * <code>.google.firestore.v1.Function function_value = 20;</code>
+   *
+   * @return The functionValue.
+   */
+  @java.lang.Override
+  public com.google.firestore.v1.Function getFunctionValue() {
+    if (valueTypeCase_ == 20) {
+      return (com.google.firestore.v1.Function) valueType_;
+    }
+    return com.google.firestore.v1.Function.getDefaultInstance();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * A value that represents an unevaluated expression.
+   *
+   * **Requires:**
+   *
+   * * Not allowed to be used when writing documents.
+   *
+   * (-- NOTE(batchik): similar to above, there is no reason to not allow
+   *     storing expressions into the database, just no plan to support in
+   *     the near term.
+   *
+   *     This would actually be an interesting way to represent user-defined
+   *     functions or more expressive rules-based systems. --)
+   * </pre>
+   *
+   * <code>.google.firestore.v1.Function function_value = 20;</code>
+   */
+  @java.lang.Override
+  public com.google.firestore.v1.FunctionOrBuilder getFunctionValueOrBuilder() {
+    if (valueTypeCase_ == 20) {
+      return (com.google.firestore.v1.Function) valueType_;
+    }
+    return com.google.firestore.v1.Function.getDefaultInstance();
+  }
+
+  public static final int PIPELINE_VALUE_FIELD_NUMBER = 21;
+  /**
+   *
+   *
+   * <pre>
+   * A value that represents an unevaluated pipeline.
+   *
+   * **Requires:**
+   *
+   * * Not allowed to be used when writing documents.
+   *
+   * (-- NOTE(batchik): similar to above, there is no reason to not allow
+   *     storing expressions into the database, just no plan to support in
+   *     the near term.
+   *
+   *     This would actually be an interesting way to represent user-defined
+   *     functions or more expressive rules-based systems. --)
+   * </pre>
+   *
+   * <code>.google.firestore.v1.Pipeline pipeline_value = 21;</code>
+   *
+   * @return Whether the pipelineValue field is set.
+   */
+  @java.lang.Override
+  public boolean hasPipelineValue() {
+    return valueTypeCase_ == 21;
+  }
+  /**
+   *
+   *
+   * <pre>
+   * A value that represents an unevaluated pipeline.
+   *
+   * **Requires:**
+   *
+   * * Not allowed to be used when writing documents.
+   *
+   * (-- NOTE(batchik): similar to above, there is no reason to not allow
+   *     storing expressions into the database, just no plan to support in
+   *     the near term.
+   *
+   *     This would actually be an interesting way to represent user-defined
+   *     functions or more expressive rules-based systems. --)
+   * </pre>
+   *
+   * <code>.google.firestore.v1.Pipeline pipeline_value = 21;</code>
+   *
+   * @return The pipelineValue.
+   */
+  @java.lang.Override
+  public com.google.firestore.v1.Pipeline getPipelineValue() {
+    if (valueTypeCase_ == 21) {
+      return (com.google.firestore.v1.Pipeline) valueType_;
+    }
+    return com.google.firestore.v1.Pipeline.getDefaultInstance();
+  }
+  /**
+   *
+   *
+   * <pre>
+   * A value that represents an unevaluated pipeline.
+   *
+   * **Requires:**
+   *
+   * * Not allowed to be used when writing documents.
+   *
+   * (-- NOTE(batchik): similar to above, there is no reason to not allow
+   *     storing expressions into the database, just no plan to support in
+   *     the near term.
+   *
+   *     This would actually be an interesting way to represent user-defined
+   *     functions or more expressive rules-based systems. --)
+   * </pre>
+   *
+   * <code>.google.firestore.v1.Pipeline pipeline_value = 21;</code>
+   */
+  @java.lang.Override
+  public com.google.firestore.v1.PipelineOrBuilder getPipelineValueOrBuilder() {
+    if (valueTypeCase_ == 21) {
+      return (com.google.firestore.v1.Pipeline) valueType_;
+    }
+    return com.google.firestore.v1.Pipeline.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -757,6 +1040,15 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
     }
     if (valueTypeCase_ == 18) {
       output.writeBytes(18, (com.google.protobuf.ByteString) valueType_);
+    }
+    if (valueTypeCase_ == 19) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 19, valueType_);
+    }
+    if (valueTypeCase_ == 20) {
+      output.writeMessage(20, (com.google.firestore.v1.Function) valueType_);
+    }
+    if (valueTypeCase_ == 21) {
+      output.writeMessage(21, (com.google.firestore.v1.Pipeline) valueType_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -818,6 +1110,19 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
           com.google.protobuf.CodedOutputStream.computeBytesSize(
               18, (com.google.protobuf.ByteString) valueType_);
     }
+    if (valueTypeCase_ == 19) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(19, valueType_);
+    }
+    if (valueTypeCase_ == 20) {
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              20, (com.google.firestore.v1.Function) valueType_);
+    }
+    if (valueTypeCase_ == 21) {
+      size +=
+          com.google.protobuf.CodedOutputStream.computeMessageSize(
+              21, (com.google.firestore.v1.Pipeline) valueType_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -868,6 +1173,15 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
         break;
       case 6:
         if (!getMapValue().equals(other.getMapValue())) return false;
+        break;
+      case 19:
+        if (!getFieldReferenceValue().equals(other.getFieldReferenceValue())) return false;
+        break;
+      case 20:
+        if (!getFunctionValue().equals(other.getFunctionValue())) return false;
+        break;
+      case 21:
+        if (!getPipelineValue().equals(other.getPipelineValue())) return false;
         break;
       case 0:
       default:
@@ -930,6 +1244,18 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
       case 6:
         hash = (37 * hash) + MAP_VALUE_FIELD_NUMBER;
         hash = (53 * hash) + getMapValue().hashCode();
+        break;
+      case 19:
+        hash = (37 * hash) + FIELD_REFERENCE_VALUE_FIELD_NUMBER;
+        hash = (53 * hash) + getFieldReferenceValue().hashCode();
+        break;
+      case 20:
+        hash = (37 * hash) + FUNCTION_VALUE_FIELD_NUMBER;
+        hash = (53 * hash) + getFunctionValue().hashCode();
+        break;
+      case 21:
+        hash = (37 * hash) + PIPELINE_VALUE_FIELD_NUMBER;
+        hash = (53 * hash) + getPipelineValue().hashCode();
         break;
       case 0:
       default:
@@ -1083,6 +1409,12 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
       if (mapValueBuilder_ != null) {
         mapValueBuilder_.clear();
       }
+      if (functionValueBuilder_ != null) {
+        functionValueBuilder_.clear();
+      }
+      if (pipelineValueBuilder_ != null) {
+        pipelineValueBuilder_.clear();
+      }
       valueTypeCase_ = 0;
       valueType_ = null;
       return this;
@@ -1137,6 +1469,12 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
       }
       if (valueTypeCase_ == 6 && mapValueBuilder_ != null) {
         result.valueType_ = mapValueBuilder_.build();
+      }
+      if (valueTypeCase_ == 20 && functionValueBuilder_ != null) {
+        result.valueType_ = functionValueBuilder_.build();
+      }
+      if (valueTypeCase_ == 21 && pipelineValueBuilder_ != null) {
+        result.valueType_ = pipelineValueBuilder_.build();
       }
     }
 
@@ -1245,6 +1583,23 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
             mergeMapValue(other.getMapValue());
             break;
           }
+        case FIELD_REFERENCE_VALUE:
+          {
+            valueTypeCase_ = 19;
+            valueType_ = other.valueType_;
+            onChanged();
+            break;
+          }
+        case FUNCTION_VALUE:
+          {
+            mergeFunctionValue(other.getFunctionValue());
+            break;
+          }
+        case PIPELINE_VALUE:
+          {
+            mergePipelineValue(other.getPipelineValue());
+            break;
+          }
         case VALUETYPE_NOT_SET:
           {
             break;
@@ -1345,6 +1700,25 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
                 valueTypeCase_ = 18;
                 break;
               } // case 146
+            case 154:
+              {
+                java.lang.String s = input.readStringRequireUtf8();
+                valueTypeCase_ = 19;
+                valueType_ = s;
+                break;
+              } // case 154
+            case 162:
+              {
+                input.readMessage(getFunctionValueFieldBuilder().getBuilder(), extensionRegistry);
+                valueTypeCase_ = 20;
+                break;
+              } // case 162
+            case 170:
+              {
+                input.readMessage(getPipelineValueFieldBuilder().getBuilder(), extensionRegistry);
+                valueTypeCase_ = 21;
+                break;
+              } // case 170
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -2951,6 +3325,822 @@ public final class Value extends com.google.protobuf.GeneratedMessageV3
       valueTypeCase_ = 6;
       onChanged();
       return mapValueBuilder_;
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Value which references a field.
+     *
+     * This is considered relative (vs absolute) since it only refers to a field
+     * and not a field within a particular document.
+     *
+     * **Requires:**
+     *
+     * * Must follow [field reference][FieldReference.field_path] limitations.
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): long term, there is no reason this type should not be
+     *     allowed to be used on the write path. --)
+     * </pre>
+     *
+     * <code>string field_reference_value = 19;</code>
+     *
+     * @return Whether the fieldReferenceValue field is set.
+     */
+    @java.lang.Override
+    public boolean hasFieldReferenceValue() {
+      return valueTypeCase_ == 19;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Value which references a field.
+     *
+     * This is considered relative (vs absolute) since it only refers to a field
+     * and not a field within a particular document.
+     *
+     * **Requires:**
+     *
+     * * Must follow [field reference][FieldReference.field_path] limitations.
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): long term, there is no reason this type should not be
+     *     allowed to be used on the write path. --)
+     * </pre>
+     *
+     * <code>string field_reference_value = 19;</code>
+     *
+     * @return The fieldReferenceValue.
+     */
+    @java.lang.Override
+    public java.lang.String getFieldReferenceValue() {
+      java.lang.Object ref = "";
+      if (valueTypeCase_ == 19) {
+        ref = valueType_;
+      }
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (valueTypeCase_ == 19) {
+          valueType_ = s;
+        }
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Value which references a field.
+     *
+     * This is considered relative (vs absolute) since it only refers to a field
+     * and not a field within a particular document.
+     *
+     * **Requires:**
+     *
+     * * Must follow [field reference][FieldReference.field_path] limitations.
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): long term, there is no reason this type should not be
+     *     allowed to be used on the write path. --)
+     * </pre>
+     *
+     * <code>string field_reference_value = 19;</code>
+     *
+     * @return The bytes for fieldReferenceValue.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getFieldReferenceValueBytes() {
+      java.lang.Object ref = "";
+      if (valueTypeCase_ == 19) {
+        ref = valueType_;
+      }
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        if (valueTypeCase_ == 19) {
+          valueType_ = b;
+        }
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Value which references a field.
+     *
+     * This is considered relative (vs absolute) since it only refers to a field
+     * and not a field within a particular document.
+     *
+     * **Requires:**
+     *
+     * * Must follow [field reference][FieldReference.field_path] limitations.
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): long term, there is no reason this type should not be
+     *     allowed to be used on the write path. --)
+     * </pre>
+     *
+     * <code>string field_reference_value = 19;</code>
+     *
+     * @param value The fieldReferenceValue to set.
+     * @return This builder for chaining.
+     */
+    public Builder setFieldReferenceValue(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      valueTypeCase_ = 19;
+      valueType_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Value which references a field.
+     *
+     * This is considered relative (vs absolute) since it only refers to a field
+     * and not a field within a particular document.
+     *
+     * **Requires:**
+     *
+     * * Must follow [field reference][FieldReference.field_path] limitations.
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): long term, there is no reason this type should not be
+     *     allowed to be used on the write path. --)
+     * </pre>
+     *
+     * <code>string field_reference_value = 19;</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearFieldReferenceValue() {
+      if (valueTypeCase_ == 19) {
+        valueTypeCase_ = 0;
+        valueType_ = null;
+        onChanged();
+      }
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * Value which references a field.
+     *
+     * This is considered relative (vs absolute) since it only refers to a field
+     * and not a field within a particular document.
+     *
+     * **Requires:**
+     *
+     * * Must follow [field reference][FieldReference.field_path] limitations.
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): long term, there is no reason this type should not be
+     *     allowed to be used on the write path. --)
+     * </pre>
+     *
+     * <code>string field_reference_value = 19;</code>
+     *
+     * @param value The bytes for fieldReferenceValue to set.
+     * @return This builder for chaining.
+     */
+    public Builder setFieldReferenceValueBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      valueTypeCase_ = 19;
+      valueType_ = value;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.firestore.v1.Function,
+            com.google.firestore.v1.Function.Builder,
+            com.google.firestore.v1.FunctionOrBuilder>
+        functionValueBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated expression.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Function function_value = 20;</code>
+     *
+     * @return Whether the functionValue field is set.
+     */
+    @java.lang.Override
+    public boolean hasFunctionValue() {
+      return valueTypeCase_ == 20;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated expression.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Function function_value = 20;</code>
+     *
+     * @return The functionValue.
+     */
+    @java.lang.Override
+    public com.google.firestore.v1.Function getFunctionValue() {
+      if (functionValueBuilder_ == null) {
+        if (valueTypeCase_ == 20) {
+          return (com.google.firestore.v1.Function) valueType_;
+        }
+        return com.google.firestore.v1.Function.getDefaultInstance();
+      } else {
+        if (valueTypeCase_ == 20) {
+          return functionValueBuilder_.getMessage();
+        }
+        return com.google.firestore.v1.Function.getDefaultInstance();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated expression.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Function function_value = 20;</code>
+     */
+    public Builder setFunctionValue(com.google.firestore.v1.Function value) {
+      if (functionValueBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        valueType_ = value;
+        onChanged();
+      } else {
+        functionValueBuilder_.setMessage(value);
+      }
+      valueTypeCase_ = 20;
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated expression.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Function function_value = 20;</code>
+     */
+    public Builder setFunctionValue(com.google.firestore.v1.Function.Builder builderForValue) {
+      if (functionValueBuilder_ == null) {
+        valueType_ = builderForValue.build();
+        onChanged();
+      } else {
+        functionValueBuilder_.setMessage(builderForValue.build());
+      }
+      valueTypeCase_ = 20;
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated expression.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Function function_value = 20;</code>
+     */
+    public Builder mergeFunctionValue(com.google.firestore.v1.Function value) {
+      if (functionValueBuilder_ == null) {
+        if (valueTypeCase_ == 20
+            && valueType_ != com.google.firestore.v1.Function.getDefaultInstance()) {
+          valueType_ =
+              com.google.firestore.v1.Function.newBuilder(
+                      (com.google.firestore.v1.Function) valueType_)
+                  .mergeFrom(value)
+                  .buildPartial();
+        } else {
+          valueType_ = value;
+        }
+        onChanged();
+      } else {
+        if (valueTypeCase_ == 20) {
+          functionValueBuilder_.mergeFrom(value);
+        } else {
+          functionValueBuilder_.setMessage(value);
+        }
+      }
+      valueTypeCase_ = 20;
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated expression.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Function function_value = 20;</code>
+     */
+    public Builder clearFunctionValue() {
+      if (functionValueBuilder_ == null) {
+        if (valueTypeCase_ == 20) {
+          valueTypeCase_ = 0;
+          valueType_ = null;
+          onChanged();
+        }
+      } else {
+        if (valueTypeCase_ == 20) {
+          valueTypeCase_ = 0;
+          valueType_ = null;
+        }
+        functionValueBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated expression.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Function function_value = 20;</code>
+     */
+    public com.google.firestore.v1.Function.Builder getFunctionValueBuilder() {
+      return getFunctionValueFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated expression.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Function function_value = 20;</code>
+     */
+    @java.lang.Override
+    public com.google.firestore.v1.FunctionOrBuilder getFunctionValueOrBuilder() {
+      if ((valueTypeCase_ == 20) && (functionValueBuilder_ != null)) {
+        return functionValueBuilder_.getMessageOrBuilder();
+      } else {
+        if (valueTypeCase_ == 20) {
+          return (com.google.firestore.v1.Function) valueType_;
+        }
+        return com.google.firestore.v1.Function.getDefaultInstance();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated expression.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Function function_value = 20;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.firestore.v1.Function,
+            com.google.firestore.v1.Function.Builder,
+            com.google.firestore.v1.FunctionOrBuilder>
+        getFunctionValueFieldBuilder() {
+      if (functionValueBuilder_ == null) {
+        if (!(valueTypeCase_ == 20)) {
+          valueType_ = com.google.firestore.v1.Function.getDefaultInstance();
+        }
+        functionValueBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.v1.Function,
+                com.google.firestore.v1.Function.Builder,
+                com.google.firestore.v1.FunctionOrBuilder>(
+                (com.google.firestore.v1.Function) valueType_, getParentForChildren(), isClean());
+        valueType_ = null;
+      }
+      valueTypeCase_ = 20;
+      onChanged();
+      return functionValueBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.firestore.v1.Pipeline,
+            com.google.firestore.v1.Pipeline.Builder,
+            com.google.firestore.v1.PipelineOrBuilder>
+        pipelineValueBuilder_;
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Pipeline pipeline_value = 21;</code>
+     *
+     * @return Whether the pipelineValue field is set.
+     */
+    @java.lang.Override
+    public boolean hasPipelineValue() {
+      return valueTypeCase_ == 21;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Pipeline pipeline_value = 21;</code>
+     *
+     * @return The pipelineValue.
+     */
+    @java.lang.Override
+    public com.google.firestore.v1.Pipeline getPipelineValue() {
+      if (pipelineValueBuilder_ == null) {
+        if (valueTypeCase_ == 21) {
+          return (com.google.firestore.v1.Pipeline) valueType_;
+        }
+        return com.google.firestore.v1.Pipeline.getDefaultInstance();
+      } else {
+        if (valueTypeCase_ == 21) {
+          return pipelineValueBuilder_.getMessage();
+        }
+        return com.google.firestore.v1.Pipeline.getDefaultInstance();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Pipeline pipeline_value = 21;</code>
+     */
+    public Builder setPipelineValue(com.google.firestore.v1.Pipeline value) {
+      if (pipelineValueBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        valueType_ = value;
+        onChanged();
+      } else {
+        pipelineValueBuilder_.setMessage(value);
+      }
+      valueTypeCase_ = 21;
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Pipeline pipeline_value = 21;</code>
+     */
+    public Builder setPipelineValue(com.google.firestore.v1.Pipeline.Builder builderForValue) {
+      if (pipelineValueBuilder_ == null) {
+        valueType_ = builderForValue.build();
+        onChanged();
+      } else {
+        pipelineValueBuilder_.setMessage(builderForValue.build());
+      }
+      valueTypeCase_ = 21;
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Pipeline pipeline_value = 21;</code>
+     */
+    public Builder mergePipelineValue(com.google.firestore.v1.Pipeline value) {
+      if (pipelineValueBuilder_ == null) {
+        if (valueTypeCase_ == 21
+            && valueType_ != com.google.firestore.v1.Pipeline.getDefaultInstance()) {
+          valueType_ =
+              com.google.firestore.v1.Pipeline.newBuilder(
+                      (com.google.firestore.v1.Pipeline) valueType_)
+                  .mergeFrom(value)
+                  .buildPartial();
+        } else {
+          valueType_ = value;
+        }
+        onChanged();
+      } else {
+        if (valueTypeCase_ == 21) {
+          pipelineValueBuilder_.mergeFrom(value);
+        } else {
+          pipelineValueBuilder_.setMessage(value);
+        }
+      }
+      valueTypeCase_ = 21;
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Pipeline pipeline_value = 21;</code>
+     */
+    public Builder clearPipelineValue() {
+      if (pipelineValueBuilder_ == null) {
+        if (valueTypeCase_ == 21) {
+          valueTypeCase_ = 0;
+          valueType_ = null;
+          onChanged();
+        }
+      } else {
+        if (valueTypeCase_ == 21) {
+          valueTypeCase_ = 0;
+          valueType_ = null;
+        }
+        pipelineValueBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Pipeline pipeline_value = 21;</code>
+     */
+    public com.google.firestore.v1.Pipeline.Builder getPipelineValueBuilder() {
+      return getPipelineValueFieldBuilder().getBuilder();
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Pipeline pipeline_value = 21;</code>
+     */
+    @java.lang.Override
+    public com.google.firestore.v1.PipelineOrBuilder getPipelineValueOrBuilder() {
+      if ((valueTypeCase_ == 21) && (pipelineValueBuilder_ != null)) {
+        return pipelineValueBuilder_.getMessageOrBuilder();
+      } else {
+        if (valueTypeCase_ == 21) {
+          return (com.google.firestore.v1.Pipeline) valueType_;
+        }
+        return com.google.firestore.v1.Pipeline.getDefaultInstance();
+      }
+    }
+    /**
+     *
+     *
+     * <pre>
+     * A value that represents an unevaluated pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     *
+     * (-- NOTE(batchik): similar to above, there is no reason to not allow
+     *     storing expressions into the database, just no plan to support in
+     *     the near term.
+     *
+     *     This would actually be an interesting way to represent user-defined
+     *     functions or more expressive rules-based systems. --)
+     * </pre>
+     *
+     * <code>.google.firestore.v1.Pipeline pipeline_value = 21;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+            com.google.firestore.v1.Pipeline,
+            com.google.firestore.v1.Pipeline.Builder,
+            com.google.firestore.v1.PipelineOrBuilder>
+        getPipelineValueFieldBuilder() {
+      if (pipelineValueBuilder_ == null) {
+        if (!(valueTypeCase_ == 21)) {
+          valueType_ = com.google.firestore.v1.Pipeline.getDefaultInstance();
+        }
+        pipelineValueBuilder_ =
+            new com.google.protobuf.SingleFieldBuilderV3<
+                com.google.firestore.v1.Pipeline,
+                com.google.firestore.v1.Pipeline.Builder,
+                com.google.firestore.v1.PipelineOrBuilder>(
+                (com.google.firestore.v1.Pipeline) valueType_, getParentForChildren(), isClean());
+        valueType_ = null;
+      }
+      valueTypeCase_ = 21;
+      onChanged();
+      return pipelineValueBuilder_;
     }
 
     @java.lang.Override

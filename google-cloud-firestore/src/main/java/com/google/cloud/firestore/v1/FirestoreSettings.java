@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,8 @@ import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.CreateDocumentRequest;
 import com.google.firestore.v1.DeleteDocumentRequest;
 import com.google.firestore.v1.Document;
+import com.google.firestore.v1.ExecutePipelineRequest;
+import com.google.firestore.v1.ExecutePipelineResponse;
 import com.google.firestore.v1.GetDocumentRequest;
 import com.google.firestore.v1.ListCollectionIdsRequest;
 import com.google.firestore.v1.ListCollectionIdsResponse;
@@ -155,6 +157,12 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     return ((FirestoreStubSettings) getStubSettings()).runQuerySettings();
   }
 
+  /** Returns the object with the settings used for calls to executePipeline. */
+  public ServerStreamingCallSettings<ExecutePipelineRequest, ExecutePipelineResponse>
+      executePipelineSettings() {
+    return ((FirestoreStubSettings) getStubSettings()).executePipelineSettings();
+  }
+
   /** Returns the object with the settings used for calls to runAggregationQuery. */
   public ServerStreamingCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
       runAggregationQuerySettings() {
@@ -235,7 +243,6 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     return FirestoreStubSettings.defaultTransportChannelProvider();
   }
 
-  @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
   public static ApiClientHeaderProvider.Builder defaultApiClientHeaderProviderBuilder() {
     return FirestoreStubSettings.defaultApiClientHeaderProviderBuilder();
   }
@@ -246,7 +253,6 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
   }
 
   /** Returns a new REST builder for this class. */
-  @BetaApi
   public static Builder newHttpJsonBuilder() {
     return Builder.createHttpJsonDefault();
   }
@@ -288,7 +294,6 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
       return new Builder(FirestoreStubSettings.newBuilder());
     }
 
-    @BetaApi
     private static Builder createHttpJsonDefault() {
       return new Builder(FirestoreStubSettings.newHttpJsonBuilder());
     }
@@ -357,6 +362,12 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     public ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings() {
       return getStubSettingsBuilder().runQuerySettings();
+    }
+
+    /** Returns the builder for the settings used for calls to executePipeline. */
+    public ServerStreamingCallSettings.Builder<ExecutePipelineRequest, ExecutePipelineResponse>
+        executePipelineSettings() {
+      return getStubSettingsBuilder().executePipelineSettings();
     }
 
     /** Returns the builder for the settings used for calls to runAggregationQuery. */

@@ -561,4 +561,57 @@ public interface StructuredQueryOrBuilder
    * <code>.google.protobuf.Int32Value limit = 5;</code>
    */
   com.google.protobuf.Int32ValueOrBuilder getLimitOrBuilder();
+
+  /**
+   *
+   *
+   * <pre>
+   * Optional. A potential Nearest Neighbors Search.
+   *
+   * Applies after all other filters and ordering.
+   *
+   * Finds the closest vector embeddings to the given query vector.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.v1.StructuredQuery.FindNearest find_nearest = 9 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
+   *
+   * @return Whether the findNearest field is set.
+   */
+  boolean hasFindNearest();
+  /**
+   *
+   *
+   * <pre>
+   * Optional. A potential Nearest Neighbors Search.
+   *
+   * Applies after all other filters and ordering.
+   *
+   * Finds the closest vector embeddings to the given query vector.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.v1.StructuredQuery.FindNearest find_nearest = 9 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
+   *
+   * @return The findNearest.
+   */
+  com.google.firestore.v1.StructuredQuery.FindNearest getFindNearest();
+  /**
+   *
+   *
+   * <pre>
+   * Optional. A potential Nearest Neighbors Search.
+   *
+   * Applies after all other filters and ordering.
+   *
+   * Finds the closest vector embeddings to the given query vector.
+   * </pre>
+   *
+   * <code>
+   * .google.firestore.v1.StructuredQuery.FindNearest find_nearest = 9 [(.google.api.field_behavior) = OPTIONAL];
+   * </code>
+   */
+  com.google.firestore.v1.StructuredQuery.FindNearestOrBuilder getFindNearestOrBuilder();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,12 +31,19 @@ import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.firestore.v1.stub.FirestoreAdminStub;
 import com.google.cloud.firestore.v1.stub.FirestoreAdminStubSettings;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.firestore.admin.v1.Backup;
+import com.google.firestore.admin.v1.BackupName;
+import com.google.firestore.admin.v1.BackupSchedule;
+import com.google.firestore.admin.v1.BackupScheduleName;
 import com.google.firestore.admin.v1.CollectionGroupName;
+import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DatabaseName;
+import com.google.firestore.admin.v1.DeleteBackupRequest;
+import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
 import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
 import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
@@ -46,6 +53,8 @@ import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FieldName;
 import com.google.firestore.admin.v1.FieldOperationMetadata;
+import com.google.firestore.admin.v1.GetBackupRequest;
+import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
@@ -54,13 +63,21 @@ import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.IndexName;
 import com.google.firestore.admin.v1.IndexOperationMetadata;
+import com.google.firestore.admin.v1.ListBackupSchedulesRequest;
+import com.google.firestore.admin.v1.ListBackupSchedulesResponse;
+import com.google.firestore.admin.v1.ListBackupsRequest;
+import com.google.firestore.admin.v1.ListBackupsResponse;
 import com.google.firestore.admin.v1.ListDatabasesRequest;
 import com.google.firestore.admin.v1.ListDatabasesResponse;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.LocationName;
 import com.google.firestore.admin.v1.ProjectName;
+import com.google.firestore.admin.v1.RestoreDatabaseMetadata;
+import com.google.firestore.admin.v1.RestoreDatabaseRequest;
+import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
@@ -400,6 +417,174 @@ import javax.annotation.Generated;
  *      <ul>
  *           <li><p> deleteDatabaseOperationCallable()
  *           <li><p> deleteDatabaseCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> GetBackup</td>
+ *      <td><p> Gets information about a backup.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> getBackup(GetBackupRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> getBackup(BackupName name)
+ *           <li><p> getBackup(String name)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> getBackupCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> ListBackups</td>
+ *      <td><p> Lists all the backups.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> listBackups(ListBackupsRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> listBackups(LocationName parent)
+ *           <li><p> listBackups(String parent)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> listBackupsCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> DeleteBackup</td>
+ *      <td><p> Deletes a backup.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> deleteBackup(DeleteBackupRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> deleteBackup(BackupName name)
+ *           <li><p> deleteBackup(String name)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> deleteBackupCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> RestoreDatabase</td>
+ *      <td><p> Creates a new database by restoring from an existing backup.
+ * <p>  The new database must be in the same cloud region or multi-region location as the existing backup. This behaves similar to [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase] except instead of creating a new empty database, a new database is created with the database type, index configuration, and documents from an existing backup.
+ * <p>  The [long-running operation][google.longrunning.Operation] can be used to track the progress of the restore, with the Operation's [metadata][google.longrunning.Operation.metadata] field type being the [RestoreDatabaseMetadata][google.firestore.admin.v1.RestoreDatabaseMetadata]. The [response][google.longrunning.Operation.response] type is the [Database][google.firestore.admin.v1.Database] if the restore was successful. The new database is not readable or writeable until the LRO has completed.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> restoreDatabaseAsync(RestoreDatabaseRequest request)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> restoreDatabaseOperationCallable()
+ *           <li><p> restoreDatabaseCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> CreateBackupSchedule</td>
+ *      <td><p> Creates a backup schedule on a database. At most two backup schedules can be configured on a database, one daily backup schedule and one weekly backup schedule.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> createBackupSchedule(CreateBackupScheduleRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> createBackupSchedule(DatabaseName parent, BackupSchedule backupSchedule)
+ *           <li><p> createBackupSchedule(String parent, BackupSchedule backupSchedule)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> createBackupScheduleCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> GetBackupSchedule</td>
+ *      <td><p> Gets information about a backup schedule.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> getBackupSchedule(GetBackupScheduleRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> getBackupSchedule(BackupScheduleName name)
+ *           <li><p> getBackupSchedule(String name)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> getBackupScheduleCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> ListBackupSchedules</td>
+ *      <td><p> List backup schedules.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> listBackupSchedules(ListBackupSchedulesRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> listBackupSchedules(DatabaseName parent)
+ *           <li><p> listBackupSchedules(String parent)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> listBackupSchedulesCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> UpdateBackupSchedule</td>
+ *      <td><p> Updates a backup schedule.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> updateBackupSchedule(UpdateBackupScheduleRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> updateBackupSchedule(BackupSchedule backupSchedule, FieldMask updateMask)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> updateBackupScheduleCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> DeleteBackupSchedule</td>
+ *      <td><p> Deletes a backup schedule.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> deleteBackupSchedule(DeleteBackupScheduleRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> deleteBackupSchedule(BackupScheduleName name)
+ *           <li><p> deleteBackupSchedule(String name)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> deleteBackupScheduleCallable()
  *      </ul>
  *       </td>
  *    </tr>
@@ -2582,6 +2767,1047 @@ public class FirestoreAdminClient implements BackgroundResource {
    */
   public final UnaryCallable<DeleteDatabaseRequest, Operation> deleteDatabaseCallable() {
     return stub.deleteDatabaseCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a backup.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   BackupName name = BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]");
+   *   Backup response = firestoreAdminClient.getBackup(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. Name of the backup to fetch.
+   *     <p>Format is `projects/{project}/locations/{location}/backups/{backup}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Backup getBackup(BackupName name) {
+    GetBackupRequest request =
+        GetBackupRequest.newBuilder().setName(name == null ? null : name.toString()).build();
+    return getBackup(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a backup.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name = BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString();
+   *   Backup response = firestoreAdminClient.getBackup(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. Name of the backup to fetch.
+   *     <p>Format is `projects/{project}/locations/{location}/backups/{backup}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Backup getBackup(String name) {
+    GetBackupRequest request = GetBackupRequest.newBuilder().setName(name).build();
+    return getBackup(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a backup.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   GetBackupRequest request =
+   *       GetBackupRequest.newBuilder()
+   *           .setName(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+   *           .build();
+   *   Backup response = firestoreAdminClient.getBackup(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final Backup getBackup(GetBackupRequest request) {
+    return getBackupCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a backup.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   GetBackupRequest request =
+   *       GetBackupRequest.newBuilder()
+   *           .setName(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+   *           .build();
+   *   ApiFuture<Backup> future = firestoreAdminClient.getBackupCallable().futureCall(request);
+   *   // Do something.
+   *   Backup response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<GetBackupRequest, Backup> getBackupCallable() {
+    return stub.getBackupCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the backups.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   LocationName parent = LocationName.of("[PROJECT]", "[LOCATION]");
+   *   ListBackupsResponse response = firestoreAdminClient.listBackups(parent);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. The location to list backups from.
+   *     <p>Format is `projects/{project}/locations/{location}`. Use `{location} = '-'` to list
+   *     backups from all locations for the given project. This allows listing backups from a single
+   *     location or from all locations.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBackupsResponse listBackups(LocationName parent) {
+    ListBackupsRequest request =
+        ListBackupsRequest.newBuilder()
+            .setParent(parent == null ? null : parent.toString())
+            .build();
+    return listBackups(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the backups.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String parent = LocationName.of("[PROJECT]", "[LOCATION]").toString();
+   *   ListBackupsResponse response = firestoreAdminClient.listBackups(parent);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. The location to list backups from.
+   *     <p>Format is `projects/{project}/locations/{location}`. Use `{location} = '-'` to list
+   *     backups from all locations for the given project. This allows listing backups from a single
+   *     location or from all locations.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBackupsResponse listBackups(String parent) {
+    ListBackupsRequest request = ListBackupsRequest.newBuilder().setParent(parent).build();
+    return listBackups(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the backups.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ListBackupsRequest request =
+   *       ListBackupsRequest.newBuilder()
+   *           .setParent(LocationName.of("[PROJECT]", "[LOCATION]").toString())
+   *           .build();
+   *   ListBackupsResponse response = firestoreAdminClient.listBackups(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBackupsResponse listBackups(ListBackupsRequest request) {
+    return listBackupsCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Lists all the backups.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ListBackupsRequest request =
+   *       ListBackupsRequest.newBuilder()
+   *           .setParent(LocationName.of("[PROJECT]", "[LOCATION]").toString())
+   *           .build();
+   *   ApiFuture<ListBackupsResponse> future =
+   *       firestoreAdminClient.listBackupsCallable().futureCall(request);
+   *   // Do something.
+   *   ListBackupsResponse response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<ListBackupsRequest, ListBackupsResponse> listBackupsCallable() {
+    return stub.listBackupsCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   BackupName name = BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]");
+   *   firestoreAdminClient.deleteBackup(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. Name of the backup to delete.
+   *     <p>format is `projects/{project}/locations/{location}/backups/{backup}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteBackup(BackupName name) {
+    DeleteBackupRequest request =
+        DeleteBackupRequest.newBuilder().setName(name == null ? null : name.toString()).build();
+    deleteBackup(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name = BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString();
+   *   firestoreAdminClient.deleteBackup(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. Name of the backup to delete.
+   *     <p>format is `projects/{project}/locations/{location}/backups/{backup}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteBackup(String name) {
+    DeleteBackupRequest request = DeleteBackupRequest.newBuilder().setName(name).build();
+    deleteBackup(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DeleteBackupRequest request =
+   *       DeleteBackupRequest.newBuilder()
+   *           .setName(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+   *           .build();
+   *   firestoreAdminClient.deleteBackup(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteBackup(DeleteBackupRequest request) {
+    deleteBackupCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DeleteBackupRequest request =
+   *       DeleteBackupRequest.newBuilder()
+   *           .setName(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+   *           .build();
+   *   ApiFuture<Empty> future = firestoreAdminClient.deleteBackupCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<DeleteBackupRequest, Empty> deleteBackupCallable() {
+    return stub.deleteBackupCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new database by restoring from an existing backup.
+   *
+   * <p>The new database must be in the same cloud region or multi-region location as the existing
+   * backup. This behaves similar to
+   * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase] except instead of
+   * creating a new empty database, a new database is created with the database type, index
+   * configuration, and documents from an existing backup.
+   *
+   * <p>The [long-running operation][google.longrunning.Operation] can be used to track the progress
+   * of the restore, with the Operation's [metadata][google.longrunning.Operation.metadata] field
+   * type being the [RestoreDatabaseMetadata][google.firestore.admin.v1.RestoreDatabaseMetadata].
+   * The [response][google.longrunning.Operation.response] type is the
+   * [Database][google.firestore.admin.v1.Database] if the restore was successful. The new database
+   * is not readable or writeable until the LRO has completed.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   RestoreDatabaseRequest request =
+   *       RestoreDatabaseRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .setDatabaseId("databaseId1688905718")
+   *           .setBackup(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+   *           .build();
+   *   Database response = firestoreAdminClient.restoreDatabaseAsync(request).get();
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<Database, RestoreDatabaseMetadata> restoreDatabaseAsync(
+      RestoreDatabaseRequest request) {
+    return restoreDatabaseOperationCallable().futureCall(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new database by restoring from an existing backup.
+   *
+   * <p>The new database must be in the same cloud region or multi-region location as the existing
+   * backup. This behaves similar to
+   * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase] except instead of
+   * creating a new empty database, a new database is created with the database type, index
+   * configuration, and documents from an existing backup.
+   *
+   * <p>The [long-running operation][google.longrunning.Operation] can be used to track the progress
+   * of the restore, with the Operation's [metadata][google.longrunning.Operation.metadata] field
+   * type being the [RestoreDatabaseMetadata][google.firestore.admin.v1.RestoreDatabaseMetadata].
+   * The [response][google.longrunning.Operation.response] type is the
+   * [Database][google.firestore.admin.v1.Database] if the restore was successful. The new database
+   * is not readable or writeable until the LRO has completed.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   RestoreDatabaseRequest request =
+   *       RestoreDatabaseRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .setDatabaseId("databaseId1688905718")
+   *           .setBackup(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+   *           .build();
+   *   OperationFuture<Database, RestoreDatabaseMetadata> future =
+   *       firestoreAdminClient.restoreDatabaseOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Database response = future.get();
+   * }
+   * }</pre>
+   */
+  public final OperationCallable<RestoreDatabaseRequest, Database, RestoreDatabaseMetadata>
+      restoreDatabaseOperationCallable() {
+    return stub.restoreDatabaseOperationCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new database by restoring from an existing backup.
+   *
+   * <p>The new database must be in the same cloud region or multi-region location as the existing
+   * backup. This behaves similar to
+   * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase] except instead of
+   * creating a new empty database, a new database is created with the database type, index
+   * configuration, and documents from an existing backup.
+   *
+   * <p>The [long-running operation][google.longrunning.Operation] can be used to track the progress
+   * of the restore, with the Operation's [metadata][google.longrunning.Operation.metadata] field
+   * type being the [RestoreDatabaseMetadata][google.firestore.admin.v1.RestoreDatabaseMetadata].
+   * The [response][google.longrunning.Operation.response] type is the
+   * [Database][google.firestore.admin.v1.Database] if the restore was successful. The new database
+   * is not readable or writeable until the LRO has completed.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   RestoreDatabaseRequest request =
+   *       RestoreDatabaseRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .setDatabaseId("databaseId1688905718")
+   *           .setBackup(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+   *           .build();
+   *   ApiFuture<Operation> future =
+   *       firestoreAdminClient.restoreDatabaseCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<RestoreDatabaseRequest, Operation> restoreDatabaseCallable() {
+    return stub.restoreDatabaseCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a backup schedule on a database. At most two backup schedules can be configured on a
+   * database, one daily backup schedule and one weekly backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DatabaseName parent = DatabaseName.of("[PROJECT]", "[DATABASE]");
+   *   BackupSchedule backupSchedule = BackupSchedule.newBuilder().build();
+   *   BackupSchedule response = firestoreAdminClient.createBackupSchedule(parent, backupSchedule);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. The parent database.
+   *     <p>Format `projects/{project}/databases/{database}`
+   * @param backupSchedule Required. The backup schedule to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BackupSchedule createBackupSchedule(
+      DatabaseName parent, BackupSchedule backupSchedule) {
+    CreateBackupScheduleRequest request =
+        CreateBackupScheduleRequest.newBuilder()
+            .setParent(parent == null ? null : parent.toString())
+            .setBackupSchedule(backupSchedule)
+            .build();
+    return createBackupSchedule(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a backup schedule on a database. At most two backup schedules can be configured on a
+   * database, one daily backup schedule and one weekly backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String parent = DatabaseName.of("[PROJECT]", "[DATABASE]").toString();
+   *   BackupSchedule backupSchedule = BackupSchedule.newBuilder().build();
+   *   BackupSchedule response = firestoreAdminClient.createBackupSchedule(parent, backupSchedule);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. The parent database.
+   *     <p>Format `projects/{project}/databases/{database}`
+   * @param backupSchedule Required. The backup schedule to create.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BackupSchedule createBackupSchedule(String parent, BackupSchedule backupSchedule) {
+    CreateBackupScheduleRequest request =
+        CreateBackupScheduleRequest.newBuilder()
+            .setParent(parent)
+            .setBackupSchedule(backupSchedule)
+            .build();
+    return createBackupSchedule(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a backup schedule on a database. At most two backup schedules can be configured on a
+   * database, one daily backup schedule and one weekly backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   CreateBackupScheduleRequest request =
+   *       CreateBackupScheduleRequest.newBuilder()
+   *           .setParent(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .setBackupSchedule(BackupSchedule.newBuilder().build())
+   *           .build();
+   *   BackupSchedule response = firestoreAdminClient.createBackupSchedule(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BackupSchedule createBackupSchedule(CreateBackupScheduleRequest request) {
+    return createBackupScheduleCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a backup schedule on a database. At most two backup schedules can be configured on a
+   * database, one daily backup schedule and one weekly backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   CreateBackupScheduleRequest request =
+   *       CreateBackupScheduleRequest.newBuilder()
+   *           .setParent(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .setBackupSchedule(BackupSchedule.newBuilder().build())
+   *           .build();
+   *   ApiFuture<BackupSchedule> future =
+   *       firestoreAdminClient.createBackupScheduleCallable().futureCall(request);
+   *   // Do something.
+   *   BackupSchedule response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<CreateBackupScheduleRequest, BackupSchedule>
+      createBackupScheduleCallable() {
+    return stub.createBackupScheduleCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   BackupScheduleName name =
+   *       BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]");
+   *   BackupSchedule response = firestoreAdminClient.getBackupSchedule(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. The name of the backup schedule.
+   *     <p>Format `projects/{project}/databases/{database}/backupSchedules/{backup_schedule}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BackupSchedule getBackupSchedule(BackupScheduleName name) {
+    GetBackupScheduleRequest request =
+        GetBackupScheduleRequest.newBuilder()
+            .setName(name == null ? null : name.toString())
+            .build();
+    return getBackupSchedule(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name =
+   *       BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]").toString();
+   *   BackupSchedule response = firestoreAdminClient.getBackupSchedule(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. The name of the backup schedule.
+   *     <p>Format `projects/{project}/databases/{database}/backupSchedules/{backup_schedule}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BackupSchedule getBackupSchedule(String name) {
+    GetBackupScheduleRequest request = GetBackupScheduleRequest.newBuilder().setName(name).build();
+    return getBackupSchedule(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   GetBackupScheduleRequest request =
+   *       GetBackupScheduleRequest.newBuilder()
+   *           .setName(
+   *               BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]").toString())
+   *           .build();
+   *   BackupSchedule response = firestoreAdminClient.getBackupSchedule(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BackupSchedule getBackupSchedule(GetBackupScheduleRequest request) {
+    return getBackupScheduleCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets information about a backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   GetBackupScheduleRequest request =
+   *       GetBackupScheduleRequest.newBuilder()
+   *           .setName(
+   *               BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]").toString())
+   *           .build();
+   *   ApiFuture<BackupSchedule> future =
+   *       firestoreAdminClient.getBackupScheduleCallable().futureCall(request);
+   *   // Do something.
+   *   BackupSchedule response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<GetBackupScheduleRequest, BackupSchedule> getBackupScheduleCallable() {
+    return stub.getBackupScheduleCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List backup schedules.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DatabaseName parent = DatabaseName.of("[PROJECT]", "[DATABASE]");
+   *   ListBackupSchedulesResponse response = firestoreAdminClient.listBackupSchedules(parent);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. The parent database.
+   *     <p>Format is `projects/{project}/databases/{database}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBackupSchedulesResponse listBackupSchedules(DatabaseName parent) {
+    ListBackupSchedulesRequest request =
+        ListBackupSchedulesRequest.newBuilder()
+            .setParent(parent == null ? null : parent.toString())
+            .build();
+    return listBackupSchedules(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List backup schedules.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String parent = DatabaseName.of("[PROJECT]", "[DATABASE]").toString();
+   *   ListBackupSchedulesResponse response = firestoreAdminClient.listBackupSchedules(parent);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. The parent database.
+   *     <p>Format is `projects/{project}/databases/{database}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBackupSchedulesResponse listBackupSchedules(String parent) {
+    ListBackupSchedulesRequest request =
+        ListBackupSchedulesRequest.newBuilder().setParent(parent).build();
+    return listBackupSchedules(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List backup schedules.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ListBackupSchedulesRequest request =
+   *       ListBackupSchedulesRequest.newBuilder()
+   *           .setParent(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .build();
+   *   ListBackupSchedulesResponse response = firestoreAdminClient.listBackupSchedules(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListBackupSchedulesResponse listBackupSchedules(ListBackupSchedulesRequest request) {
+    return listBackupSchedulesCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List backup schedules.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ListBackupSchedulesRequest request =
+   *       ListBackupSchedulesRequest.newBuilder()
+   *           .setParent(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .build();
+   *   ApiFuture<ListBackupSchedulesResponse> future =
+   *       firestoreAdminClient.listBackupSchedulesCallable().futureCall(request);
+   *   // Do something.
+   *   ListBackupSchedulesResponse response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+      listBackupSchedulesCallable() {
+    return stub.listBackupSchedulesCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   BackupSchedule backupSchedule = BackupSchedule.newBuilder().build();
+   *   FieldMask updateMask = FieldMask.newBuilder().build();
+   *   BackupSchedule response =
+   *       firestoreAdminClient.updateBackupSchedule(backupSchedule, updateMask);
+   * }
+   * }</pre>
+   *
+   * @param backupSchedule Required. The backup schedule to update.
+   * @param updateMask The list of fields to be updated.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BackupSchedule updateBackupSchedule(
+      BackupSchedule backupSchedule, FieldMask updateMask) {
+    UpdateBackupScheduleRequest request =
+        UpdateBackupScheduleRequest.newBuilder()
+            .setBackupSchedule(backupSchedule)
+            .setUpdateMask(updateMask)
+            .build();
+    return updateBackupSchedule(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UpdateBackupScheduleRequest request =
+   *       UpdateBackupScheduleRequest.newBuilder()
+   *           .setBackupSchedule(BackupSchedule.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   BackupSchedule response = firestoreAdminClient.updateBackupSchedule(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final BackupSchedule updateBackupSchedule(UpdateBackupScheduleRequest request) {
+    return updateBackupScheduleCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Updates a backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UpdateBackupScheduleRequest request =
+   *       UpdateBackupScheduleRequest.newBuilder()
+   *           .setBackupSchedule(BackupSchedule.newBuilder().build())
+   *           .setUpdateMask(FieldMask.newBuilder().build())
+   *           .build();
+   *   ApiFuture<BackupSchedule> future =
+   *       firestoreAdminClient.updateBackupScheduleCallable().futureCall(request);
+   *   // Do something.
+   *   BackupSchedule response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<UpdateBackupScheduleRequest, BackupSchedule>
+      updateBackupScheduleCallable() {
+    return stub.updateBackupScheduleCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   BackupScheduleName name =
+   *       BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]");
+   *   firestoreAdminClient.deleteBackupSchedule(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. The name of the backup schedule.
+   *     <p>Format `projects/{project}/databases/{database}/backupSchedules/{backup_schedule}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteBackupSchedule(BackupScheduleName name) {
+    DeleteBackupScheduleRequest request =
+        DeleteBackupScheduleRequest.newBuilder()
+            .setName(name == null ? null : name.toString())
+            .build();
+    deleteBackupSchedule(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name =
+   *       BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]").toString();
+   *   firestoreAdminClient.deleteBackupSchedule(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. The name of the backup schedule.
+   *     <p>Format `projects/{project}/databases/{database}/backupSchedules/{backup_schedule}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteBackupSchedule(String name) {
+    DeleteBackupScheduleRequest request =
+        DeleteBackupScheduleRequest.newBuilder().setName(name).build();
+    deleteBackupSchedule(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DeleteBackupScheduleRequest request =
+   *       DeleteBackupScheduleRequest.newBuilder()
+   *           .setName(
+   *               BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]").toString())
+   *           .build();
+   *   firestoreAdminClient.deleteBackupSchedule(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteBackupSchedule(DeleteBackupScheduleRequest request) {
+    deleteBackupScheduleCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a backup schedule.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DeleteBackupScheduleRequest request =
+   *       DeleteBackupScheduleRequest.newBuilder()
+   *           .setName(
+   *               BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]").toString())
+   *           .build();
+   *   ApiFuture<Empty> future =
+   *       firestoreAdminClient.deleteBackupScheduleCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable() {
+    return stub.deleteBackupScheduleCallable();
   }
 
   @Override

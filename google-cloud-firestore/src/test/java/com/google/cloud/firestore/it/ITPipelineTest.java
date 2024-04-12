@@ -55,7 +55,7 @@ public class ITPipelineTest {
             .project(
                 Field.of("foo"),
                 Constant.of("emptyValue").asAlias("emptyField"),
-                Field.of("embedding").cosineDistance(new double[]{1, 2, 3.0}).asAlias("distance"));
+                Field.of("embedding").cosineDistance(new double[] {1, 2, 3.0}).asAlias("distance"));
 
     // More compact
     p =

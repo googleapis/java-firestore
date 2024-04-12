@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,6 +63,8 @@ import com.google.firestore.v1.CreateDocumentRequest;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.DeleteDocumentRequest;
 import com.google.firestore.v1.Document;
+import com.google.firestore.v1.ExecutePipelineRequest;
+import com.google.firestore.v1.ExecutePipelineResponse;
 import com.google.firestore.v1.GetDocumentRequest;
 import com.google.firestore.v1.ListCollectionIdsRequest;
 import com.google.firestore.v1.ListCollectionIdsResponse;
@@ -144,6 +146,8 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
   private final UnaryCallSettings<CommitRequest, CommitResponse> commitSettings;
   private final UnaryCallSettings<RollbackRequest, Empty> rollbackSettings;
   private final ServerStreamingCallSettings<RunQueryRequest, RunQueryResponse> runQuerySettings;
+  private final ServerStreamingCallSettings<ExecutePipelineRequest, ExecutePipelineResponse>
+      executePipelineSettings;
   private final ServerStreamingCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
       runAggregationQuerySettings;
   private final PagedCallSettings<
@@ -370,6 +374,12 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     return runQuerySettings;
   }
 
+  /** Returns the object with the settings used for calls to executePipeline. */
+  public ServerStreamingCallSettings<ExecutePipelineRequest, ExecutePipelineResponse>
+      executePipelineSettings() {
+    return executePipelineSettings;
+  }
+
   /** Returns the object with the settings used for calls to runAggregationQuery. */
   public ServerStreamingCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
       runAggregationQuerySettings() {
@@ -485,7 +495,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     return defaultGrpcTransportProviderBuilder().build();
   }
 
-  @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
   public static ApiClientHeaderProvider.Builder defaultGrpcApiClientHeaderProviderBuilder() {
     return ApiClientHeaderProvider.newBuilder()
         .setGeneratedLibToken("gapic", GaxProperties.getLibraryVersion(FirestoreStubSettings.class))
@@ -493,7 +502,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
             GaxGrpcProperties.getGrpcTokenName(), GaxGrpcProperties.getGrpcVersion());
   }
 
-  @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
   public static ApiClientHeaderProvider.Builder defaultHttpJsonApiClientHeaderProviderBuilder() {
     return ApiClientHeaderProvider.newBuilder()
         .setGeneratedLibToken("gapic", GaxProperties.getLibraryVersion(FirestoreStubSettings.class))
@@ -538,6 +546,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     commitSettings = settingsBuilder.commitSettings().build();
     rollbackSettings = settingsBuilder.rollbackSettings().build();
     runQuerySettings = settingsBuilder.runQuerySettings().build();
+    executePipelineSettings = settingsBuilder.executePipelineSettings().build();
     runAggregationQuerySettings = settingsBuilder.runAggregationQuerySettings().build();
     partitionQuerySettings = settingsBuilder.partitionQuerySettings().build();
     writeSettings = settingsBuilder.writeSettings().build();
@@ -565,6 +574,9 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     private final UnaryCallSettings.Builder<RollbackRequest, Empty> rollbackSettings;
     private final ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings;
+    private final ServerStreamingCallSettings.Builder<
+            ExecutePipelineRequest, ExecutePipelineResponse>
+        executePipelineSettings;
     private final ServerStreamingCallSettings.Builder<
             RunAggregationQueryRequest, RunAggregationQueryResponse>
         runAggregationQuerySettings;
@@ -606,6 +618,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
                   StatusCode.Code.UNAVAILABLE,
                   StatusCode.Code.INTERNAL,
                   StatusCode.Code.DEADLINE_EXCEEDED)));
+      definitions.put("no_retry_codes", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
       definitions.put(
           "no_retry_3_codes", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
       definitions.put(
@@ -664,6 +677,8 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               .setTotalTimeout(Duration.ofMillis(300000L))
               .build();
       definitions.put("retry_policy_1_params", settings);
+      settings = RetrySettings.newBuilder().setRpcTimeoutMultiplier(1.0).build();
+      definitions.put("no_retry_params", settings);
       settings =
           RetrySettings.newBuilder()
               .setInitialRpcTimeout(Duration.ofMillis(86400000L))
@@ -713,6 +728,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       commitSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       rollbackSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       runQuerySettings = ServerStreamingCallSettings.newBuilder();
+      executePipelineSettings = ServerStreamingCallSettings.newBuilder();
       runAggregationQuerySettings = ServerStreamingCallSettings.newBuilder();
       partitionQuerySettings = PagedCallSettings.newBuilder(PARTITION_QUERY_PAGE_STR_FACT);
       writeSettings = StreamingCallSettings.newBuilder();
@@ -749,6 +765,7 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
       commitSettings = settings.commitSettings.toBuilder();
       rollbackSettings = settings.rollbackSettings.toBuilder();
       runQuerySettings = settings.runQuerySettings.toBuilder();
+      executePipelineSettings = settings.executePipelineSettings.toBuilder();
       runAggregationQuerySettings = settings.runAggregationQuerySettings.toBuilder();
       partitionQuerySettings = settings.partitionQuerySettings.toBuilder();
       writeSettings = settings.writeSettings.toBuilder();
@@ -843,6 +860,11 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
 
       builder
+          .executePipelineSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
           .runAggregationQuerySettings()
           .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("retry_policy_1_codes"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("retry_policy_1_params"));
@@ -933,6 +955,12 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
     public ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings() {
       return runQuerySettings;
+    }
+
+    /** Returns the builder for the settings used for calls to executePipeline. */
+    public ServerStreamingCallSettings.Builder<ExecutePipelineRequest, ExecutePipelineResponse>
+        executePipelineSettings() {
+      return executePipelineSettings;
     }
 
     /** Returns the builder for the settings used for calls to runAggregationQuery. */
