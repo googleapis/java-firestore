@@ -3,25 +3,29 @@ package com.google.cloud.firestore
 import com.google.api.core.ApiFuture
 import com.google.api.core.ApiFutures
 import com.google.api.gax.rpc.ApiStreamObserver
+import com.google.cloud.firestore.UserDataConverter.EncodingOptions
 import com.google.cloud.firestore.pipeline.AggregatorTarget
 import com.google.cloud.firestore.pipeline.Collection
 import com.google.cloud.firestore.pipeline.CollectionGroup
+import com.google.cloud.firestore.pipeline.Expr
+import com.google.cloud.firestore.pipeline.ExprAsAlias
 import com.google.cloud.firestore.pipeline.Field
+import com.google.cloud.firestore.pipeline.Fields
 import com.google.cloud.firestore.pipeline.Filter
 import com.google.cloud.firestore.pipeline.FindNearest
 import com.google.cloud.firestore.pipeline.Function
-import com.google.cloud.firestore.pipeline.GenericStage
-import com.google.cloud.firestore.pipeline.Limit
-import com.google.cloud.firestore.pipeline.Offset
-import com.google.cloud.firestore.pipeline.Ordering
+import com.google.cloud.firestore.pipeline.Project
 import com.google.cloud.firestore.pipeline.Projectable
 import com.google.cloud.firestore.pipeline.Sort
+import com.google.cloud.firestore.pipeline.Sort.Ordering
 import com.google.cloud.firestore.pipeline.Stage
+import com.google.cloud.firestore.pipeline.ToProto
+import com.google.firestore.v1.Value
 
 class PaginatingPipeline internal constructor(
   val p: Pipeline,
   pageSize: Int,
-  orders: Array<out Ordering>
+  orders: Array<out Sort.Ordering>
 ) {
   fun firstPage(): Pipeline {
     return this.p
@@ -78,19 +82,12 @@ class PaginatingPipeline internal constructor(
  *     .aggregate(count(Field.of("orderId")).asAlias("orderCount"));
  * ```
  */
-class Pipeline {
-  private val stages: MutableList<Stage> = mutableListOf()
-  private var name: String
+class Pipeline private constructor(private val stages: List<Stage>, private val name: String):
+  ToProto {
 
-  private constructor(collection: Collection) {
-    stages.add(collection)
-    name = collection.path
-  }
+  private constructor(collection: Collection) : this(listOf(collection), collection.path)
 
-  private constructor(group: CollectionGroup) {
-    stages.add(group)
-    name = group.path
-  }
+  private constructor(group: CollectionGroup): this(listOf(group), group.path)
 
   companion object {
     @JvmStatic
@@ -115,21 +112,27 @@ class Pipeline {
   }
 
   fun project(vararg projections: Projectable): Pipeline {
-    return this
+    val projMap = mutableMapOf<String, Expr>()
+    for(proj in projections) {
+      when (proj){
+        is Field -> projMap[proj.field] = proj
+        is AggregatorTarget -> projMap[proj.target] = proj.current
+        is ExprAsAlias -> projMap[proj.alias] = proj.current
+        is Fields -> proj.fs?.forEach { projMap[it.field] = it}
+      }
+    }
+    return Pipeline(stages.plus(Project(projMap)), name)
   }
 
   fun filter(condition: Function.FilterCondition): Pipeline {
-    stages.add(Filter(condition))
-    return this
+    return Pipeline(stages.plus(Filter(condition)), name)
   }
 
   fun offset(offset: Int): Pipeline {
-    stages.add(Offset(offset))
     return this
   }
 
   fun limit(limit: Int): Pipeline {
-    stages.add(Limit(limit))
     return this
   }
 
@@ -144,16 +147,14 @@ class Pipeline {
     vector: DoubleArray,
     options: FindNearest.FindNearestOptions
   ): Pipeline {
-    stages.add(FindNearest(property, vector, options))
     return this
   }
 
   fun sort(
-    orders: List<Ordering>,
+    orders: List<Sort.Ordering>,
     density: Sort.Density = Sort.Density.UNSPECIFIED,
     truncation: Sort.Truncation = Sort.Truncation.UNSPECIFIED
   ): Pipeline {
-    stages.add(Sort(orders, density, truncation))
     return this
   }
 
@@ -167,7 +168,6 @@ class Pipeline {
   }
 
   fun genericOperation(name: String, params: Map<String, Any>? = null): Pipeline {
-    stages.add(GenericStage(name, params))
     return this
   }
 
@@ -176,6 +176,30 @@ class Pipeline {
   }
 
   fun execute(db: Firestore, observer: ApiStreamObserver<PipelineResult>): Unit {
+  }
+
+  override fun toProto(): Value {
+    return Value.newBuilder()
+      .setPipelineValue(com.google.firestore.v1.Pipeline.newBuilder()
+                          .addAllStages(stages.map { toStageProto(it) })
+      )
+      .build()
+  }
+}
+
+internal fun toStageProto(stage: Stage): com.google.firestore.v1.Pipeline.Stage {
+  return when (stage) {
+    is Project -> com.google.firestore.v1.Pipeline.Stage.newBuilder()
+      .setName("project")
+      .addArgs(UserDataConverter.encodeValue(FieldPath.empty(), stage.projections, UserDataConverter.ARGUMENT))
+      .build()
+    is Collection -> com.google.firestore.v1.Pipeline.Stage.newBuilder()
+      .setName("collection")
+      .addArgs(UserDataConverter.encodeValue(FieldPath.empty(),stage.path, UserDataConverter.ARGUMENT))
+      .build()
+    else -> {
+      TODO()
+    }
   }
 }
 

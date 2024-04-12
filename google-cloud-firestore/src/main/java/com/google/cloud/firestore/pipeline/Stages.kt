@@ -1,14 +1,29 @@
 package com.google.cloud.firestore.pipeline
 
-interface Stage
+import com.google.firestore.v1.Pipeline
+import com.google.firestore.v1.Value
 
-internal data class Collection(val path: String) : Stage
-internal data class CollectionGroup(val path: String) : Stage
+internal interface Stage
 
-internal data class Project(val projections: Map<Field, Expr>) : Stage
-internal data class Filter(val condition: Function.FilterCondition) : Stage
-internal data class Offset(val offset: Int) : Stage
-internal data class Limit(val limit: Int) : Stage
+internal data class Collection(val path: String) : Stage {
+
+}
+
+internal data class CollectionGroup(val path: String) : Stage {
+
+}
+
+internal data class Project(val projections: Map<String, Expr>) : Stage {
+}
+
+data class Filter(val condition: Function.FilterCondition) : Stage {
+}
+
+data class Offset(val offset: Int) : Stage {
+}
+
+data class Limit(val limit: Int) : Stage {
+}
 
 data class FindNearest internal constructor(
   val property: Field,
@@ -42,35 +57,7 @@ data class FindNearest internal constructor(
     val limit: Long,
     val output: Field? = null
   )
-}
 
-data class Ordering internal constructor(val expr: Expr, val dir: Direction = Direction.ASC) {
-  enum class Direction {
-    ASC,
-    DESC
-  }
-
-  companion object {
-    @JvmStatic
-    fun of(expr: Expr, dir: Direction = Direction.ASC): Ordering {
-      return Ordering(expr, dir)
-    }
-
-    @JvmStatic
-    fun of(expr: Expr): Ordering {
-      return Ordering(expr, Direction.ASC)
-    }
-
-    @JvmStatic
-    fun ascending(expr: Expr): Ordering {
-      return Ordering(expr, Direction.ASC)
-    }
-
-    @JvmStatic
-    fun descending(expr: Expr): Ordering {
-      return Ordering(expr, Direction.DESC)
-    }
-  }
 }
 
 data class Sort internal constructor(
@@ -87,7 +74,36 @@ data class Sort internal constructor(
     UNSPECIFIED,
     DISABLED
   }
+
+  data class Ordering internal constructor(val expr: Expr, val dir: Direction = Direction.ASC) {
+    enum class Direction {
+      ASC,
+      DESC
+    }
+
+    companion object {
+      @JvmStatic
+      fun of(expr: Expr, dir: Direction = Direction.ASC): Ordering {
+        return Ordering(expr, dir)
+      }
+
+      @JvmStatic
+      fun of(expr: Expr): Ordering {
+        return Ordering(expr, Direction.ASC)
+      }
+
+      @JvmStatic
+      fun ascending(expr: Expr): Ordering {
+        return Ordering(expr, Direction.ASC)
+      }
+
+      @JvmStatic
+      fun descending(expr: Expr): Ordering {
+        return Ordering(expr, Direction.DESC)
+      }
+    }
+  }
 }
 
-data class GenericStage(val name: String, val params: Map<String, Any>?) : Stage
-
+data class GenericStage(val name: String, val params: Map<String, Any>?) : Stage {
+}

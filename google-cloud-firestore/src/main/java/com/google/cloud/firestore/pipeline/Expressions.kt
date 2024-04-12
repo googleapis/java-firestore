@@ -22,9 +22,25 @@ import com.google.cloud.firestore.pipeline.Function.NotIn
 import com.google.cloud.firestore.pipeline.Function.Sum
 import com.google.firestore.v1.Value
 
+internal interface ToProto {
+  fun toProto(): Value
+}
+
+internal fun exprToValue(expr: Expr): Value{
+  return when(expr) {
+    is Constant -> expr.toProto()
+    is Field -> expr.toProto()
+    is Function -> expr.toProto()
+    // is ExprAsAlias ->
+    else -> {
+      TODO()
+    }
+  }
+}
+
 sealed interface Projectable
 
-sealed interface Expr {
+interface Expr {
   // Infix functions returning Function subclasses
   infix fun equal(other: Expr) = Equal(this, other)
   infix fun equal(other: Number) = Equal(this, Constant.of(other))
@@ -85,7 +101,7 @@ sealed interface Expr {
 internal data class ListOfExprs(val conditions: List<Expr>) : Expr
 internal data class ListOfConditions(val conditions: List<Function.FilterCondition>) : Expr,
                                                                                        Function.FilterCondition
-data class Constant internal constructor(val value: Any) : Expr {
+data class Constant internal constructor(val value: Any) : Expr, ToProto {
   companion object {
     @JvmStatic
     fun of(value: String): Constant {
@@ -117,10 +133,15 @@ data class Constant internal constructor(val value: Any) : Expr {
       return Constant(value)
     }
   }
+
+  override fun toProto(): Value {
+    return Value.newBuilder().build()
+  }
 }
 
 data class Field internal constructor(val field: String, var pipeline: Pipeline? = null) : Expr,
-                                                                                           Projectable {
+                                                                                           Projectable,
+                                                                                           ToProto {
   companion object {
     const val DOCUMENT_ID: String = "__path__"
 
@@ -131,6 +152,10 @@ data class Field internal constructor(val field: String, var pipeline: Pipeline?
   }
 
   fun exists() = Function.Exists(this)
+
+  override fun toProto(): Value {
+    return Value.newBuilder().setFieldReferenceValue(field).build()
+  }
 }
 
 data class Fields internal constructor(val fs: List<Field>? = null) : Expr, Projectable {
@@ -156,10 +181,10 @@ data class AggregatorTarget internal constructor(
     Projectable,
     Function.Accumulator
 
-sealed class Function(val name: String, val params: Map<String, Expr>?) : Expr {
+sealed class Function(val name: String, val params: List<Expr>): Expr, ToProto {
   interface FilterCondition
 
-  interface Accumulator {
+  interface Accumulator: Expr {
     var distinct: Boolean
 
     fun distinct(on: Boolean): Accumulator {
@@ -170,82 +195,88 @@ sealed class Function(val name: String, val params: Map<String, Expr>?) : Expr {
     fun toField(target: String) = AggregatorTarget(this, target, this.distinct)
   }
 
+  override fun toProto(): Value {
+    return Value.newBuilder().setFunctionValue(com.google.firestore.v1.Function.newBuilder()
+                                          .setName(name)
+                                          .addAllArgs(params.map { exprToValue(it) })).build()
+  }
+
   data class Equal internal constructor(val left: Expr, val right: Expr) :
-    Function("equal", mapOf("left" to left, "right" to right)), FilterCondition
+    Function("equal", listOf(left, right)), FilterCondition
 
   data class NotEqual(val left: Expr, val right: Expr) :
-    Function("not_equal", mapOf("left" to left, "right" to right)), FilterCondition
+    Function("not_equal", listOf(left, right)), FilterCondition
 
   data class GreaterThan(val left: Expr, val right: Expr) :
-    Function("greater_than", mapOf("left" to left, "right" to right)), FilterCondition
+    Function("greater_than", listOf(left, right)), FilterCondition
 
   data class GreaterThanOrEqual(val left: Expr, val right: Expr) :
-    Function("greater_than_equal", mapOf("left" to left, "right" to right)), FilterCondition
+    Function("greater_than_equal", listOf(left, right)), FilterCondition
 
   data class In(val left: Expr, val others: List<Expr>) :
-    Function("in", mapOf("left" to left, "others" to ListOfExprs(others))),
+    Function("in", listOf(left, ListOfExprs(others))),
     FilterCondition // For 'in'
 
   data class LessThan(val left: Expr, val right: Expr) :
-    Function("less_than", mapOf("left" to left, "right" to right)), FilterCondition
+    Function("less_than", listOf(left, right)), FilterCondition
 
   data class LessThanOrEqual(val left: Expr, val right: Expr) :
-    Function("less_than_equal", mapOf("left" to left, "right" to right)), FilterCondition
+    Function("less_than_equal", listOf(left, right)), FilterCondition
 
   data class NotIn(val left: Expr, val others: List<Expr>) :
-    Function("not_in", mapOf("left" to left, "others" to ListOfExprs(others))),
+    Function("not_in", listOf(left, ListOfExprs(others))),
     FilterCondition // For 'not in'
 
   data class And(val conditions: List<FilterCondition>) :
-    Function("and", mapOf("conditions" to ListOfConditions(conditions))), FilterCondition
+    Function("and", listOf(ListOfConditions(conditions))), FilterCondition
 
   data class Or(val conditions: List<FilterCondition>) :
-    Function("or", mapOf("conditions" to ListOfConditions(conditions))), FilterCondition
+    Function("or", listOf(ListOfConditions(conditions))), FilterCondition
 
-  data class Not(val condition: Expr) : Function("not", mapOf("condition" to condition)),
+  data class Not(val condition: Expr) : Function("not", listOf(condition)),
                                         FilterCondition
 
-  data class Exists(val current: Field) : Function("exists", mapOf("current" to current)),
+  data class Exists(val current: Field) : Function("exists", listOf(current)),
                                           FilterCondition
 
   data class MapGet(val map: Expr, val key: String) : Function(
     "map_get",
-    mapOf(
-      "map" to map,
-      "key" to Constant(Value.getDefaultInstance().toBuilder().setStringValue(key).build())
+    listOf(
+      map,
+      Constant(Value.getDefaultInstance().toBuilder().setStringValue(key).build())
     )
   )
 
   data class ArrayContains(val array: Expr, val element: Expr) :
-    Function("array_contains", mapOf("array" to array, "element" to element)), FilterCondition
+    Function("array_contains", listOf(array, element)), FilterCondition
 
   data class ArrayContainsAny(val array: Expr, val elements: List<Expr>) :
-    Function("array_contains_any", mapOf("array" to array, "elements" to ListOfExprs(elements))),
+    Function("array_contains_any", listOf(array, ListOfExprs(elements))),
     FilterCondition
 
-  data class IsNaN(val value: Expr) : Function("is_nan", mapOf("value" to value)), FilterCondition
-  data class IsNull(val value: Expr) : Function("is_null", mapOf("value" to value)),
+  data class IsNaN(val value: Expr) : Function("is_nan", listOf(value)), FilterCondition
+  data class IsNull(val value: Expr) : Function("is_null", listOf(value)),
                                        FilterCondition
 
   data class Sum(val value: Expr, override var distinct: Boolean) :
-    Function("sum", mapOf("value" to value)), Accumulator
+    Function("sum", listOf(value)), Accumulator
 
   data class Avg(val value: Expr, override var distinct: Boolean) :
-    Function("avg", mapOf("value" to value)), Accumulator
+    Function("avg", listOf(value)), Accumulator
 
   data class Count(val value: Expr, override var distinct: Boolean) :
-    Function("count", mapOf("value" to value)), Accumulator
+    Function("count", listOf(value)), Accumulator
 
   data class CosineDistance(val vector1: Expr, val vector2: Expr) :
-    Function("cosine_distance", mapOf("vector1" to vector1, "vector2" to vector2))
+    Function("cosine_distance", listOf(vector1, vector2))
 
   data class DotProductDistance(val vector1: Expr, val vector2: Expr) :
-    Function("dot_product_distance", mapOf("vector1" to vector1, "vector2" to vector2))
+    Function("dot_product_distance", listOf(vector1, vector2))
 
   data class EuclideanDistance(val vector1: Expr, val vector2: Expr) :
-    Function("euclidean_distance", mapOf("vector1" to vector1, "vector2" to vector2))
+    Function("euclidean_distance", listOf(vector1, vector2))
 
-  data class Generic(val n: String, val ps: Map<String, Expr>?) : Function(n, ps)
+  data class Generic(val n: String, val ps: List<Expr>) : Function(n, ps)
 
 
   companion object {
@@ -411,7 +442,7 @@ sealed class Function(val name: String, val params: Map<String, Expr>?) : Expr {
     fun asAlias(expr: Expr, alias: String): Projectable = ExprAsAlias(expr, alias)
 
     @JvmStatic
-    fun function(name: String, params: Map<String, Expr>?) = Generic(name, params)
+    fun function(name: String, params: List<Expr>) = Generic(name, params)
   }
 }
 
