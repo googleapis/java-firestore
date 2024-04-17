@@ -1,6 +1,7 @@
 package com.google.cloud.firestore
 
 import com.google.cloud.Timestamp
+import com.google.firestore.v1.Document
 import com.google.firestore.v1.Value
 import java.util.Date
 import javax.annotation.Nonnull
@@ -8,13 +9,11 @@ import javax.annotation.Nonnull
 data class PipelineResult internal constructor(
   private val rpcContext: FirestoreRpcContext<*>?,
   val reference: DocumentReference?,
-  val protoFields: Map<String, Value>?,
-  val readTime: Timestamp?,
+  val protoFields: Map<String, Value>,
+  val readTime: Timestamp,
   val updateTime: Timestamp?,
   val createTime: Timestamp?
 ) {
-  constructor() : this(null, null, null, null, null, null)
-
   val id: String?
     get() = reference?.id
 
@@ -154,5 +153,21 @@ data class PipelineResult internal constructor(
   }
 
   val isEmpty: Boolean
-    get() = protoFields == null || protoFields.isEmpty()
+    get() = protoFields.isEmpty()
+
+  companion object {
+    @JvmStatic
+    internal fun fromDocument(
+      rpcContext: FirestoreRpcContext<*>?, readTime: com.google.protobuf.Timestamp, document: Document
+    ): PipelineResult {
+      return PipelineResult(
+        rpcContext,
+        document.name?.let { DocumentReference(rpcContext, ResourcePath.create(it)) },
+        document.fieldsMap,
+        Timestamp.fromProto(readTime),
+        document.updateTime?.let {Timestamp.fromProto(it)},
+        document.createTime?.let {Timestamp.fromProto(it)},
+      )
+    }
+  }
 }

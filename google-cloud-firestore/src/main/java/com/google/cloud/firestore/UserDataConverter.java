@@ -16,8 +16,10 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.pipeline.ExpressionsKt.exprToValue;
+
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.pipeline.ToProto;
+import com.google.cloud.firestore.pipeline.Expr;
 import com.google.common.base.Preconditions;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.MapValue;
@@ -153,10 +155,10 @@ class UserDataConverter {
     } else if (sanitizedObject instanceof Blob) {
       Blob blob = (Blob) sanitizedObject;
       return Value.newBuilder().setBytesValue(blob.toByteString()).build();
+    } else if (sanitizedObject instanceof Expr) {
+      return exprToValue((Expr) sanitizedObject);
     } else if (sanitizedObject instanceof Value) {
       return (Value) sanitizedObject;
-    } else if (sanitizedObject instanceof ToProto) {
-      return ((ToProto) sanitizedObject).toProto();
     } else if (sanitizedObject instanceof DocumentReference) {
       DocumentReference docRef = (DocumentReference) sanitizedObject;
       return Value.newBuilder().setReferenceValue(docRef.getName()).build();
