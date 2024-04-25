@@ -102,6 +102,9 @@ public interface TraceUtil {
     /** Adds the given attribute to this span. */
     Span setAttribute(String key, String value);
 
+    /** Adds the given attribute to this span. */
+    Span setAttribute(String key, boolean value);
+
     /** Marks this span as the current span. */
     Scope makeCurrent();
 
