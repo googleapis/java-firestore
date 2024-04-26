@@ -18,6 +18,7 @@ package com.google.cloud.firestore;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -82,9 +83,12 @@ public abstract class BasePath<B extends BasePath<B>> implements Comparable<B> {
    * @param path A relative path
    */
   B append(BasePath<B> path) {
-    ImmutableList.Builder<String> components = ImmutableList.builder();
-    components.addAll(this.getSegments());
-    components.addAll(path.getSegments());
+    ImmutableList<String> segments1 = this.getSegments();
+    ImmutableList<String> segments2 = path.getSegments();
+    ImmutableList.Builder<String> components =
+        ImmutableList.builderWithExpectedSize(segments1.size() + segments2.size());
+    components.addAll(segments1);
+    components.addAll(segments2);
     return createPathWithSegments(components.build());
   }
 
@@ -95,12 +99,13 @@ public abstract class BasePath<B extends BasePath<B>> implements Comparable<B> {
    * @return true if current path is a prefix of the other path.
    */
   boolean isPrefixOf(BasePath<B> path) {
-    ImmutableList<String> prefixSegments = getSegments();
-    ImmutableList<String> childSegments = path.getSegments();
-    if (prefixSegments.size() > path.getSegments().size()) {
+    List<String> prefixSegments = getSegments();
+    List<String> childSegments = path.getSegments();
+    int size = prefixSegments.size();
+    if (size > childSegments.size()) {
       return false;
     }
-    for (int i = 0; i < prefixSegments.size(); i++) {
+    for (int i = 0; i < size; i++) {
       if (!prefixSegments.get(i).equals(childSegments.get(i))) {
         return false;
       }
@@ -116,19 +121,16 @@ public abstract class BasePath<B extends BasePath<B>> implements Comparable<B> {
    */
   @Override
   public int compareTo(@Nonnull B other) {
-    int length = Math.min(this.getSegments().size(), other.getSegments().size());
+    List<String> thisSegments = this.getSegments();
+    List<String> otherSegments = other.getSegments();
+    int length = Math.min(thisSegments.size(), otherSegments.size());
     for (int i = 0; i < length; i++) {
-      int cmp = this.getSegments().get(i).compareTo(other.getSegments().get(i));
+      int cmp = thisSegments.get(i).compareTo(otherSegments.get(i));
       if (cmp != 0) {
         return cmp;
       }
     }
-    return Integer.compare(this.getSegments().size(), other.getSegments().size());
-  }
-
-  /** Returns the number of path components. */
-  int size() {
-    return this.getSegments().size();
+    return Integer.compare(thisSegments.size(), otherSegments.size());
   }
 
   abstract String[] splitChildPath(String path);

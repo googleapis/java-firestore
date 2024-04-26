@@ -18,11 +18,15 @@ package com.google.cloud.firestore;
 
 import com.google.cloud.Timestamp;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.NullValue;
+import com.google.protobuf.Struct;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -226,5 +230,35 @@ class UserDataConverter {
         throw FirestoreException.forInvalidArgument(
             String.format("Unknown Value Type: %s", typeCase));
     }
+  }
+
+  static Object decodeGoogleProtobufValue(com.google.protobuf.Value v) {
+    switch (v.getKindCase()) {
+      case NULL_VALUE:
+        return null;
+      case BOOL_VALUE:
+        return v.getBoolValue();
+      case NUMBER_VALUE:
+        return v.getNumberValue();
+      case STRING_VALUE:
+        return v.getStringValue();
+      case LIST_VALUE:
+        return Lists.transform(
+            v.getListValue().getValuesList(), UserDataConverter::decodeGoogleProtobufValue);
+      case STRUCT_VALUE:
+        return Maps.transformValues(
+            v.getStructValue().getFieldsMap(), UserDataConverter::decodeGoogleProtobufValue);
+      default:
+        throw FirestoreException.forInvalidArgument(
+            String.format("Unknown Value Type: %s", v.getKindCase().getNumber()));
+    }
+  }
+
+  static Map<String, Object> decodeStruct(@Nullable Struct struct) {
+    if (struct == null || struct.getFieldsCount() == 0) {
+      return Collections.emptyMap();
+    }
+    return Maps.transformValues(
+        struct.getFieldsMap(), UserDataConverter::decodeGoogleProtobufValue);
   }
 }
