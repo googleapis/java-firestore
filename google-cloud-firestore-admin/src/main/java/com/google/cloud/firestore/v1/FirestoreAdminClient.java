@@ -496,7 +496,7 @@ import javax.annotation.Generated;
  *    </tr>
  *    <tr>
  *      <td><p> CreateBackupSchedule</td>
- *      <td><p> Creates a backup schedule on a database. At most two backup schedules can be configured on a database, one daily backup schedule with retention up to 7 days and one weekly backup schedule with retention up to 14 weeks.</td>
+ *      <td><p> Creates a backup schedule on a database. At most two backup schedules can be configured on a database, one daily backup schedule and one weekly backup schedule.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
  *      <ul>
@@ -3240,8 +3240,7 @@ public class FirestoreAdminClient implements BackgroundResource {
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Creates a backup schedule on a database. At most two backup schedules can be configured on a
-   * database, one daily backup schedule with retention up to 7 days and one weekly backup schedule
-   * with retention up to 14 weeks.
+   * database, one daily backup schedule and one weekly backup schedule.
    *
    * <p>Sample code:
    *
@@ -3276,8 +3275,7 @@ public class FirestoreAdminClient implements BackgroundResource {
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Creates a backup schedule on a database. At most two backup schedules can be configured on a
-   * database, one daily backup schedule with retention up to 7 days and one weekly backup schedule
-   * with retention up to 14 weeks.
+   * database, one daily backup schedule and one weekly backup schedule.
    *
    * <p>Sample code:
    *
@@ -3311,8 +3309,7 @@ public class FirestoreAdminClient implements BackgroundResource {
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Creates a backup schedule on a database. At most two backup schedules can be configured on a
-   * database, one daily backup schedule with retention up to 7 days and one weekly backup schedule
-   * with retention up to 14 weeks.
+   * database, one daily backup schedule and one weekly backup schedule.
    *
    * <p>Sample code:
    *
@@ -3342,8 +3339,7 @@ public class FirestoreAdminClient implements BackgroundResource {
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
    * Creates a backup schedule on a database. At most two backup schedules can be configured on a
-   * database, one daily backup schedule with retention up to 7 days and one weekly backup schedule
-   * with retention up to 14 weeks.
+   * database, one daily backup schedule and one weekly backup schedule.
    *
    * <p>Sample code:
    *
@@ -3715,7 +3711,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * }</pre>
    *
-   * @param name Required. The name of backup schedule.
+   * @param name Required. The name of the backup schedule.
    *     <p>Format `projects/{project}/databases/{database}/backupSchedules/{backup_schedule}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
@@ -3746,7 +3742,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    * }
    * }</pre>
    *
-   * @param name Required. The name of backup schedule.
+   * @param name Required. The name of the backup schedule.
    *     <p>Format `projects/{project}/databases/{database}/backupSchedules/{backup_schedule}`
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */

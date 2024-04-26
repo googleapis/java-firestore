@@ -1453,8 +1453,7 @@ public final class FirestoreAdminGrpc {
      * <pre>
      * Creates a backup schedule on a database.
      * At most two backup schedules can be configured on a database, one daily
-     * backup schedule with retention up to 7 days and one weekly backup schedule
-     * with retention up to 14 weeks.
+     * backup schedule and one weekly backup schedule.
      * </pre>
      */
     default void createBackupSchedule(
@@ -1938,8 +1937,7 @@ public final class FirestoreAdminGrpc {
      * <pre>
      * Creates a backup schedule on a database.
      * At most two backup schedules can be configured on a database, one daily
-     * backup schedule with retention up to 7 days and one weekly backup schedule
-     * with retention up to 14 weeks.
+     * backup schedule and one weekly backup schedule.
      * </pre>
      */
     public void createBackupSchedule(
@@ -2349,8 +2347,7 @@ public final class FirestoreAdminGrpc {
      * <pre>
      * Creates a backup schedule on a database.
      * At most two backup schedules can be configured on a database, one daily
-     * backup schedule with retention up to 7 days and one weekly backup schedule
-     * with retention up to 14 weeks.
+     * backup schedule and one weekly backup schedule.
      * </pre>
      */
     public com.google.firestore.admin.v1.BackupSchedule createBackupSchedule(
@@ -2746,8 +2743,7 @@ public final class FirestoreAdminGrpc {
      * <pre>
      * Creates a backup schedule on a database.
      * At most two backup schedules can be configured on a database, one daily
-     * backup schedule with retention up to 7 days and one weekly backup schedule
-     * with retention up to 14 weeks.
+     * backup schedule and one weekly backup schedule.
      * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<

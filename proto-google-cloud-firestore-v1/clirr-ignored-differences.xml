@@ -121,4 +121,19 @@
     <className>com/google/firestore/v1/Run*QueryResponseOrBuilder</className>
     <method>boolean hasExplainMetrics()</method>
   </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQueryOrBuilder</className>
+    <method>com.google.firestore.v1.StructuredQuery$FindNearest getFindNearest()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQueryOrBuilder</className>
+    <method>com.google.firestore.v1.StructuredQuery$FindNearestOrBuilder getFindNearestOrBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQueryOrBuilder</className>
+    <method>boolean hasFindNearest()</method>
+  </difference>
 </differences>
