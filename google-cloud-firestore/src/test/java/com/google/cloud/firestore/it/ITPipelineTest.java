@@ -40,24 +40,20 @@ import java.util.Iterator;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-public class ITPipelineTest {
-
-  protected Firestore firestore;
-
-  @Before
-  public void before() throws Exception {
-    firestore = FirestoreOptions.newBuilder().build().getService();
-  }
+@RunWith(JUnit4.class)
+public class ITPipelineTest extends ITBaseTest {
 
   @Test
   public void projections() throws Exception {
     Pipeline p = Pipeline.fromCollection("coll1").project(Field.of("foo"));
-    ApiFuture<List<PipelineResult>> results = p.execute(firestore);
+    List<PipelineResult> results = p.execute(firestore).get();
 
     // More compact
     p = Pipeline.fromCollection("coll1").project(Fields.of("foo", "bar", "baz"));
-    results = p.execute(firestore);
+    results = p.execute(firestore).get();
   }
 
   @Test

@@ -1955,6 +1955,13 @@ public class Query {
     return new AggregateQuery(this, aggregateFieldList);
   }
 
+  public Pipeline toPipeline() {
+    Pipeline ppl = Pipeline.fromCollection(this.options.getParentPath().append(this.options.getCollectionId()).getPath());
+    for(FilterInternal f: this.options.getFilters()){
+    }
+    return ppl;
+  }
+
   /**
    * Returns true if this Query is equal to the provided object.
    *
