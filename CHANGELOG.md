@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.21.0](https://github.com/googleapis/java-firestore/compare/v3.20.2...v3.21.0) (2024-04-26)
+
+
+### Features
+
+* Add Vector Index API ([4964982](https://github.com/googleapis/java-firestore/commit/496498271b31a878910c17954350673beade2bef))
+* Add VectorSearch API ([4964982](https://github.com/googleapis/java-firestore/commit/496498271b31a878910c17954350673beade2bef))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.39.0 ([#1629](https://github.com/googleapis/java-firestore/issues/1629)) ([4964982](https://github.com/googleapis/java-firestore/commit/496498271b31a878910c17954350673beade2bef))
+
+
+### Documentation
+
+* Allow 14 week backup retention for Firestore daily backups ([4964982](https://github.com/googleapis/java-firestore/commit/496498271b31a878910c17954350673beade2bef))
+* Correct BackupSchedule recurrence docs that mentioned specific time of day ([4964982](https://github.com/googleapis/java-firestore/commit/496498271b31a878910c17954350673beade2bef))
+
 ## [3.20.2](https://github.com/googleapis/java-firestore/compare/v3.20.1...v3.20.2) (2024-04-19)
 
 
