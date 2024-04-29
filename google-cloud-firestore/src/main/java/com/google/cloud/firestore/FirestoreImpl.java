@@ -18,7 +18,6 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutures;
 import com.google.api.core.NanoClock;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
@@ -46,7 +45,6 @@ import io.opencensus.trace.Tracing;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -408,11 +406,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   public FirestoreBundle.Builder bundleBuilder(@Nullable String bundleId) {
     String id = bundleId == null ? autoId() : bundleId;
     return new FirestoreBundle.Builder(id);
-  }
-
-  @Override
-  public ApiFuture<Iterator<PipelineResult>> execute(Pipeline pipeline) {
-    return ApiFutures.immediateFuture(null);
   }
 
   /** Returns the name of the Firestore project associated with this client. */

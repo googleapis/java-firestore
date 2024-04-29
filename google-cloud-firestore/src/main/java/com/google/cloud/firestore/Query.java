@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.PipelineUtilsKt.toPaginatedPipeline;
+import static com.google.cloud.firestore.PipelineUtilsKt.toPipelineFilterCondition;
 import static com.google.common.collect.Lists.reverse;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS_ANY;
@@ -38,6 +40,11 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
+import com.google.cloud.firestore.pipeline.Field;
+import com.google.cloud.firestore.pipeline.Projectable;
+import com.google.cloud.firestore.pipeline.Sort.Density;
+import com.google.cloud.firestore.pipeline.Sort.Ordering;
+import com.google.cloud.firestore.pipeline.Sort.Truncation;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -54,6 +61,7 @@ import com.google.firestore.v1.StructuredQuery.FieldFilter.Operator;
 import com.google.firestore.v1.StructuredQuery.FieldReference;
 import com.google.firestore.v1.StructuredQuery.Filter;
 import com.google.firestore.v1.StructuredQuery.Order;
+import com.google.firestore.v1.StructuredQuery.UnaryFilter;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Int32Value;
@@ -74,6 +82,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.threeten.bp.Duration;
@@ -172,6 +181,11 @@ public class Query {
       return filters;
     }
 
+    @Nonnull
+    CompositeFilter.Operator getOperator() {
+      return this.operator;
+    }
+
     @Nullable
     @Override
     public FieldReference getFirstInequalityField() {
@@ -237,7 +251,7 @@ public class Query {
     }
   }
 
-  private static class UnaryFilterInternal extends FieldFilterInternal {
+  static class UnaryFilterInternal extends FieldFilterInternal {
 
     private final StructuredQuery.UnaryFilter.Operator operator;
 
@@ -262,6 +276,11 @@ public class Query {
       Filter.Builder result = Filter.newBuilder();
       result.getUnaryFilterBuilder().setField(fieldReference).setOp(operator);
       return result.build();
+    }
+
+    @Nonnull
+    UnaryFilter.Operator getOperator() {
+      return this.operator;
     }
 
     @Override
@@ -1955,10 +1974,62 @@ public class Query {
     return new AggregateQuery(this, aggregateFieldList);
   }
 
+  @Nonnull
   public Pipeline toPipeline() {
-    Pipeline ppl = Pipeline.fromCollection(this.options.getParentPath().append(this.options.getCollectionId()).getPath());
-    for(FilterInternal f: this.options.getFilters()){
+    // From
+    Pipeline ppl =
+        Pipeline.fromCollection(
+            this.options.getParentPath().append(this.options.getCollectionId()).getPath());
+
+    // Filters
+    for (FilterInternal f : this.options.getFilters()) {
+      ppl = ppl.filter(toPipelineFilterCondition(f));
     }
+
+    // Projections
+    if (this.options.getFieldProjections() != null
+        && !this.options.getFieldProjections().isEmpty()) {
+      ppl =
+          ppl.project(
+              this.options.getFieldProjections().stream()
+                  .map(fieldReference -> Field.of(fieldReference.getFieldPath()))
+                  .toArray(Projectable[]::new));
+    }
+
+    // Orders
+    if (this.options.getFieldOrders() != null && !this.options.getFieldOrders().isEmpty()) {
+      List<Ordering> orders =
+          this.options.getFieldOrders().stream()
+              .map(
+                  fieldOrder ->
+                      Ordering.of(
+                          Field.of(fieldOrder.fieldReference.getFieldPath()),
+                          fieldOrder.direction == Direction.ASCENDING
+                              ? Ordering.Direction.ASCENDING
+                              : Ordering.Direction.DESCENDING))
+              .collect(Collectors.toList());
+      ppl = ppl.sort(orders, Density.REQUIRED, Truncation.UNSPECIFIED);
+    }
+
+    // Cursors, Limit and Offset
+    if (this.options.getStartCursor() != null || this.options.getEndCursor() != null) {
+      ppl =
+          toPaginatedPipeline(
+              ppl,
+              options.getStartCursor(),
+              options.getEndCursor(),
+              options.getLimit(),
+              options.getLimitType(),
+              options.getOffset());
+    } else { // Limit & Offset without cursors
+      if (this.options.getOffset() != null) {
+        ppl = ppl.offset(this.options.getOffset());
+      }
+      if (this.options.getLimit() != null) {
+        ppl = ppl.limit(this.options.getLimit());
+      }
+    }
+
     return ppl;
   }
 

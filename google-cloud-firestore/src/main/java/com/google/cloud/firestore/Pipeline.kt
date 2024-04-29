@@ -29,6 +29,7 @@ import com.google.cloud.firestore.pipeline.Stage
 import com.google.cloud.firestore.pipeline.toStageProto
 import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableMap
+import com.google.firestore.v1.Cursor
 import com.google.firestore.v1.Document
 import com.google.firestore.v1.ExecutePipelineRequest
 import com.google.firestore.v1.ExecutePipelineResponse
@@ -39,46 +40,70 @@ import io.opencensus.trace.Tracing
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class PaginatingPipeline internal constructor(
-  val p: Pipeline,
-  pageSize: Int,
-  orders: Array<out Sort.Ordering>
+internal fun setStartCursor(pipeline: PaginatingPipeline, cursor: Cursor): PaginatingPipeline {
+  return pipeline
+}
+
+internal fun setEndCursor(pipeline: PaginatingPipeline, cursor: Cursor): PaginatingPipeline {
+  return pipeline
+}
+
+class PaginatingPipeline
+internal constructor(
+  internal val p: Pipeline,
+  internal val pageSize: Int,
+  internal val orders: List<Ordering>,
+  private val offset: Int? = null,
+  private val startCursor: Cursor? = null,
+  private val endCursor: Cursor? = null,
 ) {
   fun firstPage(): Pipeline {
     return this.p
   }
 
-  fun startAt(result: PipelineResult): Pipeline {
+  fun lastPage(): Pipeline {
     return this.p
   }
 
-  fun startAfter(result: PipelineResult): Pipeline {
-    return this.p
+  fun startAt(result: PipelineResult): PaginatingPipeline {
+    return this
   }
 
-  fun endAt(result: PipelineResult): Pipeline {
-    return this.p
+  fun startAfter(result: PipelineResult): PaginatingPipeline {
+    return this
   }
 
-  fun endBefore(result: PipelineResult): Pipeline {
-    return this.p
+  fun endAt(result: PipelineResult): PaginatingPipeline {
+    return this
+  }
+
+  fun endBefore(result: PipelineResult): PaginatingPipeline {
+    return this
+  }
+
+  // Internal as this is only potentially used when converting Query to Pipeline.
+  internal fun offset(offset: Int): PaginatingPipeline {
+    return this
   }
 }
 
 /**
- * The Pipeline class provides a flexible and expressive framework for building complex data transformation
- * and query pipelines for Firestore.
+ * The Pipeline class provides a flexible and expressive framework for building complex data
+ * transformation and query pipelines for Firestore.
  *
- * A pipeline takes data sources such as Firestore collections, collection groups, or even in-memory data, and
- * applies a series of operations that are chained together, each operation takes the output from the last
- * operation (or the data source) and produces an output for the next operation (or as the final output of the pipeline).
+ * A pipeline takes data sources such as Firestore collections, collection groups, or even in-memory
+ * data, and applies a series of operations that are chained together, each operation takes the
+ * output from the last operation (or the data source) and produces an output for the next operation
+ * (or as the final output of the pipeline).
  *
- * NOTE: the chained operations are not a prescription of exactly how Firestore will execute the pipeline,
- * instead Firestore only guarantee the result is the same as if the chained operations are executed in order.
+ * NOTE: the chained operations are not a prescription of exactly how Firestore will execute the
+ * pipeline, instead Firestore only guarantee the result is the same as if the chained operations
+ * are executed in order.
  *
  * Usage Examples:
  *
  * **1. Projecting Specific Fields and Renaming:**
+ *
  * ```java
  * Pipeline pipeline = Pipeline.fromCollection("users")
  *     // Select 'name' and 'email' fields, create 'userAge' which is renamed from field 'age'.
@@ -86,6 +111,7 @@ class PaginatingPipeline internal constructor(
  * ```
  *
  * **2. Filtering and Sorting:**
+ *
  * ```java
  * Pipeline pipeline = Pipeline.fromCollectionGroup("reviews")
  *     .filter(Field.of("rating").greaterThan(Expr.Constant.of(3))) // High ratings
@@ -93,6 +119,7 @@ class PaginatingPipeline internal constructor(
  * ```
  *
  * **3. Aggregation with Grouping:**
+ *
  * ```java
  * Pipeline pipeline = Pipeline.fromCollection("orders")
  *     .group(Field.of("customerId"))
@@ -130,7 +157,7 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
       Preconditions.checkArgument(
         !collectionId.contains("/"),
         "Invalid collectionId '%s'. Collection IDs must not contain '/'.",
-        collectionId
+        collectionId,
       )
       return Pipeline(CollectionGroup(collectionId))
     }
@@ -166,7 +193,7 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
     return Pipeline(stages.plus(Project(projectablesToMap(*projections))), name)
   }
 
-  fun <T> filter(condition: T): Pipeline where T : Expr, T:Function.FilterCondition{
+  fun <T> filter(condition: T): Pipeline where T : Expr, T : Function.FilterCondition {
     return Pipeline(stages.plus(Filter(condition)), name)
   }
 
@@ -185,26 +212,26 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
   fun findNearest(
     property: Field,
     vector: DoubleArray,
-    options: FindNearest.FindNearestOptions
+    options: FindNearest.FindNearestOptions,
   ): Pipeline {
     return this
   }
 
   fun sort(
-    orders: List<Sort.Ordering>,
+    orders: List<Ordering>,
     density: Sort.Density = Sort.Density.UNSPECIFIED,
-    truncation: Sort.Truncation = Sort.Truncation.UNSPECIFIED
+    truncation: Sort.Truncation = Sort.Truncation.UNSPECIFIED,
   ): Pipeline {
-    return this
+    return Pipeline(stages.plus(Sort(orders, density, truncation)), name)
   }
 
   // Sugar
   fun sort(vararg orders: Ordering): Pipeline {
-    return this
+    return this.sort(orders.toList())
   }
 
   fun paginate(pageSize: Int, vararg orders: Ordering): PaginatingPipeline {
-    return PaginatingPipeline(this, pageSize, orders)
+    return PaginatingPipeline(this, pageSize, orders.toList())
   }
 
   fun genericOperation(name: String, params: Map<String, Any>? = null): Pipeline {
@@ -215,31 +242,37 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
     when (db) {
       is FirestoreImpl -> {
         val pipelineValue = toProto()
-        val request = ExecutePipelineRequest.newBuilder()
-          .setStructuredPipeline(
-            StructuredPipeline.newBuilder()
-              .setPipeline(pipelineValue.pipelineValue).build()
-          ).build()
+        val request =
+          ExecutePipelineRequest.newBuilder()
+            .setDatabase(db.resourcePath.databaseName.toString())
+            .setStructuredPipeline(
+              StructuredPipeline.newBuilder().setPipeline(pipelineValue.pipelineValue).build()
+            )
+            .build()
 
         val futureResult = SettableApiFuture.create<List<PipelineResult>>()
-        pipelineInternalStream(db, request, object : PipelineResultObserver() {
-          val results = mutableListOf<PipelineResult>()
-          override fun onCompleted() {
-            futureResult.set(results)
-          }
+        pipelineInternalStream(
+          db,
+          request,
+          object : PipelineResultObserver() {
+            val results = mutableListOf<PipelineResult>()
 
-          override fun onNext(result: PipelineResult?) {
-            results.add(result!!)
-          }
+            override fun onCompleted() {
+              futureResult.set(results)
+            }
 
-          override fun onError(t: Throwable?) {
-            futureResult.setException(t)
-          }
-        })
+            override fun onNext(result: PipelineResult?) {
+              results.add(result!!)
+            }
+
+            override fun onError(t: Throwable?) {
+              futureResult.setException(t)
+            }
+          },
+        )
 
         return futureResult
       }
-
       else -> {
         TODO()
       }
@@ -250,28 +283,32 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
     when (db) {
       is FirestoreImpl -> {
         val pipelineValue = toProto()
-        val request = ExecutePipelineRequest.newBuilder()
-          .setDatabase(db.resourcePath.databaseName.toString())
-          .setStructuredPipeline(
-            StructuredPipeline.newBuilder()
-              .setPipeline(pipelineValue.pipelineValue).build()
-          ).build()
+        val request =
+          ExecutePipelineRequest.newBuilder()
+            .setDatabase(db.resourcePath.databaseName.toString())
+            .setStructuredPipeline(
+              StructuredPipeline.newBuilder().setPipeline(pipelineValue.pipelineValue).build()
+            )
+            .build()
 
-        pipelineInternalStream(db, request, object : PipelineResultObserver() {
-          override fun onCompleted() {
-            observer.onCompleted()
-          }
+        pipelineInternalStream(
+          db,
+          request,
+          object : PipelineResultObserver() {
+            override fun onCompleted() {
+              observer.onCompleted()
+            }
 
-          override fun onNext(result: PipelineResult?) {
-            observer.onNext(result)
-          }
+            override fun onNext(result: PipelineResult?) {
+              observer.onNext(result)
+            }
 
-          override fun onError(t: Throwable?) {
-            observer.onError(t)
-          }
-        })
+            override fun onError(t: Throwable?) {
+              observer.onError(t)
+            }
+          },
+        )
       }
-
       else -> {
         TODO()
       }
@@ -281,24 +318,17 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
   fun toProto(): Value {
     return Value.newBuilder()
       .setPipelineValue(
-        com.google.firestore.v1.Pipeline.newBuilder()
-          .addAllStages(stages.map { toStageProto(it) })
+        com.google.firestore.v1.Pipeline.newBuilder().addAllStages(stages.map { toStageProto(it) })
       )
       .build()
   }
 }
 
 internal fun encodeValue(value: Any?): Value? {
-  return UserDataConverter.encodeValue(
-    FieldPath.empty(),
-    value,
-    UserDataConverter.ARGUMENT
-  )
+  return UserDataConverter.encodeValue(FieldPath.empty(), value, UserDataConverter.ARGUMENT)
 }
 
-private abstract class PipelineResultObserver
-
-  : ApiStreamObserver<PipelineResult?> {
+private abstract class PipelineResultObserver : ApiStreamObserver<PipelineResult?> {
   var executionTime: Timestamp? = null
     private set
 
@@ -311,7 +341,7 @@ private abstract class PipelineResultObserver
 private fun pipelineInternalStream(
   rpcContext: FirestoreImpl,
   request: ExecutePipelineRequest,
-  resultObserver: PipelineResultObserver
+  resultObserver: PipelineResultObserver,
 ) {
   val observer: ResponseObserver<ExecutePipelineResponse> =
     object : ResponseObserver<ExecutePipelineResponse> {
@@ -323,8 +353,7 @@ private fun pipelineInternalStream(
       // this flag makes sure only the first one is actually processed.
       var hasCompleted: Boolean = false
 
-      override fun onStart(streamController: StreamController) {
-      }
+      override fun onStart(streamController: StreamController) {}
 
       override fun onResponse(response: ExecutePipelineResponse) {
         if (!firstResponse) {
@@ -334,17 +363,11 @@ private fun pipelineInternalStream(
         if (response.resultsCount > 0) {
           numDocuments += response.resultsCount
           if (numDocuments % 100 == 0) {
-            Tracing.getTracer()
-              .currentSpan
-              .addAnnotation("Firestore.Query: Received 100 documents")
+            Tracing.getTracer().currentSpan.addAnnotation("Firestore.Query: Received 100 documents")
           }
           response.resultsList.forEach { doc: Document ->
             resultObserver.onNext(
-              PipelineResult.fromDocument(
-                rpcContext,
-                response.executionTime,
-                doc
-              )
+              PipelineResult.fromDocument(rpcContext, response.executionTime, doc)
             )
           }
         }
@@ -370,15 +393,15 @@ private fun pipelineInternalStream(
           .addAnnotation(
             "Firestore.Query: Completed",
             ImmutableMap.of(
-              "numDocuments", AttributeValue.longAttributeValue(numDocuments.toLong())
-            )
+              "numDocuments",
+              AttributeValue.longAttributeValue(numDocuments.toLong()),
+            ),
           )
         resultObserver.onCompleted(executionTime)
       }
     }
 
-  Logger.getLogger("Pipeline")
-    .log(Level.WARNING, "Sending request: $request")
+  Logger.getLogger("Pipeline").log(Level.WARNING, "Sending request: $request")
 
   rpcContext.streamRequest(request, observer, rpcContext.client.executePipelineCallable())
 }

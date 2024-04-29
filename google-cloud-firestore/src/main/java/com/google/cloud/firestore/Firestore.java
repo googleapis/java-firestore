@@ -21,7 +21,6 @@ import com.google.api.core.BetaApi;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Service;
-import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -287,8 +286,6 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    */
   @Nonnull
   FirestoreBundle.Builder bundleBuilder(@Nonnull String bundleId);
-
-  ApiFuture<Iterator<PipelineResult>> execute(Pipeline pipeline);
 
   /**
    * Closes the gRPC channels associated with this instance and frees up their resources. This

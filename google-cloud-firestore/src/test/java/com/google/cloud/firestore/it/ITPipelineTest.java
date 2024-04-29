@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore.it;
 
+import static com.google.cloud.firestore.it.ITQueryTest.map;
 import static com.google.cloud.firestore.pipeline.Function.avg;
 import static com.google.cloud.firestore.pipeline.Function.cosineDistance;
 import static com.google.cloud.firestore.pipeline.Function.equal;
@@ -25,9 +26,8 @@ import static com.google.cloud.firestore.pipeline.Function.or;
 import static com.google.cloud.firestore.pipeline.Sort.Ordering.ascending;
 import static com.google.cloud.firestore.pipeline.Sort.Ordering.descending;
 
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.PaginatingPipeline;
 import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.PipelineResult;
@@ -36,24 +36,53 @@ import com.google.cloud.firestore.pipeline.Field;
 import com.google.cloud.firestore.pipeline.Fields;
 import com.google.cloud.firestore.pipeline.Sort;
 import com.google.cloud.firestore.pipeline.Sort.Ordering.Direction;
-import java.util.Iterator;
 import java.util.List;
-import org.junit.Before;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class ITPipelineTest extends ITBaseTest {
+  public CollectionReference testCollectionWithDocs(Map<String, Map<String, Object>> docs)
+      throws ExecutionException, InterruptedException, TimeoutException {
+    CollectionReference collection = firestore.collection(LocalFirestoreHelper.autoId());
+    for (Map.Entry<String, Map<String, Object>> doc : docs.entrySet()) {
+      collection.document(doc.getKey()).set(doc.getValue()).get(5, TimeUnit.SECONDS);
+    }
+    return collection;
+  }
+
+  @Test
+  public void fromSources() throws Exception {
+    Map<String, Map<String, Object>> testDocs =
+        map(
+            "doc1", map("a", 1, "b", 0),
+            "doc2", map("a", 2, "b", 1),
+            "doc3", map("a", 3, "b", 2),
+            "doc4", map("a", 1, "b", 3),
+            "doc5", map("a", 1, "b", 1));
+
+    CollectionReference collection = testCollectionWithDocs(testDocs);
+
+    Pipeline p = Pipeline.fromCollectionGroup(collection.getId());
+    List<PipelineResult> results = p.execute(firestore).get();
+    System.out.println(results.size());
+  }
 
   @Test
   public void projections() throws Exception {
-    Pipeline p = Pipeline.fromCollection("coll1").project(Field.of("foo"));
+    Pipeline p = Pipeline.fromCollectionGroup("coll1").project(Field.of("foo"));
     List<PipelineResult> results = p.execute(firestore).get();
+    System.out.println(results.size());
 
     // More compact
-    p = Pipeline.fromCollection("coll1").project(Fields.of("foo", "bar", "baz"));
+    p = Pipeline.fromCollectionGroup("coll1").project(Fields.of("foo", "bar", "baz"));
     results = p.execute(firestore).get();
+    System.out.println(results.size());
   }
 
   @Test
@@ -65,65 +94,66 @@ public class ITPipelineTest extends ITBaseTest {
                 or(
                     Field.of("bar").lessThan(Constant.of(100)),
                     Constant.of("value").equal(Field.of("key"))))
-            .filter(not(Constant.of(128).inAny(Field.of("f1"), Field.of("f2"))));
-    ApiFuture<List<PipelineResult>> results = p.execute(firestore);
+            .filter(not(Constant.of(128).inAny("f1", "f2")));
+    List<PipelineResult> results = p.execute(firestore).get();
 
     p =
         Pipeline.fromCollectionGroup("coll1")
             .filter(equal(Field.of("foo"), 42))
             .filter(
                 or(lessThan(Field.of("bar"), 100), equal(Field.of("key"), Constant.of("value"))))
-            .filter(not(Constant.of(128).inAny(Field.of("f1"), Field.of("f2"))));
-    results = p.execute(firestore);
+            .filter(not(Constant.of(128).inAny("f1", "f2")));
+    results = p.execute(firestore).get();
   }
 
   @Test
   public void inFilters() throws Exception {
-    Pipeline p =
-        Pipeline.fromCollectionGroup("coll1")
-            .filter(Field.of("foo").inAny(Constant.of(42), Field.of("bar")));
+    Pipeline p = Pipeline.fromCollectionGroup("coll1").filter(Field.of("foo").inAny(42, "42"));
+    List<PipelineResult> results = p.execute(firestore).get();
   }
 
   @Test
   public void aggregateWithoutGrouping() throws Exception {
     Pipeline p =
-        Pipeline.fromCollection("coll1")
-            .filter(Field.of("foo").inAny(42, Field.of("bar")))
+        Pipeline.fromDatabase()
+            .filter(Field.of("foo").inAny(42, "bar"))
             .aggregate(avg(Field.of("score")).toField("avg_score_1"));
+    List<PipelineResult> results = p.execute(firestore).get();
   }
 
   @Test
   public void sorts() throws Exception {
     Pipeline p =
         Pipeline.fromCollection("coll1")
-            .filter(Field.of("foo").inAny(Constant.of(42), Field.of("bar")))
+            .filter(Field.of("foo").inAny(42, "42"))
             .sort(
                 Field.of("rank").ascending(),
                 Sort.Ordering.of(
                     cosineDistance(Field.of("embedding1"), Field.of("embedding2")),
                     Direction.DESCENDING))
             .limit(100);
+    List<PipelineResult> results = p.execute(firestore).get();
 
     // equivalent but more concise.
     p =
         Pipeline.fromCollection("coll1")
-            .filter(Field.of("foo").inAny(Constant.of(42), Field.of("bar")))
+            .filter(Field.of("foo").inAny(Constant.of(42), Constant.of(false)))
             .sort(
                 ascending(Field.of("rank")),
                 descending(cosineDistance(Field.of("embedding1"), Field.of("embedding2"))))
             .limit(100);
+    results = p.execute(firestore).get();
   }
 
   @Test
   public void pagination() throws Exception {
     PaginatingPipeline p =
         Pipeline.fromCollection("coll1")
-            .filter(Field.of("foo").inAny(Constant.of(42), Field.of("bar")))
+            .filter(Field.of("foo").inAny(Constant.of(42), Constant.of("bar")))
             .paginate(
                 100, cosineDistance(Field.of("embedding1"), Field.of("embedding2")).descending());
 
-    Iterator<PipelineResult> result = firestore.execute(p.firstPage()).get();
-    // Iterator<PipelineResult> second = firestore.execute(p.startAfter(result.next())).get();
+    List<PipelineResult> results = p.firstPage().execute(firestore).get();
   }
 
   @Test
@@ -133,7 +163,7 @@ public class ITPipelineTest extends ITBaseTest {
             .filter(Field.of("foo").inAny(Constant.of(42), Field.of("bar")))
             .limit(10);
 
-    Iterator<PipelineResult> result = firestore.execute(p).get();
+    List<PipelineResult> result = p.execute(firestore).get();
   }
 
   @Test
@@ -142,19 +172,17 @@ public class ITPipelineTest extends ITBaseTest {
         Pipeline.fromDocuments(firestore.document("foo/bar1"), firestore.document("foo/bar2"))
             .offset(1);
 
-    Iterator<PipelineResult> result = firestore.execute(p).get();
+    List<PipelineResult> result = p.execute(firestore).get();
   }
 
   @Test
   public void fluentAllTheWay() throws Exception {
     PaginatingPipeline p =
         Pipeline.fromCollection("coll1")
-            .filter(Field.of("foo").inAny(Constant.of(42), Field.of("bar")))
+            .filter(Field.of("foo").inAny(Constant.of(42), Constant.of("bar")))
             .paginate(
                 100, cosineDistance(Field.of("embedding1"), Field.of("embedding2")).descending());
 
-    ApiFuture<List<PipelineResult>> result = p.firstPage().execute(firestore);
-    // List<PipelineResult> second =
-    // p.startAfter(result.iterator().next()).execute(firestore).get();
+    List<PipelineResult> result = p.firstPage().execute(firestore).get();
   }
 }

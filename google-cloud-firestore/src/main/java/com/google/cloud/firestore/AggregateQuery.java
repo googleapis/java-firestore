@@ -24,6 +24,7 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.pipeline.AggregatorTarget;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
@@ -63,6 +64,16 @@ public class AggregateQuery {
   @Nonnull
   public Query getQuery() {
     return query;
+  }
+
+  @Nonnull
+  public Pipeline toPipeline() {
+    return getQuery()
+        .toPipeline()
+        .aggregate(
+            this.aggregateFieldList.stream()
+                .map(PipelineUtilsKt::toPipelineAggregatorTarget)
+                .toArray(AggregatorTarget[]::new));
   }
 
   /**

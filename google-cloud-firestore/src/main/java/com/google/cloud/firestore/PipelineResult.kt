@@ -6,13 +6,14 @@ import com.google.firestore.v1.Value
 import java.util.Date
 import javax.annotation.Nonnull
 
-data class PipelineResult internal constructor(
+data class PipelineResult
+internal constructor(
   private val rpcContext: FirestoreRpcContext<*>?,
   val reference: DocumentReference?,
   val protoFields: Map<String, Value>,
   val readTime: Timestamp,
   val updateTime: Timestamp?,
-  val createTime: Timestamp?
+  val createTime: Timestamp?,
 ) {
   val id: String?
     get() = reference?.id
@@ -23,8 +24,8 @@ data class PipelineResult internal constructor(
 
   val data: Map<String, Any>?
     /**
-     * Returns the fields of the document as a Map or null if the document doesn't exist. Field values
-     * will be converted to their native Java representation.
+     * Returns the fields of the document as a Map or null if the document doesn't exist. Field
+     * values will be converted to their native Java representation.
      *
      * @return The fields of the document as a Map or null if the document doesn't exist.
      */
@@ -46,14 +47,12 @@ data class PipelineResult internal constructor(
    *
    * @param valueType The Java class to create
    * @return The contents of the result in an object of type T or null if the document doesn't
-   * exist.
+   *   exist.
    */
   fun <T> toObject(@Nonnull valueType: Class<T>): T? {
     val data = data
-    return if (data == null) null else CustomClassMapper.convertToCustomClass(
-      data, valueType,
-      reference
-    )
+    return if (data == null) null
+    else CustomClassMapper.convertToCustomClass(data, valueType, reference)
   }
 
   /**
@@ -93,10 +92,8 @@ data class PipelineResult internal constructor(
 
   fun <T> get(fieldPath: FieldPath, valueType: Class<T>): T? {
     val data = get(fieldPath)
-    return if (data == null) null else CustomClassMapper.convertToCustomClass(
-      data, valueType,
-      reference
-    )
+    return if (data == null) null
+    else CustomClassMapper.convertToCustomClass(data, valueType, reference)
   }
 
   fun extractField(fieldPath: FieldPath): Value? {
@@ -158,15 +155,17 @@ data class PipelineResult internal constructor(
   companion object {
     @JvmStatic
     internal fun fromDocument(
-      rpcContext: FirestoreRpcContext<*>?, readTime: com.google.protobuf.Timestamp, document: Document
+      rpcContext: FirestoreRpcContext<*>?,
+      readTime: com.google.protobuf.Timestamp,
+      document: Document,
     ): PipelineResult {
       return PipelineResult(
         rpcContext,
         document.name?.let { DocumentReference(rpcContext, ResourcePath.create(it)) },
         document.fieldsMap,
         Timestamp.fromProto(readTime),
-        document.updateTime?.let {Timestamp.fromProto(it)},
-        document.createTime?.let {Timestamp.fromProto(it)},
+        document.updateTime?.let { Timestamp.fromProto(it) },
+        document.createTime?.let { Timestamp.fromProto(it) },
       )
     }
   }
