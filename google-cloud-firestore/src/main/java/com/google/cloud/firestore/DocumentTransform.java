@@ -36,8 +36,7 @@ final class DocumentTransform {
     this.transforms = transforms;
   }
 
-  static DocumentTransform fromFieldPathMap(
-      DocumentReference documentReference, Map<FieldPath, Object> values) {
+  static DocumentTransform fromFieldPathMap(Map<FieldPath, Object> values) {
     SortedMap<FieldPath, FieldTransform> transforms = new TreeMap<>();
 
     for (Map.Entry<FieldPath, Object> entry : values.entrySet()) {

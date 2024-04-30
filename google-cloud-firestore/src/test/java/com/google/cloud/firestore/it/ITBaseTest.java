@@ -19,6 +19,7 @@ package com.google.cloud.firestore.it;
 import static com.google.cloud.firestore.LocalFirestoreHelper.autoId;
 import static com.google.cloud.firestore.it.ITQueryTest.map;
 
+import com.google.api.gax.rpc.TransportChannelProvider;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
@@ -54,7 +55,11 @@ public abstract class ITBaseTest {
   public void before() throws Exception {
     FirestoreOptions.Builder optionsBuilder = FirestoreOptions.newBuilder();
 
-    String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
+    String dbPropertyName = "FIRESTORE_NAMED_DATABASE";
+    String namedDb = System.getProperty(dbPropertyName);
+    if (namedDb == null) {
+      namedDb = System.getenv(dbPropertyName);
+    }
     if (namedDb != null) {
       logger.log(Level.INFO, "Integration test using named database " + namedDb);
       optionsBuilder = optionsBuilder.setDatabaseId(namedDb);
@@ -62,7 +67,30 @@ public abstract class ITBaseTest {
       logger.log(Level.INFO, "Integration test using default database.");
     }
 
+    String targetPropertyName = "FIRESTORE_TARGET_BACKEND";
+    String targetBackend = System.getProperty(targetPropertyName);
+    if (targetBackend == null) {
+      targetBackend = System.getenv(targetPropertyName);
+    }
+    TransportChannelProvider defaultProvider = optionsBuilder.build().getTransportChannelProvider();
+    if (targetBackend != null) {
+      if (targetBackend.equals("PROD")) {
+        // do nothing to use the default
+      } else if (targetBackend.equals("QA")) {
+        optionsBuilder.setChannelProvider(
+            defaultProvider.withEndpoint("staging-firestore.sandbox.googleapis.com:443"));
+      } else if (targetBackend.equals("NIGHTLY")) {
+        optionsBuilder.setChannelProvider(
+            defaultProvider.withEndpoint("test-firestore.sandbox.googleapis.com:443"));
+      } else {
+        throw new IllegalArgumentException("Illegal target backend: " + targetBackend);
+      }
+    }
+
     firestoreOptions = optionsBuilder.build();
+    logger.log(
+        Level.INFO,
+        "Integration test against " + firestoreOptions.getTransportChannelProvider().getEndpoint());
     firestore = firestoreOptions.getService();
     primeBackend();
   }

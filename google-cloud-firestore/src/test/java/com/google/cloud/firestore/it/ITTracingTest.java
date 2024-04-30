@@ -199,7 +199,7 @@ public class ITTracingTest {
   void printSpans() {
     for (SpanData spanData : spanNameToSpanData.values()) {
       logger.log(
-          Level.FINE,
+          Level.INFO,
           String.format(
               "SPAN ID:%s, ParentID:%s, KIND:%s, TRACE ID:%s, NAME:%s, ATTRIBUTES:%s, EVENTS:%s\n",
               spanData.getSpanId(),
@@ -580,10 +580,13 @@ public class ITTracingTest {
             "RunQuery",
             Attributes.builder()
                 .put("isRetryRequestWithCursor", false)
-                .put("transactional", false)
+                .put("isTransactional", false)
                 .build()));
     assertTrue(
-        hasEvent(span, "RunQuery: Completed", Attributes.builder().put("numDocuments", 0).build()));
+        hasEvent(
+            getGrpcSpanByName(RUN_QUERY_RPC_NAME),
+            "RunQuery: Completed",
+            Attributes.builder().put("numDocuments", 0).build()));
   }
 
   @Test

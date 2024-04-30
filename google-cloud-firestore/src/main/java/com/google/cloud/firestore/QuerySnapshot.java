@@ -18,6 +18,7 @@ package com.google.cloud.firestore;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentChange.Type;
+import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -43,7 +44,7 @@ public abstract class QuerySnapshot implements Iterable<QueryDocumentSnapshot> {
   public static QuerySnapshot withDocuments(
       final Query query, Timestamp readTime, final List<QueryDocumentSnapshot> documents) {
     return new QuerySnapshot(query, readTime) {
-      volatile List<DocumentChange> documentChanges;
+      volatile ImmutableList<DocumentChange> documentChanges;
 
       @Nonnull
       @Override
@@ -57,14 +58,17 @@ public abstract class QuerySnapshot implements Iterable<QueryDocumentSnapshot> {
         if (documentChanges == null) {
           synchronized (documents) {
             if (documentChanges == null) {
-              documentChanges = new ArrayList<>();
-              for (int i = 0; i < documents.size(); ++i) {
-                documentChanges.add(new DocumentChange(documents.get(i), Type.ADDED, -1, i));
+              int size = documents.size();
+              ImmutableList.Builder<DocumentChange> builder =
+                  ImmutableList.builderWithExpectedSize(size);
+              for (int i = 0; i < size; ++i) {
+                builder.add(new DocumentChange(documents.get(i), Type.ADDED, -1, i));
               }
+              documentChanges = builder.build();
             }
           }
         }
-        return Collections.unmodifiableList(documentChanges);
+        return documentChanges;
       }
 
       @Override
