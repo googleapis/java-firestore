@@ -112,8 +112,7 @@ public class CollectionReference extends Query {
   public DocumentReference document(@Nonnull String childPath) {
     ResourcePath documentPath = getResourcePath().append(childPath);
     Preconditions.checkArgument(
-        documentPath.isDocument(),
-        String.format("Path should point to a Document Reference: %s", getPath()));
+        documentPath.isDocument(), "Path should point to a Document Reference: %s", getPath());
     return new DocumentReference(rpcContext, documentPath);
   }
 

@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -74,6 +75,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -83,6 +85,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import org.mockito.ArgumentCaptor;
@@ -146,6 +149,7 @@ public final class LocalFirestoreHelper {
 
   public static final Date DATE;
   public static final Timestamp TIMESTAMP;
+  public static final Instant INSTANT;
   public static final GeoPoint GEO_POINT;
   public static final Blob BLOB;
   public static final FooList<SingleField> FOO_LIST = new FooList<>();
@@ -940,6 +944,7 @@ public final class LocalFirestoreHelper {
     public SingleField objectValue = new SingleField();
     public Date dateValue = DATE;
     public Timestamp timestampValue = TIMESTAMP;
+    public Instant instantValue = INSTANT;
     public List<String> arrayValue = ImmutableList.of("foo");
     public String nullValue = null;
     public Blob bytesValue = BLOB;
@@ -966,6 +971,7 @@ public final class LocalFirestoreHelper {
           && Objects.equals(objectValue, that.objectValue)
           && Objects.equals(dateValue, that.dateValue)
           && Objects.equals(timestampValue, that.timestampValue)
+          && Objects.equals(instantValue, that.instantValue)
           && Objects.equals(arrayValue, that.arrayValue)
           && Objects.equals(nullValue, that.nullValue)
           && Objects.equals(bytesValue, that.bytesValue)
@@ -985,6 +991,10 @@ public final class LocalFirestoreHelper {
 
     TIMESTAMP =
         Timestamp.ofTimeSecondsAndNanos(
+            TimeUnit.MILLISECONDS.toSeconds(DATE.getTime()),
+            123000); // Firestore truncates to microsecond precision.
+    INSTANT =
+        Instant.ofEpochSecond(
             TimeUnit.MILLISECONDS.toSeconds(DATE.getTime()),
             123000); // Firestore truncates to microsecond precision.
     GEO_POINT = new GeoPoint(50.1430847, -122.9477780);
@@ -1081,6 +1091,7 @@ public final class LocalFirestoreHelper {
     ALL_SUPPORTED_TYPES_MAP.put("objectValue", map("foo", (Object) "bar"));
     ALL_SUPPORTED_TYPES_MAP.put("dateValue", Timestamp.of(DATE));
     ALL_SUPPORTED_TYPES_MAP.put("timestampValue", TIMESTAMP);
+    ALL_SUPPORTED_TYPES_MAP.put("instantValue", TIMESTAMP);
     ALL_SUPPORTED_TYPES_MAP.put("arrayValue", ImmutableList.of("foo"));
     ALL_SUPPORTED_TYPES_MAP.put("nullValue", null);
     ALL_SUPPORTED_TYPES_MAP.put("bytesValue", BLOB);
@@ -1116,6 +1127,14 @@ public final class LocalFirestoreHelper {
                         com.google.protobuf.Timestamp.newBuilder()
                             .setSeconds(479978400)
                             .setNanos(123000)) // Timestamps supports microsecond precision.
+                    .build())
+            .put(
+                "instantValue",
+                Value.newBuilder()
+                    .setTimestampValue(
+                        com.google.protobuf.Timestamp.newBuilder()
+                            .setSeconds(479978400)
+                            .setNanos(123000)) // Instants supports microsecond precision.
                     .build())
             .put(
                 "arrayValue",
@@ -1195,9 +1214,9 @@ public final class LocalFirestoreHelper {
    * `sendRequest()` is called.
    */
   static class ResponseStubber {
-    int requestCount = 0;
-
     List<RequestResponsePair> operationList = new ArrayList<>();
+
+    List<Object> actualRequestList = new CopyOnWriteArrayList<>();
 
     void put(GeneratedMessageV3 request, ApiFuture<? extends GeneratedMessageV3> response) {
       operationList.add(new RequestResponsePair(request, response));
@@ -1209,8 +1228,7 @@ public final class LocalFirestoreHelper {
       for (final RequestResponsePair entry : operationList) {
         Answer<ApiFuture<? extends GeneratedMessageV3>> answer =
             invocationOnMock -> {
-              ++requestCount;
-              assertEquals(entry.request, invocationOnMock.getArguments()[0]);
+              actualRequestList.add(invocationOnMock.getArguments()[0]);
               return entry.response;
             };
         stubber = (stubber != null) ? stubber.doAnswer(answer) : doAnswer(answer);
@@ -1223,10 +1241,10 @@ public final class LocalFirestoreHelper {
     }
 
     public void verifyAllRequestsSent() {
-      assertEquals(
-          String.format("Expected %d requests, but got %d", operationList.size(), requestCount),
-          operationList.size(),
-          requestCount);
+      assertArrayEquals(
+          "Expected requests, but got actual requests",
+          operationList.stream().map(x -> x.request).toArray(),
+          actualRequestList.toArray());
     }
   }
 

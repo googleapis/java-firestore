@@ -20,8 +20,6 @@ import com.google.auto.value.AutoValue;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.StructuredQuery;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
@@ -44,6 +42,8 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
   /** Regular expression to verify that dot-separated field paths do not contain ~*[]/. */
   private static final Pattern PROHIBITED_CHARACTERS = Pattern.compile(".*[~*/\\[\\]].*");
 
+  private static FieldPath EMPTY = null;
+
   /**
    * Creates a FieldPath from the provided field names. If more than one field name is provided, the
    * path will point to a nested field in a document.
@@ -58,7 +58,8 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
     for (int i = 0; i < fieldNames.length; ++i) {
       Preconditions.checkArgument(
           fieldNames[i] != null && !fieldNames[i].isEmpty(),
-          "Invalid field name at argument " + (i + 1) + ". Field names must not be null or empty.");
+          "Invalid field name at argument %s. Field names must not be null or empty.",
+          (i + 1));
     }
 
     return new AutoValue_FieldPath(ImmutableList.copyOf(fieldNames));
@@ -92,7 +93,7 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
    * https://github.com/firebase/firebase-android-sdk/blob/2d3b2be7d2d00d693eb74986f20a6265c918848f/firebase-firestore/src/main/java/com/google/firebase/firestore/model/FieldPath.java#L47
    */
   public static FieldPath fromServerFormat(String path) {
-    List<String> res = new ArrayList<>();
+    ImmutableList.Builder<String> res = ImmutableList.builder();
     StringBuilder builder = new StringBuilder();
 
     int i = 0;
@@ -100,10 +101,11 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
     // If we're inside '`' backticks, then we should ignore '.' dots.
     boolean inBackticks = false;
 
-    while (i < path.length()) {
+    int length = path.length();
+    while (i < length) {
       char c = path.charAt(i);
       if (c == '\\') {
-        if (i + 1 == path.length()) {
+        if (i + 1 == length) {
           throw new IllegalArgumentException("Trailing escape character is not allowed");
         }
         i++;
@@ -138,14 +140,14 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
               + "). Paths must not be empty, begin with '.', end with '.', or contain '..'");
     }
     res.add(lastElem);
-    return FieldPath.of(res.toArray(new String[0]));
+    return new AutoValue_FieldPath(res.build());
   }
 
   /** Returns an empty field path. */
   static FieldPath empty() {
-    // NOTE: This is not static since it would create a circular class dependency during
-    // initialization.
-    return new AutoValue_FieldPath(ImmutableList.of());
+    // NOTE: This static is lazy evaluated since otherwise it would create a
+    // circular class dependency during initialization.
+    return EMPTY == null ? (EMPTY = new AutoValue_FieldPath(ImmutableList.of())) : EMPTY;
   }
 
   private String encodedPath;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,15 @@ import com.google.api.gax.rpc.ClientContext;
 import com.google.api.gax.rpc.OperationCallable;
 import com.google.api.gax.rpc.RequestParamsBuilder;
 import com.google.api.gax.rpc.UnaryCallable;
+import com.google.firestore.admin.v1.Backup;
+import com.google.firestore.admin.v1.BackupSchedule;
+import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
+import com.google.firestore.admin.v1.DeleteBackupRequest;
+import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
 import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
 import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
@@ -39,6 +44,8 @@ import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FieldOperationMetadata;
+import com.google.firestore.admin.v1.GetBackupRequest;
+import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
@@ -46,12 +53,19 @@ import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.IndexOperationMetadata;
+import com.google.firestore.admin.v1.ListBackupSchedulesRequest;
+import com.google.firestore.admin.v1.ListBackupSchedulesResponse;
+import com.google.firestore.admin.v1.ListBackupsRequest;
+import com.google.firestore.admin.v1.ListBackupsResponse;
 import com.google.firestore.admin.v1.ListDatabasesRequest;
 import com.google.firestore.admin.v1.ListDatabasesResponse;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.RestoreDatabaseMetadata;
+import com.google.firestore.admin.v1.RestoreDatabaseRequest;
+import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
@@ -200,6 +214,93 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
               .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))
               .build();
 
+  private static final MethodDescriptor<GetBackupRequest, Backup> getBackupMethodDescriptor =
+      MethodDescriptor.<GetBackupRequest, Backup>newBuilder()
+          .setType(MethodDescriptor.MethodType.UNARY)
+          .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/GetBackup")
+          .setRequestMarshaller(ProtoUtils.marshaller(GetBackupRequest.getDefaultInstance()))
+          .setResponseMarshaller(ProtoUtils.marshaller(Backup.getDefaultInstance()))
+          .build();
+
+  private static final MethodDescriptor<ListBackupsRequest, ListBackupsResponse>
+      listBackupsMethodDescriptor =
+          MethodDescriptor.<ListBackupsRequest, ListBackupsResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/ListBackups")
+              .setRequestMarshaller(ProtoUtils.marshaller(ListBackupsRequest.getDefaultInstance()))
+              .setResponseMarshaller(
+                  ProtoUtils.marshaller(ListBackupsResponse.getDefaultInstance()))
+              .build();
+
+  private static final MethodDescriptor<DeleteBackupRequest, Empty> deleteBackupMethodDescriptor =
+      MethodDescriptor.<DeleteBackupRequest, Empty>newBuilder()
+          .setType(MethodDescriptor.MethodType.UNARY)
+          .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/DeleteBackup")
+          .setRequestMarshaller(ProtoUtils.marshaller(DeleteBackupRequest.getDefaultInstance()))
+          .setResponseMarshaller(ProtoUtils.marshaller(Empty.getDefaultInstance()))
+          .build();
+
+  private static final MethodDescriptor<RestoreDatabaseRequest, Operation>
+      restoreDatabaseMethodDescriptor =
+          MethodDescriptor.<RestoreDatabaseRequest, Operation>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/RestoreDatabase")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(RestoreDatabaseRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))
+              .build();
+
+  private static final MethodDescriptor<CreateBackupScheduleRequest, BackupSchedule>
+      createBackupScheduleMethodDescriptor =
+          MethodDescriptor.<CreateBackupScheduleRequest, BackupSchedule>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/CreateBackupSchedule")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(CreateBackupScheduleRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(BackupSchedule.getDefaultInstance()))
+              .build();
+
+  private static final MethodDescriptor<GetBackupScheduleRequest, BackupSchedule>
+      getBackupScheduleMethodDescriptor =
+          MethodDescriptor.<GetBackupScheduleRequest, BackupSchedule>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/GetBackupSchedule")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(GetBackupScheduleRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(BackupSchedule.getDefaultInstance()))
+              .build();
+
+  private static final MethodDescriptor<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+      listBackupSchedulesMethodDescriptor =
+          MethodDescriptor.<ListBackupSchedulesRequest, ListBackupSchedulesResponse>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/ListBackupSchedules")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(ListBackupSchedulesRequest.getDefaultInstance()))
+              .setResponseMarshaller(
+                  ProtoUtils.marshaller(ListBackupSchedulesResponse.getDefaultInstance()))
+              .build();
+
+  private static final MethodDescriptor<UpdateBackupScheduleRequest, BackupSchedule>
+      updateBackupScheduleMethodDescriptor =
+          MethodDescriptor.<UpdateBackupScheduleRequest, BackupSchedule>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/UpdateBackupSchedule")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(UpdateBackupScheduleRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(BackupSchedule.getDefaultInstance()))
+              .build();
+
+  private static final MethodDescriptor<DeleteBackupScheduleRequest, Empty>
+      deleteBackupScheduleMethodDescriptor =
+          MethodDescriptor.<DeleteBackupScheduleRequest, Empty>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/DeleteBackupSchedule")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(DeleteBackupScheduleRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(Empty.getDefaultInstance()))
+              .build();
+
   private final UnaryCallable<CreateIndexRequest, Operation> createIndexCallable;
   private final OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
       createIndexOperationCallable;
@@ -232,6 +333,20 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
   private final UnaryCallable<DeleteDatabaseRequest, Operation> deleteDatabaseCallable;
   private final OperationCallable<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
       deleteDatabaseOperationCallable;
+  private final UnaryCallable<GetBackupRequest, Backup> getBackupCallable;
+  private final UnaryCallable<ListBackupsRequest, ListBackupsResponse> listBackupsCallable;
+  private final UnaryCallable<DeleteBackupRequest, Empty> deleteBackupCallable;
+  private final UnaryCallable<RestoreDatabaseRequest, Operation> restoreDatabaseCallable;
+  private final OperationCallable<RestoreDatabaseRequest, Database, RestoreDatabaseMetadata>
+      restoreDatabaseOperationCallable;
+  private final UnaryCallable<CreateBackupScheduleRequest, BackupSchedule>
+      createBackupScheduleCallable;
+  private final UnaryCallable<GetBackupScheduleRequest, BackupSchedule> getBackupScheduleCallable;
+  private final UnaryCallable<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+      listBackupSchedulesCallable;
+  private final UnaryCallable<UpdateBackupScheduleRequest, BackupSchedule>
+      updateBackupScheduleCallable;
+  private final UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable;
 
   private final BackgroundResource backgroundResources;
   private final GrpcOperationsStub operationsStub;
@@ -417,6 +532,101 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
                   return builder.build();
                 })
             .build();
+    GrpcCallSettings<GetBackupRequest, Backup> getBackupTransportSettings =
+        GrpcCallSettings.<GetBackupRequest, Backup>newBuilder()
+            .setMethodDescriptor(getBackupMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    GrpcCallSettings<ListBackupsRequest, ListBackupsResponse> listBackupsTransportSettings =
+        GrpcCallSettings.<ListBackupsRequest, ListBackupsResponse>newBuilder()
+            .setMethodDescriptor(listBackupsMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
+            .build();
+    GrpcCallSettings<DeleteBackupRequest, Empty> deleteBackupTransportSettings =
+        GrpcCallSettings.<DeleteBackupRequest, Empty>newBuilder()
+            .setMethodDescriptor(deleteBackupMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    GrpcCallSettings<RestoreDatabaseRequest, Operation> restoreDatabaseTransportSettings =
+        GrpcCallSettings.<RestoreDatabaseRequest, Operation>newBuilder()
+            .setMethodDescriptor(restoreDatabaseMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
+            .build();
+    GrpcCallSettings<CreateBackupScheduleRequest, BackupSchedule>
+        createBackupScheduleTransportSettings =
+            GrpcCallSettings.<CreateBackupScheduleRequest, BackupSchedule>newBuilder()
+                .setMethodDescriptor(createBackupScheduleMethodDescriptor)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
+                .build();
+    GrpcCallSettings<GetBackupScheduleRequest, BackupSchedule> getBackupScheduleTransportSettings =
+        GrpcCallSettings.<GetBackupScheduleRequest, BackupSchedule>newBuilder()
+            .setMethodDescriptor(getBackupScheduleMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    GrpcCallSettings<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+        listBackupSchedulesTransportSettings =
+            GrpcCallSettings.<ListBackupSchedulesRequest, ListBackupSchedulesResponse>newBuilder()
+                .setMethodDescriptor(listBackupSchedulesMethodDescriptor)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
+                .build();
+    GrpcCallSettings<UpdateBackupScheduleRequest, BackupSchedule>
+        updateBackupScheduleTransportSettings =
+            GrpcCallSettings.<UpdateBackupScheduleRequest, BackupSchedule>newBuilder()
+                .setMethodDescriptor(updateBackupScheduleMethodDescriptor)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add(
+                          "backup_schedule.name",
+                          String.valueOf(request.getBackupSchedule().getName()));
+                      return builder.build();
+                    })
+                .build();
+    GrpcCallSettings<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleTransportSettings =
+        GrpcCallSettings.<DeleteBackupScheduleRequest, Empty>newBuilder()
+            .setMethodDescriptor(deleteBackupScheduleMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
 
     this.createIndexCallable =
         callableFactory.createUnaryCallable(
@@ -508,6 +718,49 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
             settings.deleteDatabaseOperationSettings(),
             clientContext,
             operationsStub);
+    this.getBackupCallable =
+        callableFactory.createUnaryCallable(
+            getBackupTransportSettings, settings.getBackupSettings(), clientContext);
+    this.listBackupsCallable =
+        callableFactory.createUnaryCallable(
+            listBackupsTransportSettings, settings.listBackupsSettings(), clientContext);
+    this.deleteBackupCallable =
+        callableFactory.createUnaryCallable(
+            deleteBackupTransportSettings, settings.deleteBackupSettings(), clientContext);
+    this.restoreDatabaseCallable =
+        callableFactory.createUnaryCallable(
+            restoreDatabaseTransportSettings, settings.restoreDatabaseSettings(), clientContext);
+    this.restoreDatabaseOperationCallable =
+        callableFactory.createOperationCallable(
+            restoreDatabaseTransportSettings,
+            settings.restoreDatabaseOperationSettings(),
+            clientContext,
+            operationsStub);
+    this.createBackupScheduleCallable =
+        callableFactory.createUnaryCallable(
+            createBackupScheduleTransportSettings,
+            settings.createBackupScheduleSettings(),
+            clientContext);
+    this.getBackupScheduleCallable =
+        callableFactory.createUnaryCallable(
+            getBackupScheduleTransportSettings,
+            settings.getBackupScheduleSettings(),
+            clientContext);
+    this.listBackupSchedulesCallable =
+        callableFactory.createUnaryCallable(
+            listBackupSchedulesTransportSettings,
+            settings.listBackupSchedulesSettings(),
+            clientContext);
+    this.updateBackupScheduleCallable =
+        callableFactory.createUnaryCallable(
+            updateBackupScheduleTransportSettings,
+            settings.updateBackupScheduleSettings(),
+            clientContext);
+    this.deleteBackupScheduleCallable =
+        callableFactory.createUnaryCallable(
+            deleteBackupScheduleTransportSettings,
+            settings.deleteBackupScheduleSettings(),
+            clientContext);
 
     this.backgroundResources =
         new BackgroundResourceAggregation(clientContext.getBackgroundResources());
@@ -637,6 +890,58 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
   public OperationCallable<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
       deleteDatabaseOperationCallable() {
     return deleteDatabaseOperationCallable;
+  }
+
+  @Override
+  public UnaryCallable<GetBackupRequest, Backup> getBackupCallable() {
+    return getBackupCallable;
+  }
+
+  @Override
+  public UnaryCallable<ListBackupsRequest, ListBackupsResponse> listBackupsCallable() {
+    return listBackupsCallable;
+  }
+
+  @Override
+  public UnaryCallable<DeleteBackupRequest, Empty> deleteBackupCallable() {
+    return deleteBackupCallable;
+  }
+
+  @Override
+  public UnaryCallable<RestoreDatabaseRequest, Operation> restoreDatabaseCallable() {
+    return restoreDatabaseCallable;
+  }
+
+  @Override
+  public OperationCallable<RestoreDatabaseRequest, Database, RestoreDatabaseMetadata>
+      restoreDatabaseOperationCallable() {
+    return restoreDatabaseOperationCallable;
+  }
+
+  @Override
+  public UnaryCallable<CreateBackupScheduleRequest, BackupSchedule> createBackupScheduleCallable() {
+    return createBackupScheduleCallable;
+  }
+
+  @Override
+  public UnaryCallable<GetBackupScheduleRequest, BackupSchedule> getBackupScheduleCallable() {
+    return getBackupScheduleCallable;
+  }
+
+  @Override
+  public UnaryCallable<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+      listBackupSchedulesCallable() {
+    return listBackupSchedulesCallable;
+  }
+
+  @Override
+  public UnaryCallable<UpdateBackupScheduleRequest, BackupSchedule> updateBackupScheduleCallable() {
+    return updateBackupScheduleCallable;
+  }
+
+  @Override
+  public UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable() {
+    return deleteBackupScheduleCallable;
   }
 
   @Override

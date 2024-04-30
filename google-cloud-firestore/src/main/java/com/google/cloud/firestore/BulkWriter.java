@@ -22,7 +22,6 @@ import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
-import com.google.api.core.BetaApi;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.StatusCode.Code;
@@ -49,7 +48,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 
 /** A Firestore BulkWriter that can be used to perform a large number of writes in parallel. */
-@BetaApi
 public final class BulkWriter implements AutoCloseable {
   /**
    * A callback set by `addWriteResultListener()` to be run every time an operation successfully
@@ -914,7 +912,7 @@ public final class BulkWriter implements AutoCloseable {
               .getOptions()
               .getTraceUtil()
               .startSpan(TraceUtil.SPAN_NAME_BULK_WRITER_COMMIT, traceContext)
-              .setAttribute("numDocuments", batch.getWrites().size());
+              .setAttribute("numDocuments", batch.getMutationsSize());
       try (Scope ignored = span.makeCurrent()) {
         ApiFuture<Void> result = batch.bulkCommit();
         result.addListener(

@@ -872,6 +872,7 @@ public class DocumentReferenceTest {
             "second.foo",
             "second.geoPointValue",
             "second.infValue",
+            "second.instantValue",
             "second.longValue",
             "second.nanValue",
             "second.negInfValue",

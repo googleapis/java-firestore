@@ -63,13 +63,16 @@ import javax.annotation.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.junit.runners.MethodSorters;
 
 @RunWith(JUnit4.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ITTracingTest {
   private static final Logger logger =
       Logger.getLogger(com.google.cloud.firestore.it.ITTracingTest.class.getName());
@@ -122,10 +125,10 @@ public class ITTracingTest {
                 FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build());
     String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
     if (namedDb != null) {
-      logger.log(Level.INFO, "Integration test using named database " + namedDb);
+      logger.log(Level.INFO, String.format("Integration test using named database %s for test %s", namedDb, testName.getMethodName()));
       optionsBuilder = optionsBuilder.setDatabaseId(namedDb);
     } else {
-      logger.log(Level.INFO, "Integration test using default database.");
+      logger.log(Level.INFO, String.format("Integration test using default database for test %s", testName.getMethodName()));
     }
     firestore = optionsBuilder.build().getService();
 
@@ -149,6 +152,12 @@ public class ITTracingTest {
     // gRPC channel and hence force the gRPC instrumentation library to flush
     // its spans.
     firestore.close();
+
+    // The gRPC auto instrumentation takes a non-zero amount of time to export its spans to the
+    // `inMemorySpanExporter`. That library, however, doesn't provide a way to wait on that event.
+    // This doesn't pose an issue in practice, but can make tests flaky. Therefore, we're adding
+    // a large delay to make sure we avoid any flakiness.
+    TimeUnit.MILLISECONDS.sleep(50);
   }
 
   // Prepares all the spans in memory for inspection.
@@ -199,7 +208,7 @@ public class ITTracingTest {
   void printSpans() {
     for (SpanData spanData : spanNameToSpanData.values()) {
       logger.log(
-          Level.FINE,
+          Level.INFO,
           String.format(
               "SPAN ID:%s, ParentID:%s, KIND:%s, TRACE ID:%s, NAME:%s, ATTRIBUTES:%s, EVENTS:%s\n",
               spanData.getSpanId(),
@@ -277,18 +286,25 @@ public class ITTracingTest {
       return false;
     }
 
+    logger.log(Level.INFO, String.format("Checking if span named '%s' (ID='%s') contains an event named '%s'", spanData.getName(), spanData.getSpanId(), eventName));
+
     List<EventData> events = spanData.getEvents();
     for (EventData event : events) {
       if (event.getName().equals(eventName)) {
+        logger.log(Level.INFO, "Found the event in the span.");
         if (expectedAttributes == null) {
           return true;
         }
 
         // Make sure attributes also match.
         Attributes eventAttributes = event.getAttributes();
-        return expectedAttributes.equals(eventAttributes);
+        boolean attributesMatch = expectedAttributes.equals(eventAttributes);
+        logger.log(Level.INFO, "Event attributes match: " + attributesMatch);
+        return attributesMatch;
       }
     }
+
+    logger.log(Level.INFO, "Did not find the event in the span.");
     return false;
   }
 
@@ -304,9 +320,7 @@ public class ITTracingTest {
   @Test
   public void aggregateQueryGet() throws Exception {
     firestore.collection("col").count().get().get();
-    waitForTracesToComplete();
-    List<SpanData> spans = inMemorySpanExporter.getFinishedSpanItems();
-    buildSpanMaps(spans);
+    List<SpanData> spans = prepareSpans();
     assertEquals(2, spans.size());
     SpanData getSpan = getSpanByName(SPAN_NAME_AGGREGATION_QUERY_GET);
     SpanData grpcSpan = getGrpcSpanByName(SPAN_NAME_RUN_AGGREGATION_QUERY);
@@ -580,10 +594,13 @@ public class ITTracingTest {
             "RunQuery",
             Attributes.builder()
                 .put("isRetryRequestWithCursor", false)
-                .put("transactional", false)
+                .put("isTransactional", false)
                 .build()));
     assertTrue(
-        hasEvent(span, "RunQuery: Completed", Attributes.builder().put("numDocuments", 0).build()));
+        hasEvent(
+            getGrpcSpanByName(RUN_QUERY_RPC_NAME),
+            "RunQuery: Completed",
+            Attributes.builder().put("numDocuments", 0).build()));
   }
 
   @Test

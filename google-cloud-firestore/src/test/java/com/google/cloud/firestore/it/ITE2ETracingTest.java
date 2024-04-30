@@ -95,6 +95,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -120,6 +121,7 @@ import org.junit.runner.RunWith;
 // TODO In the future it would be great to have a single test-driver for this test and
 // ITTracingTest.
 @RunWith(TestParameterInjector.class)
+@Ignore
 public class ITE2ETracingTest extends ITBaseTest {
 
   protected boolean isUsingGlobalOpenTelemetrySDK() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,8 @@ import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.DeleteDocumentRequest;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.DocumentMask;
+import com.google.firestore.v1.ExplainMetrics;
+import com.google.firestore.v1.ExplainOptions;
 import com.google.firestore.v1.GetDocumentRequest;
 import com.google.firestore.v1.ListCollectionIdsRequest;
 import com.google.firestore.v1.ListCollectionIdsResponse;
@@ -56,8 +58,6 @@ import com.google.firestore.v1.ListenRequest;
 import com.google.firestore.v1.ListenResponse;
 import com.google.firestore.v1.PartitionQueryRequest;
 import com.google.firestore.v1.PartitionQueryResponse;
-import com.google.firestore.v1.QueryMode;
-import com.google.firestore.v1.ResultSetStats;
 import com.google.firestore.v1.RollbackRequest;
 import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
@@ -507,13 +507,13 @@ public class FirestoreClientTest {
             .setDocument(Document.newBuilder().build())
             .setReadTime(Timestamp.newBuilder().build())
             .setSkippedResults(880286183)
-            .setStats(ResultSetStats.newBuilder().build())
+            .setExplainMetrics(ExplainMetrics.newBuilder().build())
             .build();
     mockFirestore.addResponse(expectedResponse);
     RunQueryRequest request =
         RunQueryRequest.newBuilder()
             .setParent("parent-995424086")
-            .setMode(QueryMode.forNumber(0))
+            .setExplainOptions(ExplainOptions.newBuilder().build())
             .build();
 
     MockStreamObserver<RunQueryResponse> responseObserver = new MockStreamObserver<>();
@@ -533,7 +533,7 @@ public class FirestoreClientTest {
     RunQueryRequest request =
         RunQueryRequest.newBuilder()
             .setParent("parent-995424086")
-            .setMode(QueryMode.forNumber(0))
+            .setExplainOptions(ExplainOptions.newBuilder().build())
             .build();
 
     MockStreamObserver<RunQueryResponse> responseObserver = new MockStreamObserver<>();
@@ -558,13 +558,13 @@ public class FirestoreClientTest {
             .setResult(AggregationResult.newBuilder().build())
             .setTransaction(ByteString.EMPTY)
             .setReadTime(Timestamp.newBuilder().build())
-            .setStats(ResultSetStats.newBuilder().build())
+            .setExplainMetrics(ExplainMetrics.newBuilder().build())
             .build();
     mockFirestore.addResponse(expectedResponse);
     RunAggregationQueryRequest request =
         RunAggregationQueryRequest.newBuilder()
             .setParent("parent-995424086")
-            .setMode(QueryMode.forNumber(0))
+            .setExplainOptions(ExplainOptions.newBuilder().build())
             .build();
 
     MockStreamObserver<RunAggregationQueryResponse> responseObserver = new MockStreamObserver<>();
@@ -585,7 +585,7 @@ public class FirestoreClientTest {
     RunAggregationQueryRequest request =
         RunAggregationQueryRequest.newBuilder()
             .setParent("parent-995424086")
-            .setMode(QueryMode.forNumber(0))
+            .setExplainOptions(ExplainOptions.newBuilder().build())
             .build();
 
     MockStreamObserver<RunAggregationQueryResponse> responseObserver = new MockStreamObserver<>();
