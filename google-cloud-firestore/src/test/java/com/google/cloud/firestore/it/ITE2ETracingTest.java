@@ -82,11 +82,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -444,15 +442,13 @@ public class ITE2ETracingTest extends ITBaseTest {
   // For Transaction traces, there may be more spans than in the trace than specified in
   // `callStack`. So `numExpectedSpans` is the expected total number of spans (and not just the
   // spans in `callStack`)
-  protected void fetchAndValidateTrace(String traceId, List<List<String>> callStackList)
+  protected void fetchAndValidateTrace(
+      String traceId, int numExpectedSpans, List<List<String>> callStackList)
       throws InterruptedException {
     // Large enough count to accommodate eventually consistent Cloud Trace backend
     int numRetries = GET_TRACE_RETRY_COUNT;
-
-    // Find the number of unique spans, and Add '1' to account for rootSpanName.
-    Set<String> spanNames = new HashSet<>();
-    callStackList.forEach(spanNames::addAll);
-    int numExpectedSpans = spanNames.size() + 1;
+    // Account for rootSpanName
+    numExpectedSpans++;
 
     // Fetch traces
     do {
@@ -517,7 +513,7 @@ public class ITE2ETracingTest extends ITBaseTest {
   // For Non-Transaction traces, there is a 1:1 ratio of spans in `spanNames` and in the trace.
   protected void fetchAndValidateTrace(String traceId, String... spanNames)
       throws InterruptedException {
-    fetchAndValidateTrace(traceId, Collections.singletonList(Arrays.asList(spanNames)));
+    fetchAndValidateTrace(traceId, spanNames.length, Arrays.asList(Arrays.asList(spanNames)));
   }
 
   @Test
@@ -1138,6 +1134,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
+        /*numExpectedSpans=*/ 11,
         Arrays.asList(
             Arrays.asList(
                 SPAN_NAME_TRANSACTION_RUN,
@@ -1192,6 +1189,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
+        /*numExpectedSpans=*/ 5,
         Arrays.asList(
             Arrays.asList(
                 SPAN_NAME_TRANSACTION_RUN,
