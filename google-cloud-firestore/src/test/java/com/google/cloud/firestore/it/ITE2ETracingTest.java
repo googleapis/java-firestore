@@ -62,8 +62,6 @@ import com.google.cloud.trace.v1.TraceServiceClient;
 import com.google.common.base.Preconditions;
 import com.google.devtools.cloudtrace.v1.Trace;
 import com.google.devtools.cloudtrace.v1.TraceSpan;
-import com.google.testing.junit.testparameterinjector.TestParameter;
-import com.google.testing.junit.testparameterinjector.TestParameterInjector;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanContext;
@@ -96,7 +94,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 // This End-to-End test verifies Client-side Tracing Functionality instrumented using the
 // OpenTelemetry API.
@@ -119,12 +116,8 @@ import org.junit.runner.RunWith;
 // 5. Traces are read-back using TraceServiceClient and verified against expected Call Stacks.
 // TODO In the future it would be great to have a single test-driver for this test and
 // ITTracingTest.
-@RunWith(TestParameterInjector.class)
-public class ITE2ETracingTest extends ITBaseTest {
-
-  protected boolean isUsingGlobalOpenTelemetrySDK() {
-    return useGlobalOpenTelemetrySDK;
-  }
+public abstract class ITE2ETracingTest extends ITBaseTest {
+  protected abstract boolean isUsingGlobalOpenTelemetrySDK();
 
   // Helper class to track call-stacks in a trace
   protected static class TraceContainer {
@@ -272,8 +265,6 @@ public class ITE2ETracingTest extends ITBaseTest {
   private static String projectId;
 
   private static Firestore firestore;
-
-  @TestParameter boolean useGlobalOpenTelemetrySDK;
 
   @BeforeClass
   public static void setup() throws IOException {

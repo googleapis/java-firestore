@@ -248,12 +248,6 @@
       <version>1.3.0</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>com.google.testparameterinjector</groupId>
-      <artifactId>test-parameter-injector</artifactId>
-      <version>1.15</version>
-      <scope>test</scope>
-    </dependency>
     <!-- END Cloud Ops -->
   </dependencies>
 

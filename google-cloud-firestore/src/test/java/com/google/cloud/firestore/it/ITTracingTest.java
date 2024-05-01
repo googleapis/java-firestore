@@ -41,6 +41,8 @@ import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.OpenTelemetrySdkBuilder;
+import io.opentelemetry.sdk.common.CompletableResultCode;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.testing.exporter.InMemorySpanExporter;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
@@ -61,19 +63,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
-@RunWith(JUnit4.class)
-public class ITTracingTest {
+public abstract class ITTracingTest {
+  protected abstract boolean isUsingGlobalOpenTelemetrySDK();
+
   private static final Logger logger =
       Logger.getLogger(com.google.cloud.firestore.it.ITTracingTest.class.getName());
 
+  private static final int TRACE_FORCE_FLUSH_MILLIS = 1000;
+  private static final int TRACE_PROVIDER_SHUTDOWN_MILLIS = 1000;
+  private static final int IN_MEMORY_SPAN_EXPORTER_DELAY_MILLIS = 50;
   private static final String SERVICE = "google.firestore.v1.Firestore/";
   private static final String BATCH_GET_DOCUMENTS_RPC_NAME = "BatchGetDocuments";
   private static final String COMMIT_RPC_NAME = "Commit";
@@ -85,9 +89,11 @@ public class ITTracingTest {
   private static final String BEGIN_TRANSACTION_RPC_NAME = "BeginTransaction";
   private static final String ROLLBACK_RPC_NAME = "Rollback";
 
+  private static OpenTelemetrySdk openTelemetrySdk;
+
   // We use an InMemorySpanExporter for testing which keeps all generated trace spans
   // in memory so that we can check their correctness.
-  protected static InMemorySpanExporter inMemorySpanExporter = InMemorySpanExporter.create();
+  protected InMemorySpanExporter inMemorySpanExporter;
 
   protected Firestore firestore;
 
@@ -97,35 +103,48 @@ public class ITTracingTest {
 
   @Rule public TestName testName = new TestName();
 
-  @BeforeClass
-  public static void beforeAll() {
-    // Create Firestore with an in-memory span exporter.
-    GlobalOpenTelemetry.resetForTest();
+  @Before
+  public void before() {
+    inMemorySpanExporter = InMemorySpanExporter.create();
+
     Resource resource =
         Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
     SpanProcessor inMemorySpanProcessor = SimpleSpanProcessor.create(inMemorySpanExporter);
-    OpenTelemetrySdk.builder()
-        .setTracerProvider(
-            SdkTracerProvider.builder()
-                .setResource(resource)
-                .addSpanProcessor(inMemorySpanProcessor)
-                .setSampler(Sampler.alwaysOn())
-                .build())
-        .buildAndRegisterGlobal();
-  }
+    FirestoreOptions.Builder optionsBuilder = FirestoreOptions.newBuilder();
+    FirestoreOpenTelemetryOptions.Builder otelOptionsBuilder =
+        FirestoreOpenTelemetryOptions.newBuilder();
+    OpenTelemetrySdkBuilder openTelemetrySdkBuilder =
+        OpenTelemetrySdk.builder()
+            .setTracerProvider(
+                SdkTracerProvider.builder()
+                    .setResource(resource)
+                    .addSpanProcessor(inMemorySpanProcessor)
+                    .setSampler(Sampler.alwaysOn())
+                    .build());
 
-  @Before
-  public void before() {
-    FirestoreOptions.Builder optionsBuilder =
-        FirestoreOptions.newBuilder()
-            .setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build());
+    if (isUsingGlobalOpenTelemetrySDK()) {
+      GlobalOpenTelemetry.resetForTest();
+      openTelemetrySdk = openTelemetrySdkBuilder.buildAndRegisterGlobal();
+      optionsBuilder.setOpenTelemetryOptions(otelOptionsBuilder.setTracingEnabled(true).build());
+    } else {
+      openTelemetrySdk = openTelemetrySdkBuilder.build();
+      optionsBuilder.setOpenTelemetryOptions(
+          otelOptionsBuilder.setTracingEnabled(true).setOpenTelemetry(openTelemetrySdk).build());
+    }
+
     String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
     if (namedDb != null) {
-      logger.log(Level.INFO, "Integration test using named database " + namedDb);
+      logger.log(
+          Level.INFO,
+          String.format(
+              "Integration test using named database %s for test %s",
+              namedDb, testName.getMethodName()));
       optionsBuilder = optionsBuilder.setDatabaseId(namedDb);
     } else {
-      logger.log(Level.INFO, "Integration test using default database.");
+      logger.log(
+          Level.INFO,
+          String.format(
+              "Integration test using default database for test %s", testName.getMethodName()));
     }
     firestore = optionsBuilder.build().getService();
 
@@ -144,11 +163,30 @@ public class ITTracingTest {
     inMemorySpanExporter.reset();
   }
 
+  @AfterClass
+  public static void teardown() {
+    CompletableResultCode completableResultCode =
+        openTelemetrySdk.getSdkTracerProvider().shutdown();
+    completableResultCode.join(TRACE_PROVIDER_SHUTDOWN_MILLIS, TimeUnit.MILLISECONDS);
+  }
+
   void waitForTracesToComplete() throws Exception {
     // We need to call `firestore.close()` because that will also close the
     // gRPC channel and hence force the gRPC instrumentation library to flush
     // its spans.
     firestore.close();
+
+    // The same way that querying the Cloud Trace backend may not give us the
+    // full trace on the first try, querying the in-memory traces may not result
+    // in the full trace immediately. Note that performing the `flush` is not
+    // enough. This doesn't pose an issue in practice, but can make tests flaky.
+    // Therefore, we're adding a delay to make sure we avoid any flakiness.
+    inMemorySpanExporter.flush().join(IN_MEMORY_SPAN_EXPORTER_DELAY_MILLIS, TimeUnit.MILLISECONDS);
+    TimeUnit.MILLISECONDS.sleep(IN_MEMORY_SPAN_EXPORTER_DELAY_MILLIS);
+
+    CompletableResultCode completableResultCode =
+        openTelemetrySdk.getSdkTracerProvider().forceFlush();
+    completableResultCode.join(TRACE_FORCE_FLUSH_MILLIS, TimeUnit.MILLISECONDS);
   }
 
   // Prepares all the spans in memory for inspection.
@@ -269,13 +307,19 @@ public class ITTracingTest {
     }
   }
 
-  // Returns true if an only if the given span data contains an event with the given name and the
+  // Returns true if and only if the given span data contains an event with the given name and the
   // given expected
   // attributes.
   boolean hasEvent(SpanData spanData, String eventName, @Nullable Attributes expectedAttributes) {
     if (spanData == null) {
       return false;
     }
+
+    logger.log(
+        Level.INFO,
+        String.format(
+            "Checking if span named '%s' (ID='%s') contains an event named '%s'",
+            spanData.getName(), spanData.getSpanId(), eventName));
 
     List<EventData> events = spanData.getEvents();
     for (EventData event : events) {
@@ -293,10 +337,22 @@ public class ITTracingTest {
   }
 
   // This is a POJO used for testing APIs that take a POJO.
-  static class Pojo {
+  public static class Pojo {
     public int bar;
 
-    Pojo(int bar) {
+    public Pojo() {
+      bar = 0;
+    }
+
+    public Pojo(int bar) {
+      this.bar = bar;
+    }
+
+    public int getBar() {
+      return bar;
+    }
+
+    public void setBar(int bar) {
       this.bar = bar;
     }
   }
@@ -583,10 +639,7 @@ public class ITTracingTest {
                 .put("isTransactional", false)
                 .build()));
     assertTrue(
-        hasEvent(
-            getGrpcSpanByName(RUN_QUERY_RPC_NAME),
-            "RunQuery: Completed",
-            Attributes.builder().put("numDocuments", 0).build()));
+        hasEvent(span, "RunQuery: Completed", Attributes.builder().put("numDocuments", 0).build()));
   }
 
   @Test
