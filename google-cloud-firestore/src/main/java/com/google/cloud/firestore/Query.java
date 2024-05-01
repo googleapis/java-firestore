@@ -1729,14 +1729,13 @@ public class Query {
       request.setReadTime(readTime.toProto());
     }
 
-    traceUtil
-        .currentSpan()
-        .addEvent(
-            TraceUtil.SPAN_NAME_RUN_QUERY,
-            new ImmutableMap.Builder<String, Object>()
-                .put("isTransactional", transactionId != null)
-                .put("isRetryRequestWithCursor", isRetryRequestWithCursor)
-                .build());
+    TraceUtil.Span span = traceUtil.currentSpan();
+    span.addEvent(
+        TraceUtil.SPAN_NAME_RUN_QUERY,
+        new ImmutableMap.Builder<String, Object>()
+            .put("isTransactional", transactionId != null)
+            .put("isRetryRequestWithCursor", isRetryRequestWithCursor)
+            .build());
 
     final AtomicReference<QueryDocumentSnapshot> lastReceivedDocument = new AtomicReference<>();
 
@@ -1757,7 +1756,7 @@ public class Query {
           public void onResponse(RunQueryResponse response) {
             if (!firstResponse) {
               firstResponse = true;
-              traceUtil.currentSpan().addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": First Response");
+              span.addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": First Response");
             }
 
             runQueryResponseObserver.onNext(response);
@@ -1765,13 +1764,8 @@ public class Query {
             if (response.hasDocument()) {
               numDocuments++;
               if (numDocuments % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
-                traceUtil
-                    .currentSpan()
-                    .addEvent(
-                        TraceUtil.SPAN_NAME_RUN_QUERY
-                            + ": Received "
-                            + numDocuments
-                            + " documents");
+                span.addEvent(
+                    TraceUtil.SPAN_NAME_RUN_QUERY + ": Received " + numDocuments + " documents");
               }
               Document document = response.getDocument();
               QueryDocumentSnapshot documentSnapshot =
@@ -1781,9 +1775,7 @@ public class Query {
             }
 
             if (response.getDone()) {
-              traceUtil
-                  .currentSpan()
-                  .addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
+              span.addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
               onComplete();
             }
           }
@@ -1792,11 +1784,9 @@ public class Query {
           public void onError(Throwable throwable) {
             QueryDocumentSnapshot cursor = lastReceivedDocument.get();
             if (shouldRetry(cursor, throwable)) {
-              traceUtil
-                  .currentSpan()
-                  .addEvent(
-                      TraceUtil.SPAN_NAME_RUN_QUERY + ": Retryable Error",
-                      Collections.singletonMap("error.message", throwable.getMessage()));
+              span.addEvent(
+                  TraceUtil.SPAN_NAME_RUN_QUERY + ": Retryable Error",
+                  Collections.singletonMap("error.message", throwable.getMessage()));
 
               Query.this
                   .startAfter(cursor)
@@ -1808,11 +1798,9 @@ public class Query {
                       /* explainOptions= */ explainOptions,
                       /* isRetryRequestWithCursor= */ true);
             } else {
-              traceUtil
-                  .currentSpan()
-                  .addEvent(
-                      TraceUtil.SPAN_NAME_RUN_QUERY + ": Error",
-                      Collections.singletonMap("error.message", throwable.getMessage()));
+              span.addEvent(
+                  TraceUtil.SPAN_NAME_RUN_QUERY + ": Error",
+                  Collections.singletonMap("error.message", throwable.getMessage()));
               runQueryResponseObserver.onError(throwable);
             }
           }
@@ -1821,11 +1809,9 @@ public class Query {
           public void onComplete() {
             if (hasCompleted) return;
             hasCompleted = true;
-            traceUtil
-                .currentSpan()
-                .addEvent(
-                    TraceUtil.SPAN_NAME_RUN_QUERY + ": Completed",
-                    Collections.singletonMap("numDocuments", numDocuments));
+            span.addEvent(
+                TraceUtil.SPAN_NAME_RUN_QUERY + ": Completed",
+                Collections.singletonMap("numDocuments", numDocuments));
             runQueryResponseObserver.onCompleted();
           }
 

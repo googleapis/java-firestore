@@ -60,6 +60,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -98,7 +99,8 @@ public class ITTracingTest {
   Map<String, String> spanIdToParentSpanId = new HashMap<>();
   Map<String, SpanData> spanNameToSpanData = new HashMap<>();
 
-  @Rule public TestName testName = new TestName();
+  @Rule
+  public TestName testName = new TestName();
 
   @BeforeClass
   public static void beforeAll() {
@@ -125,10 +127,17 @@ public class ITTracingTest {
                 FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build());
     String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
     if (namedDb != null) {
-      logger.log(Level.INFO, String.format("Integration test using named database %s for test %s", namedDb, testName.getMethodName()));
+      logger.log(
+          Level.INFO,
+          String.format(
+              "Integration test using named database %s for test %s",
+              namedDb, testName.getMethodName()));
       optionsBuilder = optionsBuilder.setDatabaseId(namedDb);
     } else {
-      logger.log(Level.INFO, String.format("Integration test using default database for test %s", testName.getMethodName()));
+      logger.log(
+          Level.INFO,
+          String.format(
+              "Integration test using default database for test %s", testName.getMethodName()));
     }
     firestore = optionsBuilder.build().getService();
 
@@ -286,7 +295,11 @@ public class ITTracingTest {
       return false;
     }
 
-    logger.log(Level.INFO, String.format("Checking if span named '%s' (ID='%s') contains an event named '%s'", spanData.getName(), spanData.getSpanId(), eventName));
+    logger.log(
+        Level.INFO,
+        String.format(
+            "Checking if span named '%s' (ID='%s') contains an event named '%s'",
+            spanData.getName(), spanData.getSpanId(), eventName));
 
     List<EventData> events = spanData.getEvents();
     for (EventData event : events) {
@@ -597,10 +610,7 @@ public class ITTracingTest {
                 .put("isTransactional", false)
                 .build()));
     assertTrue(
-        hasEvent(
-            getGrpcSpanByName(RUN_QUERY_RPC_NAME),
-            "RunQuery: Completed",
-            Attributes.builder().put("numDocuments", 0).build()));
+        hasEvent(span, "RunQuery: Completed", Attributes.builder().put("numDocuments", 0).build()));
   }
 
   @Test
