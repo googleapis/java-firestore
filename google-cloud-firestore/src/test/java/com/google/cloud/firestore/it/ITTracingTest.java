@@ -36,11 +36,15 @@ import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.common.base.Preconditions;
+import com.google.testing.junit.testparameterinjector.TestParameter;
+import com.google.testing.junit.testparameterinjector.TestParameterInjector;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.OpenTelemetrySdkBuilder;
+import io.opentelemetry.sdk.common.CompletableResultCode;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.testing.exporter.InMemorySpanExporter;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
@@ -60,24 +64,24 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
-
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.junit.runners.MethodSorters;
 
-@RunWith(JUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@RunWith(TestParameterInjector.class)
 public class ITTracingTest {
+  @TestParameter boolean useGlobalOpenTelemetrySDK;
+
   private static final Logger logger =
       Logger.getLogger(com.google.cloud.firestore.it.ITTracingTest.class.getName());
 
+  private static final int TRACE_FORCE_FLUSH_MILLIS = 1000;
+  private static final int TRACE_PROVIDER_SHUTDOWN_MILLIS = 1000;
+  private static final int GRPC_DELAY_MILLIS = 50;
   private static final String SERVICE = "google.firestore.v1.Firestore/";
   private static final String BATCH_GET_DOCUMENTS_RPC_NAME = "BatchGetDocuments";
   private static final String COMMIT_RPC_NAME = "Commit";
@@ -89,9 +93,11 @@ public class ITTracingTest {
   private static final String BEGIN_TRANSACTION_RPC_NAME = "BeginTransaction";
   private static final String ROLLBACK_RPC_NAME = "Rollback";
 
+  private static OpenTelemetrySdk openTelemetrySdk;
+
   // We use an InMemorySpanExporter for testing which keeps all generated trace spans
   // in memory so that we can check their correctness.
-  protected static InMemorySpanExporter inMemorySpanExporter = InMemorySpanExporter.create();
+  protected InMemorySpanExporter inMemorySpanExporter;
 
   protected Firestore firestore;
 
@@ -99,32 +105,37 @@ public class ITTracingTest {
   Map<String, String> spanIdToParentSpanId = new HashMap<>();
   Map<String, SpanData> spanNameToSpanData = new HashMap<>();
 
-  @Rule
-  public TestName testName = new TestName();
-
-  @BeforeClass
-  public static void beforeAll() {
-    // Create Firestore with an in-memory span exporter.
-    GlobalOpenTelemetry.resetForTest();
-    Resource resource =
-        Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
-    SpanProcessor inMemorySpanProcessor = SimpleSpanProcessor.create(inMemorySpanExporter);
-    OpenTelemetrySdk.builder()
-        .setTracerProvider(
-            SdkTracerProvider.builder()
-                .setResource(resource)
-                .addSpanProcessor(inMemorySpanProcessor)
-                .setSampler(Sampler.alwaysOn())
-                .build())
-        .buildAndRegisterGlobal();
-  }
+  @Rule public TestName testName = new TestName();
 
   @Before
   public void before() {
-    FirestoreOptions.Builder optionsBuilder =
-        FirestoreOptions.newBuilder()
-            .setOpenTelemetryOptions(
-                FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build());
+    inMemorySpanExporter = InMemorySpanExporter.create();
+
+    Resource resource =
+        Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
+    SpanProcessor inMemorySpanProcessor = SimpleSpanProcessor.create(inMemorySpanExporter);
+    FirestoreOptions.Builder optionsBuilder = FirestoreOptions.newBuilder();
+    FirestoreOpenTelemetryOptions.Builder otelOptionsBuilder =
+        FirestoreOpenTelemetryOptions.newBuilder();
+    OpenTelemetrySdkBuilder openTelemetrySdkBuilder =
+        OpenTelemetrySdk.builder()
+            .setTracerProvider(
+                SdkTracerProvider.builder()
+                    .setResource(resource)
+                    .addSpanProcessor(inMemorySpanProcessor)
+                    .setSampler(Sampler.alwaysOn())
+                    .build());
+
+    if (isUsingGlobalOpenTelemetrySDK()) {
+      GlobalOpenTelemetry.resetForTest();
+      openTelemetrySdkBuilder.buildAndRegisterGlobal();
+      optionsBuilder.setOpenTelemetryOptions(otelOptionsBuilder.setTracingEnabled(true).build());
+    } else {
+      openTelemetrySdk = openTelemetrySdkBuilder.build();
+      optionsBuilder.setOpenTelemetryOptions(
+          otelOptionsBuilder.setTracingEnabled(true).setOpenTelemetry(openTelemetrySdk).build());
+    }
+
     String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
     if (namedDb != null) {
       logger.log(
@@ -156,6 +167,17 @@ public class ITTracingTest {
     inMemorySpanExporter.reset();
   }
 
+  @AfterClass
+  public static void teardown() {
+    CompletableResultCode completableResultCode =
+        openTelemetrySdk.getSdkTracerProvider().shutdown();
+    completableResultCode.join(TRACE_PROVIDER_SHUTDOWN_MILLIS, TimeUnit.MILLISECONDS);
+  }
+
+  protected boolean isUsingGlobalOpenTelemetrySDK() {
+    return useGlobalOpenTelemetrySDK;
+  }
+
   void waitForTracesToComplete() throws Exception {
     // We need to call `firestore.close()` because that will also close the
     // gRPC channel and hence force the gRPC instrumentation library to flush
@@ -166,7 +188,11 @@ public class ITTracingTest {
     // `inMemorySpanExporter`. That library, however, doesn't provide a way to wait on that event.
     // This doesn't pose an issue in practice, but can make tests flaky. Therefore, we're adding
     // a large delay to make sure we avoid any flakiness.
-    TimeUnit.MILLISECONDS.sleep(50);
+    TimeUnit.MILLISECONDS.sleep(GRPC_DELAY_MILLIS);
+
+    CompletableResultCode completableResultCode =
+        openTelemetrySdk.getSdkTracerProvider().forceFlush();
+    completableResultCode.join(TRACE_FORCE_FLUSH_MILLIS, TimeUnit.MILLISECONDS);
   }
 
   // Prepares all the spans in memory for inspection.
