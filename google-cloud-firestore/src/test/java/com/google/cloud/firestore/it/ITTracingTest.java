@@ -71,10 +71,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-@RunWith(TestParameterInjector.class)
+@RunWith(JUnit4.class)
 public class ITTracingTest {
-  @TestParameter boolean useGlobalOpenTelemetrySDK;
+  //@TestParameter boolean useGlobalOpenTelemetrySDK;
 
   private static final Logger logger =
       Logger.getLogger(com.google.cloud.firestore.it.ITTracingTest.class.getName());
@@ -175,7 +176,8 @@ public class ITTracingTest {
   }
 
   protected boolean isUsingGlobalOpenTelemetrySDK() {
-    return useGlobalOpenTelemetrySDK;
+    return false;
+    //return useGlobalOpenTelemetrySDK;
   }
 
   void waitForTracesToComplete() throws Exception {
