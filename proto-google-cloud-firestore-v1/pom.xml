@@ -54,5 +54,12 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>native</id>
+            <properties>
+                <!-- skip native tests for this module, it will be tested in google-cloud-firestore -->
+                <skipTests>true</skipTests>
+            </properties>
+        </profile>
     </profiles>
 </project>
