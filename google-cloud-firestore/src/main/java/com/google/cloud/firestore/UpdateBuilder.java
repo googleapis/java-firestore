@@ -620,6 +620,8 @@ public abstract class UpdateBuilder<T> {
                     ? TraceUtil.SPAN_NAME_BATCH_COMMIT
                     : TraceUtil.SPAN_NAME_TRANSACTION_COMMIT);
     span.setAttribute("numDocuments", writes.size());
+    span.setAttribute("isTransactional", transactionId != null);
+
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<CommitResponse> response =
           firestore.sendRequest(request.build(), firestore.getClient().commitCallable());

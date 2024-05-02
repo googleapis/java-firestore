@@ -580,10 +580,13 @@ public class ITTracingTest {
             "RunQuery",
             Attributes.builder()
                 .put("isRetryRequestWithCursor", false)
-                .put("transactional", false)
+                .put("isTransactional", false)
                 .build()));
     assertTrue(
-        hasEvent(span, "RunQuery: Completed", Attributes.builder().put("numDocuments", 0).build()));
+        hasEvent(
+            getGrpcSpanByName(RUN_QUERY_RPC_NAME),
+            "RunQuery: Completed",
+            Attributes.builder().put("numDocuments", 0).build()));
   }
 
   @Test
@@ -733,6 +736,12 @@ public class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(2, spans.size());
     assertSpanHierarchy(SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+    assertEquals(
+        false,
+        getSpanByName(SPAN_NAME_BATCH_COMMIT)
+            .getAttributes()
+            .get(AttributeKey.booleanKey("gcp.firestore.isTransactional"))
+            .booleanValue());
     assertEquals(
         3L,
         getSpanByName(SPAN_NAME_BATCH_COMMIT)

@@ -33,6 +33,7 @@ import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.DatabaseRootName;
@@ -235,7 +236,10 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                 .currentSpan()
                 .addEvent(
                     TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": Start",
-                    Collections.singletonMap("numDocuments", documentReferences.length));
+                    new ImmutableMap.Builder<String, Object>()
+                        .put("numDocuments", documentReferences.length)
+                        .put("isTransactional", transactionId != null)
+                        .build());
           }
 
           @Override

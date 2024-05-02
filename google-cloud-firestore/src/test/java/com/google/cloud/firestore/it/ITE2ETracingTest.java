@@ -189,7 +189,7 @@ public class ITE2ETracingTest extends ITBaseTest {
       if (spanName(spanId).equals(expectedCallStack.get(0))) {
         // Recursion termination
         if (childSpans(spanId) == null) {
-          logger.info("No more chilren for " + spanName(spanId));
+          logger.info("No more children for " + spanName(spanId));
           return true;
         } else {
           // Examine the child spans
@@ -241,7 +241,7 @@ public class ITE2ETracingTest extends ITBaseTest {
 
   private static final int NUM_SPAN_ID_BYTES = 16;
 
-  private static final int GET_TRACE_RETRY_COUNT = 15;
+  private static final int GET_TRACE_RETRY_COUNT = 60;
 
   private static final int GET_TRACE_RETRY_BACKOFF_MILLIS = 1000;
 
@@ -538,14 +538,23 @@ public class ITE2ETracingTest extends ITBaseTest {
       try {
         traceResp = traceClient_v1.getTrace(projectId, customSpanContext.getTraceId());
         if (traceResp.getSpansCount() == expectedSpanCount) {
+          logger.info("Success: Got " + expectedSpanCount + " spans.");
           break;
         }
       } catch (NotFoundException notFoundException) {
         Thread.sleep(GET_TRACE_RETRY_BACKOFF_MILLIS);
         logger.info("Trace not found, retrying in " + GET_TRACE_RETRY_BACKOFF_MILLIS + " ms");
       }
+      logger.info(
+          "Trace Found. The trace did not contain "
+              + expectedSpanCount
+              + " spans. Going to retry.");
       numRetries--;
     } while (numRetries > 0);
+
+    // Make sure we got as many spans as we expected.
+    assertNotNull(traceResp);
+    assertEquals(expectedSpanCount, traceResp.getSpansCount());
 
     TraceContainer traceCont = new TraceContainer(rootSpanName, traceResp);
 

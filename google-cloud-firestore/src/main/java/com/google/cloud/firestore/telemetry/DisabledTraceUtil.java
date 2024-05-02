@@ -56,6 +56,11 @@ public class DisabledTraceUtil implements TraceUtil {
     }
 
     @Override
+    public TraceUtil.Span setAttribute(String key, boolean value) {
+      return this;
+    }
+
+    @Override
     public Scope makeCurrent() {
       return new Scope();
     }
