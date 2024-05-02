@@ -73,9 +73,9 @@ import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-@RunWith(JUnit4.class)
-public class ITTracingTest {
+public abstract class ITTracingTest {
   //@TestParameter boolean useGlobalOpenTelemetrySDK;
+  protected abstract boolean isUsingGlobalOpenTelemetrySDK();
 
   private static final Logger logger =
       Logger.getLogger(com.google.cloud.firestore.it.ITTracingTest.class.getName());
@@ -129,7 +129,7 @@ public class ITTracingTest {
 
     if (isUsingGlobalOpenTelemetrySDK()) {
       GlobalOpenTelemetry.resetForTest();
-      openTelemetrySdkBuilder.buildAndRegisterGlobal();
+      openTelemetrySdk = openTelemetrySdkBuilder.buildAndRegisterGlobal();
       optionsBuilder.setOpenTelemetryOptions(otelOptionsBuilder.setTracingEnabled(true).build());
     } else {
       openTelemetrySdk = openTelemetrySdkBuilder.build();
@@ -173,11 +173,6 @@ public class ITTracingTest {
     CompletableResultCode completableResultCode =
         openTelemetrySdk.getSdkTracerProvider().shutdown();
     completableResultCode.join(TRACE_PROVIDER_SHUTDOWN_MILLIS, TimeUnit.MILLISECONDS);
-  }
-
-  protected boolean isUsingGlobalOpenTelemetrySDK() {
-    return false;
-    //return useGlobalOpenTelemetrySDK;
   }
 
   void waitForTracesToComplete() throws Exception {
