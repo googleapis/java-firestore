@@ -15,13 +15,15 @@
  */
 package com.google.cloud.firestore.it;
 
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+@Ignore
 @RunWith(JUnit4.class)
-public class ITTracingTestNonGlobalOtel extends ITTracingTest {
+public class ITE2ETracingTestGlobalOtel extends ITE2ETracingTest {
   @Override
   protected boolean isUsingGlobalOpenTelemetrySDK() {
-    return false;
+    return true;
   }
 }

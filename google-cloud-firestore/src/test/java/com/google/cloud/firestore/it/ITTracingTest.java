@@ -36,8 +36,6 @@ import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.common.base.Preconditions;
-import com.google.testing.junit.testparameterinjector.TestParameter;
-import com.google.testing.junit.testparameterinjector.TestParameterInjector;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
@@ -70,11 +68,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 public abstract class ITTracingTest {
-  //@TestParameter boolean useGlobalOpenTelemetrySDK;
   protected abstract boolean isUsingGlobalOpenTelemetrySDK();
 
   private static final Logger logger =
