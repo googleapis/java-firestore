@@ -305,7 +305,7 @@ public abstract class ITTracingTest {
     }
   }
 
-  // Returns true if an only if the given span data contains an event with the given name and the
+  // Returns true if and only if the given span data contains an event with the given name and the
   // given expected
   // attributes.
   boolean hasEvent(SpanData spanData, String eventName, @Nullable Attributes expectedAttributes) {
@@ -340,10 +340,14 @@ public abstract class ITTracingTest {
   }
 
   // This is a POJO used for testing APIs that take a POJO.
-  static class Pojo {
+  public static class Pojo {
     public int bar;
 
-    Pojo(int bar) {
+    public Pojo() {
+      bar = 0;
+    }
+
+    public Pojo(int bar) {
       this.bar = bar;
     }
   }
