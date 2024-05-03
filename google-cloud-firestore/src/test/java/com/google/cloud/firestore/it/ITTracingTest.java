@@ -36,6 +36,7 @@ import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.common.base.Preconditions;
+import com.google.errorprone.annotations.Keep;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
@@ -51,6 +52,8 @@ import io.opentelemetry.sdk.trace.data.EventData;
 import io.opentelemetry.sdk.trace.data.SpanData;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
+
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -340,7 +343,8 @@ public abstract class ITTracingTest {
   }
 
   // This is a POJO used for testing APIs that take a POJO.
-  public static class Pojo {
+  @Keep
+  public static class Pojo implements Serializable {
     public int bar;
 
     public Pojo() {
