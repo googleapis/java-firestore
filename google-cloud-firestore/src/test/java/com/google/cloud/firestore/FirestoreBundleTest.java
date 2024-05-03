@@ -40,13 +40,14 @@ import com.google.protobuf.util.JsonFormat;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FirestoreBundleTest {
@@ -239,7 +240,7 @@ public class FirestoreBundleTest {
     FirestoreBundle.Builder bundleBuilder = new FirestoreBundle.Builder(TEST_BUNDLE_ID);
     QuerySnapshot snapshot =
         QuerySnapshot.withDocuments(
-            query, SINGLE_FIELD_SNAPSHOT.getReadTime(), Lists.newArrayList());
+            query, SINGLE_FIELD_SNAPSHOT.getReadTime(), Collections.emptyList());
     bundleBuilder.add("test-query", snapshot);
     ByteBuffer bundleBuffer = bundleBuilder.build().toByteBuffer();
 

@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -74,6 +75,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -83,10 +85,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 import org.threeten.bp.Duration;
@@ -146,6 +149,7 @@ public final class LocalFirestoreHelper {
 
   public static final Date DATE;
   public static final Timestamp TIMESTAMP;
+  public static final Instant INSTANT;
   public static final GeoPoint GEO_POINT;
   public static final Blob BLOB;
   public static final FooList<SingleField> FOO_LIST = new FooList<>();
@@ -262,6 +266,16 @@ public final class LocalFirestoreHelper {
 
   public static Answer<BatchGetDocumentsResponse> getAllResponse(
       final Map<String, Value>... fields) {
+    return getAllResponseImpl(true, fields);
+  }
+
+  public static Answer<BatchGetDocumentsResponse> getAllResponseWithoutOnComplete(
+      final Map<String, Value>... fields) {
+    return getAllResponseImpl(false, fields);
+  }
+
+  public static Answer<BatchGetDocumentsResponse> getAllResponseImpl(
+      boolean withOnComplete, final Map<String, Value>... fields) {
     BatchGetDocumentsResponse[] responses = new BatchGetDocumentsResponse[fields.length];
 
     for (int i = 0; i < fields.length; ++i) {
@@ -281,7 +295,13 @@ public final class LocalFirestoreHelper {
       responses[i] = response.build();
     }
 
-    return streamingResponse(responses, null);
+    if (withOnComplete) {
+      return streamingResponse(responses, null);
+    } else {
+      // Verify with logical termination, the return of results no longer depends on calling
+      // OnComplete.
+      return streamingResponseWithoutOnComplete(responses);
+    }
   }
 
   public static ApiFuture<Empty> rollbackResponse() {
@@ -341,24 +361,24 @@ public final class LocalFirestoreHelper {
     }
   }
 
-  public static Answer<RunAggregationQueryResponse> aggregationQueryResponse() {
-    return aggregationQueryResponse(42);
+  public static Answer<RunAggregationQueryResponse> countQueryResponse() {
+    return countQueryResponse(42);
   }
 
-  public static Answer<RunAggregationQueryResponse> aggregationQueryResponse(int count) {
-    return aggregationQueryResponse(count, null);
+  public static Answer<RunAggregationQueryResponse> countQueryResponse(int count) {
+    return countQueryResponse(count, null);
   }
 
-  public static Answer<RunAggregationQueryResponse> aggregationQueryResponse(
+  public static Answer<RunAggregationQueryResponse> countQueryResponse(
       int count, @Nullable Timestamp readTime) {
     return streamingResponse(
         new RunAggregationQueryResponse[] {
-          createRunAggregationQueryResponse(count, readTime),
+          createCountQueryResponse(count, readTime),
         },
         /*throwable=*/ null);
   }
 
-  public static Answer<RunAggregationQueryResponse> aggregationQueryResponse(Throwable throwable) {
+  public static Answer<RunAggregationQueryResponse> countQueryResponse(Throwable throwable) {
     return streamingResponse(new RunAggregationQueryResponse[] {}, throwable);
   }
 
@@ -366,8 +386,7 @@ public final class LocalFirestoreHelper {
       int count1, int count2) {
     return streamingResponse(
         new RunAggregationQueryResponse[] {
-          createRunAggregationQueryResponse(count1, null),
-          createRunAggregationQueryResponse(count2, null),
+          createCountQueryResponse(count1, null), createCountQueryResponse(count2, null),
         },
         /*throwable=*/ null);
   }
@@ -376,17 +395,17 @@ public final class LocalFirestoreHelper {
       int count1, Throwable throwable) {
     return streamingResponse(
         new RunAggregationQueryResponse[] {
-          createRunAggregationQueryResponse(count1, null),
+          createCountQueryResponse(count1, null),
         },
         throwable);
   }
 
-  private static RunAggregationQueryResponse createRunAggregationQueryResponse(
+  private static RunAggregationQueryResponse createCountQueryResponse(
       int count, @Nullable Timestamp timestamp) {
     RunAggregationQueryResponse.Builder builder = RunAggregationQueryResponse.newBuilder();
     builder.setResult(
         AggregationResult.newBuilder()
-            .putAggregateFields("count", Value.newBuilder().setIntegerValue(count).build())
+            .putAggregateFields("aggregate_0", Value.newBuilder().setIntegerValue(count).build())
             .build());
     if (timestamp != null) {
       builder.setReadTime(timestamp.toProto());
@@ -750,11 +769,11 @@ public final class LocalFirestoreHelper {
     return request.build();
   }
 
-  public static RunAggregationQueryRequest aggregationQuery() {
-    return aggregationQuery((String) null);
+  public static RunAggregationQueryRequest countQuery() {
+    return countQuery((String) null);
   }
 
-  public static RunAggregationQueryRequest aggregationQuery(@Nullable String transactionId) {
+  public static RunAggregationQueryRequest countQuery(@Nullable String transactionId) {
     RunQueryRequest runQueryRequest = query(TRANSACTION_ID, false);
 
     RunAggregationQueryRequest.Builder request =
@@ -765,7 +784,7 @@ public final class LocalFirestoreHelper {
                     .setStructuredQuery(runQueryRequest.getStructuredQuery())
                     .addAggregations(
                         Aggregation.newBuilder()
-                            .setAlias("count")
+                            .setAlias("aggregate_0")
                             .setCount(Aggregation.Count.getDefaultInstance())));
 
     if (transactionId != null) {
@@ -775,7 +794,7 @@ public final class LocalFirestoreHelper {
     return request.build();
   }
 
-  public static RunAggregationQueryRequest aggregationQuery(RunQueryRequest runQueryRequest) {
+  public static RunAggregationQueryRequest countQuery(RunQueryRequest runQueryRequest) {
     return RunAggregationQueryRequest.newBuilder()
         .setParent(runQueryRequest.getParent())
         .setStructuredAggregationQuery(
@@ -783,7 +802,7 @@ public final class LocalFirestoreHelper {
                 .setStructuredQuery(runQueryRequest.getStructuredQuery())
                 .addAggregations(
                     Aggregation.newBuilder()
-                        .setAlias("count")
+                        .setAlias("aggregate_0")
                         .setCount(Aggregation.Count.getDefaultInstance())))
         .build();
   }
@@ -925,6 +944,7 @@ public final class LocalFirestoreHelper {
     public SingleField objectValue = new SingleField();
     public Date dateValue = DATE;
     public Timestamp timestampValue = TIMESTAMP;
+    public Instant instantValue = INSTANT;
     public List<String> arrayValue = ImmutableList.of("foo");
     public String nullValue = null;
     public Blob bytesValue = BLOB;
@@ -951,6 +971,7 @@ public final class LocalFirestoreHelper {
           && Objects.equals(objectValue, that.objectValue)
           && Objects.equals(dateValue, that.dateValue)
           && Objects.equals(timestampValue, that.timestampValue)
+          && Objects.equals(instantValue, that.instantValue)
           && Objects.equals(arrayValue, that.arrayValue)
           && Objects.equals(nullValue, that.nullValue)
           && Objects.equals(bytesValue, that.bytesValue)
@@ -970,6 +991,10 @@ public final class LocalFirestoreHelper {
 
     TIMESTAMP =
         Timestamp.ofTimeSecondsAndNanos(
+            TimeUnit.MILLISECONDS.toSeconds(DATE.getTime()),
+            123000); // Firestore truncates to microsecond precision.
+    INSTANT =
+        Instant.ofEpochSecond(
             TimeUnit.MILLISECONDS.toSeconds(DATE.getTime()),
             123000); // Firestore truncates to microsecond precision.
     GEO_POINT = new GeoPoint(50.1430847, -122.9477780);
@@ -1066,6 +1091,7 @@ public final class LocalFirestoreHelper {
     ALL_SUPPORTED_TYPES_MAP.put("objectValue", map("foo", (Object) "bar"));
     ALL_SUPPORTED_TYPES_MAP.put("dateValue", Timestamp.of(DATE));
     ALL_SUPPORTED_TYPES_MAP.put("timestampValue", TIMESTAMP);
+    ALL_SUPPORTED_TYPES_MAP.put("instantValue", TIMESTAMP);
     ALL_SUPPORTED_TYPES_MAP.put("arrayValue", ImmutableList.of("foo"));
     ALL_SUPPORTED_TYPES_MAP.put("nullValue", null);
     ALL_SUPPORTED_TYPES_MAP.put("bytesValue", BLOB);
@@ -1101,6 +1127,14 @@ public final class LocalFirestoreHelper {
                         com.google.protobuf.Timestamp.newBuilder()
                             .setSeconds(479978400)
                             .setNanos(123000)) // Timestamps supports microsecond precision.
+                    .build())
+            .put(
+                "instantValue",
+                Value.newBuilder()
+                    .setTimestampValue(
+                        com.google.protobuf.Timestamp.newBuilder()
+                            .setSeconds(479978400)
+                            .setNanos(123000)) // Instants supports microsecond precision.
                     .build())
             .put(
                 "arrayValue",
@@ -1180,9 +1214,9 @@ public final class LocalFirestoreHelper {
    * `sendRequest()` is called.
    */
   static class ResponseStubber {
-    int requestCount = 0;
-
     List<RequestResponsePair> operationList = new ArrayList<>();
+
+    List<Object> actualRequestList = new CopyOnWriteArrayList<>();
 
     void put(GeneratedMessageV3 request, ApiFuture<? extends GeneratedMessageV3> response) {
       operationList.add(new RequestResponsePair(request, response));
@@ -1194,8 +1228,7 @@ public final class LocalFirestoreHelper {
       for (final RequestResponsePair entry : operationList) {
         Answer<ApiFuture<? extends GeneratedMessageV3>> answer =
             invocationOnMock -> {
-              ++requestCount;
-              assertEquals(entry.request, invocationOnMock.getArguments()[0]);
+              actualRequestList.add(invocationOnMock.getArguments()[0]);
               return entry.response;
             };
         stubber = (stubber != null) ? stubber.doAnswer(answer) : doAnswer(answer);
@@ -1203,14 +1236,15 @@ public final class LocalFirestoreHelper {
       Preconditions.checkNotNull(stubber, "Stubber should not be null");
       stubber
           .when(firestoreMock)
-          .sendRequest(argumentCaptor.capture(), Matchers.<UnaryCallable<Message, Message>>any());
+          .sendRequest(
+              argumentCaptor.capture(), ArgumentMatchers.<UnaryCallable<Message, Message>>any());
     }
 
     public void verifyAllRequestsSent() {
-      assertEquals(
-          String.format("Expected %d requests, but got %d", operationList.size(), requestCount),
-          operationList.size(),
-          requestCount);
+      assertArrayEquals(
+          "Expected requests, but got actual requests",
+          operationList.stream().map(x -> x.request).toArray(),
+          actualRequestList.toArray());
     }
   }
 
@@ -1241,5 +1275,21 @@ public final class LocalFirestoreHelper {
     }
 
     return result;
+  }
+
+  @FunctionalInterface
+  interface VoidFunction {
+    void apply();
+  }
+
+  static void assertException(VoidFunction voidFunction, String expectedErrorMessage) {
+    String errorMessage = "";
+    try {
+      voidFunction.apply();
+    } catch (Exception e) {
+      errorMessage = e.getMessage();
+    } finally {
+      assertEquals(errorMessage, expectedErrorMessage);
+    }
   }
 }

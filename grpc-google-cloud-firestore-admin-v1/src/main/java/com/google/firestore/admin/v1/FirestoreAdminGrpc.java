@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ public final class FirestoreAdminGrpc {
 
   private FirestoreAdminGrpc() {}
 
-  public static final String SERVICE_NAME = "google.firestore.admin.v1.FirestoreAdmin";
+  public static final java.lang.String SERVICE_NAME = "google.firestore.admin.v1.FirestoreAdmin";
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<
@@ -443,6 +443,49 @@ public final class FirestoreAdminGrpc {
   }
 
   private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.CreateDatabaseRequest, com.google.longrunning.Operation>
+      getCreateDatabaseMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "CreateDatabase",
+      requestType = com.google.firestore.admin.v1.CreateDatabaseRequest.class,
+      responseType = com.google.longrunning.Operation.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.CreateDatabaseRequest, com.google.longrunning.Operation>
+      getCreateDatabaseMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.CreateDatabaseRequest, com.google.longrunning.Operation>
+        getCreateDatabaseMethod;
+    if ((getCreateDatabaseMethod = FirestoreAdminGrpc.getCreateDatabaseMethod) == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getCreateDatabaseMethod = FirestoreAdminGrpc.getCreateDatabaseMethod) == null) {
+          FirestoreAdminGrpc.getCreateDatabaseMethod =
+              getCreateDatabaseMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.CreateDatabaseRequest,
+                          com.google.longrunning.Operation>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "CreateDatabase"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.CreateDatabaseRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.longrunning.Operation.getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("CreateDatabase"))
+                      .build();
+        }
+      }
+    }
+    return getCreateDatabaseMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.GetDatabaseRequest, com.google.firestore.admin.v1.Database>
       getGetDatabaseMethod;
 
@@ -576,6 +619,462 @@ public final class FirestoreAdminGrpc {
     return getUpdateDatabaseMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.DeleteDatabaseRequest, com.google.longrunning.Operation>
+      getDeleteDatabaseMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "DeleteDatabase",
+      requestType = com.google.firestore.admin.v1.DeleteDatabaseRequest.class,
+      responseType = com.google.longrunning.Operation.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.DeleteDatabaseRequest, com.google.longrunning.Operation>
+      getDeleteDatabaseMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.DeleteDatabaseRequest, com.google.longrunning.Operation>
+        getDeleteDatabaseMethod;
+    if ((getDeleteDatabaseMethod = FirestoreAdminGrpc.getDeleteDatabaseMethod) == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getDeleteDatabaseMethod = FirestoreAdminGrpc.getDeleteDatabaseMethod) == null) {
+          FirestoreAdminGrpc.getDeleteDatabaseMethod =
+              getDeleteDatabaseMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.DeleteDatabaseRequest,
+                          com.google.longrunning.Operation>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "DeleteDatabase"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.DeleteDatabaseRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.longrunning.Operation.getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("DeleteDatabase"))
+                      .build();
+        }
+      }
+    }
+    return getDeleteDatabaseMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.GetBackupRequest, com.google.firestore.admin.v1.Backup>
+      getGetBackupMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetBackup",
+      requestType = com.google.firestore.admin.v1.GetBackupRequest.class,
+      responseType = com.google.firestore.admin.v1.Backup.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.GetBackupRequest, com.google.firestore.admin.v1.Backup>
+      getGetBackupMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.GetBackupRequest, com.google.firestore.admin.v1.Backup>
+        getGetBackupMethod;
+    if ((getGetBackupMethod = FirestoreAdminGrpc.getGetBackupMethod) == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getGetBackupMethod = FirestoreAdminGrpc.getGetBackupMethod) == null) {
+          FirestoreAdminGrpc.getGetBackupMethod =
+              getGetBackupMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.GetBackupRequest,
+                          com.google.firestore.admin.v1.Backup>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetBackup"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.GetBackupRequest.getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.Backup.getDefaultInstance()))
+                      .setSchemaDescriptor(new FirestoreAdminMethodDescriptorSupplier("GetBackup"))
+                      .build();
+        }
+      }
+    }
+    return getGetBackupMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.ListBackupsRequest,
+          com.google.firestore.admin.v1.ListBackupsResponse>
+      getListBackupsMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "ListBackups",
+      requestType = com.google.firestore.admin.v1.ListBackupsRequest.class,
+      responseType = com.google.firestore.admin.v1.ListBackupsResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.ListBackupsRequest,
+          com.google.firestore.admin.v1.ListBackupsResponse>
+      getListBackupsMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.ListBackupsRequest,
+            com.google.firestore.admin.v1.ListBackupsResponse>
+        getListBackupsMethod;
+    if ((getListBackupsMethod = FirestoreAdminGrpc.getListBackupsMethod) == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getListBackupsMethod = FirestoreAdminGrpc.getListBackupsMethod) == null) {
+          FirestoreAdminGrpc.getListBackupsMethod =
+              getListBackupsMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.ListBackupsRequest,
+                          com.google.firestore.admin.v1.ListBackupsResponse>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "ListBackups"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.ListBackupsRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.ListBackupsResponse
+                                  .getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("ListBackups"))
+                      .build();
+        }
+      }
+    }
+    return getListBackupsMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.DeleteBackupRequest, com.google.protobuf.Empty>
+      getDeleteBackupMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "DeleteBackup",
+      requestType = com.google.firestore.admin.v1.DeleteBackupRequest.class,
+      responseType = com.google.protobuf.Empty.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.DeleteBackupRequest, com.google.protobuf.Empty>
+      getDeleteBackupMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.DeleteBackupRequest, com.google.protobuf.Empty>
+        getDeleteBackupMethod;
+    if ((getDeleteBackupMethod = FirestoreAdminGrpc.getDeleteBackupMethod) == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getDeleteBackupMethod = FirestoreAdminGrpc.getDeleteBackupMethod) == null) {
+          FirestoreAdminGrpc.getDeleteBackupMethod =
+              getDeleteBackupMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.DeleteBackupRequest,
+                          com.google.protobuf.Empty>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "DeleteBackup"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.DeleteBackupRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.protobuf.Empty.getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("DeleteBackup"))
+                      .build();
+        }
+      }
+    }
+    return getDeleteBackupMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.RestoreDatabaseRequest, com.google.longrunning.Operation>
+      getRestoreDatabaseMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "RestoreDatabase",
+      requestType = com.google.firestore.admin.v1.RestoreDatabaseRequest.class,
+      responseType = com.google.longrunning.Operation.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.RestoreDatabaseRequest, com.google.longrunning.Operation>
+      getRestoreDatabaseMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.RestoreDatabaseRequest, com.google.longrunning.Operation>
+        getRestoreDatabaseMethod;
+    if ((getRestoreDatabaseMethod = FirestoreAdminGrpc.getRestoreDatabaseMethod) == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getRestoreDatabaseMethod = FirestoreAdminGrpc.getRestoreDatabaseMethod) == null) {
+          FirestoreAdminGrpc.getRestoreDatabaseMethod =
+              getRestoreDatabaseMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.RestoreDatabaseRequest,
+                          com.google.longrunning.Operation>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "RestoreDatabase"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.RestoreDatabaseRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.longrunning.Operation.getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("RestoreDatabase"))
+                      .build();
+        }
+      }
+    }
+    return getRestoreDatabaseMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.CreateBackupScheduleRequest,
+          com.google.firestore.admin.v1.BackupSchedule>
+      getCreateBackupScheduleMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "CreateBackupSchedule",
+      requestType = com.google.firestore.admin.v1.CreateBackupScheduleRequest.class,
+      responseType = com.google.firestore.admin.v1.BackupSchedule.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.CreateBackupScheduleRequest,
+          com.google.firestore.admin.v1.BackupSchedule>
+      getCreateBackupScheduleMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.CreateBackupScheduleRequest,
+            com.google.firestore.admin.v1.BackupSchedule>
+        getCreateBackupScheduleMethod;
+    if ((getCreateBackupScheduleMethod = FirestoreAdminGrpc.getCreateBackupScheduleMethod)
+        == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getCreateBackupScheduleMethod = FirestoreAdminGrpc.getCreateBackupScheduleMethod)
+            == null) {
+          FirestoreAdminGrpc.getCreateBackupScheduleMethod =
+              getCreateBackupScheduleMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.CreateBackupScheduleRequest,
+                          com.google.firestore.admin.v1.BackupSchedule>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(
+                          generateFullMethodName(SERVICE_NAME, "CreateBackupSchedule"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.CreateBackupScheduleRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.BackupSchedule.getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("CreateBackupSchedule"))
+                      .build();
+        }
+      }
+    }
+    return getCreateBackupScheduleMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.GetBackupScheduleRequest,
+          com.google.firestore.admin.v1.BackupSchedule>
+      getGetBackupScheduleMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetBackupSchedule",
+      requestType = com.google.firestore.admin.v1.GetBackupScheduleRequest.class,
+      responseType = com.google.firestore.admin.v1.BackupSchedule.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.GetBackupScheduleRequest,
+          com.google.firestore.admin.v1.BackupSchedule>
+      getGetBackupScheduleMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.GetBackupScheduleRequest,
+            com.google.firestore.admin.v1.BackupSchedule>
+        getGetBackupScheduleMethod;
+    if ((getGetBackupScheduleMethod = FirestoreAdminGrpc.getGetBackupScheduleMethod) == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getGetBackupScheduleMethod = FirestoreAdminGrpc.getGetBackupScheduleMethod) == null) {
+          FirestoreAdminGrpc.getGetBackupScheduleMethod =
+              getGetBackupScheduleMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.GetBackupScheduleRequest,
+                          com.google.firestore.admin.v1.BackupSchedule>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetBackupSchedule"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.GetBackupScheduleRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.BackupSchedule.getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("GetBackupSchedule"))
+                      .build();
+        }
+      }
+    }
+    return getGetBackupScheduleMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.ListBackupSchedulesRequest,
+          com.google.firestore.admin.v1.ListBackupSchedulesResponse>
+      getListBackupSchedulesMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "ListBackupSchedules",
+      requestType = com.google.firestore.admin.v1.ListBackupSchedulesRequest.class,
+      responseType = com.google.firestore.admin.v1.ListBackupSchedulesResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.ListBackupSchedulesRequest,
+          com.google.firestore.admin.v1.ListBackupSchedulesResponse>
+      getListBackupSchedulesMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.ListBackupSchedulesRequest,
+            com.google.firestore.admin.v1.ListBackupSchedulesResponse>
+        getListBackupSchedulesMethod;
+    if ((getListBackupSchedulesMethod = FirestoreAdminGrpc.getListBackupSchedulesMethod) == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getListBackupSchedulesMethod = FirestoreAdminGrpc.getListBackupSchedulesMethod)
+            == null) {
+          FirestoreAdminGrpc.getListBackupSchedulesMethod =
+              getListBackupSchedulesMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.ListBackupSchedulesRequest,
+                          com.google.firestore.admin.v1.ListBackupSchedulesResponse>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(
+                          generateFullMethodName(SERVICE_NAME, "ListBackupSchedules"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.ListBackupSchedulesRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.ListBackupSchedulesResponse
+                                  .getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("ListBackupSchedules"))
+                      .build();
+        }
+      }
+    }
+    return getListBackupSchedulesMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.UpdateBackupScheduleRequest,
+          com.google.firestore.admin.v1.BackupSchedule>
+      getUpdateBackupScheduleMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "UpdateBackupSchedule",
+      requestType = com.google.firestore.admin.v1.UpdateBackupScheduleRequest.class,
+      responseType = com.google.firestore.admin.v1.BackupSchedule.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.UpdateBackupScheduleRequest,
+          com.google.firestore.admin.v1.BackupSchedule>
+      getUpdateBackupScheduleMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.UpdateBackupScheduleRequest,
+            com.google.firestore.admin.v1.BackupSchedule>
+        getUpdateBackupScheduleMethod;
+    if ((getUpdateBackupScheduleMethod = FirestoreAdminGrpc.getUpdateBackupScheduleMethod)
+        == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getUpdateBackupScheduleMethod = FirestoreAdminGrpc.getUpdateBackupScheduleMethod)
+            == null) {
+          FirestoreAdminGrpc.getUpdateBackupScheduleMethod =
+              getUpdateBackupScheduleMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.UpdateBackupScheduleRequest,
+                          com.google.firestore.admin.v1.BackupSchedule>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(
+                          generateFullMethodName(SERVICE_NAME, "UpdateBackupSchedule"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.UpdateBackupScheduleRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.BackupSchedule.getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("UpdateBackupSchedule"))
+                      .build();
+        }
+      }
+    }
+    return getUpdateBackupScheduleMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.DeleteBackupScheduleRequest, com.google.protobuf.Empty>
+      getDeleteBackupScheduleMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "DeleteBackupSchedule",
+      requestType = com.google.firestore.admin.v1.DeleteBackupScheduleRequest.class,
+      responseType = com.google.protobuf.Empty.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.DeleteBackupScheduleRequest, com.google.protobuf.Empty>
+      getDeleteBackupScheduleMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.DeleteBackupScheduleRequest, com.google.protobuf.Empty>
+        getDeleteBackupScheduleMethod;
+    if ((getDeleteBackupScheduleMethod = FirestoreAdminGrpc.getDeleteBackupScheduleMethod)
+        == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getDeleteBackupScheduleMethod = FirestoreAdminGrpc.getDeleteBackupScheduleMethod)
+            == null) {
+          FirestoreAdminGrpc.getDeleteBackupScheduleMethod =
+              getDeleteBackupScheduleMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.DeleteBackupScheduleRequest,
+                          com.google.protobuf.Empty>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(
+                          generateFullMethodName(SERVICE_NAME, "DeleteBackupSchedule"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.DeleteBackupScheduleRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.protobuf.Empty.getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("DeleteBackupSchedule"))
+                      .build();
+        }
+      }
+    }
+    return getDeleteBackupScheduleMethod;
+  }
+
   /** Creates a new async stub that supports all call types for the service */
   public static FirestoreAdminStub newStub(io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<FirestoreAdminStub> factory =
@@ -649,9 +1148,11 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
-     * Creates a composite index. This returns a [google.longrunning.Operation][google.longrunning.Operation]
-     * which may be used to track the status of the creation. The metadata for
-     * the operation will be the type [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
+     * Creates a composite index. This returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the creation. The metadata for the operation
+     * will be the type
+     * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
      * </pre>
      */
     default void createIndex(
@@ -722,12 +1223,15 @@ public final class FirestoreAdminGrpc {
      * <pre>
      * Updates a field configuration. Currently, field updates apply only to
      * single field index configuration. However, calls to
-     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should provide a field mask to avoid
-     * changing any configuration that the caller isn't aware of. The field mask
-     * should be specified as: `{ paths: "index_config" }`.
-     * This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may be used to
-     * track the status of the field update. The metadata for
-     * the operation will be the type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField]
+     * should provide a field mask to avoid changing any configuration that the
+     * caller isn't aware of. The field mask should be specified as: `{ paths:
+     * "index_config" }`.
+     * This call returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the field update. The metadata for the
+     * operation will be the type
+     * [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
      * To configure the default field settings for the database, use
      * the special `Field` with resource name:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
@@ -745,10 +1249,13 @@ public final class FirestoreAdminGrpc {
      *
      * <pre>
      * Lists the field configuration and metadata for this database.
-     * Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
-     * that have been explicitly overridden. To issue this query, call
-     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
-     * `indexConfig.usesAncestorConfig:false` .
+     * Currently,
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * only supports listing fields that have been explicitly overridden. To issue
+     * this query, call
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * with the filter set to `indexConfig.usesAncestorConfig:false` or
+     * `ttlConfig:*`.
      * </pre>
      */
     default void listFields(
@@ -803,6 +1310,20 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
+     * Create a database.
+     * </pre>
+     */
+    default void createDatabase(
+        com.google.firestore.admin.v1.CreateDatabaseRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getCreateDatabaseMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Gets information about a database.
      * </pre>
      */
@@ -840,6 +1361,166 @@ public final class FirestoreAdminGrpc {
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
           getUpdateDatabaseMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a database.
+     * </pre>
+     */
+    default void deleteDatabase(
+        com.google.firestore.admin.v1.DeleteDatabaseRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getDeleteDatabaseMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets information about a backup.
+     * </pre>
+     */
+    default void getBackup(
+        com.google.firestore.admin.v1.GetBackupRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Backup> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetBackupMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Lists all the backups.
+     * </pre>
+     */
+    default void listBackups(
+        com.google.firestore.admin.v1.ListBackupsRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListBackupsResponse>
+            responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getListBackupsMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a backup.
+     * </pre>
+     */
+    default void deleteBackup(
+        com.google.firestore.admin.v1.DeleteBackupRequest request,
+        io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getDeleteBackupMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new database by restoring from an existing backup.
+     * The new database must be in the same cloud region or multi-region location
+     * as the existing backup. This behaves similar to
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase]
+     * except instead of creating a new empty database, a new database is created
+     * with the database type, index configuration, and documents from an existing
+     * backup.
+     * The [long-running operation][google.longrunning.Operation] can be used to
+     * track the progress of the restore, with the Operation's
+     * [metadata][google.longrunning.Operation.metadata] field type being the
+     * [RestoreDatabaseMetadata][google.firestore.admin.v1.RestoreDatabaseMetadata].
+     * The [response][google.longrunning.Operation.response] type is the
+     * [Database][google.firestore.admin.v1.Database] if the restore was
+     * successful. The new database is not readable or writeable until the LRO has
+     * completed.
+     * </pre>
+     */
+    default void restoreDatabase(
+        com.google.firestore.admin.v1.RestoreDatabaseRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getRestoreDatabaseMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a backup schedule on a database.
+     * At most two backup schedules can be configured on a database, one daily
+     * backup schedule and one weekly backup schedule.
+     * </pre>
+     */
+    default void createBackupSchedule(
+        com.google.firestore.admin.v1.CreateBackupScheduleRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.BackupSchedule>
+            responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getCreateBackupScheduleMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets information about a backup schedule.
+     * </pre>
+     */
+    default void getBackupSchedule(
+        com.google.firestore.admin.v1.GetBackupScheduleRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.BackupSchedule>
+            responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getGetBackupScheduleMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * List backup schedules.
+     * </pre>
+     */
+    default void listBackupSchedules(
+        com.google.firestore.admin.v1.ListBackupSchedulesRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListBackupSchedulesResponse>
+            responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getListBackupSchedulesMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Updates a backup schedule.
+     * </pre>
+     */
+    default void updateBackupSchedule(
+        com.google.firestore.admin.v1.UpdateBackupScheduleRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.BackupSchedule>
+            responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getUpdateBackupScheduleMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a backup schedule.
+     * </pre>
+     */
+    default void deleteBackupSchedule(
+        com.google.firestore.admin.v1.DeleteBackupScheduleRequest request,
+        io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getDeleteBackupScheduleMethod(), responseObserver);
     }
   }
 
@@ -919,9 +1600,11 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
-     * Creates a composite index. This returns a [google.longrunning.Operation][google.longrunning.Operation]
-     * which may be used to track the status of the creation. The metadata for
-     * the operation will be the type [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
+     * Creates a composite index. This returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the creation. The metadata for the operation
+     * will be the type
+     * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
      * </pre>
      */
     public void createIndex(
@@ -1000,12 +1683,15 @@ public final class FirestoreAdminGrpc {
      * <pre>
      * Updates a field configuration. Currently, field updates apply only to
      * single field index configuration. However, calls to
-     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should provide a field mask to avoid
-     * changing any configuration that the caller isn't aware of. The field mask
-     * should be specified as: `{ paths: "index_config" }`.
-     * This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may be used to
-     * track the status of the field update. The metadata for
-     * the operation will be the type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField]
+     * should provide a field mask to avoid changing any configuration that the
+     * caller isn't aware of. The field mask should be specified as: `{ paths:
+     * "index_config" }`.
+     * This call returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the field update. The metadata for the
+     * operation will be the type
+     * [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
      * To configure the default field settings for the database, use
      * the special `Field` with resource name:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
@@ -1025,10 +1711,13 @@ public final class FirestoreAdminGrpc {
      *
      * <pre>
      * Lists the field configuration and metadata for this database.
-     * Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
-     * that have been explicitly overridden. To issue this query, call
-     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
-     * `indexConfig.usesAncestorConfig:false` .
+     * Currently,
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * only supports listing fields that have been explicitly overridden. To issue
+     * this query, call
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * with the filter set to `indexConfig.usesAncestorConfig:false` or
+     * `ttlConfig:*`.
      * </pre>
      */
     public void listFields(
@@ -1088,6 +1777,22 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
+     * Create a database.
+     * </pre>
+     */
+    public void createDatabase(
+        com.google.firestore.admin.v1.CreateDatabaseRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getCreateDatabaseMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Gets information about a database.
      * </pre>
      */
@@ -1129,6 +1834,185 @@ public final class FirestoreAdminGrpc {
         io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getUpdateDatabaseMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a database.
+     * </pre>
+     */
+    public void deleteDatabase(
+        com.google.firestore.admin.v1.DeleteDatabaseRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getDeleteDatabaseMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets information about a backup.
+     * </pre>
+     */
+    public void getBackup(
+        com.google.firestore.admin.v1.GetBackupRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Backup> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getGetBackupMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Lists all the backups.
+     * </pre>
+     */
+    public void listBackups(
+        com.google.firestore.admin.v1.ListBackupsRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListBackupsResponse>
+            responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getListBackupsMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a backup.
+     * </pre>
+     */
+    public void deleteBackup(
+        com.google.firestore.admin.v1.DeleteBackupRequest request,
+        io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getDeleteBackupMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new database by restoring from an existing backup.
+     * The new database must be in the same cloud region or multi-region location
+     * as the existing backup. This behaves similar to
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase]
+     * except instead of creating a new empty database, a new database is created
+     * with the database type, index configuration, and documents from an existing
+     * backup.
+     * The [long-running operation][google.longrunning.Operation] can be used to
+     * track the progress of the restore, with the Operation's
+     * [metadata][google.longrunning.Operation.metadata] field type being the
+     * [RestoreDatabaseMetadata][google.firestore.admin.v1.RestoreDatabaseMetadata].
+     * The [response][google.longrunning.Operation.response] type is the
+     * [Database][google.firestore.admin.v1.Database] if the restore was
+     * successful. The new database is not readable or writeable until the LRO has
+     * completed.
+     * </pre>
+     */
+    public void restoreDatabase(
+        com.google.firestore.admin.v1.RestoreDatabaseRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getRestoreDatabaseMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a backup schedule on a database.
+     * At most two backup schedules can be configured on a database, one daily
+     * backup schedule and one weekly backup schedule.
+     * </pre>
+     */
+    public void createBackupSchedule(
+        com.google.firestore.admin.v1.CreateBackupScheduleRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.BackupSchedule>
+            responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getCreateBackupScheduleMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets information about a backup schedule.
+     * </pre>
+     */
+    public void getBackupSchedule(
+        com.google.firestore.admin.v1.GetBackupScheduleRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.BackupSchedule>
+            responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getGetBackupScheduleMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * List backup schedules.
+     * </pre>
+     */
+    public void listBackupSchedules(
+        com.google.firestore.admin.v1.ListBackupSchedulesRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListBackupSchedulesResponse>
+            responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getListBackupSchedulesMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Updates a backup schedule.
+     * </pre>
+     */
+    public void updateBackupSchedule(
+        com.google.firestore.admin.v1.UpdateBackupScheduleRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.BackupSchedule>
+            responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getUpdateBackupScheduleMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a backup schedule.
+     * </pre>
+     */
+    public void deleteBackupSchedule(
+        com.google.firestore.admin.v1.DeleteBackupScheduleRequest request,
+        io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getDeleteBackupScheduleMethod(), getCallOptions()),
           request,
           responseObserver);
     }
@@ -1176,9 +2060,11 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
-     * Creates a composite index. This returns a [google.longrunning.Operation][google.longrunning.Operation]
-     * which may be used to track the status of the creation. The metadata for
-     * the operation will be the type [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
+     * Creates a composite index. This returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the creation. The metadata for the operation
+     * will be the type
+     * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
      * </pre>
      */
     public com.google.longrunning.Operation createIndex(
@@ -1245,12 +2131,15 @@ public final class FirestoreAdminGrpc {
      * <pre>
      * Updates a field configuration. Currently, field updates apply only to
      * single field index configuration. However, calls to
-     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should provide a field mask to avoid
-     * changing any configuration that the caller isn't aware of. The field mask
-     * should be specified as: `{ paths: "index_config" }`.
-     * This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may be used to
-     * track the status of the field update. The metadata for
-     * the operation will be the type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField]
+     * should provide a field mask to avoid changing any configuration that the
+     * caller isn't aware of. The field mask should be specified as: `{ paths:
+     * "index_config" }`.
+     * This call returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the field update. The metadata for the
+     * operation will be the type
+     * [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
      * To configure the default field settings for the database, use
      * the special `Field` with resource name:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
@@ -1267,10 +2156,13 @@ public final class FirestoreAdminGrpc {
      *
      * <pre>
      * Lists the field configuration and metadata for this database.
-     * Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
-     * that have been explicitly overridden. To issue this query, call
-     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
-     * `indexConfig.usesAncestorConfig:false` .
+     * Currently,
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * only supports listing fields that have been explicitly overridden. To issue
+     * this query, call
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * with the filter set to `indexConfig.usesAncestorConfig:false` or
+     * `ttlConfig:*`.
      * </pre>
      */
     public com.google.firestore.admin.v1.ListFieldsResponse listFields(
@@ -1322,6 +2214,19 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
+     * Create a database.
+     * </pre>
+     */
+    public com.google.longrunning.Operation createDatabase(
+        com.google.firestore.admin.v1.CreateDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getCreateDatabaseMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Gets information about a database.
      * </pre>
      */
@@ -1355,6 +2260,152 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.UpdateDatabaseRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getUpdateDatabaseMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a database.
+     * </pre>
+     */
+    public com.google.longrunning.Operation deleteDatabase(
+        com.google.firestore.admin.v1.DeleteDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getDeleteDatabaseMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets information about a backup.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.Backup getBackup(
+        com.google.firestore.admin.v1.GetBackupRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGetBackupMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Lists all the backups.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.ListBackupsResponse listBackups(
+        com.google.firestore.admin.v1.ListBackupsRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getListBackupsMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a backup.
+     * </pre>
+     */
+    public com.google.protobuf.Empty deleteBackup(
+        com.google.firestore.admin.v1.DeleteBackupRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getDeleteBackupMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new database by restoring from an existing backup.
+     * The new database must be in the same cloud region or multi-region location
+     * as the existing backup. This behaves similar to
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase]
+     * except instead of creating a new empty database, a new database is created
+     * with the database type, index configuration, and documents from an existing
+     * backup.
+     * The [long-running operation][google.longrunning.Operation] can be used to
+     * track the progress of the restore, with the Operation's
+     * [metadata][google.longrunning.Operation.metadata] field type being the
+     * [RestoreDatabaseMetadata][google.firestore.admin.v1.RestoreDatabaseMetadata].
+     * The [response][google.longrunning.Operation.response] type is the
+     * [Database][google.firestore.admin.v1.Database] if the restore was
+     * successful. The new database is not readable or writeable until the LRO has
+     * completed.
+     * </pre>
+     */
+    public com.google.longrunning.Operation restoreDatabase(
+        com.google.firestore.admin.v1.RestoreDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getRestoreDatabaseMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a backup schedule on a database.
+     * At most two backup schedules can be configured on a database, one daily
+     * backup schedule and one weekly backup schedule.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.BackupSchedule createBackupSchedule(
+        com.google.firestore.admin.v1.CreateBackupScheduleRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getCreateBackupScheduleMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets information about a backup schedule.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.BackupSchedule getBackupSchedule(
+        com.google.firestore.admin.v1.GetBackupScheduleRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGetBackupScheduleMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * List backup schedules.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.ListBackupSchedulesResponse listBackupSchedules(
+        com.google.firestore.admin.v1.ListBackupSchedulesRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getListBackupSchedulesMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Updates a backup schedule.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.BackupSchedule updateBackupSchedule(
+        com.google.firestore.admin.v1.UpdateBackupScheduleRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getUpdateBackupScheduleMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a backup schedule.
+     * </pre>
+     */
+    public com.google.protobuf.Empty deleteBackupSchedule(
+        com.google.firestore.admin.v1.DeleteBackupScheduleRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getDeleteBackupScheduleMethod(), getCallOptions(), request);
     }
   }
 
@@ -1400,9 +2451,11 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
-     * Creates a composite index. This returns a [google.longrunning.Operation][google.longrunning.Operation]
-     * which may be used to track the status of the creation. The metadata for
-     * the operation will be the type [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
+     * Creates a composite index. This returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the creation. The metadata for the operation
+     * will be the type
+     * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
      * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
@@ -1470,12 +2523,15 @@ public final class FirestoreAdminGrpc {
      * <pre>
      * Updates a field configuration. Currently, field updates apply only to
      * single field index configuration. However, calls to
-     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField] should provide a field mask to avoid
-     * changing any configuration that the caller isn't aware of. The field mask
-     * should be specified as: `{ paths: "index_config" }`.
-     * This call returns a [google.longrunning.Operation][google.longrunning.Operation] which may be used to
-     * track the status of the field update. The metadata for
-     * the operation will be the type [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField]
+     * should provide a field mask to avoid changing any configuration that the
+     * caller isn't aware of. The field mask should be specified as: `{ paths:
+     * "index_config" }`.
+     * This call returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the field update. The metadata for the
+     * operation will be the type
+     * [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
      * To configure the default field settings for the database, use
      * the special `Field` with resource name:
      * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
@@ -1492,10 +2548,13 @@ public final class FirestoreAdminGrpc {
      *
      * <pre>
      * Lists the field configuration and metadata for this database.
-     * Currently, [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] only supports listing fields
-     * that have been explicitly overridden. To issue this query, call
-     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
-     * `indexConfig.usesAncestorConfig:false` .
+     * Currently,
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * only supports listing fields that have been explicitly overridden. To issue
+     * this query, call
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * with the filter set to `indexConfig.usesAncestorConfig:false` or
+     * `ttlConfig:*`.
      * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<
@@ -1548,6 +2607,19 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
+     * Create a database.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
+        createDatabase(com.google.firestore.admin.v1.CreateDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getCreateDatabaseMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Gets information about a database.
      * </pre>
      */
@@ -1584,6 +2656,157 @@ public final class FirestoreAdminGrpc {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getUpdateDatabaseMethod(), getCallOptions()), request);
     }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a database.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
+        deleteDatabase(com.google.firestore.admin.v1.DeleteDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getDeleteDatabaseMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets information about a backup.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.google.firestore.admin.v1.Backup>
+        getBackup(com.google.firestore.admin.v1.GetBackupRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getGetBackupMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Lists all the backups.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<
+            com.google.firestore.admin.v1.ListBackupsResponse>
+        listBackups(com.google.firestore.admin.v1.ListBackupsRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getListBackupsMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a backup.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.google.protobuf.Empty>
+        deleteBackup(com.google.firestore.admin.v1.DeleteBackupRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getDeleteBackupMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new database by restoring from an existing backup.
+     * The new database must be in the same cloud region or multi-region location
+     * as the existing backup. This behaves similar to
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase]
+     * except instead of creating a new empty database, a new database is created
+     * with the database type, index configuration, and documents from an existing
+     * backup.
+     * The [long-running operation][google.longrunning.Operation] can be used to
+     * track the progress of the restore, with the Operation's
+     * [metadata][google.longrunning.Operation.metadata] field type being the
+     * [RestoreDatabaseMetadata][google.firestore.admin.v1.RestoreDatabaseMetadata].
+     * The [response][google.longrunning.Operation.response] type is the
+     * [Database][google.firestore.admin.v1.Database] if the restore was
+     * successful. The new database is not readable or writeable until the LRO has
+     * completed.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
+        restoreDatabase(com.google.firestore.admin.v1.RestoreDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getRestoreDatabaseMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a backup schedule on a database.
+     * At most two backup schedules can be configured on a database, one daily
+     * backup schedule and one weekly backup schedule.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<
+            com.google.firestore.admin.v1.BackupSchedule>
+        createBackupSchedule(com.google.firestore.admin.v1.CreateBackupScheduleRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getCreateBackupScheduleMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets information about a backup schedule.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<
+            com.google.firestore.admin.v1.BackupSchedule>
+        getBackupSchedule(com.google.firestore.admin.v1.GetBackupScheduleRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getGetBackupScheduleMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * List backup schedules.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<
+            com.google.firestore.admin.v1.ListBackupSchedulesResponse>
+        listBackupSchedules(com.google.firestore.admin.v1.ListBackupSchedulesRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getListBackupSchedulesMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Updates a backup schedule.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<
+            com.google.firestore.admin.v1.BackupSchedule>
+        updateBackupSchedule(com.google.firestore.admin.v1.UpdateBackupScheduleRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getUpdateBackupScheduleMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a backup schedule.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.google.protobuf.Empty>
+        deleteBackupSchedule(com.google.firestore.admin.v1.DeleteBackupScheduleRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getDeleteBackupScheduleMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_CREATE_INDEX = 0;
@@ -1595,9 +2818,20 @@ public final class FirestoreAdminGrpc {
   private static final int METHODID_LIST_FIELDS = 6;
   private static final int METHODID_EXPORT_DOCUMENTS = 7;
   private static final int METHODID_IMPORT_DOCUMENTS = 8;
-  private static final int METHODID_GET_DATABASE = 9;
-  private static final int METHODID_LIST_DATABASES = 10;
-  private static final int METHODID_UPDATE_DATABASE = 11;
+  private static final int METHODID_CREATE_DATABASE = 9;
+  private static final int METHODID_GET_DATABASE = 10;
+  private static final int METHODID_LIST_DATABASES = 11;
+  private static final int METHODID_UPDATE_DATABASE = 12;
+  private static final int METHODID_DELETE_DATABASE = 13;
+  private static final int METHODID_GET_BACKUP = 14;
+  private static final int METHODID_LIST_BACKUPS = 15;
+  private static final int METHODID_DELETE_BACKUP = 16;
+  private static final int METHODID_RESTORE_DATABASE = 17;
+  private static final int METHODID_CREATE_BACKUP_SCHEDULE = 18;
+  private static final int METHODID_GET_BACKUP_SCHEDULE = 19;
+  private static final int METHODID_LIST_BACKUP_SCHEDULES = 20;
+  private static final int METHODID_UPDATE_BACKUP_SCHEDULE = 21;
+  private static final int METHODID_DELETE_BACKUP_SCHEDULE = 22;
 
   private static final class MethodHandlers<Req, Resp>
       implements io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -1663,6 +2897,11 @@ public final class FirestoreAdminGrpc {
               (com.google.firestore.admin.v1.ImportDocumentsRequest) request,
               (io.grpc.stub.StreamObserver<com.google.longrunning.Operation>) responseObserver);
           break;
+        case METHODID_CREATE_DATABASE:
+          serviceImpl.createDatabase(
+              (com.google.firestore.admin.v1.CreateDatabaseRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.longrunning.Operation>) responseObserver);
+          break;
         case METHODID_GET_DATABASE:
           serviceImpl.getDatabase(
               (com.google.firestore.admin.v1.GetDatabaseRequest) request,
@@ -1679,6 +2918,62 @@ public final class FirestoreAdminGrpc {
           serviceImpl.updateDatabase(
               (com.google.firestore.admin.v1.UpdateDatabaseRequest) request,
               (io.grpc.stub.StreamObserver<com.google.longrunning.Operation>) responseObserver);
+          break;
+        case METHODID_DELETE_DATABASE:
+          serviceImpl.deleteDatabase(
+              (com.google.firestore.admin.v1.DeleteDatabaseRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.longrunning.Operation>) responseObserver);
+          break;
+        case METHODID_GET_BACKUP:
+          serviceImpl.getBackup(
+              (com.google.firestore.admin.v1.GetBackupRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.Backup>) responseObserver);
+          break;
+        case METHODID_LIST_BACKUPS:
+          serviceImpl.listBackups(
+              (com.google.firestore.admin.v1.ListBackupsRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.ListBackupsResponse>)
+                  responseObserver);
+          break;
+        case METHODID_DELETE_BACKUP:
+          serviceImpl.deleteBackup(
+              (com.google.firestore.admin.v1.DeleteBackupRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.protobuf.Empty>) responseObserver);
+          break;
+        case METHODID_RESTORE_DATABASE:
+          serviceImpl.restoreDatabase(
+              (com.google.firestore.admin.v1.RestoreDatabaseRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.longrunning.Operation>) responseObserver);
+          break;
+        case METHODID_CREATE_BACKUP_SCHEDULE:
+          serviceImpl.createBackupSchedule(
+              (com.google.firestore.admin.v1.CreateBackupScheduleRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.BackupSchedule>)
+                  responseObserver);
+          break;
+        case METHODID_GET_BACKUP_SCHEDULE:
+          serviceImpl.getBackupSchedule(
+              (com.google.firestore.admin.v1.GetBackupScheduleRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.BackupSchedule>)
+                  responseObserver);
+          break;
+        case METHODID_LIST_BACKUP_SCHEDULES:
+          serviceImpl.listBackupSchedules(
+              (com.google.firestore.admin.v1.ListBackupSchedulesRequest) request,
+              (io.grpc.stub.StreamObserver<
+                      com.google.firestore.admin.v1.ListBackupSchedulesResponse>)
+                  responseObserver);
+          break;
+        case METHODID_UPDATE_BACKUP_SCHEDULE:
+          serviceImpl.updateBackupSchedule(
+              (com.google.firestore.admin.v1.UpdateBackupScheduleRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.firestore.admin.v1.BackupSchedule>)
+                  responseObserver);
+          break;
+        case METHODID_DELETE_BACKUP_SCHEDULE:
+          serviceImpl.deleteBackupSchedule(
+              (com.google.firestore.admin.v1.DeleteBackupScheduleRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.protobuf.Empty>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -1755,6 +3050,12 @@ public final class FirestoreAdminGrpc {
                     com.google.firestore.admin.v1.ImportDocumentsRequest,
                     com.google.longrunning.Operation>(service, METHODID_IMPORT_DOCUMENTS)))
         .addMethod(
+            getCreateDatabaseMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.CreateDatabaseRequest,
+                    com.google.longrunning.Operation>(service, METHODID_CREATE_DATABASE)))
+        .addMethod(
             getGetDatabaseMethod(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
                 new MethodHandlers<
@@ -1773,6 +3074,71 @@ public final class FirestoreAdminGrpc {
                 new MethodHandlers<
                     com.google.firestore.admin.v1.UpdateDatabaseRequest,
                     com.google.longrunning.Operation>(service, METHODID_UPDATE_DATABASE)))
+        .addMethod(
+            getDeleteDatabaseMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.DeleteDatabaseRequest,
+                    com.google.longrunning.Operation>(service, METHODID_DELETE_DATABASE)))
+        .addMethod(
+            getGetBackupMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.GetBackupRequest,
+                    com.google.firestore.admin.v1.Backup>(service, METHODID_GET_BACKUP)))
+        .addMethod(
+            getListBackupsMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.ListBackupsRequest,
+                    com.google.firestore.admin.v1.ListBackupsResponse>(
+                    service, METHODID_LIST_BACKUPS)))
+        .addMethod(
+            getDeleteBackupMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.DeleteBackupRequest, com.google.protobuf.Empty>(
+                    service, METHODID_DELETE_BACKUP)))
+        .addMethod(
+            getRestoreDatabaseMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.RestoreDatabaseRequest,
+                    com.google.longrunning.Operation>(service, METHODID_RESTORE_DATABASE)))
+        .addMethod(
+            getCreateBackupScheduleMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.CreateBackupScheduleRequest,
+                    com.google.firestore.admin.v1.BackupSchedule>(
+                    service, METHODID_CREATE_BACKUP_SCHEDULE)))
+        .addMethod(
+            getGetBackupScheduleMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.GetBackupScheduleRequest,
+                    com.google.firestore.admin.v1.BackupSchedule>(
+                    service, METHODID_GET_BACKUP_SCHEDULE)))
+        .addMethod(
+            getListBackupSchedulesMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.ListBackupSchedulesRequest,
+                    com.google.firestore.admin.v1.ListBackupSchedulesResponse>(
+                    service, METHODID_LIST_BACKUP_SCHEDULES)))
+        .addMethod(
+            getUpdateBackupScheduleMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.UpdateBackupScheduleRequest,
+                    com.google.firestore.admin.v1.BackupSchedule>(
+                    service, METHODID_UPDATE_BACKUP_SCHEDULE)))
+        .addMethod(
+            getDeleteBackupScheduleMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.DeleteBackupScheduleRequest,
+                    com.google.protobuf.Empty>(service, METHODID_DELETE_BACKUP_SCHEDULE)))
         .build();
   }
 
@@ -1800,9 +3166,9 @@ public final class FirestoreAdminGrpc {
   private static final class FirestoreAdminMethodDescriptorSupplier
       extends FirestoreAdminBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
-    private final String methodName;
+    private final java.lang.String methodName;
 
-    FirestoreAdminMethodDescriptorSupplier(String methodName) {
+    FirestoreAdminMethodDescriptorSupplier(java.lang.String methodName) {
       this.methodName = methodName;
     }
 
@@ -1833,9 +3199,20 @@ public final class FirestoreAdminGrpc {
                       .addMethod(getListFieldsMethod())
                       .addMethod(getExportDocumentsMethod())
                       .addMethod(getImportDocumentsMethod())
+                      .addMethod(getCreateDatabaseMethod())
                       .addMethod(getGetDatabaseMethod())
                       .addMethod(getListDatabasesMethod())
                       .addMethod(getUpdateDatabaseMethod())
+                      .addMethod(getDeleteDatabaseMethod())
+                      .addMethod(getGetBackupMethod())
+                      .addMethod(getListBackupsMethod())
+                      .addMethod(getDeleteBackupMethod())
+                      .addMethod(getRestoreDatabaseMethod())
+                      .addMethod(getCreateBackupScheduleMethod())
+                      .addMethod(getGetBackupScheduleMethod())
+                      .addMethod(getListBackupSchedulesMethod())
+                      .addMethod(getUpdateBackupScheduleMethod())
+                      .addMethod(getDeleteBackupScheduleMethod())
                       .build();
         }
       }

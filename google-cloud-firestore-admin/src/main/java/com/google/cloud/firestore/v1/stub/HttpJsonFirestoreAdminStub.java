@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import static com.google.cloud.firestore.v1.FirestoreAdminClient.ListFieldsPaged
 import static com.google.cloud.firestore.v1.FirestoreAdminClient.ListIndexesPagedResponse;
 
 import com.google.api.HttpRule;
-import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.api.gax.core.BackgroundResource;
 import com.google.api.gax.core.BackgroundResourceAggregation;
@@ -34,16 +33,28 @@ import com.google.api.gax.httpjson.ProtoRestSerializer;
 import com.google.api.gax.httpjson.longrunning.stub.HttpJsonOperationsStub;
 import com.google.api.gax.rpc.ClientContext;
 import com.google.api.gax.rpc.OperationCallable;
+import com.google.api.gax.rpc.RequestParamsBuilder;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.common.collect.ImmutableMap;
+import com.google.firestore.admin.v1.Backup;
+import com.google.firestore.admin.v1.BackupSchedule;
+import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
+import com.google.firestore.admin.v1.CreateDatabaseMetadata;
+import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
+import com.google.firestore.admin.v1.DeleteBackupRequest;
+import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
+import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
+import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FieldOperationMetadata;
+import com.google.firestore.admin.v1.GetBackupRequest;
+import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
@@ -51,12 +62,19 @@ import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.IndexOperationMetadata;
+import com.google.firestore.admin.v1.ListBackupSchedulesRequest;
+import com.google.firestore.admin.v1.ListBackupSchedulesResponse;
+import com.google.firestore.admin.v1.ListBackupsRequest;
+import com.google.firestore.admin.v1.ListBackupsResponse;
 import com.google.firestore.admin.v1.ListDatabasesRequest;
 import com.google.firestore.admin.v1.ListDatabasesResponse;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.RestoreDatabaseMetadata;
+import com.google.firestore.admin.v1.RestoreDatabaseRequest;
+import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
@@ -78,18 +96,20 @@ import javax.annotation.Generated;
  * <p>This class is for advanced usage and reflects the underlying API directly.
  */
 @Generated("by gapic-generator-java")
-@BetaApi
 public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   private static final TypeRegistry typeRegistry =
       TypeRegistry.newBuilder()
           .add(ExportDocumentsResponse.getDescriptor())
-          .add(UpdateDatabaseMetadata.getDescriptor())
           .add(Field.getDescriptor())
-          .add(Empty.getDescriptor())
+          .add(RestoreDatabaseMetadata.getDescriptor())
           .add(ImportDocumentsMetadata.getDescriptor())
           .add(Database.getDescriptor())
-          .add(Index.getDescriptor())
           .add(FieldOperationMetadata.getDescriptor())
+          .add(DeleteDatabaseMetadata.getDescriptor())
+          .add(UpdateDatabaseMetadata.getDescriptor())
+          .add(Empty.getDescriptor())
+          .add(Index.getDescriptor())
+          .add(CreateDatabaseMetadata.getDescriptor())
           .add(ExportDocumentsMetadata.getDescriptor())
           .add(IndexOperationMetadata.getDescriptor())
           .build();
@@ -429,6 +449,47 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                       HttpJsonOperationSnapshot.create(response))
               .build();
 
+  private static final ApiMethodDescriptor<CreateDatabaseRequest, Operation>
+      createDatabaseMethodDescriptor =
+          ApiMethodDescriptor.<CreateDatabaseRequest, Operation>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/CreateDatabase")
+              .setHttpMethod("POST")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<CreateDatabaseRequest>newBuilder()
+                      .setPath(
+                          "/v1/{parent=projects/*}/databases",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<CreateDatabaseRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "parent", request.getParent());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<CreateDatabaseRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "databaseId", request.getDatabaseId());
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("database", request.getDatabase(), true))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<Operation>newBuilder()
+                      .setDefaultInstance(Operation.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .setOperationSnapshotFactory(
+                  (CreateDatabaseRequest request, Operation response) ->
+                      HttpJsonOperationSnapshot.create(response))
+              .build();
+
   private static final ApiMethodDescriptor<GetDatabaseRequest, Database>
       getDatabaseMethodDescriptor =
           ApiMethodDescriptor.<GetDatabaseRequest, Database>newBuilder()
@@ -539,6 +600,365 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                       HttpJsonOperationSnapshot.create(response))
               .build();
 
+  private static final ApiMethodDescriptor<DeleteDatabaseRequest, Operation>
+      deleteDatabaseMethodDescriptor =
+          ApiMethodDescriptor.<DeleteDatabaseRequest, Operation>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/DeleteDatabase")
+              .setHttpMethod("DELETE")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<DeleteDatabaseRequest>newBuilder()
+                      .setPath(
+                          "/v1/{name=projects/*/databases/*}",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<DeleteDatabaseRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "name", request.getName());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<DeleteDatabaseRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "etag", request.getEtag());
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(request -> null)
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<Operation>newBuilder()
+                      .setDefaultInstance(Operation.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .setOperationSnapshotFactory(
+                  (DeleteDatabaseRequest request, Operation response) ->
+                      HttpJsonOperationSnapshot.create(response))
+              .build();
+
+  private static final ApiMethodDescriptor<GetBackupRequest, Backup> getBackupMethodDescriptor =
+      ApiMethodDescriptor.<GetBackupRequest, Backup>newBuilder()
+          .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/GetBackup")
+          .setHttpMethod("GET")
+          .setType(ApiMethodDescriptor.MethodType.UNARY)
+          .setRequestFormatter(
+              ProtoMessageRequestFormatter.<GetBackupRequest>newBuilder()
+                  .setPath(
+                      "/v1/{name=projects/*/locations/*/backups/*}",
+                      request -> {
+                        Map<String, String> fields = new HashMap<>();
+                        ProtoRestSerializer<GetBackupRequest> serializer =
+                            ProtoRestSerializer.create();
+                        serializer.putPathParam(fields, "name", request.getName());
+                        return fields;
+                      })
+                  .setQueryParamsExtractor(
+                      request -> {
+                        Map<String, List<String>> fields = new HashMap<>();
+                        ProtoRestSerializer<GetBackupRequest> serializer =
+                            ProtoRestSerializer.create();
+                        serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                        return fields;
+                      })
+                  .setRequestBodyExtractor(request -> null)
+                  .build())
+          .setResponseParser(
+              ProtoMessageResponseParser.<Backup>newBuilder()
+                  .setDefaultInstance(Backup.getDefaultInstance())
+                  .setDefaultTypeRegistry(typeRegistry)
+                  .build())
+          .build();
+
+  private static final ApiMethodDescriptor<ListBackupsRequest, ListBackupsResponse>
+      listBackupsMethodDescriptor =
+          ApiMethodDescriptor.<ListBackupsRequest, ListBackupsResponse>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/ListBackups")
+              .setHttpMethod("GET")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<ListBackupsRequest>newBuilder()
+                      .setPath(
+                          "/v1/{parent=projects/*/locations/*}/backups",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<ListBackupsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "parent", request.getParent());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<ListBackupsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(request -> null)
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<ListBackupsResponse>newBuilder()
+                      .setDefaultInstance(ListBackupsResponse.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<DeleteBackupRequest, Empty>
+      deleteBackupMethodDescriptor =
+          ApiMethodDescriptor.<DeleteBackupRequest, Empty>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/DeleteBackup")
+              .setHttpMethod("DELETE")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<DeleteBackupRequest>newBuilder()
+                      .setPath(
+                          "/v1/{name=projects/*/locations/*/backups/*}",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<DeleteBackupRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "name", request.getName());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<DeleteBackupRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(request -> null)
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<Empty>newBuilder()
+                      .setDefaultInstance(Empty.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<RestoreDatabaseRequest, Operation>
+      restoreDatabaseMethodDescriptor =
+          ApiMethodDescriptor.<RestoreDatabaseRequest, Operation>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/RestoreDatabase")
+              .setHttpMethod("POST")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<RestoreDatabaseRequest>newBuilder()
+                      .setPath(
+                          "/v1/{parent=projects/*}/databases:restore",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<RestoreDatabaseRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "parent", request.getParent());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<RestoreDatabaseRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("*", request.toBuilder().clearParent().build(), true))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<Operation>newBuilder()
+                      .setDefaultInstance(Operation.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .setOperationSnapshotFactory(
+                  (RestoreDatabaseRequest request, Operation response) ->
+                      HttpJsonOperationSnapshot.create(response))
+              .build();
+
+  private static final ApiMethodDescriptor<CreateBackupScheduleRequest, BackupSchedule>
+      createBackupScheduleMethodDescriptor =
+          ApiMethodDescriptor.<CreateBackupScheduleRequest, BackupSchedule>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/CreateBackupSchedule")
+              .setHttpMethod("POST")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<CreateBackupScheduleRequest>newBuilder()
+                      .setPath(
+                          "/v1/{parent=projects/*/databases/*}/backupSchedules",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<CreateBackupScheduleRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "parent", request.getParent());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<CreateBackupScheduleRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("backupSchedule", request.getBackupSchedule(), true))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<BackupSchedule>newBuilder()
+                      .setDefaultInstance(BackupSchedule.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<GetBackupScheduleRequest, BackupSchedule>
+      getBackupScheduleMethodDescriptor =
+          ApiMethodDescriptor.<GetBackupScheduleRequest, BackupSchedule>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/GetBackupSchedule")
+              .setHttpMethod("GET")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<GetBackupScheduleRequest>newBuilder()
+                      .setPath(
+                          "/v1/{name=projects/*/databases/*/backupSchedules/*}",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<GetBackupScheduleRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "name", request.getName());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<GetBackupScheduleRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(request -> null)
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<BackupSchedule>newBuilder()
+                      .setDefaultInstance(BackupSchedule.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+      listBackupSchedulesMethodDescriptor =
+          ApiMethodDescriptor.<ListBackupSchedulesRequest, ListBackupSchedulesResponse>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/ListBackupSchedules")
+              .setHttpMethod("GET")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<ListBackupSchedulesRequest>newBuilder()
+                      .setPath(
+                          "/v1/{parent=projects/*/databases/*}/backupSchedules",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<ListBackupSchedulesRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "parent", request.getParent());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<ListBackupSchedulesRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(request -> null)
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<ListBackupSchedulesResponse>newBuilder()
+                      .setDefaultInstance(ListBackupSchedulesResponse.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<UpdateBackupScheduleRequest, BackupSchedule>
+      updateBackupScheduleMethodDescriptor =
+          ApiMethodDescriptor.<UpdateBackupScheduleRequest, BackupSchedule>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/UpdateBackupSchedule")
+              .setHttpMethod("PATCH")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<UpdateBackupScheduleRequest>newBuilder()
+                      .setPath(
+                          "/v1/{backupSchedule.name=projects/*/databases/*/backupSchedules/*}",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<UpdateBackupScheduleRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(
+                                fields,
+                                "backupSchedule.name",
+                                request.getBackupSchedule().getName());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<UpdateBackupScheduleRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "updateMask", request.getUpdateMask());
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("backupSchedule", request.getBackupSchedule(), true))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<BackupSchedule>newBuilder()
+                      .setDefaultInstance(BackupSchedule.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<DeleteBackupScheduleRequest, Empty>
+      deleteBackupScheduleMethodDescriptor =
+          ApiMethodDescriptor.<DeleteBackupScheduleRequest, Empty>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/DeleteBackupSchedule")
+              .setHttpMethod("DELETE")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<DeleteBackupScheduleRequest>newBuilder()
+                      .setPath(
+                          "/v1/{name=projects/*/databases/*/backupSchedules/*}",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<DeleteBackupScheduleRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "name", request.getName());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<DeleteBackupScheduleRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(request -> null)
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<Empty>newBuilder()
+                      .setDefaultInstance(Empty.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
   private final UnaryCallable<CreateIndexRequest, Operation> createIndexCallable;
   private final OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
       createIndexOperationCallable;
@@ -560,11 +980,31 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   private final UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable;
   private final OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationCallable;
+  private final UnaryCallable<CreateDatabaseRequest, Operation> createDatabaseCallable;
+  private final OperationCallable<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
+      createDatabaseOperationCallable;
   private final UnaryCallable<GetDatabaseRequest, Database> getDatabaseCallable;
   private final UnaryCallable<ListDatabasesRequest, ListDatabasesResponse> listDatabasesCallable;
   private final UnaryCallable<UpdateDatabaseRequest, Operation> updateDatabaseCallable;
   private final OperationCallable<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
       updateDatabaseOperationCallable;
+  private final UnaryCallable<DeleteDatabaseRequest, Operation> deleteDatabaseCallable;
+  private final OperationCallable<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationCallable;
+  private final UnaryCallable<GetBackupRequest, Backup> getBackupCallable;
+  private final UnaryCallable<ListBackupsRequest, ListBackupsResponse> listBackupsCallable;
+  private final UnaryCallable<DeleteBackupRequest, Empty> deleteBackupCallable;
+  private final UnaryCallable<RestoreDatabaseRequest, Operation> restoreDatabaseCallable;
+  private final OperationCallable<RestoreDatabaseRequest, Database, RestoreDatabaseMetadata>
+      restoreDatabaseOperationCallable;
+  private final UnaryCallable<CreateBackupScheduleRequest, BackupSchedule>
+      createBackupScheduleCallable;
+  private final UnaryCallable<GetBackupScheduleRequest, BackupSchedule> getBackupScheduleCallable;
+  private final UnaryCallable<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+      listBackupSchedulesCallable;
+  private final UnaryCallable<UpdateBackupScheduleRequest, BackupSchedule>
+      updateBackupScheduleCallable;
+  private final UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable;
 
   private final BackgroundResource backgroundResources;
   private final HttpJsonOperationsStub httpJsonOperationsStub;
@@ -640,62 +1080,262 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
         HttpJsonCallSettings.<CreateIndexRequest, Operation>newBuilder()
             .setMethodDescriptor(createIndexMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<ListIndexesRequest, ListIndexesResponse> listIndexesTransportSettings =
         HttpJsonCallSettings.<ListIndexesRequest, ListIndexesResponse>newBuilder()
             .setMethodDescriptor(listIndexesMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<GetIndexRequest, Index> getIndexTransportSettings =
         HttpJsonCallSettings.<GetIndexRequest, Index>newBuilder()
             .setMethodDescriptor(getIndexMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<DeleteIndexRequest, Empty> deleteIndexTransportSettings =
         HttpJsonCallSettings.<DeleteIndexRequest, Empty>newBuilder()
             .setMethodDescriptor(deleteIndexMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<GetFieldRequest, Field> getFieldTransportSettings =
         HttpJsonCallSettings.<GetFieldRequest, Field>newBuilder()
             .setMethodDescriptor(getFieldMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<UpdateFieldRequest, Operation> updateFieldTransportSettings =
         HttpJsonCallSettings.<UpdateFieldRequest, Operation>newBuilder()
             .setMethodDescriptor(updateFieldMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("field.name", String.valueOf(request.getField().getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<ListFieldsRequest, ListFieldsResponse> listFieldsTransportSettings =
         HttpJsonCallSettings.<ListFieldsRequest, ListFieldsResponse>newBuilder()
             .setMethodDescriptor(listFieldsMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<ExportDocumentsRequest, Operation> exportDocumentsTransportSettings =
         HttpJsonCallSettings.<ExportDocumentsRequest, Operation>newBuilder()
             .setMethodDescriptor(exportDocumentsMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<ImportDocumentsRequest, Operation> importDocumentsTransportSettings =
         HttpJsonCallSettings.<ImportDocumentsRequest, Operation>newBuilder()
             .setMethodDescriptor(importDocumentsMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<CreateDatabaseRequest, Operation> createDatabaseTransportSettings =
+        HttpJsonCallSettings.<CreateDatabaseRequest, Operation>newBuilder()
+            .setMethodDescriptor(createDatabaseMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<GetDatabaseRequest, Database> getDatabaseTransportSettings =
         HttpJsonCallSettings.<GetDatabaseRequest, Database>newBuilder()
             .setMethodDescriptor(getDatabaseMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
     HttpJsonCallSettings<ListDatabasesRequest, ListDatabasesResponse>
         listDatabasesTransportSettings =
             HttpJsonCallSettings.<ListDatabasesRequest, ListDatabasesResponse>newBuilder()
                 .setMethodDescriptor(listDatabasesMethodDescriptor)
                 .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
                 .build();
     HttpJsonCallSettings<UpdateDatabaseRequest, Operation> updateDatabaseTransportSettings =
         HttpJsonCallSettings.<UpdateDatabaseRequest, Operation>newBuilder()
             .setMethodDescriptor(updateDatabaseMethodDescriptor)
             .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("database.name", String.valueOf(request.getDatabase().getName()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<DeleteDatabaseRequest, Operation> deleteDatabaseTransportSettings =
+        HttpJsonCallSettings.<DeleteDatabaseRequest, Operation>newBuilder()
+            .setMethodDescriptor(deleteDatabaseMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<GetBackupRequest, Backup> getBackupTransportSettings =
+        HttpJsonCallSettings.<GetBackupRequest, Backup>newBuilder()
+            .setMethodDescriptor(getBackupMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<ListBackupsRequest, ListBackupsResponse> listBackupsTransportSettings =
+        HttpJsonCallSettings.<ListBackupsRequest, ListBackupsResponse>newBuilder()
+            .setMethodDescriptor(listBackupsMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<DeleteBackupRequest, Empty> deleteBackupTransportSettings =
+        HttpJsonCallSettings.<DeleteBackupRequest, Empty>newBuilder()
+            .setMethodDescriptor(deleteBackupMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<RestoreDatabaseRequest, Operation> restoreDatabaseTransportSettings =
+        HttpJsonCallSettings.<RestoreDatabaseRequest, Operation>newBuilder()
+            .setMethodDescriptor(restoreDatabaseMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<CreateBackupScheduleRequest, BackupSchedule>
+        createBackupScheduleTransportSettings =
+            HttpJsonCallSettings.<CreateBackupScheduleRequest, BackupSchedule>newBuilder()
+                .setMethodDescriptor(createBackupScheduleMethodDescriptor)
+                .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
+                .build();
+    HttpJsonCallSettings<GetBackupScheduleRequest, BackupSchedule>
+        getBackupScheduleTransportSettings =
+            HttpJsonCallSettings.<GetBackupScheduleRequest, BackupSchedule>newBuilder()
+                .setMethodDescriptor(getBackupScheduleMethodDescriptor)
+                .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("name", String.valueOf(request.getName()));
+                      return builder.build();
+                    })
+                .build();
+    HttpJsonCallSettings<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+        listBackupSchedulesTransportSettings =
+            HttpJsonCallSettings
+                .<ListBackupSchedulesRequest, ListBackupSchedulesResponse>newBuilder()
+                .setMethodDescriptor(listBackupSchedulesMethodDescriptor)
+                .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
+                .build();
+    HttpJsonCallSettings<UpdateBackupScheduleRequest, BackupSchedule>
+        updateBackupScheduleTransportSettings =
+            HttpJsonCallSettings.<UpdateBackupScheduleRequest, BackupSchedule>newBuilder()
+                .setMethodDescriptor(updateBackupScheduleMethodDescriptor)
+                .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add(
+                          "backup_schedule.name",
+                          String.valueOf(request.getBackupSchedule().getName()));
+                      return builder.build();
+                    })
+                .build();
+    HttpJsonCallSettings<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleTransportSettings =
+        HttpJsonCallSettings.<DeleteBackupScheduleRequest, Empty>newBuilder()
+            .setMethodDescriptor(deleteBackupScheduleMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
             .build();
 
     this.createIndexCallable =
@@ -755,6 +1395,15 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
             settings.importDocumentsOperationSettings(),
             clientContext,
             httpJsonOperationsStub);
+    this.createDatabaseCallable =
+        callableFactory.createUnaryCallable(
+            createDatabaseTransportSettings, settings.createDatabaseSettings(), clientContext);
+    this.createDatabaseOperationCallable =
+        callableFactory.createOperationCallable(
+            createDatabaseTransportSettings,
+            settings.createDatabaseOperationSettings(),
+            clientContext,
+            httpJsonOperationsStub);
     this.getDatabaseCallable =
         callableFactory.createUnaryCallable(
             getDatabaseTransportSettings, settings.getDatabaseSettings(), clientContext);
@@ -770,6 +1419,58 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
             settings.updateDatabaseOperationSettings(),
             clientContext,
             httpJsonOperationsStub);
+    this.deleteDatabaseCallable =
+        callableFactory.createUnaryCallable(
+            deleteDatabaseTransportSettings, settings.deleteDatabaseSettings(), clientContext);
+    this.deleteDatabaseOperationCallable =
+        callableFactory.createOperationCallable(
+            deleteDatabaseTransportSettings,
+            settings.deleteDatabaseOperationSettings(),
+            clientContext,
+            httpJsonOperationsStub);
+    this.getBackupCallable =
+        callableFactory.createUnaryCallable(
+            getBackupTransportSettings, settings.getBackupSettings(), clientContext);
+    this.listBackupsCallable =
+        callableFactory.createUnaryCallable(
+            listBackupsTransportSettings, settings.listBackupsSettings(), clientContext);
+    this.deleteBackupCallable =
+        callableFactory.createUnaryCallable(
+            deleteBackupTransportSettings, settings.deleteBackupSettings(), clientContext);
+    this.restoreDatabaseCallable =
+        callableFactory.createUnaryCallable(
+            restoreDatabaseTransportSettings, settings.restoreDatabaseSettings(), clientContext);
+    this.restoreDatabaseOperationCallable =
+        callableFactory.createOperationCallable(
+            restoreDatabaseTransportSettings,
+            settings.restoreDatabaseOperationSettings(),
+            clientContext,
+            httpJsonOperationsStub);
+    this.createBackupScheduleCallable =
+        callableFactory.createUnaryCallable(
+            createBackupScheduleTransportSettings,
+            settings.createBackupScheduleSettings(),
+            clientContext);
+    this.getBackupScheduleCallable =
+        callableFactory.createUnaryCallable(
+            getBackupScheduleTransportSettings,
+            settings.getBackupScheduleSettings(),
+            clientContext);
+    this.listBackupSchedulesCallable =
+        callableFactory.createUnaryCallable(
+            listBackupSchedulesTransportSettings,
+            settings.listBackupSchedulesSettings(),
+            clientContext);
+    this.updateBackupScheduleCallable =
+        callableFactory.createUnaryCallable(
+            updateBackupScheduleTransportSettings,
+            settings.updateBackupScheduleSettings(),
+            clientContext);
+    this.deleteBackupScheduleCallable =
+        callableFactory.createUnaryCallable(
+            deleteBackupScheduleTransportSettings,
+            settings.deleteBackupScheduleSettings(),
+            clientContext);
 
     this.backgroundResources =
         new BackgroundResourceAggregation(clientContext.getBackgroundResources());
@@ -787,9 +1488,20 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
     methodDescriptors.add(listFieldsMethodDescriptor);
     methodDescriptors.add(exportDocumentsMethodDescriptor);
     methodDescriptors.add(importDocumentsMethodDescriptor);
+    methodDescriptors.add(createDatabaseMethodDescriptor);
     methodDescriptors.add(getDatabaseMethodDescriptor);
     methodDescriptors.add(listDatabasesMethodDescriptor);
     methodDescriptors.add(updateDatabaseMethodDescriptor);
+    methodDescriptors.add(deleteDatabaseMethodDescriptor);
+    methodDescriptors.add(getBackupMethodDescriptor);
+    methodDescriptors.add(listBackupsMethodDescriptor);
+    methodDescriptors.add(deleteBackupMethodDescriptor);
+    methodDescriptors.add(restoreDatabaseMethodDescriptor);
+    methodDescriptors.add(createBackupScheduleMethodDescriptor);
+    methodDescriptors.add(getBackupScheduleMethodDescriptor);
+    methodDescriptors.add(listBackupSchedulesMethodDescriptor);
+    methodDescriptors.add(updateBackupScheduleMethodDescriptor);
+    methodDescriptors.add(deleteBackupScheduleMethodDescriptor);
     return methodDescriptors;
   }
 
@@ -877,6 +1589,17 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   }
 
   @Override
+  public UnaryCallable<CreateDatabaseRequest, Operation> createDatabaseCallable() {
+    return createDatabaseCallable;
+  }
+
+  @Override
+  public OperationCallable<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
+      createDatabaseOperationCallable() {
+    return createDatabaseOperationCallable;
+  }
+
+  @Override
   public UnaryCallable<GetDatabaseRequest, Database> getDatabaseCallable() {
     return getDatabaseCallable;
   }
@@ -895,6 +1618,69 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   public OperationCallable<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
       updateDatabaseOperationCallable() {
     return updateDatabaseOperationCallable;
+  }
+
+  @Override
+  public UnaryCallable<DeleteDatabaseRequest, Operation> deleteDatabaseCallable() {
+    return deleteDatabaseCallable;
+  }
+
+  @Override
+  public OperationCallable<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationCallable() {
+    return deleteDatabaseOperationCallable;
+  }
+
+  @Override
+  public UnaryCallable<GetBackupRequest, Backup> getBackupCallable() {
+    return getBackupCallable;
+  }
+
+  @Override
+  public UnaryCallable<ListBackupsRequest, ListBackupsResponse> listBackupsCallable() {
+    return listBackupsCallable;
+  }
+
+  @Override
+  public UnaryCallable<DeleteBackupRequest, Empty> deleteBackupCallable() {
+    return deleteBackupCallable;
+  }
+
+  @Override
+  public UnaryCallable<RestoreDatabaseRequest, Operation> restoreDatabaseCallable() {
+    return restoreDatabaseCallable;
+  }
+
+  @Override
+  public OperationCallable<RestoreDatabaseRequest, Database, RestoreDatabaseMetadata>
+      restoreDatabaseOperationCallable() {
+    return restoreDatabaseOperationCallable;
+  }
+
+  @Override
+  public UnaryCallable<CreateBackupScheduleRequest, BackupSchedule> createBackupScheduleCallable() {
+    return createBackupScheduleCallable;
+  }
+
+  @Override
+  public UnaryCallable<GetBackupScheduleRequest, BackupSchedule> getBackupScheduleCallable() {
+    return getBackupScheduleCallable;
+  }
+
+  @Override
+  public UnaryCallable<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+      listBackupSchedulesCallable() {
+    return listBackupSchedulesCallable;
+  }
+
+  @Override
+  public UnaryCallable<UpdateBackupScheduleRequest, BackupSchedule> updateBackupScheduleCallable() {
+    return updateBackupScheduleCallable;
+  }
+
+  @Override
+  public UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable() {
+    return deleteBackupScheduleCallable;
   }
 
   @Override

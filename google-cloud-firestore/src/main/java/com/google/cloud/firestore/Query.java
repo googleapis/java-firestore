@@ -61,14 +61,19 @@ import io.grpc.Status;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.threeten.bp.Duration;
@@ -80,18 +85,25 @@ import org.threeten.bp.Duration;
 @InternalExtensionOnly
 public class Query {
 
+  static final Comparator<QueryDocumentSnapshot> DOCUMENT_ID_COMPARATOR = Query::compareDocumentId;
   final FirestoreRpcContext<?> rpcContext;
   final QueryOptions options;
 
+  private static final Logger LOGGER = Logger.getLogger(Query.class.getName());
+
   /** The direction of a sort. */
   public enum Direction {
-    ASCENDING(StructuredQuery.Direction.ASCENDING),
-    DESCENDING(StructuredQuery.Direction.DESCENDING);
+    ASCENDING(StructuredQuery.Direction.ASCENDING, DOCUMENT_ID_COMPARATOR),
+    DESCENDING(StructuredQuery.Direction.DESCENDING, DOCUMENT_ID_COMPARATOR.reversed());
 
     private final StructuredQuery.Direction direction;
+    private final Comparator<QueryDocumentSnapshot> documentIdComparator;
 
-    Direction(StructuredQuery.Direction direction) {
+    Direction(
+        StructuredQuery.Direction direction,
+        Comparator<QueryDocumentSnapshot> documentIdComparator) {
       this.direction = direction;
+      this.documentIdComparator = documentIdComparator;
     }
 
     StructuredQuery.Direction getDirection() {
@@ -282,7 +294,9 @@ public class Query {
       return operator.equals(GREATER_THAN)
           || operator.equals(GREATER_THAN_OR_EQUAL)
           || operator.equals(LESS_THAN)
-          || operator.equals(LESS_THAN_OR_EQUAL);
+          || operator.equals(LESS_THAN_OR_EQUAL)
+          || operator.equals(NOT_EQUAL)
+          || operator.equals(NOT_IN);
     }
 
     @Nullable
@@ -315,12 +329,17 @@ public class Query {
     }
   }
 
-  static final class FieldOrder {
+  static final class FieldOrder implements Comparator<QueryDocumentSnapshot> {
     private final FieldReference fieldReference;
     private final Direction direction;
 
     FieldOrder(FieldReference fieldReference, Direction direction) {
       this.fieldReference = fieldReference;
+      this.direction = direction;
+    }
+
+    FieldOrder(String field, Direction direction) {
+      this.fieldReference = FieldPath.fromServerFormat(field).toProto();
       this.direction = direction;
     }
 
@@ -339,7 +358,27 @@ public class Query {
         return false;
       }
       FieldOrder filter = (FieldOrder) o;
-      return Objects.equals(toProto(), filter.toProto());
+      if (direction != filter.direction) {
+        return false;
+      }
+      return Objects.equals(fieldReference, filter.fieldReference);
+    }
+
+    public int compare(QueryDocumentSnapshot doc1, QueryDocumentSnapshot doc2) {
+      String path = fieldReference.getFieldPath();
+      if (FieldPath.isDocumentId(path)) {
+        return direction.documentIdComparator.compare(doc1, doc2);
+      }
+      FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
+      Preconditions.checkState(
+          doc1.contains(fieldPath) && doc2.contains(fieldPath),
+          "Can only compare fields that exist in the DocumentSnapshot."
+              + " Please include the fields you are ordering on in your select() call.");
+      Value v1 = doc1.extractField(fieldPath);
+      Value v2 = doc2.extractField(fieldPath);
+
+      int cmp = com.google.cloud.firestore.Order.INSTANCE.compare(v1, v2);
+      return (direction == Direction.ASCENDING) ? cmp : -cmp;
     }
   }
 
@@ -459,39 +498,57 @@ public class Query {
     return value == null || value.equals(Double.NaN) || value.equals(Float.NaN);
   }
 
-  /** Computes the backend ordering semantics for DocumentSnapshot cursors. */
-  private ImmutableList<FieldOrder> createImplicitOrderBy() {
-    List<FieldOrder> implicitOrders = new ArrayList<>(options.getFieldOrders());
+  /** Returns the sorted set of inequality filter fields used in this query. */
+  private SortedSet<FieldPath> getInequalityFilterFields() {
+    SortedSet<FieldPath> result = new TreeSet<>();
 
-    // If no explicit ordering is specified, use the first inequality to define an implicit order.
-    if (implicitOrders.isEmpty()) {
-      for (FilterInternal filter : options.getFilters()) {
-        FieldReference fieldReference = filter.getFirstInequalityField();
-        if (fieldReference != null) {
-          implicitOrders.add(new FieldOrder(fieldReference, Direction.ASCENDING));
-          break;
+    for (FilterInternal filter : options.getFilters()) {
+      for (FieldFilterInternal subFilter : filter.getFlattenedFilters()) {
+        if (subFilter.isInequalityFilter()) {
+          result.add(FieldPath.fromServerFormat(subFilter.fieldReference.getFieldPath()));
         }
       }
     }
 
-    boolean hasDocumentId = false;
-    for (FieldOrder fieldOrder : implicitOrders) {
-      if (FieldPath.isDocumentId(fieldOrder.fieldReference.getFieldPath())) {
-        hasDocumentId = true;
+    return result;
+  }
+
+  /** Computes the backend ordering semantics for DocumentSnapshot cursors. */
+  ImmutableList<FieldOrder> createImplicitOrderBy() {
+    // Any explicit order by fields should be added as is.
+    List<FieldOrder> result = new ArrayList<>(options.getFieldOrders());
+
+    HashSet<String> fieldsNormalized = new HashSet<>();
+    for (FieldOrder order : result) {
+      fieldsNormalized.add(order.fieldReference.getFieldPath());
+    }
+
+    /** The order of the implicit ordering always matches the last explicit order by. */
+    Direction lastDirection =
+        result.isEmpty() ? Direction.ASCENDING : result.get(result.size() - 1).direction;
+
+    /**
+     * Any inequality fields not explicitly ordered should be implicitly ordered in a
+     * lexicographical order. When there are multiple inequality filters on the same field, the
+     * field should be added only once.
+     *
+     * <p>Note: `SortedSet<FieldPath>` sorts the key field before other fields. However, we want the
+     * key field to be sorted last.
+     */
+    SortedSet<FieldPath> inequalityFields = getInequalityFilterFields();
+    for (FieldPath field : inequalityFields) {
+      if (!fieldsNormalized.contains(field.toString())
+          && !FieldPath.isDocumentId(field.toString())) {
+        result.add(new FieldOrder(field.toProto(), lastDirection));
       }
     }
 
-    if (!hasDocumentId) {
-      // Add implicit sorting by name, using the last specified direction.
-      Direction lastDirection =
-          implicitOrders.isEmpty()
-              ? Direction.ASCENDING
-              : implicitOrders.get(implicitOrders.size() - 1).direction;
-
-      implicitOrders.add(new FieldOrder(FieldPath.documentId().toProto(), lastDirection));
+    // Add the document key field to the last if it is not explicitly ordered.
+    if (!fieldsNormalized.contains(FieldPath.documentId().toString())) {
+      result.add(new FieldOrder(FieldPath.documentId().toProto(), lastDirection));
     }
 
-    return ImmutableList.<FieldOrder>builder().addAll(implicitOrders).build();
+    return ImmutableList.<FieldOrder>builder().addAll(result).build();
   }
 
   private Cursor createCursor(
@@ -503,11 +560,12 @@ public class Query {
       if (FieldPath.isDocumentId(path)) {
         fieldValues.add(documentSnapshot.getReference());
       } else {
-        FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
+        FieldPath fieldPath = FieldPath.fromServerFormat(path);
         Preconditions.checkArgument(
             documentSnapshot.contains(fieldPath),
             "Field '%s' is missing in the provided DocumentSnapshot. Please provide a document "
-                + "that contains values for all specified orderBy() and where() constraints.");
+                + "that contains values for all specified orderBy() and where() constraints.",
+            fieldPath);
         fieldValues.add(documentSnapshot.get(fieldPath));
       }
     }
@@ -901,7 +959,8 @@ public class Query {
             + "startAfter(), endBefore() or endAt().");
     FilterInternal parsedFilter = parseFilter(filter);
     if (parsedFilter.getFilters().isEmpty()) {
-      // Return the existing query if not adding any more filters (e.g. an empty composite filter).
+      // Return the existing query if not adding any more filters (for example an empty composite
+      // filter).
       return this;
     }
     Builder newOptions = options.toBuilder();
@@ -1111,6 +1170,9 @@ public class Query {
    */
   @Nonnull
   public Query startAt(Object... fieldValues) {
+    // TODO(b/296435819): Remove this warning message.
+    warningOnSingleDocumentReference(fieldValues);
+
     ImmutableList<FieldOrder> fieldOrders =
         fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
             ? createImplicitOrderBy()
@@ -1152,12 +1214,12 @@ public class Query {
    */
   @Nonnull
   public Query select(FieldPath... fieldPaths) {
-    ImmutableList.Builder<FieldReference> fieldProjections = ImmutableList.builder();
-
     if (fieldPaths.length == 0) {
       fieldPaths = new FieldPath[] {FieldPath.DOCUMENT_ID};
     }
 
+    ImmutableList.Builder<FieldReference> fieldProjections =
+        ImmutableList.builderWithExpectedSize(fieldPaths.length);
     for (FieldPath path : fieldPaths) {
       FieldReference fieldReference =
           FieldReference.newBuilder().setFieldPath(path.getEncodedPath()).build();
@@ -1197,6 +1259,9 @@ public class Query {
    * @return The created Query.
    */
   public Query startAfter(Object... fieldValues) {
+    // TODO(b/296435819): Remove this warning message.
+    warningOnSingleDocumentReference(fieldValues);
+
     ImmutableList<FieldOrder> fieldOrders =
         fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
             ? createImplicitOrderBy()
@@ -1238,6 +1303,9 @@ public class Query {
    */
   @Nonnull
   public Query endBefore(Object... fieldValues) {
+    // TODO(b/296435819): Remove this warning message.
+    warningOnSingleDocumentReference(fieldValues);
+
     ImmutableList<FieldOrder> fieldOrders =
         fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
             ? createImplicitOrderBy()
@@ -1259,6 +1327,9 @@ public class Query {
    */
   @Nonnull
   public Query endAt(Object... fieldValues) {
+    // TODO(b/296435819): Remove this warning message.
+    warningOnSingleDocumentReference(fieldValues);
+
     ImmutableList<FieldOrder> fieldOrders =
         fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
             ? createImplicitOrderBy()
@@ -1269,6 +1340,16 @@ public class Query {
     newOptions.setFieldOrders(fieldOrders);
     newOptions.setEndCursor(cursor);
     return new Query(rpcContext, newOptions.build());
+  }
+
+  private void warningOnSingleDocumentReference(Object... fieldValues) {
+    if (options.getFieldOrders().isEmpty()
+        && fieldValues.length == 1
+        && fieldValues[0] instanceof DocumentReference) {
+      LOGGER.warning(
+          "Warning: Passing DocumentReference into a cursor without orderBy clause is not an intended "
+              + "behavior. Please use DocumentSnapshot or add an explicit orderBy on document key field.");
+    }
   }
 
   /**
@@ -1420,12 +1501,16 @@ public class Query {
             + "Use Query.get() instead.");
 
     internalStream(
-        new QuerySnapshotObserver() {
-          boolean hasCompleted = false;
-
+        new ApiStreamObserver<RunQueryResponse>() {
           @Override
-          public void onNext(QueryDocumentSnapshot documentSnapshot) {
-            responseObserver.onNext(documentSnapshot);
+          public void onNext(RunQueryResponse runQueryResponse) {
+            if (runQueryResponse.hasDocument()) {
+              Document document = runQueryResponse.getDocument();
+              QueryDocumentSnapshot documentSnapshot =
+                  QueryDocumentSnapshot.fromDocument(
+                      rpcContext, Timestamp.fromProto(runQueryResponse.getReadTime()), document);
+              responseObserver.onNext(documentSnapshot);
+            }
           }
 
           @Override
@@ -1435,14 +1520,71 @@ public class Query {
 
           @Override
           public void onCompleted() {
-            if (hasCompleted) return;
-            hasCompleted = true;
             responseObserver.onCompleted();
           }
         },
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         /* transactionId= */ null,
-        /* readTime= */ null);
+        /* readTime= */ null,
+        /* explainOptions= */ null);
+  }
+
+  /**
+   * Executes the query, streams the results as a StreamObserver of DocumentSnapshots, and returns
+   * an ApiFuture that will be resolved with the associated {@link ExplainMetrics}.
+   *
+   * @param options The options that configure the explain request.
+   * @param documentObserver The observer to be notified every time a new document arrives.
+   */
+  @Nonnull
+  public ApiFuture<ExplainMetrics> explainStream(
+      @Nonnull ExplainOptions options,
+      @Nonnull ApiStreamObserver<DocumentSnapshot> documentObserver) {
+    Preconditions.checkState(
+        !LimitType.Last.equals(Query.this.options.getLimitType()),
+        "Query results for queries that include limitToLast() constraints cannot be streamed. "
+            + "Use Query.explain() instead.");
+
+    final SettableApiFuture<ExplainMetrics> metricsFuture = SettableApiFuture.create();
+    internalStream(
+        new ApiStreamObserver<RunQueryResponse>() {
+          @Override
+          public void onNext(RunQueryResponse runQueryResponse) {
+            if (runQueryResponse.hasDocument()) {
+              Document document = runQueryResponse.getDocument();
+              QueryDocumentSnapshot documentSnapshot =
+                  QueryDocumentSnapshot.fromDocument(
+                      rpcContext, Timestamp.fromProto(runQueryResponse.getReadTime()), document);
+              documentObserver.onNext(documentSnapshot);
+            }
+
+            if (runQueryResponse.hasExplainMetrics()) {
+              metricsFuture.set(new ExplainMetrics(runQueryResponse.getExplainMetrics()));
+            }
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            metricsFuture.setException(throwable);
+            documentObserver.onError(throwable);
+          }
+
+          @Override
+          public void onCompleted() {
+            documentObserver.onCompleted();
+            if (!metricsFuture.isDone()) {
+              // This means the gRPC stream completed without any metrics.
+              metricsFuture.setException(
+                  new RuntimeException("Did not receive any explain results."));
+            }
+          }
+        },
+        /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
+        /* transactionId= */ null,
+        /* readTime= */ null,
+        /* explainOptions= */ options);
+
+    return metricsFuture;
   }
 
   /**
@@ -1512,7 +1654,8 @@ public class Query {
       }
     }
 
-    ImmutableList.Builder<FieldOrder> fieldOrders = ImmutableList.builder();
+    ImmutableList.Builder<FieldOrder> fieldOrders =
+        ImmutableList.builderWithExpectedSize(structuredQuery.getOrderByCount());
     for (Order order : structuredQuery.getOrderByList()) {
       fieldOrders.add(
           new FieldOrder(order.getField(), Direction.valueOf(order.getDirection().name())));
@@ -1558,29 +1701,18 @@ public class Query {
     return encodedValue;
   }
 
-  /** Stream observer that captures DocumentSnapshots as well as the Query read time. */
-  private abstract static class QuerySnapshotObserver
-      implements ApiStreamObserver<QueryDocumentSnapshot> {
-
-    private Timestamp readTime;
-
-    void onCompleted(Timestamp readTime) {
-      this.readTime = readTime;
-      this.onCompleted();
-    }
-
-    Timestamp getReadTime() {
-      return readTime;
-    }
-  }
-
   private void internalStream(
-      final QuerySnapshotObserver documentObserver,
+      final ApiStreamObserver<RunQueryResponse> runQueryResponseObserver,
       final long startTimeNanos,
       @Nullable final ByteString transactionId,
-      @Nullable final Timestamp readTime) {
+      @Nullable final Timestamp readTime,
+      @Nullable final ExplainOptions explainOptions) {
     RunQueryRequest.Builder request = RunQueryRequest.newBuilder();
     request.setStructuredQuery(buildQuery()).setParent(options.getParentPath().toString());
+
+    if (explainOptions != null) {
+      request.setExplainOptions(explainOptions.toProto());
+    }
 
     if (transactionId != null) {
       request.setTransaction(transactionId);
@@ -1600,9 +1732,12 @@ public class Query {
 
     ResponseObserver<RunQueryResponse> observer =
         new ResponseObserver<RunQueryResponse>() {
-          Timestamp readTime;
           boolean firstResponse;
           int numDocuments;
+
+          // The stream's `onComplete()` could be called more than once,
+          // this flag makes sure only the first one is actually processed.
+          boolean hasCompleted = false;
 
           @Override
           public void onStart(StreamController streamController) {}
@@ -1613,6 +1748,9 @@ public class Query {
               firstResponse = true;
               Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: First response");
             }
+
+            runQueryResponseObserver.onNext(response);
+
             if (response.hasDocument()) {
               numDocuments++;
               if (numDocuments % 100 == 0) {
@@ -1624,12 +1762,7 @@ public class Query {
               QueryDocumentSnapshot documentSnapshot =
                   QueryDocumentSnapshot.fromDocument(
                       rpcContext, Timestamp.fromProto(response.getReadTime()), document);
-              documentObserver.onNext(documentSnapshot);
               lastReceivedDocument.set(documentSnapshot);
-            }
-
-            if (readTime == null) {
-              readTime = Timestamp.fromProto(response.getReadTime());
             }
 
             if (response.getDone()) {
@@ -1639,7 +1772,7 @@ public class Query {
                       "Firestore.Query: Completed",
                       ImmutableMap.of(
                           "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
-              documentObserver.onCompleted(readTime);
+              onComplete();
             }
           }
 
@@ -1654,32 +1787,43 @@ public class Query {
               Query.this
                   .startAfter(cursor)
                   .internalStream(
-                      documentObserver,
+                      runQueryResponseObserver,
                       startTimeNanos,
                       /* transactionId= */ null,
-                      options.getRequireConsistency() ? cursor.getReadTime() : null);
+                      options.getRequireConsistency() ? cursor.getReadTime() : null,
+                      explainOptions);
 
             } else {
               Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: Error");
-              documentObserver.onError(throwable);
+              runQueryResponseObserver.onError(throwable);
             }
           }
 
           @Override
           public void onComplete() {
+            if (hasCompleted) return;
+            hasCompleted = true;
+
             Tracing.getTracer()
                 .getCurrentSpan()
                 .addAnnotation(
                     "Firestore.Query: Completed",
                     ImmutableMap.of(
                         "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
-            documentObserver.onCompleted(readTime);
+            runQueryResponseObserver.onCompleted();
           }
 
           boolean shouldRetry(DocumentSnapshot lastDocument, Throwable t) {
             if (lastDocument == null) {
               // Only retry if we have received a single result. Retries for RPCs with initial
               // failure are handled by Google Gax, which also implements backoff.
+              return false;
+            }
+
+            // Do not retry EXPLAIN requests because it'd be executing
+            // multiple queries. This means stats would have to be aggregated,
+            // and that may not even make sense for many statistics.
+            if (explainOptions != null) {
               return false;
             }
 
@@ -1699,7 +1843,81 @@ public class Query {
    */
   @Nonnull
   public ApiFuture<QuerySnapshot> get() {
-    return get(null);
+    return get(null, null);
+  }
+
+  /**
+   * Plans and optionally executes this query. Returns an ApiFuture that will be resolved with the
+   * planner information, statistics from the query execution (if any), and the query results (if
+   * any).
+   *
+   * @return An ApiFuture that will be resolved with the planner information, statistics from the
+   *     query execution (if any), and the query results (if any).
+   */
+  @Nonnull
+  public ApiFuture<ExplainResults<QuerySnapshot>> explain(ExplainOptions options) {
+    final SettableApiFuture<ExplainResults<QuerySnapshot>> result = SettableApiFuture.create();
+
+    internalStream(
+        new ApiStreamObserver<RunQueryResponse>() {
+          @Nullable List<QueryDocumentSnapshot> documentSnapshots = null;
+          Timestamp readTime;
+          ExplainMetrics metrics;
+
+          @Override
+          public void onNext(RunQueryResponse runQueryResponse) {
+            if (runQueryResponse.hasDocument()) {
+              if (documentSnapshots == null) {
+                documentSnapshots = new ArrayList<>();
+              }
+
+              Document document = runQueryResponse.getDocument();
+              QueryDocumentSnapshot documentSnapshot =
+                  QueryDocumentSnapshot.fromDocument(
+                      rpcContext, Timestamp.fromProto(runQueryResponse.getReadTime()), document);
+              documentSnapshots.add(documentSnapshot);
+            }
+
+            if (readTime == null) {
+              readTime = Timestamp.fromProto(runQueryResponse.getReadTime());
+            }
+
+            if (runQueryResponse.hasExplainMetrics()) {
+              metrics = new ExplainMetrics(runQueryResponse.getExplainMetrics());
+              if (documentSnapshots == null && metrics.getExecutionStats() != null) {
+                // This indicates that the query was executed, but no documents
+                // had matched the query. Create an empty list.
+                documentSnapshots = Collections.emptyList();
+              }
+            }
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            result.setException(throwable);
+          }
+
+          @Override
+          public void onCompleted() {
+            @Nullable QuerySnapshot snapshot = null;
+            if (documentSnapshots != null) {
+              // The results for limitToLast queries need to be flipped since we reversed the
+              // ordering constraints before sending the query to the backend.
+              List<QueryDocumentSnapshot> resultView =
+                  LimitType.Last.equals(Query.this.options.getLimitType())
+                      ? reverse(documentSnapshots)
+                      : documentSnapshots;
+              snapshot = QuerySnapshot.withDocuments(Query.this, readTime, resultView);
+            }
+            result.set(new ExplainResults<>(metrics, snapshot));
+          }
+        },
+        /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
+        /* transactionId= */ null,
+        /* readTime= */ null,
+        /* explainOptions= */ options);
+
+    return result;
   }
 
   /**
@@ -1726,19 +1944,27 @@ public class Query {
     return Watch.forQuery(this).runWatch(executor, listener);
   }
 
-  ApiFuture<QuerySnapshot> get(@Nullable ByteString transactionId) {
+  ApiFuture<QuerySnapshot> get(
+      @Nullable ByteString transactionId, @Nullable Timestamp requestReadTime) {
     final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
 
     internalStream(
-        new QuerySnapshotObserver() {
+        new ApiStreamObserver<RunQueryResponse>() {
           final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
-          // The stream's onCompleted could be called more than once,
-          // this flag makes sure only the first one is actually processed.
-          boolean hasCompleted = false;
+          Timestamp responseReadTime;
 
           @Override
-          public void onNext(QueryDocumentSnapshot documentSnapshot) {
-            documentSnapshots.add(documentSnapshot);
+          public void onNext(RunQueryResponse runQueryResponse) {
+            if (runQueryResponse.hasDocument()) {
+              Document document = runQueryResponse.getDocument();
+              QueryDocumentSnapshot documentSnapshot =
+                  QueryDocumentSnapshot.fromDocument(
+                      rpcContext, Timestamp.fromProto(runQueryResponse.getReadTime()), document);
+              documentSnapshots.add(documentSnapshot);
+            }
+            if (responseReadTime == null) {
+              responseReadTime = Timestamp.fromProto(runQueryResponse.getReadTime());
+            }
           }
 
           @Override
@@ -1748,9 +1974,6 @@ public class Query {
 
           @Override
           public void onCompleted() {
-            if (hasCompleted) return;
-            hasCompleted = true;
-
             // The results for limitToLast queries need to be flipped since we reversed the
             // ordering constraints before sending the query to the backend.
             List<QueryDocumentSnapshot> resultView =
@@ -1758,58 +1981,36 @@ public class Query {
                     ? reverse(documentSnapshots)
                     : documentSnapshots;
             QuerySnapshot querySnapshot =
-                QuerySnapshot.withDocuments(Query.this, this.getReadTime(), resultView);
+                QuerySnapshot.withDocuments(Query.this, responseReadTime, resultView);
             result.set(querySnapshot);
           }
         },
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         transactionId,
-        /* readTime= */ null);
+        /* readTime= */ requestReadTime,
+        /* explainOptions= */ null);
 
     return result;
   }
 
   Comparator<QueryDocumentSnapshot> comparator() {
-    return (doc1, doc2) -> {
-      // Add implicit sorting by name, using the last specified direction.
-      ImmutableList<FieldOrder> fieldOrders = options.getFieldOrders();
-      Direction lastDirection =
-          fieldOrders.isEmpty()
-              ? Direction.ASCENDING
-              : fieldOrders.get(fieldOrders.size() - 1).direction;
+    Iterator<FieldOrder> iterator = options.getFieldOrders().iterator();
+    if (!iterator.hasNext()) {
+      return DOCUMENT_ID_COMPARATOR;
+    }
+    FieldOrder fieldOrder = iterator.next();
+    Comparator<QueryDocumentSnapshot> comparator = fieldOrder;
+    while (iterator.hasNext()) {
+      fieldOrder = iterator.next();
+      comparator = comparator.thenComparing(fieldOrder);
+    }
+    // Add implicit sorting by name, using the last specified direction.
+    Direction lastDirection = fieldOrder.direction;
+    return comparator.thenComparing(lastDirection.documentIdComparator);
+  }
 
-      List<FieldOrder> orderBys = new ArrayList<>(fieldOrders);
-      orderBys.add(new FieldOrder(FieldPath.DOCUMENT_ID.toProto(), lastDirection));
-
-      for (FieldOrder orderBy : orderBys) {
-        int comp;
-
-        String path = orderBy.fieldReference.getFieldPath();
-        if (FieldPath.isDocumentId(path)) {
-          comp =
-              doc1.getReference()
-                  .getResourcePath()
-                  .compareTo(doc2.getReference().getResourcePath());
-        } else {
-          FieldPath fieldPath = FieldPath.fromDotSeparatedString(path);
-          Preconditions.checkState(
-              doc1.contains(fieldPath) && doc2.contains(fieldPath),
-              "Can only compare fields that exist in the DocumentSnapshot."
-                  + " Please include the fields you are ordering on in your select() call.");
-          Value v1 = doc1.extractField(fieldPath);
-          Value v2 = doc2.extractField(fieldPath);
-
-          comp = com.google.cloud.firestore.Order.INSTANCE.compare(v1, v2);
-        }
-
-        if (comp != 0) {
-          int direction = orderBy.direction.equals(Direction.ASCENDING) ? 1 : -1;
-          return direction * comp;
-        }
-      }
-
-      return 0;
-    };
+  private static int compareDocumentId(QueryDocumentSnapshot doc1, QueryDocumentSnapshot doc2) {
+    return doc1.getReference().getResourcePath().compareTo(doc2.getReference().getResourcePath());
   }
 
   /**
@@ -1817,7 +2018,8 @@ public class Query {
    * list.
    */
   private <T> ImmutableList<T> append(ImmutableList<T> existingList, T newElement) {
-    ImmutableList.Builder<T> builder = ImmutableList.builder();
+    ImmutableList.Builder<T> builder =
+        ImmutableList.builderWithExpectedSize(existingList.size() + 1);
     builder.addAll(existingList);
     builder.add(newElement);
     return builder.build();
@@ -1867,14 +2069,35 @@ public class Query {
    * <em>without actually downloading the documents</em>.
    *
    * <p>Using the returned query to count the documents is efficient because only the final count,
-   * not the documents' data, is downloaded. The returned query can even count the documents if the
-   * result set would be prohibitively large to download entirely (e.g. thousands of documents).
+   * not the documents' data, is downloaded. The returned query can count the documents in cases
+   * where the result set is prohibitively large to download entirely (thousands of documents).
    *
    * @return a query that counts the documents in the result set of this query.
    */
   @Nonnull
   public AggregateQuery count() {
-    return new AggregateQuery(this);
+    return new AggregateQuery(this, Collections.singletonList(AggregateField.count()));
+  }
+
+  /**
+   * Calculates the specified aggregations over the documents in the result set of the given query
+   * <em>without actually downloading the documents</em>.
+   *
+   * <p>Using the returned query to perform aggregations is efficient because only the final
+   * aggregation values, not the documents' data, is downloaded. The returned query can perform
+   * aggregations of the documents in cases where the result set is prohibitively large to download
+   * entirely (thousands of documents).
+   *
+   * @return an {@link AggregateQuery} that performs aggregations on the documents in the result set
+   *     of this query.
+   */
+  @Nonnull
+  public AggregateQuery aggregate(
+      @Nonnull AggregateField aggregateField1, @Nonnull AggregateField... aggregateFields) {
+    List<AggregateField> aggregateFieldList = new ArrayList<>();
+    aggregateFieldList.add(aggregateField1);
+    aggregateFieldList.addAll(Arrays.asList(aggregateFields));
+    return new AggregateQuery(this, aggregateFieldList);
   }
 
   /**

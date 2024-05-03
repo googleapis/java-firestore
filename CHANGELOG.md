@@ -1,5 +1,456 @@
 # Changelog
 
+## [3.21.0](https://github.com/googleapis/java-firestore/compare/v3.20.2...v3.21.0) (2024-04-26)
+
+
+### Features
+
+* Add Vector Index API ([4964982](https://github.com/googleapis/java-firestore/commit/496498271b31a878910c17954350673beade2bef))
+* Add VectorSearch API ([4964982](https://github.com/googleapis/java-firestore/commit/496498271b31a878910c17954350673beade2bef))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.39.0 ([#1629](https://github.com/googleapis/java-firestore/issues/1629)) ([4964982](https://github.com/googleapis/java-firestore/commit/496498271b31a878910c17954350673beade2bef))
+
+
+### Documentation
+
+* Allow 14 week backup retention for Firestore daily backups ([4964982](https://github.com/googleapis/java-firestore/commit/496498271b31a878910c17954350673beade2bef))
+* Correct BackupSchedule recurrence docs that mentioned specific time of day ([4964982](https://github.com/googleapis/java-firestore/commit/496498271b31a878910c17954350673beade2bef))
+
+## [3.20.2](https://github.com/googleapis/java-firestore/compare/v3.20.1...v3.20.2) (2024-04-19)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.29.0 ([#1652](https://github.com/googleapis/java-firestore/issues/1652)) ([1e3b0b9](https://github.com/googleapis/java-firestore/commit/1e3b0b9dde920d18311de226a52652ef71a6a180))
+
+## [3.20.1](https://github.com/googleapis/java-firestore/compare/v3.20.0...v3.20.1) (2024-04-18)
+
+
+### Dependencies
+
+* Update beam.version to v2.55.1 ([#1643](https://github.com/googleapis/java-firestore/issues/1643)) ([88ce6c3](https://github.com/googleapis/java-firestore/commit/88ce6c3c1855c527243fcdf236d8210e8ecb3610))
+
+## [3.20.0](https://github.com/googleapis/java-firestore/compare/v3.19.3...v3.20.0) (2024-03-26)
+
+
+### Features
+
+* Query Profiling ([#1609](https://github.com/googleapis/java-firestore/issues/1609)) ([55b1a49](https://github.com/googleapis/java-firestore/commit/55b1a49ad3b75835b6b4f8a1cfd8d665c1a56968))
+
+
+### Dependencies
+
+* Update beam.version to v2.55.0 ([#1631](https://github.com/googleapis/java-firestore/issues/1631)) ([bdb2e43](https://github.com/googleapis/java-firestore/commit/bdb2e4314d2eacdff69b538876e69e7007427925))
+
+## [3.19.3](https://github.com/googleapis/java-firestore/compare/v3.19.2...v3.19.3) (2024-03-21)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.28.1 ([#1625](https://github.com/googleapis/java-firestore/issues/1625)) ([f390946](https://github.com/googleapis/java-firestore/commit/f39094608151df51f32a8f91717eee5840a2d4d2))
+
+## [3.19.2](https://github.com/googleapis/java-firestore/compare/v3.19.1...v3.19.2) (2024-03-18)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.28.1 ([#1617](https://github.com/googleapis/java-firestore/issues/1617)) ([44d5e8d](https://github.com/googleapis/java-firestore/commit/44d5e8d9e6e05c9119dd5a5fdfc51ebba27c71c9))
+
+## [3.19.1](https://github.com/googleapis/java-firestore/compare/v3.19.0...v3.19.1) (2024-03-15)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.28.0 ([#1612](https://github.com/googleapis/java-firestore/issues/1612)) ([06fa74e](https://github.com/googleapis/java-firestore/commit/06fa74e5fbaf1bbc74ab8d220356ad2c6ab4b7ac))
+
+## [3.19.0](https://github.com/googleapis/java-firestore/compare/v3.18.0...v3.19.0) (2024-03-15)
+
+
+### Features
+
+* A new message `Backup` is added ([#1611](https://github.com/googleapis/java-firestore/issues/1611)) ([434a55b](https://github.com/googleapis/java-firestore/commit/434a55b478fc617c2ec892a30d3eb1ce027ac54f))
+* Add ExplainMetrics field to RunAggregationQueryResponse ([f275b16](https://github.com/googleapis/java-firestore/commit/f275b1603225895e2673131191b4c15927e3bdcd))
+* Add ExplainMetrics field to RunQueryResponse ([f275b16](https://github.com/googleapis/java-firestore/commit/f275b1603225895e2673131191b4c15927e3bdcd))
+* Add ExplainOptions field to RunAggregationQueryRequest ([f275b16](https://github.com/googleapis/java-firestore/commit/f275b1603225895e2673131191b4c15927e3bdcd))
+* Add ExplainOptions field to RunQueryRequest ([f275b16](https://github.com/googleapis/java-firestore/commit/f275b1603225895e2673131191b4c15927e3bdcd))
+* Add new types ExplainOptions, ExplainMetrics, PlanSummary, ExecutionStats ([#1608](https://github.com/googleapis/java-firestore/issues/1608)) ([f275b16](https://github.com/googleapis/java-firestore/commit/f275b1603225895e2673131191b4c15927e3bdcd))
+
+
+### Bug Fixes
+
+* Update DocFX profile ([#1603](https://github.com/googleapis/java-firestore/issues/1603)) ([0a2eb16](https://github.com/googleapis/java-firestore/commit/0a2eb1640e1d4fb13d05bc489ace5a773a0b9a78))
+
+## [3.18.0](https://github.com/googleapis/java-firestore/compare/v3.17.1...v3.18.0) (2024-03-04)
+
+
+### Features
+
+* `Instant` support ([#1586](https://github.com/googleapis/java-firestore/issues/1586)) ([77a9bfc](https://github.com/googleapis/java-firestore/commit/77a9bfc9c501eeb10ee97f91b0b0b97e92f2c71d))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.37.0 ([#1597](https://github.com/googleapis/java-firestore/issues/1597)) ([7574dfd](https://github.com/googleapis/java-firestore/commit/7574dfd1c73c73c3de7cf3235e55ed20190991b8))
+* Only override built-in retry settings when the customer provides them. ([#1588](https://github.com/googleapis/java-firestore/issues/1588)) ([103c37a](https://github.com/googleapis/java-firestore/commit/103c37a92764930480149f288fd9350a829d4953))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.27.0 ([#1596](https://github.com/googleapis/java-firestore/issues/1596)) ([2672d71](https://github.com/googleapis/java-firestore/commit/2672d7173b2bd5723beb7fa1be4d3e2bf1ec0e9c))
+
+## [3.17.1](https://github.com/googleapis/java-firestore/compare/v3.17.0...v3.17.1) (2024-02-22)
+
+
+### Dependencies
+
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.10.1 ([#1576](https://github.com/googleapis/java-firestore/issues/1576)) ([f45af23](https://github.com/googleapis/java-firestore/commit/f45af236c0b74ab2507e232ed2c3e6c2d9363360))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.10.1 ([#1577](https://github.com/googleapis/java-firestore/issues/1577)) ([396d06b](https://github.com/googleapis/java-firestore/commit/396d06bfa6e0353ddf02c4309a220f10020ca90c))
+
+## [3.17.0](https://github.com/googleapis/java-firestore/compare/v3.16.3...v3.17.0) (2024-02-15)
+
+
+### Features
+
+* Add an API method for reordering firewall policies ([#1572](https://github.com/googleapis/java-firestore/issues/1572)) ([60d8ab1](https://github.com/googleapis/java-firestore/commit/60d8ab167e56806a9ef66d904f6d11f6b45b4ef9))
+
+
+### Bug Fixes
+
+* Transactions with `readTime` will omit begin and commit transaction requests, and instead pass `readTime` on individual read requests. ([#1565](https://github.com/googleapis/java-firestore/issues/1565)) ([d5fb01a](https://github.com/googleapis/java-firestore/commit/d5fb01ad99a04f7e1ac8327eb14931db0307b13a))
+
+
+### Dependencies
+
+* Update beam.version to v2.54.0 ([#1571](https://github.com/googleapis/java-firestore/issues/1571)) ([e0d4daa](https://github.com/googleapis/java-firestore/commit/e0d4daafcf7f37f399c2e7a32a69429c451f8ee9))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.25.0 ([#1567](https://github.com/googleapis/java-firestore/issues/1567)) ([b6c1531](https://github.com/googleapis/java-firestore/commit/b6c1531abd2f2075ec3eb925682d65a23298dc29))
+
+## [3.16.3](https://github.com/googleapis/java-firestore/compare/v3.16.2...v3.16.3) (2024-02-05)
+
+
+### Dependencies
+
+* Update dependency org.junit.vintage:junit-vintage-engine to v5.10.2 ([#1559](https://github.com/googleapis/java-firestore/issues/1559)) ([502cf05](https://github.com/googleapis/java-firestore/commit/502cf0594c030460db5f7d44c08ea0e9398ad2ac))
+
+## [3.16.2](https://github.com/googleapis/java-firestore/compare/v3.16.1...v3.16.2) (2024-02-01)
+
+
+### Bug Fixes
+
+* Remove QueryMode field from RunAggregationQueryRequest ([32b539c](https://github.com/googleapis/java-firestore/commit/32b539c2431f437ec556923864f967a487c32552))
+* Remove QueryMode field from RunQueryRequest ([32b539c](https://github.com/googleapis/java-firestore/commit/32b539c2431f437ec556923864f967a487c32552))
+* Remove ResultSetStats field from RunAggregationQueryResponse ([32b539c](https://github.com/googleapis/java-firestore/commit/32b539c2431f437ec556923864f967a487c32552))
+* Remove ResultSetStats field from RunQueryResponse ([32b539c](https://github.com/googleapis/java-firestore/commit/32b539c2431f437ec556923864f967a487c32552))
+* Remove types QueryMode, QueryPlan, ResultSetStats ([32b539c](https://github.com/googleapis/java-firestore/commit/32b539c2431f437ec556923864f967a487c32552))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.24.0 ([#1551](https://github.com/googleapis/java-firestore/issues/1551)) ([6874143](https://github.com/googleapis/java-firestore/commit/68741438c7a7fe50da2a72cb9688947ccccf7638))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.10.0 ([#1553](https://github.com/googleapis/java-firestore/issues/1553)) ([701d820](https://github.com/googleapis/java-firestore/commit/701d82078df9e7cff902072abcc6767a67bde3d6))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.10.0 ([#1554](https://github.com/googleapis/java-firestore/issues/1554)) ([581da1f](https://github.com/googleapis/java-firestore/commit/581da1f963ac951b5ca2d5b9edc2ad8a9f189ca6))
+
+## [3.16.1](https://github.com/googleapis/java-firestore/compare/v3.16.0...v3.16.1) (2024-01-25)
+
+
+### Bug Fixes
+
+* `internalStream` should handle duplicate `onComplete`s. ([#1523](https://github.com/googleapis/java-firestore/issues/1523)) ([b3067d7](https://github.com/googleapis/java-firestore/commit/b3067d7b382ea5c4c9124a12a701abe2f7289503))
+* Allow an explicit MustExist precondition for update ([#1542](https://github.com/googleapis/java-firestore/issues/1542)) ([46e09aa](https://github.com/googleapis/java-firestore/commit/46e09aad7f6689d4dfe82bd284905d52edda4364))
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.32.0 ([#1534](https://github.com/googleapis/java-firestore/issues/1534)) ([2281320](https://github.com/googleapis/java-firestore/commit/2281320fd924a1d6c259a493ce703a51f0cd8a03))
+* Make rollback best effort. ([#1515](https://github.com/googleapis/java-firestore/issues/1515)) ([4c39af5](https://github.com/googleapis/java-firestore/commit/4c39af50d6d416440164fc5d5360f3912cd8f01b))
+* Thread safe UpdateBuilder ([#1537](https://github.com/googleapis/java-firestore/issues/1537)) ([f9cdab5](https://github.com/googleapis/java-firestore/commit/f9cdab5885bd1d500c6fc412eb3090cea9347d0e))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.22.0 ([#1535](https://github.com/googleapis/java-firestore/issues/1535)) ([04c0e07](https://github.com/googleapis/java-firestore/commit/04c0e0736ddcd49eb42aacb31e2fc087b2a39754))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.23.0 ([#1544](https://github.com/googleapis/java-firestore/issues/1544)) ([79713bf](https://github.com/googleapis/java-firestore/commit/79713bf0fa376a4d22518ae2f5da9660795d9f89))
+
+
+### Documentation
+
+* Fix formatting due to unclosed backtick ([#1529](https://github.com/googleapis/java-firestore/issues/1529)) ([3c78fe3](https://github.com/googleapis/java-firestore/commit/3c78fe3c248cb212c6e4f91a5bb7aeb8b9b003b0))
+* Rring BulkWriter out of BetaApi status. ([#1513](https://github.com/googleapis/java-firestore/issues/1513)) ([c2812f7](https://github.com/googleapis/java-firestore/commit/c2812f7cb72257512ffecc98ec1bdb1109d7d044))
+
+## [3.16.0](https://github.com/googleapis/java-firestore/compare/v3.15.7...v3.16.0) (2024-01-10)
+
+
+### Features
+
+* Add DeleteDatabase API and delete protection ([#1508](https://github.com/googleapis/java-firestore/issues/1508)) ([81a1b48](https://github.com/googleapis/java-firestore/commit/81a1b48bae2398f13d0081ea203d8dbac2e74987))
+* Add new types QueryMode, QueryPlan, ResultSetStats ([#1516](https://github.com/googleapis/java-firestore/issues/1516)) ([3060e86](https://github.com/googleapis/java-firestore/commit/3060e868e467a9ef8399f9d15bd91cc819e7bf05))
+* Expose Firestore namespace ID fields in import/export APIs to stable ([21ad25f](https://github.com/googleapis/java-firestore/commit/21ad25f75f91527cf9152a0476af385717e5b111))
+* Expose Firestore PITR fields in Database to stable ([#1495](https://github.com/googleapis/java-firestore/issues/1495)) ([21ad25f](https://github.com/googleapis/java-firestore/commit/21ad25f75f91527cf9152a0476af385717e5b111))
+* Expose Firestore snapshot_time field in export API to stable ([21ad25f](https://github.com/googleapis/java-firestore/commit/21ad25f75f91527cf9152a0476af385717e5b111))
+* Logical termination for firestore.getAll(...). ([#1517](https://github.com/googleapis/java-firestore/issues/1517)) ([c6448fc](https://github.com/googleapis/java-firestore/commit/c6448fc6411de01b3453e58bcbfca633e0849166))
+
+
+### Bug Fixes
+
+* Better error message when Transaction/WriteBatch is modified after commit. ([#1503](https://github.com/googleapis/java-firestore/issues/1503)) ([9693c7b](https://github.com/googleapis/java-firestore/commit/9693c7b46dcb63b0348217ecb7c29b95ecd04191))
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.31.0 ([#1520](https://github.com/googleapis/java-firestore/issues/1520)) ([c4c5a0b](https://github.com/googleapis/java-firestore/commit/c4c5a0b5a5f0e428b041c0ace80c1bbed3872564))
+
+
+### Dependencies
+
+* Update beam.version to v2.53.0 ([#1514](https://github.com/googleapis/java-firestore/issues/1514)) ([7639e0d](https://github.com/googleapis/java-firestore/commit/7639e0d0eefb9df84ab535f61c836d0dfb0ef6cf))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.21.0 ([#1518](https://github.com/googleapis/java-firestore/issues/1518)) ([866b2b4](https://github.com/googleapis/java-firestore/commit/866b2b48ee7acf644dc6355054d7b2ae7e627c13))
+
+
+### Documentation
+
+* Assorted typo fixes and whitespace updates ([21ad25f](https://github.com/googleapis/java-firestore/commit/21ad25f75f91527cf9152a0476af385717e5b111))
+* Remove latin abbreviations from comments. ([#1457](https://github.com/googleapis/java-firestore/issues/1457)) ([1cfa03d](https://github.com/googleapis/java-firestore/commit/1cfa03d36a04f17fba91cc7b1f05a59ee149c7aa))
+* Tweak Count API docs ([#1522](https://github.com/googleapis/java-firestore/issues/1522)) ([e25ae13](https://github.com/googleapis/java-firestore/commit/e25ae1391893f26faac9938d49918fcad6a9d0ed))
+
+## [3.15.7](https://github.com/googleapis/java-firestore/compare/v3.15.6...v3.15.7) (2023-12-01)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.20.0 ([#1490](https://github.com/googleapis/java-firestore/issues/1490)) ([73a85e7](https://github.com/googleapis/java-firestore/commit/73a85e7b39bee9024ec06995c5d2a269ddf61503))
+
+## [3.15.6](https://github.com/googleapis/java-firestore/compare/v3.15.5...v3.15.6) (2023-11-22)
+
+
+### Dependencies
+
+* Update beam.version to v2.52.0 ([#1480](https://github.com/googleapis/java-firestore/issues/1480)) ([45e33f7](https://github.com/googleapis/java-firestore/commit/45e33f771e012c2ad889466191de03375b7a1e83))
+* Update dependency org.apache.commons:commons-lang3 to v3.14.0 ([#1482](https://github.com/googleapis/java-firestore/issues/1482)) ([3ef71f8](https://github.com/googleapis/java-firestore/commit/3ef71f8da4c07a5e9ef3a44e3f30290d20382c10))
+
+## [3.15.5](https://github.com/googleapis/java-firestore/compare/v3.15.4...v3.15.5) (2023-11-14)
+
+
+### Bug Fixes
+
+* Prevent watch stream from emitting events after close. ([#1471](https://github.com/googleapis/java-firestore/issues/1471)) ([ee3f8c0](https://github.com/googleapis/java-firestore/commit/ee3f8c0c6e2c8aff64f429e8eea649cc6614c74f))
+
+
+### Dependencies
+
+* Update actions/github-script action to v7 ([#1473](https://github.com/googleapis/java-firestore/issues/1473)) ([1097a0b](https://github.com/googleapis/java-firestore/commit/1097a0b97c1dff40c07b657417db4ac431822619))
+* Update actions/github-script action to v7 ([#1475](https://github.com/googleapis/java-firestore/issues/1475)) ([d848d87](https://github.com/googleapis/java-firestore/commit/d848d875738260cde620f5cedfc15bf4dae31aac))
+
+## [3.15.4](https://github.com/googleapis/java-firestore/compare/v3.15.3...v3.15.4) (2023-11-07)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.19.0 ([#1467](https://github.com/googleapis/java-firestore/issues/1467)) ([a048707](https://github.com/googleapis/java-firestore/commit/a04870759725f03304842373df46f8186861a38f))
+
+## [3.15.3](https://github.com/googleapis/java-firestore/compare/v3.15.2...v3.15.3) (2023-11-06)
+
+
+### Dependencies
+
+* Update dependency org.junit.vintage:junit-vintage-engine to v5.10.1 ([#1463](https://github.com/googleapis/java-firestore/issues/1463)) ([6180322](https://github.com/googleapis/java-firestore/commit/6180322051a63f537d5d355fecc68fe798b44035))
+
+## [3.15.2](https://github.com/googleapis/java-firestore/compare/v3.15.1...v3.15.2) (2023-10-20)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.18.0 ([#1450](https://github.com/googleapis/java-firestore/issues/1450)) ([d32d343](https://github.com/googleapis/java-firestore/commit/d32d343ddd4e72c8b434372657a51fc631ba2887))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.28 ([#1451](https://github.com/googleapis/java-firestore/issues/1451)) ([a008a69](https://github.com/googleapis/java-firestore/commit/a008a6943f278658be914b3b88f196a30e36deb1))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.28 ([#1452](https://github.com/googleapis/java-firestore/issues/1452)) ([59daefe](https://github.com/googleapis/java-firestore/commit/59daefe4c3b760c4f3c0b0cf00655465859be4ef))
+
+## [3.15.1](https://github.com/googleapis/java-firestore/compare/v3.15.0...v3.15.1) (2023-10-11)
+
+
+### Dependencies
+
+* Update dependency org.apache.beam:beam-runners-direct-java to v2.51.0 ([#1443](https://github.com/googleapis/java-firestore/issues/1443)) ([738f93a](https://github.com/googleapis/java-firestore/commit/738f93adca3dc42b835c454bf0fc84d87f4bb6b9))
+
+## [3.15.0](https://github.com/googleapis/java-firestore/compare/v3.14.4...v3.15.0) (2023-10-10)
+
+
+### Features
+
+* Sum and Average aggregations ([#1387](https://github.com/googleapis/java-firestore/issues/1387)) ([afa5c01](https://github.com/googleapis/java-firestore/commit/afa5c0124c98a0a58259e54c9bb054248b4d4104))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.17.0 ([#1437](https://github.com/googleapis/java-firestore/issues/1437)) ([cd006f9](https://github.com/googleapis/java-firestore/commit/cd006f90db7c57742d57be74ba244cb0f24a4620))
+
+## [3.14.4](https://github.com/googleapis/java-firestore/compare/v3.14.3...v3.14.4) (2023-09-28)
+
+
+### Bug Fixes
+
+* Add tests for multiple inequality support ([#1392](https://github.com/googleapis/java-firestore/issues/1392)) ([e01b3a1](https://github.com/googleapis/java-firestore/commit/e01b3a1c2489b9cde11543584ab32270960c41ce))
+
+
+### Dependencies
+
+* Remove unused dependency that is blocking PR 1428 ([#1429](https://github.com/googleapis/java-firestore/issues/1429)) ([73ff8dc](https://github.com/googleapis/java-firestore/commit/73ff8dca20052715ae88e91bd5c322d06dbeccc0))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.16.1 ([#1431](https://github.com/googleapis/java-firestore/issues/1431)) ([38832f9](https://github.com/googleapis/java-firestore/commit/38832f9853019aedbbf04d34a64d007cbff2752f))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.27 ([#1425](https://github.com/googleapis/java-firestore/issues/1425)) ([dc26bbb](https://github.com/googleapis/java-firestore/commit/dc26bbb91e291d53597221873d3c0995de3d31a2))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.27 ([#1426](https://github.com/googleapis/java-firestore/issues/1426)) ([5e8b299](https://github.com/googleapis/java-firestore/commit/5e8b2998c90829eccef5d18d50541ba5ea3d74f5))
+
+## [3.14.3](https://github.com/googleapis/java-firestore/compare/v3.14.2...v3.14.3) (2023-09-12)
+
+
+### Bug Fixes
+
+* Add reflections configs for generated firestore classes ([#1419](https://github.com/googleapis/java-firestore/issues/1419)) ([1c5e09f](https://github.com/googleapis/java-firestore/commit/1c5e09f08f3e8d57152fa7f0fae52ef2cea8331b))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.15.0 ([#1417](https://github.com/googleapis/java-firestore/issues/1417)) ([3626776](https://github.com/googleapis/java-firestore/commit/3626776483d005ba5d07046eebe25b9c6b39242e))
+
+## [3.14.2](https://github.com/googleapis/java-firestore/compare/v3.14.1...v3.14.2) (2023-09-07)
+
+
+### Dependencies
+
+* Update beam.version to v2.50.0 ([#1410](https://github.com/googleapis/java-firestore/issues/1410)) ([fa14cad](https://github.com/googleapis/java-firestore/commit/fa14cad1ed9536c97279461af9355eb7674c4a85))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.26 ([#1413](https://github.com/googleapis/java-firestore/issues/1413)) ([501af1a](https://github.com/googleapis/java-firestore/commit/501af1ac6d7b62fd6128a1d30cc234c00fc9c592))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.26 ([#1414](https://github.com/googleapis/java-firestore/issues/1414)) ([afb93d2](https://github.com/googleapis/java-firestore/commit/afb93d2ba5e7a300da64bdc98467481c8d0151b7))
+
+## [3.14.1](https://github.com/googleapis/java-firestore/compare/v3.14.0...v3.14.1) (2023-08-25)
+
+
+### Dependencies
+
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.25 ([#1405](https://github.com/googleapis/java-firestore/issues/1405)) ([01720e5](https://github.com/googleapis/java-firestore/commit/01720e5a56645e5e0f4aae83af401256eab2aadb))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.25 ([#1406](https://github.com/googleapis/java-firestore/issues/1406)) ([438ad97](https://github.com/googleapis/java-firestore/commit/438ad974e4e37f60d889ccfe716d2427ebf74ffc))
+
+## [3.14.0](https://github.com/googleapis/java-firestore/compare/v3.13.8...v3.14.0) (2023-08-08)
+
+
+### Features
+
+* Publish proto definitions for SUM/AVG in Firestore ([#1304](https://github.com/googleapis/java-firestore/issues/1304)) ([b025d11](https://github.com/googleapis/java-firestore/commit/b025d118433b3930b5186621ef852b4219c2274d))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.14.0 ([#1385](https://github.com/googleapis/java-firestore/issues/1385)) ([d215982](https://github.com/googleapis/java-firestore/commit/d215982730aae862bb0b113887b3ebfc1413d602))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.24 ([#1388](https://github.com/googleapis/java-firestore/issues/1388)) ([24be02b](https://github.com/googleapis/java-firestore/commit/24be02b562780a76847608ca18e8ab2aa4d4514e))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.24 ([#1389](https://github.com/googleapis/java-firestore/issues/1389)) ([34e30e0](https://github.com/googleapis/java-firestore/commit/34e30e053e891f2dadcb09e4dc918dca2709c23d))
+
+## [3.13.8](https://github.com/googleapis/java-firestore/compare/v3.13.7...v3.13.8) (2023-07-28)
+
+
+### Dependencies
+
+* Update dependency org.apache.commons:commons-lang3 to v3.13.0 ([#1380](https://github.com/googleapis/java-firestore/issues/1380)) ([f6f07fb](https://github.com/googleapis/java-firestore/commit/f6f07fbccfcb331d318f66d75a7083695dc21bbb))
+
+## [3.13.7](https://github.com/googleapis/java-firestore/compare/v3.13.6...v3.13.7) (2023-07-27)
+
+
+### Dependencies
+
+* Update beam.version to v2.49.0 ([#1357](https://github.com/googleapis/java-firestore/issues/1357)) ([6eaf446](https://github.com/googleapis/java-firestore/commit/6eaf44650e6ef8ea0ec68e3a7195519c2f631ed2))
+
+## [3.13.6](https://github.com/googleapis/java-firestore/compare/v3.13.5...v3.13.6) (2023-07-24)
+
+
+### Dependencies
+
+* Update dependency org.junit.vintage:junit-vintage-engine to v5.10.0 ([#1368](https://github.com/googleapis/java-firestore/issues/1368)) ([188a8e9](https://github.com/googleapis/java-firestore/commit/188a8e9abfa3c500327e45327966e609b12b2267))
+
+## [3.13.5](https://github.com/googleapis/java-firestore/compare/v3.13.4...v3.13.5) (2023-07-20)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.13.1 ([#1364](https://github.com/googleapis/java-firestore/issues/1364)) ([7dde6ee](https://github.com/googleapis/java-firestore/commit/7dde6ee0b0e39c72665314da25dd9a71aab29e75))
+
+## [3.13.4](https://github.com/googleapis/java-firestore/compare/v3.13.3...v3.13.4) (2023-07-20)
+
+
+### Bug Fixes
+
+* Remove  'x-goog-request-params' header from GRPC requests due to incorrect format. ([#1358](https://github.com/googleapis/java-firestore/issues/1358)) ([1a1bf5f](https://github.com/googleapis/java-firestore/commit/1a1bf5f101d44b0870b44ddf225ccd66d9c2bbc8))
+
+## [3.13.3](https://github.com/googleapis/java-firestore/compare/v3.13.2...v3.13.3) (2023-07-13)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.13.0 ([#1351](https://github.com/googleapis/java-firestore/issues/1351)) ([7c11f8a](https://github.com/googleapis/java-firestore/commit/7c11f8a3667ad9bcc217813a7867e0d18760948e))
+
+## [3.13.2](https://github.com/googleapis/java-firestore/compare/v3.13.1...v3.13.2) (2023-06-22)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.12.0 ([#1338](https://github.com/googleapis/java-firestore/issues/1338)) ([0ef1882](https://github.com/googleapis/java-firestore/commit/0ef18821e1bec0a99da5609f6b894f0c4131f6c5))
+
+## [3.13.1](https://github.com/googleapis/java-firestore/compare/v3.13.0...v3.13.1) (2023-06-21)
+
+
+### Dependencies
+
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.23 ([#1329](https://github.com/googleapis/java-firestore/issues/1329)) ([ea5e78f](https://github.com/googleapis/java-firestore/commit/ea5e78fd136cad86ce439ca0e7338ed84ef1a3d7))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.23 ([#1330](https://github.com/googleapis/java-firestore/issues/1330)) ([63a01e6](https://github.com/googleapis/java-firestore/commit/63a01e6034ed2c6f6f3613da01ca07d6dffb1909))
+
+## [3.13.0](https://github.com/googleapis/java-firestore/compare/v3.12.1...v3.13.0) (2023-06-12)
+
+
+### Features
+
+* Add toString methods to classes comprising WriteBatch ([#1281](https://github.com/googleapis/java-firestore/issues/1281)) ([9df8028](https://github.com/googleapis/java-firestore/commit/9df80286f350ce35c5ed4b2a44df117b7e241a4a))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.11.0 ([#1322](https://github.com/googleapis/java-firestore/issues/1322)) ([c2bca72](https://github.com/googleapis/java-firestore/commit/c2bca72f27206eaed813199be7b4944d085246e2))
+
+## [3.12.1](https://github.com/googleapis/java-firestore/compare/v3.12.0...v3.12.1) (2023-06-05)
+
+
+### Dependencies
+
+* Update beam.version to v2.48.0 ([#1311](https://github.com/googleapis/java-firestore/issues/1311)) ([0a20e1a](https://github.com/googleapis/java-firestore/commit/0a20e1a32a231372313f77c29ecaec3f085fcb6e))
+
+## [3.12.0](https://github.com/googleapis/java-firestore/compare/v3.11.0...v3.12.0) (2023-05-30)
+
+
+### Features
+
+* Add ApiScope and COLLECTION_RECURSIVE query_scope for Firestore index ([#1300](https://github.com/googleapis/java-firestore/issues/1300)) ([b84a7cd](https://github.com/googleapis/java-firestore/commit/b84a7cd2155484692fc8447c0d27a1cdaa9c8fa1))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.10.1 ([#1305](https://github.com/googleapis/java-firestore/issues/1305)) ([b734212](https://github.com/googleapis/java-firestore/commit/b734212cec11e51b5219b71725df92b7c722791d))
+
+## [3.11.0](https://github.com/googleapis/java-firestore/compare/v3.10.0...v3.11.0) (2023-05-12)
+
+
+### Features
+
+* Add bloom filter related proto fields ([#1285](https://github.com/googleapis/java-firestore/issues/1285)) ([9b14c1b](https://github.com/googleapis/java-firestore/commit/9b14c1b69ca5a70cd92feaa41a520e732c0b3cee))
+
+
+### Dependencies
+
+* Update beam.version to v2.47.0 ([#1292](https://github.com/googleapis/java-firestore/issues/1292)) ([e9f11e8](https://github.com/googleapis/java-firestore/commit/e9f11e86aafaa4a50cca789c7349ac59c4c63ccb))
+* Update dependency com.google.cloud:google-cloud-shared-dependencies to v3.9.0 ([#1291](https://github.com/googleapis/java-firestore/issues/1291)) ([6dd0e8f](https://github.com/googleapis/java-firestore/commit/6dd0e8fe93cd1f18a949ffd98a247d7364d9f475))
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.9.22 ([#1293](https://github.com/googleapis/java-firestore/issues/1293)) ([e8e5f9b](https://github.com/googleapis/java-firestore/commit/e8e5f9b056c94d68c01b90bf49b1d6908b511ab5))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.9.22 ([#1294](https://github.com/googleapis/java-firestore/issues/1294)) ([f0ceb7f](https://github.com/googleapis/java-firestore/commit/f0ceb7fc076e43eb62c1a75fa620ee3e510739f4))
+
+## [3.10.0](https://github.com/googleapis/java-firestore/compare/v3.9.6...v3.10.0) (2023-04-27)
+
+
+### Features
+
+* Add bloom filter related proto fields (only in the preview API surface) ([#1274](https://github.com/googleapis/java-firestore/issues/1274)) ([41909b7](https://github.com/googleapis/java-firestore/commit/41909b712bd0e373218f03ae7e978df1259cfd0d))
+
+## [3.9.6](https://github.com/googleapis/java-firestore/compare/v3.9.5...v3.9.6) (2023-04-26)
+
+
+### Dependencies
+
+* Update dependency org.junit.vintage:junit-vintage-engine to v5.9.3 ([#1275](https://github.com/googleapis/java-firestore/issues/1275)) ([1f32893](https://github.com/googleapis/java-firestore/commit/1f328937a9e1a1ed5b76400a65580ee79562d1f2))
+
 ## [3.9.5](https://github.com/googleapis/java-firestore/compare/v3.9.4...v3.9.5) (2023-04-25)
 
 

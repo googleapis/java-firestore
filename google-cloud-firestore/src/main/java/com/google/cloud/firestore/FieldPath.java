@@ -42,6 +42,8 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
   /** Regular expression to verify that dot-separated field paths do not contain ~*[]/. */
   private static final Pattern PROHIBITED_CHARACTERS = Pattern.compile(".*[~*/\\[\\]].*");
 
+  private static FieldPath EMPTY = null;
+
   /**
    * Creates a FieldPath from the provided field names. If more than one field name is provided, the
    * path will point to a nested field in a document.
@@ -56,7 +58,8 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
     for (int i = 0; i < fieldNames.length; ++i) {
       Preconditions.checkArgument(
           fieldNames[i] != null && !fieldNames[i].isEmpty(),
-          "Invalid field name at argument " + (i + 1) + ". Field names must not be null or empty.");
+          "Invalid field name at argument %s. Field names must not be null or empty.",
+          (i + 1));
     }
 
     return new AutoValue_FieldPath(ImmutableList.copyOf(fieldNames));
@@ -83,11 +86,68 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
     return empty().append(field);
   }
 
+  /**
+   * Creates a {@code FieldPath} from a server-encoded field path.
+   *
+   * <p>Copied from Firebase Android SDK:
+   * https://github.com/firebase/firebase-android-sdk/blob/2d3b2be7d2d00d693eb74986f20a6265c918848f/firebase-firestore/src/main/java/com/google/firebase/firestore/model/FieldPath.java#L47
+   */
+  public static FieldPath fromServerFormat(String path) {
+    ImmutableList.Builder<String> res = ImmutableList.builder();
+    StringBuilder builder = new StringBuilder();
+
+    int i = 0;
+
+    // If we're inside '`' backticks, then we should ignore '.' dots.
+    boolean inBackticks = false;
+
+    int length = path.length();
+    while (i < length) {
+      char c = path.charAt(i);
+      if (c == '\\') {
+        if (i + 1 == length) {
+          throw new IllegalArgumentException("Trailing escape character is not allowed");
+        }
+        i++;
+        builder.append(path.charAt(i));
+      } else if (c == '.') {
+        if (!inBackticks) {
+          String elem = builder.toString();
+          if (elem.isEmpty()) {
+            throw new IllegalArgumentException(
+                "Invalid field path ("
+                    + path
+                    + "). Paths must not be empty, begin with '.', end with '.', or contain '..'");
+          }
+          builder = new StringBuilder();
+          res.add(elem);
+        } else {
+          // escaped, append to current segment
+          builder.append(c);
+        }
+      } else if (c == '`') {
+        inBackticks = !inBackticks;
+      } else {
+        builder.append(c);
+      }
+      i++;
+    }
+    String lastElem = builder.toString();
+    if (lastElem.isEmpty()) {
+      throw new IllegalArgumentException(
+          "Invalid field path ("
+              + path
+              + "). Paths must not be empty, begin with '.', end with '.', or contain '..'");
+    }
+    res.add(lastElem);
+    return new AutoValue_FieldPath(res.build());
+  }
+
   /** Returns an empty field path. */
   static FieldPath empty() {
-    // NOTE: This is not static since it would create a circular class dependency during
-    // initialization.
-    return new AutoValue_FieldPath(ImmutableList.of());
+    // NOTE: This static is lazy evaluated since otherwise it would create a
+    // circular class dependency during initialization.
+    return EMPTY == null ? (EMPTY = new AutoValue_FieldPath(ImmutableList.of())) : EMPTY;
   }
 
   private String encodedPath;

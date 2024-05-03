@@ -37,7 +37,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -72,7 +72,6 @@ import com.google.cloud.firestore.Transaction.Function;
 import com.google.cloud.firestore.TransactionOptions;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -99,7 +98,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -109,7 +107,7 @@ import org.junit.runners.JUnit4;
 import org.threeten.bp.Duration;
 
 @RunWith(JUnit4.class)
-public class ITSystemTest {
+public class ITSystemTest extends ITBaseTest {
 
   private static final double DOUBLE_EPSILON = 0.000001;
 
@@ -124,26 +122,17 @@ public class ITSystemTest {
 
   @Rule public TestName testName = new TestName();
 
-  private Firestore firestore;
   private CollectionReference randomColl;
   private DocumentReference randomDoc;
 
   @Before
-  public void before() {
-    FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().build();
-    firestore = firestoreOptions.getService();
+  public void before() throws Exception {
+    super.before();
+
     randomColl =
         firestore.collection(
             String.format("java-%s-%s", testName.getMethodName(), LocalFirestoreHelper.autoId()));
     randomDoc = randomColl.document();
-  }
-
-  @After
-  public void after() throws Exception {
-    Preconditions.checkNotNull(
-        firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
-    firestore.close();
   }
 
   private DocumentReference setDocument(String documentId, Map<String, ?> fields) throws Exception {
@@ -380,10 +369,108 @@ public class ITSystemTest {
   }
 
   @Test
+  public void defaultQueryStream() throws Exception {
+    addDocument("foo", "bar");
+    addDocument("foo", "bar");
+
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<String> iterator = Arrays.asList("bar", "bar").iterator();
+    randomColl.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.get("foo"));
+          }
+
+          @Override
+          public void onError(Throwable throwable) {}
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the number of response
+    assertFalse(iterator.hasNext());
+  }
+
+  @Test
+  public void largeQuery() throws Exception {
+    int count = 100;
+    while (count-- > 0) {
+      addDocument("foo", "bar");
+    }
+
+    QuerySnapshot querySnapshot = randomColl.get().get();
+    assertEquals(100, querySnapshot.size());
+  }
+
+  @Test
+  public void largeQueryStream() throws Exception {
+    int count = 100;
+    while (count-- > 0) {
+      addDocument("foo", "bar");
+    }
+
+    final Semaphore semaphore = new Semaphore(0);
+    final int[] docCount = {0};
+    randomColl.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            docCount[0]++;
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the number of response
+    assertEquals(100, docCount[0]);
+  }
+
+  @Test
   public void noResults() throws Exception {
     QuerySnapshot querySnapshot = randomColl.get().get();
     assertTrue(querySnapshot.isEmpty());
     assertNotNull(querySnapshot.getReadTime());
+  }
+
+  @Test
+  public void noResultsStream() throws Exception {
+    final Semaphore semaphore = new Semaphore(0);
+    final int[] docCount = {0};
+    randomColl.stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            docCount[0]++;
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the number of response
+    assertEquals(0, docCount[0]);
   }
 
   @Test
@@ -424,6 +511,37 @@ public class ITSystemTest {
   }
 
   @Test
+  public void limitQueryStream() throws Exception {
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+    setDocument("doc3", Collections.singletonMap("counter", 3));
+
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<String> iterator = Arrays.asList("doc1", "doc2").iterator();
+    randomColl.orderBy("counter").limit(2).stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.getId());
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the number of response
+    assertFalse(iterator.hasNext());
+  }
+
+  @Test
   public void limitToLastQuery() throws Exception {
     setDocument("doc1", Collections.singletonMap("counter", 1));
     setDocument("doc2", Collections.singletonMap("counter", 2));
@@ -434,6 +552,47 @@ public class ITSystemTest {
   }
 
   @Test
+  public void largerLimitQuery() throws Exception {
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+    setDocument("doc3", Collections.singletonMap("counter", 3));
+
+    QuerySnapshot querySnapshot = randomColl.orderBy("counter").limit(4).get().get();
+    assertEquals(asList("doc1", "doc2", "doc3"), querySnapshotToIds(querySnapshot));
+  }
+
+  @Test
+  public void largerLimitQueryStream() throws Exception {
+    setDocument("doc1", Collections.singletonMap("counter", 1));
+    setDocument("doc2", Collections.singletonMap("counter", 2));
+    setDocument("doc3", Collections.singletonMap("counter", 3));
+
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<String> iterator = Arrays.asList("doc1", "doc2", "doc3").iterator();
+    randomColl.orderBy("counter").limit(4).stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.getId());
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the number of response
+    assertFalse(iterator.hasNext());
+  }
+
+  @Test
   public void offsetQuery() throws Exception {
     addDocument("foo", "bar");
     addDocument("foo", "bar");
@@ -441,6 +600,75 @@ public class ITSystemTest {
     QuerySnapshot querySnapshot = randomColl.offset(1).get().get();
     assertEquals(1, querySnapshot.size());
     assertEquals("bar", querySnapshot.getDocuments().get(0).get("foo"));
+  }
+
+  @Test
+  public void offsetQueryStream() throws Exception {
+    addDocument("foo", "bar");
+    addDocument("foo", "bar");
+
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<String> iterator = Collections.singletonList("bar").iterator();
+    randomColl.offset(1).stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iterator.next(), documentSnapshot.get("foo"));
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the number of response
+    assertFalse(iterator.hasNext());
+  }
+
+  @Test
+  public void largerOffsetQuery() throws Exception {
+    addDocument("foo", "bar");
+    addDocument("foo", "bar");
+
+    QuerySnapshot querySnapshot = randomColl.offset(3).get().get();
+    assertEquals(0, querySnapshot.size());
+  }
+
+  @Test
+  public void largerOffsetQueryStream() throws Exception {
+    addDocument("foo", "bar");
+    addDocument("foo", "bar");
+
+    final Semaphore semaphore = new Semaphore(0);
+    final int[] docCount = {0};
+    randomColl.offset(3).stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            docCount[0]++;
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the number of response
+    assertEquals(0, docCount[0]);
   }
 
   @Test
@@ -457,6 +685,59 @@ public class ITSystemTest {
     documents = querySnapshot.iterator();
     assertEquals(2L, documents.next().get("foo"));
     assertEquals(1L, documents.next().get("foo"));
+  }
+
+  @Test
+  public void orderByQueryStream() throws Exception {
+    addDocument("foo", 1);
+    addDocument("foo", 2);
+
+    final Semaphore semaphore = new Semaphore(0);
+    final Iterator<Long> iteratorAscending = Arrays.asList(1L, 2L).iterator();
+    randomColl.orderBy("foo").stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iteratorAscending.next(), documentSnapshot.get("foo"));
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the number of response
+    assertFalse(iteratorAscending.hasNext());
+
+    final Iterator<Long> iteratorDescending = Arrays.asList(2L, 1L).iterator();
+    randomColl.orderBy("foo", Query.Direction.DESCENDING).stream(
+        new ApiStreamObserver<DocumentSnapshot>() {
+          @Override
+          public void onNext(DocumentSnapshot documentSnapshot) {
+            assertEquals(iteratorDescending.next(), documentSnapshot.get("foo"));
+          }
+
+          @Override
+          public void onError(Throwable throwable) {
+            fail();
+          }
+
+          @Override
+          public void onCompleted() {
+            semaphore.release();
+          }
+        });
+
+    semaphore.acquire();
+    // Verify the number of response
+    assertFalse(iteratorDescending.hasNext());
   }
 
   @Test
@@ -500,25 +781,20 @@ public class ITSystemTest {
     assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
   }
 
-  /** Based on https://github.com/googleapis/java-firestore/issues/1085 */
   @Test
-  public void multipleInequalityQueryOnDifferentPropertiesShouldThrow() throws Exception {
-    assumeFalse(
-        "Skip this test when running against emulator because the fix is only applied in the "
-            + "production",
+  public void multipleInequalityQueryOnDifferentPropertiesShouldBeSupported() throws Exception {
+    // TODO(MIEQ): Enable this test against production when possible.
+    assumeTrue(
+        "Skip this test if running against production because multiple inequality is "
+            + "not supported yet.",
         isRunningAgainstFirestoreEmulator(firestore));
 
     addDocument("foo", 1, "bar", 2);
 
-    ExecutionException executionException =
-        assertThrows(
-            ExecutionException.class,
-            () -> randomColl.whereGreaterThan("foo", 1).whereNotEqualTo("bar", 3).get().get());
-    assertThat(executionException)
-        .hasCauseThat()
-        .hasMessageThat()
-        .contains(
-            "INVALID_ARGUMENT: Cannot have inequality filters on multiple properties: [bar, foo]");
+    QuerySnapshot querySnapshot =
+        randomColl.whereGreaterThan("foo", 0).whereLessThanOrEqualTo("bar", 2).get().get();
+    assertEquals(1, querySnapshot.size());
+    assertEquals(1L, querySnapshot.getDocuments().get(0).get("foo"));
   }
 
   @Test
@@ -1509,18 +1785,20 @@ public class ITSystemTest {
             },
             TransactionOptions.createReadOnlyOptionsBuilder().build());
 
-    try {
-      runTransaction.get(10, TimeUnit.SECONDS);
-    } catch (ExecutionException e) {
-      final Throwable cause = e.getCause();
-      assertThat(cause).isInstanceOf(FirestoreException.class);
-      final Throwable rootCause = ExceptionUtils.getRootCause(cause);
-      assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
-      final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
-      final Status status = invalidArgument.getStatus();
-      assertThat(status.getCode()).isEqualTo(Code.INVALID_ARGUMENT);
-      assertThat(status.getDescription()).contains("read-only");
-    }
+    ExecutionException e =
+        assertThrows(
+            ExecutionException.class,
+            () -> {
+              runTransaction.get(10, TimeUnit.SECONDS);
+            });
+    final Throwable cause = e.getCause();
+    assertThat(cause).isInstanceOf(FirestoreException.class);
+    final Throwable rootCause = ExceptionUtils.getRootCause(cause);
+    assertThat(rootCause).isInstanceOf(StatusRuntimeException.class);
+    final StatusRuntimeException invalidArgument = (StatusRuntimeException) rootCause;
+    final Status status = invalidArgument.getStatus();
+    assertThat(status.getCode()).isEqualTo(Code.INVALID_ARGUMENT);
+    assertThat(status.getDescription()).contains("read-only");
   }
 
   @Test
@@ -1559,12 +1837,19 @@ public class ITSystemTest {
       throws ExecutionException, InterruptedException, TimeoutException {
     final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
 
-    // Exception isn't thrown until 5 minutes.
-    final long tenMinutes = System.currentTimeMillis() / 1000 - 600;
+    // Exception isn't thrown until 60 minutes.
+    // To ensure we exceed this, we use 120 minutes.
+    // If this test fails, we should likely be update documentation to reflect new value. See all
+    // usages of "Read Time" on proto, and within SDK.
+    //
+    // If Point-in-Time Recovery is enabled, can additionally be a whole minute timestamp within the
+    // past 7 days. For that reason `twoHours` is calculated to whole minute to more accurately
+    // catch this situation.
+    final long twoHours = (System.currentTimeMillis() / 60_000 - 120) * 60;
     final TransactionOptions options =
         TransactionOptions.createReadOnlyOptionsBuilder()
             .setReadTime(
-                com.google.protobuf.Timestamp.newBuilder().setSeconds(tenMinutes).setNanos(0))
+                com.google.protobuf.Timestamp.newBuilder().setSeconds(twoHours).setNanos(0))
             .build();
 
     final ApiFuture<Void> runTransaction =

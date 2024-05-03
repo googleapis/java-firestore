@@ -10,14 +10,35 @@
         "grpc": {
           "libraryClient": "FirestoreAdminClient",
           "rpcs": {
+            "CreateBackupSchedule": {
+              "methods": ["createBackupSchedule", "createBackupSchedule", "createBackupSchedule", "createBackupScheduleCallable"]
+            },
+            "CreateDatabase": {
+              "methods": ["createDatabaseAsync", "createDatabaseAsync", "createDatabaseAsync", "createDatabaseOperationCallable", "createDatabaseCallable"]
+            },
             "CreateIndex": {
               "methods": ["createIndexAsync", "createIndexAsync", "createIndexAsync", "createIndexOperationCallable", "createIndexCallable"]
+            },
+            "DeleteBackup": {
+              "methods": ["deleteBackup", "deleteBackup", "deleteBackup", "deleteBackupCallable"]
+            },
+            "DeleteBackupSchedule": {
+              "methods": ["deleteBackupSchedule", "deleteBackupSchedule", "deleteBackupSchedule", "deleteBackupScheduleCallable"]
+            },
+            "DeleteDatabase": {
+              "methods": ["deleteDatabaseAsync", "deleteDatabaseAsync", "deleteDatabaseAsync", "deleteDatabaseOperationCallable", "deleteDatabaseCallable"]
             },
             "DeleteIndex": {
               "methods": ["deleteIndex", "deleteIndex", "deleteIndex", "deleteIndexCallable"]
             },
             "ExportDocuments": {
               "methods": ["exportDocumentsAsync", "exportDocumentsAsync", "exportDocumentsAsync", "exportDocumentsOperationCallable", "exportDocumentsCallable"]
+            },
+            "GetBackup": {
+              "methods": ["getBackup", "getBackup", "getBackup", "getBackupCallable"]
+            },
+            "GetBackupSchedule": {
+              "methods": ["getBackupSchedule", "getBackupSchedule", "getBackupSchedule", "getBackupScheduleCallable"]
             },
             "GetDatabase": {
               "methods": ["getDatabase", "getDatabase", "getDatabase", "getDatabaseCallable"]
@@ -31,6 +52,12 @@
             "ImportDocuments": {
               "methods": ["importDocumentsAsync", "importDocumentsAsync", "importDocumentsAsync", "importDocumentsOperationCallable", "importDocumentsCallable"]
             },
+            "ListBackupSchedules": {
+              "methods": ["listBackupSchedules", "listBackupSchedules", "listBackupSchedules", "listBackupSchedulesCallable"]
+            },
+            "ListBackups": {
+              "methods": ["listBackups", "listBackups", "listBackups", "listBackupsCallable"]
+            },
             "ListDatabases": {
               "methods": ["listDatabases", "listDatabases", "listDatabases", "listDatabasesCallable"]
             },
@@ -39,6 +66,12 @@
             },
             "ListIndexes": {
               "methods": ["listIndexes", "listIndexes", "listIndexes", "listIndexesPagedCallable", "listIndexesCallable"]
+            },
+            "RestoreDatabase": {
+              "methods": ["restoreDatabaseAsync", "restoreDatabaseOperationCallable", "restoreDatabaseCallable"]
+            },
+            "UpdateBackupSchedule": {
+              "methods": ["updateBackupSchedule", "updateBackupSchedule", "updateBackupScheduleCallable"]
             },
             "UpdateDatabase": {
               "methods": ["updateDatabaseAsync", "updateDatabaseAsync", "updateDatabaseOperationCallable", "updateDatabaseCallable"]

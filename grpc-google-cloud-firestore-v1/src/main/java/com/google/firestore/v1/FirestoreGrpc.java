@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public final class FirestoreGrpc {
 
   private FirestoreGrpc() {}
 
-  public static final String SERVICE_NAME = "google.firestore.v1.Firestore";
+  public static final java.lang.String SERVICE_NAME = "google.firestore.v1.Firestore";
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<
@@ -952,7 +952,7 @@ public final class FirestoreGrpc {
      *
      * <pre>
      * Streams batches of document updates and deletes, in order. This method is
-     * only available via the gRPC API (not REST).
+     * only available via gRPC or WebChannel (not REST).
      * </pre>
      */
     default io.grpc.stub.StreamObserver<com.google.firestore.v1.WriteRequest> write(
@@ -965,8 +965,8 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
-     * Listens to changes. This method is only available via the gRPC API (not
-     * REST).
+     * Listens to changes. This method is only available via gRPC or WebChannel
+     * (not REST).
      * </pre>
      */
     default io.grpc.stub.StreamObserver<com.google.firestore.v1.ListenRequest> listen(
@@ -1262,7 +1262,7 @@ public final class FirestoreGrpc {
      *
      * <pre>
      * Streams batches of document updates and deletes, in order. This method is
-     * only available via the gRPC API (not REST).
+     * only available via gRPC or WebChannel (not REST).
      * </pre>
      */
     public io.grpc.stub.StreamObserver<com.google.firestore.v1.WriteRequest> write(
@@ -1275,8 +1275,8 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
-     * Listens to changes. This method is only available via the gRPC API (not
-     * REST).
+     * Listens to changes. This method is only available via gRPC or WebChannel
+     * (not REST).
      * </pre>
      */
     public io.grpc.stub.StreamObserver<com.google.firestore.v1.ListenRequest> listen(
@@ -2020,9 +2020,9 @@ public final class FirestoreGrpc {
   private static final class FirestoreMethodDescriptorSupplier
       extends FirestoreBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
-    private final String methodName;
+    private final java.lang.String methodName;
 
-    FirestoreMethodDescriptorSupplier(String methodName) {
+    FirestoreMethodDescriptorSupplier(java.lang.String methodName) {
       this.methodName = methodName;
     }
 

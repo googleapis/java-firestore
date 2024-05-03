@@ -68,7 +68,7 @@ public class DocumentReference {
   }
 
   /**
-   * The id of a document refers to the last component of path pointing to a document, e.g.
+   * The id of a document refers to the last component of path pointing to a document, for example
    * "document-id" in "projects/project-id/databases/database-id/document-id".
    *
    * @return The ID of the document.

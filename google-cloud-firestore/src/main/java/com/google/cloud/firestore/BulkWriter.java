@@ -22,7 +22,6 @@ import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
-import com.google.api.core.BetaApi;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.StatusCode.Code;
@@ -46,7 +45,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 
 /** A Firestore BulkWriter that can be used to perform a large number of writes in parallel. */
-@BetaApi
 public final class BulkWriter implements AutoCloseable {
   /**
    * A callback set by `addWriteResultListener()` to be run every time an operation successfully
@@ -760,18 +758,20 @@ public final class BulkWriter implements AutoCloseable {
    *
    * <p>The executor cannot be changed once writes have been enqueued onto the BulkWriter.
    *
-   * <p>For example, see the sample code: <code>
-   *   BulkWriter bulkWriter = firestore.bulkWriter();
-   *   bulkWriter.addWriteResultListener(
-   *         (DocumentReference documentReference, WriteResult result) -> {
-   *             System.out.println(
-   *                 "Successfully executed write on document: "
-   *                     + documentReference
-   *                     + " at: "
-   *                     + result.getUpdateTime());
-   *           }
-   *         );
-   * </code>
+   * <p>For example, see the sample code:
+   *
+   * <pre>{@code
+   * BulkWriter bulkWriter = firestore.bulkWriter();
+   * bulkWriter.addWriteResultListener(
+   *       (DocumentReference documentReference, WriteResult result) -> {
+   *           System.out.println(
+   *               "Successfully executed write on document: "
+   *                   + documentReference
+   *                   + " at: "
+   *                   + result.getUpdateTime());
+   *         }
+   *       );
+   * }</pre>
    *
    * @param executor The executor to run the provided callback on.
    * @param writeResultCallback A callback to be called every time a BulkWriter operation
@@ -796,20 +796,22 @@ public final class BulkWriter implements AutoCloseable {
    * maximum of 10 failed attempts. When an error handler is specified, the default error handler
    * will be overwritten.
    *
-   * <p>For example, see the sample code: <code>
-   *   BulkWriter bulkWriter = firestore.bulkWriter();
-   *   bulkWriter.addWriteErrorListener(
-   *         (BulkWriterException error) -> {
-   *           if (error.getStatus() == Status.UNAVAILABLE
-   *             && error.getFailedAttempts() < MAX_RETRY_ATTEMPTS) {
-   *             return true;
-   *           } else {
-   *             System.out.println("Failed write at document: " + error.getDocumentReference());
-   *             return false;
-   *           }
+   * <p>For example, see the sample code:
+   *
+   * <pre>{@code
+   * BulkWriter bulkWriter = firestore.bulkWriter();
+   * bulkWriter.addWriteErrorListener(
+   *       (BulkWriterException error) -> {
+   *         if (error.getStatus() == Status.UNAVAILABLE
+   *           && error.getFailedAttempts() < MAX_RETRY_ATTEMPTS) {
+   *           return true;
+   *         } else {
+   *           System.out.println("Failed write at document: " + error.getDocumentReference());
+   *           return false;
    *         }
-   *       );
-   * </code>
+   *       }
+   *     );
+   * }</pre>
    *
    * @param onError A callback to be called every time a BulkWriter operation fails. Returning
    *     `true` will retry the operation. Returning `false` will stop the retry loop.
@@ -829,20 +831,22 @@ public final class BulkWriter implements AutoCloseable {
    * maximum of 10 failed attempts. When an error handler is specified, the default error handler
    * will be overwritten.
    *
-   * <p>For example, see the sample code: <code>
-   *   BulkWriter bulkWriter = firestore.bulkWriter();
-   *   bulkWriter.addWriteErrorListener(
-   *         (BulkWriterException error) -> {
-   *           if (error.getStatus() == Status.UNAVAILABLE
-   *             && error.getFailedAttempts() < MAX_RETRY_ATTEMPTS) {
-   *             return true;
-   *           } else {
-   *             System.out.println("Failed write at document: " + error.getDocumentReference());
-   *             return false;
-   *           }
+   * <p>For example, see the sample code:
+   *
+   * <pre>{@code
+   * BulkWriter bulkWriter = firestore.bulkWriter();
+   * bulkWriter.addWriteErrorListener(
+   *       (BulkWriterException error) -> {
+   *         if (error.getStatus() == Status.UNAVAILABLE
+   *           && error.getFailedAttempts() < MAX_RETRY_ATTEMPTS) {
+   *           return true;
+   *         } else {
+   *           System.out.println("Failed write at document: " + error.getDocumentReference());
+   *           return false;
    *         }
-   *       );
-   * </code>
+   *       }
+   *     );
+   * }</pre>
    *
    * @param executor The executor to run the provided callback on.
    * @param onError A callback to be called every time a BulkWriter operation fails. Returning
@@ -910,7 +914,7 @@ public final class BulkWriter implements AutoCloseable {
               bulkWriterExecutor);
     } else {
       long delayMs = rateLimiter.getNextRequestDelayMs(batch.getMutationsSize());
-      logger.log(Level.FINE, String.format("Backing off for %d seconds", delayMs / 1000));
+      logger.log(Level.FINE, () -> String.format("Backing off for %d seconds", delayMs / 1000));
       bulkWriterExecutor.schedule(
           () -> {
             synchronized (lock) {
