@@ -36,7 +36,6 @@ import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.common.base.Preconditions;
-import com.google.errorprone.annotations.Keep;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
@@ -341,7 +340,6 @@ public abstract class ITTracingTest {
   }
 
   // This is a POJO used for testing APIs that take a POJO.
-  @Keep
   public static class Pojo {
     public int bar;
 
@@ -353,7 +351,6 @@ public abstract class ITTracingTest {
       this.bar = bar;
     }
 
-    @Keep
     public int getBar() {
       return bar;
     }
@@ -430,7 +427,9 @@ public abstract class ITTracingTest {
 
   @Test
   public void docRefCreate2() throws Exception {
-    firestore.collection("col").document().create(new Pojo(1)).get();
+    Pojo pojo = new Pojo(1);
+    pojo.setBar(2);
+    firestore.collection("col").document().create(pojo).get();
 
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
