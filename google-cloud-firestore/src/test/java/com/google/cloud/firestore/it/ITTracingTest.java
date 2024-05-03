@@ -52,7 +52,6 @@ import io.opentelemetry.sdk.trace.data.EventData;
 import io.opentelemetry.sdk.trace.data.SpanData;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -343,8 +342,8 @@ public abstract class ITTracingTest {
 
   // This is a POJO used for testing APIs that take a POJO.
   @Keep
-  public static class Pojo implements Serializable {
-    private int bar;
+  public static class Pojo {
+    public int bar;
 
     public Pojo() {
       bar = 0;
@@ -354,6 +353,7 @@ public abstract class ITTracingTest {
       this.bar = bar;
     }
 
+    @Keep
     public int getBar() {
       return bar;
     }
