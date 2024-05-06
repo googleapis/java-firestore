@@ -8,11 +8,11 @@ import java.util.Locale
 
 internal interface Stage
 
-internal data class Collection(val relativePath: String) : Stage {
+internal data class Collection(internal val relativePath: String) : Stage {
   val name = "collection"
 }
 
-internal data class CollectionGroup(val collectionId: String) : Stage {
+internal data class CollectionGroup(internal val collectionId: String) : Stage {
   val name = "collection_group"
 }
 
@@ -20,7 +20,7 @@ internal class Database : Stage {
   val name = "database"
 }
 
-internal data class Documents(val documents: List<String>) : Stage {
+internal data class Documents(internal val documents: List<String>) : Stage {
   val name = "documents"
 
   companion object {
@@ -31,32 +31,32 @@ internal data class Documents(val documents: List<String>) : Stage {
   }
 }
 
-internal data class Project(val projections: Map<String, Expr>) : Stage {
+internal data class Project(internal val projections: Map<String, Expr>) : Stage {
   val name = "project"
 }
 
-internal data class AddFields(val fields: Map<String, Expr>) : Stage {
+internal data class AddFields(internal val fields: Map<String, Expr>) : Stage {
   val name = "add_fields"
 }
 
-internal data class Filter<T>(val condition: T) : Stage where
+internal data class Filter<T>(internal val condition: T) : Stage where
 T : Function.FilterCondition,
 T : Expr {
   val name = "filter"
 }
 
-internal class Offset(val offset: Int) : Stage {
+internal class Offset(internal val offset: Int) : Stage {
   val name = "offset"
 }
 
-internal class Limit(val limit: Int) : Stage {
+internal class Limit(internal val limit: Int) : Stage {
   val name = "limit"
 }
 
 class Aggregate
 internal constructor(
-  val groups: Map<String, Expr>,
-  val accumulators: Map<String, Function.Accumulator>,
+  internal val groups: Map<String, Expr>,
+  internal val accumulators: Map<String, Function.Accumulator>,
 ) : Stage {
   val name = "aggregate"
 
@@ -67,14 +67,14 @@ internal constructor(
 
 class FindNearest
 internal constructor(
-  val property: Field,
-  val vector: DoubleArray,
-  val distanceMeasure: DistanceMeasure,
-  val options: FindNearestOptions,
+  internal val property: Field,
+  internal val vector: DoubleArray,
+  internal val distanceMeasure: DistanceMeasure,
+  internal val options: FindNearestOptions,
 ) : Stage {
   val name = "find_nearest"
 
-  sealed interface DistanceMeasure {
+  interface DistanceMeasure {
     data object Euclidean : DistanceMeasure
 
     data object Cosine : DistanceMeasure
@@ -89,6 +89,7 @@ internal constructor(
         is Cosine -> "cosine"
         is DotProduct -> "dot_product"
         is GenericDistanceMeasure -> name
+        else -> throw IllegalArgumentException("Unknown distance measure")
       }
     }
 
@@ -108,9 +109,9 @@ internal constructor(
 
 class Sort
 internal constructor(
-  val orders: List<Ordering>,
-  val density: Density = Density.UNSPECIFIED,
-  val truncation: Truncation = Truncation.UNSPECIFIED,
+  internal val orders: List<Ordering>,
+  internal val density: Density = Density.UNSPECIFIED,
+  internal val truncation: Truncation = Truncation.UNSPECIFIED,
 ) : Stage {
   val name = "sort"
 
@@ -172,9 +173,7 @@ internal constructor(
   }
 }
 
-// internal class Pagination(): Stage, GenericStage()
-
-internal open class GenericStage(val name: String, val params: List<Any>) : Stage {}
+internal class GenericStage(internal val name: String, internal val params: List<Any>) : Stage {}
 
 internal fun toStageProto(stage: Stage): com.google.firestore.v1.Pipeline.Stage {
   return when (stage) {

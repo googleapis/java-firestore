@@ -315,7 +315,7 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
     }
   }
 
-  fun toProto(): Value {
+  internal fun toProto(): Value {
     return Value.newBuilder()
       .setPipelineValue(
         com.google.firestore.v1.Pipeline.newBuilder().addAllStages(stages.map { toStageProto(it) })

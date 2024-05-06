@@ -47,7 +47,7 @@ internal fun exprToValue(expr: Expr): Value {
   }
 }
 
-sealed interface Projectable
+interface Projectable
 
 interface Expr {
   // Infix functions returning Function subclasses
@@ -148,7 +148,7 @@ interface Expr {
 // Convenient class for internal usage
 internal data class ListOfExprs(val conditions: List<Expr>) : Expr
 
-data class Constant internal constructor(val value: Any?) : Expr {
+data class Constant internal constructor(private val value: Any?) : Expr {
   companion object {
     @JvmStatic
     fun of(value: String?): Constant {
@@ -237,12 +237,15 @@ data class Constant internal constructor(val value: Any?) : Expr {
     }
   }
 
-  fun toProto(): Value {
+  internal fun toProto(): Value {
     return encodeValue(value)!!
   }
 }
 
-data class Field internal constructor(val field: String, var pipeline: Pipeline? = null) :
+data class Field internal constructor(
+  internal val field: String,
+  private var pipeline: Pipeline? = null
+) :
   Expr, Projectable {
   companion object {
     const val DOCUMENT_ID: String = "__path__"
@@ -258,12 +261,12 @@ data class Field internal constructor(val field: String, var pipeline: Pipeline?
     }
   }
 
-  fun toProto(): Value {
+  internal fun toProto(): Value {
     return Value.newBuilder().setFieldReferenceValue(field).build()
   }
 }
 
-data class Fields internal constructor(val fs: List<Field>? = null) : Expr, Projectable {
+data class Fields internal constructor(internal val fs: List<Field>? = null) : Expr, Projectable {
   companion object {
     @JvmStatic
     fun of(f1: String, vararg f: String): Fields {
@@ -279,8 +282,8 @@ data class Fields internal constructor(val fs: List<Field>? = null) : Expr, Proj
 
 data class AggregatorTarget
 internal constructor(
-  val accumulator: Function.Accumulator,
-  val fieldName: String,
+  internal val accumulator: Function.Accumulator,
+  internal val fieldName: String,
   override var distinct: Boolean,
 ) : Projectable, Function.Accumulator
 
@@ -298,7 +301,7 @@ sealed class Function(val name: String, val params: List<Expr>) : Expr {
     fun toField(target: String) = AggregatorTarget(this, target, this.distinct)
   }
 
-  fun toProto(): Value {
+  internal fun toProto(): Value {
     return Value.newBuilder()
       .setFunctionValue(
         com.google.firestore.v1.Function.newBuilder()
@@ -308,70 +311,72 @@ sealed class Function(val name: String, val params: List<Expr>) : Expr {
       .build()
   }
 
-  data class Equal internal constructor(val left: Expr, val right: Expr) :
+  data class Equal internal constructor(private val left: Expr, private val right: Expr) :
     Function("eq", listOf(left, right)), FilterCondition
 
-  data class NotEqual(val left: Expr, val right: Expr) :
+  data class NotEqual(private val left: Expr, private val right: Expr) :
     Function("neq", listOf(left, right)), FilterCondition
 
-  data class GreaterThan(val left: Expr, val right: Expr) :
+  data class GreaterThan(private val left: Expr, private val right: Expr) :
     Function("gt", listOf(left, right)), FilterCondition
 
-  data class GreaterThanOrEqual(val left: Expr, val right: Expr) :
+  data class GreaterThanOrEqual(private val left: Expr, private val right: Expr) :
     Function("gte", listOf(left, right)), FilterCondition
 
-  data class LessThan(val left: Expr, val right: Expr) :
+  data class LessThan(private val left: Expr, private val right: Expr) :
     Function("lt", listOf(left, right)), FilterCondition
 
-  data class LessThanOrEqual(val left: Expr, val right: Expr) :
+  data class LessThanOrEqual(private val left: Expr, private val right: Expr) :
     Function("lte", listOf(left, right)), FilterCondition
 
-  data class In(val left: Expr, val others: List<Expr>) :
+  data class In(private val left: Expr, private val others: List<Expr>) :
     Function("in", listOf(left, ListOfExprs(others))), FilterCondition // For 'in'
 
-  data class And<T>(val conditions: List<T>) : Function("and", conditions), FilterCondition where
+  data class And<T>(private val conditions: List<T>) : Function("and", conditions),
+                                                       FilterCondition where
   T : FilterCondition
 
-  data class Or<T>(val conditions: List<T>) : Function("or", conditions), FilterCondition where
+  data class Or<T>(private val conditions: List<T>) : Function("or", conditions),
+                                                      FilterCondition where
   T : FilterCondition
 
-  data class Not(val condition: Expr) : Function("not", listOf(condition)), FilterCondition
+  data class Not(private val condition: Expr) : Function("not", listOf(condition)), FilterCondition
 
-  data class ArrayContains(val array: Expr, val element: Expr) :
+  data class ArrayContains(private val array: Expr, private val element: Expr) :
     Function("array_contains", listOf(array, element)), FilterCondition
 
-  data class ArrayContainsAny(val array: Expr, val elements: List<Expr>) :
+  data class ArrayContainsAny(private val array: Expr, private val elements: List<Expr>) :
     Function("array_contains_any", listOf(array, ListOfExprs(elements))), FilterCondition
 
-  data class IsNaN(val value: Expr) : Function("is_nan", listOf(value)), FilterCondition
+  data class IsNaN(private val value: Expr) : Function("is_nan", listOf(value)), FilterCondition
 
-  data class IsNull(val value: Expr) : Function("is_null", listOf(value)), FilterCondition
+  data class IsNull(private val value: Expr) : Function("is_null", listOf(value)), FilterCondition
 
-  data class Sum(val value: Expr, override var distinct: Boolean) :
+  data class Sum(private val value: Expr, override var distinct: Boolean) :
     Function("sum", listOf(value)), Accumulator
 
-  data class Avg(val value: Expr, override var distinct: Boolean) :
+  data class Avg(private val value: Expr, override var distinct: Boolean) :
     Function("avg", listOf(value)), Accumulator
 
-  data class Count(val value: Expr?, override var distinct: Boolean) :
+  data class Count(private val value: Expr?, override var distinct: Boolean) :
     Function("count", value?.let { listOf(it) } ?: emptyList()), Accumulator
 
-  data class Min(val value: Expr, override var distinct: Boolean) :
+  data class Min(private val value: Expr, override var distinct: Boolean) :
     Function("min", listOf(value)), Accumulator
 
-  data class Max(val value: Expr, override var distinct: Boolean) :
+  data class Max(private val value: Expr, override var distinct: Boolean) :
     Function("max", listOf(value)), Accumulator
 
-  data class CosineDistance(val vector1: Expr, val vector2: Expr) :
+  data class CosineDistance(private val vector1: Expr, private val vector2: Expr) :
     Function("cosine_distance", listOf(vector1, vector2))
 
-  data class DotProductDistance(val vector1: Expr, val vector2: Expr) :
+  data class DotProductDistance(private val vector1: Expr, private val vector2: Expr) :
     Function("dot_product", listOf(vector1, vector2))
 
-  data class EuclideanDistance(val vector1: Expr, val vector2: Expr) :
+  data class EuclideanDistance(private val vector1: Expr, private val vector2: Expr) :
     Function("euclidean_distance", listOf(vector1, vector2))
 
-  data class Generic(val n: String, val ps: List<Expr>) : Function(n, ps)
+  data class Generic(private val n: String, private val ps: List<Expr>) : Function(n, ps)
 
   companion object {
     @JvmStatic fun equal(left: Expr, right: Expr) = Equal(left, right)
