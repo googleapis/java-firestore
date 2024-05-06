@@ -62,6 +62,9 @@ public interface TraceUtil {
    * @return An instance of the TraceUtil class.
    */
   static TraceUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
+    // TODO(tracing): Re-enable this code when the tracing APIs are public.
+    return new DisabledTraceUtil();
+    /*
     boolean createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().isTracingEnabled();
 
     // The environment variable can override options to enable/disable telemetry collection.
@@ -82,6 +85,7 @@ public interface TraceUtil {
     } else {
       return new DisabledTraceUtil();
     }
+    */
   }
 
   /** Returns a channel configurator for gRPC, or {@code null} if tracing is disabled. */

@@ -23,7 +23,6 @@ import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.common.base.Throwables;
 import io.grpc.ManagedChannelBuilder;
-import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
@@ -42,6 +41,12 @@ public class EnabledTraceUtil implements TraceUtil {
   private final FirestoreOptions firestoreOptions;
 
   EnabledTraceUtil(FirestoreOptions firestoreOptions) {
+    this.firestoreOptions = firestoreOptions;
+    this.openTelemetry = null;
+    this.tracer = null;
+
+    // TODO(tracing): Re-enable this code when the tracing APIs are public.
+    /*
     OpenTelemetry openTelemetry = firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
 
     // If tracing is enabled, but an OpenTelemetry instance is not provided, fall back
@@ -53,6 +58,7 @@ public class EnabledTraceUtil implements TraceUtil {
     this.firestoreOptions = firestoreOptions;
     this.openTelemetry = openTelemetry;
     this.tracer = openTelemetry.getTracer(LIBRARY_NAME);
+    */
   }
 
   public OpenTelemetry getOpenTelemetry() {

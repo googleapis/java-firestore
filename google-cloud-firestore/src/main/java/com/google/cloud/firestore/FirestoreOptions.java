@@ -129,7 +129,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
 
   @BetaApi
   @Nonnull
-  public FirestoreOpenTelemetryOptions getOpenTelemetryOptions() {
+  FirestoreOpenTelemetryOptions getOpenTelemetryOptions() {
     return openTelemetryOptions;
   }
 
@@ -225,8 +225,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
      */
     @BetaApi
     @Nonnull
-    public Builder setOpenTelemetryOptions(
-        @Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions) {
+    Builder setOpenTelemetryOptions(@Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions) {
       this.openTelemetryOptions = openTelemetryOptions;
       return this;
     }

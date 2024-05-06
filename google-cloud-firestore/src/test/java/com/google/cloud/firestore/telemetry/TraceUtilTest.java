@@ -56,6 +56,10 @@ public class TraceUtilTest {
                 .setOpenTelemetryOptions(
                     FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build())
                 .build());
-    assertThat(traceUtil instanceof EnabledTraceUtil).isTrue();
+
+    // This is currently disabled because the feature is disabled as a whole.
+    // TODO (tracing): This should be `traceUtil instanceof EnabledTraceUtil
+    //  once the feature is enabled.
+    assertThat(traceUtil instanceof DisabledTraceUtil).isTrue();
   }
 }
