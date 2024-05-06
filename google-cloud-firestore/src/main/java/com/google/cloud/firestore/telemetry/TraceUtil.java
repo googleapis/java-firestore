@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public interface TraceUtil {
+  static final boolean TRACING_FEATURE_ENABLED = false;
   String ATTRIBUTE_SERVICE_PREFIX = "gcp.firestore.";
   String SPAN_NAME_DOC_REF_CREATE = "DocumentReference.Create";
   String SPAN_NAME_DOC_REF_SET = "DocumentReference.Set";
@@ -62,6 +63,11 @@ public interface TraceUtil {
    * @return An instance of the TraceUtil class.
    */
   static TraceUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
+    // TODO(tracing): Remove this to enable the feature.
+    if (!TRACING_FEATURE_ENABLED) {
+      return new DisabledTraceUtil();
+    }
+
     boolean createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().isTracingEnabled();
 
     // The environment variable can override options to enable/disable telemetry collection.

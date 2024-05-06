@@ -127,6 +127,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return traceUtil;
   }
 
+  @InternalApi
   @BetaApi
   @Nonnull
   public FirestoreOpenTelemetryOptions getOpenTelemetryOptions() {
@@ -223,6 +224,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
      *
      * @param openTelemetryOptions The `FirestoreOpenTelemetryOptions` to use.
      */
+    @InternalApi
     @BetaApi
     @Nonnull
     public Builder setOpenTelemetryOptions(
