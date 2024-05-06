@@ -16,10 +16,8 @@
 
 package com.google.cloud.firestore;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -47,7 +45,7 @@ public final class FieldMask {
    */
   @Nonnull
   public static FieldMask of(String... fieldPaths) {
-    List<FieldPath> paths = new ArrayList<>();
+    TreeSet<FieldPath> paths = new TreeSet<>();
     for (String fieldPath : fieldPaths) {
       paths.add(FieldPath.fromDotSeparatedString(fieldPath));
     }
@@ -62,22 +60,24 @@ public final class FieldMask {
    */
   @Nonnull
   public static FieldMask of(FieldPath... fieldPaths) {
-    return new FieldMask(Arrays.asList(fieldPaths));
+    TreeSet<FieldPath> paths = new TreeSet<>();
+    Collections.addAll(paths, fieldPaths);
+    return new FieldMask(paths);
   }
 
   static FieldMask fromObject(Map<String, Object> values) {
-    List<FieldPath> fieldPaths = extractFromMap(values, FieldPath.empty());
+    TreeSet<FieldPath> fieldPaths = extractFromMap(values, FieldPath.empty());
     return new FieldMask(fieldPaths);
   }
 
-  private static List<FieldPath> extractFromMap(Map<String, Object> values, FieldPath path) {
-    List<FieldPath> fieldPaths = new ArrayList<>();
+  private static TreeSet<FieldPath> extractFromMap(Map<String, Object> values, FieldPath path) {
+    TreeSet<FieldPath> fieldPaths = new TreeSet<>();
 
     for (Map.Entry<String, Object> entry : values.entrySet()) {
       Object value = entry.getValue();
       FieldPath childPath = path.append(FieldPath.of(entry.getKey()));
-      if (entry.getValue() instanceof FieldValue) {
-        if (((FieldValue) entry.getValue()).includeInDocumentMask()) {
+      if (value instanceof FieldValue) {
+        if (((FieldValue) value).includeInDocumentMask()) {
           fieldPaths.add(childPath);
         }
       } else if (value instanceof Map) {
@@ -98,9 +98,5 @@ public final class FieldMask {
       updateMask.addFieldPaths(fieldPath.getEncodedPath());
     }
     return updateMask.build();
-  }
-
-  boolean isEmpty() {
-    return fieldPaths.isEmpty();
   }
 }

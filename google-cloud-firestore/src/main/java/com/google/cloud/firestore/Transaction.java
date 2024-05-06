@@ -17,20 +17,11 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutures;
-import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
+import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Context;
-import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
-import com.google.common.base.Preconditions;
-import com.google.common.util.concurrent.MoreExecutors;
-import com.google.firestore.v1.BeginTransactionRequest;
-import com.google.firestore.v1.BeginTransactionResponse;
-import com.google.firestore.v1.RollbackRequest;
-import com.google.firestore.v1.TransactionOptions.ReadOnly;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.Empty;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -40,10 +31,28 @@ import javax.annotation.Nullable;
  *
  * @see Firestore#runTransaction(Function)
  */
-public final class Transaction extends UpdateBuilder<Transaction> {
+@InternalExtensionOnly
+public abstract class Transaction extends UpdateBuilder<Transaction> {
 
+  private static final Logger LOGGER = Logger.getLogger(Transaction.class.getName());
   private static final String READ_BEFORE_WRITE_ERROR_MSG =
       "Firestore transactions require all reads to be executed before all writes";
+  protected @Nonnull Context transactionTraceContext;
+
+  protected Transaction(FirestoreImpl firestore) {
+    super(firestore);
+    this.transactionTraceContext = firestore.getOptions().getTraceUtil().currentContext();
+  }
+
+  @Nonnull
+  TraceUtil getTraceUtil() {
+    return firestore.getOptions().getTraceUtil();
+  }
+
+  @Nonnull
+  Context setTransactionTraceContext(Context context) {
+    return transactionTraceContext = context;
+  }
 
   /**
    * User callback that takes a Firestore Transaction.
@@ -65,103 +74,16 @@ public final class Transaction extends UpdateBuilder<Transaction> {
     ApiFuture<T> updateCallback(Transaction transaction);
   }
 
-  private final TransactionOptions transactionOptions;
-  private ByteString transactionId;
-  @Nonnull private final Context transactionTraceContext;
-
-  Transaction(
-      FirestoreImpl firestore,
-      TransactionOptions transactionOptions,
-      @Nullable Transaction previousTransaction) {
-    super(firestore);
-    this.transactionOptions = transactionOptions;
-    this.transactionId = previousTransaction != null ? previousTransaction.transactionId : null;
-    this.transactionTraceContext = firestore.getOptions().getTraceUtil().currentContext();
+  @Override
+  protected String className() {
+    return "Transaction";
   }
 
-  @Nonnull
-  private TraceUtil getTraceUtil() {
-    return firestore.getOptions().getTraceUtil();
-  }
+  public abstract boolean hasTransactionId();
 
-  public boolean hasTransactionId() {
-    return transactionId != null;
-  }
-
+  @Override
   Transaction wrapResult(int writeIndex) {
     return this;
-  }
-
-  /** Starts a transaction and obtains the transaction id. */
-  ApiFuture<Void> begin() {
-    TraceUtil.Span span =
-        getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_BEGIN, transactionTraceContext);
-    try (Scope ignored = span.makeCurrent()) {
-      BeginTransactionRequest.Builder beginTransaction = BeginTransactionRequest.newBuilder();
-      beginTransaction.setDatabase(firestore.getDatabaseName());
-
-      if (TransactionOptionsType.READ_WRITE.equals(transactionOptions.getType())
-          && transactionId != null) {
-        beginTransaction
-            .getOptionsBuilder()
-            .getReadWriteBuilder()
-            .setRetryTransaction(transactionId);
-      } else if (TransactionOptionsType.READ_ONLY.equals(transactionOptions.getType())) {
-        final ReadOnly.Builder readOnlyBuilder = ReadOnly.newBuilder();
-        if (transactionOptions.getReadTime() != null) {
-          readOnlyBuilder.setReadTime(transactionOptions.getReadTime());
-        }
-        beginTransaction.getOptionsBuilder().setReadOnly(readOnlyBuilder);
-      }
-
-      ApiFuture<BeginTransactionResponse> transactionBeginFuture =
-          firestore.sendRequest(
-              beginTransaction.build(), firestore.getClient().beginTransactionCallable());
-
-      ApiFuture<Void> result =
-          ApiFutures.transform(
-              transactionBeginFuture,
-              beginTransactionResponse -> {
-                transactionId = beginTransactionResponse.getTransaction();
-                return null;
-              },
-              MoreExecutors.directExecutor());
-      span.endAtFuture(result);
-      return result;
-    } catch (Exception error) {
-      span.end(error);
-      throw error;
-    }
-  }
-
-  /** Commits a transaction. */
-  ApiFuture<List<WriteResult>> commit() {
-    try (Scope ignored = transactionTraceContext.makeCurrent()) {
-      return super.commit(transactionId);
-    }
-  }
-
-  /** Rolls a transaction back and releases all read locks. */
-  ApiFuture<Void> rollback() {
-    TraceUtil.Span span =
-        getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_ROLLBACK, transactionTraceContext);
-    try (Scope ignored = span.makeCurrent()) {
-      RollbackRequest.Builder reqBuilder = RollbackRequest.newBuilder();
-      reqBuilder.setTransaction(transactionId);
-      reqBuilder.setDatabase(firestore.getDatabaseName());
-
-      ApiFuture<Empty> rollbackFuture =
-          firestore.sendRequest(reqBuilder.build(), firestore.getClient().rollbackCallable());
-
-      ApiFuture<Void> result =
-          ApiFutures.transform(
-              rollbackFuture, rollbackResponse -> null, MoreExecutors.directExecutor());
-      span.endAtFuture(result);
-      return result;
-    } catch (Exception error) {
-      span.end(error);
-      throw error;
-    }
   }
 
   /**
@@ -171,26 +93,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
    * @return The contents of the Document at this DocumentReference.
    */
   @Nonnull
-  public ApiFuture<DocumentSnapshot> get(@Nonnull DocumentReference documentRef) {
-    Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-
-    TraceUtil.Span span =
-        getTraceUtil()
-            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, transactionTraceContext);
-    try (Scope ignored = span.makeCurrent()) {
-      ApiFuture<DocumentSnapshot> result =
-          ApiFutures.transform(
-              firestore.getAll(
-                  new DocumentReference[] {documentRef}, /*fieldMask=*/ null, transactionId),
-              snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
-              MoreExecutors.directExecutor());
-      span.endAtFuture(result);
-      return result;
-    } catch (Exception error) {
-      span.end(error);
-      throw error;
-    }
-  }
+  public abstract ApiFuture<DocumentSnapshot> get(@Nonnull DocumentReference documentRef);
 
   /**
    * Retrieves multiple documents from Firestore. Holds a pessimistic lock on all returned
@@ -199,23 +102,8 @@ public final class Transaction extends UpdateBuilder<Transaction> {
    * @param documentReferences List of Document References to fetch.
    */
   @Nonnull
-  public ApiFuture<List<DocumentSnapshot>> getAll(
-      @Nonnull DocumentReference... documentReferences) {
-    Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-
-    TraceUtil.Span span =
-        getTraceUtil()
-            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
-    try (Scope ignored = span.makeCurrent()) {
-      ApiFuture<List<DocumentSnapshot>> result =
-          firestore.getAll(documentReferences, /*fieldMask=*/ null, transactionId);
-      span.endAtFuture(result);
-      return result;
-    } catch (Exception error) {
-      span.end(error);
-      throw error;
-    }
-  }
+  public abstract ApiFuture<List<DocumentSnapshot>> getAll(
+      @Nonnull DocumentReference... documentReferences);
 
   /**
    * Retrieves multiple documents from Firestore, while optionally applying a field mask to reduce
@@ -226,23 +114,8 @@ public final class Transaction extends UpdateBuilder<Transaction> {
    * @param fieldMask If set, specifies the subset of fields to return.
    */
   @Nonnull
-  public ApiFuture<List<DocumentSnapshot>> getAll(
-      @Nonnull DocumentReference[] documentReferences, @Nullable FieldMask fieldMask) {
-    Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-
-    TraceUtil.Span span =
-        getTraceUtil()
-            .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
-    try (Scope ignored = span.makeCurrent()) {
-      ApiFuture<List<DocumentSnapshot>> result =
-          firestore.getAll(documentReferences, fieldMask, transactionId);
-      span.endAtFuture(result);
-      return result;
-    } catch (Exception error) {
-      span.end(error);
-      throw error;
-    }
-  }
+  public abstract ApiFuture<List<DocumentSnapshot>> getAll(
+      @Nonnull DocumentReference[] documentReferences, @Nullable FieldMask fieldMask);
 
   /**
    * Returns the result set from the provided query. Holds a pessimistic lock on all returned
@@ -251,13 +124,7 @@ public final class Transaction extends UpdateBuilder<Transaction> {
    * @return The contents of the Document at this DocumentReference.
    */
   @Nonnull
-  public ApiFuture<QuerySnapshot> get(@Nonnull Query query) {
-    Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-
-    try (Scope ignored = transactionTraceContext.makeCurrent()) {
-      return query.get(transactionId);
-    }
-  }
+  public abstract ApiFuture<QuerySnapshot> get(@Nonnull Query query);
 
   /**
    * Returns the result from the provided aggregate query. Holds a pessimistic lock on all accessed
@@ -266,11 +133,5 @@ public final class Transaction extends UpdateBuilder<Transaction> {
    * @return The result of the aggregation.
    */
   @Nonnull
-  public ApiFuture<AggregateQuerySnapshot> get(@Nonnull AggregateQuery query) {
-    Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-
-    try (Scope ignored = transactionTraceContext.makeCurrent()) {
-      return query.get(transactionId);
-    }
-  }
+  public abstract ApiFuture<AggregateQuerySnapshot> get(@Nonnull AggregateQuery query);
 }

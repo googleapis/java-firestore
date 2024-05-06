@@ -45,7 +45,7 @@ import javax.annotation.Nonnull;
  * <p>TransactionRunner uses exponential backoff to increase the chance that retries succeed. To
  * customize the backoff settings, you can specify custom settings via {@link FirestoreOptions}.
  */
-class TransactionRunner<T> {
+final class ServerSideTransactionRunner<T> {
   private final Transaction.AsyncFunction<T> userCallback;
   private final FirestoreImpl firestore;
   private final ScheduledExecutorService firestoreExecutor;
@@ -53,9 +53,10 @@ class TransactionRunner<T> {
   private final ExponentialRetryAlgorithm backoffAlgorithm;
   private final TransactionOptions transactionOptions;
   private TimedAttemptSettings nextBackoffAttempt;
-  private Transaction transaction;
+  private ServerSideTransaction transaction;
   private int attemptsRemaining;
   private Span runTransactionSpan;
+  private TraceUtil.Context runTransactionContext;
 
   /**
    * @param firestore The active Firestore instance
@@ -63,7 +64,7 @@ class TransactionRunner<T> {
    * @param transactionOptions The options determining which executor the {@code userCallback} is
    *     run on and whether the transaction is read-write or read-only
    */
-  TransactionRunner(
+  ServerSideTransactionRunner(
       FirestoreImpl firestore,
       Transaction.AsyncFunction<T> userCallback,
       TransactionOptions transactionOptions) {
@@ -95,10 +96,8 @@ class TransactionRunner<T> {
     runTransactionSpan.setAttribute("numAttemptsAllowed", transactionOptions.getNumberOfAttempts());
     runTransactionSpan.setAttribute("attemptsRemaining", attemptsRemaining);
     try (Scope ignored = runTransactionSpan.makeCurrent()) {
-      this.transaction = new Transaction(firestore, transactionOptions, this.transaction);
-
+      runTransactionContext = getTraceUtil().currentContext();
       --attemptsRemaining;
-
       ApiFuture<T> result =
           ApiFutures.catchingAsync(
               ApiFutures.transformAsync(
@@ -114,10 +113,35 @@ class TransactionRunner<T> {
     }
   }
 
+  ApiFuture<ServerSideTransaction> begin() {
+    TraceUtil.Span span =
+        getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_BEGIN, runTransactionContext);
+    try (Scope ignored = span.makeCurrent()) {
+      ServerSideTransaction previousTransaction = this.transaction;
+      this.transaction = null;
+      ApiFuture<ServerSideTransaction> result =
+          ServerSideTransaction.begin(firestore, transactionOptions, previousTransaction);
+      result =
+          ApiFutures.transform(
+              result,
+              serverSideTransaction -> {
+                serverSideTransaction.setTransactionTraceContext(runTransactionContext);
+                return serverSideTransaction;
+              });
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
+  }
+
   private ApiFuture<Void> maybeRollback() {
-    return transaction.hasTransactionId()
-        ? transaction.rollback()
-        : ApiFutures.immediateFuture(null);
+    return hasTransaction() ? transaction.rollback() : ApiFutures.immediateFuture(null);
+  }
+
+  private boolean hasTransaction() {
+    return transaction != null;
   }
 
   /** A callback that invokes the BeginTransaction callback. */
@@ -131,7 +155,7 @@ class TransactionRunner<T> {
 
     nextBackoffAttempt = backoffAlgorithm.createNextAttempt(nextBackoffAttempt);
     return ApiFutures.transformAsync(
-        backoff, TransactionRunner.this::backoffCallback, MoreExecutors.directExecutor());
+        backoff, this::backoffCallback, MoreExecutors.directExecutor());
   }
 
   /**
@@ -169,14 +193,15 @@ class TransactionRunner<T> {
   /** A callback that invokes the BeginTransaction callback. */
   private ApiFuture<T> backoffCallback(Void input) {
     return ApiFutures.transformAsync(
-        transaction.begin(), this::beginTransactionCallback, MoreExecutors.directExecutor());
+        begin(), this::beginTransactionCallback, MoreExecutors.directExecutor());
   }
 
   /**
    * The callback for the BeginTransaction RPC, which invokes the user callback and handles all
    * errors thereafter.
    */
-  private ApiFuture<T> beginTransactionCallback(Void input) {
+  private ApiFuture<T> beginTransactionCallback(ServerSideTransaction serverSideTransaction) {
+    this.transaction = serverSideTransaction;
     return ApiFutures.transformAsync(
         invokeUserCallback(), this::userFunctionCallback, MoreExecutors.directExecutor());
   }
@@ -201,7 +226,7 @@ class TransactionRunner<T> {
     }
 
     ApiException apiException = (ApiException) throwable;
-    if (transaction.hasTransactionId() && isRetryableTransactionError(apiException)) {
+    if (isRetryableTransactionError(apiException)) {
       if (attemptsRemaining > 0) {
         getTraceUtil()
             .currentSpan()
@@ -247,7 +272,7 @@ class TransactionRunner<T> {
   private ApiFuture<T> rollbackAndReject(final Throwable throwable) {
     final SettableApiFuture<T> failedTransaction = SettableApiFuture.create();
 
-    if (transaction.hasTransactionId()) {
+    if (hasTransaction()) {
       // We use `addListener()` since we want to return the original exception regardless of
       // whether rollback() succeeds.
       transaction

@@ -182,8 +182,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   public DocumentReference document(@Nonnull String documentPath) {
     ResourcePath document = databasePath.append(documentPath);
     Preconditions.checkArgument(
-        document.isDocument(),
-        String.format("Path should point to a Document Reference: %s", documentPath));
+        document.isDocument(), "Path should point to a Document Reference: %s", documentPath);
     return new DocumentReference(this, document);
   }
 
@@ -213,13 +212,14 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       final @Nonnull DocumentReference[] documentReferences,
       @Nullable FieldMask fieldMask,
       @Nonnull final ApiStreamObserver<DocumentSnapshot> apiStreamObserver) {
-    this.getAll(documentReferences, fieldMask, null, apiStreamObserver);
+    this.getAll(documentReferences, fieldMask, null, null, apiStreamObserver);
   }
 
   void getAll(
       final @Nonnull DocumentReference[] documentReferences,
       @Nullable FieldMask fieldMask,
       @Nullable ByteString transactionId,
+      @Nullable com.google.protobuf.Timestamp readTime,
       final ApiStreamObserver<DocumentSnapshot> apiStreamObserver) {
     // To reduce the size of traces, we only register one event for every 100 responses
     // that we receive from the server.
@@ -326,6 +326,10 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       request.setTransaction(transactionId);
     }
 
+    if (readTime != null) {
+      request.setReadTime(readTime);
+    }
+
     for (DocumentReference docRef : documentReferences) {
       request.addDocuments(docRef.getName());
     }
@@ -333,17 +337,33 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     streamRequest(request.build(), responseObserver, firestoreClient.batchGetDocumentsCallable());
   }
 
+  final ApiFuture<List<DocumentSnapshot>> getAll(
+      final @Nonnull DocumentReference[] documentReferences,
+      @Nullable FieldMask fieldMask,
+      @Nullable com.google.protobuf.Timestamp readTime) {
+    return getAll(documentReferences, fieldMask, null, readTime);
+  }
+
+  private ApiFuture<List<DocumentSnapshot>> getAll(
+      final @Nonnull DocumentReference[] documentReferences,
+      @Nullable FieldMask fieldMask,
+      @Nullable ByteString transactionId) {
+    return getAll(documentReferences, fieldMask, transactionId, null);
+  }
+
   /** Internal getAll() method that accepts an optional transaction id. */
   ApiFuture<List<DocumentSnapshot>> getAll(
       final @Nonnull DocumentReference[] documentReferences,
       @Nullable FieldMask fieldMask,
-      @Nullable ByteString transactionId) {
+      @Nullable ByteString transactionId,
+      @Nullable com.google.protobuf.Timestamp readTime) {
     final SettableApiFuture<List<DocumentSnapshot>> futureList = SettableApiFuture.create();
     final Map<DocumentReference, DocumentSnapshot> documentSnapshotMap = new HashMap<>();
     getAll(
         documentReferences,
         fieldMask,
         transactionId,
+        readTime,
         new ApiStreamObserver<DocumentSnapshot>() {
           @Override
           public void onNext(DocumentSnapshot documentSnapshot) {
@@ -372,8 +392,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   public CollectionGroup collectionGroup(@Nonnull final String collectionId) {
     Preconditions.checkArgument(
         !collectionId.contains("/"),
-        String.format(
-            "Invalid collectionId '%s'. Collection IDs must not contain '/'.", collectionId));
+        "Invalid collectionId '%s'. Collection IDs must not contain '/'.",
+        collectionId);
     return new CollectionGroup(this, collectionId);
   }
 
@@ -405,9 +425,16 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nonnull final Transaction.AsyncFunction<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
 
-    TransactionRunner<T> transactionRunner =
-        new TransactionRunner<>(this, updateFunction, transactionOptions);
-    return transactionRunner.run();
+    if (transactionOptions.getReadTime() != null) {
+      // READ_ONLY transactions with readTime have no retry, nor transaction state, so we don't need
+      // a runner.
+      return updateFunction.updateCallback(
+          new ReadTimeTransaction(this, transactionOptions.getReadTime()));
+    } else {
+      // For READ_ONLY transactions without readTime, there is still strong consistency applied,
+      // that cannot be tracked client side.
+      return new ServerSideTransactionRunner<>(this, updateFunction, transactionOptions).run();
+    }
   }
 
   @Nonnull

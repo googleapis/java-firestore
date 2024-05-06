@@ -16,14 +16,12 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.BetaApi;
 import com.google.auto.value.AutoValue;
 import java.util.concurrent.ScheduledExecutorService;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Options used to configure request throttling in BulkWriter. */
-@BetaApi
 @AutoValue
 public abstract class BulkWriterOptions {
   /**

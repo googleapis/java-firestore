@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,10 +33,15 @@ import com.google.api.gax.rpc.PagedCallSettings;
 import com.google.api.gax.rpc.TransportChannelProvider;
 import com.google.api.gax.rpc.UnaryCallSettings;
 import com.google.cloud.firestore.v1.stub.FirestoreAdminStubSettings;
+import com.google.firestore.admin.v1.Backup;
+import com.google.firestore.admin.v1.BackupSchedule;
+import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
+import com.google.firestore.admin.v1.DeleteBackupRequest;
+import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
 import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
 import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
@@ -45,6 +50,8 @@ import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FieldOperationMetadata;
+import com.google.firestore.admin.v1.GetBackupRequest;
+import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
@@ -52,12 +59,19 @@ import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.IndexOperationMetadata;
+import com.google.firestore.admin.v1.ListBackupSchedulesRequest;
+import com.google.firestore.admin.v1.ListBackupSchedulesResponse;
+import com.google.firestore.admin.v1.ListBackupsRequest;
+import com.google.firestore.admin.v1.ListBackupsResponse;
 import com.google.firestore.admin.v1.ListDatabasesRequest;
 import com.google.firestore.admin.v1.ListDatabasesResponse;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.RestoreDatabaseMetadata;
+import com.google.firestore.admin.v1.RestoreDatabaseRequest;
+import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
@@ -222,6 +236,60 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     return ((FirestoreAdminStubSettings) getStubSettings()).deleteDatabaseOperationSettings();
   }
 
+  /** Returns the object with the settings used for calls to getBackup. */
+  public UnaryCallSettings<GetBackupRequest, Backup> getBackupSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).getBackupSettings();
+  }
+
+  /** Returns the object with the settings used for calls to listBackups. */
+  public UnaryCallSettings<ListBackupsRequest, ListBackupsResponse> listBackupsSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).listBackupsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to deleteBackup. */
+  public UnaryCallSettings<DeleteBackupRequest, Empty> deleteBackupSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).deleteBackupSettings();
+  }
+
+  /** Returns the object with the settings used for calls to restoreDatabase. */
+  public UnaryCallSettings<RestoreDatabaseRequest, Operation> restoreDatabaseSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).restoreDatabaseSettings();
+  }
+
+  /** Returns the object with the settings used for calls to restoreDatabase. */
+  public OperationCallSettings<RestoreDatabaseRequest, Database, RestoreDatabaseMetadata>
+      restoreDatabaseOperationSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).restoreDatabaseOperationSettings();
+  }
+
+  /** Returns the object with the settings used for calls to createBackupSchedule. */
+  public UnaryCallSettings<CreateBackupScheduleRequest, BackupSchedule>
+      createBackupScheduleSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).createBackupScheduleSettings();
+  }
+
+  /** Returns the object with the settings used for calls to getBackupSchedule. */
+  public UnaryCallSettings<GetBackupScheduleRequest, BackupSchedule> getBackupScheduleSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).getBackupScheduleSettings();
+  }
+
+  /** Returns the object with the settings used for calls to listBackupSchedules. */
+  public UnaryCallSettings<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+      listBackupSchedulesSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).listBackupSchedulesSettings();
+  }
+
+  /** Returns the object with the settings used for calls to updateBackupSchedule. */
+  public UnaryCallSettings<UpdateBackupScheduleRequest, BackupSchedule>
+      updateBackupScheduleSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).updateBackupScheduleSettings();
+  }
+
+  /** Returns the object with the settings used for calls to deleteBackupSchedule. */
+  public UnaryCallSettings<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).deleteBackupScheduleSettings();
+  }
+
   public static final FirestoreAdminSettings create(FirestoreAdminStubSettings stub)
       throws IOException {
     return new FirestoreAdminSettings.Builder(stub.toBuilder()).build();
@@ -263,7 +331,6 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     return FirestoreAdminStubSettings.defaultTransportChannelProvider();
   }
 
-  @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
   public static ApiClientHeaderProvider.Builder defaultApiClientHeaderProviderBuilder() {
     return FirestoreAdminStubSettings.defaultApiClientHeaderProviderBuilder();
   }
@@ -274,7 +341,6 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
   }
 
   /** Returns a new REST builder for this class. */
-  @BetaApi
   public static Builder newHttpJsonBuilder() {
     return Builder.createHttpJsonDefault();
   }
@@ -316,7 +382,6 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
       return new Builder(FirestoreAdminStubSettings.newBuilder());
     }
 
-    @BetaApi
     private static Builder createHttpJsonDefault() {
       return new Builder(FirestoreAdminStubSettings.newHttpJsonBuilder());
     }
@@ -452,6 +517,63 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     public OperationCallSettings.Builder<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
         deleteDatabaseOperationSettings() {
       return getStubSettingsBuilder().deleteDatabaseOperationSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to getBackup. */
+    public UnaryCallSettings.Builder<GetBackupRequest, Backup> getBackupSettings() {
+      return getStubSettingsBuilder().getBackupSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to listBackups. */
+    public UnaryCallSettings.Builder<ListBackupsRequest, ListBackupsResponse>
+        listBackupsSettings() {
+      return getStubSettingsBuilder().listBackupsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to deleteBackup. */
+    public UnaryCallSettings.Builder<DeleteBackupRequest, Empty> deleteBackupSettings() {
+      return getStubSettingsBuilder().deleteBackupSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to restoreDatabase. */
+    public UnaryCallSettings.Builder<RestoreDatabaseRequest, Operation> restoreDatabaseSettings() {
+      return getStubSettingsBuilder().restoreDatabaseSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to restoreDatabase. */
+    public OperationCallSettings.Builder<RestoreDatabaseRequest, Database, RestoreDatabaseMetadata>
+        restoreDatabaseOperationSettings() {
+      return getStubSettingsBuilder().restoreDatabaseOperationSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to createBackupSchedule. */
+    public UnaryCallSettings.Builder<CreateBackupScheduleRequest, BackupSchedule>
+        createBackupScheduleSettings() {
+      return getStubSettingsBuilder().createBackupScheduleSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to getBackupSchedule. */
+    public UnaryCallSettings.Builder<GetBackupScheduleRequest, BackupSchedule>
+        getBackupScheduleSettings() {
+      return getStubSettingsBuilder().getBackupScheduleSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to listBackupSchedules. */
+    public UnaryCallSettings.Builder<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+        listBackupSchedulesSettings() {
+      return getStubSettingsBuilder().listBackupSchedulesSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to updateBackupSchedule. */
+    public UnaryCallSettings.Builder<UpdateBackupScheduleRequest, BackupSchedule>
+        updateBackupScheduleSettings() {
+      return getStubSettingsBuilder().updateBackupScheduleSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to deleteBackupSchedule. */
+    public UnaryCallSettings.Builder<DeleteBackupScheduleRequest, Empty>
+        deleteBackupScheduleSettings() {
+      return getStubSettingsBuilder().deleteBackupScheduleSettings();
     }
 
     @Override
