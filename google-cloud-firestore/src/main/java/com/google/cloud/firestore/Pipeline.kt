@@ -189,7 +189,7 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
     return Pipeline(stages.plus(AddFields(projectablesToMap(*fields))), name)
   }
 
-  fun project(vararg projections: Projectable): Pipeline {
+  fun select(vararg projections: Projectable): Pipeline {
     return Pipeline(stages.plus(Project(projectablesToMap(*projections))), name)
   }
 

@@ -104,7 +104,12 @@ internal constructor(
     }
   }
 
-  data class FindNearestOptions(val limit: Long?, val output: Field? = null)
+  class FindNearestOptions(val limit: Long, val output: Field? = null) {
+    companion object {
+      @JvmStatic
+      fun newInstance(limit: Long, output: Field? = null) = FindNearestOptions(limit, output)
+    }
+  }
 }
 
 class Sort

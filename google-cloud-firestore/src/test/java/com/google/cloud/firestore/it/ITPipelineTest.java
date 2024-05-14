@@ -34,8 +34,6 @@ import com.google.cloud.firestore.PipelineResult;
 import com.google.cloud.firestore.pipeline.Constant;
 import com.google.cloud.firestore.pipeline.Field;
 import com.google.cloud.firestore.pipeline.Fields;
-import com.google.cloud.firestore.pipeline.Sort;
-import com.google.cloud.firestore.pipeline.Sort.Ordering.Direction;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -75,25 +73,20 @@ public class ITPipelineTest extends ITBaseTest {
 
   @Test
   public void projections() throws Exception {
-    Pipeline p = Pipeline.fromCollectionGroup("coll1").project(Field.of("foo"));
+    Pipeline p = Pipeline.fromCollectionGroup("coll1").select(Field.of("foo"));
     List<PipelineResult> results = p.execute(firestore).get();
     System.out.println(results.size());
 
-    // More compact
-    p = Pipeline.fromCollectionGroup("coll1").project(Fields.of("foo", "bar", "baz"));
+    p = Pipeline.fromCollectionGroup("coll1").select(Fields.of("foo", "bar", "baz"));
     results = p.execute(firestore).get();
-    System.out.println(results.size());
   }
 
   @Test
   public void filters() throws Exception {
     Pipeline p =
         Pipeline.fromCollectionGroup("coll1")
-            .filter(Field.of("foo").equal(Constant.of(42)))
-            .filter(
-                or(
-                    Field.of("bar").lessThan(Constant.of(100)),
-                    Constant.of("value").equal(Field.of("key"))))
+            .filter(Field.of("foo").equal(42))
+            .filter(or(Field.of("bar").lessThan(100), Constant.of("value").equal(Field.of("key"))))
             .filter(not(Constant.of(128).inAny("f1", "f2")));
     List<PipelineResult> results = p.execute(firestore).get();
 
@@ -128,16 +121,14 @@ public class ITPipelineTest extends ITBaseTest {
             .filter(Field.of("foo").inAny(42, "42"))
             .sort(
                 Field.of("rank").ascending(),
-                Sort.Ordering.of(
-                    cosineDistance(Field.of("embedding1"), Field.of("embedding2")),
-                    Direction.DESCENDING))
+                cosineDistance(Field.of("embedding1"), Field.of("embedding2")).descending())
             .limit(100);
     List<PipelineResult> results = p.execute(firestore).get();
 
     // equivalent but more concise.
     p =
         Pipeline.fromCollection("coll1")
-            .filter(Field.of("foo").inAny(Constant.of(42), Constant.of(false)))
+            .filter(Field.of("foo").inAny(42, false))
             .sort(
                 ascending(Field.of("rank")),
                 descending(cosineDistance(Field.of("embedding1"), Field.of("embedding2"))))
@@ -149,19 +140,18 @@ public class ITPipelineTest extends ITBaseTest {
   public void pagination() throws Exception {
     PaginatingPipeline p =
         Pipeline.fromCollection("coll1")
-            .filter(Field.of("foo").inAny(Constant.of(42), Constant.of("bar")))
+            .filter(Field.of("foo").inAny(42, "bar"))
             .paginate(
                 100, cosineDistance(Field.of("embedding1"), Field.of("embedding2")).descending());
 
     List<PipelineResult> results = p.firstPage().execute(firestore).get();
+    List<PipelineResult> secondPage =
+        p.startAfter(results.get(results.size() - 1)).firstPage().execute(firestore).get();
   }
 
   @Test
   public void limit() throws Exception {
-    Pipeline p =
-        Pipeline.fromDatabase()
-            .filter(Field.of("foo").inAny(Constant.of(42), Field.of("bar")))
-            .limit(10);
+    Pipeline p = Pipeline.fromDatabase().filter(Field.of("foo").inAny(42, "bar")).limit(10);
 
     List<PipelineResult> result = p.execute(firestore).get();
   }
@@ -173,16 +163,5 @@ public class ITPipelineTest extends ITBaseTest {
             .offset(1);
 
     List<PipelineResult> result = p.execute(firestore).get();
-  }
-
-  @Test
-  public void fluentAllTheWay() throws Exception {
-    PaginatingPipeline p =
-        Pipeline.fromCollection("coll1")
-            .filter(Field.of("foo").inAny(Constant.of(42), Constant.of("bar")))
-            .paginate(
-                100, cosineDistance(Field.of("embedding1"), Field.of("embedding2")).descending());
-
-    List<PipelineResult> result = p.firstPage().execute(firestore).get();
   }
 }

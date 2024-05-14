@@ -1990,7 +1990,7 @@ public class Query {
     if (this.options.getFieldProjections() != null
         && !this.options.getFieldProjections().isEmpty()) {
       ppl =
-          ppl.project(
+          ppl.select(
               this.options.getFieldProjections().stream()
                   .map(fieldReference -> Field.of(fieldReference.getFieldPath()))
                   .toArray(Projectable[]::new));

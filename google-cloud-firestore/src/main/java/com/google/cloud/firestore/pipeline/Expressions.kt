@@ -287,7 +287,7 @@ internal constructor(
   override var distinct: Boolean,
 ) : Projectable, Function.Accumulator
 
-sealed class Function(val name: String, val params: List<Expr>) : Expr {
+open class Function(val name: String, val params: List<Expr>) : Expr {
   interface FilterCondition : Expr
 
   interface Accumulator : Expr {
@@ -314,69 +314,93 @@ sealed class Function(val name: String, val params: List<Expr>) : Expr {
   data class Equal internal constructor(private val left: Expr, private val right: Expr) :
     Function("eq", listOf(left, right)), FilterCondition
 
-  data class NotEqual(private val left: Expr, private val right: Expr) :
+  data class NotEqual internal constructor(private val left: Expr, private val right: Expr) :
     Function("neq", listOf(left, right)), FilterCondition
 
-  data class GreaterThan(private val left: Expr, private val right: Expr) :
+  data class GreaterThan internal constructor(private val left: Expr, private val right: Expr) :
     Function("gt", listOf(left, right)), FilterCondition
 
-  data class GreaterThanOrEqual(private val left: Expr, private val right: Expr) :
+  data class GreaterThanOrEqual internal constructor(
+    private val left: Expr,
+    private val right: Expr
+  ) :
     Function("gte", listOf(left, right)), FilterCondition
 
-  data class LessThan(private val left: Expr, private val right: Expr) :
+  data class LessThan internal constructor(private val left: Expr, private val right: Expr) :
     Function("lt", listOf(left, right)), FilterCondition
 
-  data class LessThanOrEqual(private val left: Expr, private val right: Expr) :
+  data class LessThanOrEqual internal constructor(private val left: Expr, private val right: Expr) :
     Function("lte", listOf(left, right)), FilterCondition
 
-  data class In(private val left: Expr, private val others: List<Expr>) :
+  data class In internal constructor(private val left: Expr, private val others: List<Expr>) :
     Function("in", listOf(left, ListOfExprs(others))), FilterCondition // For 'in'
 
-  data class And<T>(private val conditions: List<T>) : Function("and", conditions),
+  data class And<T> internal constructor(private val conditions: List<T>) :
+    Function("and", conditions),
                                                        FilterCondition where
   T : FilterCondition
 
-  data class Or<T>(private val conditions: List<T>) : Function("or", conditions),
+  data class Or<T> internal constructor(private val conditions: List<T>) :
+    Function("or", conditions),
                                                       FilterCondition where
   T : FilterCondition
 
-  data class Not(private val condition: Expr) : Function("not", listOf(condition)), FilterCondition
+  data class Not internal constructor(private val condition: Expr) :
+    Function("not", listOf(condition)), FilterCondition
 
-  data class ArrayContains(private val array: Expr, private val element: Expr) :
+  data class ArrayContains internal constructor(
+    private val array: Expr,
+    private val element: Expr
+  ) :
     Function("array_contains", listOf(array, element)), FilterCondition
 
-  data class ArrayContainsAny(private val array: Expr, private val elements: List<Expr>) :
+  data class ArrayContainsAny internal constructor(
+    private val array: Expr,
+    private val elements: List<Expr>
+  ) :
     Function("array_contains_any", listOf(array, ListOfExprs(elements))), FilterCondition
 
-  data class IsNaN(private val value: Expr) : Function("is_nan", listOf(value)), FilterCondition
+  data class IsNaN internal constructor(private val value: Expr) :
+    Function("is_nan", listOf(value)), FilterCondition
 
-  data class IsNull(private val value: Expr) : Function("is_null", listOf(value)), FilterCondition
+  data class IsNull internal constructor(private val value: Expr) :
+    Function("is_null", listOf(value)), FilterCondition
 
-  data class Sum(private val value: Expr, override var distinct: Boolean) :
+  data class Sum internal constructor(private val value: Expr, override var distinct: Boolean) :
     Function("sum", listOf(value)), Accumulator
 
-  data class Avg(private val value: Expr, override var distinct: Boolean) :
+  data class Avg internal constructor(private val value: Expr, override var distinct: Boolean) :
     Function("avg", listOf(value)), Accumulator
 
-  data class Count(private val value: Expr?, override var distinct: Boolean) :
+  data class Count internal constructor(private val value: Expr?, override var distinct: Boolean) :
     Function("count", value?.let { listOf(it) } ?: emptyList()), Accumulator
 
-  data class Min(private val value: Expr, override var distinct: Boolean) :
+  data class Min internal constructor(private val value: Expr, override var distinct: Boolean) :
     Function("min", listOf(value)), Accumulator
 
-  data class Max(private val value: Expr, override var distinct: Boolean) :
+  data class Max internal constructor(private val value: Expr, override var distinct: Boolean) :
     Function("max", listOf(value)), Accumulator
 
-  data class CosineDistance(private val vector1: Expr, private val vector2: Expr) :
+  data class CosineDistance internal constructor(
+    private val vector1: Expr,
+    private val vector2: Expr
+  ) :
     Function("cosine_distance", listOf(vector1, vector2))
 
-  data class DotProductDistance(private val vector1: Expr, private val vector2: Expr) :
+  data class DotProductDistance internal constructor(
+    private val vector1: Expr,
+    private val vector2: Expr
+  ) :
     Function("dot_product", listOf(vector1, vector2))
 
-  data class EuclideanDistance(private val vector1: Expr, private val vector2: Expr) :
+  data class EuclideanDistance internal constructor(
+    private val vector1: Expr,
+    private val vector2: Expr
+  ) :
     Function("euclidean_distance", listOf(vector1, vector2))
 
-  data class Generic(private val n: String, private val ps: List<Expr>) : Function(n, ps)
+  data class Generic internal constructor(private val n: String, private val ps: List<Expr>) :
+    Function(n, ps)
 
   companion object {
     @JvmStatic fun equal(left: Expr, right: Expr) = Equal(left, right)

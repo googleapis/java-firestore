@@ -6,7 +6,7 @@ import com.google.firestore.v1.Value
 import java.util.Date
 import javax.annotation.Nonnull
 
-data class PipelineResult
+class PipelineResult
 internal constructor(
   private val rpcContext: FirestoreRpcContext<*>?,
   val reference: DocumentReference?,
