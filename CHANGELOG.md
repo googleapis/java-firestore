@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.21.2](https://github.com/googleapis/java-firestore/compare/v3.21.1...v3.21.2) (2024-05-16)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.30.1 ([#1681](https://github.com/googleapis/java-firestore/issues/1681)) ([9fb8531](https://github.com/googleapis/java-firestore/commit/9fb853147d5af34a3ec7e68317be8e588a7cae91))
+
 ## [3.21.1](https://github.com/googleapis/java-firestore/compare/v3.21.0...v3.21.1) (2024-05-03)
 
 
