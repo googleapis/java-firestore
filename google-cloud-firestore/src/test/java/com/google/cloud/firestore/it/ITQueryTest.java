@@ -82,15 +82,12 @@ public class ITQueryTest extends ITBaseTest {
       assertThat(result).isEqualTo(Arrays.asList(docs));
     }
 
-    /*
     List<PipelineResult> pipelineResults = query.toPipeline().execute(query.getFirestore()).get();
     List<String> result =
         pipelineResults.stream()
             .map(pipelineResult -> Objects.requireNonNull(pipelineResult.getReference()).getId())
             .collect(Collectors.toList());
     assertThat(result).isEqualTo(Arrays.asList(docs));
-
-     */
   }
 
   @Test
@@ -616,7 +613,7 @@ public class ITQueryTest extends ITBaseTest {
     Query query2WithCursor = query2.startAt(docSnap);
     checkResultContainsDocuments(
         query2, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc2", "doc3");
-    // checkResultContainsDocuments(query2WithCursor, "doc2", "doc3");
+    checkResultContainsDocuments(query2WithCursor, "doc2", "doc3");
   }
 
   @Test
@@ -910,7 +907,7 @@ public class ITQueryTest extends ITBaseTest {
     if (isRunningAgainstFirestoreEmulator(firestore)) {
       assertThat(query.get().get().getCount()).isEqualTo(4);
     }
-    // assertThat(query.toPipeline().execute(query.getQuery().getFirestore()).get()).isNotEmpty();
+    assertThat(query.toPipeline().execute(query.getQuery().getFirestore()).get()).isNotEmpty();
     // TODO(MIEQ): Add sum and average when they are public.
   }
 
