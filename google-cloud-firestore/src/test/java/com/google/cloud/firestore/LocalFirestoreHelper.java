@@ -63,9 +63,9 @@ import com.google.firestore.v1.Value;
 import com.google.firestore.v1.Write;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
-import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Message;
 import com.google.protobuf.NullValue;
 import com.google.type.LatLng;
@@ -1200,11 +1200,11 @@ public final class LocalFirestoreHelper {
   }
 
   static class RequestResponsePair {
-    GeneratedMessageV3 request;
-    ApiFuture<? extends GeneratedMessageV3> response;
+    AbstractMessage request;
+    ApiFuture<? extends AbstractMessage> response;
 
     public RequestResponsePair(
-        GeneratedMessageV3 request, ApiFuture<? extends GeneratedMessageV3> response) {
+        AbstractMessage request, ApiFuture<? extends AbstractMessage> response) {
       this.request = request;
       this.response = response;
     }
@@ -1218,7 +1218,7 @@ public final class LocalFirestoreHelper {
 
     List<Object> actualRequestList = new CopyOnWriteArrayList<>();
 
-    void put(GeneratedMessageV3 request, ApiFuture<? extends GeneratedMessageV3> response) {
+    void put(AbstractMessage request, ApiFuture<? extends AbstractMessage> response) {
       operationList.add(new RequestResponsePair(request, response));
     }
 
@@ -1226,7 +1226,7 @@ public final class LocalFirestoreHelper {
         ArgumentCaptor<? extends Message> argumentCaptor, FirestoreImpl firestoreMock) {
       Stubber stubber = null;
       for (final RequestResponsePair entry : operationList) {
-        Answer<ApiFuture<? extends GeneratedMessageV3>> answer =
+        Answer<ApiFuture<? extends AbstractMessage>> answer =
             invocationOnMock -> {
               actualRequestList.add(invocationOnMock.getArguments()[0]);
               return entry.response;
