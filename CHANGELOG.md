@@ -1,5 +1,33 @@
 # Changelog
 
+## [3.21.3](https://github.com/googleapis/java-firestore/compare/v3.21.2...v3.21.3) (2024-05-17)
+
+
+### Dependencies
+
+* Update dependency org.graalvm.buildtools:junit-platform-native to v0.10.2 ([#1685](https://github.com/googleapis/java-firestore/issues/1685)) ([d3f329f](https://github.com/googleapis/java-firestore/commit/d3f329fa4d1b0e833843090cdc7adc27c6bb2505))
+* Update dependency org.graalvm.buildtools:native-maven-plugin to v0.10.2 ([#1686](https://github.com/googleapis/java-firestore/issues/1686)) ([bafebb8](https://github.com/googleapis/java-firestore/commit/bafebb8b69f9ccf8166ce5cd218f3346b0e647b9))
+
+## [3.21.2](https://github.com/googleapis/java-firestore/compare/v3.21.1...v3.21.2) (2024-05-16)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.30.1 ([#1681](https://github.com/googleapis/java-firestore/issues/1681)) ([9fb8531](https://github.com/googleapis/java-firestore/commit/9fb853147d5af34a3ec7e68317be8e588a7cae91))
+
+## [3.21.1](https://github.com/googleapis/java-firestore/compare/v3.21.0...v3.21.1) (2024-05-03)
+
+
+### Bug Fixes
+
+* Add configurable to run tests against different firestore backends ([#1659](https://github.com/googleapis/java-firestore/issues/1659)) ([a60d2a3](https://github.com/googleapis/java-firestore/commit/a60d2a3622a7193844f150a005bfb89204fc43af))
+
+
+### Dependencies
+
+* Update beam.version to v2.56.0 ([#1669](https://github.com/googleapis/java-firestore/issues/1669)) ([a4b4d1d](https://github.com/googleapis/java-firestore/commit/a4b4d1dc3e5b13209efb288f0cead7bcea2013e0))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.30.0 ([#1670](https://github.com/googleapis/java-firestore/issues/1670)) ([5bcbf88](https://github.com/googleapis/java-firestore/commit/5bcbf88b1174d5e2615f66d9997be76481842131))
+
 ## [3.21.0](https://github.com/googleapis/java-firestore/compare/v3.20.2...v3.21.0) (2024-04-26)
 
 
