@@ -49,6 +49,8 @@ internal fun exprToValue(expr: Expr): Value {
 
 interface Projectable
 
+internal class ExprWithAlias internal constructor(val alias: String, val expr: Expr) : Projectable
+
 interface Expr {
   // Infix functions returning Function subclasses
   infix fun equal(other: Expr) = Equal(this, other)
@@ -142,6 +144,10 @@ interface Expr {
 
   fun descending(): Ordering {
     return Ordering(this, Direction.DESCENDING)
+  }
+
+  fun asAlias(alias: String): Projectable {
+    return ExprWithAlias(alias, this)
   }
 }
 

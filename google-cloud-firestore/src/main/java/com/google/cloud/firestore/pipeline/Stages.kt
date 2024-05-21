@@ -104,10 +104,15 @@ internal constructor(
     }
   }
 
-  class FindNearestOptions(val limit: Long, val output: Field? = null) {
+  class FindNearestOptions internal constructor(
+    val limit: Long,
+    val distanceMeasure: DistanceMeasure,
+    val output: Field? = null
+  ) {
     companion object {
       @JvmStatic
-      fun newInstance(limit: Long, output: Field? = null) = FindNearestOptions(limit, output)
+      fun newInstance(limit: Long, distanceMeasure: DistanceMeasure, output: Field? = null) =
+        FindNearestOptions(limit, distanceMeasure, output)
     }
   }
 }
