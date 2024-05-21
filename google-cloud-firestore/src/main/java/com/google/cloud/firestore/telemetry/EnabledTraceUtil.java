@@ -292,6 +292,13 @@ public class EnabledTraceUtil implements TraceUtil {
                   .build());
     }
 
+    Package pkg = this.getClass().getPackage();
+    if (pkg != null) {
+      spanBuilder =
+          spanBuilder.setAttribute(
+              ATTRIBUTE_SERVICE_PREFIX + "sdk.version", pkg.getImplementationVersion());
+    }
+
     // Add the memory utilization of the client at the time this trace was collected.
     long totalMemory = Runtime.getRuntime().totalMemory();
     long freeMemory = Runtime.getRuntime().freeMemory();
