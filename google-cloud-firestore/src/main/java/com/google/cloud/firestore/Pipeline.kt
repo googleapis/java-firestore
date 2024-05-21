@@ -21,8 +21,8 @@ import com.google.cloud.firestore.pipeline.FindNearest
 import com.google.cloud.firestore.pipeline.Function
 import com.google.cloud.firestore.pipeline.Limit
 import com.google.cloud.firestore.pipeline.Offset
-import com.google.cloud.firestore.pipeline.Project
-import com.google.cloud.firestore.pipeline.Projectable
+import com.google.cloud.firestore.pipeline.Select
+import com.google.cloud.firestore.pipeline.Selectable
 import com.google.cloud.firestore.pipeline.Sort
 import com.google.cloud.firestore.pipeline.Sort.Ordering
 import com.google.cloud.firestore.pipeline.Stage
@@ -173,9 +173,9 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
     }
   }
 
-  private fun projectablesToMap(vararg projectables: Projectable): Map<String, Expr> {
+  private fun projectablesToMap(vararg selectables: Selectable): Map<String, Expr> {
     val projMap = mutableMapOf<String, Expr>()
-    for (proj in projectables) {
+    for (proj in selectables) {
       when (proj) {
         is Field -> projMap[proj.field] = proj
         is AggregatorTarget -> projMap[proj.fieldName] = proj.accumulator
@@ -185,12 +185,12 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
     return projMap
   }
 
-  fun addFields(vararg fields: Projectable): Pipeline {
+  fun addFields(vararg fields: Selectable): Pipeline {
     return Pipeline(stages.plus(AddFields(projectablesToMap(*fields))), name)
   }
 
-  fun select(vararg projections: Projectable): Pipeline {
-    return Pipeline(stages.plus(Project(projectablesToMap(*projections))), name)
+  fun select(vararg projections: Selectable): Pipeline {
+    return Pipeline(stages.plus(Select(projectablesToMap(*projections))), name)
   }
 
   fun <T> filter(condition: T): Pipeline where T : Expr, T : Function.FilterCondition {

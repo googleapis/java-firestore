@@ -41,7 +41,7 @@ import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
 import com.google.cloud.firestore.pipeline.Field;
-import com.google.cloud.firestore.pipeline.Projectable;
+import com.google.cloud.firestore.pipeline.Selectable;
 import com.google.cloud.firestore.pipeline.Sort.Density;
 import com.google.cloud.firestore.pipeline.Sort.Ordering;
 import com.google.cloud.firestore.pipeline.Sort.Truncation;
@@ -1993,7 +1993,7 @@ public class Query {
           ppl.select(
               this.options.getFieldProjections().stream()
                   .map(fieldReference -> Field.of(fieldReference.getFieldPath()))
-                  .toArray(Projectable[]::new));
+                  .toArray(Selectable[]::new));
     }
 
     // Orders

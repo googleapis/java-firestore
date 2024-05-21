@@ -31,8 +31,8 @@ internal data class Documents(internal val documents: List<String>) : Stage {
   }
 }
 
-internal data class Project(internal val projections: Map<String, Expr>) : Stage {
-  val name = "project"
+internal data class Select(internal val projections: Map<String, Expr>) : Stage {
+  val name = "select"
 }
 
 internal data class AddFields(internal val fields: Map<String, Expr>) : Stage {
@@ -205,7 +205,7 @@ internal fun toStageProto(stage: Stage): com.google.firestore.v1.Pipeline.Stage 
         .setName(stage.name)
         .addAllArgs(stage.documents.map { Value.newBuilder().setReferenceValue(it).build() })
         .build()
-    is Project ->
+    is Select ->
       com.google.firestore.v1.Pipeline.Stage.newBuilder()
         .setName(stage.name)
         .addArgs(encodeValue(stage.projections))

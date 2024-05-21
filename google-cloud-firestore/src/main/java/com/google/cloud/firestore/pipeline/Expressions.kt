@@ -47,9 +47,9 @@ internal fun exprToValue(expr: Expr): Value {
   }
 }
 
-interface Projectable
+interface Selectable
 
-internal class ExprWithAlias internal constructor(val alias: String, val expr: Expr) : Projectable
+internal class ExprWithAlias internal constructor(val alias: String, val expr: Expr) : Selectable
 
 interface Expr {
   // Infix functions returning Function subclasses
@@ -146,7 +146,7 @@ interface Expr {
     return Ordering(this, Direction.DESCENDING)
   }
 
-  fun asAlias(alias: String): Projectable {
+  fun asAlias(alias: String): Selectable {
     return ExprWithAlias(alias, this)
   }
 }
@@ -252,7 +252,7 @@ data class Field internal constructor(
   internal val field: String,
   private var pipeline: Pipeline? = null
 ) :
-  Expr, Projectable {
+  Expr, Selectable {
   companion object {
     const val DOCUMENT_ID: String = "__path__"
 
@@ -272,7 +272,7 @@ data class Field internal constructor(
   }
 }
 
-data class Fields internal constructor(internal val fs: List<Field>? = null) : Expr, Projectable {
+data class Fields internal constructor(internal val fs: List<Field>? = null) : Expr, Selectable {
   companion object {
     @JvmStatic
     fun of(f1: String, vararg f: String): Fields {
@@ -291,7 +291,7 @@ internal constructor(
   internal val accumulator: Function.Accumulator,
   internal val fieldName: String,
   override var distinct: Boolean,
-) : Projectable, Function.Accumulator
+) : Selectable, Function.Accumulator
 
 open class Function(val name: String, val params: List<Expr>) : Expr {
   interface FilterCondition : Expr
