@@ -2,6 +2,7 @@
 package com.google.cloud.firestore.pipeline
 
 import com.google.cloud.firestore.DocumentReference
+import com.google.cloud.firestore.Pipeline
 import com.google.cloud.firestore.encodeValue
 import com.google.firestore.v1.MapValue
 import com.google.firestore.v1.Value
@@ -53,6 +54,11 @@ internal class Offset(internal val offset: Int) : Stage {
 internal class Limit(internal val limit: Int) : Stage {
   val name = "limit"
 }
+
+internal data class UnionWith(val pipeline: Pipeline, val distinct: Boolean) : Stage
+
+internal data class Group(val fields: Map<Field, Expr>, val accumulators: Map<Field, Expr>) :
+  Stage
 
 class Aggregate
 internal constructor(
@@ -115,6 +121,31 @@ internal constructor(
       fun newInstance(limit: Long, distanceMeasure: DistanceMeasure, output: Field? = null) =
         FindNearestOptions(limit, distanceMeasure, output)
     }
+  }
+}
+
+sealed interface JoinCondition {
+  data class Expression(val expr: Expr) : JoinCondition
+  data class Using(val fields: Set<Field>) : JoinCondition
+}
+
+data class Join(
+  val type: Type,
+  val condition: JoinCondition,
+  val alias: Field,
+  val otherPipeline: Pipeline,
+  val otherAlias: Field
+) : Stage {
+  enum class Type {
+    CROSS,
+    INNER,
+    FULL,
+    LEFT,
+    RIGHT,
+    LEFT_SEMI,
+    RIGHT_SEMI,
+    LEFT_ANTI_SEMI,
+    RIGHT_ANTI_SEMI,
   }
 }
 
@@ -183,6 +214,16 @@ internal constructor(
     }
   }
 }
+
+data class ReplaceMap(val mode: Mode, val field: Field) : Stage {
+  enum class Mode {
+    FULL_REPLACE,
+    MERGE_PREFER_NEST,
+    MERGE_PREFER_PARENT;
+  }
+}
+
+data class UnnestArray(val field: Field) : Stage
 
 internal class GenericStage(internal val name: String, internal val params: List<Any>) : Stage {}
 
@@ -258,8 +299,11 @@ internal fun toStageProto(stage: Stage): com.google.firestore.v1.Pipeline.Stage 
         .setName(stage.name)
         .addAllArgs(stage.params.map { encodeValue(it) })
         .build()
-    else -> {
-      TODO()
-    }
+    is UnionWith -> TODO()
+    is UnnestArray -> TODO()
+    is ReplaceMap -> TODO()
+    is Group -> TODO()
+    is Join -> TODO()
+    else -> TODO()
   }
 }

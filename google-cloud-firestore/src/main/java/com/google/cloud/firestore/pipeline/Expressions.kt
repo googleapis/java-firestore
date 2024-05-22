@@ -255,17 +255,27 @@ data class Field internal constructor(
   private var pipeline: Pipeline? = null
 ) :
   Expr, Selectable {
+
+  fun usingPrefix(prefix: String): Selectable {
+    return this
+  }
+
   companion object {
     const val DOCUMENT_ID: String = "__name__"
 
     @JvmStatic
     fun of(path: String): Field {
-      return Field(FieldPath.of(path))
+      return Field(path, null)
     }
 
     @JvmStatic
-    fun ofAll(): Field {
-      return Field(FieldPath.of(""))
+    fun of(pipeline: Pipeline, path: String): Field {
+      return Field(path, pipeline)
+    }
+
+    @JvmStatic
+    fun ofAll(pipeline: Pipeline? = null): Field {
+      return Field("", pipeline)
     }
   }
 
@@ -275,6 +285,10 @@ data class Field internal constructor(
 }
 
 data class Fields internal constructor(internal val fs: List<Field>? = null) : Expr, Selectable {
+  fun usingPrefix(prefix: String): Selectable {
+    return this
+  }
+
   companion object {
     @JvmStatic
     fun of(f1: String, vararg f: String): Fields {
@@ -282,7 +296,17 @@ data class Fields internal constructor(internal val fs: List<Field>? = null) : E
     }
 
     @JvmStatic
+    fun of(pipeline: Pipeline, f1: String, vararg f: String): Fields {
+      return Fields(listOf(Field.of(f1)) + f.map(Field.Companion::of))
+    }
+
+    @JvmStatic
     fun ofAll(): Fields {
+      return Fields(listOf(Field.of("")))
+    }
+
+    @JvmStatic
+    fun ofAll(pipeline: Pipeline): Fields {
       return Fields(listOf(Field.of("")))
     }
   }
@@ -388,6 +412,20 @@ open class Function(val name: String, val params: List<Expr>) : Expr {
 
   data class Max internal constructor(private val value: Expr, override var distinct: Boolean) :
     Function("max", listOf(value)), Accumulator
+
+  // String manipulation
+  data class Concat(val value: List<Expr>) : Function("concat", value)
+  data class Trim(val value: Expr) : Function("trim", listOf(value))
+  data class ToLower(val value: Expr) : Function("toLower", listOf(value))
+  data class ToUpper(val value: Expr) : Function("toUpper", listOf(value))
+  data class StartsWith(val value: Expr, val query: Expr) :
+    Function("startWith", listOf(value, query)), FilterCondition
+
+  data class RegexMatch(val regex: String, val value: Expr) :
+    Function("startWith", listOf(Constant.of(regex), value)), FilterCondition
+
+  data class HasAncestor(val child: Expr, val ancestor: Expr) :
+    Function("has_ancestor", listOf(ancestor)), FilterCondition
 
   data class CosineDistance internal constructor(
     private val vector1: Expr,
@@ -637,6 +675,30 @@ open class Function(val name: String, val params: List<Expr>) : Expr {
     @JvmStatic
     fun euclideanDistance(field: String, other: DoubleArray) =
       EuclideanDistance(Field.of(field), Constant.ofVector(other))
+
+    @JvmStatic
+    fun concat(vararg expr: Expr) =
+      Concat(expr.toList())
+
+    @JvmStatic
+    fun trim(expr: Expr) =
+      Trim(expr)
+
+    @JvmStatic
+    fun toLower(expr: Expr) =
+      ToLower(expr)
+
+    @JvmStatic
+    fun toUpper(expr: Expr) =
+      ToUpper(expr)
+
+    @JvmStatic
+    fun startsWith(expr: Expr, query: Expr) =
+      StartsWith(expr, query)
+
+    @JvmStatic
+    fun regexMatches(regex: String, value: Expr) =
+      RegexMatch(regex, value)
 
     @JvmStatic fun function(name: String, params: List<Expr>) = Generic(name, params)
   }

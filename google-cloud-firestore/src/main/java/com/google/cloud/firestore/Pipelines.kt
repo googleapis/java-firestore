@@ -20,13 +20,18 @@ import com.google.cloud.firestore.pipeline.Fields
 import com.google.cloud.firestore.pipeline.Filter
 import com.google.cloud.firestore.pipeline.FindNearest
 import com.google.cloud.firestore.pipeline.Function
+import com.google.cloud.firestore.pipeline.Group
+import com.google.cloud.firestore.pipeline.Join
 import com.google.cloud.firestore.pipeline.Limit
 import com.google.cloud.firestore.pipeline.Offset
+import com.google.cloud.firestore.pipeline.ReplaceMap
 import com.google.cloud.firestore.pipeline.Select
 import com.google.cloud.firestore.pipeline.Selectable
 import com.google.cloud.firestore.pipeline.Sort
 import com.google.cloud.firestore.pipeline.Sort.Ordering
 import com.google.cloud.firestore.pipeline.Stage
+import com.google.cloud.firestore.pipeline.UnionWith
+import com.google.cloud.firestore.pipeline.UnnestArray
 import com.google.cloud.firestore.pipeline.toStageProto
 import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableMap
@@ -40,6 +45,36 @@ import io.opencensus.trace.AttributeValue
 import io.opencensus.trace.Tracing
 import java.util.logging.Level
 import java.util.logging.Logger
+
+class GroupingPipeline internal constructor(val p: Pipeline, vararg val by: Selectable) {
+  fun aggregate(vararg aggregator: AggregatorTarget): Pipeline {
+    // TODO: this.p.operations.add()
+    return this.p
+  }
+}
+
+class JoiningPipeline internal constructor(
+  private val left: Pipeline,
+  private val right: Pipeline,
+  private val join: Join.Type,
+  private val leftPrefix: String? = null,
+  private val rightPrefix: String? = null,
+) {
+  fun on(condition: Function.FilterCondition): Pipeline {
+    // TODO: this.p.operations.add()
+    return left
+  }
+
+  fun on(vararg field: Field): Pipeline {
+    // TODO: this.p.operations.add()
+    return left
+  }
+
+  fun on(field: Fields): Pipeline {
+    // TODO: this.p.operations.add()
+    return left
+  }
+}
 
 internal fun setStartCursor(pipeline: PaginatingPipeline, cursor: Cursor): PaginatingPipeline {
   return pipeline
@@ -218,6 +253,24 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
     return Pipeline(stages.plus(Limit(limit)), name)
   }
 
+  fun unionWith(pipeline: Pipeline, distinct: Boolean): Pipeline {
+    return Pipeline(stages.plus(UnionWith(pipeline, distinct)), name)
+  }
+
+  fun group(fields: Map<Field, Expr>, accumulators: Map<Field, Expr>): Pipeline {
+    return Pipeline(stages.plus(Group(fields, accumulators)), name)
+  }
+
+  fun group(vararg by: Fields): GroupingPipeline {
+    // operations.add(Group(fields, accumulators))
+    return GroupingPipeline(this /*TODO*/)
+  }
+
+  fun group(vararg by: Selectable): GroupingPipeline {
+    // operations.add(Group(fields, accumulators))
+    return GroupingPipeline(this /*TODO*/)
+  }
+
   fun aggregate(vararg aggregators: AggregatorTarget): Pipeline {
     return Pipeline(stages.plus(Aggregate(*aggregators)), name)
   }
@@ -228,6 +281,43 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
     options: FindNearest.FindNearestOptions,
   ): Pipeline {
     return this
+  }
+
+  fun innerJoin(
+    otherPipeline: Pipeline
+  ) = JoiningPipeline(this, otherPipeline, Join.Type.INNER)
+
+  fun crossJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.CROSS)
+
+  fun fullJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.FULL)
+
+  fun leftJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.LEFT)
+
+  fun rightJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.RIGHT)
+
+  fun leftSemiJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.LEFT_SEMI)
+
+  fun rightSemiJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.RIGHT_SEMI)
+
+  fun leftAntiSemiJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.LEFT_ANTI_SEMI)
+
+  fun rightAntiSemiJoin(otherPipeline: Pipeline): JoiningPipeline =
+    JoiningPipeline(this, otherPipeline, Join.Type.RIGHT_ANTI_SEMI)
+
+  @JvmOverloads
+  fun replaceMap(field: Field, mode: ReplaceMap.Mode = ReplaceMap.Mode.FULL_REPLACE): Pipeline {
+    return Pipeline(stages.plus(ReplaceMap(mode, field)), name)
+  }
+
+  fun unnestArray(field: Field): Pipeline {
+    return Pipeline(stages.plus(UnnestArray(field)), name)
   }
 
   fun sort(

@@ -17,12 +17,16 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.it.ITQueryTest.map;
+import static com.google.cloud.firestore.pipeline.Function.and;
 import static com.google.cloud.firestore.pipeline.Function.avg;
+import static com.google.cloud.firestore.pipeline.Function.concat;
 import static com.google.cloud.firestore.pipeline.Function.cosineDistance;
 import static com.google.cloud.firestore.pipeline.Function.equal;
 import static com.google.cloud.firestore.pipeline.Function.lessThan;
 import static com.google.cloud.firestore.pipeline.Function.not;
 import static com.google.cloud.firestore.pipeline.Function.or;
+import static com.google.cloud.firestore.pipeline.Function.toLower;
+import static com.google.cloud.firestore.pipeline.Function.trim;
 import static com.google.cloud.firestore.pipeline.Sort.Ordering.ascending;
 import static com.google.cloud.firestore.pipeline.Sort.Ordering.descending;
 
@@ -34,6 +38,9 @@ import com.google.cloud.firestore.PipelineResult;
 import com.google.cloud.firestore.pipeline.Constant;
 import com.google.cloud.firestore.pipeline.Field;
 import com.google.cloud.firestore.pipeline.Fields;
+import com.google.cloud.firestore.pipeline.FindNearest.DistanceMeasure;
+import com.google.cloud.firestore.pipeline.FindNearest.FindNearestOptions;
+import com.google.cloud.firestore.pipeline.Function;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -106,15 +113,6 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
-  public void aggregateWithoutGrouping() throws Exception {
-    Pipeline p =
-        Pipeline.fromDatabase()
-            .filter(Field.of("foo").inAny(42, "bar"))
-            .aggregate(avg(Field.of("score")).toField("avg_score_1"));
-    List<PipelineResult> results = p.execute(firestore).get();
-  }
-
-  @Test
   public void sorts() throws Exception {
     Pipeline p =
         Pipeline.fromCollection("coll1")
@@ -163,5 +161,67 @@ public class ITPipelineTest extends ITBaseTest {
             .offset(1);
 
     List<PipelineResult> result = p.execute(firestore).get();
+  }
+  @Test
+  public void groupBy() throws Exception {
+    Pipeline p =
+        Pipeline.fromCollection("coll1")
+            .filter(Field.of("foo").inAny(42, Field.of("bar")))
+            .group(Fields.of("given_name", "family_name"))
+            .aggregate(Field.of("score").avg().toField("avg_score_2"));
+
+    List<PipelineResult> results = p.execute(firestore).get();
+  }
+
+  @Test
+  public void aggregateWithoutGrouping() throws Exception {
+    Pipeline p =
+        Pipeline.fromCollection("coll1")
+            .filter(Field.of("foo").inAny(Constant.of(42), Field.of("bar")))
+            .aggregate(avg(Field.of("score")).toField("avg_score_1"));
+  }
+
+  @Test
+  public void joins() throws Exception {
+    Pipeline p =
+        Pipeline.fromCollection("coll1")
+            .filter(Field.of("foo").inAny(Constant.of(42), Field.of("bar")));
+    Pipeline pipe =
+        Pipeline.fromCollection("users")
+            .findNearest(
+                Field.of("embedding"),
+                new double[] {1.0, 2.0},
+                FindNearestOptions.newInstance(1000, DistanceMeasure.euclidean(), Field.of("distance")))
+            .innerJoin(p)
+            .on(
+                and(
+                    Field.of("foo").equal(Field.of(p, "bar")),
+                    Field.of(p, "requirement").greaterThan(Field.of("distance"))))
+            // select is optional in case user want to resolve conflict manually
+            .select(Fields.ofAll().usingPrefix("left"), Fields.ofAll(p).usingPrefix("right"));
+
+    Pipeline another =
+        Pipeline.fromCollection("users")
+            .innerJoin(p)
+            .on(Fields.of("foo", "bar"))
+            // select is optional in case user want to resolve conflict manually
+            .select(
+                Fields.ofAll().usingPrefix("left"), Field.ofAll(p).usingPrefix("right"));
+  }
+
+  @Test
+  public void functionComposition() throws Exception {
+    // A normalized value by joining the first and last name, triming surrounding whitespace and
+    // convert to lower case
+    Function normalized = concat(Field.of("first_name"), Constant.of(" "), Field.of("last_name"));
+    normalized = trim(normalized);
+    normalized = toLower(normalized);
+
+    Pipeline p =
+        Pipeline.fromCollection("users")
+            .filter(
+                or(
+                    normalized.equal(Constant.of("john smith")),
+                    normalized.equal(Constant.of("alice baker"))));
   }
 }
