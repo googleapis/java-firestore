@@ -309,6 +309,11 @@ data class Fields internal constructor(internal val fs: List<Field>? = null) : E
     }
 
     @JvmStatic
+    fun of(pipeline: Pipeline, f1: String, vararg f: String): Fields {
+      return Fields(listOf(Field.of(f1)) + f.map(Field.Companion::of))
+    }
+
+    @JvmStatic
     fun ofAll(): Fields {
       return Fields(listOf(Field.of("")))
     }
@@ -676,37 +681,6 @@ open class Function(val name: String, val params: List<Expr>) : Expr {
     @JvmStatic
     fun euclideanDistance(expr: Expr, other: DoubleArray) =
       EuclideanDistance(expr, Constant.ofVector(other))
-
-    @JvmStatic
-    fun euclideanDistance(field: String, other: Expr) = EuclideanDistance(Field.of(field), other)
-
-    @JvmStatic
-    fun euclideanDistance(field: String, other: DoubleArray) =
-      EuclideanDistance(Field.of(field), Constant.ofVector(other))
-
-    @JvmStatic
-    fun concat(vararg expr: Expr) =
-      Concat(expr.toList())
-
-    @JvmStatic
-    fun trim(expr: Expr) =
-      Trim(expr)
-
-    @JvmStatic
-    fun toLower(expr: Expr) =
-      ToLower(expr)
-
-    @JvmStatic
-    fun toUpper(expr: Expr) =
-      ToUpper(expr)
-
-    @JvmStatic
-    fun startsWith(expr: Expr, query: Expr) =
-      StartsWith(expr, query)
-
-    @JvmStatic
-    fun regexMatches(regex: String, value: Expr) =
-      RegexMatch(regex, value)
 
     @JvmStatic fun function(name: String, params: List<Expr>) = Generic(name, params)
   }
