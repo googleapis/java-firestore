@@ -120,9 +120,9 @@ interface Expr {
 
   fun count() = Count(this, false)
 
-  fun min() = Count(this, false)
+  fun min() = Function.Min(this, false)
 
-  fun max() = Count(this, false)
+  fun max() = Function.Max(this, false)
 
   infix fun cosineDistance(other: Expr) = CosineDistance(this, other)
 
@@ -502,7 +502,7 @@ open class Function(val name: String, val params: List<Expr>) : Expr {
 
     @JvmStatic fun max(expr: Expr) = Avg(expr, false)
 
-    @JvmStatic fun countAll(expr: Expr) = Count(expr, false)
+    @JvmStatic fun count(expr: Expr) = Count(expr, false)
 
     @JvmStatic fun countAll() = Count(null, false)
 

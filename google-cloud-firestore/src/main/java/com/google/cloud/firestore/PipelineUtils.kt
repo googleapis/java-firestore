@@ -9,6 +9,7 @@ import com.google.cloud.firestore.pipeline.AggregatorTarget
 import com.google.cloud.firestore.pipeline.Constant
 import com.google.cloud.firestore.pipeline.Field
 import com.google.cloud.firestore.pipeline.Function
+import com.google.cloud.firestore.pipeline.Function.Companion.count
 import com.google.cloud.firestore.pipeline.Function.Companion.countAll
 import com.google.cloud.firestore.pipeline.Function.Companion.not
 import com.google.firestore.v1.Cursor
