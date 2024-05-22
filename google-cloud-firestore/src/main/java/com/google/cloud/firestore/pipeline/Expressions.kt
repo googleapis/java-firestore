@@ -148,6 +148,14 @@ interface Expr {
     return Ordering(this, Direction.DESCENDING)
   }
 
+  // Strings
+  fun toLower() = Function.ToLower(this)
+  fun toUpper() = Function.ToUpper(this)
+  fun concatWith(vararg expr: Expr) = Function.Concat(listOf(this) + expr.toList())
+  fun trim() = Function.Trim(this)
+  fun startsWith(query: Expr) = Function.StartsWith(this, query)
+  fun regexMatch(regex: String) = Function.RegexMatch(regex, this)
+
   fun asAlias(alias: String): Selectable {
     return ExprWithAlias(alias, this)
   }

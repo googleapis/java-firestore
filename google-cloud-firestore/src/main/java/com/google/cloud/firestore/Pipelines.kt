@@ -46,7 +46,7 @@ import io.opencensus.trace.Tracing
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class GroupingPipeline internal constructor(val p: Pipeline, vararg val by: Selectable) {
+class GroupingPipeline internal constructor(internal val p: Pipeline, internal vararg val by: Selectable) {
   fun aggregate(vararg aggregator: AggregatorTarget): Pipeline {
     // TODO: this.p.operations.add()
     return this.p
