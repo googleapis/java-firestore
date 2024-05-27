@@ -22,12 +22,14 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.cloud.firestore.*;
 import com.google.cloud.firestore.Query.Direction;
+import com.google.common.collect.Sets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -66,12 +68,13 @@ public class ITQueryTest extends ITBaseTest {
     return collection;
   }
 
-  public static void checkResultContainsDocuments(Query query, String... docs)
+  public static void checkResultContainsDocumentsInOrder(Query query, String... docs)
       throws ExecutionException, InterruptedException {
-    checkResultContainsDocuments(query, false, docs);
+    checkResultContainsDocumentsInOrder(query, false, docs);
   }
 
-  public static void checkResultContainsDocuments(Query query, boolean pipelineOnly, String... docs)
+  public static void checkResultContainsDocumentsInOrder(
+      Query query, boolean pipelineOnly, String... docs)
       throws ExecutionException, InterruptedException {
     if (!pipelineOnly) {
       QuerySnapshot snapshot = query.get().get();
@@ -90,6 +93,25 @@ public class ITQueryTest extends ITBaseTest {
     assertThat(result).isEqualTo(Arrays.asList(docs));
   }
 
+  public static void checkResultContainsDocuments(Query query, boolean pipelineOnly, String... docs)
+      throws ExecutionException, InterruptedException {
+    if (!pipelineOnly) {
+      QuerySnapshot snapshot = query.get().get();
+      Set<String> result =
+          snapshot.getDocuments().stream()
+              .map(queryDocumentSnapshot -> queryDocumentSnapshot.getReference().getId())
+              .collect(Collectors.toSet());
+      assertThat(result).isEqualTo(Sets.newHashSet(docs));
+    }
+
+    List<PipelineResult> pipelineResults = query.toPipeline().execute(query.getFirestore()).get();
+    Set<String> result =
+        pipelineResults.stream()
+            .map(pipelineResult -> Objects.requireNonNull(pipelineResult.getReference()).getId())
+            .collect(Collectors.toSet());
+    assertThat(result).isEqualTo(Sets.newHashSet(docs));
+  }
+
   @Test
   public void orQueries() throws Exception {
     Map<String, Map<String, Object>> testDocs =
@@ -103,7 +125,7 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     // Two equalities: a==1 || b==1.
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection.where(Filter.or(Filter.equalTo("a", 1), Filter.equalTo("b", 1))),
         "doc1",
         "doc2",
@@ -111,7 +133,7 @@ public class ITQueryTest extends ITBaseTest {
         "doc5");
 
     // (a==1 && b==0) || (a==3 && b==2)
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection.where(
             Filter.or(
                 Filter.and(Filter.equalTo("a", 1), Filter.equalTo("b", 0)),
@@ -120,7 +142,7 @@ public class ITQueryTest extends ITBaseTest {
         "doc3");
 
     // a==1 && (b==0 || b==3).
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection.where(
             Filter.and(
                 Filter.equalTo("a", 1), Filter.or(Filter.equalTo("b", 0), Filter.equalTo("b", 3)))),
@@ -128,7 +150,7 @@ public class ITQueryTest extends ITBaseTest {
         "doc4");
 
     // (a==2 || b==2) && (a==3 || b==3)
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection.where(
             Filter.and(
                 Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 2)),
@@ -136,7 +158,7 @@ public class ITQueryTest extends ITBaseTest {
         "doc3");
 
     // Test with limits without orderBy (the __name__ ordering is the tiebreaker).
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection.where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1))).limit(1),
         "doc2");
   }
@@ -162,7 +184,7 @@ public class ITQueryTest extends ITBaseTest {
         "doc3");
 
     // Test with limits (implicit order by ASC): (a==1) || (b > 0) LIMIT 2
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection.where(Filter.or(Filter.equalTo("a", 1), Filter.greaterThan("b", 0))).limit(2),
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc1",
@@ -170,7 +192,7 @@ public class ITQueryTest extends ITBaseTest {
 
     // Test with limits (explicit order by): (a==1) || (b > 0) LIMIT_TO_LAST 2
     // Note: The public query API does not allow implicit ordering when limitToLast is used.
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection
             .where(Filter.or(Filter.equalTo("a", 1), Filter.greaterThan("b", 0)))
             .limitToLast(2)
@@ -180,7 +202,7 @@ public class ITQueryTest extends ITBaseTest {
         "doc4");
 
     // Test with limits (explicit order by ASC): (a==2) || (b == 1) ORDER BY a LIMIT 1
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection
             .where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1)))
             .limit(1)
@@ -189,7 +211,7 @@ public class ITQueryTest extends ITBaseTest {
         "doc5");
 
     // Test with limits (explicit order by DESC): (a==2) || (b == 1) ORDER BY a LIMIT_TO_LAST 1
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection
             .where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1)))
             .limitToLast(1)
@@ -198,7 +220,7 @@ public class ITQueryTest extends ITBaseTest {
         "doc2");
 
     // Test with limits (explicit order by DESC): (a==2) || (b == 1) ORDER BY a DESC LIMIT 1
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection
             .where(Filter.or(Filter.equalTo("a", 2), Filter.equalTo("b", 1)))
             .limit(1)
@@ -224,7 +246,7 @@ public class ITQueryTest extends ITBaseTest {
     // There's no explicit nor implicit orderBy. Documents with missing 'a' or missing 'b' should be
     // allowed if the document matches at least one disjunction term.
     Query query = collection.where(Filter.or(Filter.equalTo("a", 1), Filter.equalTo("b", 1)));
-    checkResultContainsDocuments(query, "doc1", "doc2", "doc4", "doc5");
+    checkResultContainsDocumentsInOrder(query, "doc1", "doc2", "doc4", "doc5");
   }
 
   @Test
@@ -244,7 +266,7 @@ public class ITQueryTest extends ITBaseTest {
     // doc2 should not be included because it's missing the field 'a', and we have "orderBy a".
     Query query1 =
         collection.where(Filter.or(Filter.equalTo("a", 1), Filter.equalTo("b", 1))).orderBy("a");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc1",
@@ -255,7 +277,7 @@ public class ITQueryTest extends ITBaseTest {
     // doc5 should not be included because it's missing the field 'b', and we have "orderBy b".
     Query query2 =
         collection.where(Filter.or(Filter.equalTo("a", 1), Filter.equalTo("b", 1))).orderBy("b");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc1",
@@ -266,7 +288,7 @@ public class ITQueryTest extends ITBaseTest {
     // This query has an implicit 'order by a'.
     // doc2 should not be included because it's missing the field 'a'.
     Query query3 = collection.where(Filter.or(Filter.greaterThan("a", 2), Filter.equalTo("b", 1)));
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query3, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc3");
 
     // Query: a>1 || b==1 order by a order by b.
@@ -277,7 +299,7 @@ public class ITQueryTest extends ITBaseTest {
             .where(Filter.or(Filter.greaterThan("a", 1), Filter.equalTo("b", 1)))
             .orderBy("a")
             .orderBy("b");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query4, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc3");
   }
 
@@ -294,7 +316,7 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     // a==2 || b in [2,3]
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection.where(Filter.or(Filter.equalTo("a", 2), Filter.inArray("b", asList(2, 3)))),
         "doc3",
         "doc4",
@@ -316,7 +338,7 @@ public class ITQueryTest extends ITBaseTest {
 
     // a==2 || b not-in [2,3]
     // Has implicit orderBy b.
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection.where(Filter.or(Filter.equalTo("a", 2), Filter.notInArray("b", asList(2, 3)))),
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc1",
@@ -337,14 +359,14 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     // a==2 || b array-contains 7
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection.where(Filter.or(Filter.equalTo("a", 2), Filter.arrayContains("b", 7))),
         "doc3",
         "doc4",
         "doc6");
 
     // a==2 || b array-contains-any [0, 3]
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         collection.where(
             Filter.or(Filter.equalTo("a", 2), Filter.arrayContainsAny("b", asList(0, 3)))),
         "doc1",
@@ -368,26 +390,26 @@ public class ITQueryTest extends ITBaseTest {
     Query query1 =
         collection.where(
             Filter.or(Filter.inArray("a", asList(2, 3)), Filter.arrayContains("b", 3)));
-    checkResultContainsDocuments(query1, "doc3", "doc4", "doc6");
+    checkResultContainsDocumentsInOrder(query1, "doc3", "doc4", "doc6");
 
     Query query2 =
         collection.where(
             Filter.and(Filter.inArray("a", asList(2, 3)), Filter.arrayContains("b", 7)));
-    checkResultContainsDocuments(query2, "doc3");
+    checkResultContainsDocumentsInOrder(query2, "doc3");
 
     Query query3 =
         collection.where(
             Filter.or(
                 Filter.inArray("a", asList(2, 3)),
                 Filter.and(Filter.arrayContains("b", 3), Filter.equalTo("a", 1))));
-    checkResultContainsDocuments(query3, "doc3", "doc4", "doc6");
+    checkResultContainsDocumentsInOrder(query3, "doc3", "doc4", "doc6");
 
     Query query4 =
         collection.where(
             Filter.and(
                 Filter.inArray("a", asList(2, 3)),
                 Filter.or(Filter.arrayContains("b", 7), Filter.equalTo("a", 1))));
-    checkResultContainsDocuments(query4, "doc3");
+    checkResultContainsDocumentsInOrder(query4, "doc3");
   }
 
   @Test
@@ -404,7 +426,7 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference collection = testCollectionWithDocs(testDocs);
 
     Query query1 = collection.where(Filter.equalTo("a", 1)).orderBy("a");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc1",
@@ -412,7 +434,7 @@ public class ITQueryTest extends ITBaseTest {
         "doc5");
 
     Query query2 = collection.where(Filter.inArray("a", asList(2, 3))).orderBy("a");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc6", "doc3");
   }
 
@@ -432,7 +454,7 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .whereLessThanOrEqualTo("sort", 2)
             .whereGreaterThan("v", 2);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc3");
 
     // Duplicate inequality fields
@@ -441,7 +463,7 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .whereLessThanOrEqualTo("sort", 2)
             .whereGreaterThan("sort", 1);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc4");
 
     // With multiple IN
@@ -451,7 +473,7 @@ public class ITQueryTest extends ITBaseTest {
             .whereLessThanOrEqualTo("sort", 2)
             .whereIn("v", asList(2, 3, 4))
             .whereIn("sort", asList(2, 3));
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query3, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc4");
 
     // With NOT-IN
@@ -460,7 +482,7 @@ public class ITQueryTest extends ITBaseTest {
             .whereGreaterThanOrEqualTo("key", "a")
             .whereLessThanOrEqualTo("sort", 2)
             .whereNotIn("v", asList(2, 4, 5));
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query4, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc1", "doc3");
 
     // With orderby
@@ -469,7 +491,7 @@ public class ITQueryTest extends ITBaseTest {
             .whereGreaterThanOrEqualTo("key", "a")
             .whereLessThanOrEqualTo("sort", 2)
             .orderBy("v", Direction.DESCENDING);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query5,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc3",
@@ -483,7 +505,7 @@ public class ITQueryTest extends ITBaseTest {
             .whereLessThanOrEqualTo("sort", 2)
             .orderBy("v", Direction.DESCENDING)
             .limit(2);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query6, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc3", "doc4");
 
     // With limitToLast
@@ -493,7 +515,7 @@ public class ITQueryTest extends ITBaseTest {
             .whereLessThanOrEqualTo("sort", 2)
             .orderBy("v", Direction.DESCENDING)
             .limitToLast(2);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query7, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc4", "doc1");
   }
 
@@ -510,7 +532,7 @@ public class ITQueryTest extends ITBaseTest {
                 "doc6", map("key", "f", "sort", 1, "v", 1)));
 
     Query query1 = collection.whereNotEqualTo("key", "a").whereLessThanOrEqualTo("sort", 2);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc5", "doc6");
 
     Query query2 =
@@ -518,7 +540,7 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .whereLessThanOrEqualTo("sort", 2)
             .whereLessThanOrEqualTo("v", 1);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc6");
   }
 
@@ -547,7 +569,7 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .whereGreaterThanOrEqualTo("sort", 1)
             .whereArrayContains("v", 0);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc2");
 
     Query query2 =
@@ -555,7 +577,7 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .whereGreaterThanOrEqualTo("sort", 1)
             .whereArrayContainsAny("v", asList(0, 1));
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc2", "doc4");
   }
 
@@ -594,9 +616,9 @@ public class ITQueryTest extends ITBaseTest {
             .orderBy("name");
     DocumentSnapshot docSnap = collection.document("doc4").get().get();
     Query query1WithCursor = query1.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc4", "doc1");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc4",
@@ -611,9 +633,9 @@ public class ITQueryTest extends ITBaseTest {
             .orderBy("name", Direction.DESCENDING);
     docSnap = collection.document("doc2").get().get();
     Query query2WithCursor = query2.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc2", "doc3");
-    checkResultContainsDocuments(query2WithCursor, "doc2", "doc3");
+    checkResultContainsDocumentsInOrder(query2WithCursor, "doc2", "doc3");
   }
 
   @Test
@@ -642,14 +664,14 @@ public class ITQueryTest extends ITBaseTest {
                 Filter.and(Filter.notEqualTo("key", "b"), Filter.greaterThan("v", 4))));
     DocumentSnapshot docSnap = collection.document("doc1").get().get();
     Query query1WithCursor = query1.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc1",
         "doc6",
         "doc5",
         "doc4");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc1",
@@ -668,14 +690,14 @@ public class ITQueryTest extends ITBaseTest {
             .orderBy("key");
     docSnap = collection.document("doc5").get().get();
     Query query2WithCursor = query2.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc5",
         "doc4",
         "doc1",
         "doc6");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc5",
@@ -696,9 +718,9 @@ public class ITQueryTest extends ITBaseTest {
                     Filter.and(Filter.lessThan("key", "b"), Filter.greaterThan("v", 0)))));
     docSnap = collection.document("doc1").get().get();
     Query query3WithCursor = query3.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query3, /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore), "doc1", "doc2");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query3WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc1",
@@ -733,14 +755,14 @@ public class ITQueryTest extends ITBaseTest {
             .whereGreaterThan("sort", 1)
             .whereIn("v", asList(1, 2, 3, 4));
     Query query1WithCursor = query1.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
         "doc4",
         "doc5",
         "doc3");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
@@ -755,14 +777,14 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .whereIn("v", asList(1, 2, 3, 4));
     Query query2WithCursor = query2.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
         "doc4",
         "doc5",
         "doc3");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
@@ -795,14 +817,14 @@ public class ITQueryTest extends ITBaseTest {
     Query query1 =
         collection.whereGreaterThan("key", "a").whereGreaterThanOrEqualTo("sort", 1).orderBy("v");
     Query query1WithCursor = query1.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
         "doc4",
         "doc3",
         "doc5");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
@@ -818,14 +840,14 @@ public class ITQueryTest extends ITBaseTest {
             .orderBy("v")
             .orderBy("sort");
     Query query2WithCursor = query2.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
         "doc5",
         "doc4",
         "doc3");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
@@ -843,14 +865,14 @@ public class ITQueryTest extends ITBaseTest {
             .whereGreaterThanOrEqualTo("sort", 1)
             .orderBy("v", Direction.DESCENDING);
     Query query3WithCursor = query3.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query3,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc5",
         "doc3",
         "doc4",
         "doc2");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query3WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc5",
@@ -866,14 +888,14 @@ public class ITQueryTest extends ITBaseTest {
             .orderBy("v", Direction.DESCENDING)
             .orderBy("sort");
     Query query4WithCursor = query4.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query4,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc5",
         "doc4",
         "doc3",
         "doc2");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query4WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc5",
@@ -937,13 +959,13 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .whereLessThan(FieldPath.documentId(), "doc5");
     Query query1WithCursor = query1.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
         "doc4",
         "doc3");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query1WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
@@ -958,13 +980,13 @@ public class ITQueryTest extends ITBaseTest {
             .whereGreaterThan("sort", 1)
             .whereNotEqualTo("key", "a");
     Query query2WithCursor = query2.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
         "doc4",
         "doc3");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query2WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
@@ -979,13 +1001,13 @@ public class ITQueryTest extends ITBaseTest {
             .whereNotEqualTo("key", "a")
             .orderBy("sort", Direction.DESCENDING);
     Query query3WithCursor = query3.startAt(docSnap);
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query3,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",
         "doc3",
         "doc4");
-    checkResultContainsDocuments(
+    checkResultContainsDocumentsInOrder(
         query3WithCursor,
         /*pipelineOnly*/ !isRunningAgainstFirestoreEmulator(firestore),
         "doc2",

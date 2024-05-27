@@ -1,6 +1,7 @@
 package com.google.cloud.firestore
 
 import com.google.cloud.Timestamp
+import com.google.cloud.firestore.pipeline.Field
 import com.google.firestore.v1.Document
 import com.google.firestore.v1.Value
 import java.util.Date
@@ -76,6 +77,10 @@ internal constructor(
     return this.extractField(fieldPath) != null
   }
 
+  fun contains(field: Field): Boolean {
+    return this.extractField(field.path) != null
+  }
+
   fun get(field: String): Any? {
     return get(FieldPath.fromDotSeparatedString(field))
   }
@@ -90,10 +95,18 @@ internal constructor(
     return UserDataConverter.decodeValue(rpcContext, value)
   }
 
+  fun get(field: Field): Any? {
+    return get(field.path)
+  }
+
   fun <T> get(fieldPath: FieldPath, valueType: Class<T>): T? {
     val data = get(fieldPath)
     return if (data == null) null
     else CustomClassMapper.convertToCustomClass(data, valueType, reference)
+  }
+
+  fun <T> get(field: Field, valueType: Class<T>): T? {
+    return get(field.path, valueType)
   }
 
   fun extractField(fieldPath: FieldPath): Value? {
@@ -112,6 +125,10 @@ internal constructor(
     }
 
     return value
+  }
+
+  fun extractField(field: Field): Value? {
+    return extractField(field.path)
   }
 
   fun getBoolean(field: String): Boolean? {

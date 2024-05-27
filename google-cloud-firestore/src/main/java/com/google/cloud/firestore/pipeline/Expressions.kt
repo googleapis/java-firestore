@@ -3,6 +3,7 @@ package com.google.cloud.firestore.pipeline
 import com.google.cloud.Timestamp
 import com.google.cloud.firestore.Blob
 import com.google.cloud.firestore.DocumentReference
+import com.google.cloud.firestore.FieldPath
 import com.google.cloud.firestore.GeoPoint
 import com.google.cloud.firestore.Pipeline
 import com.google.cloud.firestore.encodeValue
@@ -249,26 +250,26 @@ data class Constant internal constructor(private val value: Any?) : Expr {
 }
 
 data class Field internal constructor(
-  internal val field: String,
+  internal val path: FieldPath,
   private var pipeline: Pipeline? = null
 ) :
   Expr, Selectable {
   companion object {
-    const val DOCUMENT_ID: String = "__path__"
+    const val DOCUMENT_ID: String = "__name__"
 
     @JvmStatic
     fun of(path: String): Field {
-      return Field(path)
+      return Field(FieldPath.of(path))
     }
 
     @JvmStatic
     fun ofAll(): Field {
-      return Field("")
+      return Field(FieldPath.of(""))
     }
   }
 
   internal fun toProto(): Value {
-    return Value.newBuilder().setFieldReferenceValue(field).build()
+    return Value.newBuilder().setFieldReferenceValue(path.toString()).build()
   }
 }
 

@@ -1997,9 +1997,10 @@ public class Query {
     }
 
     // Orders
-    if (this.options.getFieldOrders() != null && !this.options.getFieldOrders().isEmpty()) {
+    List<FieldOrder> normalizedOrderbys = this.createImplicitOrderBy();
+    if (normalizedOrderbys != null && !normalizedOrderbys.isEmpty()) {
       List<Ordering> orders =
-          this.options.getFieldOrders().stream()
+          normalizedOrderbys.stream()
               .map(
                   fieldOrder ->
                       Ordering.of(

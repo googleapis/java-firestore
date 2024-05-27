@@ -177,9 +177,9 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
     val projMap = mutableMapOf<String, Expr>()
     for (proj in selectables) {
       when (proj) {
-        is Field -> projMap[proj.field] = proj
+        is Field -> projMap[proj.path.encodedPath] = proj
         is AggregatorTarget -> projMap[proj.fieldName] = proj.accumulator
-        is Fields -> proj.fs?.forEach { projMap[it.field] = it }
+        is Fields -> proj.fs?.forEach { projMap[it.path.encodedPath] = it }
       }
     }
     return projMap
