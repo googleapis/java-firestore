@@ -36,7 +36,7 @@ libraries:
     transport: "grpc"
     excluded_poms: "google-cloud-firestore,google-cloud-firestore-bom"
     recommended_package: "com.google.cloud.firestore"
-  	GAPICs:
-  	- proto_path: google/firestore/v1
-  	- proto_path: google/firestore/admin/v1
-  	- proto_path: google/firestore/bundle/v1
+    GAPICs:
+      - proto_path: google/firestore/v1
+      - proto_path: google/firestore/admin/v1
+      - proto_path: google/firestore/bundle/v1
