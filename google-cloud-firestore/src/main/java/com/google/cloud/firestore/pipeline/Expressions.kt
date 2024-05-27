@@ -273,17 +273,17 @@ data class Field internal constructor(
 
     @JvmStatic
     fun of(path: String): Field {
-      return Field(path, null)
+      return Field(FieldPath.of(path), null)
     }
 
     @JvmStatic
     fun of(pipeline: Pipeline, path: String): Field {
-      return Field(path, pipeline)
+      return Field(FieldPath.of(path), pipeline)
     }
 
     @JvmStatic
     fun ofAll(pipeline: Pipeline? = null): Field {
-      return Field("", pipeline)
+      return Field(FieldPath.of(""), pipeline)
     }
   }
 
