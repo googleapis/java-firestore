@@ -1,0 +1,1177 @@
+// Signature format: 2.0
+package com.google.cloud.firestore {
+
+  public abstract class AggregateField {
+    ctor public AggregateField();
+    method @NonNull public static com.google.cloud.firestore.AggregateField.AverageAggregateField average(@NonNull com.google.cloud.firestore.FieldPath);
+    method @NonNull public static com.google.cloud.firestore.AggregateField.AverageAggregateField average(@NonNull String);
+    method @NonNull public static com.google.cloud.firestore.AggregateField.CountAggregateField count();
+    method public boolean equals(Object);
+    method public int hashCode();
+    method @NonNull public static com.google.cloud.firestore.AggregateField.SumAggregateField sum(@NonNull com.google.cloud.firestore.FieldPath);
+    method @NonNull public static com.google.cloud.firestore.AggregateField.SumAggregateField sum(@NonNull String);
+  }
+
+  public static class AggregateField.AverageAggregateField extends com.google.cloud.firestore.AggregateField {
+    method @NonNull public String getOperator();
+  }
+
+  public static class AggregateField.CountAggregateField extends com.google.cloud.firestore.AggregateField {
+    method @NonNull public String getOperator();
+  }
+
+  public static class AggregateField.SumAggregateField extends com.google.cloud.firestore.AggregateField {
+    method @NonNull public String getOperator();
+  }
+
+  public class AggregateQuery {
+    method public boolean equals(Object);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.ExplainResults<com.google.cloud.firestore.AggregateQuerySnapshot>> explain(com.google.cloud.firestore.ExplainOptions);
+    method @NonNull public static com.google.cloud.firestore.AggregateQuery fromProto(com.google.cloud.firestore.Firestore, RunAggregationQueryRequest);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.AggregateQuerySnapshot> get();
+    method @NonNull public com.google.cloud.firestore.Query getQuery();
+    method public int hashCode();
+    method @NonNull public RunAggregationQueryRequest toProto();
+  }
+
+  public class AggregateQuerySnapshot {
+    method public boolean equals(Object);
+    method @Nullable public Object get(@NonNull com.google.cloud.firestore.AggregateField);
+    method @Nullable public Double get(@NonNull com.google.cloud.firestore.AggregateField.AverageAggregateField);
+    method public long get(@NonNull com.google.cloud.firestore.AggregateField.CountAggregateField);
+    method public long getCount();
+    method @Nullable public Double getDouble(@NonNull com.google.cloud.firestore.AggregateField);
+    method @Nullable public Long getLong(@NonNull com.google.cloud.firestore.AggregateField);
+    method @NonNull public com.google.cloud.firestore.AggregateQuery getQuery();
+    method @NonNull public Timestamp getReadTime();
+    method public int hashCode();
+  }
+
+  public abstract class BasePath<B extends com.google.cloud.firestore.BasePath<B>> {
+    ctor public BasePath();
+    method public int compareTo(@NonNull B);
+  }
+
+  public final class Blob {
+    method public boolean equals(Object);
+    method @NonNull public static com.google.cloud.firestore.Blob fromByteString(@NonNull ByteString);
+    method @NonNull public static com.google.cloud.firestore.Blob fromBytes(@NonNull byte[]);
+    method public int hashCode();
+    method @NonNull public ByteString toByteString();
+    method @NonNull public byte[] toBytes();
+  }
+
+  public final class BulkWriter {
+    method public void addWriteErrorListener(com.google.cloud.firestore.BulkWriter.WriteErrorCallback);
+    method public void addWriteErrorListener(@NonNull Executor, com.google.cloud.firestore.BulkWriter.WriteErrorCallback);
+    method public void addWriteResultListener(com.google.cloud.firestore.BulkWriter.WriteResultCallback);
+    method public void addWriteResultListener(@NonNull Executor, com.google.cloud.firestore.BulkWriter.WriteResultCallback);
+    method public void close();
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> create(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> create(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Object);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> delete(@NonNull com.google.cloud.firestore.DocumentReference);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> delete(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.Precondition);
+    method @NonNull public ApiFuture<Void> flush();
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>, @NonNull com.google.cloud.firestore.SetOptions);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Object);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Object, @NonNull com.google.cloud.firestore.SetOptions);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.Precondition, @NonNull com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.Precondition, @NonNull String, @Nullable Object, Object...);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>, @NonNull com.google.cloud.firestore.Precondition);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull String, @Nullable Object, Object...);
+    field public static final int MAX_BATCH_SIZE = 20; // 0x14
+    field public static final int MAX_RETRY_ATTEMPTS = 10; // 0xa
+    field public static final int RETRY_MAX_BATCH_SIZE = 10; // 0xa
+  }
+
+  public static interface BulkWriter.WriteErrorCallback {
+    method public boolean onError(com.google.cloud.firestore.BulkWriterException);
+  }
+
+  public static interface BulkWriter.WriteResultCallback {
+    method public void onResult(com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.WriteResult);
+  }
+
+  public final class BulkWriterException extends com.google.cloud.firestore.FirestoreException {
+    ctor public BulkWriterException(Status, String, com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.BulkWriter.OperationType, int);
+    method public com.google.cloud.firestore.DocumentReference getDocumentReference();
+    method public int getFailedAttempts();
+    method public String getMessage();
+    method public com.google.cloud.firestore.BulkWriter.OperationType getOperationType();
+  }
+
+  public abstract class BulkWriterOptions {
+    ctor public BulkWriterOptions();
+    method public static com.google.cloud.firestore.BulkWriterOptions.Builder builder();
+    method @Nullable public abstract ScheduledExecutorService getExecutor();
+    method @Nullable public abstract Double getInitialOpsPerSecond();
+    method @Nullable public abstract Double getMaxOpsPerSecond();
+    method public abstract boolean getThrottlingEnabled();
+    method public abstract com.google.cloud.firestore.BulkWriterOptions.Builder toBuilder();
+  }
+
+  public abstract static class BulkWriterOptions.Builder {
+    ctor public BulkWriterOptions.Builder();
+    method public abstract com.google.cloud.firestore.BulkWriterOptions autoBuild();
+    method @NonNull public com.google.cloud.firestore.BulkWriterOptions build();
+    method public abstract com.google.cloud.firestore.BulkWriterOptions.Builder setExecutor(@Nullable ScheduledExecutorService);
+    method public com.google.cloud.firestore.BulkWriterOptions.Builder setInitialOpsPerSecond(int);
+    method public com.google.cloud.firestore.BulkWriterOptions.Builder setMaxOpsPerSecond(int);
+    method public abstract com.google.cloud.firestore.BulkWriterOptions.Builder setThrottlingEnabled(boolean);
+  }
+
+  public class CollectionGroup extends com.google.cloud.firestore.Query {
+    method public ApiFuture<List<com.google.cloud.firestore.QueryPartition>> getPartitions(long);
+    method @Deprecated public void getPartitions(long, ApiStreamObserver<com.google.cloud.firestore.QueryPartition>);
+  }
+
+  public class CollectionReference extends com.google.cloud.firestore.Query {
+    method @NonNull public ApiFuture<com.google.cloud.firestore.DocumentReference> add(@NonNull Map<String,Object>);
+    method public ApiFuture<com.google.cloud.firestore.DocumentReference> add(Object);
+    method @NonNull public com.google.cloud.firestore.DocumentReference document();
+    method @NonNull public com.google.cloud.firestore.DocumentReference document(@NonNull String);
+    method @NonNull public String getId();
+    method @Nullable public com.google.cloud.firestore.DocumentReference getParent();
+    method @NonNull public String getPath();
+    method @NonNull public Iterable<com.google.cloud.firestore.DocumentReference> listDocuments();
+  }
+
+  public class DocumentChange {
+    method public boolean equals(Object);
+    method @NonNull public com.google.cloud.firestore.QueryDocumentSnapshot getDocument();
+    method public int getNewIndex();
+    method public int getOldIndex();
+    method @NonNull public com.google.cloud.firestore.DocumentChange.Type getType();
+    method public int hashCode();
+  }
+
+  public enum DocumentChange.Type {
+    enum_constant public static final com.google.cloud.firestore.DocumentChange.Type ADDED;
+    enum_constant public static final com.google.cloud.firestore.DocumentChange.Type MODIFIED;
+    enum_constant public static final com.google.cloud.firestore.DocumentChange.Type REMOVED;
+  }
+
+  public class DocumentReference {
+    method @NonNull public com.google.cloud.firestore.ListenerRegistration addSnapshotListener(@NonNull com.google.cloud.firestore.EventListener<com.google.cloud.firestore.DocumentSnapshot>);
+    method @NonNull public com.google.cloud.firestore.ListenerRegistration addSnapshotListener(@NonNull Executor, @NonNull com.google.cloud.firestore.EventListener<com.google.cloud.firestore.DocumentSnapshot>);
+    method @NonNull public com.google.cloud.firestore.CollectionReference collection(@NonNull String);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> create(@NonNull Map<String,Object>);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> create(@NonNull Object);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> delete();
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> delete(@NonNull com.google.cloud.firestore.Precondition);
+    method public boolean equals(Object);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.DocumentSnapshot> get();
+    method @NonNull public ApiFuture<com.google.cloud.firestore.DocumentSnapshot> get(com.google.cloud.firestore.FieldMask);
+    method @NonNull public com.google.cloud.firestore.Firestore getFirestore();
+    method @NonNull public String getId();
+    method @NonNull public com.google.cloud.firestore.CollectionReference getParent();
+    method @NonNull public String getPath();
+    method public int hashCode();
+    method @NonNull public Iterable<com.google.cloud.firestore.CollectionReference> listCollections();
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull Map<String,Object>);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull Map<String,Object>, @NonNull com.google.cloud.firestore.SetOptions);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull Object);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull Object, @NonNull com.google.cloud.firestore.SetOptions);
+    method public String toString();
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.Precondition, @NonNull com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.Precondition, @NonNull String, @Nullable Object, Object...);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull Map<String,Object>);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull Map<String,Object>, com.google.cloud.firestore.Precondition);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull String, @Nullable Object, Object...);
+  }
+
+  public class DocumentSnapshot {
+    method public boolean contains(@NonNull com.google.cloud.firestore.FieldPath);
+    method public boolean contains(@NonNull String);
+    method public boolean equals(Object);
+    method public boolean exists();
+    method @Nullable public Object get(@NonNull com.google.cloud.firestore.FieldPath);
+    method @Nullable public <T> T get(@NonNull com.google.cloud.firestore.FieldPath, Class<T>);
+    method @Nullable public Object get(@NonNull String);
+    method @Nullable public <T> T get(@NonNull String, @NonNull Class<T>);
+    method @Nullable public com.google.cloud.firestore.Blob getBlob(@NonNull String);
+    method @Nullable public Boolean getBoolean(@NonNull String);
+    method @Nullable public Timestamp getCreateTime();
+    method @Nullable public Map<String,Object> getData();
+    method @Nullable public Date getDate(@NonNull String);
+    method @Nullable public Double getDouble(@NonNull String);
+    method @Nullable public com.google.cloud.firestore.GeoPoint getGeoPoint(@NonNull String);
+    method @NonNull public String getId();
+    method @Nullable public Long getLong(@NonNull String);
+    method @Nullable public Timestamp getReadTime();
+    method @NonNull public com.google.cloud.firestore.DocumentReference getReference();
+    method @Nullable public String getString(@NonNull String);
+    method @Nullable public Timestamp getTimestamp(@NonNull String);
+    method @Nullable public Timestamp getUpdateTime();
+    method public int hashCode();
+    method @Nullable public <T> T toObject(@NonNull Class<T>);
+    method public String toString();
+  }
+
+  public interface EventListener<T> {
+    method public void onEvent(@Nullable T, @Nullable com.google.cloud.firestore.FirestoreException);
+  }
+
+  public final class ExecutionStats {
+    method @NonNull public Map<String,Object> getDebugStats();
+    method @NonNull public Duration getExecutionDuration();
+    method public long getReadOperations();
+    method public long getResultsReturned();
+  }
+
+  public final class ExplainMetrics {
+    method @Nullable public com.google.cloud.firestore.ExecutionStats getExecutionStats();
+    method @NonNull public com.google.cloud.firestore.PlanSummary getPlanSummary();
+  }
+
+  public abstract class ExplainOptions {
+    ctor public ExplainOptions();
+    method public static com.google.cloud.firestore.ExplainOptions.Builder builder();
+    method public abstract boolean getAnalyze();
+    method public abstract com.google.cloud.firestore.ExplainOptions.Builder toBuilder();
+    method public com.google.firestore.v1.ExplainOptions toProto();
+  }
+
+  public abstract static class ExplainOptions.Builder {
+    ctor public ExplainOptions.Builder();
+    method public abstract com.google.cloud.firestore.ExplainOptions build();
+    method public abstract com.google.cloud.firestore.ExplainOptions.Builder setAnalyze(boolean);
+  }
+
+  public final class ExplainResults<T> {
+    method @NonNull public com.google.cloud.firestore.ExplainMetrics getMetrics();
+    method @Nullable public T getSnapshot();
+  }
+
+  public final class FieldMask {
+    method @NonNull public static com.google.cloud.firestore.FieldMask of(com.google.cloud.firestore.FieldPath...);
+    method @NonNull public static com.google.cloud.firestore.FieldMask of(String...);
+  }
+
+  public abstract class FieldPath extends com.google.cloud.firestore.BasePath<com.google.cloud.firestore.FieldPath> {
+    ctor public FieldPath();
+    method public static com.google.cloud.firestore.FieldPath documentId();
+    method public static com.google.cloud.firestore.FieldPath fromServerFormat(String);
+    method public static com.google.cloud.firestore.FieldPath of(@NonNull String...);
+    method public String toString();
+  }
+
+  public abstract class FieldValue {
+    method @NonNull public static com.google.cloud.firestore.FieldValue arrayRemove(@NonNull Object...);
+    method @NonNull public static com.google.cloud.firestore.FieldValue arrayUnion(@NonNull Object...);
+    method @NonNull public static com.google.cloud.firestore.FieldValue delete();
+    method public boolean equals(Object);
+    method public int hashCode();
+    method @NonNull public static com.google.cloud.firestore.FieldValue increment(double);
+    method @NonNull public static com.google.cloud.firestore.FieldValue increment(long);
+    method @NonNull public static com.google.cloud.firestore.FieldValue serverTimestamp();
+  }
+
+  public class Filter {
+    ctor public Filter();
+    method @NonNull public static com.google.cloud.firestore.Filter and(com.google.cloud.firestore.Filter...);
+    method @NonNull public static com.google.cloud.firestore.Filter arrayContains(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter arrayContains(@NonNull String, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter arrayContainsAny(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter arrayContainsAny(@NonNull String, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter equalTo(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter equalTo(@NonNull String, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter greaterThan(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter greaterThan(@NonNull String, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter greaterThanOrEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter greaterThanOrEqualTo(@NonNull String, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter inArray(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter inArray(@NonNull String, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter lessThan(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter lessThan(@NonNull String, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter lessThanOrEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter lessThanOrEqualTo(@NonNull String, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter notEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter notEqualTo(@NonNull String, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter notInArray(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter notInArray(@NonNull String, @Nullable Object);
+    method @NonNull public static com.google.cloud.firestore.Filter or(com.google.cloud.firestore.Filter...);
+  }
+
+  public interface Firestore {
+    method @NonNull public com.google.cloud.firestore.WriteBatch batch();
+    method @NonNull public com.google.cloud.firestore.BulkWriter bulkWriter();
+    method @NonNull public com.google.cloud.firestore.BulkWriter bulkWriter(com.google.cloud.firestore.BulkWriterOptions);
+    method @NonNull public com.google.cloud.firestore.FirestoreBundle.Builder bundleBuilder();
+    method @NonNull public com.google.cloud.firestore.FirestoreBundle.Builder bundleBuilder(@NonNull String);
+    method public void close();
+    method @NonNull public com.google.cloud.firestore.CollectionReference collection(@NonNull String);
+    method public com.google.cloud.firestore.CollectionGroup collectionGroup(@NonNull String);
+    method @NonNull public com.google.cloud.firestore.DocumentReference document(@NonNull String);
+    method @NonNull public ApiFuture<List<com.google.cloud.firestore.DocumentSnapshot>> getAll(@NonNull com.google.cloud.firestore.DocumentReference...);
+    method @NonNull public ApiFuture<List<com.google.cloud.firestore.DocumentSnapshot>> getAll(@NonNull com.google.cloud.firestore.DocumentReference[], @Nullable com.google.cloud.firestore.FieldMask);
+    method public void getAll(@NonNull com.google.cloud.firestore.DocumentReference[], @Nullable com.google.cloud.firestore.FieldMask, ApiStreamObserver<com.google.cloud.firestore.DocumentSnapshot>);
+    method @NonNull public Iterable<com.google.cloud.firestore.CollectionReference> listCollections();
+    method @NonNull public ApiFuture<Void> recursiveDelete(com.google.cloud.firestore.CollectionReference);
+    method @NonNull public ApiFuture<Void> recursiveDelete(com.google.cloud.firestore.CollectionReference, com.google.cloud.firestore.BulkWriter);
+    method @NonNull public ApiFuture<Void> recursiveDelete(com.google.cloud.firestore.DocumentReference);
+    method @NonNull public ApiFuture<Void> recursiveDelete(com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.BulkWriter);
+    method @NonNull public <T> ApiFuture<T> runAsyncTransaction(@NonNull com.google.cloud.firestore.Transaction.AsyncFunction<T>);
+    method @NonNull public <T> ApiFuture<T> runAsyncTransaction(@NonNull com.google.cloud.firestore.Transaction.AsyncFunction<T>, @NonNull com.google.cloud.firestore.TransactionOptions);
+    method @NonNull public <T> ApiFuture<T> runTransaction(@NonNull com.google.cloud.firestore.Transaction.Function<T>);
+    method @NonNull public <T> ApiFuture<T> runTransaction(@NonNull com.google.cloud.firestore.Transaction.Function<T>, @NonNull com.google.cloud.firestore.TransactionOptions);
+    method public void shutdown();
+    method public void shutdownNow();
+  }
+
+  public final class FirestoreBundle {
+    method public ByteBuffer toByteBuffer();
+  }
+
+  public static final class FirestoreBundle.Builder {
+    method public com.google.cloud.firestore.FirestoreBundle.Builder add(com.google.cloud.firestore.DocumentSnapshot);
+    method public com.google.cloud.firestore.FirestoreBundle.Builder add(String, com.google.cloud.firestore.QuerySnapshot);
+    method public com.google.cloud.firestore.FirestoreBundle build();
+    method public String getId();
+  }
+
+  public class FirestoreException {
+    method public static com.google.cloud.firestore.FirestoreException forApiException(ApiException);
+    method public static com.google.cloud.firestore.FirestoreException forApiException(ApiException, String);
+    method public static com.google.cloud.firestore.FirestoreException forIOException(IOException, boolean);
+    method public static com.google.cloud.firestore.FirestoreException forInvalidArgument(String, Object...);
+    method public static com.google.cloud.firestore.FirestoreException forServerRejection(Status, String, Object...);
+    method public static com.google.cloud.firestore.FirestoreException forServerRejection(Status, @Nullable Throwable, String, Object...);
+    method @Nullable public Status getStatus();
+  }
+
+  public interface FirestoreFactory {
+  }
+
+  public final class FirestoreOptions {
+    ctor protected FirestoreOptions(com.google.cloud.firestore.FirestoreOptions.Builder);
+    method public boolean equals(Object);
+    method public CredentialsProvider getCredentialsProvider();
+    method public String getDatabaseId();
+    method @NonNull public static GoogleCredentialsProvider.Builder getDefaultCredentialsProviderBuilder();
+    method protected String getDefaultHost();
+    method public static com.google.cloud.firestore.FirestoreOptions getDefaultInstance();
+    method @NonNull public static InstantiatingGrpcChannelProvider.Builder getDefaultTransportChannelProviderBuilder();
+    method @NonNull public static GrpcTransportOptions.Builder getDefaultTransportOptionsBuilder();
+    method public String getEmulatorHost();
+    method protected Set<String> getScopes();
+    method public TransportChannelProvider getTransportChannelProvider();
+    method public int hashCode();
+    method @NonNull public static com.google.cloud.firestore.FirestoreOptions.Builder newBuilder();
+    method protected boolean projectIdRequired();
+    method @NonNull public com.google.cloud.firestore.FirestoreOptions.Builder toBuilder();
+  }
+
+  public static class FirestoreOptions.Builder {
+    method @NonNull public com.google.cloud.firestore.FirestoreOptions build();
+    method @NonNull public com.google.cloud.firestore.FirestoreOptions.Builder setChannelProvider(@NonNull TransportChannelProvider);
+    method @NonNull public com.google.cloud.firestore.FirestoreOptions.Builder setCredentialsProvider(@NonNull CredentialsProvider);
+    method public com.google.cloud.firestore.FirestoreOptions.Builder setDatabaseId(@NonNull String);
+    method public com.google.cloud.firestore.FirestoreOptions.Builder setEmulatorHost(@NonNull String);
+    method @NonNull public com.google.cloud.firestore.FirestoreOptions.Builder setTransportOptions(@NonNull TransportOptions);
+  }
+
+  public static class FirestoreOptions.DefaultFirestoreFactory implements com.google.cloud.firestore.FirestoreFactory {
+    ctor public FirestoreOptions.DefaultFirestoreFactory();
+    method @NonNull public com.google.cloud.firestore.Firestore create(@NonNull com.google.cloud.firestore.FirestoreOptions);
+  }
+
+  public static class FirestoreOptions.DefaultFirestoreRpcFactory implements com.google.cloud.firestore.FirestoreRpcFactory {
+    ctor public FirestoreOptions.DefaultFirestoreRpcFactory();
+    method @NonNull public com.google.cloud.firestore.spi.v1.FirestoreRpc create(@NonNull com.google.cloud.firestore.FirestoreOptions);
+  }
+
+  public static class FirestoreOptions.EmulatorCredentials {
+    ctor public FirestoreOptions.EmulatorCredentials();
+    method public String getAuthenticationType();
+    method public Map<String,List<String>> getRequestMetadata(URI);
+    method public boolean hasRequestMetadata();
+    method public boolean hasRequestMetadataOnly();
+    method public void refresh();
+  }
+
+  public interface FirestoreRpcFactory {
+  }
+
+  public class GeoPoint {
+    ctor public GeoPoint(double, double);
+    method public boolean equals(Object);
+    method public double getLatitude();
+    method public double getLongitude();
+    method public int hashCode();
+    method @NonNull public String toString();
+  }
+
+  public class Internal {
+    ctor public Internal(com.google.cloud.firestore.FirestoreImpl);
+    ctor public Internal(com.google.cloud.firestore.FirestoreOptions, com.google.cloud.firestore.spi.v1.FirestoreRpc);
+    method public static String autoId();
+    method public Map<String,Value> protoFromSnapshot(com.google.cloud.firestore.DocumentSnapshot);
+    method public com.google.cloud.firestore.DocumentSnapshot snapshotFromMap(String, Map<String,Object>);
+    method public com.google.cloud.firestore.DocumentSnapshot snapshotFromObject(String, Object);
+    method public com.google.cloud.firestore.DocumentSnapshot snapshotFromProto(Timestamp, Document);
+  }
+
+  public interface ListenerRegistration {
+    method public void remove();
+  }
+
+  public final class PlanSummary {
+    method @NonNull public List<Map<String,Object>> getIndexesUsed();
+  }
+
+  public final class Precondition {
+    method public boolean equals(Object);
+    method public int hashCode();
+    method @NonNull public static com.google.cloud.firestore.Precondition updatedAt(Timestamp);
+    field public static final com.google.cloud.firestore.Precondition NONE;
+  }
+
+  public class Query {
+    ctor protected Query(com.google.cloud.firestore.FirestoreRpcContext<?>, com.google.cloud.firestore.Query.QueryOptions);
+    method @NonNull public com.google.cloud.firestore.ListenerRegistration addSnapshotListener(@NonNull com.google.cloud.firestore.EventListener<com.google.cloud.firestore.QuerySnapshot>);
+    method @NonNull public com.google.cloud.firestore.ListenerRegistration addSnapshotListener(@NonNull Executor, @NonNull com.google.cloud.firestore.EventListener<com.google.cloud.firestore.QuerySnapshot>);
+    method @NonNull public com.google.cloud.firestore.AggregateQuery aggregate(@NonNull com.google.cloud.firestore.AggregateField, @NonNull com.google.cloud.firestore.AggregateField...);
+    method @NonNull public com.google.cloud.firestore.AggregateQuery count();
+    method @NonNull public com.google.cloud.firestore.Query endAt(@NonNull com.google.cloud.firestore.DocumentSnapshot);
+    method @NonNull public com.google.cloud.firestore.Query endAt(Object...);
+    method @NonNull public com.google.cloud.firestore.Query endBefore(@NonNull com.google.cloud.firestore.DocumentSnapshot);
+    method @NonNull public com.google.cloud.firestore.Query endBefore(Object...);
+    method public boolean equals(Object);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.ExplainResults<com.google.cloud.firestore.QuerySnapshot>> explain(com.google.cloud.firestore.ExplainOptions);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.ExplainMetrics> explainStream(@NonNull com.google.cloud.firestore.ExplainOptions, @NonNull ApiStreamObserver<com.google.cloud.firestore.DocumentSnapshot>);
+    method public static com.google.cloud.firestore.Query fromProto(com.google.cloud.firestore.Firestore, RunQueryRequest);
+    method @NonNull public ApiFuture<com.google.cloud.firestore.QuerySnapshot> get();
+    method @NonNull public com.google.cloud.firestore.Firestore getFirestore();
+    method public int hashCode();
+    method @NonNull public com.google.cloud.firestore.Query limit(int);
+    method @NonNull public com.google.cloud.firestore.Query limitToLast(int);
+    method @NonNull public com.google.cloud.firestore.Query offset(int);
+    method @NonNull public com.google.cloud.firestore.Query orderBy(@NonNull com.google.cloud.firestore.FieldPath);
+    method @NonNull public com.google.cloud.firestore.Query orderBy(@NonNull com.google.cloud.firestore.FieldPath, @NonNull com.google.cloud.firestore.Query.Direction);
+    method @NonNull public com.google.cloud.firestore.Query orderBy(@NonNull String);
+    method @NonNull public com.google.cloud.firestore.Query orderBy(@NonNull String, @NonNull com.google.cloud.firestore.Query.Direction);
+    method @NonNull public com.google.cloud.firestore.Query select(com.google.cloud.firestore.FieldPath...);
+    method @NonNull public com.google.cloud.firestore.Query select(String...);
+    method @NonNull public com.google.cloud.firestore.Query startAfter(@NonNull com.google.cloud.firestore.DocumentSnapshot);
+    method public com.google.cloud.firestore.Query startAfter(Object...);
+    method @NonNull public com.google.cloud.firestore.Query startAt(@NonNull com.google.cloud.firestore.DocumentSnapshot);
+    method @NonNull public com.google.cloud.firestore.Query startAt(Object...);
+    method public void stream(@NonNull ApiStreamObserver<com.google.cloud.firestore.DocumentSnapshot>);
+    method public RunQueryRequest toProto();
+    method public com.google.cloud.firestore.Query where(com.google.cloud.firestore.Filter);
+    method @NonNull public com.google.cloud.firestore.Query whereArrayContains(@NonNull com.google.cloud.firestore.FieldPath, @NonNull Object);
+    method @NonNull public com.google.cloud.firestore.Query whereArrayContains(@NonNull String, @NonNull Object);
+    method @NonNull public com.google.cloud.firestore.Query whereArrayContainsAny(@NonNull com.google.cloud.firestore.FieldPath, @NonNull List<? extends Object>);
+    method @NonNull public com.google.cloud.firestore.Query whereArrayContainsAny(@NonNull String, @NonNull List<? extends Object>);
+    method @NonNull public com.google.cloud.firestore.Query whereEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method @NonNull public com.google.cloud.firestore.Query whereEqualTo(@NonNull String, @Nullable Object);
+    method @NonNull public com.google.cloud.firestore.Query whereGreaterThan(@NonNull com.google.cloud.firestore.FieldPath, @NonNull Object);
+    method @NonNull public com.google.cloud.firestore.Query whereGreaterThan(@NonNull String, @NonNull Object);
+    method @NonNull public com.google.cloud.firestore.Query whereGreaterThanOrEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @NonNull Object);
+    method @NonNull public com.google.cloud.firestore.Query whereGreaterThanOrEqualTo(@NonNull String, @NonNull Object);
+    method @NonNull public com.google.cloud.firestore.Query whereIn(@NonNull com.google.cloud.firestore.FieldPath, @NonNull List<? extends Object>);
+    method @NonNull public com.google.cloud.firestore.Query whereIn(@NonNull String, @NonNull List<? extends Object>);
+    method @NonNull public com.google.cloud.firestore.Query whereLessThan(@NonNull com.google.cloud.firestore.FieldPath, @NonNull Object);
+    method @NonNull public com.google.cloud.firestore.Query whereLessThan(@NonNull String, @NonNull Object);
+    method @NonNull public com.google.cloud.firestore.Query whereLessThanOrEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @NonNull Object);
+    method @NonNull public com.google.cloud.firestore.Query whereLessThanOrEqualTo(@NonNull String, @NonNull Object);
+    method @NonNull public com.google.cloud.firestore.Query whereNotEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method @NonNull public com.google.cloud.firestore.Query whereNotEqualTo(@NonNull String, @Nullable Object);
+    method @NonNull public com.google.cloud.firestore.Query whereNotIn(@NonNull com.google.cloud.firestore.FieldPath, @NonNull List<? extends Object>);
+    method @NonNull public com.google.cloud.firestore.Query whereNotIn(@NonNull String, @NonNull List<? extends Object>);
+  }
+
+  public enum Query.Direction {
+    enum_constant public static final com.google.cloud.firestore.Query.Direction ASCENDING;
+    enum_constant public static final com.google.cloud.firestore.Query.Direction DESCENDING;
+  }
+
+  public class QueryDocumentSnapshot extends com.google.cloud.firestore.DocumentSnapshot {
+  }
+
+  public class QueryPartition {
+    ctor public QueryPartition(com.google.cloud.firestore.Query, @Nullable Object[], @Nullable Object[]);
+    method public com.google.cloud.firestore.Query createQuery();
+    method public boolean equals(Object);
+    method @Nullable public Object[] getEndBefore();
+    method @Nullable public Object[] getStartAt();
+    method public int hashCode();
+  }
+
+  public abstract class QuerySnapshot {
+    ctor protected QuerySnapshot(com.google.cloud.firestore.Query, Timestamp);
+    method public abstract boolean equals(Object);
+    method @NonNull public abstract List<com.google.cloud.firestore.DocumentChange> getDocumentChanges();
+    method @NonNull public abstract List<com.google.cloud.firestore.QueryDocumentSnapshot> getDocuments();
+    method @NonNull public com.google.cloud.firestore.Query getQuery();
+    method @NonNull public Timestamp getReadTime();
+    method public abstract int hashCode();
+    method public boolean isEmpty();
+    method @NonNull public Iterator<com.google.cloud.firestore.QueryDocumentSnapshot> iterator();
+    method public abstract int size();
+    method @NonNull public <T> List<T> toObjects(@NonNull Class<T>);
+    method public static com.google.cloud.firestore.QuerySnapshot withChanges(com.google.cloud.firestore.Query, Timestamp, com.google.cloud.firestore.DocumentSet, List<com.google.cloud.firestore.DocumentChange>);
+    method public static com.google.cloud.firestore.QuerySnapshot withDocuments(com.google.cloud.firestore.Query, Timestamp, List<com.google.cloud.firestore.QueryDocumentSnapshot>);
+  }
+
+  public final class RecursiveDelete {
+    method public ApiFuture<Void> run();
+    field public static final int MAX_PENDING_OPS = 5000; // 0x1388
+    field public static final int MIN_PENDING_OPS = 1000; // 0x3e8
+    field public static final String REFERENCE_NAME_MIN_ID;
+  }
+
+  public final class SetOptions {
+    method public boolean equals(Object);
+    method public int hashCode();
+    method @NonNull public static com.google.cloud.firestore.SetOptions merge();
+    method @NonNull public static com.google.cloud.firestore.SetOptions mergeFieldPaths(List<com.google.cloud.firestore.FieldPath>);
+    method @NonNull public static com.google.cloud.firestore.SetOptions mergeFields(List<String>);
+    method @NonNull public static com.google.cloud.firestore.SetOptions mergeFields(String...);
+  }
+
+  public abstract class Transaction extends com.google.cloud.firestore.UpdateBuilder<com.google.cloud.firestore.Transaction> {
+    ctor protected Transaction(com.google.cloud.firestore.FirestoreImpl);
+    method @NonNull public abstract ApiFuture<com.google.cloud.firestore.AggregateQuerySnapshot> get(@NonNull com.google.cloud.firestore.AggregateQuery);
+    method @NonNull public abstract ApiFuture<com.google.cloud.firestore.DocumentSnapshot> get(@NonNull com.google.cloud.firestore.DocumentReference);
+    method @NonNull public abstract ApiFuture<com.google.cloud.firestore.QuerySnapshot> get(@NonNull com.google.cloud.firestore.Query);
+    method @NonNull public abstract ApiFuture<List<com.google.cloud.firestore.DocumentSnapshot>> getAll(@NonNull com.google.cloud.firestore.DocumentReference...);
+    method @NonNull public abstract ApiFuture<List<com.google.cloud.firestore.DocumentSnapshot>> getAll(@NonNull com.google.cloud.firestore.DocumentReference[], @Nullable com.google.cloud.firestore.FieldMask);
+    method public abstract boolean hasTransactionId();
+  }
+
+  public static interface Transaction.AsyncFunction<T> {
+    method public ApiFuture<T> updateCallback(com.google.cloud.firestore.Transaction);
+  }
+
+  public static interface Transaction.Function<T> {
+    method public T updateCallback(com.google.cloud.firestore.Transaction);
+  }
+
+  public final class TransactionOptions {
+    method @NonNull public static com.google.cloud.firestore.TransactionOptions create();
+    method @Deprecated @NonNull public static com.google.cloud.firestore.TransactionOptions create(@Nullable Executor);
+    method @Deprecated @NonNull public static com.google.cloud.firestore.TransactionOptions create(@Nullable Executor, int);
+    method @Deprecated @NonNull public static com.google.cloud.firestore.TransactionOptions create(int);
+    method @NonNull public static com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder createReadOnlyOptionsBuilder();
+    method @NonNull public static com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder createReadWriteOptionsBuilder();
+    method @Nullable public Executor getExecutor();
+    method public int getNumberOfAttempts();
+    method @Nullable public Timestamp getReadTime();
+    method @NonNull public com.google.cloud.firestore.TransactionOptions.TransactionOptionsType getType();
+  }
+
+  public abstract static class TransactionOptions.Builder<B extends com.google.cloud.firestore.TransactionOptions.Builder<B>> {
+    ctor protected TransactionOptions.Builder(@Nullable Executor);
+    method @NonNull public abstract com.google.cloud.firestore.TransactionOptions build();
+    method @Nullable public Executor getExecutor();
+    method @NonNull public B setExecutor(@Nullable Executor);
+    field @Nullable protected Executor executor;
+  }
+
+  public static final class TransactionOptions.ReadOnlyOptionsBuilder extends com.google.cloud.firestore.TransactionOptions.Builder<com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder> {
+    method @NonNull public com.google.cloud.firestore.TransactionOptions build();
+    method @Nullable public TimestampOrBuilder getReadTime();
+    method @NonNull public com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder setReadTime(@Nullable TimestampOrBuilder);
+  }
+
+  public static final class TransactionOptions.ReadWriteOptionsBuilder extends com.google.cloud.firestore.TransactionOptions.Builder<com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder> {
+    method @NonNull public com.google.cloud.firestore.TransactionOptions build();
+    method public int getNumberOfAttempts();
+    method @NonNull public com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder setNumberOfAttempts(int);
+  }
+
+  public enum TransactionOptions.TransactionOptionsType {
+    enum_constant public static final com.google.cloud.firestore.TransactionOptions.TransactionOptionsType READ_ONLY;
+    enum_constant public static final com.google.cloud.firestore.TransactionOptions.TransactionOptionsType READ_WRITE;
+  }
+
+  public abstract class UpdateBuilder<T> {
+    method protected String className();
+    method @NonNull public T create(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>);
+    method @NonNull public T create(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Object);
+    method @NonNull public T delete(@NonNull com.google.cloud.firestore.DocumentReference);
+    method @NonNull public T delete(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.Precondition);
+    method public int getMutationsSize();
+    method @NonNull public T set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>);
+    method @NonNull public T set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>, @NonNull com.google.cloud.firestore.SetOptions);
+    method @NonNull public T set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Object);
+    method @NonNull public T set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Object, @NonNull com.google.cloud.firestore.SetOptions);
+    method public String toString();
+    method @NonNull public T update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
+    method @NonNull public T update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.Precondition, @NonNull com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
+    method @NonNull public T update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.Precondition, @NonNull String, @Nullable Object, Object...);
+    method @NonNull public T update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>);
+    method @NonNull public T update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>, com.google.cloud.firestore.Precondition);
+    method @NonNull public T update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull String, @Nullable Object, Object...);
+    field protected volatile boolean committed;
+  }
+
+  public class WriteBatch extends com.google.cloud.firestore.UpdateBuilder<com.google.cloud.firestore.WriteBatch> {
+    method @NonNull public ApiFuture<List<com.google.cloud.firestore.WriteResult>> commit();
+  }
+
+  public final class WriteResult {
+    method public boolean equals(Object);
+    method @NonNull public Timestamp getUpdateTime();
+    method public int hashCode();
+  }
+
+}
+
+package com.google.cloud.firestore.annotation {
+
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.CLASS) public @interface DocumentId {
+  }
+
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.CLASS) public @interface Exclude {
+  }
+
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.CLASS) public @interface IgnoreExtraProperties {
+  }
+
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.CLASS) public @interface PropertyName {
+    method public abstract String value();
+  }
+
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.CLASS) public @interface ServerTimestamp {
+  }
+
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.CLASS) public @interface ThrowOnExtraProperties {
+  }
+
+}
+
+package com.google.cloud.firestore.collection {
+
+  public class ArraySortedMap<K, V> extends com.google.cloud.firestore.collection.ImmutableSortedMap<K,V> {
+    ctor public ArraySortedMap(Comparator<K>);
+    method public static <A, B, C> com.google.cloud.firestore.collection.ArraySortedMap<A,C> buildFrom(List<A>, Map<B,C>, com.google.cloud.firestore.collection.ImmutableSortedMap.Builder.KeyTranslator<A,B>, Comparator<A>);
+    method public boolean containsKey(K);
+    method public static <K, V> com.google.cloud.firestore.collection.ArraySortedMap<K,V> fromMap(Map<K,V>, Comparator<K>);
+    method public V get(K);
+    method public Comparator<K> getComparator();
+    method public K getMaxKey();
+    method public K getMinKey();
+    method public K getPredecessorKey(K);
+    method public K getSuccessorKey(K);
+    method public void inOrderTraversal(com.google.cloud.firestore.collection.LLRBNode.NodeVisitor<K,V>);
+    method public int indexOf(K);
+    method public com.google.cloud.firestore.collection.ImmutableSortedMap<K,V> insert(K, V);
+    method public boolean isEmpty();
+    method public Iterator<Map.Entry<K,V>> iterator();
+    method public Iterator<Map.Entry<K,V>> iteratorFrom(K);
+    method public com.google.cloud.firestore.collection.ImmutableSortedMap<K,V> remove(K);
+    method public Iterator<Map.Entry<K,V>> reverseIterator();
+    method public Iterator<Map.Entry<K,V>> reverseIteratorFrom(K);
+    method public int size();
+  }
+
+  public abstract class ImmutableSortedMap<K, V> {
+    ctor public ImmutableSortedMap();
+    method public abstract boolean containsKey(K);
+    method public boolean equals(Object);
+    method public abstract V get(K);
+    method public abstract Comparator<K> getComparator();
+    method public abstract K getMaxKey();
+    method public abstract K getMinKey();
+    method public abstract K getPredecessorKey(K);
+    method public abstract K getSuccessorKey(K);
+    method public int hashCode();
+    method public abstract void inOrderTraversal(com.google.cloud.firestore.collection.LLRBNode.NodeVisitor<K,V>);
+    method public abstract int indexOf(K);
+    method public abstract com.google.cloud.firestore.collection.ImmutableSortedMap<K,V> insert(K, V);
+    method public abstract boolean isEmpty();
+    method public abstract Iterator<Map.Entry<K,V>> iterator();
+    method public abstract Iterator<Map.Entry<K,V>> iteratorFrom(K);
+    method public abstract com.google.cloud.firestore.collection.ImmutableSortedMap<K,V> remove(K);
+    method public abstract Iterator<Map.Entry<K,V>> reverseIterator();
+    method public abstract Iterator<Map.Entry<K,V>> reverseIteratorFrom(K);
+    method public abstract int size();
+    method public String toString();
+  }
+
+  public static class ImmutableSortedMap.Builder {
+    ctor public ImmutableSortedMap.Builder();
+    method public static <A, B, C> com.google.cloud.firestore.collection.ImmutableSortedMap<A,C> buildFrom(List<A>, Map<B,C>, com.google.cloud.firestore.collection.ImmutableSortedMap.Builder.KeyTranslator<A,B>, Comparator<A>);
+    method public static <K, V> com.google.cloud.firestore.collection.ImmutableSortedMap<K,V> emptyMap(Comparator<K>);
+    method public static <A, B> com.google.cloud.firestore.collection.ImmutableSortedMap<A,B> fromMap(Map<A,B>, Comparator<A>);
+    method public static <A> com.google.cloud.firestore.collection.ImmutableSortedMap.Builder.KeyTranslator<A,A> identityTranslator();
+  }
+
+  public static interface ImmutableSortedMap.Builder.KeyTranslator<C, D> {
+    method public D translate(C);
+  }
+
+  public class ImmutableSortedMapIterator<K, V> {
+    method public boolean hasNext();
+    method public Map.Entry<K,V> next();
+    method public void remove();
+  }
+
+  public class ImmutableSortedSet<T> {
+    ctor public ImmutableSortedSet(List<T>, Comparator<T>);
+    method public boolean contains(T);
+    method public boolean equals(Object);
+    method public T getMaxEntry();
+    method public T getMinEntry();
+    method public T getPredecessorEntry(T);
+    method public int hashCode();
+    method public int indexOf(T);
+    method public com.google.cloud.firestore.collection.ImmutableSortedSet<T> insert(T);
+    method public boolean isEmpty();
+    method public Iterator<T> iterator();
+    method public Iterator<T> iteratorFrom(T);
+    method public com.google.cloud.firestore.collection.ImmutableSortedSet<T> remove(T);
+    method public Iterator<T> reverseIterator();
+    method public Iterator<T> reverseIteratorFrom(T);
+    method public int size();
+  }
+
+  public class LLRBBlackValueNode<K, V> extends com.google.cloud.firestore.collection.LLRBValueNode<K,V> {
+    method protected com.google.cloud.firestore.collection.LLRBValueNode<K,V> copy(K, V, com.google.cloud.firestore.collection.LLRBNode<K,V>, com.google.cloud.firestore.collection.LLRBNode<K,V>);
+    method protected com.google.cloud.firestore.collection.LLRBNode.Color getColor();
+    method public boolean isRed();
+    method public int size();
+  }
+
+  public class LLRBEmptyNode<K, V> implements com.google.cloud.firestore.collection.LLRBNode<K,V> {
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> copy(K, V, com.google.cloud.firestore.collection.LLRBNode.Color, com.google.cloud.firestore.collection.LLRBNode<K,V>, com.google.cloud.firestore.collection.LLRBNode<K,V>);
+    method public static <K, V> com.google.cloud.firestore.collection.LLRBEmptyNode<K,V> getInstance();
+    method public K getKey();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> getLeft();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> getMax();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> getMin();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> getRight();
+    method public V getValue();
+    method public void inOrderTraversal(com.google.cloud.firestore.collection.LLRBNode.NodeVisitor<K,V>);
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> insert(K, V, Comparator<K>);
+    method public boolean isEmpty();
+    method public boolean isRed();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> remove(K, Comparator<K>);
+    method public boolean shortCircuitingInOrderTraversal(com.google.cloud.firestore.collection.LLRBNode.ShortCircuitingNodeVisitor<K,V>);
+    method public boolean shortCircuitingReverseOrderTraversal(com.google.cloud.firestore.collection.LLRBNode.ShortCircuitingNodeVisitor<K,V>);
+    method public int size();
+  }
+
+  public interface LLRBNode<K, V> {
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> copy(K, V, com.google.cloud.firestore.collection.LLRBNode.Color, com.google.cloud.firestore.collection.LLRBNode<K,V>, com.google.cloud.firestore.collection.LLRBNode<K,V>);
+    method public K getKey();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> getLeft();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> getMax();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> getMin();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> getRight();
+    method public V getValue();
+    method public void inOrderTraversal(com.google.cloud.firestore.collection.LLRBNode.NodeVisitor<K,V>);
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> insert(K, V, Comparator<K>);
+    method public boolean isEmpty();
+    method public boolean isRed();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> remove(K, Comparator<K>);
+    method public boolean shortCircuitingInOrderTraversal(com.google.cloud.firestore.collection.LLRBNode.ShortCircuitingNodeVisitor<K,V>);
+    method public boolean shortCircuitingReverseOrderTraversal(com.google.cloud.firestore.collection.LLRBNode.ShortCircuitingNodeVisitor<K,V>);
+    method public int size();
+  }
+
+  public enum LLRBNode.Color {
+    enum_constant public static final com.google.cloud.firestore.collection.LLRBNode.Color BLACK;
+    enum_constant public static final com.google.cloud.firestore.collection.LLRBNode.Color RED;
+  }
+
+  public abstract static class LLRBNode.NodeVisitor<K, V> implements com.google.cloud.firestore.collection.LLRBNode.ShortCircuitingNodeVisitor<K,V> {
+    ctor public LLRBNode.NodeVisitor();
+    method public boolean shouldContinue(K, V);
+    method public abstract void visitEntry(K, V);
+  }
+
+  public static interface LLRBNode.ShortCircuitingNodeVisitor<K, V> {
+    method public boolean shouldContinue(K, V);
+  }
+
+  public class LLRBRedValueNode<K, V> extends com.google.cloud.firestore.collection.LLRBValueNode<K,V> {
+    method protected com.google.cloud.firestore.collection.LLRBValueNode<K,V> copy(K, V, com.google.cloud.firestore.collection.LLRBNode<K,V>, com.google.cloud.firestore.collection.LLRBNode<K,V>);
+    method protected com.google.cloud.firestore.collection.LLRBNode.Color getColor();
+    method public boolean isRed();
+    method public int size();
+  }
+
+  public abstract class LLRBValueNode<K, V> implements com.google.cloud.firestore.collection.LLRBNode<K,V> {
+    method public com.google.cloud.firestore.collection.LLRBValueNode<K,V> copy(K, V, com.google.cloud.firestore.collection.LLRBNode.Color, com.google.cloud.firestore.collection.LLRBNode<K,V>, com.google.cloud.firestore.collection.LLRBNode<K,V>);
+    method protected abstract com.google.cloud.firestore.collection.LLRBValueNode<K,V> copy(K, V, com.google.cloud.firestore.collection.LLRBNode<K,V>, com.google.cloud.firestore.collection.LLRBNode<K,V>);
+    method protected abstract com.google.cloud.firestore.collection.LLRBNode.Color getColor();
+    method public K getKey();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> getLeft();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> getMax();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> getMin();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> getRight();
+    method public V getValue();
+    method public void inOrderTraversal(com.google.cloud.firestore.collection.LLRBNode.NodeVisitor<K,V>);
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> insert(K, V, Comparator<K>);
+    method public boolean isEmpty();
+    method public com.google.cloud.firestore.collection.LLRBNode<K,V> remove(K, Comparator<K>);
+    method public boolean shortCircuitingInOrderTraversal(com.google.cloud.firestore.collection.LLRBNode.ShortCircuitingNodeVisitor<K,V>);
+    method public boolean shortCircuitingReverseOrderTraversal(com.google.cloud.firestore.collection.LLRBNode.ShortCircuitingNodeVisitor<K,V>);
+  }
+
+  public class RBTreeSortedMap<K, V> extends com.google.cloud.firestore.collection.ImmutableSortedMap<K,V> {
+    method public static <A, B, C> com.google.cloud.firestore.collection.RBTreeSortedMap<A,C> buildFrom(List<A>, Map<B,C>, com.google.cloud.firestore.collection.ImmutableSortedMap.Builder.KeyTranslator<A,B>, Comparator<A>);
+    method public boolean containsKey(K);
+    method public static <A, B> com.google.cloud.firestore.collection.RBTreeSortedMap<A,B> fromMap(Map<A,B>, Comparator<A>);
+    method public V get(K);
+    method public Comparator<K> getComparator();
+    method public K getMaxKey();
+    method public K getMinKey();
+    method public K getPredecessorKey(K);
+    method public K getSuccessorKey(K);
+    method public void inOrderTraversal(com.google.cloud.firestore.collection.LLRBNode.NodeVisitor<K,V>);
+    method public int indexOf(K);
+    method public com.google.cloud.firestore.collection.ImmutableSortedMap<K,V> insert(K, V);
+    method public boolean isEmpty();
+    method public Iterator<Map.Entry<K,V>> iterator();
+    method public Iterator<Map.Entry<K,V>> iteratorFrom(K);
+    method public com.google.cloud.firestore.collection.ImmutableSortedMap<K,V> remove(K);
+    method public Iterator<Map.Entry<K,V>> reverseIterator();
+    method public Iterator<Map.Entry<K,V>> reverseIteratorFrom(K);
+    method public int size();
+  }
+
+}
+
+package com.google.cloud.firestore.spi.v1 {
+
+  public interface FirestoreRpc {
+    method public ServerStreamingCallable<BatchGetDocumentsRequest,BatchGetDocumentsResponse> batchGetDocumentsCallable();
+    method public UnaryCallable<BatchWriteRequest,BatchWriteResponse> batchWriteCallable();
+    method public UnaryCallable<BeginTransactionRequest,BeginTransactionResponse> beginTransactionCallable();
+    method public UnaryCallable<CommitRequest,CommitResponse> commitCallable();
+    method public ScheduledExecutorService getExecutor();
+    method public UnaryCallable<ListCollectionIdsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsPagedCallable();
+    method public UnaryCallable<ListDocumentsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse> listDocumentsPagedCallable();
+    method public BidiStreamingCallable<ListenRequest,ListenResponse> listenCallable();
+    method public UnaryCallable<PartitionQueryRequest,com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse> partitionQueryPagedCallable();
+    method public UnaryCallable<RollbackRequest,Empty> rollbackCallable();
+    method public ServerStreamingCallable<RunAggregationQueryRequest,RunAggregationQueryResponse> runAggregationQueryCallable();
+    method public ServerStreamingCallable<RunQueryRequest,RunQueryResponse> runQueryCallable();
+    method public void shutdown();
+    method public void shutdownNow();
+  }
+
+  public class GrpcFirestoreRpc implements com.google.cloud.firestore.spi.v1.FirestoreRpc {
+    ctor public GrpcFirestoreRpc(com.google.cloud.firestore.FirestoreOptions);
+    method public ServerStreamingCallable<BatchGetDocumentsRequest,BatchGetDocumentsResponse> batchGetDocumentsCallable();
+    method public UnaryCallable<BatchWriteRequest,BatchWriteResponse> batchWriteCallable();
+    method public UnaryCallable<BeginTransactionRequest,BeginTransactionResponse> beginTransactionCallable();
+    method public void close();
+    method public UnaryCallable<CommitRequest,CommitResponse> commitCallable();
+    method public ScheduledExecutorService getExecutor();
+    method public UnaryCallable<ListCollectionIdsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsPagedCallable();
+    method public UnaryCallable<ListDocumentsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse> listDocumentsPagedCallable();
+    method public BidiStreamingCallable<ListenRequest,ListenResponse> listenCallable();
+    method public UnaryCallable<PartitionQueryRequest,com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse> partitionQueryPagedCallable();
+    method public UnaryCallable<RollbackRequest,Empty> rollbackCallable();
+    method public ServerStreamingCallable<RunAggregationQueryRequest,RunAggregationQueryResponse> runAggregationQueryCallable();
+    method public ServerStreamingCallable<RunQueryRequest,RunQueryResponse> runQueryCallable();
+    method public void shutdown();
+    method public void shutdownNow();
+  }
+
+}
+
+package com.google.cloud.firestore.v1 {
+
+  public class FirestoreClient {
+    ctor protected FirestoreClient(com.google.cloud.firestore.v1.FirestoreSettings);
+    ctor protected FirestoreClient(com.google.cloud.firestore.v1.stub.FirestoreStub);
+    method public boolean awaitTermination(long, TimeUnit);
+    method public final ServerStreamingCallable<BatchGetDocumentsRequest,BatchGetDocumentsResponse> batchGetDocumentsCallable();
+    method public final BatchWriteResponse batchWrite(BatchWriteRequest);
+    method public final UnaryCallable<BatchWriteRequest,BatchWriteResponse> batchWriteCallable();
+    method public final BeginTransactionResponse beginTransaction(BeginTransactionRequest);
+    method public final BeginTransactionResponse beginTransaction(String);
+    method public final UnaryCallable<BeginTransactionRequest,BeginTransactionResponse> beginTransactionCallable();
+    method public final void close();
+    method public final CommitResponse commit(CommitRequest);
+    method public final CommitResponse commit(String, List<Write>);
+    method public final UnaryCallable<CommitRequest,CommitResponse> commitCallable();
+    method public static final com.google.cloud.firestore.v1.FirestoreClient create();
+    method public static final com.google.cloud.firestore.v1.FirestoreClient create(com.google.cloud.firestore.v1.FirestoreSettings);
+    method public static final com.google.cloud.firestore.v1.FirestoreClient create(com.google.cloud.firestore.v1.stub.FirestoreStub);
+    method public final Document createDocument(CreateDocumentRequest);
+    method public final UnaryCallable<CreateDocumentRequest,Document> createDocumentCallable();
+    method public final void deleteDocument(DeleteDocumentRequest);
+    method public final void deleteDocument(String);
+    method public final UnaryCallable<DeleteDocumentRequest,Empty> deleteDocumentCallable();
+    method public final Document getDocument(GetDocumentRequest);
+    method public final UnaryCallable<GetDocumentRequest,Document> getDocumentCallable();
+    method public final com.google.cloud.firestore.v1.FirestoreSettings getSettings();
+    method public com.google.cloud.firestore.v1.stub.FirestoreStub getStub();
+    method public boolean isShutdown();
+    method public boolean isTerminated();
+    method public final com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse listCollectionIds(ListCollectionIdsRequest);
+    method public final com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse listCollectionIds(String);
+    method public final UnaryCallable<ListCollectionIdsRequest,ListCollectionIdsResponse> listCollectionIdsCallable();
+    method public final UnaryCallable<ListCollectionIdsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsPagedCallable();
+    method public final com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse listDocuments(ListDocumentsRequest);
+    method public final UnaryCallable<ListDocumentsRequest,ListDocumentsResponse> listDocumentsCallable();
+    method public final UnaryCallable<ListDocumentsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse> listDocumentsPagedCallable();
+    method public final BidiStreamingCallable<ListenRequest,ListenResponse> listenCallable();
+    method public final com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse partitionQuery(PartitionQueryRequest);
+    method public final UnaryCallable<PartitionQueryRequest,PartitionQueryResponse> partitionQueryCallable();
+    method public final UnaryCallable<PartitionQueryRequest,com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse> partitionQueryPagedCallable();
+    method public final void rollback(RollbackRequest);
+    method public final void rollback(String, ByteString);
+    method public final UnaryCallable<RollbackRequest,Empty> rollbackCallable();
+    method public final ServerStreamingCallable<RunAggregationQueryRequest,RunAggregationQueryResponse> runAggregationQueryCallable();
+    method public final ServerStreamingCallable<RunQueryRequest,RunQueryResponse> runQueryCallable();
+    method public void shutdown();
+    method public void shutdownNow();
+    method public final Document updateDocument(Document, DocumentMask);
+    method public final Document updateDocument(UpdateDocumentRequest);
+    method public final UnaryCallable<UpdateDocumentRequest,Document> updateDocumentCallable();
+    method public final BidiStreamingCallable<WriteRequest,WriteResponse> writeCallable();
+  }
+
+  public static class FirestoreClient.ListCollectionIdsFixedSizeCollection {
+    method protected com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsFixedSizeCollection createCollection(List<com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPage>, int);
+  }
+
+  public static class FirestoreClient.ListCollectionIdsPage {
+    method protected com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPage createPage(PageContext<ListCollectionIdsRequest,ListCollectionIdsResponse,String>, ListCollectionIdsResponse);
+    method public ApiFuture<com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPage> createPageAsync(PageContext<ListCollectionIdsRequest,ListCollectionIdsResponse,String>, ApiFuture<ListCollectionIdsResponse>);
+  }
+
+  public static class FirestoreClient.ListCollectionIdsPagedResponse {
+    method public static ApiFuture<com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> createAsync(PageContext<ListCollectionIdsRequest,ListCollectionIdsResponse,String>, ApiFuture<ListCollectionIdsResponse>);
+  }
+
+  public static class FirestoreClient.ListDocumentsFixedSizeCollection {
+    method protected com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsFixedSizeCollection createCollection(List<com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPage>, int);
+  }
+
+  public static class FirestoreClient.ListDocumentsPage {
+    method protected com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPage createPage(PageContext<ListDocumentsRequest,ListDocumentsResponse,Document>, ListDocumentsResponse);
+    method public ApiFuture<com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPage> createPageAsync(PageContext<ListDocumentsRequest,ListDocumentsResponse,Document>, ApiFuture<ListDocumentsResponse>);
+  }
+
+  public static class FirestoreClient.ListDocumentsPagedResponse {
+    method public static ApiFuture<com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse> createAsync(PageContext<ListDocumentsRequest,ListDocumentsResponse,Document>, ApiFuture<ListDocumentsResponse>);
+  }
+
+  public static class FirestoreClient.PartitionQueryFixedSizeCollection {
+    method protected com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryFixedSizeCollection createCollection(List<com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPage>, int);
+  }
+
+  public static class FirestoreClient.PartitionQueryPage {
+    method protected com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPage createPage(PageContext<PartitionQueryRequest,PartitionQueryResponse,Cursor>, PartitionQueryResponse);
+    method public ApiFuture<com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPage> createPageAsync(PageContext<PartitionQueryRequest,PartitionQueryResponse,Cursor>, ApiFuture<PartitionQueryResponse>);
+  }
+
+  public static class FirestoreClient.PartitionQueryPagedResponse {
+    method public static ApiFuture<com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse> createAsync(PageContext<PartitionQueryRequest,PartitionQueryResponse,Cursor>, ApiFuture<PartitionQueryResponse>);
+  }
+
+  public class FirestoreSettings {
+    ctor protected FirestoreSettings(com.google.cloud.firestore.v1.FirestoreSettings.Builder);
+    method public ServerStreamingCallSettings<BatchGetDocumentsRequest,BatchGetDocumentsResponse> batchGetDocumentsSettings();
+    method public UnaryCallSettings<BatchWriteRequest,BatchWriteResponse> batchWriteSettings();
+    method public UnaryCallSettings<BeginTransactionRequest,BeginTransactionResponse> beginTransactionSettings();
+    method public UnaryCallSettings<CommitRequest,CommitResponse> commitSettings();
+    method public static final com.google.cloud.firestore.v1.FirestoreSettings create(com.google.cloud.firestore.v1.stub.FirestoreStubSettings);
+    method public UnaryCallSettings<CreateDocumentRequest,Document> createDocumentSettings();
+    method public static ApiClientHeaderProvider.Builder defaultApiClientHeaderProviderBuilder();
+    method public static GoogleCredentialsProvider.Builder defaultCredentialsProviderBuilder();
+    method public static InstantiatingExecutorProvider.Builder defaultExecutorProviderBuilder();
+    method public static InstantiatingGrpcChannelProvider.Builder defaultGrpcTransportProviderBuilder();
+    method public static InstantiatingHttpJsonChannelProvider.Builder defaultHttpJsonTransportProviderBuilder();
+    method public static TransportChannelProvider defaultTransportChannelProvider();
+    method public UnaryCallSettings<DeleteDocumentRequest,Empty> deleteDocumentSettings();
+    method public static String getDefaultEndpoint();
+    method public static List<String> getDefaultServiceScopes();
+    method public UnaryCallSettings<GetDocumentRequest,Document> getDocumentSettings();
+    method public PagedCallSettings<ListCollectionIdsRequest,ListCollectionIdsResponse,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsSettings();
+    method public PagedCallSettings<ListDocumentsRequest,ListDocumentsResponse,com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse> listDocumentsSettings();
+    method public StreamingCallSettings<ListenRequest,ListenResponse> listenSettings();
+    method public static com.google.cloud.firestore.v1.FirestoreSettings.Builder newBuilder();
+    method public static com.google.cloud.firestore.v1.FirestoreSettings.Builder newBuilder(ClientContext);
+    method public static com.google.cloud.firestore.v1.FirestoreSettings.Builder newHttpJsonBuilder();
+    method public PagedCallSettings<PartitionQueryRequest,PartitionQueryResponse,com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse> partitionQuerySettings();
+    method public UnaryCallSettings<RollbackRequest,Empty> rollbackSettings();
+    method public ServerStreamingCallSettings<RunAggregationQueryRequest,RunAggregationQueryResponse> runAggregationQuerySettings();
+    method public ServerStreamingCallSettings<RunQueryRequest,RunQueryResponse> runQuerySettings();
+    method public com.google.cloud.firestore.v1.FirestoreSettings.Builder toBuilder();
+    method public UnaryCallSettings<UpdateDocumentRequest,Document> updateDocumentSettings();
+    method public StreamingCallSettings<WriteRequest,WriteResponse> writeSettings();
+  }
+
+  public static class FirestoreSettings.Builder {
+    ctor protected FirestoreSettings.Builder();
+    ctor protected FirestoreSettings.Builder(ClientContext);
+    ctor protected FirestoreSettings.Builder(com.google.cloud.firestore.v1.FirestoreSettings);
+    ctor protected FirestoreSettings.Builder(com.google.cloud.firestore.v1.stub.FirestoreStubSettings.Builder);
+    method public com.google.cloud.firestore.v1.FirestoreSettings.Builder applyToAllUnaryMethods(ApiFunction<UnaryCallSettings.Builder<?,?>,Void>);
+    method public ServerStreamingCallSettings.Builder<BatchGetDocumentsRequest,BatchGetDocumentsResponse> batchGetDocumentsSettings();
+    method public UnaryCallSettings.Builder<BatchWriteRequest,BatchWriteResponse> batchWriteSettings();
+    method public UnaryCallSettings.Builder<BeginTransactionRequest,BeginTransactionResponse> beginTransactionSettings();
+    method public com.google.cloud.firestore.v1.FirestoreSettings build();
+    method public UnaryCallSettings.Builder<CommitRequest,CommitResponse> commitSettings();
+    method public UnaryCallSettings.Builder<CreateDocumentRequest,Document> createDocumentSettings();
+    method public UnaryCallSettings.Builder<DeleteDocumentRequest,Empty> deleteDocumentSettings();
+    method public UnaryCallSettings.Builder<GetDocumentRequest,Document> getDocumentSettings();
+    method public com.google.cloud.firestore.v1.stub.FirestoreStubSettings.Builder getStubSettingsBuilder();
+    method public PagedCallSettings.Builder<ListCollectionIdsRequest,ListCollectionIdsResponse,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsSettings();
+    method public PagedCallSettings.Builder<ListDocumentsRequest,ListDocumentsResponse,com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse> listDocumentsSettings();
+    method public StreamingCallSettings.Builder<ListenRequest,ListenResponse> listenSettings();
+    method public PagedCallSettings.Builder<PartitionQueryRequest,PartitionQueryResponse,com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse> partitionQuerySettings();
+    method public UnaryCallSettings.Builder<RollbackRequest,Empty> rollbackSettings();
+    method public ServerStreamingCallSettings.Builder<RunAggregationQueryRequest,RunAggregationQueryResponse> runAggregationQuerySettings();
+    method public ServerStreamingCallSettings.Builder<RunQueryRequest,RunQueryResponse> runQuerySettings();
+    method public UnaryCallSettings.Builder<UpdateDocumentRequest,Document> updateDocumentSettings();
+    method public StreamingCallSettings.Builder<WriteRequest,WriteResponse> writeSettings();
+  }
+
+}
+
+package com.google.cloud.firestore.v1.stub {
+
+  public abstract class FirestoreStub {
+    ctor public FirestoreStub();
+    method public ServerStreamingCallable<BatchGetDocumentsRequest,BatchGetDocumentsResponse> batchGetDocumentsCallable();
+    method public UnaryCallable<BatchWriteRequest,BatchWriteResponse> batchWriteCallable();
+    method public UnaryCallable<BeginTransactionRequest,BeginTransactionResponse> beginTransactionCallable();
+    method public abstract void close();
+    method public UnaryCallable<CommitRequest,CommitResponse> commitCallable();
+    method public UnaryCallable<CreateDocumentRequest,Document> createDocumentCallable();
+    method public UnaryCallable<DeleteDocumentRequest,Empty> deleteDocumentCallable();
+    method public UnaryCallable<GetDocumentRequest,Document> getDocumentCallable();
+    method public UnaryCallable<ListCollectionIdsRequest,ListCollectionIdsResponse> listCollectionIdsCallable();
+    method public UnaryCallable<ListCollectionIdsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsPagedCallable();
+    method public UnaryCallable<ListDocumentsRequest,ListDocumentsResponse> listDocumentsCallable();
+    method public UnaryCallable<ListDocumentsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse> listDocumentsPagedCallable();
+    method public BidiStreamingCallable<ListenRequest,ListenResponse> listenCallable();
+    method public UnaryCallable<PartitionQueryRequest,PartitionQueryResponse> partitionQueryCallable();
+    method public UnaryCallable<PartitionQueryRequest,com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse> partitionQueryPagedCallable();
+    method public UnaryCallable<RollbackRequest,Empty> rollbackCallable();
+    method public ServerStreamingCallable<RunAggregationQueryRequest,RunAggregationQueryResponse> runAggregationQueryCallable();
+    method public ServerStreamingCallable<RunQueryRequest,RunQueryResponse> runQueryCallable();
+    method public UnaryCallable<UpdateDocumentRequest,Document> updateDocumentCallable();
+    method public BidiStreamingCallable<WriteRequest,WriteResponse> writeCallable();
+  }
+
+  public class FirestoreStubSettings {
+    ctor protected FirestoreStubSettings(com.google.cloud.firestore.v1.stub.FirestoreStubSettings.Builder);
+    method public ServerStreamingCallSettings<BatchGetDocumentsRequest,BatchGetDocumentsResponse> batchGetDocumentsSettings();
+    method public UnaryCallSettings<BatchWriteRequest,BatchWriteResponse> batchWriteSettings();
+    method public UnaryCallSettings<BeginTransactionRequest,BeginTransactionResponse> beginTransactionSettings();
+    method public UnaryCallSettings<CommitRequest,CommitResponse> commitSettings();
+    method public UnaryCallSettings<CreateDocumentRequest,Document> createDocumentSettings();
+    method public com.google.cloud.firestore.v1.stub.FirestoreStub createStub();
+    method public static ApiClientHeaderProvider.Builder defaultApiClientHeaderProviderBuilder();
+    method public static GoogleCredentialsProvider.Builder defaultCredentialsProviderBuilder();
+    method public static InstantiatingExecutorProvider.Builder defaultExecutorProviderBuilder();
+    method public static ApiClientHeaderProvider.Builder defaultGrpcApiClientHeaderProviderBuilder();
+    method public static InstantiatingGrpcChannelProvider.Builder defaultGrpcTransportProviderBuilder();
+    method public static ApiClientHeaderProvider.Builder defaultHttpJsonApiClientHeaderProviderBuilder();
+    method public static InstantiatingHttpJsonChannelProvider.Builder defaultHttpJsonTransportProviderBuilder();
+    method public static TransportChannelProvider defaultTransportChannelProvider();
+    method public UnaryCallSettings<DeleteDocumentRequest,Empty> deleteDocumentSettings();
+    method public static String getDefaultEndpoint();
+    method public static String getDefaultMtlsEndpoint();
+    method public static List<String> getDefaultServiceScopes();
+    method public UnaryCallSettings<GetDocumentRequest,Document> getDocumentSettings();
+    method public String getServiceName();
+    method public PagedCallSettings<ListCollectionIdsRequest,ListCollectionIdsResponse,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsSettings();
+    method public PagedCallSettings<ListDocumentsRequest,ListDocumentsResponse,com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse> listDocumentsSettings();
+    method public StreamingCallSettings<ListenRequest,ListenResponse> listenSettings();
+    method public static com.google.cloud.firestore.v1.stub.FirestoreStubSettings.Builder newBuilder();
+    method public static com.google.cloud.firestore.v1.stub.FirestoreStubSettings.Builder newBuilder(ClientContext);
+    method public static com.google.cloud.firestore.v1.stub.FirestoreStubSettings.Builder newHttpJsonBuilder();
+    method public PagedCallSettings<PartitionQueryRequest,PartitionQueryResponse,com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse> partitionQuerySettings();
+    method public UnaryCallSettings<RollbackRequest,Empty> rollbackSettings();
+    method public ServerStreamingCallSettings<RunAggregationQueryRequest,RunAggregationQueryResponse> runAggregationQuerySettings();
+    method public ServerStreamingCallSettings<RunQueryRequest,RunQueryResponse> runQuerySettings();
+    method public com.google.cloud.firestore.v1.stub.FirestoreStubSettings.Builder toBuilder();
+    method public UnaryCallSettings<UpdateDocumentRequest,Document> updateDocumentSettings();
+    method public StreamingCallSettings<WriteRequest,WriteResponse> writeSettings();
+  }
+
+  public static class FirestoreStubSettings.Builder {
+    ctor protected FirestoreStubSettings.Builder();
+    ctor protected FirestoreStubSettings.Builder(ClientContext);
+    ctor protected FirestoreStubSettings.Builder(com.google.cloud.firestore.v1.stub.FirestoreStubSettings);
+    method public com.google.cloud.firestore.v1.stub.FirestoreStubSettings.Builder applyToAllUnaryMethods(ApiFunction<UnaryCallSettings.Builder<?,?>,Void>);
+    method public ServerStreamingCallSettings.Builder<BatchGetDocumentsRequest,BatchGetDocumentsResponse> batchGetDocumentsSettings();
+    method public UnaryCallSettings.Builder<BatchWriteRequest,BatchWriteResponse> batchWriteSettings();
+    method public UnaryCallSettings.Builder<BeginTransactionRequest,BeginTransactionResponse> beginTransactionSettings();
+    method public com.google.cloud.firestore.v1.stub.FirestoreStubSettings build();
+    method public UnaryCallSettings.Builder<CommitRequest,CommitResponse> commitSettings();
+    method public UnaryCallSettings.Builder<CreateDocumentRequest,Document> createDocumentSettings();
+    method public UnaryCallSettings.Builder<DeleteDocumentRequest,Empty> deleteDocumentSettings();
+    method public UnaryCallSettings.Builder<GetDocumentRequest,Document> getDocumentSettings();
+    method public PagedCallSettings.Builder<ListCollectionIdsRequest,ListCollectionIdsResponse,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsSettings();
+    method public PagedCallSettings.Builder<ListDocumentsRequest,ListDocumentsResponse,com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse> listDocumentsSettings();
+    method public StreamingCallSettings.Builder<ListenRequest,ListenResponse> listenSettings();
+    method public PagedCallSettings.Builder<PartitionQueryRequest,PartitionQueryResponse,com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse> partitionQuerySettings();
+    method public UnaryCallSettings.Builder<RollbackRequest,Empty> rollbackSettings();
+    method public ServerStreamingCallSettings.Builder<RunAggregationQueryRequest,RunAggregationQueryResponse> runAggregationQuerySettings();
+    method public ServerStreamingCallSettings.Builder<RunQueryRequest,RunQueryResponse> runQuerySettings();
+    method public ImmutableList<UnaryCallSettings.Builder<?,?>> unaryMethodSettingsBuilders();
+    method public UnaryCallSettings.Builder<UpdateDocumentRequest,Document> updateDocumentSettings();
+    method public StreamingCallSettings.Builder<WriteRequest,WriteResponse> writeSettings();
+  }
+
+  public class GrpcFirestoreCallableFactory {
+    ctor public GrpcFirestoreCallableFactory();
+    method public <RequestT, ResponseT> UnaryCallable<RequestT,ResponseT> createBatchingCallable(GrpcCallSettings<RequestT,ResponseT>, BatchingCallSettings<RequestT,ResponseT>, ClientContext);
+    method public <RequestT, ResponseT> BidiStreamingCallable<RequestT,ResponseT> createBidiStreamingCallable(GrpcCallSettings<RequestT,ResponseT>, StreamingCallSettings<RequestT,ResponseT>, ClientContext);
+    method public <RequestT, ResponseT> ClientStreamingCallable<RequestT,ResponseT> createClientStreamingCallable(GrpcCallSettings<RequestT,ResponseT>, StreamingCallSettings<RequestT,ResponseT>, ClientContext);
+    method public <RequestT, ResponseT, MetadataT> OperationCallable<RequestT,ResponseT,MetadataT> createOperationCallable(GrpcCallSettings<RequestT,Operation>, OperationCallSettings<RequestT,ResponseT,MetadataT>, ClientContext, OperationsStub);
+    method public <RequestT, ResponseT, PagedListResponseT> UnaryCallable<RequestT,PagedListResponseT> createPagedCallable(GrpcCallSettings<RequestT,ResponseT>, PagedCallSettings<RequestT,ResponseT,PagedListResponseT>, ClientContext);
+    method public <RequestT, ResponseT> ServerStreamingCallable<RequestT,ResponseT> createServerStreamingCallable(GrpcCallSettings<RequestT,ResponseT>, ServerStreamingCallSettings<RequestT,ResponseT>, ClientContext);
+    method public <RequestT, ResponseT> UnaryCallable<RequestT,ResponseT> createUnaryCallable(GrpcCallSettings<RequestT,ResponseT>, UnaryCallSettings<RequestT,ResponseT>, ClientContext);
+  }
+
+  public class GrpcFirestoreStub extends com.google.cloud.firestore.v1.stub.FirestoreStub {
+    ctor protected GrpcFirestoreStub(com.google.cloud.firestore.v1.stub.FirestoreStubSettings, ClientContext);
+    ctor protected GrpcFirestoreStub(com.google.cloud.firestore.v1.stub.FirestoreStubSettings, ClientContext, GrpcStubCallableFactory);
+    method public boolean awaitTermination(long, TimeUnit);
+    method public final void close();
+    method public static final com.google.cloud.firestore.v1.stub.GrpcFirestoreStub create(ClientContext);
+    method public static final com.google.cloud.firestore.v1.stub.GrpcFirestoreStub create(ClientContext, GrpcStubCallableFactory);
+    method public static final com.google.cloud.firestore.v1.stub.GrpcFirestoreStub create(com.google.cloud.firestore.v1.stub.FirestoreStubSettings);
+    method public GrpcOperationsStub getOperationsStub();
+    method public boolean isShutdown();
+    method public boolean isTerminated();
+    method public void shutdown();
+    method public void shutdownNow();
+  }
+
+  public class HttpJsonFirestoreCallableFactory {
+    ctor public HttpJsonFirestoreCallableFactory();
+    method public <RequestT, ResponseT> UnaryCallable<RequestT,ResponseT> createBatchingCallable(HttpJsonCallSettings<RequestT,ResponseT>, BatchingCallSettings<RequestT,ResponseT>, ClientContext);
+    method public <RequestT, ResponseT, MetadataT> OperationCallable<RequestT,ResponseT,MetadataT> createOperationCallable(HttpJsonCallSettings<RequestT,Operation>, OperationCallSettings<RequestT,ResponseT,MetadataT>, ClientContext, OperationsStub);
+    method public <RequestT, ResponseT, PagedListResponseT> UnaryCallable<RequestT,PagedListResponseT> createPagedCallable(HttpJsonCallSettings<RequestT,ResponseT>, PagedCallSettings<RequestT,ResponseT,PagedListResponseT>, ClientContext);
+    method public <RequestT, ResponseT> ServerStreamingCallable<RequestT,ResponseT> createServerStreamingCallable(HttpJsonCallSettings<RequestT,ResponseT>, ServerStreamingCallSettings<RequestT,ResponseT>, ClientContext);
+    method public <RequestT, ResponseT> UnaryCallable<RequestT,ResponseT> createUnaryCallable(HttpJsonCallSettings<RequestT,ResponseT>, UnaryCallSettings<RequestT,ResponseT>, ClientContext);
+  }
+
+  public class HttpJsonFirestoreStub extends com.google.cloud.firestore.v1.stub.FirestoreStub {
+    ctor protected HttpJsonFirestoreStub(com.google.cloud.firestore.v1.stub.FirestoreStubSettings, ClientContext);
+    ctor protected HttpJsonFirestoreStub(com.google.cloud.firestore.v1.stub.FirestoreStubSettings, ClientContext, HttpJsonStubCallableFactory);
+    method public boolean awaitTermination(long, TimeUnit);
+    method public final void close();
+    method public static final com.google.cloud.firestore.v1.stub.HttpJsonFirestoreStub create(ClientContext);
+    method public static final com.google.cloud.firestore.v1.stub.HttpJsonFirestoreStub create(ClientContext, HttpJsonStubCallableFactory);
+    method public static final com.google.cloud.firestore.v1.stub.HttpJsonFirestoreStub create(com.google.cloud.firestore.v1.stub.FirestoreStubSettings);
+    method public static List<ApiMethodDescriptor> getMethodDescriptors();
+    method public boolean isShutdown();
+    method public boolean isTerminated();
+    method public void shutdown();
+    method public void shutdownNow();
+  }
+
+}
+

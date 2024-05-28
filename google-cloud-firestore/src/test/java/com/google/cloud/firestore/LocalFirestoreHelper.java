@@ -375,7 +375,7 @@ public final class LocalFirestoreHelper {
         new RunAggregationQueryResponse[] {
           createCountQueryResponse(count, readTime),
         },
-        /*throwable=*/ null);
+        /* throwable= */ null);
   }
 
   public static Answer<RunAggregationQueryResponse> countQueryResponse(Throwable throwable) {
@@ -388,7 +388,7 @@ public final class LocalFirestoreHelper {
         new RunAggregationQueryResponse[] {
           createCountQueryResponse(count1, null), createCountQueryResponse(count2, null),
         },
-        /*throwable=*/ null);
+        /* throwable= */ null);
   }
 
   public static Answer<RunAggregationQueryResponse> aggregationQueryResponses(
@@ -1209,6 +1209,7 @@ public final class LocalFirestoreHelper {
       this.response = response;
     }
   }
+
   /**
    * Contains a map of request/response pairs that are used to create stub responses when
    * `sendRequest()` is called.

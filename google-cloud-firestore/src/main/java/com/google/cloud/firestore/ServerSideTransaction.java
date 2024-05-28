@@ -151,9 +151,9 @@ final class ServerSideTransaction extends Transaction {
     return ApiFutures.transform(
         firestore.getAll(
             new DocumentReference[] {documentRef},
-            /*fieldMask=*/ null,
+            /* fieldMask= */ null,
             transactionId,
-            /*readTime=*/ null),
+            /* readTime= */ null),
         snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
         MoreExecutors.directExecutor());
   }
@@ -170,7 +170,7 @@ final class ServerSideTransaction extends Transaction {
       @Nonnull DocumentReference... documentReferences) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
     return firestore.getAll(
-        documentReferences, /*fieldMask=*/ null, transactionId, /*readTime=*/ null);
+        documentReferences, /* fieldMask= */ null, transactionId, /* readTime= */ null);
   }
 
   /**
@@ -186,7 +186,7 @@ final class ServerSideTransaction extends Transaction {
   public ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference[] documentReferences, @Nullable FieldMask fieldMask) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-    return firestore.getAll(documentReferences, fieldMask, transactionId, /*readTime=*/ null);
+    return firestore.getAll(documentReferences, fieldMask, transactionId, /* readTime= */ null);
   }
 
   /**
@@ -199,7 +199,7 @@ final class ServerSideTransaction extends Transaction {
   @Nonnull
   public ApiFuture<QuerySnapshot> get(@Nonnull Query query) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
-    return query.get(transactionId, /*readTime=*/ null);
+    return query.get(transactionId, /* readTime= */ null);
   }
 
   /**
