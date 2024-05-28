@@ -219,16 +219,6 @@
         <artifactId>spotless-maven-plugin</artifactId>
         <version>2.43.0</version>
         <configuration>
-          <java>
-            <includes>
-              <include>src/main/java/**/*.java</include>
-              <include>src/test/java/**/*.java</include>
-            </includes>
-            <!-- no need to specify files, inferred automatically, but you can if you want -->
-            <googleJavaFormat>
-              <version>1.22.0</version>
-            </googleJavaFormat>
-          </java>
           <kotlin>
             <includes>
               <include>src/main/java/**/*.kt</include>
