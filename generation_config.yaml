@@ -39,4 +39,4 @@ libraries:
     GAPICs:
       - proto_path: google/firestore/v1
       - proto_path: google/firestore/admin/v1
-      - proto_path: google/firestore/bundle/v1
+      - proto_path: google/firestore/bundle
