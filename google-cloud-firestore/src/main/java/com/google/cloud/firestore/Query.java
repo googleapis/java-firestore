@@ -1396,9 +1396,7 @@ public class Query {
       if (options.getStartCursor() != null) {
         // Swap the cursors to match the flipped query ordering.
         Cursor cursor =
-            options
-                .getStartCursor()
-                .toBuilder()
+            options.getStartCursor().toBuilder()
                 .setBefore(!options.getStartCursor().getBefore())
                 .build();
         structuredQuery.setEndAt(cursor);
@@ -1407,9 +1405,7 @@ public class Query {
       if (options.getEndCursor() != null) {
         // Swap the cursors to match the flipped query ordering.
         Cursor cursor =
-            options
-                .getEndCursor()
-                .toBuilder()
+            options.getEndCursor().toBuilder()
                 .setBefore(!options.getEndCursor().getBefore())
                 .build();
         structuredQuery.setStartAt(cursor);
