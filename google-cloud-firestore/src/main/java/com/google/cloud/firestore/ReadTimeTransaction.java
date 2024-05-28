@@ -57,7 +57,7 @@ final class ReadTimeTransaction extends Transaction {
   public ApiFuture<DocumentSnapshot> get(@Nonnull DocumentReference documentRef) {
     Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_GETDOCUMENT);
     return ApiFutures.transform(
-        firestore.getAll(new DocumentReference[] {documentRef}, /*fieldMask=*/ null, readTime),
+        firestore.getAll(new DocumentReference[] {documentRef}, /* fieldMask= */ null, readTime),
         snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
         MoreExecutors.directExecutor());
   }
@@ -66,14 +66,14 @@ final class ReadTimeTransaction extends Transaction {
   @Override
   public ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference... documentReferences) {
-    return firestore.getAll(documentReferences, /*fieldMask=*/ null, readTime);
+    return firestore.getAll(documentReferences, /* fieldMask= */ null, readTime);
   }
 
   @Nonnull
   @Override
   public ApiFuture<List<DocumentSnapshot>> getAll(
       @Nonnull DocumentReference[] documentReferences, @Nullable FieldMask fieldMask) {
-    return firestore.getAll(documentReferences, /*fieldMask=*/ null, readTime);
+    return firestore.getAll(documentReferences, /* fieldMask= */ null, readTime);
   }
 
   @Nonnull

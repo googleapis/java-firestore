@@ -151,6 +151,7 @@ public abstract class QuerySnapshot implements Iterable<QueryDocumentSnapshot> {
       }
     };
   }
+
   /**
    * Returns the query for the snapshot.
    *
