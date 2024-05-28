@@ -75,6 +75,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -148,6 +149,7 @@ public final class LocalFirestoreHelper {
 
   public static final Date DATE;
   public static final Timestamp TIMESTAMP;
+  public static final Instant INSTANT;
   public static final GeoPoint GEO_POINT;
   public static final Blob BLOB;
   public static final FooList<SingleField> FOO_LIST = new FooList<>();
@@ -942,6 +944,7 @@ public final class LocalFirestoreHelper {
     public SingleField objectValue = new SingleField();
     public Date dateValue = DATE;
     public Timestamp timestampValue = TIMESTAMP;
+    public Instant instantValue = INSTANT;
     public List<String> arrayValue = ImmutableList.of("foo");
     public String nullValue = null;
     public Blob bytesValue = BLOB;
@@ -968,6 +971,7 @@ public final class LocalFirestoreHelper {
           && Objects.equals(objectValue, that.objectValue)
           && Objects.equals(dateValue, that.dateValue)
           && Objects.equals(timestampValue, that.timestampValue)
+          && Objects.equals(instantValue, that.instantValue)
           && Objects.equals(arrayValue, that.arrayValue)
           && Objects.equals(nullValue, that.nullValue)
           && Objects.equals(bytesValue, that.bytesValue)
@@ -987,6 +991,10 @@ public final class LocalFirestoreHelper {
 
     TIMESTAMP =
         Timestamp.ofTimeSecondsAndNanos(
+            TimeUnit.MILLISECONDS.toSeconds(DATE.getTime()),
+            123000); // Firestore truncates to microsecond precision.
+    INSTANT =
+        Instant.ofEpochSecond(
             TimeUnit.MILLISECONDS.toSeconds(DATE.getTime()),
             123000); // Firestore truncates to microsecond precision.
     GEO_POINT = new GeoPoint(50.1430847, -122.9477780);
@@ -1083,6 +1091,7 @@ public final class LocalFirestoreHelper {
     ALL_SUPPORTED_TYPES_MAP.put("objectValue", map("foo", (Object) "bar"));
     ALL_SUPPORTED_TYPES_MAP.put("dateValue", Timestamp.of(DATE));
     ALL_SUPPORTED_TYPES_MAP.put("timestampValue", TIMESTAMP);
+    ALL_SUPPORTED_TYPES_MAP.put("instantValue", TIMESTAMP);
     ALL_SUPPORTED_TYPES_MAP.put("arrayValue", ImmutableList.of("foo"));
     ALL_SUPPORTED_TYPES_MAP.put("nullValue", null);
     ALL_SUPPORTED_TYPES_MAP.put("bytesValue", BLOB);
@@ -1118,6 +1127,14 @@ public final class LocalFirestoreHelper {
                         com.google.protobuf.Timestamp.newBuilder()
                             .setSeconds(479978400)
                             .setNanos(123000)) // Timestamps supports microsecond precision.
+                    .build())
+            .put(
+                "instantValue",
+                Value.newBuilder()
+                    .setTimestampValue(
+                        com.google.protobuf.Timestamp.newBuilder()
+                            .setSeconds(479978400)
+                            .setNanos(123000)) // Instants supports microsecond precision.
                     .build())
             .put(
                 "arrayValue",

@@ -16,18 +16,17 @@
 
 package com.google.cloud.firestore.spi.v1;
 
-import com.google.api.core.ApiFunction;
 import com.google.api.gax.core.BackgroundResource;
 import com.google.api.gax.core.GaxProperties;
 import com.google.api.gax.grpc.GrpcCallContext;
 import com.google.api.gax.grpc.GrpcTransportChannel;
+import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.BidiStreamingCallable;
 import com.google.api.gax.rpc.ClientContext;
 import com.google.api.gax.rpc.HeaderProvider;
 import com.google.api.gax.rpc.NoHeaderProvider;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.TransportChannel;
-import com.google.api.gax.rpc.UnaryCallSettings;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.NoCredentials;
 import com.google.cloud.ServiceOptions;
@@ -128,17 +127,38 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
 
         clientContext = ClientContext.create(settingsBuilder.build());
       }
-      ApiFunction<UnaryCallSettings.Builder<?, ?>, Void> retrySettingsSetter =
-          builder -> {
-            builder.setRetrySettings(options.getRetrySettings());
-            return null;
-          };
+
       FirestoreStubSettings.Builder firestoreBuilder =
-          FirestoreStubSettings.newBuilder(clientContext)
-              .applyToAllUnaryMethods(retrySettingsSetter);
-      // Manually apply the retry settings to streaming methods
-      firestoreBuilder.runQuerySettings().setRetrySettings(options.getRetrySettings());
-      firestoreBuilder.batchGetDocumentsSettings().setRetrySettings(options.getRetrySettings());
+          FirestoreStubSettings.newBuilder(clientContext);
+      RetrySettings retrySettings = options.getRetrySettings();
+
+      // Override retry settings only if customer provides settings different from default.
+      if (retrySettings.equals(ServiceOptions.getDefaultRetrySettings())) {
+        // We are manually setting `setMaxAttempts(5)` to follow
+        // the `firestore_grpc_service_config.json` configuration.
+        // This code should be removed when following issue is fixed:
+        // https://github.com/googleapis/sdk-platform-java/issues/2306
+        firestoreBuilder.applyToAllUnaryMethods(
+            builder -> {
+              builder.retrySettings().setMaxAttempts(5);
+              return null;
+            });
+        // Manually apply the retry settings to streaming methods
+        firestoreBuilder.runQuerySettings().retrySettings().setMaxAttempts(5);
+        firestoreBuilder.runAggregationQuerySettings().retrySettings().setMaxAttempts(5);
+        firestoreBuilder.batchGetDocumentsSettings().retrySettings().setMaxAttempts(5);
+      } else {
+        firestoreBuilder.applyToAllUnaryMethods(
+            builder -> {
+              builder.setRetrySettings(retrySettings);
+              return null;
+            });
+        // Manually apply the retry settings to streaming methods
+        firestoreBuilder.runQuerySettings().setRetrySettings(retrySettings);
+        firestoreBuilder.runAggregationQuerySettings().setRetrySettings(retrySettings);
+        firestoreBuilder.batchGetDocumentsSettings().setRetrySettings(retrySettings);
+      }
+
       firestoreStub = GrpcFirestoreStub.create(firestoreBuilder.build());
     } catch (Exception e) {
       throw new IOException(e);

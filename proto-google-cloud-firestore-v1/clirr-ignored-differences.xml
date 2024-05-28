@@ -91,4 +91,49 @@
     <className>com/google/firestore/v1/Run*QueryResponse$Builder</className>
     <method>* mergeStats(*)</method>
   </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/Run*QueryRequestOrBuilder</className>
+    <method>com.google.firestore.v1.ExplainOptions getExplainOptions()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/Run*QueryRequestOrBuilder</className>
+    <method>com.google.firestore.v1.ExplainOptionsOrBuilder getExplainOptionsOrBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/Run*QueryRequestOrBuilder</className>
+    <method>boolean hasExplainOptions()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/Run*QueryResponseOrBuilder</className>
+    <method>com.google.firestore.v1.ExplainMetrics getExplainMetrics()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/Run*QueryResponseOrBuilder</className>
+    <method>com.google.firestore.v1.ExplainMetricsOrBuilder getExplainMetricsOrBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/Run*QueryResponseOrBuilder</className>
+    <method>boolean hasExplainMetrics()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQueryOrBuilder</className>
+    <method>com.google.firestore.v1.StructuredQuery$FindNearest getFindNearest()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQueryOrBuilder</className>
+    <method>com.google.firestore.v1.StructuredQuery$FindNearestOrBuilder getFindNearestOrBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQueryOrBuilder</className>
+    <method>boolean hasFindNearest()</method>
+  </difference>
 </differences>
