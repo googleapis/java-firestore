@@ -154,7 +154,7 @@ interface Expr {
   fun concatWith(vararg expr: Expr) = Function.Concat(listOf(this) + expr.toList())
   fun trim() = Function.Trim(this)
   fun startsWith(query: Expr) = Function.StartsWith(this, query)
-  fun regexMatch(regex: String) = Function.RegexMatch(regex, this)
+  fun regexMatch(regex: String) = Function.RegexMatch(this, regex)
 
   fun asAlias(alias: String): Selectable {
     return ExprWithAlias(alias, this)
@@ -309,11 +309,6 @@ data class Fields internal constructor(internal val fs: List<Field>? = null) : E
     }
 
     @JvmStatic
-    fun of(pipeline: Pipeline, f1: String, vararg f: String): Fields {
-      return Fields(listOf(Field.of(f1)) + f.map(Field.Companion::of))
-    }
-
-    @JvmStatic
     fun ofAll(): Fields {
       return Fields(listOf(Field.of("")))
     }
@@ -434,8 +429,8 @@ open class Function(val name: String, val params: List<Expr>) : Expr {
   data class StartsWith(val value: Expr, val query: Expr) :
     Function("startWith", listOf(value, query)), FilterCondition
 
-  data class RegexMatch(val regex: String, val value: Expr) :
-    Function("startWith", listOf(Constant.of(regex), value)), FilterCondition
+  data class RegexMatch(val value: Expr, val regex: String) :
+    Function("startWith", listOf(value, Constant.of(regex))), FilterCondition
 
   data class HasAncestor(val child: Expr, val ancestor: Expr) :
     Function("has_ancestor", listOf(ancestor)), FilterCondition
@@ -681,6 +676,30 @@ open class Function(val name: String, val params: List<Expr>) : Expr {
     @JvmStatic
     fun euclideanDistance(expr: Expr, other: DoubleArray) =
       EuclideanDistance(expr, Constant.ofVector(other))
+
+    @JvmStatic
+    fun concat(vararg expr: Expr) =
+      Concat(expr.toList())
+
+    @JvmStatic
+    fun trim(expr: Expr) =
+      Trim(expr)
+
+    @JvmStatic
+    fun toLower(expr: Expr) =
+      ToLower(expr)
+
+    @JvmStatic
+    fun toUpper(expr: Expr) =
+      ToUpper(expr)
+
+    @JvmStatic
+    fun startsWith(expr: Expr, query: Expr) =
+      StartsWith(expr, query)
+
+    @JvmStatic
+    fun regexMatches(value: Expr, regex: String,) =
+      RegexMatch(value, regex)
 
     @JvmStatic fun function(name: String, params: List<Expr>) = Generic(name, params)
   }
