@@ -281,23 +281,23 @@ public abstract class ITTracingTest {
     // All Firestore-generated spans have the settings attributes.
     List<String> expectedAttributes =
         Arrays.asList(
-            "gcp.firestore.memoryUtilization",
+            "gcp.firestore.memory_utilization",
             "gcp.firestore.settings.host",
-            "gcp.firestore.settings.databaseId",
-            "gcp.firestore.settings.channel.needsCredentials",
-            "gcp.firestore.settings.channel.needsEndpoint",
-            "gcp.firestore.settings.channel.needsHeaders",
-            "gcp.firestore.settings.channel.shouldAutoClose",
-            "gcp.firestore.settings.channel.transportName",
-            "gcp.firestore.settings.retrySettings.maxRpcTimeout",
-            "gcp.firestore.settings.retrySettings.retryDelayMultiplier",
-            "gcp.firestore.settings.retrySettings.initialRetryDelay",
-            "gcp.firestore.settings.credentials.authenticationType",
-            "gcp.firestore.settings.retrySettings.maxAttempts",
-            "gcp.firestore.settings.retrySettings.maxRetryDelay",
-            "gcp.firestore.settings.retrySettings.rpcTimeoutMultiplier",
-            "gcp.firestore.settings.retrySettings.totalTimeout",
-            "gcp.firestore.settings.retrySettings.initialRpcTimeout");
+            "gcp.firestore.settings.database_id",
+            "gcp.firestore.settings.channel.needs_credentials",
+            "gcp.firestore.settings.channel.needs_endpoint",
+            "gcp.firestore.settings.channel.needs_headers",
+            "gcp.firestore.settings.channel.should_auto_close",
+            "gcp.firestore.settings.channel.transport_name",
+            "gcp.firestore.settings.retry_settings.max_rpc_timeout",
+            "gcp.firestore.settings.retry_settings.retry_delay_multiplier",
+            "gcp.firestore.settings.retry_settings.initial_retry_delay",
+            "gcp.firestore.settings.credentials.authentication_type",
+            "gcp.firestore.settings.retry_settings.max_attempts",
+            "gcp.firestore.settings.retry_settings.max_retry_delay",
+            "gcp.firestore.settings.retry_settings.rpc_timeout_multiplier",
+            "gcp.firestore.settings.retry_settings.total_timeout",
+            "gcp.firestore.settings.retry_settings.initial_rpc_timeout");
 
     expectedAttributes.addAll(Arrays.asList(additionalExpectedAttributes));
 
@@ -376,7 +376,8 @@ public abstract class ITTracingTest {
     assertTrue(events.get(0).getAttributes().size() > 0);
     assertEquals(events.get(0).getName(), "RunAggregationQuery Stream started.");
     assertEquals(
-        events.get(0).getAttributes().get(AttributeKey.booleanKey("isRetryAttempt")), false);
+        events.get(0).getAttributes().get(AttributeKey.longKey(ATTRIBUTE_KEY_ATTEMPT)).longValue(),
+        0);
   }
 
   @Test
@@ -620,7 +621,7 @@ public abstract class ITTracingTest {
         hasEvent(
             span,
             "BatchGetDocuments: Completed with 2 responses.",
-            Attributes.builder().put("numResponses", 2).build()));
+            Attributes.builder().put(ATTRIBUTE_KEY_NUM_RESPONSES, 2).build()));
   }
 
   @Test
@@ -635,11 +636,14 @@ public abstract class ITTracingTest {
             span,
             "RunQuery",
             Attributes.builder()
-                .put("isRetryRequestWithCursor", false)
-                .put("isTransactional", false)
+                .put(ATTRIBUTE_KEY_IS_RETRY_WITH_CURSOR, false)
+                .put(ATTRIBUTE_KEY_IS_TRANSACTIONAL, false)
                 .build()));
     assertTrue(
-        hasEvent(span, "RunQuery: Completed", Attributes.builder().put("numDocuments", 0).build()));
+        hasEvent(
+            span,
+            "RunQuery: Completed",
+            Attributes.builder().put(ATTRIBUTE_KEY_DOC_COUNT, 0).build()));
   }
 
   @Test
@@ -702,22 +706,26 @@ public abstract class ITTracingTest {
 
     Attributes commitAttributes = getSpanByName(SPAN_NAME_TRANSACTION_COMMIT).getAttributes();
     assertEquals(
-        2L, commitAttributes.get(AttributeKey.longKey("gcp.firestore.numDocuments")).longValue());
+        2L,
+        commitAttributes
+            .get(AttributeKey.longKey("gcp.firestore." + ATTRIBUTE_KEY_DOC_COUNT))
+            .longValue());
 
     Attributes runTransactionAttributes = getSpanByName(SPAN_NAME_TRANSACTION_RUN).getAttributes();
     assertEquals(
         5L,
         runTransactionAttributes
-            .get(AttributeKey.longKey("gcp.firestore.numAttemptsAllowed"))
+            .get(AttributeKey.longKey("gcp.firestore." + ATTRIBUTE_KEY_ATTEMPTS_ALLOWED))
             .longValue());
     assertEquals(
         5L,
         runTransactionAttributes
-            .get(AttributeKey.longKey("gcp.firestore.attemptsRemaining"))
+            .get(AttributeKey.longKey("gcp.firestore." + ATTRIBUTE_KEY_ATTEMPTS_REMAINING))
             .longValue());
     assertEquals(
         "READ_WRITE",
-        runTransactionAttributes.get(AttributeKey.stringKey("gcp.firestore.transactionType")));
+        runTransactionAttributes.get(
+            AttributeKey.stringKey("gcp.firestore." + ATTRIBUTE_KEY_TRANSACTION_TYPE)));
   }
 
   @Test
@@ -793,13 +801,13 @@ public abstract class ITTracingTest {
         false,
         getSpanByName(SPAN_NAME_BATCH_COMMIT)
             .getAttributes()
-            .get(AttributeKey.booleanKey("gcp.firestore.isTransactional"))
+            .get(AttributeKey.booleanKey("gcp.firestore." + ATTRIBUTE_KEY_IS_TRANSACTIONAL))
             .booleanValue());
     assertEquals(
         3L,
         getSpanByName(SPAN_NAME_BATCH_COMMIT)
             .getAttributes()
-            .get(AttributeKey.longKey("gcp.firestore.numDocuments"))
+            .get(AttributeKey.longKey("gcp.firestore." + ATTRIBUTE_KEY_DOC_COUNT))
             .longValue());
   }
 }

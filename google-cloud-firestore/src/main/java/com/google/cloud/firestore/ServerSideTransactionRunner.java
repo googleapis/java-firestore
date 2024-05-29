@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.telemetry.TraceUtil.*;
+
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
@@ -92,9 +94,11 @@ final class ServerSideTransactionRunner<T> {
 
   ApiFuture<T> run() {
     runTransactionSpan = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_RUN);
-    runTransactionSpan.setAttribute("transactionType", transactionOptions.getType().name());
-    runTransactionSpan.setAttribute("numAttemptsAllowed", transactionOptions.getNumberOfAttempts());
-    runTransactionSpan.setAttribute("attemptsRemaining", attemptsRemaining);
+    runTransactionSpan.setAttribute(
+        ATTRIBUTE_KEY_TRANSACTION_TYPE, transactionOptions.getType().name());
+    runTransactionSpan.setAttribute(
+        ATTRIBUTE_KEY_ATTEMPTS_ALLOWED, transactionOptions.getNumberOfAttempts());
+    runTransactionSpan.setAttribute(ATTRIBUTE_KEY_ATTEMPTS_REMAINING, attemptsRemaining);
     try (Scope ignored = runTransactionSpan.makeCurrent()) {
       runTransactionContext = getTraceUtil().currentContext();
       --attemptsRemaining;

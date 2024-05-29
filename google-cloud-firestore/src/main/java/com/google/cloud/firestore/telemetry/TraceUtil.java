@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public interface TraceUtil {
-  static final boolean TRACING_FEATURE_ENABLED = false;
+  static final boolean TRACING_FEATURE_ENABLED = true;
   String ATTRIBUTE_SERVICE_PREFIX = "gcp.firestore.";
   String SPAN_NAME_DOC_REF_CREATE = "DocumentReference.Create";
   String SPAN_NAME_DOC_REF_SET = "DocumentReference.Set";
@@ -51,6 +51,14 @@ public interface TraceUtil {
   String SPAN_NAME_TRANSACTION_COMMIT = "Transaction.Commit";
   String SPAN_NAME_PARTITION_QUERY = "PartitionQuery";
   String SPAN_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
+  String ATTRIBUTE_KEY_ATTEMPT = "attempt";
+  String ATTRIBUTE_KEY_DOC_COUNT = "doc_count";
+  String ATTRIBUTE_KEY_IS_TRANSACTIONAL = "transactional";
+  String ATTRIBUTE_KEY_NUM_RESPONSES = "response_count";
+  String ATTRIBUTE_KEY_IS_RETRY_WITH_CURSOR = "retry_query_with_cursor";
+  String ATTRIBUTE_KEY_TRANSACTION_TYPE = "transaction_type";
+  String ATTRIBUTE_KEY_ATTEMPTS_ALLOWED = "attempts_allowed";
+  String ATTRIBUTE_KEY_ATTEMPTS_REMAINING = "attempts_remaining";
 
   String ENABLE_TRACING_ENV_VAR = "FIRESTORE_ENABLE_TRACING";
   String LIBRARY_NAME = "com.google.cloud.firestore";

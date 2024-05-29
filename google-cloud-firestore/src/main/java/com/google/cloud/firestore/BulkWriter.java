@@ -17,6 +17,7 @@
 package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.BulkWriterOperation.DEFAULT_BACKOFF_MAX_DELAY_MS;
+import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_DOC_COUNT;
 
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
@@ -912,7 +913,7 @@ public final class BulkWriter implements AutoCloseable {
               .getOptions()
               .getTraceUtil()
               .startSpan(TraceUtil.SPAN_NAME_BULK_WRITER_COMMIT, traceContext)
-              .setAttribute("numDocuments", batch.getMutationsSize());
+              .setAttribute(ATTRIBUTE_KEY_DOC_COUNT, batch.getMutationsSize());
       try (Scope ignored = span.makeCurrent()) {
         ApiFuture<Void> result = batch.bulkCommit();
         result.addListener(

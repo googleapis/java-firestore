@@ -52,7 +52,15 @@ public class EnabledTraceUtil implements TraceUtil {
 
     this.firestoreOptions = firestoreOptions;
     this.openTelemetry = openTelemetry;
-    this.tracer = openTelemetry.getTracer(LIBRARY_NAME);
+    Package pkg = this.getClass().getPackage();
+    if (pkg != null) {
+      // TODO(tracing): OpenTelemetry is currently missing the API for adding scope attributes in
+      //  Java. We should add `gcp.client.service` as scope attributes once
+      //  https://github.com/open-telemetry/opentelemetry-java/issues/4695 is resolved.
+      this.tracer = openTelemetry.getTracer(LIBRARY_NAME, pkg.getImplementationVersion());
+    } else {
+      this.tracer = openTelemetry.getTracer(LIBRARY_NAME);
+    }
   }
 
   public OpenTelemetry getOpenTelemetry() {
@@ -73,6 +81,41 @@ public class EnabledTraceUtil implements TraceUtil {
   @Nullable
   public ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
     return new OpenTelemetryGrpcChannelConfigurator();
+  }
+
+  // Returns a JSON String representation of the given duration. The JSON representation for a
+  // Duration is a String that
+  // ends in `s` to indicate seconds and is preceded by the number of seconds, with nanoseconds
+  // expressed as fractional
+  // seconds.
+  String durationString(org.threeten.bp.Duration duration) {
+    int nanos = duration.getNano();
+    long seconds = duration.getSeconds();
+    int numLeadingZeros = 9;
+
+    double nanosFraction = nanos;
+    while (nanosFraction >= 1) {
+      nanosFraction = nanosFraction / 10;
+      numLeadingZeros--;
+    }
+
+    // If seconds=1 and nanos=0, we don't show 1.000000000s. We want to show 1.0s.
+    if (numLeadingZeros == 9) {
+      numLeadingZeros = 0;
+    }
+
+    // Get rid of trailing zeros.
+    while (nanos > 0 && nanos % 10 == 0) {
+      nanos = nanos / 10;
+    }
+
+    StringBuilder stringBuilder = new StringBuilder().append(seconds).append(".");
+    for (int i = 0; i < numLeadingZeros; ++i) {
+      stringBuilder.append("0");
+    }
+    stringBuilder.append(nanos).append("s");
+
+    return stringBuilder.toString();
   }
 
   static class Span implements TraceUtil.Span {
@@ -220,11 +263,17 @@ public class EnabledTraceUtil implements TraceUtil {
 
   /** Applies the current Firestore instance settings as attributes to the current Span */
   private SpanBuilder addSettingsAttributesToCurrentSpan(SpanBuilder spanBuilder) {
+    // TODO(tracing): OpenTelemetry is currently missing the API for adding scope attributes in
+    //  Java. We are instead adding `gcp.client.service` as span attributes here.
+    //  We should remove this span attribute once
+    //  https://github.com/open-telemetry/opentelemetry-java/issues/4695 is resolved.
+    spanBuilder = spanBuilder.setAttribute("gcp.client.service", "Firestore");
+
     spanBuilder =
         spanBuilder.setAllAttributes(
             Attributes.builder()
                 .put(
-                    ATTRIBUTE_SERVICE_PREFIX + "settings.databaseId",
+                    ATTRIBUTE_SERVICE_PREFIX + "settings.database_id",
                     firestoreOptions.getDatabaseId())
                 .put(ATTRIBUTE_SERVICE_PREFIX + "settings.host", firestoreOptions.getHost())
                 .build());
@@ -234,21 +283,21 @@ public class EnabledTraceUtil implements TraceUtil {
           spanBuilder.setAllAttributes(
               Attributes.builder()
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.transportName",
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.transport_name",
                       firestoreOptions.getTransportChannelProvider().getTransportName())
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.needsCredentials",
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.needs_credentials",
                       String.valueOf(
                           firestoreOptions.getTransportChannelProvider().needsCredentials()))
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.needsEndpoint",
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.needs_endpoint",
                       String.valueOf(
                           firestoreOptions.getTransportChannelProvider().needsEndpoint()))
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.needsHeaders",
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.needs_headers",
                       String.valueOf(firestoreOptions.getTransportChannelProvider().needsHeaders()))
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.shouldAutoClose",
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.channel.should_auto_close",
                       String.valueOf(
                           firestoreOptions.getTransportChannelProvider().shouldAutoClose()))
                   .build());
@@ -257,7 +306,7 @@ public class EnabledTraceUtil implements TraceUtil {
     if (firestoreOptions.getCredentials() != null) {
       spanBuilder =
           spanBuilder.setAttribute(
-              ATTRIBUTE_SERVICE_PREFIX + "settings.credentials.authenticationType",
+              ATTRIBUTE_SERVICE_PREFIX + "settings.credentials.authentication_type",
               firestoreOptions.getCredentials().getAuthenticationType());
     }
 
@@ -266,37 +315,30 @@ public class EnabledTraceUtil implements TraceUtil {
           spanBuilder.setAllAttributes(
               Attributes.builder()
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.initialRetryDelay",
-                      firestoreOptions.getRetrySettings().getInitialRetryDelay().toString())
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retry_settings.initial_retry_delay",
+                      durationString(firestoreOptions.getRetrySettings().getInitialRetryDelay()))
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.maxRetryDelay",
-                      firestoreOptions.getRetrySettings().getMaxRetryDelay().toString())
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retry_settings.max_retry_delay",
+                      durationString(firestoreOptions.getRetrySettings().getMaxRetryDelay()))
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.retryDelayMultiplier",
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retry_settings.retry_delay_multiplier",
                       String.valueOf(firestoreOptions.getRetrySettings().getRetryDelayMultiplier()))
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.maxAttempts",
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retry_settings.max_attempts",
                       String.valueOf(firestoreOptions.getRetrySettings().getMaxAttempts()))
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.initialRpcTimeout",
-                      firestoreOptions.getRetrySettings().getInitialRpcTimeout().toString())
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retry_settings.initial_rpc_timeout",
+                      durationString(firestoreOptions.getRetrySettings().getInitialRpcTimeout()))
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.maxRpcTimeout",
-                      firestoreOptions.getRetrySettings().getMaxRpcTimeout().toString())
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retry_settings.max_rpc_timeout",
+                      durationString(firestoreOptions.getRetrySettings().getMaxRpcTimeout()))
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.rpcTimeoutMultiplier",
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retry_settings.rpc_timeout_multiplier",
                       String.valueOf(firestoreOptions.getRetrySettings().getRpcTimeoutMultiplier()))
                   .put(
-                      ATTRIBUTE_SERVICE_PREFIX + "settings.retrySettings.totalTimeout",
-                      firestoreOptions.getRetrySettings().getTotalTimeout().toString())
+                      ATTRIBUTE_SERVICE_PREFIX + "settings.retry_settings.total_timeout",
+                      durationString(firestoreOptions.getRetrySettings().getTotalTimeout()))
                   .build());
-    }
-
-    Package pkg = this.getClass().getPackage();
-    if (pkg != null) {
-      spanBuilder =
-          spanBuilder.setAttribute(
-              ATTRIBUTE_SERVICE_PREFIX + "sdk.version", pkg.getImplementationVersion());
     }
 
     // Add the memory utilization of the client at the time this trace was collected.
@@ -304,7 +346,7 @@ public class EnabledTraceUtil implements TraceUtil {
     long freeMemory = Runtime.getRuntime().freeMemory();
     double memoryUtilization = ((double) (totalMemory - freeMemory)) / totalMemory;
     spanBuilder.setAttribute(
-        ATTRIBUTE_SERVICE_PREFIX + "memoryUtilization",
+        ATTRIBUTE_SERVICE_PREFIX + "memory_utilization",
         String.format("%.2f", memoryUtilization * 100) + "%");
 
     return spanBuilder;

@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 import static com.google.common.collect.Lists.reverse;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS_ANY;
@@ -1733,8 +1734,8 @@ public class Query {
     currentSpan.addEvent(
         TraceUtil.SPAN_NAME_RUN_QUERY,
         new ImmutableMap.Builder<String, Object>()
-            .put("isTransactional", transactionId != null)
-            .put("isRetryRequestWithCursor", isRetryRequestWithCursor)
+            .put(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null)
+            .put(ATTRIBUTE_KEY_IS_RETRY_WITH_CURSOR, isRetryRequestWithCursor)
             .build());
 
     final AtomicReference<QueryDocumentSnapshot> lastReceivedDocument = new AtomicReference<>();
@@ -1812,7 +1813,7 @@ public class Query {
             hasCompleted = true;
             currentSpan.addEvent(
                 TraceUtil.SPAN_NAME_RUN_QUERY + ": Completed",
-                Collections.singletonMap("numDocuments", numDocuments));
+                Collections.singletonMap(ATTRIBUTE_KEY_DOC_COUNT, numDocuments));
             runQueryResponseObserver.onCompleted();
           }
 

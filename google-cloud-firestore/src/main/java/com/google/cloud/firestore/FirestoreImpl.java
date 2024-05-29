@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.telemetry.TraceUtil.*;
+
 import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.NanoClock;
@@ -237,8 +239,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                 .addEvent(
                     TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": Start",
                     new ImmutableMap.Builder<String, Object>()
-                        .put("numDocuments", documentReferences.length)
-                        .put("isTransactional", transactionId != null)
+                        .put(ATTRIBUTE_KEY_DOC_COUNT, documentReferences.length)
+                        .put(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null)
                         .build());
           }
 
@@ -310,7 +312,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                         + ": Completed with "
                         + numResponses
                         + " responses.",
-                    Collections.singletonMap("numResponses", numResponses));
+                    Collections.singletonMap(ATTRIBUTE_KEY_NUM_RESPONSES, numResponses));
             apiStreamObserver.onCompleted();
           }
         };

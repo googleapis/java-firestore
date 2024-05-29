@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_DOC_COUNT;
+import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_IS_TRANSACTIONAL;
 import static com.google.common.base.Predicates.not;
 import static java.util.stream.Collectors.toCollection;
 
@@ -615,7 +617,8 @@ public abstract class UpdateBuilder<T> {
                 transactionId == null
                     ? TraceUtil.SPAN_NAME_BATCH_COMMIT
                     : TraceUtil.SPAN_NAME_TRANSACTION_COMMIT);
-    span.setAttribute("numDocuments", writes.size());
+    span.setAttribute(ATTRIBUTE_KEY_DOC_COUNT, writes.size());
+    span.setAttribute(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null);
     try (Scope ignored = span.makeCurrent()) {
       // Sequence is thread safe.
       //

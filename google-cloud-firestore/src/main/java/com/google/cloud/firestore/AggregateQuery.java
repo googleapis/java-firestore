@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_ATTEMPT;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_RUN_AGGREGATION_QUERY;
 
 import com.google.api.core.ApiFuture;
@@ -290,12 +291,7 @@ public class AggregateQuery {
     }
 
     Map<String, Object> getAttemptAttributes() {
-      ImmutableMap.Builder<String, Object> builder =
-          new ImmutableMap.Builder<String, Object>().put("isRetryAttempt", attempt > 0);
-      if (attempt > 0) {
-        builder.put("attemptNumber", attempt);
-      }
-      return builder.build();
+      return Collections.singletonMap(ATTRIBUTE_KEY_ATTEMPT, attempt);
     }
 
     private boolean isExplainQuery() {
