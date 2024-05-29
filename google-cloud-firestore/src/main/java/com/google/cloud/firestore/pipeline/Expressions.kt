@@ -1,3 +1,4 @@
+@file:JvmName("Expressions")
 package com.google.cloud.firestore.pipeline
 
 import com.google.cloud.Timestamp
@@ -414,32 +415,72 @@ open class Function(val name: String, val params: List<Expr>) : Expr {
 
     @JvmStatic fun equal(left: Expr, right: Any) = Equal(left, Constant.of(right))
 
+    @JvmStatic
+    fun equal(left: String, right: Expr) = Equal(Field.of(left), right)
+
+    @JvmStatic
+    fun equal(left: String, right: Any) = Equal(Field.of(left), Constant.of(right))
+
     @JvmStatic fun notEqual(left: Expr, right: Expr) = NotEqual(left, right)
 
     @JvmStatic fun notEqual(left: Expr, right: Any) = NotEqual(left, Constant.of(right))
 
+    @JvmStatic fun notEqual(left: String, right: Expr) = NotEqual(Field.of(left), right)
+
+    @JvmStatic fun notEqual(left: String, right: Any) = NotEqual(Field.of(left), Constant.of(right))
+
     @JvmStatic fun greaterThan(left: Expr, right: Expr) = GreaterThan(left, right)
 
     @JvmStatic fun greaterThan(left: Expr, right: Any) = GreaterThan(left, Constant.of(right))
+
+    @JvmStatic fun greaterThan(left: String, right: Expr) = GreaterThan(Field.of(left), right)
+
+    @JvmStatic fun greaterThan(left: String, right: Any) = GreaterThan(Field.of(left), Constant.of(right))
 
     @JvmStatic fun greaterThanOrEqual(left: Expr, right: Expr) = GreaterThanOrEqual(left, right)
 
     @JvmStatic
     fun greaterThanOrEqual(left: Expr, right: Any) = GreaterThanOrEqual(left, Constant.of(right))
 
+    @JvmStatic fun greaterThanOrEqual(left: String, right: Expr) = GreaterThanOrEqual(Field.of(left), right)
+
+    @JvmStatic
+    fun greaterThanOrEqual(left: String, right: Any) = GreaterThanOrEqual(Field.of(left), Constant.of(right))
+
     @JvmStatic fun lessThan(left: Expr, right: Expr) = LessThan(left, right)
 
     @JvmStatic fun lessThan(left: Expr, right: Any) = LessThan(left, Constant.of(right))
+
+    @JvmStatic fun lessThan(left: String, right: Expr) = LessThan(Field.of(left), right)
+
+    @JvmStatic fun lessThan(left: String, right: Any) = LessThan(Field.of(left), Constant.of(right))
 
     @JvmStatic fun lessThanOrEqual(left: Expr, right: Expr) = LessThanOrEqual(left, right)
 
     @JvmStatic
     fun lessThanOrEqual(left: Expr, right: Any) = LessThanOrEqual(left, Constant.of(right))
 
+    @JvmStatic fun lessThanOrEqual(left: String, right: Expr) = LessThanOrEqual(Field.of(left), right)
+
+    @JvmStatic
+    fun lessThanOrEqual(left: String, right: Any) = LessThanOrEqual(Field.of(left), Constant.of(right))
+
     @JvmStatic
     fun inAny(left: Expr, values: List<Any>) =
       In(
         left,
+        values.map {
+          when (it) {
+            is Expr -> it
+            else -> Constant.of(it)
+          }
+        },
+      )
+
+    @JvmStatic
+    fun inAny(left: String, values: List<Any>) =
+      In(
+        Field.of(left),
         values.map {
           when (it) {
             is Expr -> it
@@ -463,6 +504,21 @@ open class Function(val name: String, val params: List<Expr>) : Expr {
       )
 
     @JvmStatic
+    fun notInAny(left: String, values: List<Any>) =
+      Not(
+        In(
+          Field.of(left),
+          values.map {
+            when (it) {
+              is Expr -> it
+              else -> Constant.of(it)
+            }
+          },
+        )
+      )
+
+
+    @JvmStatic
     fun <T> and(left: T, right: T) where T : FilterCondition, T : Expr = And(listOf(left, right))
 
     @JvmStatic
@@ -479,7 +535,14 @@ open class Function(val name: String, val params: List<Expr>) : Expr {
     @JvmStatic fun arrayContains(expr: Expr, element: Expr) = ArrayContains(expr, element)
 
     @JvmStatic
+    fun arrayContains(field: String, element: Expr) = ArrayContains(Field.of(field), element)
+
+    @JvmStatic
     fun arrayContains(expr: Expr, element: Any) = ArrayContains(expr, Constant.of(element))
+
+    @JvmStatic
+    fun arrayContains(field: String, element: Any) =
+      ArrayContains(Field.of(field), Constant.of(element))
 
     @JvmStatic
     fun arrayContainsAny(expr: Expr, vararg elements: Expr) =
@@ -489,21 +552,50 @@ open class Function(val name: String, val params: List<Expr>) : Expr {
     fun arrayContainsAny(expr: Expr, vararg elements: Any) =
       ArrayContainsAny(expr, elements.toList().map { Constant.of(it) })
 
+    @JvmStatic
+    fun arrayContainsAny(field: String, vararg elements: Expr) =
+      ArrayContainsAny(Field.of(field), elements.toList())
+
+    @JvmStatic
+    fun arrayContainsAny(field: String, vararg elements: Any) =
+      ArrayContainsAny(Field.of(field), elements.toList().map { Constant.of(it) })
+
     @JvmStatic fun isNaN(expr: Expr) = IsNaN(expr)
 
+    @JvmStatic
+    fun isNaN(field: String) = IsNaN(Field.of(field))
+
     @JvmStatic fun isNull(expr: Expr) = IsNull(expr)
+
+    @JvmStatic
+    fun isNull(field: String) = IsNull(Field.of(field))
 
     @JvmStatic fun not(expr: Expr) = Not(expr)
 
     @JvmStatic fun sum(expr: Expr) = Sum(expr, false)
 
+    @JvmStatic
+    fun sum(field: String) = Sum(Field.of(field), false)
+
     @JvmStatic fun avg(expr: Expr) = Avg(expr, false)
+
+    @JvmStatic
+    fun avg(field: String) = Avg(Field.of(field), false)
 
     @JvmStatic fun min(expr: Expr) = Sum(expr, false)
 
+    @JvmStatic
+    fun min(field: String) = Sum(Field.of(field), false)
+
     @JvmStatic fun max(expr: Expr) = Avg(expr, false)
 
+    @JvmStatic
+    fun max(field: String) = Avg(Field.of(field), false)
+
     @JvmStatic fun count(expr: Expr) = Count(expr, false)
+
+    @JvmStatic
+    fun count(field: String) = Count(Field.of(field), false)
 
     @JvmStatic fun countAll() = Count(null, false)
 
@@ -513,17 +605,38 @@ open class Function(val name: String, val params: List<Expr>) : Expr {
     fun cosineDistance(expr: Expr, other: DoubleArray) =
       CosineDistance(expr, Constant.ofVector(other))
 
+    @JvmStatic
+    fun cosineDistance(field: String, other: Expr) = CosineDistance(Field.of(field), other)
+
+    @JvmStatic
+    fun cosineDistance(field: String, other: DoubleArray) =
+      CosineDistance(Field.of(field), Constant.ofVector(other))
+
     @JvmStatic fun dotProductDistance(expr: Expr, other: Expr) = CosineDistance(expr, other)
 
     @JvmStatic
     fun dotProductDistance(expr: Expr, other: DoubleArray) =
       CosineDistance(expr, Constant.ofVector(other))
 
+    @JvmStatic
+    fun dotProductDistance(field: String, other: Expr) = CosineDistance(Field.of(field), other)
+
+    @JvmStatic
+    fun dotProductDistance(field: String, other: DoubleArray) =
+      CosineDistance(Field.of(field), Constant.ofVector(other))
+
     @JvmStatic fun euclideanDistance(expr: Expr, other: Expr) = EuclideanDistance(expr, other)
 
     @JvmStatic
     fun euclideanDistance(expr: Expr, other: DoubleArray) =
       EuclideanDistance(expr, Constant.ofVector(other))
+
+    @JvmStatic
+    fun euclideanDistance(field: String, other: Expr) = EuclideanDistance(Field.of(field), other)
+
+    @JvmStatic
+    fun euclideanDistance(field: String, other: DoubleArray) =
+      EuclideanDistance(Field.of(field), Constant.ofVector(other))
 
     @JvmStatic fun function(name: String, params: List<Expr>) = Generic(name, params)
   }

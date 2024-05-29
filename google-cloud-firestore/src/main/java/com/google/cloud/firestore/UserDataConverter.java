@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.pipeline.ExpressionsKt.exprToValue;
+import static com.google.cloud.firestore.pipeline.Expressions.exprToValue;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.pipeline.Expr;

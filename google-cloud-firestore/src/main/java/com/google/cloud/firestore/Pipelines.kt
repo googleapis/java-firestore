@@ -1,3 +1,4 @@
+@file:JvmName("Pipelines")
 package com.google.cloud.firestore
 
 import com.google.api.core.ApiFuture
@@ -185,12 +186,24 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
     return projMap
   }
 
+  private fun fieldNamesToMap(vararg fields: String): Map<String, Expr> {
+    val projMap = mutableMapOf<String, Expr>()
+    for (field in fields) {
+      projMap[field] = Field.of(field)
+    }
+    return projMap
+  }
+
   fun addFields(vararg fields: Selectable): Pipeline {
     return Pipeline(stages.plus(AddFields(projectablesToMap(*fields))), name)
   }
 
   fun select(vararg projections: Selectable): Pipeline {
     return Pipeline(stages.plus(Select(projectablesToMap(*projections))), name)
+  }
+
+  fun select(vararg fields: String): Pipeline {
+    return Pipeline(stages.plus(Select(fieldNamesToMap(*fields))), name)
   }
 
   fun <T> filter(condition: T): Pipeline where T : Expr, T : Function.FilterCondition {
@@ -234,7 +247,7 @@ class Pipeline private constructor(private val stages: List<Stage>, private val 
     return PaginatingPipeline(this, pageSize, orders.toList())
   }
 
-  fun genericOperation(name: String, params: Map<String, Any>? = null): Pipeline {
+  fun genericStage(name: String, params: Map<String, Any>? = null): Pipeline {
     return this
   }
 

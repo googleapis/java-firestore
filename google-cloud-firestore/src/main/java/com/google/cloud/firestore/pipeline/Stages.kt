@@ -1,3 +1,4 @@
+@file:JvmName("Stages")
 package com.google.cloud.firestore.pipeline
 
 import com.google.cloud.firestore.DocumentReference

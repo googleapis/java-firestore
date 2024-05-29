@@ -7,6 +7,9 @@ import com.google.firestore.v1.Value
 import java.util.Date
 import javax.annotation.Nonnull
 
+/**
+ * Result from a {@code Pipeline} execution.
+ */
 class PipelineResult
 internal constructor(
   private val rpcContext: FirestoreRpcContext<*>?,

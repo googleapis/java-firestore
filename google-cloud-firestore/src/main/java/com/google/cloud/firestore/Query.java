@@ -16,8 +16,8 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.PipelineUtilsKt.toPaginatedPipeline;
-import static com.google.cloud.firestore.PipelineUtilsKt.toPipelineFilterCondition;
+import static com.google.cloud.firestore.PipelineUtils.toPaginatedPipeline;
+import static com.google.cloud.firestore.PipelineUtils.toPipelineFilterCondition;
 import static com.google.common.collect.Lists.reverse;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS_ANY;

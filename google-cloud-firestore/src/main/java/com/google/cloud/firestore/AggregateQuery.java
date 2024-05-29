@@ -72,7 +72,7 @@ public class AggregateQuery {
         .toPipeline()
         .aggregate(
             this.aggregateFieldList.stream()
-                .map(PipelineUtilsKt::toPipelineAggregatorTarget)
+                .map(PipelineUtils::toPipelineAggregatorTarget)
                 .toArray(AggregatorTarget[]::new));
   }
 
