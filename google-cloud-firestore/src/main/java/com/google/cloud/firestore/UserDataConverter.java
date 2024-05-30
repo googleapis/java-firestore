@@ -16,10 +16,10 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.pipeline.Expressions.exprToValue;
+import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.exprToValue;
 
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.pipeline.Expr;
+import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

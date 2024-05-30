@@ -17,23 +17,25 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.it.ITQueryTest.map;
-import static com.google.cloud.firestore.pipeline.Function.avg;
-import static com.google.cloud.firestore.pipeline.Function.cosineDistance;
-import static com.google.cloud.firestore.pipeline.Function.equal;
-import static com.google.cloud.firestore.pipeline.Function.lessThan;
-import static com.google.cloud.firestore.pipeline.Function.not;
-import static com.google.cloud.firestore.pipeline.Function.or;
-import static com.google.cloud.firestore.pipeline.Sort.Ordering.ascending;
-import static com.google.cloud.firestore.pipeline.Sort.Ordering.descending;
+import static com.google.cloud.firestore.pipeline.expressions.Function.avg;
+import static com.google.cloud.firestore.pipeline.expressions.Function.cosineDistance;
+import static com.google.cloud.firestore.pipeline.expressions.Function.equal;
+import static com.google.cloud.firestore.pipeline.expressions.Function.lessThan;
+import static com.google.cloud.firestore.pipeline.expressions.Function.not;
+import static com.google.cloud.firestore.pipeline.expressions.Function.or;
+import static com.google.cloud.firestore.pipeline.expressions.Ordering.ascending;
+import static com.google.cloud.firestore.pipeline.expressions.Ordering.descending;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.LocalFirestoreHelper;
-import com.google.cloud.firestore.PaginatingPipeline;
 import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.PipelineResult;
-import com.google.cloud.firestore.pipeline.Constant;
-import com.google.cloud.firestore.pipeline.Field;
-import com.google.cloud.firestore.pipeline.Fields;
+import com.google.cloud.firestore.pipeline.PaginatingPipeline;
+import com.google.cloud.firestore.pipeline.expressions.Constant;
+import com.google.cloud.firestore.pipeline.expressions.Field;
+import com.google.cloud.firestore.pipeline.expressions.Fields;
+import com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure;
+import com.google.cloud.firestore.pipeline.stages.FindNearest.FindNearestOptions;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -103,6 +105,18 @@ public class ITPipelineTest extends ITBaseTest {
   public void inFilters() throws Exception {
     Pipeline p = Pipeline.fromCollectionGroup("coll1").filter(Field.of("foo").inAny(42, "42"));
     List<PipelineResult> results = p.execute(firestore).get();
+  }
+
+  @Test
+  public void findNearest() throws Exception {
+    Pipeline p = Pipeline.fromCollectionGroup("coll1").filter(Field.of("foo").inAny(42, "42"));
+    List<PipelineResult> results =
+        p.findNearest(
+                Field.of("embedding1"),
+                new double[] {},
+                FindNearestOptions.newInstance(10, DistanceMeasure.cosine(), Field.of("distance")))
+            .execute(firestore)
+            .get();
   }
 
   @Test
