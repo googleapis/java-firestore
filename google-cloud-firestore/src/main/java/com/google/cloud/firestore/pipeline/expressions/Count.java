@@ -4,7 +4,15 @@ import com.google.common.collect.Lists;
 import java.util.Collections;
 
 public final class Count extends Function implements Accumulator {
+  private boolean distinct = false;
+
   Count(Expr value, boolean distinct) {
     super("count", (value != null) ? Lists.newArrayList(value) : Collections.emptyList());
+  }
+
+  @Override
+  public Accumulator distinct(boolean on) {
+    this.distinct = on;
+    return this;
   }
 }

@@ -135,6 +135,32 @@ public interface Expr {
     return new DotProductDistance(this, Constant.ofVector(other));
   }
 
+  default Concat concatWith(Expr... others) {
+    List<Expr> exprs = Arrays.stream(others).collect(Collectors.toList());
+    exprs.add(0, this);
+    return new Concat(exprs);
+  }
+
+  default Trim trim() {
+    return new Trim(this);
+  }
+
+  default ToUpper toUpper() {
+    return new ToUpper(this);
+  }
+
+  default ToLower toLower() {
+    return new ToLower(this);
+  }
+
+  default StartsWith startsWith(Expr other) {
+    return new StartsWith(this, other);
+  }
+
+  default RegexMatch regexMatch(String regex) {
+    return new RegexMatch(this, Constant.of(regex));
+  }
+
   default Ordering ascending() {
     return Ordering.ascending(this);
   }

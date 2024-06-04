@@ -10,7 +10,13 @@ public final class Field implements Expr, Selectable {
   private final FieldPath path;
   @Nullable private Pipeline pipeline; // Nullable
 
+  private Field(Pipeline pipeline, FieldPath path) {
+    this.pipeline = pipeline;
+    this.path = path;
+  }
+
   private Field(FieldPath path) {
+    this.pipeline = null;
     this.path = path;
   }
 
@@ -18,12 +24,16 @@ public final class Field implements Expr, Selectable {
     return new Field(FieldPath.of(path));
   }
 
-  public static Field ofAll() {
-    return new Field(FieldPath.of(""));
+  public static Field of(Pipeline p, String path) {
+    return new Field(p, FieldPath.of(path));
   }
 
   public Value toProto() {
     return Value.newBuilder().setFieldReferenceValue(path.toString()).build();
+  }
+
+  public Selectable usingPrefix(String prefix) {
+    return this;
   }
 
   // Getters

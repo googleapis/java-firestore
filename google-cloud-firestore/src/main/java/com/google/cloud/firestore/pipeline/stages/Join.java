@@ -1,0 +1,41 @@
+package com.google.cloud.firestore.pipeline.stages;
+
+import com.google.api.core.InternalApi;
+import com.google.cloud.firestore.Pipeline;
+import com.google.cloud.firestore.pipeline.expressions.Field;
+
+@InternalApi
+public class Join implements Stage {
+  private final Type type;
+  private final JoinCondition condition;
+  private final Field alias;
+  private final Pipeline otherPipeline;
+  private final Field otherAlias;
+
+  @InternalApi
+  public Join(
+      Type type, JoinCondition condition, Field alias, Pipeline otherPipeline, Field otherAlias) {
+    this.type = type;
+    this.condition = condition;
+    this.alias = alias;
+    this.otherPipeline = otherPipeline;
+    this.otherAlias = otherAlias;
+  }
+
+  @Override
+  public String getName() {
+    return "join";
+  }
+
+  public enum Type {
+    CROSS,
+    INNER,
+    FULL,
+    LEFT,
+    RIGHT,
+    LEFT_SEMI,
+    RIGHT_SEMI,
+    LEFT_ANTI_SEMI,
+    RIGHT_ANTI_SEMI
+  }
+}

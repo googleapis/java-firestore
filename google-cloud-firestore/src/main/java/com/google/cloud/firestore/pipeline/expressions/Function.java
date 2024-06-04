@@ -311,6 +311,30 @@ public class Function implements Expr {
     return new EuclideanDistance(Field.of(field), Constant.ofVector(other));
   }
 
+  public static Concat concat(Expr... exprs) {
+    return new Concat(Arrays.asList(exprs));
+  }
+
+  public static Trim trim(Expr expr) {
+    return new Trim(expr);
+  }
+
+  public static ToLower toLower(Expr expr) {
+    return new ToLower(expr);
+  }
+
+  public static ToUpper toUpper(Expr expr) {
+    return new ToUpper(expr);
+  }
+
+  public static StartsWith startsWith(Expr expr, Expr prefix) {
+    return new StartsWith(expr, prefix);
+  }
+
+  public static RegexMatch regexMatch(Expr expr, String regex) {
+    return new RegexMatch(expr, Constant.of(regex));
+  }
+
   public static Function function(String name, List<Expr> params) {
     return new Function(name, params);
   }

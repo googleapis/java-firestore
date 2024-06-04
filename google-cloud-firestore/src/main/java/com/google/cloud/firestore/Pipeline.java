@@ -6,6 +6,8 @@ import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.pipeline.GroupingPipeline;
+import com.google.cloud.firestore.pipeline.JoiningPipeline;
 import com.google.cloud.firestore.pipeline.PaginatingPipeline;
 import com.google.cloud.firestore.pipeline.expressions.AggregatorTarget;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
@@ -22,12 +24,14 @@ import com.google.cloud.firestore.pipeline.stages.Database;
 import com.google.cloud.firestore.pipeline.stages.Documents;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.GenericStage;
+import com.google.cloud.firestore.pipeline.stages.Join;
 import com.google.cloud.firestore.pipeline.stages.Limit;
 import com.google.cloud.firestore.pipeline.stages.Offset;
 import com.google.cloud.firestore.pipeline.stages.Select;
 import com.google.cloud.firestore.pipeline.stages.Sort;
 import com.google.cloud.firestore.pipeline.stages.Stage;
 import com.google.cloud.firestore.pipeline.stages.StageUtils;
+import com.google.cloud.firestore.pipeline.stages.UnnestArray;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -229,6 +233,24 @@ public final class Pipeline {
 
   public PaginatingPipeline paginate(int pageSize, Ordering... orders) {
     return new PaginatingPipeline(this, pageSize, Arrays.asList(orders));
+  }
+
+  public GroupingPipeline group(String... fields) {
+    return new GroupingPipeline(
+        this, Arrays.stream(fields).map(Field::of).collect(Collectors.toList()));
+  }
+
+  public GroupingPipeline group(Selectable... fields) {
+    return new GroupingPipeline(this, Arrays.asList(fields));
+  }
+
+  public JoiningPipeline innerJoin(Pipeline other) {
+    return new JoiningPipeline(this, other, Join.Type.INNER);
+  }
+
+  public Pipeline unnestArray(Field field) {
+    return new Pipeline(
+        ImmutableList.<Stage>builder().addAll(stages).add(new UnnestArray(field)).build(), name);
   }
 
   public Pipeline genericStage(String name, Map<String, Object> params) {
