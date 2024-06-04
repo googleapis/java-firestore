@@ -1,5 +1,6 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
+import com.google.cloud.firestore.Pipeline;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +21,14 @@ public final class Fields implements Expr, Selectable {
 
   public static Fields ofAll() {
     return new Fields(Collections.singletonList(Field.of("")));
+  }
+
+  public static Fields ofAll(Pipeline p) {
+    return new Fields(Collections.singletonList(Field.of("")));
+  }
+
+  public Selectable usingPrefix(String prefix) {
+    return this;
   }
 
   // Getters
