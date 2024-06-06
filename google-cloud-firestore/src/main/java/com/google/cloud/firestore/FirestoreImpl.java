@@ -30,6 +30,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.cloud.firestore.telemetry.MetricsUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -225,6 +226,14 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     // that we receive from the server.
     final int NUM_RESPONSES_PER_TRACE_EVENT = 100;
 
+    // MILA
+    MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
+    double start = System.currentTimeMillis();
+    Map<String, String> attributes = new HashMap<>();
+    String method = transactionId != null ? "Batch.get" : "Transaction.get";
+    attributes.put("language", "java");
+    attributes.put("method", method);
+
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
         new ResponseObserver<BatchGetDocumentsResponse>() {
           int numResponses = 0;
@@ -252,6 +261,12 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
               getTraceUtil()
                   .currentSpan()
                   .addEvent(TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": First response received");
+
+              double end = System.currentTimeMillis();
+              double elapsedTime = end - start;
+              attributes.put("status", "OK");
+              util.firstResponseLatencyRecorder(elapsedTime, attributes);
+
             } else if (numResponses % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
               getTraceUtil()
                   .currentSpan()
@@ -311,6 +326,12 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                         + numResponses
                         + " responses.",
                     Collections.singletonMap("numResponses", numResponses));
+
+            double end = System.currentTimeMillis();
+            double elapsedTime = end - start;
+            attributes.put("status", "OK");
+            util.endToEndRequestLatencyRecorder(elapsedTime, attributes);
+
             apiStreamObserver.onCompleted();
           }
         };

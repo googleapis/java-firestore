@@ -38,6 +38,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
+import com.google.cloud.firestore.telemetry.MetricsUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
@@ -64,9 +65,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
@@ -1737,6 +1740,14 @@ public class Query {
             .put("isRetryRequestWithCursor", isRetryRequestWithCursor)
             .build());
 
+    // MILA
+    MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
+    long start = System.currentTimeMillis();
+    Map<String, String> attributes = new HashMap<>();
+    String method = transactionId != null ? "Query.get" : "Transaction.get";
+    attributes.put("language", "java");
+    attributes.put("method", method);
+
     final AtomicReference<QueryDocumentSnapshot> lastReceivedDocument = new AtomicReference<>();
 
     ResponseObserver<RunQueryResponse> observer =
@@ -1757,6 +1768,11 @@ public class Query {
             if (!firstResponse) {
               firstResponse = true;
               currentSpan.addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": First Response");
+
+              double end = System.currentTimeMillis();
+              double elapsedTime = end - start;
+              attributes.put("status", "OK");
+              util.firstResponseLatencyRecorder(elapsedTime, attributes);
             }
 
             runQueryResponseObserver.onNext(response);
@@ -1813,6 +1829,12 @@ public class Query {
             currentSpan.addEvent(
                 TraceUtil.SPAN_NAME_RUN_QUERY + ": Completed",
                 Collections.singletonMap("numDocuments", numDocuments));
+
+            long end = System.currentTimeMillis();
+            long elapsedTime = end - start;
+            attributes.put("status", "OK");
+            util.endToEndRequestLatencyRecorder(elapsedTime, attributes);
+
             runQueryResponseObserver.onCompleted();
           }
 

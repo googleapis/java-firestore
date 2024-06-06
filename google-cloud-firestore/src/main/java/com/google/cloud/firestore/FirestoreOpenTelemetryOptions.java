@@ -16,21 +16,29 @@
 
 package com.google.cloud.firestore;
 
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class FirestoreOpenTelemetryOptions {
   private final boolean tracingEnabled;
+  private final boolean metricsEnabled;
+
   private final @Nullable OpenTelemetry openTelemetry;
 
   FirestoreOpenTelemetryOptions(Builder builder) {
     this.tracingEnabled = builder.tracingEnabled;
+    this.metricsEnabled = builder.metricsEnabled;
     this.openTelemetry = builder.openTelemetry;
   }
 
   public boolean isTracingEnabled() {
     return tracingEnabled;
+  }
+
+  public boolean isMetricsEnabled() {
+    return metricsEnabled;
   }
 
   public OpenTelemetry getOpenTelemetry() {
@@ -50,16 +58,19 @@ public class FirestoreOpenTelemetryOptions {
   public static class Builder {
 
     private boolean tracingEnabled;
+    private boolean metricsEnabled;
 
     @Nullable private OpenTelemetry openTelemetry;
 
     private Builder() {
       tracingEnabled = false;
-      openTelemetry = null;
+      metricsEnabled = false;
+      openTelemetry = GlobalOpenTelemetry.get();
     }
 
     private Builder(FirestoreOpenTelemetryOptions options) {
       this.tracingEnabled = options.tracingEnabled;
+      this.metricsEnabled = options.metricsEnabled;
       this.openTelemetry = options.openTelemetry;
     }
 
@@ -76,6 +87,12 @@ public class FirestoreOpenTelemetryOptions {
     @Nonnull
     public FirestoreOpenTelemetryOptions.Builder setTracingEnabled(boolean tracingEnabled) {
       this.tracingEnabled = tracingEnabled;
+      return this;
+    }
+
+    @Nonnull
+    public Builder setMetricsEnabled(boolean metricsEnabled) {
+      this.metricsEnabled = metricsEnabled;
       return this;
     }
 

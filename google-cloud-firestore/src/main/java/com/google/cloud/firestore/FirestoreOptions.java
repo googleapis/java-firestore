@@ -24,6 +24,8 @@ import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.api.gax.core.GoogleCredentialsProvider;
 import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider;
 import com.google.api.gax.rpc.TransportChannelProvider;
+import com.google.api.gax.tracing.MetricsTracerFactory;
+import com.google.api.gax.tracing.OpenTelemetryMetricsRecorder;
 import com.google.auth.Credentials;
 import com.google.cloud.ServiceDefaults;
 import com.google.cloud.ServiceOptions;
@@ -64,6 +66,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final String emulatorHost;
   private final transient @Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions;
   private final transient @Nonnull com.google.cloud.firestore.telemetry.TraceUtil traceUtil;
+  private final transient @Nonnull com.google.cloud.firestore.telemetry.MetricsUtil metricsUtil;
 
   public static class DefaultFirestoreFactory implements FirestoreFactory {
 
@@ -125,6 +128,11 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   @Nonnull
   com.google.cloud.firestore.telemetry.TraceUtil getTraceUtil() {
     return traceUtil;
+  }
+
+  @Nonnull
+  com.google.cloud.firestore.telemetry.MetricsUtil getMetricsUtil() {
+    return metricsUtil;
   }
 
   @InternalApi
@@ -248,6 +256,13 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
         this.setOpenTelemetryOptions(FirestoreOpenTelemetryOptions.newBuilder().build());
       }
 
+      if (this.openTelemetryOptions.isMetricsEnabled()) {
+        OpenTelemetryMetricsRecorder recorder =
+            new OpenTelemetryMetricsRecorder(
+                this.openTelemetryOptions.getOpenTelemetry(), "sample-metrics");
+        this.setApiTracerFactory(new MetricsTracerFactory(recorder));
+      }
+
       // Override credentials and channel provider if we are using the emulator.
       if (emulatorHost == null) {
         emulatorHost = System.getenv(FIRESTORE_EMULATOR_SYSTEM_VARIABLE);
@@ -320,7 +335,16 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
         builder.openTelemetryOptions != null
             ? builder.openTelemetryOptions
             : FirestoreOpenTelemetryOptions.newBuilder().build();
+
+    if (this.openTelemetryOptions.isMetricsEnabled()) {
+      OpenTelemetryMetricsRecorder recorder =
+          new OpenTelemetryMetricsRecorder(
+              this.openTelemetryOptions.getOpenTelemetry(), "sample-metrics");
+      builder.setApiTracerFactory(new MetricsTracerFactory(recorder));
+    }
+
     this.traceUtil = com.google.cloud.firestore.telemetry.TraceUtil.getInstance(this);
+    this.metricsUtil = new com.google.cloud.firestore.telemetry.MetricsUtil(this);
 
     this.databaseId =
         builder.databaseId != null
