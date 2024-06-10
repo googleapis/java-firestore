@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.21.4](https://github.com/googleapis/java-firestore/compare/v3.21.3...v3.21.4) (2024-06-10)
+
+
+### Bug Fixes
+
+* Migrate off GeneratedMessageV3 ([#1692](https://github.com/googleapis/java-firestore/issues/1692)) ([44c26e9](https://github.com/googleapis/java-firestore/commit/44c26e978d01242b7ad468adab96958f6fa0a34f))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.31.0 ([#1699](https://github.com/googleapis/java-firestore/issues/1699)) ([ef7349a](https://github.com/googleapis/java-firestore/commit/ef7349aa11d10392c8b4afab693dd731fcd3c43d))
+
 ## [3.21.3](https://github.com/googleapis/java-firestore/compare/v3.21.2...v3.21.3) (2024-05-17)
 
 
