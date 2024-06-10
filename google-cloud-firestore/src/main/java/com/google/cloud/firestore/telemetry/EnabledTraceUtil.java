@@ -273,6 +273,9 @@ public class EnabledTraceUtil implements TraceUtil {
         spanBuilder.setAllAttributes(
             Attributes.builder()
                 .put(
+                    ATTRIBUTE_SERVICE_PREFIX + "settings.project_id",
+                    firestoreOptions.getProjectId())
+                .put(
                     ATTRIBUTE_SERVICE_PREFIX + "settings.database_id",
                     firestoreOptions.getDatabaseId())
                 .put(ATTRIBUTE_SERVICE_PREFIX + "settings.host", firestoreOptions.getHost())

@@ -283,6 +283,7 @@ public abstract class ITTracingTest {
         Arrays.asList(
             "gcp.firestore.memory_utilization",
             "gcp.firestore.settings.host",
+            "gcp.firestore.settings.project_id",
             "gcp.firestore.settings.database_id",
             "gcp.firestore.settings.channel.needs_credentials",
             "gcp.firestore.settings.channel.needs_endpoint",
