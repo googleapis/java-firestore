@@ -317,7 +317,7 @@ public class Function implements Expr {
     return new EuclideanDistance(Field.of(field), Constant.ofVector(other));
   }
 
-  public static Generic function(String name, List<Expr> params) {
-    return new Generic(name, params);
+  public static Function function(String name, List<Expr> params) {
+    return new Function(name, params);
   }
 }
