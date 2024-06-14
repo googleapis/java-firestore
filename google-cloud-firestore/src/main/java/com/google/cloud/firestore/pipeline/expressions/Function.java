@@ -164,10 +164,6 @@ public class Function implements Expr {
     return new Or(conditions);
   }
 
-  // File: FunctionUtils.java (or similar)
-
-  // ... other static methods ...
-
   public static ArrayContains arrayContains(Expr expr, Expr element) {
     return new ArrayContains(expr, element);
   }
@@ -218,7 +214,7 @@ public class Function implements Expr {
     return new IsNull(Field.of(field));
   }
 
-  public static Not not(Expr expr) {
+  public static Not not(FilterCondition expr) {
     return new Not(expr);
   }
 
@@ -238,8 +234,6 @@ public class Function implements Expr {
     return new Avg(Field.of(field), false);
   }
 
-  // Note: There seems to be a typo in the Kotlin code.
-  //       `min` and `max` are calling `Sum` and `Avg` constructors respectively
   public static Min min(Expr expr) {
     return new Min(expr, false); // Corrected constructor call
   }

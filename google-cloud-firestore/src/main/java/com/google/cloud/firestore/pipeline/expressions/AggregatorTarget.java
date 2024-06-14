@@ -1,6 +1,6 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
-public final class AggregatorTarget implements Selectable, Accumulator {
+public final class AggregatorTarget implements Selectable{
   private final Accumulator accumulator;
   private final String fieldName;
 
@@ -16,10 +16,5 @@ public final class AggregatorTarget implements Selectable, Accumulator {
 
   public String getFieldName() {
     return fieldName;
-  }
-
-  @Override
-  public AggregatorTarget toField(String fieldName) {
-    return null;
   }
 }

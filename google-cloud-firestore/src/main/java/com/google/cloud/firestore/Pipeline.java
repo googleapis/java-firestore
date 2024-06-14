@@ -82,35 +82,25 @@ import java.util.stream.Collectors;
  */
 public final class Pipeline {
   private final ImmutableList<Stage> stages;
-  private final String name;
 
-  private Pipeline(List<Stage> stages, String name) {
+  private Pipeline(List<Stage> stages) {
     this.stages = ImmutableList.copyOf(stages);
-    this.name = name;
   }
 
   private Pipeline(Collection collection) {
-    this(Lists.newArrayList(collection), collection.getPath());
+    this(Lists.newArrayList(collection));
   }
 
   private Pipeline(CollectionGroup group) {
-    this(Lists.newArrayList(group), group.getCollectionId());
+    this(Lists.newArrayList(group));
   }
 
   private Pipeline(Database db) {
-    this(Lists.newArrayList(db), db.getName());
+    this(Lists.newArrayList(db));
   }
 
   private Pipeline(Documents docs) {
-    this(Lists.newArrayList(docs), docs.getName());
-  }
-
-  public static Pipeline from(CollectionReference source) {
-    return new Pipeline(new Collection(source.getPath()));
-  }
-
-  public static Pipeline from(com.google.cloud.firestore.CollectionGroup source) {
-    return new Pipeline(new CollectionGroup(source.options.getCollectionId()));
+    this(Lists.newArrayList(docs));
   }
 
   public static Pipeline fromCollection(String collectionName) {
@@ -165,8 +155,7 @@ public final class Pipeline {
         ImmutableList.<Stage>builder()
             .addAll(stages)
             .add(new AddFields(projectablesToMap(fields)))
-            .build(),
-        name);
+            .build());
   }
 
   public Pipeline select(Selectable... projections) {
@@ -174,8 +163,7 @@ public final class Pipeline {
         ImmutableList.<Stage>builder()
             .addAll(stages)
             .add(new Select(projectablesToMap(projections)))
-            .build(),
-        name);
+            .build());
   }
 
   public Pipeline select(String... fields) {
@@ -183,8 +171,7 @@ public final class Pipeline {
         ImmutableList.<Stage>builder()
             .addAll(stages)
             .add(new Select(fieldNamesToMap(fields)))
-            .build(),
-        name);
+            .build());
   }
 
   public Pipeline filter(FilterCondition condition) {
@@ -192,24 +179,22 @@ public final class Pipeline {
         ImmutableList.<Stage>builder()
             .addAll(stages)
             .add(new com.google.cloud.firestore.pipeline.stages.Filter(condition))
-            .build(),
-        name);
+            .build());
   }
 
   public Pipeline offset(int offset) {
     return new Pipeline(
-        ImmutableList.<Stage>builder().addAll(stages).add(new Offset(offset)).build(), name);
+        ImmutableList.<Stage>builder().addAll(stages).add(new Offset(offset)).build());
   }
 
   public Pipeline limit(int limit) {
     return new Pipeline(
-        ImmutableList.<Stage>builder().addAll(stages).add(new Limit(limit)).build(), name);
+        ImmutableList.<Stage>builder().addAll(stages).add(new Limit(limit)).build());
   }
 
   public Pipeline aggregate(AggregatorTarget... aggregators) {
     return new Pipeline(
-        ImmutableList.<Stage>builder().addAll(stages).add(new Aggregate(aggregators)).build(),
-        name);
+        ImmutableList.<Stage>builder().addAll(stages).add(new Aggregate(aggregators)).build());
   }
 
   public Pipeline findNearest(
@@ -226,8 +211,7 @@ public final class Pipeline {
             .add(
                 new FindNearest(
                     property, vector, options)) // Assuming FindNearest takes these arguments
-            .build(),
-        name);
+            .build());
   }
 
   public Pipeline sort(List<Ordering> orders, Sort.Density density, Sort.Truncation truncation) {
@@ -235,8 +219,7 @@ public final class Pipeline {
         ImmutableList.<Stage>builder()
             .addAll(stages)
             .add(new Sort(orders, density, truncation))
-            .build(),
-        name);
+            .build());
   }
 
   // Sugar
@@ -258,8 +241,7 @@ public final class Pipeline {
                     name,
                     Lists.newArrayList(
                         params.values()))) // Assuming GenericStage takes a list of params
-            .build(),
-        name);
+            .build());
   }
 
   public ApiFuture<List<PipelineResult>> execute(Firestore db) {

@@ -2122,8 +2122,10 @@ public class Query {
   @Nonnull
   public Pipeline toPipeline() {
     // From
-    Pipeline ppl =
-        Pipeline.fromCollection(
+    Pipeline ppl = this.options.getAllDescendants() ?
+        Pipeline.fromCollectionGroup(
+            this.options.getCollectionId())
+        : Pipeline.fromCollection(
             this.options.getParentPath().append(this.options.getCollectionId()).getPath());
 
     // Filters
