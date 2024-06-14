@@ -250,7 +250,7 @@ public final class Pipeline {
 
   public Pipeline unnestArray(Field field) {
     return new Pipeline(
-        ImmutableList.<Stage>builder().addAll(stages).add(new UnnestArray(field)).build(), name);
+        ImmutableList.<Stage>builder().addAll(stages).add(new UnnestArray(field)).build());
   }
 
   public Pipeline genericStage(String name, Map<String, Object> params) {

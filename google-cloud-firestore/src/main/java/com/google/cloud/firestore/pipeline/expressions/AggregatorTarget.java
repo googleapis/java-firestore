@@ -1,9 +1,8 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
-public final class AggregatorTarget implements Selectable{
+public final class AggregatorTarget implements Selectable {
   private final Accumulator accumulator;
   private final String fieldName;
-  private boolean distinct = false;
 
   AggregatorTarget(Accumulator accumulator, String fieldName) {
     this.accumulator = accumulator;
@@ -19,14 +18,11 @@ public final class AggregatorTarget implements Selectable{
     return fieldName;
   }
 
-  @Override
   public AggregatorTarget toField(String fieldName) {
     return null;
   }
 
-  @Override
-  public Accumulator distinct(boolean on) {
-    this.distinct = on;
-    return this;
+  public AggregatorTarget distinct(boolean on) {
+    return new AggregatorTarget(accumulator.distinct(on), fieldName);
   }
 }
