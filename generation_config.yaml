@@ -1,25 +1,8 @@
 gapic_generator_version: 2.41.0
-protoc_version: '25.3'
 googleapis_commitish: 6f289d775912966eb0cf04bda91e5e355c998d30
 libraries_bom_version: 26.38.0
-template_excludes:
-  - .kokoro/presubmit/integration.cfg
-  - .kokoro/presubmit/graalvm-native.cfg
-  - .kokoro/presubmit/graalvm-native-17.cfg
-  - .kokoro/presubmit/samples.cfg
-  - .kokoro/nightly/integration.cfg
-  - .kokoro/nightly/java11-integration.cfg
-  - .kokoro/nightly/samples.cfg
-  - .kokoro/build.sh
-  - samples/snapshot/pom.xml
-  - .kokoro/release/publish_javadoc.sh
-  - .kokoro/release/publish_javadoc11.sh
-  - .kokoro/release/stage.sh
-  - .kokoro/requirements.in
-  - .kokoro/requirements.txt
-  - renovate.json
 libraries:
-  - api_shortname: "firestore"
+  - api_shortname: firestore
     name_pretty: "Cloud Firestore"
     product_documentation: "https://cloud.google.com/firestore"
     client_documentation: "https://cloud.google.com/java/docs/reference/google-cloud-firestore/latest/history"
