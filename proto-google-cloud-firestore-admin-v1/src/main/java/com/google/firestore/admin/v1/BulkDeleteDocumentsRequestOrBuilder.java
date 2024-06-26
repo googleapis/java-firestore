@@ -19,16 +19,16 @@
 // Protobuf Java Version: 3.25.3
 package com.google.firestore.admin.v1;
 
-public interface ImportDocumentsRequestOrBuilder
+public interface BulkDeleteDocumentsRequestOrBuilder
     extends
-    // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.ImportDocumentsRequest)
+    // @@protoc_insertion_point(interface_extends:google.firestore.admin.v1.BulkDeleteDocumentsRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
    *
    *
    * <pre>
-   * Required. Database to import into. Should be of the form:
+   * Required. Database to operate. Should be of the form:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
@@ -43,7 +43,7 @@ public interface ImportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * Required. Database to import into. Should be of the form:
+   * Required. Database to operate. Should be of the form:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
@@ -59,11 +59,13 @@ public interface ImportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * Which collection ids to import. Unspecified means all collections included
-   * in the import. Each collection id in this list must be unique.
+   * Optional. IDs of the collection groups to delete. Unspecified means all
+   * collection groups.
+   *
+   * Each collection group in this list must be unique.
    * </pre>
    *
-   * <code>repeated string collection_ids = 2;</code>
+   * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return A list containing the collectionIds.
    */
@@ -72,11 +74,13 @@ public interface ImportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * Which collection ids to import. Unspecified means all collections included
-   * in the import. Each collection id in this list must be unique.
+   * Optional. IDs of the collection groups to delete. Unspecified means all
+   * collection groups.
+   *
+   * Each collection group in this list must be unique.
    * </pre>
    *
-   * <code>repeated string collection_ids = 2;</code>
+   * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return The count of collectionIds.
    */
@@ -85,11 +89,13 @@ public interface ImportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * Which collection ids to import. Unspecified means all collections included
-   * in the import. Each collection id in this list must be unique.
+   * Optional. IDs of the collection groups to delete. Unspecified means all
+   * collection groups.
+   *
+   * Each collection group in this list must be unique.
    * </pre>
    *
-   * <code>repeated string collection_ids = 2;</code>
+   * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @param index The index of the element to return.
    * @return The collectionIds at the given index.
@@ -99,11 +105,13 @@ public interface ImportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * Which collection ids to import. Unspecified means all collections included
-   * in the import. Each collection id in this list must be unique.
+   * Optional. IDs of the collection groups to delete. Unspecified means all
+   * collection groups.
+   *
+   * Each collection group in this list must be unique.
    * </pre>
    *
-   * <code>repeated string collection_ids = 2;</code>
+   * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @param index The index of the value to return.
    * @return The bytes of the collectionIds at the given index.
@@ -114,48 +122,19 @@ public interface ImportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * Location of the exported files.
-   * This must match the output_uri_prefix of an ExportDocumentsResponse from
-   * an export that has completed successfully.
-   * See:
-   * [google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix][google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix].
-   * </pre>
+   * Optional. Namespaces to delete.
    *
-   * <code>string input_uri_prefix = 3;</code>
-   *
-   * @return The inputUriPrefix.
-   */
-  java.lang.String getInputUriPrefix();
-  /**
-   *
-   *
-   * <pre>
-   * Location of the exported files.
-   * This must match the output_uri_prefix of an ExportDocumentsResponse from
-   * an export that has completed successfully.
-   * See:
-   * [google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix][google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix].
-   * </pre>
-   *
-   * <code>string input_uri_prefix = 3;</code>
-   *
-   * @return The bytes for inputUriPrefix.
-   */
-  com.google.protobuf.ByteString getInputUriPrefixBytes();
-
-  /**
-   *
-   *
-   * <pre>
-   * An empty list represents all namespaces. This is the preferred
+   * An empty list means all namespaces. This is the recommended
    * usage for databases that don't use namespaces.
    *
    * An empty string element represents the default namespace. This should be
    * used if the database has data in non-default namespaces, but doesn't want
-   * to include them. Each namespace in this list must be unique.
+   * to delete from them.
+   *
+   * Each namespace in this list must be unique.
    * </pre>
    *
-   * <code>repeated string namespace_ids = 4;</code>
+   * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return A list containing the namespaceIds.
    */
@@ -164,15 +143,19 @@ public interface ImportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * An empty list represents all namespaces. This is the preferred
+   * Optional. Namespaces to delete.
+   *
+   * An empty list means all namespaces. This is the recommended
    * usage for databases that don't use namespaces.
    *
    * An empty string element represents the default namespace. This should be
    * used if the database has data in non-default namespaces, but doesn't want
-   * to include them. Each namespace in this list must be unique.
+   * to delete from them.
+   *
+   * Each namespace in this list must be unique.
    * </pre>
    *
-   * <code>repeated string namespace_ids = 4;</code>
+   * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return The count of namespaceIds.
    */
@@ -181,15 +164,19 @@ public interface ImportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * An empty list represents all namespaces. This is the preferred
+   * Optional. Namespaces to delete.
+   *
+   * An empty list means all namespaces. This is the recommended
    * usage for databases that don't use namespaces.
    *
    * An empty string element represents the default namespace. This should be
    * used if the database has data in non-default namespaces, but doesn't want
-   * to include them. Each namespace in this list must be unique.
+   * to delete from them.
+   *
+   * Each namespace in this list must be unique.
    * </pre>
    *
-   * <code>repeated string namespace_ids = 4;</code>
+   * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @param index The index of the element to return.
    * @return The namespaceIds at the given index.
@@ -199,15 +186,19 @@ public interface ImportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * An empty list represents all namespaces. This is the preferred
+   * Optional. Namespaces to delete.
+   *
+   * An empty list means all namespaces. This is the recommended
    * usage for databases that don't use namespaces.
    *
    * An empty string element represents the default namespace. This should be
    * used if the database has data in non-default namespaces, but doesn't want
-   * to include them. Each namespace in this list must be unique.
+   * to delete from them.
+   *
+   * Each namespace in this list must be unique.
    * </pre>
    *
-   * <code>repeated string namespace_ids = 4;</code>
+   * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @param index The index of the value to return.
    * @return The bytes of the namespaceIds at the given index.
