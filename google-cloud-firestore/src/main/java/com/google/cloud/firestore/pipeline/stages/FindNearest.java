@@ -106,13 +106,13 @@ public final class FindNearest implements Stage {
 
     private final Long limit;
     private final FindNearest.DistanceMeasure distanceMeasure;
-    private final Field output;
+    private final Field distanceField;
 
     private FindNearestOptions(
-        Long limit, FindNearest.DistanceMeasure distanceMeasure, Field output) {
+        Long limit, FindNearest.DistanceMeasure distanceMeasure, Field distanceField) {
       this.limit = limit;
       this.distanceMeasure = distanceMeasure;
-      this.output = output;
+      this.distanceField = distanceField;
     }
 
     public static FindNearest.FindNearestOptions newInstance(
@@ -128,8 +128,8 @@ public final class FindNearest implements Stage {
       return distanceMeasure;
     }
 
-    public Field getOutput() {
-      return output;
+    public Field getDistanceField() {
+      return distanceField;
     }
   }
 }

@@ -2160,7 +2160,7 @@ public class Query {
     }
 
     // Cursors, Limit and Offset
-    if (this.options.getStartCursor() != null || this.options.getEndCursor() != null) {
+    if (this.options.getStartCursor() != null || this.options.getEndCursor() != null || this.options.getLimitType() == LimitType.Last) {
       ppl =
           toPaginatedPipeline(
               ppl,

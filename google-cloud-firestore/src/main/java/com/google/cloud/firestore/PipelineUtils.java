@@ -161,13 +161,13 @@ public class PipelineUtils {
   @InternalApi
   static AggregatorTarget toPipelineAggregatorTarget(AggregateField f) {
     String operator = f.getOperator();
-    String fieldPath = f.getFieldPath(); // Assuming you have a method to get FieldPath
+    String fieldPath = f.getFieldPath();
 
     switch (operator) {
       case "sum":
         return Field.of(fieldPath)
             .sum()
-            .toField(f.getAlias()); // Note: 'toField' is assumed to be a method in your context
+            .toField(f.getAlias());
 
       case "count":
         return countAll().toField(f.getAlias());
