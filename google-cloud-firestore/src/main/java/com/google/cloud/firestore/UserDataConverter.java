@@ -26,16 +26,20 @@ import com.google.firestore.v1.Value;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.Struct;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 /** Converts user input into the Firestore Value representation. */
 class UserDataConverter {
+  private static final Logger LOGGER = Logger.getLogger(UserDataConverter.class.getName());
 
   /** Controls the behavior for field deletes. */
   interface EncodingOptions {
@@ -183,10 +187,32 @@ class UserDataConverter {
         // send the map.
         return null;
       }
+    } else if (sanitizedObject instanceof VectorValue) {
+      VectorValue vectorValue = (VectorValue) sanitizedObject;
+      return Value.newBuilder().setMapValue(vectorValue.toProto()).build();
     }
 
     throw FirestoreException.forInvalidArgument(
         "Cannot convert %s to Firestore Value", sanitizedObject);
+  }
+
+  static MapValue encodeVector(double[] rawVector) {
+    MapValue.Builder res = MapValue.newBuilder();
+
+    res.putFields(
+        MapType.RESERVED_MAP_KEY,
+        encodeValue(
+            FieldPath.fromDotSeparatedString(MapType.RESERVED_MAP_KEY),
+            MapType.RESERVED_MAP_KEY_VECTOR_VALUE,
+            ARGUMENT));
+    res.putFields(
+        MapType.VECTOR_MAP_VECTORS_KEY,
+        encodeValue(
+            FieldPath.fromDotSeparatedString(MapType.RESERVED_MAP_KEY_VECTOR_VALUE),
+            Arrays.stream(rawVector).boxed().collect(Collectors.toList()),
+            ARGUMENT));
+
+    return res.build();
   }
 
   static Object decodeValue(FirestoreRpcContext<?> rpcContext, Value v) {
@@ -220,16 +246,70 @@ class UserDataConverter {
         }
         return list;
       case MAP_VALUE:
-        Map<String, Object> outputMap = new HashMap<>();
-        Map<String, Value> inputMap = v.getMapValue().getFieldsMap();
-        for (Map.Entry<String, Value> entry : inputMap.entrySet()) {
-          outputMap.put(entry.getKey(), decodeValue(rpcContext, entry.getValue()));
-        }
-        return outputMap;
+        return decodeMap(rpcContext, v);
       default:
         throw FirestoreException.forInvalidArgument(
             String.format("Unknown Value Type: %s", typeCase));
     }
+  }
+
+  static Object decodeMap(FirestoreRpcContext<?> rpcContext, Value v) {
+    MapRepresentation mapRepresentation = detectMapRepresentation(v);
+    Map<String, Value> inputMap = v.getMapValue().getFieldsMap();
+    switch (mapRepresentation) {
+      case UNKNOWN:
+        LOGGER.warning(
+            "Parsing unknown map type as generic map. This map type may be supported in a newer SDK version.");
+      case NONE:
+        Map<String, Object> outputMap = new HashMap<>();
+        for (Map.Entry<String, Value> entry : inputMap.entrySet()) {
+          outputMap.put(entry.getKey(), decodeValue(rpcContext, entry.getValue()));
+        }
+        return outputMap;
+      case VECTOR_VALUE:
+        double[] values =
+            inputMap.get(MapType.VECTOR_MAP_VECTORS_KEY).getArrayValue().getValuesList().stream()
+                .mapToDouble(val -> val.getDoubleValue())
+                .toArray();
+        return new VectorValue(values);
+      default:
+        throw FirestoreException.forInvalidArgument(
+            String.format("Unsupported MapRepresentation: %s", mapRepresentation));
+    }
+  }
+
+  /** Indicates the data type represented by a MapValue. */
+  enum MapRepresentation {
+    /** The MapValue represents an unknown data type. */
+    UNKNOWN,
+    /** The MapValue does not represent any special data type. */
+    NONE,
+    /** The MapValue represents a VectorValue. */
+    VECTOR_VALUE
+  }
+
+  static MapRepresentation detectMapRepresentation(Value v) {
+    Map<String, Value> fields = v.getMapValue().getFieldsMap();
+    if (!fields.containsKey(MapType.RESERVED_MAP_KEY)) {
+      return MapRepresentation.NONE;
+    }
+
+    Value typeValue = fields.get(MapType.RESERVED_MAP_KEY);
+    if (typeValue.getValueTypeCase() != Value.ValueTypeCase.STRING_VALUE) {
+      LOGGER.warning(
+          "Unable to parse __type__ field of map. Unsupported value type: "
+              + typeValue.getValueTypeCase().toString());
+      return MapRepresentation.UNKNOWN;
+    }
+
+    String typeString = typeValue.getStringValue();
+
+    if (typeString.equals(MapType.RESERVED_MAP_KEY_VECTOR_VALUE)) {
+      return MapRepresentation.VECTOR_VALUE;
+    }
+
+    LOGGER.warning("Unsupported __type__ value for map: " + typeString);
+    return MapRepresentation.UNKNOWN;
   }
 
   static Object decodeGoogleProtobufValue(com.google.protobuf.Value v) {
