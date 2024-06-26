@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.21.6](https://github.com/googleapis/java-firestore/compare/v3.21.5...v3.21.6) (2024-06-26)
+
+
+### Dependencies
+
+* Update beam.version to v2.57.0 ([#1715](https://github.com/googleapis/java-firestore/issues/1715)) ([d8dcd5b](https://github.com/googleapis/java-firestore/commit/d8dcd5b93ce41c1bb985a3fd626f93ea3981880a))
+
 ## [3.21.5](https://github.com/googleapis/java-firestore/compare/v3.21.4...v3.21.5) (2024-06-25)
 
 
