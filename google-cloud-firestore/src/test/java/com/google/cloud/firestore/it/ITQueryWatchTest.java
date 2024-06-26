@@ -23,12 +23,14 @@ import static com.google.common.truth.Truth.assertWithMessage;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.junit.Assert.assertArrayEquals;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentChange;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.EventListener;
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.FirestoreException;
 import com.google.cloud.firestore.ListenerRegistration;
 import com.google.cloud.firestore.LocalFirestoreHelper;

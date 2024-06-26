@@ -70,6 +70,7 @@ import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.Transaction;
 import com.google.cloud.firestore.Transaction.Function;
 import com.google.cloud.firestore.TransactionOptions;
+import com.google.cloud.firestore.VectorValue;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
 import com.google.common.collect.ImmutableList;
