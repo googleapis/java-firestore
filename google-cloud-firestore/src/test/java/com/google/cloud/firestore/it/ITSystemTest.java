@@ -1360,7 +1360,7 @@ public class ITSystemTest extends ITBaseTest {
     expected.put("vector2", FieldValue.vector(new double[] {0, 0, 0}));
     expected.put("vector3", FieldValue.vector(new double[] {-1, -200, -9999}));
 
-    Map<String, Object> actual = getData();
+    DocumentSnapshot actual = randomDoc.get().get();
 
     assertTrue(actual.get("vector0") instanceof VectorValue);
     assertTrue(actual.get("vector1") instanceof VectorValue);
@@ -1369,19 +1369,19 @@ public class ITSystemTest extends ITBaseTest {
 
     assertArrayEquals(
         expected.get("vector0").getArray(),
-        ((VectorValue) actual.get("vector0")).getArray(),
+        actual.get("vector0", VectorValue.class).getArray(),
         DOUBLE_EPSILON);
     assertArrayEquals(
         expected.get("vector1").getArray(),
-        ((VectorValue) actual.get("vector1")).getArray(),
+        actual.get("vector1", VectorValue.class).getArray(),
         DOUBLE_EPSILON);
     assertArrayEquals(
         expected.get("vector2").getArray(),
-        ((VectorValue) actual.get("vector2")).getArray(),
+        actual.get("vector2", VectorValue.class).getArray(),
         DOUBLE_EPSILON);
     assertArrayEquals(
         expected.get("vector3").getArray(),
-        ((VectorValue) actual.get("vector3")).getArray(),
+        actual.get("vector3", VectorValue.class).getArray(),
         DOUBLE_EPSILON);
   }
 
