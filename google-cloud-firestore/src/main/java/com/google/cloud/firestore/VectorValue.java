@@ -23,8 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * * Represent a vector type in Firestore documents. * Create an instance with {@link
- * FieldValue.vector}.
+ * Represents a vector in Firestore documents. Create an instance with {@link FieldValue#vector}.
  */
 public class VectorValue implements Serializable {
   private final double[] values;
