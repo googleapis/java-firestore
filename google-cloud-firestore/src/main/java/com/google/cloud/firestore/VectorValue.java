@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 /**
  * Represents a vector in Firestore documents. Create an instance with {@link FieldValue#vector}.
  */
-public class VectorValue implements Serializable {
+public final class VectorValue implements Serializable {
   private final double[] values;
 
   VectorValue(@Nullable double[] values) {

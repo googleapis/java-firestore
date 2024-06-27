@@ -468,6 +468,7 @@ public final class ITQueryWatchTest extends ITBaseTest {
             map("embedding", FieldValue.vector(new double[] {1, 2, 3, 4, 5})),
             map("embedding", FieldValue.vector(new double[] {1, 2, 100, 4, 4})),
             map("embedding", FieldValue.vector(new double[] {100, 2, 3, 4, 5})),
+            map("embedding", map()),
             map("embedding", map("HELLO", "WORLD")),
             map("embedding", map("hello", "world")));
 

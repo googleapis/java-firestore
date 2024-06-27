@@ -20,13 +20,13 @@ import com.google.cloud.Timestamp;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.primitives.Doubles;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.Struct;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 /** Converts user input into the Firestore Value representation. */
@@ -209,7 +208,7 @@ class UserDataConverter {
         MapType.VECTOR_MAP_VECTORS_KEY,
         encodeValue(
             FieldPath.fromDotSeparatedString(MapType.RESERVED_MAP_KEY_VECTOR_VALUE),
-            Arrays.stream(rawVector).boxed().collect(Collectors.toList()),
+            Doubles.asList(rawVector),
             ARGUMENT));
 
     return res.build();
@@ -246,16 +245,16 @@ class UserDataConverter {
         }
         return list;
       case MAP_VALUE:
-        return decodeMap(rpcContext, v);
+        return decodeMap(rpcContext, v.getMapValue());
       default:
         throw FirestoreException.forInvalidArgument(
             String.format("Unknown Value Type: %s", typeCase));
     }
   }
 
-  static Object decodeMap(FirestoreRpcContext<?> rpcContext, Value v) {
-    MapRepresentation mapRepresentation = detectMapRepresentation(v);
-    Map<String, Value> inputMap = v.getMapValue().getFieldsMap();
+  static Object decodeMap(FirestoreRpcContext<?> rpcContext, MapValue mapValue) {
+    MapRepresentation mapRepresentation = detectMapRepresentation(mapValue);
+    Map<String, Value> inputMap = mapValue.getFieldsMap();
     switch (mapRepresentation) {
       case UNKNOWN:
         LOGGER.warning(
@@ -288,8 +287,8 @@ class UserDataConverter {
     VECTOR_VALUE
   }
 
-  static MapRepresentation detectMapRepresentation(Value v) {
-    Map<String, Value> fields = v.getMapValue().getFieldsMap();
+  static MapRepresentation detectMapRepresentation(MapValue mapValue) {
+    Map<String, Value> fields = mapValue.getFieldsMap();
     if (!fields.containsKey(MapType.RESERVED_MAP_KEY)) {
       return MapRepresentation.NONE;
     }

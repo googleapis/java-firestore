@@ -1386,11 +1386,11 @@ public class ITSystemTest extends ITBaseTest {
   }
 
   @Test
-  public void listenToDocumentsWithVectors() throws Exception {
+  public void listenToDocumentsWithVectors() throws Throwable {
     final Semaphore semaphore = new Semaphore(0);
     ListenerRegistration registration = null;
     DocumentReference ref = randomColl.document();
-    AtomicReference<String> failureMessage = new AtomicReference(null);
+    AtomicReference<Throwable> failureMessage = new AtomicReference(null);
     int totalPermits = 5;
 
     try {
@@ -1407,10 +1407,11 @@ public class ITSystemTest extends ITBaseTest {
                         case 0:
                           assertNull(docSnap);
                           ref.create(
-                              map(
-                                  "purpose", "vector tests",
-                                  "vector0", FieldValue.vector(new double[] {0.0}),
-                                  "vector1", FieldValue.vector(new double[] {1, 2, 3.99})));
+                                  map(
+                                      "purpose", "vector tests",
+                                      "vector0", FieldValue.vector(new double[] {0.0}),
+                                      "vector1", FieldValue.vector(new double[] {1, 2, 3.99})))
+                              .get();
                           break;
                         case 1:
                           assertNotNull(docSnap);
@@ -1423,15 +1424,16 @@ public class ITSystemTest extends ITBaseTest {
                               FieldValue.vector(new double[] {1, 2, 3.99}));
 
                           ref.set(
-                              map(
-                                  "purpose",
-                                  "vector tests",
-                                  "vector0",
-                                  FieldValue.vector(new double[] {0.0}),
-                                  "vector1",
-                                  FieldValue.vector(new double[] {1, 2, 3.99}),
-                                  "vector2",
-                                  FieldValue.vector(new double[] {0, 0, 0})));
+                                  map(
+                                      "purpose",
+                                      "vector tests",
+                                      "vector0",
+                                      FieldValue.vector(new double[] {0.0}),
+                                      "vector1",
+                                      FieldValue.vector(new double[] {1, 2, 3.99}),
+                                      "vector2",
+                                      FieldValue.vector(new double[] {0, 0, 0})))
+                              .get();
                           break;
                         case 2:
                           assertNotNull(docSnap);
@@ -1447,7 +1449,8 @@ public class ITSystemTest extends ITBaseTest {
                               FieldValue.vector(new double[] {0, 0, 0}));
 
                           ref.update(
-                              map("vector3", FieldValue.vector(new double[] {-1, -200, -999})));
+                                  map("vector3", FieldValue.vector(new double[] {-1, -200, -999})))
+                              .get();
                           break;
                         case 3:
                           assertNotNull(docSnap);
@@ -1465,14 +1468,14 @@ public class ITSystemTest extends ITBaseTest {
                               docSnap.getVectorValue("vector3"),
                               FieldValue.vector(new double[] {-1, -200, -999}));
 
-                          ref.delete();
+                          ref.delete().get();
                           break;
                         case 4:
                           assertNull(docSnap);
                           break;
                       }
-                    } catch (AssertionError e) {
-                      failureMessage.set(e.getMessage());
+                    } catch (Throwable t) {
+                      failureMessage.set(t);
                       semaphore.release(totalPermits);
                     }
 
@@ -1486,7 +1489,7 @@ public class ITSystemTest extends ITBaseTest {
       }
 
       if (failureMessage.get() != null) {
-        fail(failureMessage.get());
+        throw failureMessage.get();
       }
     }
   }

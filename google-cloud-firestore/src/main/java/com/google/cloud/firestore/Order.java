@@ -16,10 +16,11 @@
 
 package com.google.cloud.firestore;
 
+import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 import com.google.firestore.v1.Value.ValueTypeCase;
 import com.google.protobuf.ByteString;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -67,17 +68,14 @@ class Order implements Comparator<Value> {
         case ARRAY_VALUE:
           return ARRAY;
         case MAP_VALUE:
-          return fromMapValue(value);
+          return fromMapValue(value.getMapValue());
         default:
           throw new IllegalArgumentException("Could not detect value type for " + value);
       }
     }
   }
 
-  static TypeOrder fromMapValue(Value mapValue) {
-    if (mapValue.getValueTypeCase() != ValueTypeCase.MAP_VALUE)
-      throw new IllegalArgumentException("mapValue must have value type of MAP_VALUE");
-
+  static TypeOrder fromMapValue(MapValue mapValue) {
     switch (UserDataConverter.detectMapRepresentation(mapValue)) {
       case VECTOR_VALUE:
         return TypeOrder.VECTOR;
@@ -237,11 +235,11 @@ class Order implements Comparator<Value> {
     List<Value> leftArray =
         (leftValueField != null)
             ? leftValueField.getArrayValue().getValuesList()
-            : new ArrayList<>();
+            : Collections.emptyList();
     List<Value> rightArray =
         (rightValueField != null)
             ? rightValueField.getArrayValue().getValuesList()
-            : new ArrayList<>();
+            : Collections.emptyList();
 
     Integer lengthCompare = Long.compare(leftArray.size(), rightArray.size());
     if (lengthCompare != 0) {
