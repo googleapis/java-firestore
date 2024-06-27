@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.22.0](https://github.com/googleapis/java-firestore/compare/v3.21.6...v3.22.0) (2024-06-27)
+
+
+### Features
+
+* Add bulk delete api ([#1704](https://github.com/googleapis/java-firestore/issues/1704)) ([5ef6254](https://github.com/googleapis/java-firestore/commit/5ef625456afbee781951d2a5c6a9c2548feea92e))
+
+
+### Dependencies
+
+* Update dependency org.junit.vintage:junit-vintage-engine to v5.10.3 ([#1722](https://github.com/googleapis/java-firestore/issues/1722)) ([c4627a4](https://github.com/googleapis/java-firestore/commit/c4627a4e664d67d5b34a27d791cd0c06ee789f85))
+
 ## [3.21.6](https://github.com/googleapis/java-firestore/compare/v3.21.5...v3.21.6) (2024-06-26)
 
 
