@@ -52,7 +52,7 @@ test)
     RETURN_CODE=$?
     ;;
 lint)
-    mvn com.coveo:fmt-maven-plugin:check -B -ntp
+    mvn com.coveo:fmt-maven-plugin:check -B -ntp && mvn -pl google-cloud-firestore spotless:check -B -ntp
     RETURN_CODE=$?
     ;;
 javadoc)
