@@ -134,7 +134,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Which collection ids to export. Unspecified means all collections.
+   * Which collection ids to export. Unspecified means all collections. Each
+   * collection id in this list must be unique.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
@@ -148,7 +149,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Which collection ids to export. Unspecified means all collections.
+   * Which collection ids to export. Unspecified means all collections. Each
+   * collection id in this list must be unique.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
@@ -162,7 +164,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Which collection ids to export. Unspecified means all collections.
+   * Which collection ids to export. Unspecified means all collections. Each
+   * collection id in this list must be unique.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
@@ -177,7 +180,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Which collection ids to export. Unspecified means all collections.
+   * Which collection ids to export. Unspecified means all collections. Each
+   * collection id in this list must be unique.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
@@ -1027,7 +1031,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to export. Unspecified means all collections.
+     * Which collection ids to export. Unspecified means all collections. Each
+     * collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -1042,7 +1047,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to export. Unspecified means all collections.
+     * Which collection ids to export. Unspecified means all collections. Each
+     * collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -1056,7 +1062,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to export. Unspecified means all collections.
+     * Which collection ids to export. Unspecified means all collections. Each
+     * collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -1071,7 +1078,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to export. Unspecified means all collections.
+     * Which collection ids to export. Unspecified means all collections. Each
+     * collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -1086,7 +1094,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to export. Unspecified means all collections.
+     * Which collection ids to export. Unspecified means all collections. Each
+     * collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -1109,7 +1118,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to export. Unspecified means all collections.
+     * Which collection ids to export. Unspecified means all collections. Each
+     * collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -1131,7 +1141,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to export. Unspecified means all collections.
+     * Which collection ids to export. Unspecified means all collections. Each
+     * collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -1150,7 +1161,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to export. Unspecified means all collections.
+     * Which collection ids to export. Unspecified means all collections. Each
+     * collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -1168,7 +1180,8 @@ public final class ExportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to export. Unspecified means all collections.
+     * Which collection ids to export. Unspecified means all collections. Each
+     * collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>

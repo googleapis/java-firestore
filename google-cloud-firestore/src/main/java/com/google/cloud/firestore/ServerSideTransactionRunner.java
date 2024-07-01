@@ -272,6 +272,7 @@ final class ServerSideTransactionRunner<T> {
         return false;
     }
   }
+
   /** Rolls the transaction back and returns the error. */
   private ApiFuture<T> rollbackAndReject(final Throwable throwable) {
     final SettableApiFuture<T> failedTransaction = SettableApiFuture.create();

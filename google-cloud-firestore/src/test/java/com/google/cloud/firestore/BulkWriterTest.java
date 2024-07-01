@@ -42,7 +42,7 @@ import com.google.firestore.v1.BatchWriteRequest;
 import com.google.firestore.v1.BatchWriteResponse;
 import com.google.firestore.v1.Value;
 import com.google.firestore.v1.Write;
-import com.google.protobuf.GeneratedMessageV3;
+import com.google.protobuf.Message;
 import com.google.rpc.Code;
 import io.grpc.Status;
 import java.util.ArrayList;
@@ -74,21 +74,21 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class BulkWriterTest {
 
-  public static final ApiFuture<GeneratedMessageV3> FAILED_FUTURE =
+  public static final ApiFuture<Message> FAILED_FUTURE =
       ApiFutures.immediateFailedFuture(
           new ApiException(
               new IllegalStateException("Mock batchWrite failed in test"),
               GrpcStatusCode.of(Status.Code.UNKNOWN),
               false));
 
-  private static final ApiFuture<GeneratedMessageV3> RETRYABLE_FAILED_FUTURE =
+  private static final ApiFuture<Message> RETRYABLE_FAILED_FUTURE =
       ApiFutures.immediateFailedFuture(
           new ApiException(
               new IllegalStateException("Mock batchWrite failed in test"),
               GrpcStatusCode.of(Status.Code.ABORTED),
               true));
 
-  private static final ApiFuture<GeneratedMessageV3> RESOURCE_EXHAUSTED_FAILED_FUTURE =
+  private static final ApiFuture<Message> RESOURCE_EXHAUSTED_FAILED_FUTURE =
       ApiFutures.immediateFailedFuture(
           new ApiException(
               new IllegalStateException("Mock batchWrite failed in test"),
