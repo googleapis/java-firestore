@@ -1,5 +1,43 @@
 # Changelog
 
+## [3.22.0](https://github.com/googleapis/java-firestore/compare/v3.21.6...v3.22.0) (2024-06-27)
+
+
+### Features
+
+* Add bulk delete api ([#1704](https://github.com/googleapis/java-firestore/issues/1704)) ([5ef6254](https://github.com/googleapis/java-firestore/commit/5ef625456afbee781951d2a5c6a9c2548feea92e))
+
+
+### Dependencies
+
+* Update dependency org.junit.vintage:junit-vintage-engine to v5.10.3 ([#1722](https://github.com/googleapis/java-firestore/issues/1722)) ([c4627a4](https://github.com/googleapis/java-firestore/commit/c4627a4e664d67d5b34a27d791cd0c06ee789f85))
+
+## [3.21.6](https://github.com/googleapis/java-firestore/compare/v3.21.5...v3.21.6) (2024-06-26)
+
+
+### Dependencies
+
+* Update beam.version to v2.57.0 ([#1715](https://github.com/googleapis/java-firestore/issues/1715)) ([d8dcd5b](https://github.com/googleapis/java-firestore/commit/d8dcd5b93ce41c1bb985a3fd626f93ea3981880a))
+
+## [3.21.5](https://github.com/googleapis/java-firestore/compare/v3.21.4...v3.21.5) (2024-06-25)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.32.0 ([#1710](https://github.com/googleapis/java-firestore/issues/1710)) ([2906472](https://github.com/googleapis/java-firestore/commit/2906472816001d4ffdc21f3b94a36de7d925f6dc))
+
+## [3.21.4](https://github.com/googleapis/java-firestore/compare/v3.21.3...v3.21.4) (2024-06-10)
+
+
+### Bug Fixes
+
+* Migrate off GeneratedMessageV3 ([#1692](https://github.com/googleapis/java-firestore/issues/1692)) ([44c26e9](https://github.com/googleapis/java-firestore/commit/44c26e978d01242b7ad468adab96958f6fa0a34f))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.31.0 ([#1699](https://github.com/googleapis/java-firestore/issues/1699)) ([ef7349a](https://github.com/googleapis/java-firestore/commit/ef7349aa11d10392c8b4afab693dd731fcd3c43d))
+
 ## [3.21.3](https://github.com/googleapis/java-firestore/compare/v3.21.2...v3.21.3) (2024-05-17)
 
 

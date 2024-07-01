@@ -62,7 +62,7 @@ final class ReadTimeTransaction extends Transaction {
       ApiFuture<DocumentSnapshot> result =
           ApiFutures.transform(
               firestore.getAll(
-                  new DocumentReference[] {documentRef}, /*fieldMask=*/ null, readTime),
+                  new DocumentReference[] {documentRef}, /* fieldMask= */ null, readTime),
               snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
               MoreExecutors.directExecutor());
       span.endAtFuture(result);
@@ -82,7 +82,7 @@ final class ReadTimeTransaction extends Transaction {
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
-          firestore.getAll(documentReferences, /*fieldMask=*/ null, readTime);
+          firestore.getAll(documentReferences, /* fieldMask= */ null, readTime);
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
@@ -100,7 +100,7 @@ final class ReadTimeTransaction extends Transaction {
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
-          firestore.getAll(documentReferences, /*fieldMask=*/ null, readTime);
+          firestore.getAll(documentReferences, /* fieldMask= */ null, readTime);
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {

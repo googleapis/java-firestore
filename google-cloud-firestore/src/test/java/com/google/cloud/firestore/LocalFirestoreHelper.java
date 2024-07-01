@@ -65,7 +65,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
-import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Message;
 import com.google.protobuf.NullValue;
 import com.google.type.LatLng;
@@ -375,7 +374,7 @@ public final class LocalFirestoreHelper {
         new RunAggregationQueryResponse[] {
           createCountQueryResponse(count, readTime),
         },
-        /*throwable=*/ null);
+        /* throwable= */ null);
   }
 
   public static Answer<RunAggregationQueryResponse> countQueryResponse(Throwable throwable) {
@@ -388,7 +387,7 @@ public final class LocalFirestoreHelper {
         new RunAggregationQueryResponse[] {
           createCountQueryResponse(count1, null), createCountQueryResponse(count2, null),
         },
-        /*throwable=*/ null);
+        /* throwable= */ null);
   }
 
   public static Answer<RunAggregationQueryResponse> aggregationQueryResponses(
@@ -1200,15 +1199,15 @@ public final class LocalFirestoreHelper {
   }
 
   static class RequestResponsePair {
-    GeneratedMessageV3 request;
-    ApiFuture<? extends GeneratedMessageV3> response;
+    Message request;
+    ApiFuture<? extends Message> response;
 
-    public RequestResponsePair(
-        GeneratedMessageV3 request, ApiFuture<? extends GeneratedMessageV3> response) {
+    public RequestResponsePair(Message request, ApiFuture<? extends Message> response) {
       this.request = request;
       this.response = response;
     }
   }
+
   /**
    * Contains a map of request/response pairs that are used to create stub responses when
    * `sendRequest()` is called.
@@ -1218,7 +1217,7 @@ public final class LocalFirestoreHelper {
 
     List<Object> actualRequestList = new CopyOnWriteArrayList<>();
 
-    void put(GeneratedMessageV3 request, ApiFuture<? extends GeneratedMessageV3> response) {
+    void put(Message request, ApiFuture<? extends Message> response) {
       operationList.add(new RequestResponsePair(request, response));
     }
 
@@ -1226,7 +1225,7 @@ public final class LocalFirestoreHelper {
         ArgumentCaptor<? extends Message> argumentCaptor, FirestoreImpl firestoreMock) {
       Stubber stubber = null;
       for (final RequestResponsePair entry : operationList) {
-        Answer<ApiFuture<? extends GeneratedMessageV3>> answer =
+        Answer<ApiFuture<? extends Message>> answer =
             invocationOnMock -> {
               actualRequestList.add(invocationOnMock.getArguments()[0]);
               return entry.response;

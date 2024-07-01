@@ -35,6 +35,9 @@ import com.google.firestore.admin.v1.Backup;
 import com.google.firestore.admin.v1.BackupName;
 import com.google.firestore.admin.v1.BackupSchedule;
 import com.google.firestore.admin.v1.BackupScheduleName;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
 import com.google.firestore.admin.v1.CollectionGroupName;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
@@ -324,6 +327,27 @@ import javax.annotation.Generated;
  *       </td>
  *    </tr>
  *    <tr>
+ *      <td><p> BulkDeleteDocuments</td>
+ *      <td><p> Bulk deletes a subset of documents from Google Cloud Firestore. Documents created or updated after the underlying system starts to process the request will not be deleted. The bulk delete occurs in the background and its progress can be monitored and managed via the Operation resource that is created.
+ * <p>  For more details on bulk delete behavior, refer to: https://cloud.google.com/firestore/docs/manage-data/bulk-delete</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> bulkDeleteDocumentsAsync(BulkDeleteDocumentsRequest request)
+ *      </ul>
+ *      <p>Methods that return long-running operations have "Async" method variants that return `OperationFuture`, which is used to track polling of the service.</p>
+ *      <ul>
+ *           <li><p> bulkDeleteDocumentsAsync(DatabaseName name)
+ *           <li><p> bulkDeleteDocumentsAsync(String name)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> bulkDeleteDocumentsOperationCallable()
+ *           <li><p> bulkDeleteDocumentsCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
  *      <td><p> CreateDatabase</td>
  *      <td><p> Create a database.</td>
  *      <td>
@@ -480,7 +504,7 @@ import javax.annotation.Generated;
  *    <tr>
  *      <td><p> RestoreDatabase</td>
  *      <td><p> Creates a new database by restoring from an existing backup.
- * <p>  The new database must be in the same cloud region or multi-region location as the existing backup. This behaves similar to [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase] except instead of creating a new empty database, a new database is created with the database type, index configuration, and documents from an existing backup.
+ * <p>  The new database must be in the same cloud region or multi-region location as the existing backup. This behaves similar to [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase] except instead of creating a new empty database, a new database is created with the database type, index configuration, and documents from an existing backup.
  * <p>  The [long-running operation][google.longrunning.Operation] can be used to track the progress of the restore, with the Operation's [metadata][google.longrunning.Operation.metadata] field type being the [RestoreDatabaseMetadata][google.firestore.admin.v1.RestoreDatabaseMetadata]. The [response][google.longrunning.Operation.response] type is the [Database][google.firestore.admin.v1.Database] if the restore was successful. The new database is not readable or writeable until the LRO has completed.</td>
  *      <td>
  *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
@@ -2114,6 +2138,192 @@ public class FirestoreAdminClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
+   * Bulk deletes a subset of documents from Google Cloud Firestore. Documents created or updated
+   * after the underlying system starts to process the request will not be deleted. The bulk delete
+   * occurs in the background and its progress can be monitored and managed via the Operation
+   * resource that is created.
+   *
+   * <p>For more details on bulk delete behavior, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/bulk-delete
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
+   *   BulkDeleteDocumentsResponse response =
+   *       firestoreAdminClient.bulkDeleteDocumentsAsync(name).get();
+   * }
+   * }</pre>
+   *
+   * @param name Required. Database to operate. Should be of the form:
+   *     `projects/{project_id}/databases/{database_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsAsync(DatabaseName name) {
+    BulkDeleteDocumentsRequest request =
+        BulkDeleteDocumentsRequest.newBuilder()
+            .setName(name == null ? null : name.toString())
+            .build();
+    return bulkDeleteDocumentsAsync(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Bulk deletes a subset of documents from Google Cloud Firestore. Documents created or updated
+   * after the underlying system starts to process the request will not be deleted. The bulk delete
+   * occurs in the background and its progress can be monitored and managed via the Operation
+   * resource that is created.
+   *
+   * <p>For more details on bulk delete behavior, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/bulk-delete
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name = DatabaseName.of("[PROJECT]", "[DATABASE]").toString();
+   *   BulkDeleteDocumentsResponse response =
+   *       firestoreAdminClient.bulkDeleteDocumentsAsync(name).get();
+   * }
+   * }</pre>
+   *
+   * @param name Required. Database to operate. Should be of the form:
+   *     `projects/{project_id}/databases/{database_id}`.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsAsync(String name) {
+    BulkDeleteDocumentsRequest request =
+        BulkDeleteDocumentsRequest.newBuilder().setName(name).build();
+    return bulkDeleteDocumentsAsync(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Bulk deletes a subset of documents from Google Cloud Firestore. Documents created or updated
+   * after the underlying system starts to process the request will not be deleted. The bulk delete
+   * occurs in the background and its progress can be monitored and managed via the Operation
+   * resource that is created.
+   *
+   * <p>For more details on bulk delete behavior, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/bulk-delete
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   BulkDeleteDocumentsRequest request =
+   *       BulkDeleteDocumentsRequest.newBuilder()
+   *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .addAllCollectionIds(new ArrayList<String>())
+   *           .addAllNamespaceIds(new ArrayList<String>())
+   *           .build();
+   *   BulkDeleteDocumentsResponse response =
+   *       firestoreAdminClient.bulkDeleteDocumentsAsync(request).get();
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsAsync(BulkDeleteDocumentsRequest request) {
+    return bulkDeleteDocumentsOperationCallable().futureCall(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Bulk deletes a subset of documents from Google Cloud Firestore. Documents created or updated
+   * after the underlying system starts to process the request will not be deleted. The bulk delete
+   * occurs in the background and its progress can be monitored and managed via the Operation
+   * resource that is created.
+   *
+   * <p>For more details on bulk delete behavior, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/bulk-delete
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   BulkDeleteDocumentsRequest request =
+   *       BulkDeleteDocumentsRequest.newBuilder()
+   *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .addAllCollectionIds(new ArrayList<String>())
+   *           .addAllNamespaceIds(new ArrayList<String>())
+   *           .build();
+   *   OperationFuture<BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata> future =
+   *       firestoreAdminClient.bulkDeleteDocumentsOperationCallable().futureCall(request);
+   *   // Do something.
+   *   BulkDeleteDocumentsResponse response = future.get();
+   * }
+   * }</pre>
+   */
+  public final OperationCallable<
+          BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsOperationCallable() {
+    return stub.bulkDeleteDocumentsOperationCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Bulk deletes a subset of documents from Google Cloud Firestore. Documents created or updated
+   * after the underlying system starts to process the request will not be deleted. The bulk delete
+   * occurs in the background and its progress can be monitored and managed via the Operation
+   * resource that is created.
+   *
+   * <p>For more details on bulk delete behavior, refer to:
+   * https://cloud.google.com/firestore/docs/manage-data/bulk-delete
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   BulkDeleteDocumentsRequest request =
+   *       BulkDeleteDocumentsRequest.newBuilder()
+   *           .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .addAllCollectionIds(new ArrayList<String>())
+   *           .addAllNamespaceIds(new ArrayList<String>())
+   *           .build();
+   *   ApiFuture<Operation> future =
+   *       firestoreAdminClient.bulkDeleteDocumentsCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<BulkDeleteDocumentsRequest, Operation> bulkDeleteDocumentsCallable() {
+    return stub.bulkDeleteDocumentsCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
    * Create a database.
    *
    * <p>Sample code:
@@ -2467,6 +2677,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *   ListDatabasesRequest request =
    *       ListDatabasesRequest.newBuilder()
    *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .setShowDeleted(true)
    *           .build();
    *   ListDatabasesResponse response = firestoreAdminClient.listDatabases(request);
    * }
@@ -2495,6 +2706,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *   ListDatabasesRequest request =
    *       ListDatabasesRequest.newBuilder()
    *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .setShowDeleted(true)
    *           .build();
    *   ApiFuture<ListDatabasesResponse> future =
    *       firestoreAdminClient.listDatabasesCallable().futureCall(request);
@@ -3112,9 +3324,9 @@ public class FirestoreAdminClient implements BackgroundResource {
    *
    * <p>The new database must be in the same cloud region or multi-region location as the existing
    * backup. This behaves similar to
-   * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase] except instead of
-   * creating a new empty database, a new database is created with the database type, index
-   * configuration, and documents from an existing backup.
+   * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase] except
+   * instead of creating a new empty database, a new database is created with the database type,
+   * index configuration, and documents from an existing backup.
    *
    * <p>The [long-running operation][google.longrunning.Operation] can be used to track the progress
    * of the restore, with the Operation's [metadata][google.longrunning.Operation.metadata] field
@@ -3156,9 +3368,9 @@ public class FirestoreAdminClient implements BackgroundResource {
    *
    * <p>The new database must be in the same cloud region or multi-region location as the existing
    * backup. This behaves similar to
-   * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase] except instead of
-   * creating a new empty database, a new database is created with the database type, index
-   * configuration, and documents from an existing backup.
+   * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase] except
+   * instead of creating a new empty database, a new database is created with the database type,
+   * index configuration, and documents from an existing backup.
    *
    * <p>The [long-running operation][google.longrunning.Operation] can be used to track the progress
    * of the restore, with the Operation's [metadata][google.longrunning.Operation.metadata] field
@@ -3200,9 +3412,9 @@ public class FirestoreAdminClient implements BackgroundResource {
    *
    * <p>The new database must be in the same cloud region or multi-region location as the existing
    * backup. This behaves similar to
-   * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase] except instead of
-   * creating a new empty database, a new database is created with the database type, index
-   * configuration, and documents from an existing backup.
+   * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase] except
+   * instead of creating a new empty database, a new database is created with the database type,
+   * index configuration, and documents from an existing backup.
    *
    * <p>The [long-running operation][google.longrunning.Operation] can be used to track the progress
    * of the restore, with the Operation's [metadata][google.longrunning.Operation.metadata] field

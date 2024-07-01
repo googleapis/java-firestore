@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>google-cloud-firestore</artifactId>
-  <version>3.21.4-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+  <version>3.22.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
   <packaging>jar</packaging>
   <name>Google Cloud Firestore</name>
   <url>https://github.com/googleapis/java-firestore</url>
@@ -12,7 +12,7 @@
   <parent>
     <groupId>com.google.cloud</groupId>
     <artifactId>google-cloud-firestore-parent</artifactId>
-    <version>3.21.4-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+    <version>3.22.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
   </parent>
   <properties>
     <site.installationModule>google-cloud-firestore</site.installationModule>
@@ -286,6 +286,24 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>flatten-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>2.43.0</version>
+        <configuration>
+          <kotlin>
+            <includes>
+              <include>src/main/java/**/*.kt</include>
+              <include>src/test/java/**/*.kt</include>
+            </includes>
+
+            <ktfmt>
+              <version>0.46</version> <!-- optional -->
+              <style>GOOGLE</style> <!-- optional, other options are DROPBOX, GOOGLE and KOTLINLANG -->
+            </ktfmt>
+          </kotlin>
+        </configuration>
       </plugin>
     </plugins>
   </build>

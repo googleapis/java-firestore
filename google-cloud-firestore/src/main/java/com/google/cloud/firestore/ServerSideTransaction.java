@@ -165,9 +165,9 @@ final class ServerSideTransaction extends Transaction {
           ApiFutures.transform(
               firestore.getAll(
                   new DocumentReference[] {documentRef},
-                  /*fieldMask=*/ null,
+                  /* fieldMask= */ null,
                   transactionId,
-                  /*readTime=*/ null),
+                  /* readTime= */ null),
               snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
               MoreExecutors.directExecutor());
       span.endAtFuture(result);
@@ -195,7 +195,7 @@ final class ServerSideTransaction extends Transaction {
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(
-              documentReferences, /*fieldMask=*/ null, transactionId, /*readTime=*/ null);
+              documentReferences, /* fieldMask =*/ null, transactionId, /* readTime =*/ null);
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
@@ -222,7 +222,7 @@ final class ServerSideTransaction extends Transaction {
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
-          firestore.getAll(documentReferences, fieldMask, transactionId, /*readTime=*/ null);
+          firestore.getAll(documentReferences, fieldMask, transactionId, /* readTime= */ null);
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
@@ -242,7 +242,7 @@ final class ServerSideTransaction extends Transaction {
   public ApiFuture<QuerySnapshot> get(@Nonnull Query query) {
     Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
     try (TraceUtil.Scope ignored = transactionTraceContext.makeCurrent()) {
-      return query.get(transactionId, /*readTime=*/ null);
+      return query.get(transactionId, /* readTime= */ null);
     }
   }
 

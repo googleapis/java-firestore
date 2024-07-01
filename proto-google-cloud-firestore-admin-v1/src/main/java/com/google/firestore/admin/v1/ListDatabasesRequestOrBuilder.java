@@ -54,4 +54,17 @@ public interface ListDatabasesRequestOrBuilder
    * @return The bytes for parent.
    */
   com.google.protobuf.ByteString getParentBytes();
+
+  /**
+   *
+   *
+   * <pre>
+   * If true, also returns deleted resources.
+   * </pre>
+   *
+   * <code>bool show_deleted = 4;</code>
+   *
+   * @return The showDeleted.
+   */
+  boolean getShowDeleted();
 }

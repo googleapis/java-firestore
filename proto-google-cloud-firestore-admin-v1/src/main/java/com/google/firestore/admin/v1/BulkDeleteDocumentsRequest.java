@@ -24,47 +24,54 @@ package com.google.firestore.admin.v1;
  *
  * <pre>
  * The request for
- * [FirestoreAdmin.ImportDocuments][google.firestore.admin.v1.FirestoreAdmin.ImportDocuments].
+ * [FirestoreAdmin.BulkDeleteDocuments][google.firestore.admin.v1.FirestoreAdmin.BulkDeleteDocuments].
+ *
+ * When both collection_ids and namespace_ids are set, only documents satisfying
+ * both conditions will be deleted.
+ *
+ * Requests with namespace_ids and collection_ids both empty will be rejected.
+ * Please use
+ * [FirestoreAdmin.DeleteDatabase][google.firestore.admin.v1.FirestoreAdmin.DeleteDatabase]
+ * instead.
  * </pre>
  *
- * Protobuf type {@code google.firestore.admin.v1.ImportDocumentsRequest}
+ * Protobuf type {@code google.firestore.admin.v1.BulkDeleteDocumentsRequest}
  */
-public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedMessageV3
+public final class BulkDeleteDocumentsRequest extends com.google.protobuf.GeneratedMessageV3
     implements
-    // @@protoc_insertion_point(message_implements:google.firestore.admin.v1.ImportDocumentsRequest)
-    ImportDocumentsRequestOrBuilder {
+    // @@protoc_insertion_point(message_implements:google.firestore.admin.v1.BulkDeleteDocumentsRequest)
+    BulkDeleteDocumentsRequestOrBuilder {
   private static final long serialVersionUID = 0L;
-  // Use ImportDocumentsRequest.newBuilder() to construct.
-  private ImportDocumentsRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use BulkDeleteDocumentsRequest.newBuilder() to construct.
+  private BulkDeleteDocumentsRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
 
-  private ImportDocumentsRequest() {
+  private BulkDeleteDocumentsRequest() {
     name_ = "";
     collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
-    inputUriPrefix_ = "";
     namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
-    return new ImportDocumentsRequest();
+    return new BulkDeleteDocumentsRequest();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return com.google.firestore.admin.v1.FirestoreAdminProto
-        .internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor;
+        .internal_static_google_firestore_admin_v1_BulkDeleteDocumentsRequest_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
     return com.google.firestore.admin.v1.FirestoreAdminProto
-        .internal_static_google_firestore_admin_v1_ImportDocumentsRequest_fieldAccessorTable
+        .internal_static_google_firestore_admin_v1_BulkDeleteDocumentsRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.google.firestore.admin.v1.ImportDocumentsRequest.class,
-            com.google.firestore.admin.v1.ImportDocumentsRequest.Builder.class);
+            com.google.firestore.admin.v1.BulkDeleteDocumentsRequest.class,
+            com.google.firestore.admin.v1.BulkDeleteDocumentsRequest.Builder.class);
   }
 
   public static final int NAME_FIELD_NUMBER = 1;
@@ -75,7 +82,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Required. Database to import into. Should be of the form:
+   * Required. Database to operate. Should be of the form:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
@@ -101,7 +108,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Required. Database to import into. Should be of the form:
+   * Required. Database to operate. Should be of the form:
    * `projects/{project_id}/databases/{database_id}`.
    * </pre>
    *
@@ -133,11 +140,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Which collection ids to import. Unspecified means all collections included
-   * in the import. Each collection id in this list must be unique.
+   * Optional. IDs of the collection groups to delete. Unspecified means all
+   * collection groups.
+   *
+   * Each collection group in this list must be unique.
    * </pre>
    *
-   * <code>repeated string collection_ids = 2;</code>
+   * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return A list containing the collectionIds.
    */
@@ -148,11 +157,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Which collection ids to import. Unspecified means all collections included
-   * in the import. Each collection id in this list must be unique.
+   * Optional. IDs of the collection groups to delete. Unspecified means all
+   * collection groups.
+   *
+   * Each collection group in this list must be unique.
    * </pre>
    *
-   * <code>repeated string collection_ids = 2;</code>
+   * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return The count of collectionIds.
    */
@@ -163,11 +174,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Which collection ids to import. Unspecified means all collections included
-   * in the import. Each collection id in this list must be unique.
+   * Optional. IDs of the collection groups to delete. Unspecified means all
+   * collection groups.
+   *
+   * Each collection group in this list must be unique.
    * </pre>
    *
-   * <code>repeated string collection_ids = 2;</code>
+   * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @param index The index of the element to return.
    * @return The collectionIds at the given index.
@@ -179,11 +192,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * Which collection ids to import. Unspecified means all collections included
-   * in the import. Each collection id in this list must be unique.
+   * Optional. IDs of the collection groups to delete. Unspecified means all
+   * collection groups.
+   *
+   * Each collection group in this list must be unique.
    * </pre>
    *
-   * <code>repeated string collection_ids = 2;</code>
+   * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @param index The index of the value to return.
    * @return The bytes of the collectionIds at the given index.
@@ -192,66 +207,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     return collectionIds_.getByteString(index);
   }
 
-  public static final int INPUT_URI_PREFIX_FIELD_NUMBER = 3;
-
-  @SuppressWarnings("serial")
-  private volatile java.lang.Object inputUriPrefix_ = "";
-  /**
-   *
-   *
-   * <pre>
-   * Location of the exported files.
-   * This must match the output_uri_prefix of an ExportDocumentsResponse from
-   * an export that has completed successfully.
-   * See:
-   * [google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix][google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix].
-   * </pre>
-   *
-   * <code>string input_uri_prefix = 3;</code>
-   *
-   * @return The inputUriPrefix.
-   */
-  @java.lang.Override
-  public java.lang.String getInputUriPrefix() {
-    java.lang.Object ref = inputUriPrefix_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      inputUriPrefix_ = s;
-      return s;
-    }
-  }
-  /**
-   *
-   *
-   * <pre>
-   * Location of the exported files.
-   * This must match the output_uri_prefix of an ExportDocumentsResponse from
-   * an export that has completed successfully.
-   * See:
-   * [google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix][google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix].
-   * </pre>
-   *
-   * <code>string input_uri_prefix = 3;</code>
-   *
-   * @return The bytes for inputUriPrefix.
-   */
-  @java.lang.Override
-  public com.google.protobuf.ByteString getInputUriPrefixBytes() {
-    java.lang.Object ref = inputUriPrefix_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b =
-          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-      inputUriPrefix_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int NAMESPACE_IDS_FIELD_NUMBER = 4;
+  public static final int NAMESPACE_IDS_FIELD_NUMBER = 3;
 
   @SuppressWarnings("serial")
   private com.google.protobuf.LazyStringArrayList namespaceIds_ =
@@ -260,15 +216,19 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * An empty list represents all namespaces. This is the preferred
+   * Optional. Namespaces to delete.
+   *
+   * An empty list means all namespaces. This is the recommended
    * usage for databases that don't use namespaces.
    *
    * An empty string element represents the default namespace. This should be
    * used if the database has data in non-default namespaces, but doesn't want
-   * to include them. Each namespace in this list must be unique.
+   * to delete from them.
+   *
+   * Each namespace in this list must be unique.
    * </pre>
    *
-   * <code>repeated string namespace_ids = 4;</code>
+   * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return A list containing the namespaceIds.
    */
@@ -279,15 +239,19 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * An empty list represents all namespaces. This is the preferred
+   * Optional. Namespaces to delete.
+   *
+   * An empty list means all namespaces. This is the recommended
    * usage for databases that don't use namespaces.
    *
    * An empty string element represents the default namespace. This should be
    * used if the database has data in non-default namespaces, but doesn't want
-   * to include them. Each namespace in this list must be unique.
+   * to delete from them.
+   *
+   * Each namespace in this list must be unique.
    * </pre>
    *
-   * <code>repeated string namespace_ids = 4;</code>
+   * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @return The count of namespaceIds.
    */
@@ -298,15 +262,19 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * An empty list represents all namespaces. This is the preferred
+   * Optional. Namespaces to delete.
+   *
+   * An empty list means all namespaces. This is the recommended
    * usage for databases that don't use namespaces.
    *
    * An empty string element represents the default namespace. This should be
    * used if the database has data in non-default namespaces, but doesn't want
-   * to include them. Each namespace in this list must be unique.
+   * to delete from them.
+   *
+   * Each namespace in this list must be unique.
    * </pre>
    *
-   * <code>repeated string namespace_ids = 4;</code>
+   * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @param index The index of the element to return.
    * @return The namespaceIds at the given index.
@@ -318,15 +286,19 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    *
    * <pre>
-   * An empty list represents all namespaces. This is the preferred
+   * Optional. Namespaces to delete.
+   *
+   * An empty list means all namespaces. This is the recommended
    * usage for databases that don't use namespaces.
    *
    * An empty string element represents the default namespace. This should be
    * used if the database has data in non-default namespaces, but doesn't want
-   * to include them. Each namespace in this list must be unique.
+   * to delete from them.
+   *
+   * Each namespace in this list must be unique.
    * </pre>
    *
-   * <code>repeated string namespace_ids = 4;</code>
+   * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
    *
    * @param index The index of the value to return.
    * @return The bytes of the namespaceIds at the given index.
@@ -355,11 +327,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     for (int i = 0; i < collectionIds_.size(); i++) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, collectionIds_.getRaw(i));
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(inputUriPrefix_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, inputUriPrefix_);
-    }
     for (int i = 0; i < namespaceIds_.size(); i++) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, namespaceIds_.getRaw(i));
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, namespaceIds_.getRaw(i));
     }
     getUnknownFields().writeTo(output);
   }
@@ -381,9 +350,6 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       size += dataSize;
       size += 1 * getCollectionIdsList().size();
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(inputUriPrefix_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, inputUriPrefix_);
-    }
     {
       int dataSize = 0;
       for (int i = 0; i < namespaceIds_.size(); i++) {
@@ -402,15 +368,14 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     if (obj == this) {
       return true;
     }
-    if (!(obj instanceof com.google.firestore.admin.v1.ImportDocumentsRequest)) {
+    if (!(obj instanceof com.google.firestore.admin.v1.BulkDeleteDocumentsRequest)) {
       return super.equals(obj);
     }
-    com.google.firestore.admin.v1.ImportDocumentsRequest other =
-        (com.google.firestore.admin.v1.ImportDocumentsRequest) obj;
+    com.google.firestore.admin.v1.BulkDeleteDocumentsRequest other =
+        (com.google.firestore.admin.v1.BulkDeleteDocumentsRequest) obj;
 
     if (!getName().equals(other.getName())) return false;
     if (!getCollectionIdsList().equals(other.getCollectionIdsList())) return false;
-    if (!getInputUriPrefix().equals(other.getInputUriPrefix())) return false;
     if (!getNamespaceIdsList().equals(other.getNamespaceIdsList())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
@@ -429,8 +394,6 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       hash = (37 * hash) + COLLECTION_IDS_FIELD_NUMBER;
       hash = (53 * hash) + getCollectionIdsList().hashCode();
     }
-    hash = (37 * hash) + INPUT_URI_PREFIX_FIELD_NUMBER;
-    hash = (53 * hash) + getInputUriPrefix().hashCode();
     if (getNamespaceIdsCount() > 0) {
       hash = (37 * hash) + NAMESPACE_IDS_FIELD_NUMBER;
       hash = (53 * hash) + getNamespaceIdsList().hashCode();
@@ -440,71 +403,71 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     return hash;
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest parseFrom(
       java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest parseFrom(
       java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(byte[] data)
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest parseFrom(
       byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest parseFrom(
       java.io.InputStream input) throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest parseFrom(
       java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
         PARSER, input, extensionRegistry);
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseDelimitedFrom(
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest parseDelimitedFrom(
       java.io.InputStream input) throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseDelimitedFrom(
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest parseDelimitedFrom(
       java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
         PARSER, input, extensionRegistry);
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest parseFrom(
       com.google.protobuf.CodedInputStream input) throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest parseFrom(
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -521,7 +484,8 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     return DEFAULT_INSTANCE.toBuilder();
   }
 
-  public static Builder newBuilder(com.google.firestore.admin.v1.ImportDocumentsRequest prototype) {
+  public static Builder newBuilder(
+      com.google.firestore.admin.v1.BulkDeleteDocumentsRequest prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
 
@@ -540,31 +504,39 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    * <pre>
    * The request for
-   * [FirestoreAdmin.ImportDocuments][google.firestore.admin.v1.FirestoreAdmin.ImportDocuments].
+   * [FirestoreAdmin.BulkDeleteDocuments][google.firestore.admin.v1.FirestoreAdmin.BulkDeleteDocuments].
+   *
+   * When both collection_ids and namespace_ids are set, only documents satisfying
+   * both conditions will be deleted.
+   *
+   * Requests with namespace_ids and collection_ids both empty will be rejected.
+   * Please use
+   * [FirestoreAdmin.DeleteDatabase][google.firestore.admin.v1.FirestoreAdmin.DeleteDatabase]
+   * instead.
    * </pre>
    *
-   * Protobuf type {@code google.firestore.admin.v1.ImportDocumentsRequest}
+   * Protobuf type {@code google.firestore.admin.v1.BulkDeleteDocumentsRequest}
    */
   public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
       implements
-      // @@protoc_insertion_point(builder_implements:google.firestore.admin.v1.ImportDocumentsRequest)
-      com.google.firestore.admin.v1.ImportDocumentsRequestOrBuilder {
+      // @@protoc_insertion_point(builder_implements:google.firestore.admin.v1.BulkDeleteDocumentsRequest)
+      com.google.firestore.admin.v1.BulkDeleteDocumentsRequestOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.google.firestore.admin.v1.FirestoreAdminProto
-          .internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor;
+          .internal_static_google_firestore_admin_v1_BulkDeleteDocumentsRequest_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return com.google.firestore.admin.v1.FirestoreAdminProto
-          .internal_static_google_firestore_admin_v1_ImportDocumentsRequest_fieldAccessorTable
+          .internal_static_google_firestore_admin_v1_BulkDeleteDocumentsRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.google.firestore.admin.v1.ImportDocumentsRequest.class,
-              com.google.firestore.admin.v1.ImportDocumentsRequest.Builder.class);
+              com.google.firestore.admin.v1.BulkDeleteDocumentsRequest.class,
+              com.google.firestore.admin.v1.BulkDeleteDocumentsRequest.Builder.class);
     }
 
-    // Construct using com.google.firestore.admin.v1.ImportDocumentsRequest.newBuilder()
+    // Construct using com.google.firestore.admin.v1.BulkDeleteDocumentsRequest.newBuilder()
     private Builder() {}
 
     private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
@@ -577,7 +549,6 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       bitField0_ = 0;
       name_ = "";
       collectionIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
-      inputUriPrefix_ = "";
       namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
       return this;
     }
@@ -585,17 +556,17 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
       return com.google.firestore.admin.v1.FirestoreAdminProto
-          .internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor;
+          .internal_static_google_firestore_admin_v1_BulkDeleteDocumentsRequest_descriptor;
     }
 
     @java.lang.Override
-    public com.google.firestore.admin.v1.ImportDocumentsRequest getDefaultInstanceForType() {
-      return com.google.firestore.admin.v1.ImportDocumentsRequest.getDefaultInstance();
+    public com.google.firestore.admin.v1.BulkDeleteDocumentsRequest getDefaultInstanceForType() {
+      return com.google.firestore.admin.v1.BulkDeleteDocumentsRequest.getDefaultInstance();
     }
 
     @java.lang.Override
-    public com.google.firestore.admin.v1.ImportDocumentsRequest build() {
-      com.google.firestore.admin.v1.ImportDocumentsRequest result = buildPartial();
+    public com.google.firestore.admin.v1.BulkDeleteDocumentsRequest build() {
+      com.google.firestore.admin.v1.BulkDeleteDocumentsRequest result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -603,9 +574,9 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     }
 
     @java.lang.Override
-    public com.google.firestore.admin.v1.ImportDocumentsRequest buildPartial() {
-      com.google.firestore.admin.v1.ImportDocumentsRequest result =
-          new com.google.firestore.admin.v1.ImportDocumentsRequest(this);
+    public com.google.firestore.admin.v1.BulkDeleteDocumentsRequest buildPartial() {
+      com.google.firestore.admin.v1.BulkDeleteDocumentsRequest result =
+          new com.google.firestore.admin.v1.BulkDeleteDocumentsRequest(this);
       if (bitField0_ != 0) {
         buildPartial0(result);
       }
@@ -613,7 +584,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       return result;
     }
 
-    private void buildPartial0(com.google.firestore.admin.v1.ImportDocumentsRequest result) {
+    private void buildPartial0(com.google.firestore.admin.v1.BulkDeleteDocumentsRequest result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.name_ = name_;
@@ -623,9 +594,6 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
         result.collectionIds_ = collectionIds_;
       }
       if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.inputUriPrefix_ = inputUriPrefix_;
-      }
-      if (((from_bitField0_ & 0x00000008) != 0)) {
         namespaceIds_.makeImmutable();
         result.namespaceIds_ = namespaceIds_;
       }
@@ -666,16 +634,16 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
 
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof com.google.firestore.admin.v1.ImportDocumentsRequest) {
-        return mergeFrom((com.google.firestore.admin.v1.ImportDocumentsRequest) other);
+      if (other instanceof com.google.firestore.admin.v1.BulkDeleteDocumentsRequest) {
+        return mergeFrom((com.google.firestore.admin.v1.BulkDeleteDocumentsRequest) other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(com.google.firestore.admin.v1.ImportDocumentsRequest other) {
-      if (other == com.google.firestore.admin.v1.ImportDocumentsRequest.getDefaultInstance())
+    public Builder mergeFrom(com.google.firestore.admin.v1.BulkDeleteDocumentsRequest other) {
+      if (other == com.google.firestore.admin.v1.BulkDeleteDocumentsRequest.getDefaultInstance())
         return this;
       if (!other.getName().isEmpty()) {
         name_ = other.name_;
@@ -692,15 +660,10 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
         }
         onChanged();
       }
-      if (!other.getInputUriPrefix().isEmpty()) {
-        inputUriPrefix_ = other.inputUriPrefix_;
-        bitField0_ |= 0x00000004;
-        onChanged();
-      }
       if (!other.namespaceIds_.isEmpty()) {
         if (namespaceIds_.isEmpty()) {
           namespaceIds_ = other.namespaceIds_;
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000004;
         } else {
           ensureNamespaceIdsIsMutable();
           namespaceIds_.addAll(other.namespaceIds_);
@@ -748,17 +711,11 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
               } // case 18
             case 26:
               {
-                inputUriPrefix_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000004;
-                break;
-              } // case 26
-            case 34:
-              {
                 java.lang.String s = input.readStringRequireUtf8();
                 ensureNamespaceIdsIsMutable();
                 namespaceIds_.add(s);
                 break;
-              } // case 34
+              } // case 26
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -783,7 +740,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Required. Database to import into. Should be of the form:
+     * Required. Database to operate. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
@@ -808,7 +765,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Required. Database to import into. Should be of the form:
+     * Required. Database to operate. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
@@ -833,7 +790,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Required. Database to import into. Should be of the form:
+     * Required. Database to operate. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
@@ -857,7 +814,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Required. Database to import into. Should be of the form:
+     * Required. Database to operate. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
@@ -877,7 +834,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Required. Database to import into. Should be of the form:
+     * Required. Database to operate. Should be of the form:
      * `projects/{project_id}/databases/{database_id}`.
      * </pre>
      *
@@ -912,11 +869,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to import. Unspecified means all collections included
-     * in the import. Each collection id in this list must be unique.
+     * Optional. IDs of the collection groups to delete. Unspecified means all
+     * collection groups.
+     *
+     * Each collection group in this list must be unique.
      * </pre>
      *
-     * <code>repeated string collection_ids = 2;</code>
+     * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return A list containing the collectionIds.
      */
@@ -928,11 +887,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to import. Unspecified means all collections included
-     * in the import. Each collection id in this list must be unique.
+     * Optional. IDs of the collection groups to delete. Unspecified means all
+     * collection groups.
+     *
+     * Each collection group in this list must be unique.
      * </pre>
      *
-     * <code>repeated string collection_ids = 2;</code>
+     * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return The count of collectionIds.
      */
@@ -943,11 +904,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to import. Unspecified means all collections included
-     * in the import. Each collection id in this list must be unique.
+     * Optional. IDs of the collection groups to delete. Unspecified means all
+     * collection groups.
+     *
+     * Each collection group in this list must be unique.
      * </pre>
      *
-     * <code>repeated string collection_ids = 2;</code>
+     * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param index The index of the element to return.
      * @return The collectionIds at the given index.
@@ -959,11 +922,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to import. Unspecified means all collections included
-     * in the import. Each collection id in this list must be unique.
+     * Optional. IDs of the collection groups to delete. Unspecified means all
+     * collection groups.
+     *
+     * Each collection group in this list must be unique.
      * </pre>
      *
-     * <code>repeated string collection_ids = 2;</code>
+     * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param index The index of the value to return.
      * @return The bytes of the collectionIds at the given index.
@@ -975,11 +940,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to import. Unspecified means all collections included
-     * in the import. Each collection id in this list must be unique.
+     * Optional. IDs of the collection groups to delete. Unspecified means all
+     * collection groups.
+     *
+     * Each collection group in this list must be unique.
      * </pre>
      *
-     * <code>repeated string collection_ids = 2;</code>
+     * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param index The index to set the value at.
      * @param value The collectionIds to set.
@@ -999,11 +966,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to import. Unspecified means all collections included
-     * in the import. Each collection id in this list must be unique.
+     * Optional. IDs of the collection groups to delete. Unspecified means all
+     * collection groups.
+     *
+     * Each collection group in this list must be unique.
      * </pre>
      *
-     * <code>repeated string collection_ids = 2;</code>
+     * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param value The collectionIds to add.
      * @return This builder for chaining.
@@ -1022,11 +991,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to import. Unspecified means all collections included
-     * in the import. Each collection id in this list must be unique.
+     * Optional. IDs of the collection groups to delete. Unspecified means all
+     * collection groups.
+     *
+     * Each collection group in this list must be unique.
      * </pre>
      *
-     * <code>repeated string collection_ids = 2;</code>
+     * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param values The collectionIds to add.
      * @return This builder for chaining.
@@ -1042,11 +1013,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to import. Unspecified means all collections included
-     * in the import. Each collection id in this list must be unique.
+     * Optional. IDs of the collection groups to delete. Unspecified means all
+     * collection groups.
+     *
+     * Each collection group in this list must be unique.
      * </pre>
      *
-     * <code>repeated string collection_ids = 2;</code>
+     * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return This builder for chaining.
      */
@@ -1061,11 +1034,13 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * Which collection ids to import. Unspecified means all collections included
-     * in the import. Each collection id in this list must be unique.
+     * Optional. IDs of the collection groups to delete. Unspecified means all
+     * collection groups.
+     *
+     * Each collection group in this list must be unique.
      * </pre>
      *
-     * <code>repeated string collection_ids = 2;</code>
+     * <code>repeated string collection_ids = 2 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param value The bytes of the collectionIds to add.
      * @return This builder for chaining.
@@ -1082,132 +1057,6 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       return this;
     }
 
-    private java.lang.Object inputUriPrefix_ = "";
-    /**
-     *
-     *
-     * <pre>
-     * Location of the exported files.
-     * This must match the output_uri_prefix of an ExportDocumentsResponse from
-     * an export that has completed successfully.
-     * See:
-     * [google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix][google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix].
-     * </pre>
-     *
-     * <code>string input_uri_prefix = 3;</code>
-     *
-     * @return The inputUriPrefix.
-     */
-    public java.lang.String getInputUriPrefix() {
-      java.lang.Object ref = inputUriPrefix_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        inputUriPrefix_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     *
-     *
-     * <pre>
-     * Location of the exported files.
-     * This must match the output_uri_prefix of an ExportDocumentsResponse from
-     * an export that has completed successfully.
-     * See:
-     * [google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix][google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix].
-     * </pre>
-     *
-     * <code>string input_uri_prefix = 3;</code>
-     *
-     * @return The bytes for inputUriPrefix.
-     */
-    public com.google.protobuf.ByteString getInputUriPrefixBytes() {
-      java.lang.Object ref = inputUriPrefix_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-        inputUriPrefix_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     *
-     *
-     * <pre>
-     * Location of the exported files.
-     * This must match the output_uri_prefix of an ExportDocumentsResponse from
-     * an export that has completed successfully.
-     * See:
-     * [google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix][google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix].
-     * </pre>
-     *
-     * <code>string input_uri_prefix = 3;</code>
-     *
-     * @param value The inputUriPrefix to set.
-     * @return This builder for chaining.
-     */
-    public Builder setInputUriPrefix(java.lang.String value) {
-      if (value == null) {
-        throw new NullPointerException();
-      }
-      inputUriPrefix_ = value;
-      bitField0_ |= 0x00000004;
-      onChanged();
-      return this;
-    }
-    /**
-     *
-     *
-     * <pre>
-     * Location of the exported files.
-     * This must match the output_uri_prefix of an ExportDocumentsResponse from
-     * an export that has completed successfully.
-     * See:
-     * [google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix][google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix].
-     * </pre>
-     *
-     * <code>string input_uri_prefix = 3;</code>
-     *
-     * @return This builder for chaining.
-     */
-    public Builder clearInputUriPrefix() {
-      inputUriPrefix_ = getDefaultInstance().getInputUriPrefix();
-      bitField0_ = (bitField0_ & ~0x00000004);
-      onChanged();
-      return this;
-    }
-    /**
-     *
-     *
-     * <pre>
-     * Location of the exported files.
-     * This must match the output_uri_prefix of an ExportDocumentsResponse from
-     * an export that has completed successfully.
-     * See:
-     * [google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix][google.firestore.admin.v1.ExportDocumentsResponse.output_uri_prefix].
-     * </pre>
-     *
-     * <code>string input_uri_prefix = 3;</code>
-     *
-     * @param value The bytes for inputUriPrefix to set.
-     * @return This builder for chaining.
-     */
-    public Builder setInputUriPrefixBytes(com.google.protobuf.ByteString value) {
-      if (value == null) {
-        throw new NullPointerException();
-      }
-      checkByteStringIsUtf8(value);
-      inputUriPrefix_ = value;
-      bitField0_ |= 0x00000004;
-      onChanged();
-      return this;
-    }
-
     private com.google.protobuf.LazyStringArrayList namespaceIds_ =
         com.google.protobuf.LazyStringArrayList.emptyList();
 
@@ -1215,21 +1064,25 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       if (!namespaceIds_.isModifiable()) {
         namespaceIds_ = new com.google.protobuf.LazyStringArrayList(namespaceIds_);
       }
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000004;
     }
     /**
      *
      *
      * <pre>
-     * An empty list represents all namespaces. This is the preferred
+     * Optional. Namespaces to delete.
+     *
+     * An empty list means all namespaces. This is the recommended
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
      * used if the database has data in non-default namespaces, but doesn't want
-     * to include them. Each namespace in this list must be unique.
+     * to delete from them.
+     *
+     * Each namespace in this list must be unique.
      * </pre>
      *
-     * <code>repeated string namespace_ids = 4;</code>
+     * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return A list containing the namespaceIds.
      */
@@ -1241,15 +1094,19 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * An empty list represents all namespaces. This is the preferred
+     * Optional. Namespaces to delete.
+     *
+     * An empty list means all namespaces. This is the recommended
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
      * used if the database has data in non-default namespaces, but doesn't want
-     * to include them. Each namespace in this list must be unique.
+     * to delete from them.
+     *
+     * Each namespace in this list must be unique.
      * </pre>
      *
-     * <code>repeated string namespace_ids = 4;</code>
+     * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return The count of namespaceIds.
      */
@@ -1260,15 +1117,19 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * An empty list represents all namespaces. This is the preferred
+     * Optional. Namespaces to delete.
+     *
+     * An empty list means all namespaces. This is the recommended
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
      * used if the database has data in non-default namespaces, but doesn't want
-     * to include them. Each namespace in this list must be unique.
+     * to delete from them.
+     *
+     * Each namespace in this list must be unique.
      * </pre>
      *
-     * <code>repeated string namespace_ids = 4;</code>
+     * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param index The index of the element to return.
      * @return The namespaceIds at the given index.
@@ -1280,15 +1141,19 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * An empty list represents all namespaces. This is the preferred
+     * Optional. Namespaces to delete.
+     *
+     * An empty list means all namespaces. This is the recommended
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
      * used if the database has data in non-default namespaces, but doesn't want
-     * to include them. Each namespace in this list must be unique.
+     * to delete from them.
+     *
+     * Each namespace in this list must be unique.
      * </pre>
      *
-     * <code>repeated string namespace_ids = 4;</code>
+     * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param index The index of the value to return.
      * @return The bytes of the namespaceIds at the given index.
@@ -1300,15 +1165,19 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * An empty list represents all namespaces. This is the preferred
+     * Optional. Namespaces to delete.
+     *
+     * An empty list means all namespaces. This is the recommended
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
      * used if the database has data in non-default namespaces, but doesn't want
-     * to include them. Each namespace in this list must be unique.
+     * to delete from them.
+     *
+     * Each namespace in this list must be unique.
      * </pre>
      *
-     * <code>repeated string namespace_ids = 4;</code>
+     * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param index The index to set the value at.
      * @param value The namespaceIds to set.
@@ -1320,7 +1189,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       }
       ensureNamespaceIdsIsMutable();
       namespaceIds_.set(index, value);
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1328,15 +1197,19 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * An empty list represents all namespaces. This is the preferred
+     * Optional. Namespaces to delete.
+     *
+     * An empty list means all namespaces. This is the recommended
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
      * used if the database has data in non-default namespaces, but doesn't want
-     * to include them. Each namespace in this list must be unique.
+     * to delete from them.
+     *
+     * Each namespace in this list must be unique.
      * </pre>
      *
-     * <code>repeated string namespace_ids = 4;</code>
+     * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param value The namespaceIds to add.
      * @return This builder for chaining.
@@ -1347,7 +1220,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       }
       ensureNamespaceIdsIsMutable();
       namespaceIds_.add(value);
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1355,15 +1228,19 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * An empty list represents all namespaces. This is the preferred
+     * Optional. Namespaces to delete.
+     *
+     * An empty list means all namespaces. This is the recommended
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
      * used if the database has data in non-default namespaces, but doesn't want
-     * to include them. Each namespace in this list must be unique.
+     * to delete from them.
+     *
+     * Each namespace in this list must be unique.
      * </pre>
      *
-     * <code>repeated string namespace_ids = 4;</code>
+     * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param values The namespaceIds to add.
      * @return This builder for chaining.
@@ -1371,7 +1248,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
     public Builder addAllNamespaceIds(java.lang.Iterable<java.lang.String> values) {
       ensureNamespaceIdsIsMutable();
       com.google.protobuf.AbstractMessageLite.Builder.addAll(values, namespaceIds_);
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1379,21 +1256,25 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * An empty list represents all namespaces. This is the preferred
+     * Optional. Namespaces to delete.
+     *
+     * An empty list means all namespaces. This is the recommended
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
      * used if the database has data in non-default namespaces, but doesn't want
-     * to include them. Each namespace in this list must be unique.
+     * to delete from them.
+     *
+     * Each namespace in this list must be unique.
      * </pre>
      *
-     * <code>repeated string namespace_ids = 4;</code>
+     * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @return This builder for chaining.
      */
     public Builder clearNamespaceIds() {
       namespaceIds_ = com.google.protobuf.LazyStringArrayList.emptyList();
-      bitField0_ = (bitField0_ & ~0x00000008);
+      bitField0_ = (bitField0_ & ~0x00000004);
       ;
       onChanged();
       return this;
@@ -1402,15 +1283,19 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      *
      * <pre>
-     * An empty list represents all namespaces. This is the preferred
+     * Optional. Namespaces to delete.
+     *
+     * An empty list means all namespaces. This is the recommended
      * usage for databases that don't use namespaces.
      *
      * An empty string element represents the default namespace. This should be
      * used if the database has data in non-default namespaces, but doesn't want
-     * to include them. Each namespace in this list must be unique.
+     * to delete from them.
+     *
+     * Each namespace in this list must be unique.
      * </pre>
      *
-     * <code>repeated string namespace_ids = 4;</code>
+     * <code>repeated string namespace_ids = 3 [(.google.api.field_behavior) = OPTIONAL];</code>
      *
      * @param value The bytes of the namespaceIds to add.
      * @return This builder for chaining.
@@ -1422,7 +1307,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       checkByteStringIsUtf8(value);
       ensureNamespaceIdsIsMutable();
       namespaceIds_.add(value);
-      bitField0_ |= 0x00000008;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }
@@ -1438,24 +1323,24 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
       return super.mergeUnknownFields(unknownFields);
     }
 
-    // @@protoc_insertion_point(builder_scope:google.firestore.admin.v1.ImportDocumentsRequest)
+    // @@protoc_insertion_point(builder_scope:google.firestore.admin.v1.BulkDeleteDocumentsRequest)
   }
 
-  // @@protoc_insertion_point(class_scope:google.firestore.admin.v1.ImportDocumentsRequest)
-  private static final com.google.firestore.admin.v1.ImportDocumentsRequest DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:google.firestore.admin.v1.BulkDeleteDocumentsRequest)
+  private static final com.google.firestore.admin.v1.BulkDeleteDocumentsRequest DEFAULT_INSTANCE;
 
   static {
-    DEFAULT_INSTANCE = new com.google.firestore.admin.v1.ImportDocumentsRequest();
+    DEFAULT_INSTANCE = new com.google.firestore.admin.v1.BulkDeleteDocumentsRequest();
   }
 
-  public static com.google.firestore.admin.v1.ImportDocumentsRequest getDefaultInstance() {
+  public static com.google.firestore.admin.v1.BulkDeleteDocumentsRequest getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ImportDocumentsRequest> PARSER =
-      new com.google.protobuf.AbstractParser<ImportDocumentsRequest>() {
+  private static final com.google.protobuf.Parser<BulkDeleteDocumentsRequest> PARSER =
+      new com.google.protobuf.AbstractParser<BulkDeleteDocumentsRequest>() {
         @java.lang.Override
-        public ImportDocumentsRequest parsePartialFrom(
+        public BulkDeleteDocumentsRequest parsePartialFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1474,17 +1359,17 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
         }
       };
 
-  public static com.google.protobuf.Parser<ImportDocumentsRequest> parser() {
+  public static com.google.protobuf.Parser<BulkDeleteDocumentsRequest> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ImportDocumentsRequest> getParserForType() {
+  public com.google.protobuf.Parser<BulkDeleteDocumentsRequest> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.firestore.admin.v1.ImportDocumentsRequest getDefaultInstanceForType() {
+  public com.google.firestore.admin.v1.BulkDeleteDocumentsRequest getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 }

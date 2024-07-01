@@ -53,6 +53,10 @@ public final class OperationProto {
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_admin_v1_ImportDocumentsMetadata_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_BulkDeleteDocumentsMetadata_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_BulkDeleteDocumentsMetadata_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
       internal_static_google_firestore_admin_v1_ExportDocumentsResponse_descriptor;
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_admin_v1_ExportDocumentsResponse_fieldAccessorTable;
@@ -129,28 +133,39 @@ public final class OperationProto {
           + "s_bytes\030\005 \001(\0132#.google.firestore.admin.v"
           + "1.Progress\022\026\n\016collection_ids\030\006 \003(\t\022\030\n\020in"
           + "put_uri_prefix\030\007 \001(\t\022\025\n\rnamespace_ids\030\010 "
-          + "\003(\t\"4\n\027ExportDocumentsResponse\022\031\n\021output"
-          + "_uri_prefix\030\001 \001(\t\"\355\002\n\027RestoreDatabaseMet"
-          + "adata\022.\n\nstart_time\030\001 \001(\0132\032.google.proto"
-          + "buf.Timestamp\022,\n\010end_time\030\002 \001(\0132\032.google"
-          + ".protobuf.Timestamp\022B\n\017operation_state\030\003"
-          + " \001(\0162).google.firestore.admin.v1.Operati"
-          + "onState\0228\n\010database\030\004 \001(\tB&\372A#\n!firestor"
-          + "e.googleapis.com/Database\0224\n\006backup\030\005 \001("
-          + "\tB$\372A!\n\037firestore.googleapis.com/Backup\022"
-          + "@\n\023progress_percentage\030\010 \001(\0132#.google.fi"
-          + "restore.admin.v1.Progress\":\n\010Progress\022\026\n"
-          + "\016estimated_work\030\001 \001(\003\022\026\n\016completed_work\030"
-          + "\002 \001(\003*\236\001\n\016OperationState\022\037\n\033OPERATION_ST"
-          + "ATE_UNSPECIFIED\020\000\022\020\n\014INITIALIZING\020\001\022\016\n\nP"
-          + "ROCESSING\020\002\022\016\n\nCANCELLING\020\003\022\016\n\nFINALIZIN"
-          + "G\020\004\022\016\n\nSUCCESSFUL\020\005\022\n\n\006FAILED\020\006\022\r\n\tCANCE"
-          + "LLED\020\007B\335\001\n\035com.google.firestore.admin.v1"
-          + "B\016OperationProtoP\001Z9cloud.google.com/go/"
-          + "firestore/apiv1/admin/adminpb;adminpb\242\002\004"
-          + "GCFS\252\002\037Google.Cloud.Firestore.Admin.V1\312\002"
-          + "\037Google\\Cloud\\Firestore\\Admin\\V1\352\002#Googl"
-          + "e::Cloud::Firestore::Admin::V1b\006proto3"
+          + "\003(\t\"\237\003\n\033BulkDeleteDocumentsMetadata\022.\n\ns"
+          + "tart_time\030\001 \001(\0132\032.google.protobuf.Timest"
+          + "amp\022,\n\010end_time\030\002 \001(\0132\032.google.protobuf."
+          + "Timestamp\022B\n\017operation_state\030\003 \001(\0162).goo"
+          + "gle.firestore.admin.v1.OperationState\022?\n"
+          + "\022progress_documents\030\004 \001(\0132#.google.fires"
+          + "tore.admin.v1.Progress\022;\n\016progress_bytes"
+          + "\030\005 \001(\0132#.google.firestore.admin.v1.Progr"
+          + "ess\022\026\n\016collection_ids\030\006 \003(\t\022\025\n\rnamespace"
+          + "_ids\030\007 \003(\t\0221\n\rsnapshot_time\030\010 \001(\0132\032.goog"
+          + "le.protobuf.Timestamp\"4\n\027ExportDocuments"
+          + "Response\022\031\n\021output_uri_prefix\030\001 \001(\t\"\355\002\n\027"
+          + "RestoreDatabaseMetadata\022.\n\nstart_time\030\001 "
+          + "\001(\0132\032.google.protobuf.Timestamp\022,\n\010end_t"
+          + "ime\030\002 \001(\0132\032.google.protobuf.Timestamp\022B\n"
+          + "\017operation_state\030\003 \001(\0162).google.firestor"
+          + "e.admin.v1.OperationState\0228\n\010database\030\004 "
+          + "\001(\tB&\372A#\n!firestore.googleapis.com/Datab"
+          + "ase\0224\n\006backup\030\005 \001(\tB$\372A!\n\037firestore.goog"
+          + "leapis.com/Backup\022@\n\023progress_percentage"
+          + "\030\010 \001(\0132#.google.firestore.admin.v1.Progr"
+          + "ess\":\n\010Progress\022\026\n\016estimated_work\030\001 \001(\003\022"
+          + "\026\n\016completed_work\030\002 \001(\003*\236\001\n\016OperationSta"
+          + "te\022\037\n\033OPERATION_STATE_UNSPECIFIED\020\000\022\020\n\014I"
+          + "NITIALIZING\020\001\022\016\n\nPROCESSING\020\002\022\016\n\nCANCELL"
+          + "ING\020\003\022\016\n\nFINALIZING\020\004\022\016\n\nSUCCESSFUL\020\005\022\n\n"
+          + "\006FAILED\020\006\022\r\n\tCANCELLED\020\007B\335\001\n\035com.google."
+          + "firestore.admin.v1B\016OperationProtoP\001Z9cl"
+          + "oud.google.com/go/firestore/apiv1/admin/"
+          + "adminpb;adminpb\242\002\004GCFS\252\002\037Google.Cloud.Fi"
+          + "restore.Admin.V1\312\002\037Google\\Cloud\\Firestor"
+          + "e\\Admin\\V1\352\002#Google::Cloud::Firestore::A"
+          + "dmin::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -234,8 +249,23 @@ public final class OperationProto {
               "InputUriPrefix",
               "NamespaceIds",
             });
-    internal_static_google_firestore_admin_v1_ExportDocumentsResponse_descriptor =
+    internal_static_google_firestore_admin_v1_BulkDeleteDocumentsMetadata_descriptor =
         getDescriptor().getMessageTypes().get(4);
+    internal_static_google_firestore_admin_v1_BulkDeleteDocumentsMetadata_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_BulkDeleteDocumentsMetadata_descriptor,
+            new java.lang.String[] {
+              "StartTime",
+              "EndTime",
+              "OperationState",
+              "ProgressDocuments",
+              "ProgressBytes",
+              "CollectionIds",
+              "NamespaceIds",
+              "SnapshotTime",
+            });
+    internal_static_google_firestore_admin_v1_ExportDocumentsResponse_descriptor =
+        getDescriptor().getMessageTypes().get(5);
     internal_static_google_firestore_admin_v1_ExportDocumentsResponse_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ExportDocumentsResponse_descriptor,
@@ -243,7 +273,7 @@ public final class OperationProto {
               "OutputUriPrefix",
             });
     internal_static_google_firestore_admin_v1_RestoreDatabaseMetadata_descriptor =
-        getDescriptor().getMessageTypes().get(5);
+        getDescriptor().getMessageTypes().get(6);
     internal_static_google_firestore_admin_v1_RestoreDatabaseMetadata_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_RestoreDatabaseMetadata_descriptor,
@@ -251,7 +281,7 @@ public final class OperationProto {
               "StartTime", "EndTime", "OperationState", "Database", "Backup", "ProgressPercentage",
             });
     internal_static_google_firestore_admin_v1_Progress_descriptor =
-        getDescriptor().getMessageTypes().get(6);
+        getDescriptor().getMessageTypes().get(7);
     internal_static_google_firestore_admin_v1_Progress_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_Progress_descriptor,
