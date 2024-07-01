@@ -288,6 +288,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
         Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
 
     if (isUsingGlobalOpenTelemetrySDK()) {
+      GlobalOpenTelemetry.resetForTest();
       openTelemetrySdk =
           OpenTelemetrySdk.builder()
               .setTracerProvider(
@@ -363,9 +364,6 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
 
   @After
   public void after() throws Exception {
-    if (isUsingGlobalOpenTelemetrySDK()) {
-      GlobalOpenTelemetry.resetForTest();
-    }
     firestore.shutdown();
     rootSpanName = null;
     tracer = null;
