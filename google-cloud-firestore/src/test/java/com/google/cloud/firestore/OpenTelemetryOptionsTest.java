@@ -26,11 +26,8 @@ import io.opentelemetry.sdk.OpenTelemetrySdk;
 import javax.annotation.Nullable;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-// TODO(tracing): Re-enable this test when the tracing feature is enabled.
-@Ignore
 public class OpenTelemetryOptionsTest {
   @Nullable private Firestore firestore;
 
