@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 
 /** A Firestore Service exception. */
 public class FirestoreException extends BaseGrpcServiceException {
-  private Status status;
+  private final Status status;
 
   FirestoreException(String reason, Status status) {
     this(reason, status, null);
@@ -33,8 +33,12 @@ public class FirestoreException extends BaseGrpcServiceException {
 
   private FirestoreException(String reason, Status status, @Nullable Throwable cause) {
     super(reason, cause, status.getCode().value(), false);
-
     this.status = status;
+  }
+
+  FirestoreException(InterruptedException cause) {
+    super("Executing thread was interrupted", cause, Status.ABORTED.getCode().value(), true);
+    this.status = Status.ABORTED;
   }
 
   private FirestoreException(String reason, ApiException exception) {
@@ -43,10 +47,12 @@ public class FirestoreException extends BaseGrpcServiceException {
         exception,
         exception.getStatusCode().getCode().getHttpStatusCode(),
         exception.isRetryable());
+    this.status = null;
   }
 
   private FirestoreException(IOException exception, boolean retryable) {
     super(exception, retryable);
+    this.status = null;
   }
 
   /**

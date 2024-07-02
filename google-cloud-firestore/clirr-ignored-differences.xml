@@ -210,6 +210,11 @@
     <method>com.google.cloud.firestore.BulkWriter bulkWriter(*)</method>
   </difference>
   <difference>
+    <differenceType>7013</differenceType>
+    <className>com/google/cloud/firestore/BulkWriterOptions</className>
+    <method>java.lang.Integer getMaxPendingOps()</method>
+  </difference>
+  <difference>
     <differenceType>7006</differenceType>
     <className>com/google/cloud/firestore/UpdateBuilder</className>
     <method>com.google.cloud.firestore.UpdateBuilder create(*)</method>
