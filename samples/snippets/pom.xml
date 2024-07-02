@@ -48,6 +48,10 @@
     </dependency>
     <!-- [END firestore_install_with_bom] -->
 
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-firestore-admin</artifactId>
+    </dependency>
     <!--  used for beam samples-->
     <dependency>
       <groupId>org.apache.beam</groupId>
