@@ -1,5 +1,6 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
+import com.google.cloud.firestore.DocumentReference;
 import com.google.common.collect.Lists;
 import com.google.firestore.v1.Value;
 import java.util.Arrays;
@@ -26,6 +27,86 @@ public class Function implements Expr {
                         .map(FunctionUtils::exprToValue)
                         .collect(Collectors.toList())))
         .build();
+  }
+
+  public static CollectionId collectionId(String path) {
+    return new CollectionId(Constant.of(path));
+  }
+
+  public static CollectionId collectionId(DocumentReference ref) {
+    return new CollectionId(Constant.of(ref.getPath()));
+  }
+
+  public static Parent parent(String path) {
+    return new Parent(Constant.of(path));
+  }
+
+  public static Parent parent(DocumentReference ref) {
+    return new Parent(Constant.of(ref.getPath()));
+  }
+
+  public static Add add(Expr left, Expr right) {
+    return new Add(left, right);
+  }
+
+  public static Add add(Expr left, Object right) {
+    return new Add(left, Constant.of(right));
+  }
+
+  public static Add add(String left, Expr right) {
+    return new Add(Field.of(left), right);
+  }
+
+  public static Add add(String left, Object right) {
+    return new Add(Field.of(left), Constant.of(right));
+  }
+
+  public static Subtract subtract(Expr left, Expr right) {
+    return new Subtract(left, right);
+  }
+
+  public static Subtract subtract(Expr left, Object right) {
+    return new Subtract(left, Constant.of(right));
+  }
+
+  public static Subtract subtract(String left, Expr right) {
+    return new Subtract(Field.of(left), right);
+  }
+
+  public static Subtract subtract(String left, Object right) {
+    return new Subtract(Field.of(left), Constant.of(right));
+  }
+
+  public static Multiply multiply(Expr left, Expr right) {
+    return new Multiply(left, right);
+  }
+
+  public static Multiply multiply(Expr left, Object right) {
+    return new Multiply(left, Constant.of(right));
+  }
+
+  public static Multiply multiply(String left, Expr right) {
+    return new Multiply(Field.of(left), right);
+  }
+
+  public static Multiply multiply(String left, Object right) {
+    return new Multiply(Field.of(left), Constant.of(right));
+  }
+
+  public static Divide divide(Expr left, Expr right) {
+    return new Divide(left, right);
+  }
+
+  public static Divide divide(Expr left, Object right) {
+    return new Divide(left, Constant.of(right));
+  }
+
+  public static Divide divide(String left, Expr right) {
+    return new Divide(Field.of(left), right);
+  }
+
+  public static Divide divide(String left, Object right) {
+    return new Divide(Field.of(left), Constant.of(right));
   }
 
   public static Equal equal(Expr left, Expr right) {
@@ -124,6 +205,14 @@ public class Function implements Expr {
     return new LessThanOrEqual(Field.of(left), Constant.of(right));
   }
 
+  public static Exists exists(String field) {
+    return new Exists(Field.of(field));
+  }
+
+  public static Exists exists(Field field) {
+    return new Exists(field);
+  }
+
   public static In inAny(Expr left, List<Object> values) {
     List<Expr> othersAsExpr =
         values.stream()
@@ -164,6 +253,42 @@ public class Function implements Expr {
     return new Or(conditions);
   }
 
+  public static Xor xor(FilterCondition left, FilterCondition right) {
+    return new Xor(Lists.newArrayList(left, right));
+  }
+
+  public static Xor xor(FilterCondition left, FilterCondition... other) {
+    List<FilterCondition> conditions = Lists.newArrayList(left);
+    conditions.addAll(Arrays.asList(other));
+    return new Xor(conditions);
+  }
+
+  public static If ifThen(FilterCondition condition, Expr thenExpr) {
+    return new If(condition, thenExpr, null);
+  }
+
+  public static If ifThenElse(FilterCondition condition, Expr thenExpr, Expr elseExpr) {
+    return new If(condition, thenExpr, elseExpr);
+  }
+
+  public static ArrayConcat arrayConcat(Expr expr, Expr... elements) {
+    return new ArrayConcat(expr, Arrays.asList(elements));
+  }
+
+  public static ArrayConcat arrayConcat(Expr expr, Object... elements) {
+    return new ArrayConcat(
+        expr, Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+  }
+
+  public static ArrayConcat arrayConcat(String field, Expr... elements) {
+    return new ArrayConcat(Field.of(field), Arrays.asList(elements));
+  }
+
+  public static ArrayConcat arrayConcat(String field, Object... elements) {
+    return new ArrayConcat(
+        Field.of(field), Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+  }
+
   public static ArrayContains arrayContains(Expr expr, Expr element) {
     return new ArrayContains(expr, element);
   }
@@ -178,6 +303,24 @@ public class Function implements Expr {
 
   public static ArrayContains arrayContains(String field, Object element) {
     return new ArrayContains(Field.of(field), Constant.of(element));
+  }
+
+  public static ArrayContainsAll arrayContainsAll(Expr expr, Expr... elements) {
+    return new ArrayContainsAll(expr, Arrays.asList(elements));
+  }
+
+  public static ArrayContainsAll arrayContainsAll(Expr expr, Object... elements) {
+    return new ArrayContainsAll(
+        expr, Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+  }
+
+  public static ArrayContainsAll arrayContainsAll(String field, Expr... elements) {
+    return new ArrayContainsAll(Field.of(field), Arrays.asList(elements));
+  }
+
+  public static ArrayContainsAll arrayContainsAll(String field, Object... elements) {
+    return new ArrayContainsAll(
+        Field.of(field), Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
   }
 
   public static ArrayContainsAny arrayContainsAny(Expr expr, Expr... elements) {
@@ -196,6 +339,96 @@ public class Function implements Expr {
   public static ArrayContainsAny arrayContainsAny(String field, Object... elements) {
     return new ArrayContainsAny(
         Field.of(field), Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+  }
+
+  public static ArrayFilter arrayFilter(Expr expr, FilterCondition filter) {
+    return new ArrayFilter(expr, filter);
+  }
+
+  public static ArrayFilter arrayFilter(String field, FilterCondition filter) {
+    return new ArrayFilter(Field.of(field), filter);
+  }
+
+  public static ArrayLength arrayLength(Expr expr) {
+    return new ArrayLength(expr);
+  }
+
+  public static ArrayLength arrayLength(String field) {
+    return new ArrayLength(Field.of(field));
+  }
+
+  public static ArrayTransform arrayTransform(Expr expr, Function transform) {
+    return new ArrayTransform(expr, transform);
+  }
+
+  public static ArrayTransform arrayTransform(String field, Function transform) {
+    return new ArrayTransform(Field.of(field), transform);
+  }
+
+  public static Length length(Expr expr) {
+    return new Length(expr);
+  }
+
+  public static Length length(String field) {
+    return new Length(Field.of(field));
+  }
+
+  public static Like like(Expr expr, String pattern) {
+    return new Like(expr, Constant.of(pattern));
+  }
+
+  public static Like like(String field, String pattern) {
+    return new Like(Field.of(field), Constant.of(pattern));
+  }
+
+  public static RegexContains regexContains(Expr expr, String pattern) {
+    return new RegexContains(expr, Constant.of(pattern));
+  }
+
+  public static RegexContains regexContains(String field, String pattern) {
+    return new RegexContains(Field.of(field), Constant.of(pattern));
+  }
+
+  public static StrConcat strConcat(Expr expr, Expr... elements) {
+    return new StrConcat(expr, Arrays.asList(elements));
+  }
+
+  public static StrConcat strConcat(Expr expr, Object... elements) {
+    return new StrConcat(
+        expr, Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+  }
+
+  public static StrConcat strConcat(String field, Expr... elements) {
+    return new StrConcat(Field.of(field), Arrays.asList(elements));
+  }
+
+  public static StrConcat strConcat(String field, Object... elements) {
+    return new StrConcat(
+        Field.of(field), Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+  }
+
+  public static ToLowercase toLowercase(Expr expr) {
+    return new ToLowercase(expr);
+  }
+
+  public static ToLowercase toLowercase(String field) {
+    return new ToLowercase(Field.of(field));
+  }
+
+  public static ToUppercase toUppercase(Expr expr) {
+    return new ToUppercase(expr);
+  }
+
+  public static ToUppercase toUppercase(String field) {
+    return new ToUppercase(Field.of(field));
+  }
+
+  public static Trim trim(Expr expr) {
+    return new Trim(expr);
+  }
+
+  public static Trim trim(String field) {
+    return new Trim(Field.of(field));
   }
 
   public static IsNaN isNaN(Expr expr) {
@@ -258,6 +491,10 @@ public class Function implements Expr {
     return new Count(Field.of(field), false);
   }
 
+  public static CountIf countIf(FilterCondition condition) {
+    return new CountIf(condition, false);
+  }
+
   public static Count countAll() {
     return new Count(null, false);
   }
@@ -309,6 +546,10 @@ public class Function implements Expr {
 
   public static EuclideanDistance euclideanDistance(String field, double[] other) {
     return new EuclideanDistance(Field.of(field), Constant.ofVector(other));
+  }
+
+  public static ArrayElement arrayElement() {
+    return new ArrayElement();
   }
 
   public static Function function(String name, List<Expr> params) {

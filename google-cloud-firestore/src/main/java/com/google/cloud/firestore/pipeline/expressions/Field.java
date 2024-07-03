@@ -15,7 +15,10 @@ public final class Field implements Expr, Selectable {
   }
 
   public static Field of(String path) {
-    return new Field(FieldPath.of(path));
+    if (path.equals(DOCUMENT_ID)) {
+      return new Field(FieldPath.of("__path__"));
+    }
+    return new Field(FieldPath.fromDotSeparatedString(path));
   }
 
   public static Field ofAll() {
@@ -24,6 +27,10 @@ public final class Field implements Expr, Selectable {
 
   public Value toProto() {
     return Value.newBuilder().setFieldReferenceValue(path.toString()).build();
+  }
+
+  public Exists exists() {
+    return new Exists(this);
   }
 
   // Getters

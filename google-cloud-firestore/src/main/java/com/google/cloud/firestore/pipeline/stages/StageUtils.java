@@ -94,7 +94,8 @@ public final class StageUtils {
           .addArgs(encodeValue(findNearestStage.getVector()))
           .addArgs(encodeValue(findNearestStage.getOptions().getDistanceMeasure().toProtoString()))
           .putOptions("limit", encodeValue(findNearestStage.getOptions().getLimit()))
-          .putOptions("distance_field", encodeValue(findNearestStage.getOptions().getDistanceField()))
+          .putOptions(
+              "distance_field", encodeValue(findNearestStage.getOptions().getDistanceField()))
           .build();
     } else if (stage instanceof GenericStage) {
       GenericStage genericStage = (GenericStage) stage;

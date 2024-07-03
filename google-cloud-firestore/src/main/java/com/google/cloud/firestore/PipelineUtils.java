@@ -15,9 +15,9 @@ import com.google.cloud.firestore.Query.LimitType;
 import com.google.cloud.firestore.Query.UnaryFilterInternal;
 import com.google.cloud.firestore.pipeline.PaginatingPipeline;
 import com.google.cloud.firestore.pipeline.expressions.AggregatorTarget;
-import com.google.cloud.firestore.pipeline.expressions.Constant;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
+import com.google.common.collect.Lists;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.Value;
 import java.util.List;
@@ -53,20 +53,13 @@ public class PipelineUtils {
           return Field.of(fieldPath).arrayContains(value);
         case IN:
           List<Value> valuesList = value.getArrayValue().getValuesList();
-          return inAny(
-              Field.of(fieldPath),
-              valuesList.stream().map(Constant::of).collect(Collectors.toList()));
+          return inAny(Field.of(fieldPath), Lists.newArrayList(valuesList));
         case ARRAY_CONTAINS_ANY:
           List<Value> valuesListAny = value.getArrayValue().getValuesList();
-          return arrayContainsAny(
-              Field.of(fieldPath),
-              valuesListAny.stream().map(Constant::of).collect(Collectors.toList()));
+          return arrayContainsAny(Field.of(fieldPath), valuesListAny.toArray());
         case NOT_IN:
           List<Value> notInValues = value.getArrayValue().getValuesList();
-          return not(
-              inAny(
-                  Field.of(fieldPath),
-                  notInValues.stream().map(Constant::of).collect(Collectors.toList())));
+          return not(inAny(Field.of(fieldPath), Lists.newArrayList(notInValues)));
         default:
           // Handle OPERATOR_UNSPECIFIED and UNRECOGNIZED cases as needed
           throw new IllegalArgumentException("Unsupported operator: " + comparisonFilter.operator);
@@ -165,13 +158,11 @@ public class PipelineUtils {
 
     switch (operator) {
       case "sum":
-        return Field.of(fieldPath)
-            .sum()
-            .toField(f.getAlias());
+        return Field.of(fieldPath).sum().toField(f.getAlias());
 
       case "count":
         return countAll().toField(f.getAlias());
-      case "avg":
+      case "average":
         return Field.of(fieldPath).avg().toField(f.getAlias());
       default:
         // Handle the 'else' case appropriately in your Java code

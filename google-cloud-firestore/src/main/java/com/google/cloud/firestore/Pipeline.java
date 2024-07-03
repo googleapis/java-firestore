@@ -9,6 +9,7 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.pipeline.PaginatingPipeline;
 import com.google.cloud.firestore.pipeline.expressions.AggregatorTarget;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.ExprWithAlias;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Fields;
 import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
@@ -137,6 +138,9 @@ public final class Pipeline {
         if (fieldsProj.getFields() != null) {
           fieldsProj.getFields().forEach(f -> projMap.put(f.getPath().getEncodedPath(), f));
         }
+      } else if (proj instanceof ExprWithAlias) {
+        ExprWithAlias exprWithAlias = (ExprWithAlias) proj;
+        projMap.put(exprWithAlias.getAlias(), exprWithAlias.getExpr());
       }
     }
     return projMap;

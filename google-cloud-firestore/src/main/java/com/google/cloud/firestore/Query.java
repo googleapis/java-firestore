@@ -18,6 +18,7 @@ package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.PipelineUtils.toPaginatedPipeline;
 import static com.google.cloud.firestore.PipelineUtils.toPipelineFilterCondition;
+import static com.google.cloud.firestore.pipeline.expressions.Function.and;
 import static com.google.common.collect.Lists.reverse;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS_ANY;
@@ -40,6 +41,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
+import com.google.cloud.firestore.pipeline.expressions.Exists;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Ordering;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
@@ -2122,11 +2124,11 @@ public class Query {
   @Nonnull
   public Pipeline toPipeline() {
     // From
-    Pipeline ppl = this.options.getAllDescendants() ?
-        Pipeline.fromCollectionGroup(
-            this.options.getCollectionId())
-        : Pipeline.fromCollection(
-            this.options.getParentPath().append(this.options.getCollectionId()).getPath());
+    Pipeline ppl =
+        this.options.getAllDescendants()
+            ? Pipeline.fromCollectionGroup(this.options.getCollectionId())
+            : Pipeline.fromCollection(
+                this.options.getParentPath().append(this.options.getCollectionId()).getPath());
 
     // Filters
     for (FilterInternal f : this.options.getFilters()) {
@@ -2156,11 +2158,28 @@ public class Query {
                               ? Ordering.Direction.ASCENDING
                               : Ordering.Direction.DESCENDING))
               .collect(Collectors.toList());
+
+      // Add exists filters to match Query's implicit orderby semantics.
+      List<Exists> exists =
+          normalizedOrderbys.stream()
+              // .filter(order -> !order.fieldReference.getFieldPath().equals("__name__"))
+              .map(order -> Field.of(order.fieldReference.getFieldPath()).exists())
+              .collect(Collectors.toList());
+      if (exists.size() > 1) {
+        ppl =
+            ppl.filter(
+                and(exists.get(0), exists.subList(1, exists.size()).toArray(new Exists[] {})));
+      } else if (exists.size() == 1) {
+        ppl = ppl.filter(exists.get(0));
+      }
+
       ppl = ppl.sort(orders, Density.REQUIRED, Truncation.UNSPECIFIED);
     }
 
     // Cursors, Limit and Offset
-    if (this.options.getStartCursor() != null || this.options.getEndCursor() != null || this.options.getLimitType() == LimitType.Last) {
+    if (this.options.getStartCursor() != null
+        || this.options.getEndCursor() != null
+        || this.options.getLimitType() == LimitType.Last) {
       ppl =
           toPaginatedPipeline(
               ppl,

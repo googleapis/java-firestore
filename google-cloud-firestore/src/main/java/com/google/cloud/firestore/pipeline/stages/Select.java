@@ -7,7 +7,7 @@ import java.util.Map;
 @InternalApi
 public final class Select implements Stage {
 
-  private static final String name = "select";
+  private static final String name = "project";
   private final Map<String, Expr> projections;
 
   @InternalApi

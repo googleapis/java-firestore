@@ -81,7 +81,9 @@ public final class PipelineResult {
       FirestoreRpcContext<?> rpcContext, Timestamp readTime, Document document) {
     return new PipelineResult(
         rpcContext,
-        new DocumentReference(rpcContext, ResourcePath.create(document.getName())),
+        document.getName().isEmpty()
+            ? null
+            : new DocumentReference(rpcContext, ResourcePath.create(document.getName())),
         document.getFieldsMap(),
         readTime,
         Timestamp.fromProto(document.getUpdateTime()),
