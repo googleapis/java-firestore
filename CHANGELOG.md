@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.23.0](https://github.com/googleapis/java-firestore/compare/v3.22.0...v3.23.0) (2024-07-10)
+
+
+### Features
+
+* Enable hermetic library generation ([#1697](https://github.com/googleapis/java-firestore/issues/1697)) ([85e66df](https://github.com/googleapis/java-firestore/commit/85e66df5fc51f9aaafe71f784773b9107671c477))
+
+
+### Bug Fixes
+
+* Correct hermetic library generation script path ([#1727](https://github.com/googleapis/java-firestore/issues/1727)) ([172d224](https://github.com/googleapis/java-firestore/commit/172d224aa767a69e9c02419bb48f506a1861c787))
+
 ## [3.22.0](https://github.com/googleapis/java-firestore/compare/v3.21.6...v3.22.0) (2024-06-27)
 
 
