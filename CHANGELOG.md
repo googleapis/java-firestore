@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.23.1](https://github.com/googleapis/java-firestore/compare/v3.23.0...v3.23.1) (2024-07-10)
+
+
+### Dependencies
+
+* Update dependency com.android.tools.metalava:metalava to v1.0.0-alpha11 ([#1736](https://github.com/googleapis/java-firestore/issues/1736)) ([649d7b4](https://github.com/googleapis/java-firestore/commit/649d7b43424201168bf64a38d923b423d731f100))
+
 ## [3.23.0](https://github.com/googleapis/java-firestore/compare/v3.22.0...v3.23.0) (2024-07-10)
 
 
