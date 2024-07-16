@@ -52,11 +52,11 @@ public final class StageUtils {
           .setName(addFieldsStage.getName())
           .addArgs(encodeValue(addFieldsStage.getFields()))
           .build();
-    } else if (stage instanceof Filter) {
-      Filter filterStage = (Filter) stage; // Use wildcard for generic type
+    } else if (stage instanceof Where) {
+      Where whereStage = (Where) stage; // Use wildcard for generic type
       return com.google.firestore.v1.Pipeline.Stage.newBuilder()
-          .setName(filterStage.getName())
-          .addArgs(encodeValue(filterStage.getCondition()))
+          .setName(whereStage.getName())
+          .addArgs(encodeValue(whereStage.getCondition()))
           .build();
     } else if (stage instanceof Sort) {
       Sort sortStage = (Sort) stage;

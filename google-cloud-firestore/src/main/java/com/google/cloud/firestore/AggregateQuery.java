@@ -67,9 +67,9 @@ public class AggregateQuery {
   }
 
   @Nonnull
-  public Pipeline toPipeline() {
+  public Pipeline pipeline() {
     return getQuery()
-        .toPipeline()
+        .pipeline()
         .aggregate(
             this.aggregateFieldList.stream()
                 .map(PipelineUtils::toPipelineAggregatorTarget)

@@ -4,13 +4,13 @@ import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
 
 @InternalApi
-public final class Filter implements Stage {
+public final class Where implements Stage {
 
   private static final String name = "filter";
   private final FilterCondition condition;
 
   @InternalApi
-  public Filter(FilterCondition condition) {
+  public Where(FilterCondition condition) {
     this.condition = condition;
   }
 

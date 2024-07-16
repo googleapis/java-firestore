@@ -66,6 +66,8 @@ public interface Firestore extends Service<FirestoreOptions>, AutoCloseable {
    */
   CollectionGroup collectionGroup(@Nonnull String collectionId);
 
+  PipelineSource pipeline();
+
   /**
    * Executes the given updateFunction and then attempts to commit the changes applied within the
    * transaction. If any document read within the transaction has changed, the updateFunction will

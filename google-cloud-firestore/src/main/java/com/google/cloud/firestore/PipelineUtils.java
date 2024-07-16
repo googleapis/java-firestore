@@ -38,17 +38,17 @@ public class PipelineUtils {
       Value value = comparisonFilter.value;
       switch (comparisonFilter.operator) {
         case LESS_THAN:
-          return Field.of(fieldPath).lessThan(value);
+          return Field.of(fieldPath).lt(value);
         case LESS_THAN_OR_EQUAL:
-          return Field.of(fieldPath).lessThanOrEqual(value);
+          return Field.of(fieldPath).lte(value);
         case GREATER_THAN:
-          return Field.of(fieldPath).greaterThan(value);
+          return Field.of(fieldPath).gt(value);
         case GREATER_THAN_OR_EQUAL:
-          return Field.of(fieldPath).greaterThanOrEqual(value);
+          return Field.of(fieldPath).gte(value);
         case EQUAL:
-          return Field.of(fieldPath).equal(value);
+          return Field.of(fieldPath).eq(value);
         case NOT_EQUAL:
-          return not(Field.of(fieldPath).equal(value));
+          return not(Field.of(fieldPath).eq(value));
         case ARRAY_CONTAINS:
           return Field.of(fieldPath).arrayContains(value);
         case IN:

@@ -109,100 +109,100 @@ public class Function implements Expr {
     return new Divide(Field.of(left), Constant.of(right));
   }
 
-  public static Equal equal(Expr left, Expr right) {
-    return new Equal(left, right);
+  public static Eq eq(Expr left, Expr right) {
+    return new Eq(left, right);
   }
 
-  public static Equal equal(Expr left, Object right) {
-    return new Equal(left, Constant.of(right));
+  public static Eq eq(Expr left, Object right) {
+    return new Eq(left, Constant.of(right));
   }
 
-  public static Equal equal(String left, Expr right) {
-    return new Equal(Field.of(left), right);
+  public static Eq eq(String left, Expr right) {
+    return new Eq(Field.of(left), right);
   }
 
-  public static Equal equal(String left, Object right) {
-    return new Equal(Field.of(left), Constant.of(right));
+  public static Eq eq(String left, Object right) {
+    return new Eq(Field.of(left), Constant.of(right));
   }
 
-  public static NotEqual notEqual(Expr left, Expr right) {
-    return new NotEqual(left, right);
+  public static Neq neq(Expr left, Expr right) {
+    return new Neq(left, right);
   }
 
-  public static NotEqual notEqual(Expr left, Object right) {
-    return new NotEqual(left, Constant.of(right));
+  public static Neq neq(Expr left, Object right) {
+    return new Neq(left, Constant.of(right));
   }
 
-  public static NotEqual notEqual(String left, Expr right) {
-    return new NotEqual(Field.of(left), right);
+  public static Neq neq(String left, Expr right) {
+    return new Neq(Field.of(left), right);
   }
 
-  public static NotEqual notEqual(String left, Object right) {
-    return new NotEqual(Field.of(left), Constant.of(right));
+  public static Neq neq(String left, Object right) {
+    return new Neq(Field.of(left), Constant.of(right));
   }
 
-  public static GreaterThan greaterThan(Expr left, Expr right) {
-    return new GreaterThan(left, right);
+  public static Gt gt(Expr left, Expr right) {
+    return new Gt(left, right);
   }
 
-  public static GreaterThan greaterThan(Expr left, Object right) {
-    return new GreaterThan(left, Constant.of(right));
+  public static Gt gt(Expr left, Object right) {
+    return new Gt(left, Constant.of(right));
   }
 
-  public static GreaterThan greaterThan(String left, Expr right) {
-    return new GreaterThan(Field.of(left), right);
+  public static Gt gt(String left, Expr right) {
+    return new Gt(Field.of(left), right);
   }
 
-  public static GreaterThan greaterThan(String left, Object right) {
-    return new GreaterThan(Field.of(left), Constant.of(right));
+  public static Gt gt(String left, Object right) {
+    return new Gt(Field.of(left), Constant.of(right));
   }
 
-  public static GreaterThanOrEqual greaterThanOrEqual(Expr left, Expr right) {
-    return new GreaterThanOrEqual(left, right);
+  public static Gte gte(Expr left, Expr right) {
+    return new Gte(left, right);
   }
 
-  public static GreaterThanOrEqual greaterThanOrEqual(Expr left, Object right) {
-    return new GreaterThanOrEqual(left, Constant.of(right));
+  public static Gte gte(Expr left, Object right) {
+    return new Gte(left, Constant.of(right));
   }
 
-  public static GreaterThanOrEqual greaterThanOrEqual(String left, Expr right) {
-    return new GreaterThanOrEqual(Field.of(left), right);
+  public static Gte gte(String left, Expr right) {
+    return new Gte(Field.of(left), right);
   }
 
-  public static GreaterThanOrEqual greaterThanOrEqual(String left, Object right) {
-    return new GreaterThanOrEqual(Field.of(left), Constant.of(right));
+  public static Gte gte(String left, Object right) {
+    return new Gte(Field.of(left), Constant.of(right));
   }
 
-  public static LessThan lessThan(Expr left, Expr right) {
-    return new LessThan(left, right);
+  public static Lt lt(Expr left, Expr right) {
+    return new Lt(left, right);
   }
 
-  public static LessThan lessThan(Expr left, Object right) {
-    return new LessThan(left, Constant.of(right));
+  public static Lt lt(Expr left, Object right) {
+    return new Lt(left, Constant.of(right));
   }
 
-  public static LessThan lessThan(String left, Expr right) {
-    return new LessThan(Field.of(left), right);
+  public static Lt lt(String left, Expr right) {
+    return new Lt(Field.of(left), right);
   }
 
-  public static LessThan lessThan(String left, Object right) {
-    return new LessThan(Field.of(left), Constant.of(right));
+  public static Lt lt(String left, Object right) {
+    return new Lt(Field.of(left), Constant.of(right));
   }
 
-  public static LessThanOrEqual lessThanOrEqual(Expr left, Expr right) {
-    return new LessThanOrEqual(left, right);
+  public static Lte lte(Expr left, Expr right) {
+    return new Lte(left, right);
   }
 
-  public static LessThanOrEqual lessThanOrEqual(Expr left, Object right) {
-    return new LessThanOrEqual(left, Constant.of(right));
+  public static Lte lte(Expr left, Object right) {
+    return new Lte(left, Constant.of(right));
   }
 
-  public static LessThanOrEqual lessThanOrEqual(String left, Expr right) {
-    return new LessThanOrEqual(Field.of(left), right);
+  public static Lte lte(String left, Expr right) {
+    return new Lte(Field.of(left), right);
   }
 
-  public static LessThanOrEqual lessThanOrEqual(String left, Object right) {
-    return new LessThanOrEqual(Field.of(left), Constant.of(right));
+  public static Lte lte(String left, Object right) {
+    return new Lte(Field.of(left), Constant.of(right));
   }
 
   public static Exists exists(String field) {
@@ -387,6 +387,14 @@ public class Function implements Expr {
 
   public static RegexContains regexContains(String field, String pattern) {
     return new RegexContains(Field.of(field), Constant.of(pattern));
+  }
+
+  public static RegexMatch regexMatch(Expr expr, String pattern) {
+    return new RegexMatch(expr, Constant.of(pattern));
+  }
+
+  public static RegexMatch regexMatch(String field, String pattern) {
+    return new RegexMatch(Field.of(field), Constant.of(pattern));
   }
 
   public static StrConcat strConcat(Expr expr, Expr... elements) {

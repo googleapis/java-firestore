@@ -2122,17 +2122,18 @@ public class Query {
   }
 
   @Nonnull
-  public Pipeline toPipeline() {
+  public Pipeline pipeline() {
     // From
     Pipeline ppl =
         this.options.getAllDescendants()
-            ? Pipeline.fromCollectionGroup(this.options.getCollectionId())
-            : Pipeline.fromCollection(
-                this.options.getParentPath().append(this.options.getCollectionId()).getPath());
+            ? new PipelineSource().collectionGroup(this.options.getCollectionId())
+            : new PipelineSource()
+                .collection(
+                    this.options.getParentPath().append(this.options.getCollectionId()).getPath());
 
     // Filters
     for (FilterInternal f : this.options.getFilters()) {
-      ppl = ppl.filter(toPipelineFilterCondition(f));
+      ppl = ppl.where(toPipelineFilterCondition(f));
     }
 
     // Projections
@@ -2167,10 +2168,10 @@ public class Query {
               .collect(Collectors.toList());
       if (exists.size() > 1) {
         ppl =
-            ppl.filter(
+            ppl.where(
                 and(exists.get(0), exists.subList(1, exists.size()).toArray(new Exists[] {})));
       } else if (exists.size() == 1) {
-        ppl = ppl.filter(exists.get(0));
+        ppl = ppl.where(exists.get(0));
       }
 
       ppl = ppl.sort(orders, Density.REQUIRED, Truncation.UNSPECIFIED);

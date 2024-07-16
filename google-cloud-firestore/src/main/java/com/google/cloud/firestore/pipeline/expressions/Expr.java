@@ -37,52 +37,52 @@ public interface Expr {
     return new Divide(this, Constant.of(other));
   }
 
-  default Equal equal(Expr expr) {
-    return new Equal(this, expr);
+  default Eq eq(Expr expr) {
+    return new Eq(this, expr);
   }
 
-  default Equal equal(Object other) {
-    return new Equal(this, Constant.of(other));
+  default Eq eq(Object other) {
+    return new Eq(this, Constant.of(other));
   }
 
-  default NotEqual notEqual(Expr other) {
-    return new NotEqual(this, other);
+  default Neq neq(Expr other) {
+    return new Neq(this, other);
   }
 
-  default NotEqual notEqual(Object other) {
-    return new NotEqual(this, Constant.of(other));
+  default Neq neq(Object other) {
+    return new Neq(this, Constant.of(other));
   }
 
-  default GreaterThan greaterThan(Expr other) {
-    return new GreaterThan(this, other);
+  default Gt gt(Expr other) {
+    return new Gt(this, other);
   }
 
-  default GreaterThan greaterThan(Object other) {
-    return new GreaterThan(this, Constant.of(other));
+  default Gt gt(Object other) {
+    return new Gt(this, Constant.of(other));
   }
 
-  default GreaterThanOrEqual greaterThanOrEqual(Expr other) {
-    return new GreaterThanOrEqual(this, other);
+  default Gte gte(Expr other) {
+    return new Gte(this, other);
   }
 
-  default GreaterThanOrEqual greaterThanOrEqual(Object other) {
-    return new GreaterThanOrEqual(this, Constant.of(other));
+  default Gte gte(Object other) {
+    return new Gte(this, Constant.of(other));
   }
 
-  default LessThan lessThan(Expr other) {
-    return new LessThan(this, other);
+  default Lt lt(Expr other) {
+    return new Lt(this, other);
   }
 
-  default LessThan lessThan(Object other) {
-    return new LessThan(this, Constant.of(other));
+  default Lt lt(Object other) {
+    return new Lt(this, Constant.of(other));
   }
 
-  default LessThanOrEqual lessThanOrEqual(Expr other) {
-    return new LessThanOrEqual(this, other);
+  default Lte lte(Expr other) {
+    return new Lte(this, other);
   }
 
-  default LessThanOrEqual lessThanOrEqual(Object other) {
-    return new LessThanOrEqual(this, Constant.of(other));
+  default Lte lte(Object other) {
+    return new Lte(this, Constant.of(other));
   }
 
   default In inAny(Object... other) {
@@ -182,6 +182,10 @@ public interface Expr {
 
   default RegexContains regexContains(String regex) {
     return new RegexContains(this, Constant.of(regex));
+  }
+
+  default RegexMatch regexMatches(String regex) {
+    return new RegexMatch(this, Constant.of(regex));
   }
 
   default StrConcat strConcat(List<Expr> elements) {

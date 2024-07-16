@@ -29,7 +29,7 @@ import com.google.cloud.firestore.pipeline.stages.Select;
 import com.google.cloud.firestore.pipeline.stages.Sort;
 import com.google.cloud.firestore.pipeline.stages.Stage;
 import com.google.cloud.firestore.pipeline.stages.StageUtils;
-import com.google.common.base.Preconditions;
+import com.google.cloud.firestore.pipeline.stages.Where;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -88,40 +88,20 @@ public final class Pipeline {
     this.stages = ImmutableList.copyOf(stages);
   }
 
-  private Pipeline(Collection collection) {
+  Pipeline(Collection collection) {
     this(Lists.newArrayList(collection));
   }
 
-  private Pipeline(CollectionGroup group) {
+  Pipeline(CollectionGroup group) {
     this(Lists.newArrayList(group));
   }
 
-  private Pipeline(Database db) {
+  Pipeline(Database db) {
     this(Lists.newArrayList(db));
   }
 
-  private Pipeline(Documents docs) {
+  Pipeline(Documents docs) {
     this(Lists.newArrayList(docs));
-  }
-
-  public static Pipeline fromCollection(String collectionName) {
-    return new Pipeline(new Collection(collectionName));
-  }
-
-  public static Pipeline fromCollectionGroup(String collectionId) {
-    Preconditions.checkArgument(
-        !collectionId.contains("/"),
-        "Invalid collectionId '%s'. Collection IDs must not contain '/'.",
-        collectionId);
-    return new Pipeline(new CollectionGroup(collectionId));
-  }
-
-  public static Pipeline fromDatabase() {
-    return new Pipeline(new Database());
-  }
-
-  public static Pipeline fromDocuments(DocumentReference... docs) {
-    return new Pipeline(Documents.of(docs));
   }
 
   private Map<String, Expr> projectablesToMap(Selectable... selectables) {
@@ -178,12 +158,9 @@ public final class Pipeline {
             .build());
   }
 
-  public Pipeline filter(FilterCondition condition) {
+  public Pipeline where(FilterCondition condition) {
     return new Pipeline(
-        ImmutableList.<Stage>builder()
-            .addAll(stages)
-            .add(new com.google.cloud.firestore.pipeline.stages.Filter(condition))
-            .build());
+        ImmutableList.<Stage>builder().addAll(stages).add(new Where(condition)).build());
   }
 
   public Pipeline offset(int offset) {
