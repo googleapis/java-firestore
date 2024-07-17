@@ -15,11 +15,13 @@ public final class Select implements Stage {
     this.projections = projections;
   }
 
+  @InternalApi
   public Map<String, Expr> getProjections() {
     return projections;
   }
 
   @Override
+  @InternalApi
   public String getName() {
     return name;
   }

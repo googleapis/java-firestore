@@ -2,11 +2,13 @@ package com.google.cloud.firestore.pipeline.expressions;
 
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
+import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 import java.util.Locale;
 
+@BetaApi
 public final class Ordering {
 
   private final Expr expr;
@@ -17,6 +19,7 @@ public final class Ordering {
     this.dir = dir;
   }
 
+  @BetaApi
   public enum Direction {
     ASCENDING,
     DESCENDING;
@@ -38,27 +41,32 @@ public final class Ordering {
         .build();
   }
 
+  @BetaApi
   public static Ordering of(Expr expr, Ordering.Direction dir) {
     return new Ordering(expr, dir);
   }
 
+  @BetaApi
   public static Ordering of(Expr expr) {
     return new Ordering(expr, Direction.ASCENDING);
   }
 
+  @BetaApi
   public static Ordering ascending(Expr expr) {
     return new Ordering(expr, Direction.ASCENDING);
   }
 
+  @BetaApi
   public static Ordering descending(Expr expr) {
     return new Ordering(expr, Direction.DESCENDING);
   }
 
-  // Getters
+  @InternalApi
   public Expr getExpr() {
     return expr;
   }
 
+  @InternalApi
   public Ordering.Direction getDir() {
     return dir;
   }

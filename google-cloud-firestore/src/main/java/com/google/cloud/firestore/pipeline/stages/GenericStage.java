@@ -16,6 +16,7 @@ public final class GenericStage implements Stage {
   }
 
   @Override
+  @InternalApi
   public String getName() {
     return name;
   }

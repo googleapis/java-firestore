@@ -18,6 +18,7 @@ public final class Collection implements Stage {
     }
   }
 
+  @InternalApi
   public String getPath() {
     return path;
   }

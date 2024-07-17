@@ -13,6 +13,7 @@ public final class ListOfExprs implements Expr {
     this.conditions = ImmutableList.copyOf(list);
   }
 
+  @InternalApi
   public List<Expr> getConditions() {
     return conditions;
   }

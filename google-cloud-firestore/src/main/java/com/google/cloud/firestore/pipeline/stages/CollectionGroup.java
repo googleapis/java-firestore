@@ -13,6 +13,7 @@ public final class CollectionGroup implements Stage {
     this.collectionId = collectionId;
   }
 
+  @InternalApi
   public String getCollectionId() {
     return collectionId;
   }

@@ -15,6 +15,7 @@ public final class AddFields implements Stage {
     this.fields = fields;
   }
 
+  @InternalApi
   public Map<String, Expr> getFields() {
     return fields;
   }

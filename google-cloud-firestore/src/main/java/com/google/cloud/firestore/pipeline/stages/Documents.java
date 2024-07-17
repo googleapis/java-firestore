@@ -17,11 +17,13 @@ public final class Documents implements Stage {
     this.documents = documents;
   }
 
+  @InternalApi
   public static Documents of(DocumentReference... documents) {
     return new Documents(
         Arrays.stream(documents).map(doc -> "/" + doc.getPath()).collect(Collectors.toList()));
   }
 
+  @InternalApi
   public List<String> getDocuments() {
     return documents;
   }

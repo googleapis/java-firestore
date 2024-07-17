@@ -13,11 +13,13 @@ public final class Offset implements Stage {
     this.offset = offset;
   }
 
+  @InternalApi
   public int getOffset() {
     return offset;
   }
 
   @Override
+  @InternalApi
   public String getName() {
     return name;
   }

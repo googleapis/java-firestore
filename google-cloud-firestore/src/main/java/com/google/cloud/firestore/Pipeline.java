@@ -1,13 +1,15 @@
 package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.BetaApi;
+import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.pipeline.PaginatingPipeline;
-import com.google.cloud.firestore.pipeline.expressions.AggregatorTarget;
+import com.google.cloud.firestore.pipeline.expressions.AccumulatorTarget;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.cloud.firestore.pipeline.expressions.ExprWithAlias;
 import com.google.cloud.firestore.pipeline.expressions.Field;
@@ -81,6 +83,7 @@ import java.util.stream.Collectors;
  * <p>```java Pipeline pipeline = Pipeline.fromCollection("orders") .group(Field.of("customerId"))
  * .aggregate(count(Field.of("orderId")).asAlias("orderCount")); ```
  */
+@BetaApi
 public final class Pipeline {
   private final ImmutableList<Stage> stages;
 
@@ -110,8 +113,8 @@ public final class Pipeline {
       if (proj instanceof Field) {
         Field fieldProj = (Field) proj;
         projMap.put(fieldProj.getPath().getEncodedPath(), fieldProj);
-      } else if (proj instanceof AggregatorTarget) {
-        AggregatorTarget aggregatorProj = (AggregatorTarget) proj;
+      } else if (proj instanceof AccumulatorTarget) {
+        AccumulatorTarget aggregatorProj = (AccumulatorTarget) proj;
         projMap.put(aggregatorProj.getFieldName(), aggregatorProj.getAccumulator());
       } else if (proj instanceof Fields) {
         Fields fieldsProj = (Fields) proj;
@@ -134,6 +137,7 @@ public final class Pipeline {
     return projMap;
   }
 
+  @BetaApi
   public Pipeline addFields(Selectable... fields) {
     return new Pipeline(
         ImmutableList.<Stage>builder()
@@ -142,6 +146,7 @@ public final class Pipeline {
             .build());
   }
 
+  @BetaApi
   public Pipeline select(Selectable... projections) {
     return new Pipeline(
         ImmutableList.<Stage>builder()
@@ -150,6 +155,7 @@ public final class Pipeline {
             .build());
   }
 
+  @BetaApi
   public Pipeline select(String... fields) {
     return new Pipeline(
         ImmutableList.<Stage>builder()
@@ -158,31 +164,37 @@ public final class Pipeline {
             .build());
   }
 
+  @BetaApi
   public Pipeline where(FilterCondition condition) {
     return new Pipeline(
         ImmutableList.<Stage>builder().addAll(stages).add(new Where(condition)).build());
   }
 
+  @BetaApi
   public Pipeline offset(int offset) {
     return new Pipeline(
         ImmutableList.<Stage>builder().addAll(stages).add(new Offset(offset)).build());
   }
 
+  @BetaApi
   public Pipeline limit(int limit) {
     return new Pipeline(
         ImmutableList.<Stage>builder().addAll(stages).add(new Limit(limit)).build());
   }
 
-  public Pipeline aggregate(AggregatorTarget... aggregators) {
+  @BetaApi
+  public Pipeline aggregate(AccumulatorTarget... aggregators) {
     return new Pipeline(
         ImmutableList.<Stage>builder().addAll(stages).add(new Aggregate(aggregators)).build());
   }
 
+  @BetaApi
   public Pipeline findNearest(
       String fieldName, double[] vector, FindNearest.FindNearestOptions options) {
     return findNearest(Field.of(fieldName), vector, options);
   }
 
+  @BetaApi
   public Pipeline findNearest(
       Field property, double[] vector, FindNearest.FindNearestOptions options) {
     // Implementation for findNearest (add the FindNearest stage if needed)
@@ -195,6 +207,7 @@ public final class Pipeline {
             .build());
   }
 
+  @BetaApi
   public Pipeline sort(List<Ordering> orders, Sort.Density density, Sort.Truncation truncation) {
     return new Pipeline(
         ImmutableList.<Stage>builder()
@@ -204,14 +217,17 @@ public final class Pipeline {
   }
 
   // Sugar
+  @BetaApi
   public Pipeline sort(Ordering... orders) {
     return sort(Arrays.asList(orders), Sort.Density.UNSPECIFIED, Sort.Truncation.UNSPECIFIED);
   }
 
+  @BetaApi
   public PaginatingPipeline paginate(int pageSize, Ordering... orders) {
     return new PaginatingPipeline(this, pageSize, Arrays.asList(orders));
   }
 
+  @BetaApi
   public Pipeline genericStage(String name, Map<String, Object> params) {
     // Implementation for genericStage (add the GenericStage if needed)
     return new Pipeline(
@@ -225,6 +241,7 @@ public final class Pipeline {
             .build());
   }
 
+  @BetaApi
   public ApiFuture<List<PipelineResult>> execute(Firestore db) {
     if (db instanceof FirestoreImpl) {
       FirestoreImpl firestoreImpl = (FirestoreImpl) db;
@@ -269,6 +286,7 @@ public final class Pipeline {
     }
   }
 
+  @BetaApi
   public void execute(Firestore db, ApiStreamObserver<PipelineResult> observer) {
     if (db instanceof FirestoreImpl) {
       FirestoreImpl firestoreImpl = (FirestoreImpl) db;
@@ -307,7 +325,7 @@ public final class Pipeline {
     }
   }
 
-  public Value toProto() {
+  private Value toProto() {
     return Value.newBuilder()
         .setPipelineValue(
             com.google.firestore.v1.Pipeline.newBuilder()
@@ -392,6 +410,7 @@ public final class Pipeline {
   }
 }
 
+@InternalExtensionOnly
 abstract class PipelineResultObserver implements ApiStreamObserver<PipelineResult> {
   private Timestamp executionTime; // Remove optional since Java doesn't have it
 

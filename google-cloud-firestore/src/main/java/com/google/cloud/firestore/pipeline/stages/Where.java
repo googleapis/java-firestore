@@ -14,6 +14,7 @@ public final class Where implements Stage {
     this.condition = condition;
   }
 
+  @InternalApi
   public FilterCondition getCondition() {
     return condition;
   }

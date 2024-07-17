@@ -5,7 +5,6 @@ import com.google.cloud.firestore.pipeline.expressions.Ordering;
 import java.util.List;
 import java.util.Locale;
 
-@InternalApi
 public final class Sort implements Stage {
 
   private static final String name = "sort";
@@ -20,15 +19,17 @@ public final class Sort implements Stage {
     this.truncation = truncation;
   }
 
-  // Getters
+  @InternalApi
   public String getName() {
     return name;
   }
 
+  @InternalApi
   public List<Ordering> getOrders() {
     return orders;
   }
 
+  @InternalApi
   public Sort.Density getDensity() {
     if (density != null) {
       return density;
@@ -36,6 +37,7 @@ public final class Sort implements Stage {
     return Density.UNSPECIFIED;
   }
 
+  @InternalApi
   public Sort.Truncation getTruncation() {
     if (truncation != null) {
       return truncation;

@@ -3,7 +3,6 @@ package com.google.cloud.firestore.pipeline.stages;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 
-@InternalApi
 public final class FindNearest implements Stage {
 
   private static final String name = "find_nearest";
@@ -19,18 +18,22 @@ public final class FindNearest implements Stage {
   }
 
   @Override
+  @InternalApi
   public String getName() {
     return name;
   }
 
+  @InternalApi
   public Field getProperty() {
     return property;
   }
 
+  @InternalApi
   public double[] getVector() {
     return vector;
   }
 
+  @InternalApi
   public FindNearestOptions getOptions() {
     return options;
   }
@@ -67,6 +70,7 @@ public final class FindNearest implements Stage {
   static class EuclideanDistanceMeasure implements FindNearest.DistanceMeasure {
 
     @Override
+    @InternalApi
     public String toProtoString() {
       return "euclidean";
     }
@@ -75,6 +79,7 @@ public final class FindNearest implements Stage {
   static class CosineDistanceMeasure implements FindNearest.DistanceMeasure {
 
     @Override
+    @InternalApi
     public String toProtoString() {
       return "cosine";
     }
@@ -83,6 +88,7 @@ public final class FindNearest implements Stage {
   static class DotProductDistanceMeasure implements FindNearest.DistanceMeasure {
 
     @Override
+    @InternalApi
     public String toProtoString() {
       return "dot_product";
     }
@@ -97,6 +103,7 @@ public final class FindNearest implements Stage {
     }
 
     @Override
+    @InternalApi
     public String toProtoString() {
       return name;
     }

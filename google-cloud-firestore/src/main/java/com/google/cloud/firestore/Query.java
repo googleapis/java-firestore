@@ -32,6 +32,7 @@ import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.NOT_E
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.NOT_IN;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.BetaApi;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
@@ -2122,6 +2123,7 @@ public class Query {
   }
 
   @Nonnull
+  @BetaApi
   public Pipeline pipeline() {
     // From
     Pipeline ppl =

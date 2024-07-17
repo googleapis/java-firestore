@@ -2,6 +2,7 @@ package com.google.cloud.firestore.pipeline.expressions;
 
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
+import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Blob;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@BetaApi
 public final class Constant implements Expr {
   private final Object value;
 
@@ -20,34 +22,42 @@ public final class Constant implements Expr {
     this.value = value;
   }
 
+  @BetaApi
   public static Constant of(String value) {
     return new Constant(value);
   }
 
+  @BetaApi
   public static Constant of(Number value) {
     return new Constant(value);
   }
 
+  @BetaApi
   public static Constant of(Date value) {
     return new Constant(value);
   }
 
+  @BetaApi
   public static Constant of(Timestamp value) {
     return new Constant(value);
   }
 
+  @BetaApi
   public static Constant of(Boolean value) {
     return new Constant(value);
   }
 
+  @BetaApi
   public static Constant of(GeoPoint value) {
     return new Constant(value);
   }
 
+  @BetaApi
   public static Constant of(Blob value) {
     return new Constant(value);
   }
 
+  @BetaApi
   public static Constant of(DocumentReference value) {
     return new Constant(value);
   }
@@ -57,7 +67,7 @@ public final class Constant implements Expr {
     return new Constant(value);
   }
 
-  @InternalApi
+  @BetaApi
   static Constant of(Object value) {
     if (value == null) {
       return new Constant(null);
@@ -86,23 +96,28 @@ public final class Constant implements Expr {
     }
   }
 
+  @BetaApi
   public static <T> Constant of(Iterable<T> value) {
     return new Constant(value);
   }
 
+  @BetaApi
   public static <T> Constant of(T[] value) {
     return new Constant(Arrays.asList(value)); // Convert array to list
   }
 
+  @BetaApi
   public static <T> Constant of(Map<String, T> value) {
     return new Constant(value);
   }
 
+  @BetaApi
   public static Constant ofVector(double[] value) {
     // Convert double array to List<Double>
     return new Constant(Arrays.stream(value).boxed().collect(Collectors.toList()));
   }
 
+  @InternalApi
   public Value toProto() {
     return encodeValue(value);
   }
