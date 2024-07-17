@@ -23,6 +23,10 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * A fully disabled (No-op) tracing utility class that does not perform any tracing actions and has
+ * near-zero overhead.
+ */
 public class DisabledTraceUtil implements TraceUtil {
 
   static class Span implements TraceUtil.Span {

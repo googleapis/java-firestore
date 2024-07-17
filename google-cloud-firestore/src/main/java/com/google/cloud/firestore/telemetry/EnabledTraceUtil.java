@@ -36,6 +36,10 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * A utility class that uses OpenTelemetry for trace collection. `FirestoreOpenTelemetryOptions` in
+ * `FirestoreOptions` can be used to configure its behavior.
+ */
 public class EnabledTraceUtil implements TraceUtil {
   private final Tracer tracer;
   private final OpenTelemetry openTelemetry;

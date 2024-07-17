@@ -24,6 +24,11 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * A utility interface for trace collection. Classes that implement this interface may make their
+ * own design choices for how they approach trace collection. For instance, they may be no-op, or
+ * they may use a particular tracing framework such as OpenTelemetry.
+ */
 public interface TraceUtil {
   String ATTRIBUTE_SERVICE_PREFIX = "gcp.firestore.";
   String SPAN_NAME_DOC_REF_CREATE = "DocumentReference.Create";
