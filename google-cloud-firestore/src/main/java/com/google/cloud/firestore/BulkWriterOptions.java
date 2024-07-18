@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.BulkWriter.DEFAULT_MAXIMUM_IN_FLIGHT_OPERATIONS;
+
 import com.google.auto.value.AutoValue;
 import java.util.concurrent.ScheduledExecutorService;
 import javax.annotation.Nonnull;
@@ -57,11 +59,23 @@ public abstract class BulkWriterOptions {
   @Nullable
   public abstract ScheduledExecutorService getExecutor();
 
+  /**
+   * Limit on the total number of mutations in-memory.
+   *
+   * @return The maximum number of operations that will be queued.
+   */
+  @Nullable
+  public abstract Integer getMaxPendingOps();
+
+  abstract int getMaxInFlightOps();
+
   public static Builder builder() {
     return new AutoValue_BulkWriterOptions.Builder()
         .setMaxOpsPerSecond(null)
         .setInitialOpsPerSecond(null)
         .setThrottlingEnabled(true)
+        .setMaxInFlightOps(DEFAULT_MAXIMUM_IN_FLIGHT_OPERATIONS)
+        .setMaxPendingOps(null)
         .setExecutor(null);
   }
 
@@ -121,6 +135,19 @@ public abstract class BulkWriterOptions {
      */
     public abstract Builder setExecutor(@Nullable ScheduledExecutorService executor);
 
+    /**
+     * Limit on the total number of mutations in-memory.
+     *
+     * @return The maximum number of operations that will be queued.
+     */
+    public Builder setMaxPendingOps(int maxPending) {
+      return setMaxPendingOps(Integer.valueOf(maxPending));
+    }
+
+    abstract Builder setMaxPendingOps(@Nullable Integer maxPending);
+
+    abstract Builder setMaxInFlightOps(int maxInFlight);
+
     public abstract BulkWriterOptions autoBuild();
 
     @Nonnull
@@ -128,6 +155,8 @@ public abstract class BulkWriterOptions {
       BulkWriterOptions options = autoBuild();
       Double initialRate = options.getInitialOpsPerSecond();
       Double maxRate = options.getMaxOpsPerSecond();
+      int maxInFlightOps = options.getMaxInFlightOps();
+      Integer maxPendingOps = options.getMaxPendingOps();
 
       if (initialRate != null && initialRate < 1) {
         throw FirestoreException.forInvalidArgument(
@@ -150,6 +179,19 @@ public abstract class BulkWriterOptions {
         throw FirestoreException.forInvalidArgument(
             "Cannot set 'initialOpsPerSecond' or 'maxOpsPerSecond' when 'throttlingEnabled' is set to false.");
       }
+
+      if (maxInFlightOps < 1) {
+        throw FirestoreException.forInvalidArgument(
+            "Value for argument 'maxInFlightOps' must be greater than 1, but was :"
+                + maxInFlightOps);
+      }
+
+      if (maxPendingOps != null && maxInFlightOps > maxPendingOps) {
+        throw FirestoreException.forInvalidArgument(
+            "Value for argument 'maxPendingOps' must be greater than `maxInFlightOps`, but was :"
+                + maxPendingOps);
+      }
+
       return options;
     }
   }
