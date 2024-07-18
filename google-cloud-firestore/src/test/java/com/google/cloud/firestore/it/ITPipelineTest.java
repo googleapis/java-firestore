@@ -49,6 +49,7 @@ import com.google.cloud.firestore.PipelineResult;
 import com.google.cloud.firestore.pipeline.expressions.Constant;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Function;
+import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Map;
@@ -250,13 +251,13 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
-  public void fromCollectionThenAggregate() throws Exception {
+  public void testAggregates() throws Exception {
     List<PipelineResult> results =
         firestore
             .pipeline()
             .collection(collection.getPath())
-            .aggregate(countAll().toField("count"))
-            .execute(firestore)
+            .aggregate(countAll().as("count"))
+            .execute()
             .get();
     assertThat(data(results)).isEqualTo(Lists.newArrayList(map("count", 10L)));
 
@@ -265,13 +266,55 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .where(eq("genre", "Science Fiction"))
             .aggregate(
-                countAll().toField("count"),
-                avg("rating").toField("avg_rating"),
-                Field.of("rating").max().toField("max_rating"))
-            .execute(firestore)
+                countAll().as("count"),
+                avg("rating").as("avg_rating"),
+                Field.of("rating").max().as("max_rating"))
+            .execute()
             .get();
     assertThat(data(results))
         .isEqualTo(Lists.newArrayList(map("count", 2L, "avg_rating", 4.4, "max_rating", 4.6)));
+  }
+
+  @Test
+  public void testGroupBys() throws Exception {
+    List<PipelineResult> results =
+        collection
+            .pipeline()
+            .where(lt("published", 1900))
+            .aggregate(
+                Aggregate
+                    .newInstance()
+                    .withGroups("genre"))
+            .execute()
+            .get();
+    assertThat(data(results))
+        .containsExactly(
+            map("genre", "Romance"),
+            map("genre", "Psychological Thriller")
+        );
+  }
+
+  @Test
+  public void testGroupBysAndAggregate() throws Exception {
+    List<PipelineResult> results =
+        collection
+            .pipeline()
+            .where(lt("published", 1984))
+            .aggregate(
+                Aggregate
+                    .newInstance()
+                    .withGroups("genre")
+                    .withAccumulators(avg("rating").as("avg_rating"))
+            )
+            .where(gt("avg_rating", 4.3))
+            .execute()
+            .get();
+    assertThat(data(results))
+        .containsExactly(
+            map("avg_rating", 4.7, "genre", "Fantasy"),
+            map("avg_rating", 4.5, "genre", "Romance"),
+            map("avg_rating", 4.4, "genre", "Science Fiction")
+            );
   }
 
   @Test
@@ -280,10 +323,10 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .aggregate(
-                countAll().toField("count"),
-                Field.of("rating").max().toField("max_rating"),
-                Field.of("published").min().toField("min_published"))
-            .execute(firestore)
+                countAll().as("count"),
+                Field.of("rating").max().as("max_rating"),
+                Field.of("published").min().as("min_published"))
+            .execute()
             .get();
     assertThat(data(results))
         .isEqualTo(
@@ -301,7 +344,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .select("title", "author")
             .sort(Field.of("author").ascending())
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -325,7 +368,7 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .where(and(gt("rating", 4.5), eq("genre", "Science Fiction")))
-            .execute(firestore)
+            .execute()
             .get();
 
     // It's Dune
@@ -341,7 +384,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .where(or(eq("genre", "Romance"), eq("genre", "Dystopian")))
             .select("title")
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -361,7 +404,7 @@ public class ITPipelineTest extends ITBaseTest {
             .offset(5)
             .limit(3)
             .select("title", "author")
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -375,7 +418,7 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void testArrayContains() throws Exception {
     List<PipelineResult> results =
-        collection.pipeline().where(arrayContains("tags", "comedy")).execute(firestore).get();
+        collection.pipeline().where(arrayContains("tags", "comedy")).execute().get();
     assertThat(data(results))
         // The Hitchhiker's Guide to the Galaxy
         .isEqualTo(Lists.newArrayList(collection.document("book1").get().get().getData()));
@@ -388,7 +431,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .where(arrayContainsAny("tags", "comedy", "classic"))
             .select("title")
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -404,7 +447,7 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .where(arrayContainsAll("tags", "adventure", "magic"))
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results)).isEqualTo(Lists.newArrayList(map("title", "The Lord of the Rings")));
@@ -415,9 +458,9 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(Field.of("tags").arrayLength().asAlias("tagsCount"))
+            .select(Field.of("tags").arrayLength().as("tagsCount"))
             .where(eq("tagsCount", 3))
-            .execute(firestore)
+            .execute()
             .get();
 
     // All documents have 3 tags in the test dataset
@@ -429,9 +472,9 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(Field.of("tags").arrayConcat("newTag1", "newTag2").asAlias("modifiedTags"))
+            .select(Field.of("tags").arrayConcat("newTag1", "newTag2").as("modifiedTags"))
             .limit(1)
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -449,9 +492,9 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .select(
                 arrayFilter(Field.of("tags"), Function.eq(arrayElement(), ""))
-                    .asAlias("filteredTags"))
+                    .as("filteredTags"))
             .limit(1)
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -467,9 +510,9 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .select(
                 arrayTransform(Field.of("tags"), strConcat(arrayElement(), "transformed"))
-                    .asAlias("transformedTags"))
+                    .as("transformedTags"))
             .limit(1)
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -486,9 +529,9 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(strConcat(Field.of("author"), " - ", Field.of("title")).asAlias("bookInfo"))
+            .select(strConcat(Field.of("author"), " - ", Field.of("title")).as("bookInfo"))
             .limit(1)
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -502,9 +545,9 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(Field.of("title").length().asAlias("titleLength"), Field.of("title"))
+            .select(Field.of("title").length().as("titleLength"), Field.of("title"))
             .where(gt("titleLength", 20))
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -516,9 +559,9 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(Field.of("title").toLowercase().asAlias("lowercaseTitle"))
+            .select(Field.of("title").toLowercase().as("lowercaseTitle"))
             .limit(1)
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -531,9 +574,9 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(Field.of("author").toUppercase().asAlias("uppercaseAuthor"))
+            .select(Field.of("author").toUppercase().as("uppercaseAuthor"))
             .limit(1)
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -547,10 +590,10 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .addFields(
                 strConcat(Constant.of(" "), Field.of("title"), Constant.of(" "))
-                    .asAlias("spacedTitle"))
-            .select(Field.of("spacedTitle").trim().asAlias("trimmedTitle"), Field.of("spacedTitle"))
+                    .as("spacedTitle"))
+            .select(Field.of("spacedTitle").trim().as("trimmedTitle"), Field.of("spacedTitle"))
             .limit(1)
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -568,7 +611,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .where(Field.of("title").like("%Guide%"))
             .select("title")
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -582,7 +625,7 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .where(Field.of("title").regexContains("(?i)(the|of)"))
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results)).hasSize(5);
@@ -595,7 +638,7 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .where(Function.regexMatch("title", ".*(?i)(the|of).*"))
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results)).hasSize(5);
@@ -607,12 +650,12 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .select(
-                add(Field.of("rating"), 1).asAlias("ratingPlusOne"),
-                subtract(Field.of("published"), 1900).asAlias("yearsSince1900"),
-                Field.of("rating").multiply(10).asAlias("ratingTimesTen"),
-                Field.of("rating").divide(2).asAlias("ratingDividedByTwo"))
+                add(Field.of("rating"), 1).as("ratingPlusOne"),
+                subtract(Field.of("published"), 1900).as("yearsSince1900"),
+                Field.of("rating").multiply(10).as("ratingTimesTen"),
+                Field.of("rating").divide(2).as("ratingDividedByTwo"))
             .limit(1)
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -641,7 +684,7 @@ public class ITPipelineTest extends ITBaseTest {
                     neq("genre", "Science Fiction")))
             .select("rating", "title")
             .sort(Field.of("title").ascending())
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -661,7 +704,7 @@ public class ITPipelineTest extends ITBaseTest {
                 or(and(gt("rating", 4.5), eq("genre", "Science Fiction")), lt("published", 1900)))
             .select("title")
             .sort(Field.of("title").ascending())
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -679,10 +722,10 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .where(not(Field.of("rating").isNaN())) // Filter out any documents with NaN rating
             .select(
-                isNull("rating").asAlias("ratingIsNull"),
-                not(Field.of("rating").isNaN()).asAlias("ratingIsNotNaN"))
+                isNull("rating").as("ratingIsNull"),
+                not(Field.of("rating").isNaN()).as("ratingIsNotNaN"))
             .limit(1)
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -694,9 +737,9 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(Field.of("awards").mapGet("hugo").asAlias("hugoAward"), Field.of("title"))
+            .select(Field.of("awards").mapGet("hugo").as("hugoAward"), Field.of("title"))
             .where(eq("hugoAward", true))
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -713,9 +756,9 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .select(
                 parent(collection.document("chile").collection("subCollection").getPath())
-                    .asAlias("parent"))
+                    .as("parent"))
             .limit(1)
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))
@@ -728,9 +771,9 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(collectionId(collection.document("chile")).asAlias("collectionId"))
+            .select(collectionId(collection.document("chile")).as("collectionId"))
             .limit(1)
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results)).isEqualTo(Lists.newArrayList(map("collectionId", "books")));
@@ -745,13 +788,13 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .select(
                 cosineDistance(Constant.ofVector(sourceVector), targetVector)
-                    .asAlias("cosineDistance"),
+                    .as("cosineDistance"),
                 dotProductDistance(Constant.ofVector(sourceVector), targetVector)
-                    .asAlias("dotProductDistance"),
+                    .as("dotProductDistance"),
                 euclideanDistance(Constant.ofVector(sourceVector), targetVector)
-                    .asAlias("euclideanDistance"))
+                    .as("euclideanDistance"))
             .limit(1)
-            .execute(firestore)
+            .execute()
             .get();
   }
 
@@ -762,7 +805,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .where(eq("awards.hugo", true))
             .select("title", "awards.hugo")
-            .execute(firestore)
+            .execute()
             .get();
 
     assertThat(data(results))

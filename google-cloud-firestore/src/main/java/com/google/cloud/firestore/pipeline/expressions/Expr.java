@@ -300,7 +300,7 @@ public interface Expr {
   }
 
   @BetaApi
-  default Selectable asAlias(String alias) {
+  default Selectable as(String alias) {
     return new ExprWithAlias(this, alias);
   }
 }

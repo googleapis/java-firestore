@@ -15,12 +15,18 @@ import com.google.cloud.firestore.Query.LimitType;
 import com.google.cloud.firestore.Query.UnaryFilterInternal;
 import com.google.cloud.firestore.pipeline.PaginatingPipeline;
 import com.google.cloud.firestore.pipeline.expressions.AccumulatorTarget;
+import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.ExprWithAlias;
 import com.google.cloud.firestore.pipeline.expressions.Field;
+import com.google.cloud.firestore.pipeline.expressions.Fields;
 import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
+import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.common.collect.Lists;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.Value;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @InternalApi
@@ -158,15 +164,47 @@ public class PipelineUtils {
 
     switch (operator) {
       case "sum":
-        return Field.of(fieldPath).sum().toField(f.getAlias());
+        return Field.of(fieldPath).sum().as(f.getAlias());
 
       case "count":
-        return countAll().toField(f.getAlias());
+        return countAll().as(f.getAlias());
       case "average":
-        return Field.of(fieldPath).avg().toField(f.getAlias());
+        return Field.of(fieldPath).avg().as(f.getAlias());
       default:
         // Handle the 'else' case appropriately in your Java code
         throw new IllegalArgumentException("Unsupported operator: " + operator);
     }
+  }
+
+  @InternalApi
+  public static Map<String, Expr> selectablesToMap(Selectable... selectables) {
+    Map<String, Expr> projMap = new HashMap<>();
+    for (Selectable proj : selectables) {
+      if (proj instanceof Field) {
+        Field fieldProj = (Field) proj;
+        projMap.put(fieldProj.getPath().getEncodedPath(), fieldProj);
+      } else if (proj instanceof AccumulatorTarget) {
+        AccumulatorTarget aggregatorProj = (AccumulatorTarget) proj;
+        projMap.put(aggregatorProj.getFieldName(), aggregatorProj.getAccumulator());
+      } else if (proj instanceof Fields) {
+        Fields fieldsProj = (Fields) proj;
+        if (fieldsProj.getFields() != null) {
+          fieldsProj.getFields().forEach(f -> projMap.put(f.getPath().getEncodedPath(), f));
+        }
+      } else if (proj instanceof ExprWithAlias) {
+        ExprWithAlias exprWithAlias = (ExprWithAlias) proj;
+        projMap.put(exprWithAlias.getAlias(), exprWithAlias.getExpr());
+      }
+    }
+    return projMap;
+  }
+
+  @InternalApi
+  public static Map<String, Expr> fieldNamesToMap(String... fields) {
+    Map<String, Expr> projMap = new HashMap<>();
+    for (String field : fields) {
+      projMap.put(field, Field.of(field));
+    }
+    return projMap;
   }
 }

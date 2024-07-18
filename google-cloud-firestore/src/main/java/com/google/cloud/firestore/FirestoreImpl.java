@@ -390,7 +390,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Override
   @BetaApi
   public PipelineSource pipeline() {
-    return new PipelineSource();
+    return new PipelineSource(this);
   }
 
   @Nonnull

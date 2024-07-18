@@ -10,10 +10,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.pipeline.PaginatingPipeline;
 import com.google.cloud.firestore.pipeline.expressions.AccumulatorTarget;
-import com.google.cloud.firestore.pipeline.expressions.Expr;
-import com.google.cloud.firestore.pipeline.expressions.ExprWithAlias;
 import com.google.cloud.firestore.pipeline.expressions.Field;
-import com.google.cloud.firestore.pipeline.expressions.Fields;
 import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
 import com.google.cloud.firestore.pipeline.expressions.Ordering;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
@@ -44,7 +41,6 @@ import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -86,106 +82,93 @@ import java.util.stream.Collectors;
 @BetaApi
 public final class Pipeline {
   private final ImmutableList<Stage> stages;
+  private final Firestore db;
 
-  private Pipeline(List<Stage> stages) {
+  private Pipeline(Firestore db, List<Stage> stages) {
+    this.db = db;
     this.stages = ImmutableList.copyOf(stages);
   }
 
-  Pipeline(Collection collection) {
-    this(Lists.newArrayList(collection));
+  Pipeline(Firestore db, Collection collection) {
+    this(db, Lists.newArrayList(collection));
   }
 
-  Pipeline(CollectionGroup group) {
-    this(Lists.newArrayList(group));
+  Pipeline(Firestore db, CollectionGroup group) {
+    this(db, Lists.newArrayList(group));
   }
 
-  Pipeline(Database db) {
-    this(Lists.newArrayList(db));
+  Pipeline(Firestore firestore, Database db) {
+    this(firestore, Lists.newArrayList(db));
   }
 
-  Pipeline(Documents docs) {
-    this(Lists.newArrayList(docs));
-  }
-
-  private Map<String, Expr> projectablesToMap(Selectable... selectables) {
-    Map<String, Expr> projMap = new HashMap<>();
-    for (Selectable proj : selectables) {
-      if (proj instanceof Field) {
-        Field fieldProj = (Field) proj;
-        projMap.put(fieldProj.getPath().getEncodedPath(), fieldProj);
-      } else if (proj instanceof AccumulatorTarget) {
-        AccumulatorTarget aggregatorProj = (AccumulatorTarget) proj;
-        projMap.put(aggregatorProj.getFieldName(), aggregatorProj.getAccumulator());
-      } else if (proj instanceof Fields) {
-        Fields fieldsProj = (Fields) proj;
-        if (fieldsProj.getFields() != null) {
-          fieldsProj.getFields().forEach(f -> projMap.put(f.getPath().getEncodedPath(), f));
-        }
-      } else if (proj instanceof ExprWithAlias) {
-        ExprWithAlias exprWithAlias = (ExprWithAlias) proj;
-        projMap.put(exprWithAlias.getAlias(), exprWithAlias.getExpr());
-      }
-    }
-    return projMap;
-  }
-
-  private Map<String, Expr> fieldNamesToMap(String... fields) {
-    Map<String, Expr> projMap = new HashMap<>();
-    for (String field : fields) {
-      projMap.put(field, Field.of(field));
-    }
-    return projMap;
+  Pipeline(Firestore db, Documents docs) {
+    this(db, Lists.newArrayList(docs));
   }
 
   @BetaApi
   public Pipeline addFields(Selectable... fields) {
     return new Pipeline(
+        this.db,
         ImmutableList.<Stage>builder()
             .addAll(stages)
-            .add(new AddFields(projectablesToMap(fields)))
+            .add(new AddFields(PipelineUtils.selectablesToMap(fields)))
             .build());
   }
 
   @BetaApi
   public Pipeline select(Selectable... projections) {
     return new Pipeline(
+        this.db,
         ImmutableList.<Stage>builder()
             .addAll(stages)
-            .add(new Select(projectablesToMap(projections)))
+            .add(new Select(PipelineUtils.selectablesToMap(projections)))
             .build());
   }
 
   @BetaApi
   public Pipeline select(String... fields) {
     return new Pipeline(
+        this.db,
         ImmutableList.<Stage>builder()
             .addAll(stages)
-            .add(new Select(fieldNamesToMap(fields)))
+            .add(new Select(PipelineUtils.fieldNamesToMap(fields)))
             .build());
   }
 
   @BetaApi
   public Pipeline where(FilterCondition condition) {
     return new Pipeline(
+        this.db,
         ImmutableList.<Stage>builder().addAll(stages).add(new Where(condition)).build());
   }
 
   @BetaApi
   public Pipeline offset(int offset) {
     return new Pipeline(
+        this.db,
         ImmutableList.<Stage>builder().addAll(stages).add(new Offset(offset)).build());
   }
 
   @BetaApi
   public Pipeline limit(int limit) {
     return new Pipeline(
+        this.db,
         ImmutableList.<Stage>builder().addAll(stages).add(new Limit(limit)).build());
   }
 
   @BetaApi
   public Pipeline aggregate(AccumulatorTarget... aggregators) {
     return new Pipeline(
-        ImmutableList.<Stage>builder().addAll(stages).add(new Aggregate(aggregators)).build());
+        this.db,
+        ImmutableList.<Stage>builder().addAll(stages).add(Aggregate.newInstance().withAccumulators(aggregators)).build());
+  }
+
+  @BetaApi
+  public Pipeline aggregate(Aggregate aggregate) {
+    return new Pipeline(
+        this.db,
+        ImmutableList.<Stage>builder().addAll(stages)
+            .add(aggregate).build());
   }
 
   @BetaApi
@@ -199,6 +182,7 @@ public final class Pipeline {
       Field property, double[] vector, FindNearest.FindNearestOptions options) {
     // Implementation for findNearest (add the FindNearest stage if needed)
     return new Pipeline(
+        this.db,
         ImmutableList.<Stage>builder()
             .addAll(stages)
             .add(
@@ -210,6 +194,7 @@ public final class Pipeline {
   @BetaApi
   public Pipeline sort(List<Ordering> orders, Sort.Density density, Sort.Truncation truncation) {
     return new Pipeline(
+        this.db,
         ImmutableList.<Stage>builder()
             .addAll(stages)
             .add(new Sort(orders, density, truncation))
@@ -231,6 +216,7 @@ public final class Pipeline {
   public Pipeline genericStage(String name, Map<String, Object> params) {
     // Implementation for genericStage (add the GenericStage if needed)
     return new Pipeline(
+        this.db,
         ImmutableList.<Stage>builder()
             .addAll(stages)
             .add(
@@ -242,7 +228,7 @@ public final class Pipeline {
   }
 
   @BetaApi
-  public ApiFuture<List<PipelineResult>> execute(Firestore db) {
+  public ApiFuture<List<PipelineResult>> execute() {
     if (db instanceof FirestoreImpl) {
       FirestoreImpl firestoreImpl = (FirestoreImpl) db;
       Value pipelineValue = toProto();
@@ -287,7 +273,7 @@ public final class Pipeline {
   }
 
   @BetaApi
-  public void execute(Firestore db, ApiStreamObserver<PipelineResult> observer) {
+  public void execute(ApiStreamObserver<PipelineResult> observer) {
     if (db instanceof FirestoreImpl) {
       FirestoreImpl firestoreImpl = (FirestoreImpl) db;
       Value pipelineValue = toProto();

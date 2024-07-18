@@ -5,7 +5,8 @@ import com.google.api.core.BetaApi;
 @BetaApi
 public interface Accumulator extends Expr {
   @BetaApi
-  default AccumulatorTarget toField(String fieldName) {
+  @Override
+  default AccumulatorTarget as(String fieldName) {
     return new AccumulatorTarget(this, fieldName, false);
   }
 }

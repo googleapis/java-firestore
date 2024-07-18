@@ -62,7 +62,7 @@ public class ITQueryAggregationsTest extends ITBaseTest {
     AggregateQuerySnapshot snapshot = query.get().get();
 
     List<PipelineResult> pipelineResults =
-        query.pipeline().execute(query.getQuery().getFirestore()).get();
+        query.pipeline().execute().get();
     assertThat(pipelineResults).hasSize(1);
     assertThat(pipelineResults.get(0).getData())
         .isEqualTo(TestUtil.getAggregateSnapshotData(snapshot));
