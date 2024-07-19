@@ -20,29 +20,28 @@ public final class Aggregate implements Stage {
   private final Map<String, Accumulator> accumulators;
 
   @BetaApi
-  public static Aggregate newInstance(){
+  public static Aggregate newInstance() {
     return new Aggregate(Collections.emptyMap(), Collections.emptyMap());
   }
 
   @BetaApi
-  public Aggregate withGroups(String... fields){
-    return new Aggregate(
-        PipelineUtils.fieldNamesToMap(fields),
-        this.accumulators);
+  public Aggregate withGroups(String... fields) {
+    return new Aggregate(PipelineUtils.fieldNamesToMap(fields), this.accumulators);
   }
 
   @BetaApi
-  public Aggregate withGroups(Selectable... selectables){
-    return new Aggregate(
-        PipelineUtils.selectablesToMap(selectables), this.accumulators);
+  public Aggregate withGroups(Selectable... selectables) {
+    return new Aggregate(PipelineUtils.selectablesToMap(selectables), this.accumulators);
   }
 
   @BetaApi
-  public Aggregate withAccumulators(AccumulatorTarget... aggregators){
-    return new Aggregate(this.groups, Arrays.stream(aggregators)
-        .collect(
-            Collectors.toMap(
-                AccumulatorTarget::getFieldName, AccumulatorTarget::getAccumulator)));
+  public Aggregate withAccumulators(AccumulatorTarget... aggregators) {
+    return new Aggregate(
+        this.groups,
+        Arrays.stream(aggregators)
+            .collect(
+                Collectors.toMap(
+                    AccumulatorTarget::getFieldName, AccumulatorTarget::getAccumulator)));
   }
 
   private Aggregate(Map<String, Expr> groups, Map<String, Accumulator> accumulators) {

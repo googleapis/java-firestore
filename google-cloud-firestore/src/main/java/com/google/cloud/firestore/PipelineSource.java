@@ -14,14 +14,14 @@ public class PipelineSource {
   private final Firestore db;
 
   @InternalApi
-  PipelineSource(Firestore db){
+  PipelineSource(Firestore db) {
     this.db = db;
   }
 
   @Nonnull
   @BetaApi
   public Pipeline collection(@Nonnull String path) {
-    return new Pipeline(this.db,new Collection(path));
+    return new Pipeline(this.db, new Collection(path));
   }
 
   @Nonnull

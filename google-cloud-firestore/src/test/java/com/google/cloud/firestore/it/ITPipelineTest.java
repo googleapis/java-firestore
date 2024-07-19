@@ -281,17 +281,11 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .where(lt("published", 1900))
-            .aggregate(
-                Aggregate
-                    .newInstance()
-                    .withGroups("genre"))
+            .aggregate(Aggregate.newInstance().withGroups("genre"))
             .execute()
             .get();
     assertThat(data(results))
-        .containsExactly(
-            map("genre", "Romance"),
-            map("genre", "Psychological Thriller")
-        );
+        .containsExactly(map("genre", "Romance"), map("genre", "Psychological Thriller"));
   }
 
   @Test
@@ -301,11 +295,9 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .where(lt("published", 1984))
             .aggregate(
-                Aggregate
-                    .newInstance()
+                Aggregate.newInstance()
                     .withGroups("genre")
-                    .withAccumulators(avg("rating").as("avg_rating"))
-            )
+                    .withAccumulators(avg("rating").as("avg_rating")))
             .where(gt("avg_rating", 4.3))
             .execute()
             .get();
@@ -313,8 +305,7 @@ public class ITPipelineTest extends ITBaseTest {
         .containsExactly(
             map("avg_rating", 4.7, "genre", "Fantasy"),
             map("avg_rating", 4.5, "genre", "Romance"),
-            map("avg_rating", 4.4, "genre", "Science Fiction")
-            );
+            map("avg_rating", 4.4, "genre", "Science Fiction"));
   }
 
   @Test
@@ -444,11 +435,7 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void testArrayContainsAll() throws Exception {
     List<PipelineResult> results =
-        collection
-            .pipeline()
-            .where(arrayContainsAll("tags", "adventure", "magic"))
-            .execute()
-            .get();
+        collection.pipeline().where(arrayContainsAll("tags", "adventure", "magic")).execute().get();
 
     assertThat(data(results)).isEqualTo(Lists.newArrayList(map("title", "The Lord of the Rings")));
   }
@@ -491,8 +478,7 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .select(
-                arrayFilter(Field.of("tags"), Function.eq(arrayElement(), ""))
-                    .as("filteredTags"))
+                arrayFilter(Field.of("tags"), Function.eq(arrayElement(), "")).as("filteredTags"))
             .limit(1)
             .execute()
             .get();
@@ -589,8 +575,7 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .addFields(
-                strConcat(Constant.of(" "), Field.of("title"), Constant.of(" "))
-                    .as("spacedTitle"))
+                strConcat(Constant.of(" "), Field.of("title"), Constant.of(" ")).as("spacedTitle"))
             .select(Field.of("spacedTitle").trim().as("trimmedTitle"), Field.of("spacedTitle"))
             .limit(1)
             .execute()
@@ -787,8 +772,7 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .select(
-                cosineDistance(Constant.ofVector(sourceVector), targetVector)
-                    .as("cosineDistance"),
+                cosineDistance(Constant.ofVector(sourceVector), targetVector).as("cosineDistance"),
                 dotProductDistance(Constant.ofVector(sourceVector), targetVector)
                     .as("dotProductDistance"),
                 euclideanDistance(Constant.ofVector(sourceVector), targetVector)

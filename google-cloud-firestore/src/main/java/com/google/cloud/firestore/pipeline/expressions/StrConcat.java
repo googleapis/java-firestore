@@ -9,6 +9,6 @@ import java.util.List;
 public final class StrConcat extends Function {
   @InternalApi
   StrConcat(Expr first, List<Expr> exprs) {
-    super("str_concat", Lists.newArrayList(first, new ListOfExprs(exprs)));
+    super("str_concat", Lists.asList(first, exprs.toArray(new Expr[] {})));
   }
 }

@@ -3,6 +3,8 @@ package com.google.cloud.firestore.pipeline.expressions;
 import com.google.api.core.InternalApi;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.Value;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @InternalApi
@@ -28,5 +30,12 @@ public final class FunctionUtils {
     } else {
       throw new IllegalArgumentException("Unsupported expression type: " + expr.getClass());
     }
+  }
+
+  @InternalApi
+  static List<Expr> toExprList(Object[] other) {
+    return Arrays.stream(other)
+        .map(obj -> (obj instanceof Expr) ? (Expr) obj : Constant.of(obj))
+        .collect(Collectors.toList());
   }
 }

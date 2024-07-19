@@ -1,5 +1,7 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
+import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.toExprList;
+
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.DocumentReference;
@@ -340,8 +342,7 @@ public class Function implements Expr {
 
   @BetaApi
   public static ArrayConcat arrayConcat(Expr expr, Object... elements) {
-    return new ArrayConcat(
-        expr, Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+    return new ArrayConcat(expr, toExprList(elements));
   }
 
   @BetaApi
@@ -351,8 +352,7 @@ public class Function implements Expr {
 
   @BetaApi
   public static ArrayConcat arrayConcat(String field, Object... elements) {
-    return new ArrayConcat(
-        Field.of(field), Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+    return new ArrayConcat(Field.of(field), toExprList(elements));
   }
 
   @BetaApi
@@ -382,8 +382,7 @@ public class Function implements Expr {
 
   @BetaApi
   public static ArrayContainsAll arrayContainsAll(Expr expr, Object... elements) {
-    return new ArrayContainsAll(
-        expr, Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+    return new ArrayContainsAll(expr, toExprList(elements));
   }
 
   @BetaApi
@@ -393,8 +392,7 @@ public class Function implements Expr {
 
   @BetaApi
   public static ArrayContainsAll arrayContainsAll(String field, Object... elements) {
-    return new ArrayContainsAll(
-        Field.of(field), Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+    return new ArrayContainsAll(Field.of(field), toExprList(elements));
   }
 
   @BetaApi
@@ -404,8 +402,7 @@ public class Function implements Expr {
 
   @BetaApi
   public static ArrayContainsAny arrayContainsAny(Expr expr, Object... elements) {
-    return new ArrayContainsAny(
-        expr, Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+    return new ArrayContainsAny(expr, toExprList(elements));
   }
 
   @BetaApi
@@ -415,8 +412,7 @@ public class Function implements Expr {
 
   @BetaApi
   public static ArrayContainsAny arrayContainsAny(String field, Object... elements) {
-    return new ArrayContainsAny(
-        Field.of(field), Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+    return new ArrayContainsAny(Field.of(field), toExprList(elements));
   }
 
   @BetaApi
@@ -496,8 +492,7 @@ public class Function implements Expr {
 
   @BetaApi
   public static StrConcat strConcat(Expr expr, Object... elements) {
-    return new StrConcat(
-        expr, Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+    return new StrConcat(expr, toExprList(elements));
   }
 
   @BetaApi
@@ -507,8 +502,7 @@ public class Function implements Expr {
 
   @BetaApi
   public static StrConcat strConcat(String field, Object... elements) {
-    return new StrConcat(
-        Field.of(field), Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+    return new StrConcat(Field.of(field), toExprList(elements));
   }
 
   @BetaApi

@@ -1,9 +1,10 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
+import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.toExprList;
+
 import com.google.api.core.BetaApi;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @BetaApi
 public interface Expr {
@@ -109,11 +110,7 @@ public interface Expr {
 
   @BetaApi
   default In inAny(Object... other) {
-    List<Expr> othersAsExpr =
-        Arrays.stream(other)
-            .map(obj -> (obj instanceof Expr) ? (Expr) obj : Constant.of(obj))
-            .collect(Collectors.toList());
-    return new In(this, othersAsExpr);
+    return new In(this, toExprList(other));
   }
 
   @BetaApi
@@ -128,8 +125,7 @@ public interface Expr {
 
   @BetaApi
   default ArrayConcat arrayConcat(Object... elements) {
-    return new ArrayConcat(
-        this, Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+    return new ArrayConcat(this, toExprList(elements));
   }
 
   @BetaApi
@@ -149,8 +145,7 @@ public interface Expr {
 
   @BetaApi
   default ArrayContainsAll arrayContainsAll(Object... elements) {
-    return new ArrayContainsAll(
-        this, Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+    return new ArrayContainsAll(this, toExprList(elements));
   }
 
   @BetaApi
@@ -160,8 +155,7 @@ public interface Expr {
 
   @BetaApi
   default ArrayContainsAny arrayContainsAny(Object... elements) {
-    return new ArrayContainsAny(
-        this, Arrays.stream(elements).map(Constant::of).collect(Collectors.toList()));
+    return new ArrayContainsAny(this, toExprList(elements));
   }
 
   @BetaApi

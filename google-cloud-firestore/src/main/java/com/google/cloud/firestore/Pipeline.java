@@ -138,37 +138,35 @@ public final class Pipeline {
   @BetaApi
   public Pipeline where(FilterCondition condition) {
     return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder().addAll(stages).add(new Where(condition)).build());
+        this.db, ImmutableList.<Stage>builder().addAll(stages).add(new Where(condition)).build());
   }
 
   @BetaApi
   public Pipeline offset(int offset) {
     return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder().addAll(stages).add(new Offset(offset)).build());
+        this.db, ImmutableList.<Stage>builder().addAll(stages).add(new Offset(offset)).build());
   }
 
   @BetaApi
   public Pipeline limit(int limit) {
     return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder().addAll(stages).add(new Limit(limit)).build());
+        this.db, ImmutableList.<Stage>builder().addAll(stages).add(new Limit(limit)).build());
   }
 
   @BetaApi
   public Pipeline aggregate(AccumulatorTarget... aggregators) {
     return new Pipeline(
         this.db,
-        ImmutableList.<Stage>builder().addAll(stages).add(Aggregate.newInstance().withAccumulators(aggregators)).build());
+        ImmutableList.<Stage>builder()
+            .addAll(stages)
+            .add(Aggregate.newInstance().withAccumulators(aggregators))
+            .build());
   }
 
   @BetaApi
   public Pipeline aggregate(Aggregate aggregate) {
     return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder().addAll(stages)
-            .add(aggregate).build());
+        this.db, ImmutableList.<Stage>builder().addAll(stages).add(aggregate).build());
   }
 
   @BetaApi
