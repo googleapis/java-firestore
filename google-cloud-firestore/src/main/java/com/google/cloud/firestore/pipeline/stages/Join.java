@@ -4,17 +4,18 @@ import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.pipeline.expressions.Field;
+import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
 
 @BetaApi
 public class Join implements Stage {
   private final Type type;
-  private final JoinCondition condition;
+  private final FilterCondition condition;
   private final Field alias;
   private final Pipeline otherPipeline;
   private final Field otherAlias;
 
   @InternalApi
-  Join(Type type, JoinCondition condition, Field alias, Pipeline otherPipeline, Field otherAlias) {
+  Join(Type type, FilterCondition condition, Field alias, Pipeline otherPipeline, Field otherAlias) {
     this.type = type;
     this.condition = condition;
     this.alias = alias;
@@ -28,7 +29,7 @@ public class Join implements Stage {
   }
 
   @BetaApi
-  public Join onCondition(JoinCondition condition) {
+  public Join onCondition(FilterCondition condition) {
     return new Join(this.type, condition, this.alias, this.otherPipeline, this.otherAlias);
   }
 
