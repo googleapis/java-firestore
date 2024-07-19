@@ -30,6 +30,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Function.collectio
 import static com.google.cloud.firestore.pipeline.expressions.Function.cosineDistance;
 import static com.google.cloud.firestore.pipeline.expressions.Function.countAll;
 import static com.google.cloud.firestore.pipeline.expressions.Function.dotProductDistance;
+import static com.google.cloud.firestore.pipeline.expressions.Function.endsWith;
 import static com.google.cloud.firestore.pipeline.expressions.Function.eq;
 import static com.google.cloud.firestore.pipeline.expressions.Function.euclideanDistance;
 import static com.google.cloud.firestore.pipeline.expressions.Function.gt;
@@ -39,6 +40,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Function.neq;
 import static com.google.cloud.firestore.pipeline.expressions.Function.not;
 import static com.google.cloud.firestore.pipeline.expressions.Function.or;
 import static com.google.cloud.firestore.pipeline.expressions.Function.parent;
+import static com.google.cloud.firestore.pipeline.expressions.Function.startsWith;
 import static com.google.cloud.firestore.pipeline.expressions.Function.strConcat;
 import static com.google.cloud.firestore.pipeline.expressions.Function.subtract;
 import static com.google.common.truth.Truth.assertThat;
@@ -524,6 +526,43 @@ public class ITPipelineTest extends ITBaseTest {
         .isEqualTo(
             Lists.newArrayList(
                 map("bookInfo", "Douglas Adams - The Hitchhiker's Guide to the Galaxy")));
+  }
+
+  @Test
+  public void testStartsWith() throws Exception {
+    List<PipelineResult> results =
+        collection.pipeline()
+            .where(startsWith("title", "The"))
+            .select("title")
+            .sort(Field.of("title").ascending())
+            .execute().get();
+
+    assertThat(data(results))
+        .isEqualTo(
+            Lists.newArrayList(
+                map("title", "The Great Gatsby"),
+                map("title", "The Handmaid's Tale"),
+                map("title", "The Hitchhiker's Guide to the Galaxy"),
+                map("title", "The Lord of the Rings")
+                ));
+  }
+
+  @Test
+  public void testEndsWith() throws Exception {
+    List<PipelineResult> results =
+        collection
+            .pipeline()
+            .where(endsWith(Field.of("title"), Constant.of("y")))
+            .select("title")
+            .sort(Field.of("title").descending())
+            .execute()
+            .get();
+
+    assertThat(data(results))
+        .isEqualTo(
+            Lists.newArrayList(
+                map("title", "The Hitchhiker's Guide to the Galaxy"),
+                map("title", "The Great Gatsby")));
   }
 
   @Test

@@ -486,6 +486,36 @@ public class Function implements Expr {
   }
 
   @BetaApi
+  public static StartsWith startsWith(String field, String prefix) {
+    return new StartsWith(Field.of(field), Constant.of(prefix));
+  }
+
+  @BetaApi
+  public static StartsWith startsWith(String field, Expr prefix) {
+    return new StartsWith(Field.of(field), prefix);
+  }
+
+  @BetaApi
+  public static StartsWith startsWith(Expr expr, Expr prefix) {
+    return new StartsWith(expr, prefix);
+  }
+
+  @BetaApi
+  public static EndsWith endsWith(String field, String prefix) {
+    return new EndsWith(Field.of(field), Constant.of(prefix));
+  }
+
+  @BetaApi
+  public static EndsWith endsWith(String field, Expr prefix) {
+    return new EndsWith(Field.of(field), prefix);
+  }
+
+  @BetaApi
+  public static EndsWith endsWith(Expr expr, Expr prefix) {
+    return new EndsWith(expr, prefix);
+  }
+
+  @BetaApi
   public static StrConcat strConcat(Expr expr, Expr... elements) {
     return new StrConcat(expr, Arrays.asList(elements));
   }

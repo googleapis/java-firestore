@@ -81,6 +81,7 @@ import java.util.stream.Collectors;
  */
 @BetaApi
 public final class Pipeline {
+  private static Logger logger = Logger.getLogger(Pipeline.class.getName());
   private final ImmutableList<Stage> stages;
   private final Firestore db;
 
@@ -388,7 +389,7 @@ public final class Pipeline {
           }
         };
 
-    Logger.getLogger("Pipeline").log(Level.WARNING, "Sending request: " + request);
+    logger.log(Level.INFO, "Sending pipeline request: " + request.getStructuredPipeline());
 
     rpcContext.streamRequest(request, observer, rpcContext.getClient().executePipelineCallable());
   }

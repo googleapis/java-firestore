@@ -229,6 +229,26 @@ public interface Expr {
   }
 
   @BetaApi
+  default StartsWith startsWith(String prefix) {
+    return new StartsWith(this, Constant.of(prefix));
+  }
+
+  @BetaApi
+  default StartsWith startsWith(Expr prefix) {
+    return new StartsWith(this, prefix);
+  }
+
+  @BetaApi
+  default EndsWith endsWith(String postfix) {
+    return new EndsWith(this, Constant.of(postfix));
+  }
+
+  @BetaApi
+  default EndsWith endsWith(Expr postfix) {
+    return new EndsWith(this, postfix);
+  }
+
+  @BetaApi
   default StrConcat strConcat(List<Expr> elements) {
     return new StrConcat(this, elements);
   }
