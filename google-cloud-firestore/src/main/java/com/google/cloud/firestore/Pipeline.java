@@ -10,6 +10,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.pipeline.PaginatingPipeline;
 import com.google.cloud.firestore.pipeline.expressions.AccumulatorTarget;
+import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
 import com.google.cloud.firestore.pipeline.expressions.Ordering;
@@ -23,6 +24,7 @@ import com.google.cloud.firestore.pipeline.stages.Distinct;
 import com.google.cloud.firestore.pipeline.stages.Documents;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.GenericStage;
+import com.google.cloud.firestore.pipeline.stages.Join;
 import com.google.cloud.firestore.pipeline.stages.Limit;
 import com.google.cloud.firestore.pipeline.stages.Offset;
 import com.google.cloud.firestore.pipeline.stages.Select;
@@ -230,6 +232,16 @@ public final class Pipeline {
   @BetaApi
   public PaginatingPipeline paginate(int pageSize, Ordering... orders) {
     return new PaginatingPipeline(this, pageSize, Arrays.asList(orders));
+  }
+
+  @BetaApi
+  public Pipeline join(Join join) {
+    return new Pipeline(this.db, ImmutableList.<Stage>builder().addAll(stages).add(join).build());
+  }
+
+  @BetaApi
+  public Pipeline unnestArray(Expr expr) {
+    return new Pipeline(this.db, ImmutableList.<Stage>builder().addAll(stages) /*.add()*/.build());
   }
 
   @BetaApi
