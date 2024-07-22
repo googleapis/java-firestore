@@ -258,8 +258,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
 
       if (this.openTelemetryOptions.isMetricsEnabled()) {
         OpenTelemetryMetricsRecorder recorder =
-            new OpenTelemetryMetricsRecorder(
-                this.openTelemetryOptions.getOpenTelemetry(), "sample-metrics");
+            new OpenTelemetryMetricsRecorder(this.openTelemetryOptions.getOpenTelemetry(), "GAX");
         this.setApiTracerFactory(new MetricsTracerFactory(recorder));
       }
 
@@ -338,8 +337,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
 
     if (this.openTelemetryOptions.isMetricsEnabled()) {
       OpenTelemetryMetricsRecorder recorder =
-          new OpenTelemetryMetricsRecorder(
-              this.openTelemetryOptions.getOpenTelemetry(), "sample-metrics");
+          new OpenTelemetryMetricsRecorder(this.openTelemetryOptions.getOpenTelemetry(), "GAX");
       builder.setApiTracerFactory(new MetricsTracerFactory(recorder));
     }
 

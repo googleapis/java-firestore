@@ -26,6 +26,7 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.telemetry.MetricsUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
@@ -122,6 +123,11 @@ public class AggregateQuery {
                 transactionId == null
                     ? TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET
                     : TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
+
+         // MILA
+    MetricsUtil util = query.getFirestore().getOptions().getMetricsUtil();
+    double start = System.currentTimeMillis();
+
     try (Scope ignored = span.makeCurrent()) {
       AggregateQueryResponseDeliverer responseDeliverer =
           new AggregateQueryResponseDeliverer(
@@ -130,6 +136,11 @@ public class AggregateQuery {
               /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());
       runQuery(responseDeliverer, /* attempt= */ 0);
       ApiFuture<AggregateQuerySnapshot> result = responseDeliverer.getFuture();
+
+      util.endAtFuture(result, start, transactionId == null
+      ? TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET
+      : TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
+
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {

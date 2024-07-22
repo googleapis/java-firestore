@@ -1744,9 +1744,8 @@ public class Query {
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     long start = System.currentTimeMillis();
     Map<String, String> attributes = new HashMap<>();
-    String method = transactionId != null ? "Query.get" : "Transaction.get";
     attributes.put("language", "java");
-    attributes.put("method", method);
+    attributes.put("method", TraceUtil.SPAN_NAME_RUN_QUERY);
 
     final AtomicReference<QueryDocumentSnapshot> lastReceivedDocument = new AtomicReference<>();
 

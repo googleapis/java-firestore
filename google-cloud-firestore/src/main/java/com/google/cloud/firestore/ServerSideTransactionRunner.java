@@ -24,6 +24,7 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
+import com.google.cloud.firestore.telemetry.MetricsUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.telemetry.TraceUtil.Span;
@@ -95,6 +96,11 @@ final class ServerSideTransactionRunner<T> {
     runTransactionSpan.setAttribute("transactionType", transactionOptions.getType().name());
     runTransactionSpan.setAttribute("numAttemptsAllowed", transactionOptions.getNumberOfAttempts());
     runTransactionSpan.setAttribute("attemptsRemaining", attemptsRemaining);
+
+    //MILA
+        MetricsUtil util = firestore.getOptions().getMetricsUtil();
+        double start = System.currentTimeMillis();
+    
     try (Scope ignored = runTransactionSpan.makeCurrent()) {
       runTransactionContext = getTraceUtil().currentContext();
       --attemptsRemaining;
@@ -105,6 +111,7 @@ final class ServerSideTransactionRunner<T> {
               Throwable.class,
               this::restartTransactionCallback,
               MoreExecutors.directExecutor());
+              util.endAtFuture(result, start, TraceUtil.SPAN_NAME_TRANSACTION_RUN);
       runTransactionSpan.endAtFuture(result);
       return result;
     } catch (Exception error) {

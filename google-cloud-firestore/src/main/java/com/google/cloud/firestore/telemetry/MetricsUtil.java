@@ -19,9 +19,9 @@ package com.google.cloud.firestore.telemetry;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
-import com.google.api.gax.core.GaxProperties;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
@@ -29,6 +29,8 @@ import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.metrics.DoubleHistogram;
 import io.opentelemetry.api.metrics.Meter;
+import io.opentelemetry.api.trace.StatusCode;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +55,6 @@ public class MetricsUtil {
     meter =
         openTelemetry
             .meterBuilder("firestore-java")
-            .setInstrumentationVersion(GaxProperties.getGaxVersion())
             .build();
 
     endToEndRequestLatency =
@@ -97,10 +98,22 @@ public class MetricsUtil {
     return attributesBuilder.build();
   }
 
+
+  public <T> void end(ApiFuture<T> futureValue, double start, String method) {
+    Map<String, String> attributes = new HashMap<>();
+    attributes.put("language", "java");
+    attributes.put("method", method);
+    attributes.put("status", "OK");
+    double end = System.currentTimeMillis();
+    double elapsedTime = end - start;
+    endToEndRequestLatencyRecorder(elapsedTime, attributes);
+  }
+
+
   public <T> void endAtFuture(ApiFuture<T> futureValue, double start, String method) {
     Map<String, String> attributes = new HashMap<>();
     attributes.put("language", "java");
-    attributes.put("method", "DocumentReference.get");
+    attributes.put("method", method);
 
     ApiFutures.addCallback(
         futureValue,

@@ -23,6 +23,7 @@ import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.cloud.firestore.telemetry.MetricsUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
@@ -200,12 +201,20 @@ public class CollectionReference extends Query {
             .getOptions()
             .getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_COL_REF_ADD);
+
+                // MILA
+    MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
+    double start = System.currentTimeMillis();
+
     try (Scope ignored = span.makeCurrent()) {
       final DocumentReference documentReference = document();
       ApiFuture<WriteResult> createFuture = documentReference.create(fields);
       ApiFuture<DocumentReference> result =
           ApiFutures.transform(
               createFuture, writeResult -> documentReference, MoreExecutors.directExecutor());
+
+              util.endAtFuture(result, start, TraceUtil.SPAN_NAME_COL_REF_ADD);
+
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
