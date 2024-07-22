@@ -86,6 +86,12 @@ public final class StageUtils {
           .addArgs(encodeValue(aggregateStage.getGroups()))
           .addArgs(encodeValue(aggregateStage.getAccumulators()))
           .build();
+    } else if (stage instanceof Distinct) {
+      Distinct distinctStage = (Distinct) stage;
+      return com.google.firestore.v1.Pipeline.Stage.newBuilder()
+          .setName(distinctStage.getName())
+          .addArgs(encodeValue(distinctStage.getGroups()))
+          .build();
     } else if (stage instanceof FindNearest) {
       FindNearest findNearestStage = (FindNearest) stage;
       return com.google.firestore.v1.Pipeline.Stage.newBuilder()

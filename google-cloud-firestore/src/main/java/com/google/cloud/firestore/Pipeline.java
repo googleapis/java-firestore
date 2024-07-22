@@ -19,6 +19,7 @@ import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.cloud.firestore.pipeline.stages.Collection;
 import com.google.cloud.firestore.pipeline.stages.CollectionGroup;
 import com.google.cloud.firestore.pipeline.stages.Database;
+import com.google.cloud.firestore.pipeline.stages.Distinct;
 import com.google.cloud.firestore.pipeline.stages.Documents;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.GenericStage;
@@ -155,12 +156,12 @@ public final class Pipeline {
   }
 
   @BetaApi
-  public Pipeline aggregate(AccumulatorTarget... aggregators) {
+  public Pipeline aggregate(AccumulatorTarget... accumulators) {
     return new Pipeline(
         this.db,
         ImmutableList.<Stage>builder()
             .addAll(stages)
-            .add(Aggregate.newInstance().withAccumulators(aggregators))
+            .add(Aggregate.withAccumulators(accumulators))
             .build());
   }
 
@@ -168,6 +169,26 @@ public final class Pipeline {
   public Pipeline aggregate(Aggregate aggregate) {
     return new Pipeline(
         this.db, ImmutableList.<Stage>builder().addAll(stages).add(aggregate).build());
+  }
+
+  @BetaApi
+  public Pipeline distinct(String... fields) {
+    return new Pipeline(
+        this.db,
+        ImmutableList.<Stage>builder()
+            .addAll(stages)
+            .add(new Distinct(PipelineUtils.fieldNamesToMap(fields)))
+            .build());
+  }
+
+  @BetaApi
+  public Pipeline distinct(Selectable... selectables) {
+    return new Pipeline(
+        this.db,
+        ImmutableList.<Stage>builder()
+            .addAll(stages)
+            .add(new Distinct(PipelineUtils.selectablesToMap(selectables)))
+            .build());
   }
 
   @BetaApi

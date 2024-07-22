@@ -44,6 +44,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Function.startsWit
 import static com.google.cloud.firestore.pipeline.expressions.Function.strConcat;
 import static com.google.cloud.firestore.pipeline.expressions.Function.subtract;
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertThrows;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.LocalFirestoreHelper;
@@ -278,16 +279,29 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
-  public void testGroupBys() throws Exception {
+  public void testGroupBysWithoutAccumulators() throws Exception {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> {
+          collection
+              .pipeline()
+              .where(lt("published", 1900))
+              .aggregate(Aggregate.withAccumulators().withGroups("genre"));
+        });
+  }
+
+  @Test
+  public void testDistinct() throws Exception {
     List<PipelineResult> results =
         collection
             .pipeline()
             .where(lt("published", 1900))
-            .aggregate(Aggregate.newInstance().withGroups("genre"))
+            .distinct(Field.of("genre").toLowercase().as("lower_genre"))
             .execute()
             .get();
     assertThat(data(results))
-        .containsExactly(map("genre", "Romance"), map("genre", "Psychological Thriller"));
+        .containsExactly(
+            map("lower_genre", "romance"), map("lower_genre", "psychological thriller"));
   }
 
   @Test
@@ -297,9 +311,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .where(lt("published", 1984))
             .aggregate(
-                Aggregate.newInstance()
-                    .withGroups("genre")
-                    .withAccumulators(avg("rating").as("avg_rating")))
+                Aggregate.withAccumulators(avg("rating").as("avg_rating")).withGroups("genre"))
             .where(gt("avg_rating", 4.3))
             .execute()
             .get();
@@ -531,11 +543,13 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void testStartsWith() throws Exception {
     List<PipelineResult> results =
-        collection.pipeline()
+        collection
+            .pipeline()
             .where(startsWith("title", "The"))
             .select("title")
             .sort(Field.of("title").ascending())
-            .execute().get();
+            .execute()
+            .get();
 
     assertThat(data(results))
         .isEqualTo(
@@ -543,8 +557,7 @@ public class ITPipelineTest extends ITBaseTest {
                 map("title", "The Great Gatsby"),
                 map("title", "The Handmaid's Tale"),
                 map("title", "The Hitchhiker's Guide to the Galaxy"),
-                map("title", "The Lord of the Rings")
-                ));
+                map("title", "The Lord of the Rings")));
   }
 
   @Test

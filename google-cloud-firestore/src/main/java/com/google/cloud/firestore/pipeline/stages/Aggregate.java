@@ -20,11 +20,6 @@ public final class Aggregate implements Stage {
   private final Map<String, Accumulator> accumulators;
 
   @BetaApi
-  public static Aggregate newInstance() {
-    return new Aggregate(Collections.emptyMap(), Collections.emptyMap());
-  }
-
-  @BetaApi
   public Aggregate withGroups(String... fields) {
     return new Aggregate(PipelineUtils.fieldNamesToMap(fields), this.accumulators);
   }
@@ -35,10 +30,15 @@ public final class Aggregate implements Stage {
   }
 
   @BetaApi
-  public Aggregate withAccumulators(AccumulatorTarget... aggregators) {
+  public static Aggregate withAccumulators(AccumulatorTarget... accumulators) {
+    if (accumulators.length == 0) {
+      throw new IllegalArgumentException(
+          "Must specify at least one accumulator for aggregate() stage. There is a distinct() stage if only distinct group values are needed.");
+    }
+
     return new Aggregate(
-        this.groups,
-        Arrays.stream(aggregators)
+        Collections.emptyMap(),
+        Arrays.stream(accumulators)
             .collect(
                 Collectors.toMap(
                     AccumulatorTarget::getFieldName, AccumulatorTarget::getAccumulator)));
