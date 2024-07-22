@@ -25,11 +25,6 @@ public final class Field implements Expr, Selectable {
     return new Field(FieldPath.fromDotSeparatedString(path));
   }
 
-  @BetaApi
-  public static Field ofAll() {
-    return new Field(FieldPath.of(""));
-  }
-
   @InternalApi
   public Value toProto() {
     return Value.newBuilder().setFieldReferenceValue(path.toString()).build();
