@@ -17,12 +17,25 @@ public final class Field implements Expr, Selectable {
     this.path = path;
   }
 
+  private Field(Pipeline pipeline, FieldPath path) {
+    this.pipeline = pipeline;
+    this.path = path;
+  }
+
   @BetaApi
   public static Field of(String path) {
     if (path.equals(DOCUMENT_ID)) {
       return new Field(FieldPath.of("__path__"));
     }
     return new Field(FieldPath.fromDotSeparatedString(path));
+  }
+
+  @BetaApi
+  public static Field of(Pipeline pipeline, String path) {
+    if (path.equals(DOCUMENT_ID)) {
+      return new Field(pipeline, FieldPath.of("__path__"));
+    }
+    return new Field(pipeline, FieldPath.fromDotSeparatedString(path));
   }
 
   @InternalApi
