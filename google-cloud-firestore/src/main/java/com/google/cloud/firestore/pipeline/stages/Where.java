@@ -6,7 +6,7 @@ import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
 @InternalApi
 public final class Where implements Stage {
 
-  private static final String name = "filter";
+  private static final String name = "where";
   private final FilterCondition condition;
 
   @InternalApi
