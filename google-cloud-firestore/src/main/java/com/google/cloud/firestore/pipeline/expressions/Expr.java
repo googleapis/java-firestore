@@ -179,6 +179,11 @@ public interface Expr {
   }
 
   @BetaApi
+  default Exists exists() {
+    return new Exists(this);
+  }
+
+  @BetaApi
   default IsNull isNull() {
     return new IsNull(this);
   }

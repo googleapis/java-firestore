@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 @BetaApi
 public final class Exists extends Function implements FilterCondition {
   @InternalApi
-  Exists(Field field) {
-    super("exists", Lists.newArrayList(field));
+  Exists(Expr expr) {
+    super("exists", Lists.newArrayList(expr));
   }
 }

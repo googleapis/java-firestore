@@ -40,32 +40,32 @@ public class PipelineUtils {
   static FilterCondition toPipelineFilterCondition(FilterInternal f) {
     if (f instanceof ComparisonFilterInternal) {
       ComparisonFilterInternal comparisonFilter = (ComparisonFilterInternal) f;
-      String fieldPath = comparisonFilter.fieldReference.getFieldPath();
+      Field field = Field.of(comparisonFilter.fieldReference.getFieldPath());
       Value value = comparisonFilter.value;
       switch (comparisonFilter.operator) {
         case LESS_THAN:
-          return Field.of(fieldPath).lt(value);
+          return and(field.exists(), field.lt(value));
         case LESS_THAN_OR_EQUAL:
-          return Field.of(fieldPath).lte(value);
+          return and(field.exists(), field.lte(value));
         case GREATER_THAN:
-          return Field.of(fieldPath).gt(value);
+          return and(field.exists(), field.gt(value));
         case GREATER_THAN_OR_EQUAL:
-          return Field.of(fieldPath).gte(value);
+          return and(field.exists(), field.gte(value));
         case EQUAL:
-          return Field.of(fieldPath).eq(value);
+          return and(field.exists(), field.eq(value));
         case NOT_EQUAL:
-          return not(Field.of(fieldPath).eq(value));
+          return and(field.exists(), not(field.eq(value)));
         case ARRAY_CONTAINS:
-          return Field.of(fieldPath).arrayContains(value);
+          return and(field.exists(), field.arrayContains(value));
         case IN:
           List<Value> valuesList = value.getArrayValue().getValuesList();
-          return inAny(Field.of(fieldPath), Lists.newArrayList(valuesList));
+          return and(field.exists(), inAny(field, Lists.newArrayList(valuesList)));
         case ARRAY_CONTAINS_ANY:
           List<Value> valuesListAny = value.getArrayValue().getValuesList();
-          return arrayContainsAny(Field.of(fieldPath), valuesListAny.toArray());
+          return and(field.exists(), arrayContainsAny(field, valuesListAny.toArray()));
         case NOT_IN:
           List<Value> notInValues = value.getArrayValue().getValuesList();
-          return not(inAny(Field.of(fieldPath), Lists.newArrayList(notInValues)));
+          return and(field.exists(), not(inAny(field, Lists.newArrayList(notInValues))));
         default:
           // Handle OPERATOR_UNSPECIFIED and UNRECOGNIZED cases as needed
           throw new IllegalArgumentException("Unsupported operator: " + comparisonFilter.operator);
@@ -96,16 +96,16 @@ public class PipelineUtils {
       }
     } else if (f instanceof UnaryFilterInternal) {
       UnaryFilterInternal unaryFilter = (UnaryFilterInternal) f;
-      String fieldPath = unaryFilter.fieldReference.getFieldPath();
+      Field field = Field.of(unaryFilter.fieldReference.getFieldPath());
       switch (unaryFilter.getOperator()) {
         case IS_NAN:
-          return Field.of(fieldPath).isNaN();
+          return and(field.exists(), field.isNaN());
         case IS_NULL:
-          return Field.of(fieldPath).isNull();
+          return and(field.exists(), field.isNull());
         case IS_NOT_NAN:
-          return not(Field.of(fieldPath).isNaN());
+          return and(field.exists(), not(field.isNaN()));
         case IS_NOT_NULL:
-          return not(Field.of(fieldPath).isNull());
+          return and(field.exists(), not(field.isNull()));
         default:
           // Handle OPERATOR_UNSPECIFIED and UNRECOGNIZED cases as needed
           throw new IllegalArgumentException("Unsupported operator: " + unaryFilter.getOperator());
