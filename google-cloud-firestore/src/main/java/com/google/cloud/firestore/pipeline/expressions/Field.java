@@ -4,6 +4,7 @@ import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.Pipeline;
+import com.google.common.base.Objects;
 import com.google.firestore.v1.Value;
 import javax.annotation.Nullable;
 
@@ -43,9 +44,21 @@ public final class Field implements Expr, Selectable {
     return Value.newBuilder().setFieldReferenceValue(path.toString()).build();
   }
 
-  @BetaApi
-  public Exists exists() {
-    return new Exists(this);
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Field field = (Field) o;
+    return Objects.equal(path, field.path) && Objects.equal(pipeline, field.pipeline);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(path, pipeline);
   }
 
   @InternalApi

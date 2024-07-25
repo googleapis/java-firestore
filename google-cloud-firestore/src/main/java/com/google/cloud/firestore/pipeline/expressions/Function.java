@@ -5,6 +5,7 @@ import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.toEx
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.firestore.v1.Value;
 import java.util.Arrays;
@@ -261,7 +262,7 @@ public class Function implements Expr {
   }
 
   @BetaApi
-  public static Exists exists(Field field) {
+  public static Exists exists(Expr field) {
     return new Exists(field);
   }
 
@@ -718,5 +719,22 @@ public class Function implements Expr {
   @BetaApi
   public static Function function(String name, List<Expr> params) {
     return new Function(name, params);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Function function = (Function) o;
+    return Objects.equal(name, function.name) && Objects.equal(params, function.params);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(name, params);
   }
 }

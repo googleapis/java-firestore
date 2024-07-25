@@ -52,6 +52,7 @@ import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.firestore.bundle.BundledQuery;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.Document;
@@ -2139,6 +2140,9 @@ public class Query {
       ppl = ppl.where(toPipelineFilterCondition(f));
     }
 
+    // Collecting implicit exists fields.
+    Set<Exists> exists = new HashSet<>();
+
     // Projections
     if (this.options.getFieldProjections() != null
         && !this.options.getFieldProjections().isEmpty()) {
@@ -2147,6 +2151,10 @@ public class Query {
               this.options.getFieldProjections().stream()
                   .map(fieldReference -> Field.of(fieldReference.getFieldPath()))
                   .toArray(Selectable[]::new));
+      exists.addAll(
+          this.options.getFieldProjections().stream()
+              .map(fieldReference -> Field.of(fieldReference.getFieldPath()).exists())
+              .collect(Collectors.toList()));
     }
 
     // Orders
@@ -2164,17 +2172,20 @@ public class Query {
               .collect(Collectors.toList());
 
       // Add exists filters to match Query's implicit orderby semantics.
-      List<Exists> exists =
+      exists.addAll(
           normalizedOrderbys.stream()
               // .filter(order -> !order.fieldReference.getFieldPath().equals("__name__"))
               .map(order -> Field.of(order.fieldReference.getFieldPath()).exists())
-              .collect(Collectors.toList());
-      if (exists.size() > 1) {
+              .collect(Collectors.toList()));
+      List<Exists> existsList = Lists.newArrayList(exists);
+      if (existsList.size() > 1) {
         ppl =
             ppl.where(
-                and(exists.get(0), exists.subList(1, exists.size()).toArray(new Exists[] {})));
+                and(
+                    existsList.get(0),
+                    existsList.subList(1, existsList.size()).toArray(new Exists[] {})));
       } else if (exists.size() == 1) {
-        ppl = ppl.where(exists.get(0));
+        ppl = ppl.where(existsList.get(0));
       }
 
       ppl = ppl.sort(orders, Density.REQUIRED, Truncation.UNSPECIFIED);
