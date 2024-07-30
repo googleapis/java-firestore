@@ -14,6 +14,7 @@ import com.google.cloud.firestore.Query.FilterInternal;
 import com.google.cloud.firestore.Query.LimitType;
 import com.google.cloud.firestore.Query.UnaryFilterInternal;
 import com.google.cloud.firestore.pipeline.PaginatingPipeline;
+import com.google.cloud.firestore.pipeline.expressions.Accumulator;
 import com.google.cloud.firestore.pipeline.expressions.AccumulatorTarget;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.cloud.firestore.pipeline.expressions.ExprWithAlias;
@@ -158,7 +159,7 @@ public class PipelineUtils {
   }
 
   @InternalApi
-  static AccumulatorTarget toPipelineAggregatorTarget(AggregateField f) {
+  static ExprWithAlias<Accumulator> toPipelineAggregatorTarget(AggregateField f) {
     String operator = f.getOperator();
     String fieldPath = f.getFieldPath();
 
