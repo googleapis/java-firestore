@@ -449,7 +449,12 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void testArrayContainsAll() throws Exception {
     List<PipelineResult> results =
-        collection.pipeline().where(arrayContainsAll("tags", "adventure", "magic")).execute().get();
+        collection
+            .pipeline()
+            .where(arrayContainsAll("tags", "adventure", "magic"))
+            .select("title")
+            .execute()
+            .get();
 
     assertThat(data(results)).isEqualTo(Lists.newArrayList(map("title", "The Lord of the Rings")));
   }
@@ -492,15 +497,14 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .select(
-                arrayFilter(Field.of("tags"), Function.eq(arrayElement(), "")).as("filteredTags"))
+                arrayFilter(Field.of("tags"), Function.eq(arrayElement(), "comedy"))
+                    .as("filteredTags"))
             .limit(1)
             .execute()
             .get();
 
     assertThat(data(results))
-        .isEqualTo(
-            Lists.newArrayList(
-                map("filteredTags", Lists.newArrayList("comedy", "space", "adventure"))));
+        .isEqualTo(Lists.newArrayList(map("filteredTags", Lists.newArrayList("comedy"))));
   }
 
   @Test
@@ -832,6 +836,14 @@ public class ITPipelineTest extends ITBaseTest {
             .limit(1)
             .execute()
             .get();
+
+    assertThat(data(results))
+        .isEqualTo(
+            Lists.newArrayList(
+                map(
+                    "cosineDistance", 0.02560880430538015,
+                    "dotProductDistance", 0.13,
+                    "euclideanDistance", 0.806225774829855)));
   }
 
   @Test

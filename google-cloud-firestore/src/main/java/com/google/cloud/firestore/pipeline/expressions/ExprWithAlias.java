@@ -3,13 +3,13 @@ package com.google.cloud.firestore.pipeline.expressions;
 import com.google.api.core.InternalApi;
 
 @InternalApi
-public final class ExprWithAlias implements Selectable {
+public final class ExprWithAlias<T extends Expr> implements Selectable {
 
   private final String alias;
-  private final Expr expr;
+  private final T expr;
 
   @InternalApi
-  ExprWithAlias(Expr expr, String alias) {
+  ExprWithAlias(T expr, String alias) {
     this.expr = expr;
     this.alias = alias;
   }
@@ -20,7 +20,7 @@ public final class ExprWithAlias implements Selectable {
   }
 
   @InternalApi
-  public Expr getExpr() {
+  public T getExpr() {
     return expr;
   }
 }

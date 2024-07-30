@@ -4,8 +4,8 @@ import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.PipelineUtils;
 import com.google.cloud.firestore.pipeline.expressions.Accumulator;
-import com.google.cloud.firestore.pipeline.expressions.AccumulatorTarget;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.ExprWithAlias;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,7 +30,7 @@ public final class Aggregate implements Stage {
   }
 
   @BetaApi
-  public static Aggregate withAccumulators(AccumulatorTarget... accumulators) {
+  public static Aggregate withAccumulators(ExprWithAlias<Accumulator>... accumulators) {
     if (accumulators.length == 0) {
       throw new IllegalArgumentException(
           "Must specify at least one accumulator for aggregate() stage. There is a distinct() stage if only distinct group values are needed.");
@@ -39,9 +39,7 @@ public final class Aggregate implements Stage {
     return new Aggregate(
         Collections.emptyMap(),
         Arrays.stream(accumulators)
-            .collect(
-                Collectors.toMap(
-                    AccumulatorTarget::getFieldName, AccumulatorTarget::getAccumulator)));
+            .collect(Collectors.toMap(ExprWithAlias::getAlias, ExprWithAlias::getExpr)));
   }
 
   private Aggregate(Map<String, Expr> groups, Map<String, Accumulator> accumulators) {

@@ -83,8 +83,8 @@ public final class StageUtils {
       Aggregate aggregateStage = (Aggregate) stage;
       return com.google.firestore.v1.Pipeline.Stage.newBuilder()
           .setName(aggregateStage.getName())
-          .addArgs(encodeValue(aggregateStage.getGroups()))
           .addArgs(encodeValue(aggregateStage.getAccumulators()))
+          .addArgs(encodeValue(aggregateStage.getGroups()))
           .build();
     } else if (stage instanceof Distinct) {
       Distinct distinctStage = (Distinct) stage;
