@@ -42,16 +42,6 @@ public final class Ordering {
   }
 
   @BetaApi
-  public static Ordering of(Expr expr, Ordering.Direction dir) {
-    return new Ordering(expr, dir);
-  }
-
-  @BetaApi
-  public static Ordering of(Expr expr) {
-    return new Ordering(expr, Direction.ASCENDING);
-  }
-
-  @BetaApi
   public static Ordering ascending(Expr expr) {
     return new Ordering(expr, Direction.ASCENDING);
   }

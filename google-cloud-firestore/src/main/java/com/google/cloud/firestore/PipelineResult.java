@@ -32,12 +32,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * A DocumentSnapshot contains data read from a document in a Firestore database. The data can be
- * extracted with the {@link #getData()} or {@link #get(String)} methods.
+ * A PipelineResult contains data read from a Firestore Pipeline. The data can be extracted with the
+ * {@link #getData()} or {@link #get(String)} methods.
  *
- * <p>If the DocumentSnapshot points to a non-existing document, getData() and its corresponding
- * methods will return null. You can always explicitly check for a document's existence by calling
- * {@link #exists()}.
+ * <p>If the PipelineResult represents a non-document result, getReference() will return a null
+ * value.
  *
  * <p><b>Subclassing Note</b>: Firestore classes are not meant to be subclassed except for use in
  * test mocks. Subclassing is not supported in production code and new SDK releases may break code
@@ -50,7 +49,7 @@ public final class PipelineResult {
   private final FirestoreRpcContext<?> rpcContext;
   @Nullable private final DocumentReference docRef;
   @Nullable private final Map<String, Value> fields;
-  @Nullable private final Timestamp readTime;
+  @Nonnull private final Timestamp executionTime;
   @Nullable private final Timestamp updateTime;
   @Nullable private final Timestamp createTime;
 
@@ -58,23 +57,22 @@ public final class PipelineResult {
       FirestoreRpcContext<?> rpcContext,
       @Nullable DocumentReference docRef,
       @Nullable Map<String, Value> fields,
-      @Nullable Timestamp readTime,
+      @Nonnull Timestamp executionTime,
       @Nullable Timestamp updateTime,
       @Nullable Timestamp createTime) { // Elevated access level for mocking.
     this.rpcContext = rpcContext;
     this.docRef = docRef;
     this.fields = fields;
-    this.readTime = readTime;
+    this.executionTime = executionTime;
     this.updateTime = updateTime;
     this.createTime = createTime;
   }
 
   /**
-   * Returns the ID of the document contained in this snapshot.
-   *
-   * @return The id of the document.
+   * Returns the ID of the document represented by this result. Returns null if this result is not
+   * corresponding to a Firestore document.
    */
-  @Nonnull
+  @Nullable
   @BetaApi
   public String getId() {
     return docRef.getId();
@@ -93,23 +91,16 @@ public final class PipelineResult {
         Timestamp.fromProto(document.getCreateTime()));
   }
 
-  /**
-   * Returns the time at which this snapshot was read.
-   *
-   * @return The read time of this snapshot.
-   */
+  /** Returns the time at which the pipeline producing this result is executed. */
   @Nullable
   @BetaApi
-  public Timestamp getReadTime() {
-    return readTime;
+  public Timestamp getExecutionTime() {
+    return executionTime;
   }
 
   /**
-   * Returns the time at which this document was last updated. Returns null for non-existing
-   * documents.
-   *
-   * @return The last time the document in the snapshot was updated. Null if the document doesn't
-   *     exist.
+   * Returns the time at which this document was last updated. Returns null if this result is not
+   * corresponding to a Firestore document.
    */
   @Nullable
   @BetaApi
@@ -118,10 +109,8 @@ public final class PipelineResult {
   }
 
   /**
-   * Returns the time at which this document was created. Returns null for non-existing documents.
-   *
-   * @return The last time the document in the snapshot was created. Null if the document doesn't
-   *     exist.
+   * Returns the time at which this document was created. Returns null if this result is not
+   * corresponding to a Firestore document.
    */
   @Nullable
   @BetaApi
@@ -141,12 +130,12 @@ public final class PipelineResult {
   }
 
   /**
-   * Returns the fields of the document as a Map or null if the document doesn't exist. Field values
+   * Returns the fields of the result as a Map or null if the result doesn't exist. Field values
    * will be converted to their native Java representation.
    *
-   * @return The fields of the document as a Map or null if the document doesn't exist.
+   * @return The fields of the document as a Map or null if the result doesn't exist.
    */
-  @Nullable
+  @Nonnull
   @BetaApi
   public Map<String, Object> getData() {
     if (fields == null) {
@@ -162,10 +151,10 @@ public final class PipelineResult {
   }
 
   /**
-   * Returns the contents of the document converted to a POJO or null if the document doesn't exist.
+   * Returns the contents of the document converted to a POJO or null if the result doesn't exist.
    *
    * @param valueType The Java class to create
-   * @return The contents of the document in an object of type T or null if the document doesn't
+   * @return The contents of the document in an object of type T or null if the result doesn't
    *     exist.
    */
   @Nullable
@@ -176,7 +165,7 @@ public final class PipelineResult {
   }
 
   /**
-   * Returns whether or not the field exists in the document. Returns false if the document does not
+   * Returns whether or not the field exists in the document. Returns false if the result does not
    * exist.
    *
    * @param field the path to the field.
@@ -188,7 +177,7 @@ public final class PipelineResult {
   }
 
   /**
-   * Returns whether or not the field exists in the document. Returns false if the document does not
+   * Returns whether or not the field exists in the document. Returns false if the result does not
    * exist.
    *
    * @param fieldPath the path to the field.
@@ -212,7 +201,7 @@ public final class PipelineResult {
   }
 
   /**
-   * Returns the value at the field, converted to a POJO, or null if the field or document doesn't
+   * Returns the value at the field, converted to a POJO, or null if the field or result doesn't
    * exist.
    *
    * @param field The path to the field
@@ -244,7 +233,7 @@ public final class PipelineResult {
   }
 
   /**
-   * Returns the value at the field, converted to a POJO, or null if the field or document doesn't
+   * Returns the value at the field, converted to a POJO, or null if the field or result doesn't
    * exist.
    *
    * @param fieldPath The path to the field
@@ -390,7 +379,6 @@ public final class PipelineResult {
    *
    * @return The reference to the document.
    */
-  @Nonnull
   @BetaApi
   public DocumentReference getReference() {
     return docRef;
@@ -455,6 +443,6 @@ public final class PipelineResult {
   public String toString() {
     return String.format(
         "%s{doc=%s, fields=%s, readTime=%s, updateTime=%s, createTime=%s}",
-        getClass().getSimpleName(), docRef, fields, readTime, updateTime, createTime);
+        getClass().getSimpleName(), docRef, fields, executionTime, updateTime, createTime);
   }
 }

@@ -15,7 +15,8 @@ public class Join implements Stage {
   private final Field otherAlias;
 
   @InternalApi
-  Join(Type type, FilterCondition condition, Field alias, Pipeline otherPipeline, Field otherAlias) {
+  Join(
+      Type type, FilterCondition condition, Field alias, Pipeline otherPipeline, Field otherAlias) {
     this.type = type;
     this.condition = condition;
     this.alias = alias;
