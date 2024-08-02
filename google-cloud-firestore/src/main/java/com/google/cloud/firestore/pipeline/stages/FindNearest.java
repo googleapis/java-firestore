@@ -1,17 +1,19 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
+import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.cloud.firestore.pipeline.expressions.Field;
+import javax.annotation.Nullable;
 
 public final class FindNearest implements Stage {
 
   private static final String name = "find_nearest";
-  private final Field property;
+  private final Expr property;
   private final double[] vector;
   private final FindNearest.FindNearestOptions options;
 
   @InternalApi
-  public FindNearest(Field property, double[] vector, FindNearest.FindNearestOptions options) {
+  public FindNearest(Expr property, double[] vector, FindNearest.FindNearestOptions options) {
     this.property = property;
     this.vector = vector;
     this.options = options;
@@ -24,7 +26,7 @@ public final class FindNearest implements Stage {
   }
 
   @InternalApi
-  public Field getProperty() {
+  public Expr getProperty() {
     return property;
   }
 
@@ -113,18 +115,29 @@ public final class FindNearest implements Stage {
 
     private final Long limit;
     private final FindNearest.DistanceMeasure distanceMeasure;
-    private final Field distanceField;
 
-    private FindNearestOptions(
-        Long limit, FindNearest.DistanceMeasure distanceMeasure, Field distanceField) {
+    @Nullable private final Field distanceField;
+
+    private FindNearestOptions(Long limit, FindNearest.DistanceMeasure distanceMeasure) {
       this.limit = limit;
       this.distanceMeasure = distanceMeasure;
-      this.distanceField = distanceField;
+      this.distanceField = null;
     }
 
-    public static FindNearest.FindNearestOptions newInstance(
-        long limit, FindNearest.DistanceMeasure distanceMeasure, Field output) {
-      return new FindNearest.FindNearestOptions(limit, distanceMeasure, output);
+    private FindNearestOptions(
+        Long limit, FindNearest.DistanceMeasure distanceMeasure, Field field) {
+      this.limit = limit;
+      this.distanceMeasure = distanceMeasure;
+      this.distanceField = field;
+    }
+
+    public static FindNearest.FindNearestOptions withLimitAndMeasure(
+        long limit, FindNearest.DistanceMeasure distanceMeasure) {
+      return new FindNearest.FindNearestOptions(limit, distanceMeasure);
+    }
+
+    public FindNearest.FindNearestOptions withDistanceField(String name) {
+      return new FindNearest.FindNearestOptions(limit, distanceMeasure, Field.of(name));
     }
 
     public Long getLimit() {

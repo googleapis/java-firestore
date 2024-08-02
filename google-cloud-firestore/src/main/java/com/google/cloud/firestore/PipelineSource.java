@@ -9,6 +9,25 @@ import com.google.cloud.firestore.pipeline.stages.Documents;
 import com.google.common.base.Preconditions;
 import javax.annotation.Nonnull;
 
+/**
+ * A factory for creating {@link Pipeline} instances, which provide a framework for building data
+ * transformation and query pipelines for Firestore.
+ *
+ * <p>Start by calling {@link Firestore#pipeline()} to obtain an instance of {@code PipelineSource}.
+ * From there, you can use the provided methods (like {@link #collection(String)}) to specify the
+ * data source for your pipeline.
+ *
+ * <p>This class is typically used to start building Firestore pipelines. It allows you to define
+ * the initial data source for a pipeline.
+ *
+ * <p>Example Usage:
+ *
+ * <pre>{@code
+ * firestore.pipeline() // Get a PipelineSource instance
+ *   .collection("users") // Create a pipeline that operates on a collection
+ *   .select("name"); // Add stages to the pipeline
+ * }</pre>
+ */
 @BetaApi
 public class PipelineSource {
   private final Firestore db;
@@ -18,12 +37,28 @@ public class PipelineSource {
     this.db = db;
   }
 
+  /**
+   * Creates a new {@link Pipeline} that operates on the specified Firestore collection.
+   *
+   * @param path The path to the Firestore collection (e.g., "users").
+   * @return A new {@code Pipeline} instance targeting the specified collection.
+   */
   @Nonnull
   @BetaApi
   public Pipeline collection(@Nonnull String path) {
     return new Pipeline(this.db, new Collection(path));
   }
 
+  /**
+   * Creates a new {@link Pipeline} that operates on all documents in a collection group.
+   *
+   * <p>A collection group consists of all collections with the same ID. For example, if you have
+   * collections named "users" under different documents, you can query them together using a
+   * collection group query.
+   *
+   * @param collectionId The ID of the collection group.
+   * @return A new {@code Pipeline} instance targeting the specified collection group.
+   */
   @Nonnull
   @BetaApi
   public Pipeline collectionGroup(@Nonnull String collectionId) {
@@ -34,12 +69,27 @@ public class PipelineSource {
     return new Pipeline(this.db, new CollectionGroup(collectionId));
   }
 
+  /**
+   * Creates a new {@link Pipeline} that operates on all documents in the Firestore database.
+   *
+   * <p>Use this method with caution as it can lead to very large result sets. It is usually only
+   * useful at development stage.
+   *
+   * @return A new {@code Pipeline} instance targeting all documents in the database.
+   */
   @Nonnull
   @BetaApi
   public Pipeline database() {
     return new Pipeline(this.db, new Database());
   }
 
+  /**
+   * Creates a new {@link Pipeline} that operates on a specific set of Firestore documents.
+   *
+   * @param docs The {@link DocumentReference} instances representing the documents to include in
+   *     the pipeline.
+   * @return A new {@code Pipeline} instance targeting the specified documents.
+   */
   @Nonnull
   @BetaApi
   public Pipeline documents(DocumentReference... docs) {

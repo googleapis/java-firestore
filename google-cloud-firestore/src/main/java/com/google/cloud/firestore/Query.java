@@ -2170,11 +2170,9 @@ public class Query {
           normalizedOrderbys.stream()
               .map(
                   fieldOrder ->
-                      Ordering.of(
-                          Field.of(fieldOrder.fieldReference.getFieldPath()),
-                          fieldOrder.direction == Direction.ASCENDING
-                              ? Ordering.Direction.ASCENDING
-                              : Ordering.Direction.DESCENDING))
+                      fieldOrder.direction == Direction.ASCENDING
+                          ? Field.of(fieldOrder.fieldReference.getFieldPath()).ascending()
+                          : Field.of(fieldOrder.fieldReference.getFieldPath()).descending())
               .collect(Collectors.toList());
       ppl = ppl.sort(orders, Density.REQUIRED, Truncation.UNSPECIFIED);
     }

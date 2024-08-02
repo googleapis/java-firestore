@@ -13,7 +13,6 @@ import com.google.cloud.firestore.Query.CompositeFilterInternal;
 import com.google.cloud.firestore.Query.FilterInternal;
 import com.google.cloud.firestore.Query.LimitType;
 import com.google.cloud.firestore.Query.UnaryFilterInternal;
-import com.google.cloud.firestore.pipeline.PaginatingPipeline;
 import com.google.cloud.firestore.pipeline.expressions.Accumulator;
 import com.google.cloud.firestore.pipeline.expressions.AccumulatorTarget;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
@@ -125,37 +124,8 @@ public class PipelineUtils {
       Integer limit,
       LimitType limitType,
       Integer offset) {
-
-    // Handle null limit, setting a default maximum
-    int effectiveLimit = (limit != null) ? limit : Integer.MAX_VALUE;
-
-    PaginatingPipeline paginate = pipeline.paginate(effectiveLimit);
-
-    // Apply start and end cursors if present
-    if (start != null) {
-      paginate = paginate.withStartCursor(start);
-    }
-    if (end != null) {
-      paginate = paginate.withEndCursor(end);
-    }
-    if (offset != null) {
-      paginate = paginate.offset(offset);
-    }
-
-    // Handle limitType, defaulting to firstPage
-    if (limitType != null) {
-      switch (limitType) {
-        case First:
-          return paginate.firstPage();
-        case Last:
-          return paginate.lastPage();
-        default:
-          // Handle other LimitType cases as needed, or throw an exception
-          throw new IllegalArgumentException("Unsupported limit type: " + limitType);
-      }
-    } else {
-      return paginate.firstPage();
-    }
+    throw new UnsupportedOperationException(
+        "Converting to pagination pipeline is not support yet.");
   }
 
   @InternalApi
