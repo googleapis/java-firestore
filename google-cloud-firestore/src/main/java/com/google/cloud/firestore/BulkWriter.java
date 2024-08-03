@@ -920,8 +920,10 @@ public final class BulkWriter implements AutoCloseable {
         if (!lastFlushOperation.isDone()) {
           result.addListener(
               () -> {
-                synchronized (lock) {
-                  scheduleCurrentBatchLocked();
+                if (!lastFlushOperation.isDone()) {
+                  synchronized (lock) {
+                    scheduleCurrentBatchLocked();
+                  }
                 }
               },
               bulkWriterExecutor);
