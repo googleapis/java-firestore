@@ -207,9 +207,7 @@ public final class BulkWriter implements AutoCloseable {
   @GuardedBy("lock")
   private ApiFuture<Void> lastOperation = ApiFutures.immediateFuture(null);
 
-  /**
-   * A pointer to the lastOperation pointer as of last flush operation.
-   */
+  /** A pointer to the lastOperation pointer as of last flush operation. */
   @GuardedBy("lock")
   private ApiFuture<Void> lastFlushOperation = lastOperation;
 
@@ -879,9 +877,7 @@ public final class BulkWriter implements AutoCloseable {
     }
   }
 
-  /**
-   * Sends the current batch and resets {@link #bulkCommitBatch}.
-   */
+  /** Sends the current batch and resets {@link #bulkCommitBatch}. */
   private void scheduleCurrentBatchLocked() {
     if (bulkCommitBatch.getMutationsSize() == 0) return;
 
