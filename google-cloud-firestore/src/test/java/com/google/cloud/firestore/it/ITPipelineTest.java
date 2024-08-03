@@ -434,7 +434,7 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .where(arrayContainsAny("tags", "comedy", "classic"))
+            .where(arrayContainsAny("tags", Lists.newArrayList("comedy", "classic")))
             .select("title")
             .execute()
             .get();
@@ -451,7 +451,7 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .where(arrayContainsAll("tags", "adventure", "magic"))
+            .where(arrayContainsAll("tags", Lists.newArrayList("adventure", "magic")))
             .select("title")
             .execute()
             .get();

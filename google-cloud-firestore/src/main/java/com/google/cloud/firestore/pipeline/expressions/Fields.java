@@ -7,6 +7,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a selection of multiple {@link Field} instances.
+ *
+ * <p>This class is used to conveniently specify multiple fields for operations like selecting
+ * fields in a pipeline.
+ *
+ * <p>Example:
+ *
+ * <pre>{@code
+ * // Select the 'name', 'email', and 'age' fields
+ * Fields selectedFields = Fields.of("name", "email", "age");
+ *
+ * firestore.pipeline().collection("users")
+ *     .select(selectedFields)
+ *     .execute();
+ * }</pre>
+ */
 @BetaApi
 public final class Fields implements Expr, Selectable {
   private final List<Field> fields;
@@ -15,6 +32,13 @@ public final class Fields implements Expr, Selectable {
     this.fields = fs;
   }
 
+  /**
+   * Creates a {@code Fields} instance containing the specified fields.
+   *
+   * @param f1 The first field to include.
+   * @param f Additional fields to include.
+   * @return A new {@code Fields} instance containing the specified fields.
+   */
   @BetaApi
   public static Fields of(String f1, String... f) {
     List<Field> fields = Arrays.stream(f).map(Field::of).collect(Collectors.toList());
@@ -22,11 +46,24 @@ public final class Fields implements Expr, Selectable {
     return new Fields(fields);
   }
 
+  /**
+   * Creates a {@code Fields} instance representing a selection of all fields.
+   *
+   * <p>This is equivalent to not specifying any fields in a select operation, resulting in all
+   * fields being included in the output.
+   *
+   * @return A new {@code Fields} instance representing all fields.
+   */
   @BetaApi
   public static Fields ofAll() {
     return new Fields(Collections.singletonList(Field.of("")));
   }
 
+  /**
+   * Returns the list of {@link Field} instances contained in this {@code Fields} object.
+   *
+   * @return The list of fields.
+   */
   @InternalApi
   public List<Field> getFields() {
     return fields;

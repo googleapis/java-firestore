@@ -62,7 +62,7 @@ public class PipelineUtils {
           return and(field.exists(), inAny(field, Lists.newArrayList(valuesList)));
         case ARRAY_CONTAINS_ANY:
           List<Value> valuesListAny = value.getArrayValue().getValuesList();
-          return and(field.exists(), arrayContainsAny(field, valuesListAny.toArray()));
+          return and(field.exists(), arrayContainsAny(field, Lists.newArrayList(valuesListAny)));
         case NOT_IN:
           List<Value> notInValues = value.getArrayValue().getValuesList();
           return and(field.exists(), not(inAny(field, Lists.newArrayList(notInValues))));
