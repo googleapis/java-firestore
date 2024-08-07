@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>google-cloud-firestore</artifactId>
-  <version>3.21.5-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+  <version>3.24.4-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
   <packaging>jar</packaging>
   <name>Google Cloud Firestore</name>
   <url>https://github.com/googleapis/java-firestore</url>
@@ -12,10 +12,11 @@
   <parent>
     <groupId>com.google.cloud</groupId>
     <artifactId>google-cloud-firestore-parent</artifactId>
-    <version>3.21.5-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+    <version>3.24.4-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
   </parent>
   <properties>
     <site.installationModule>google-cloud-firestore</site.installationModule>
+    <opentelemetry.version>1.40.0</opentelemetry.version>
   </properties>
   <dependencies>
     <dependency>
@@ -38,10 +39,6 @@
       <groupId>com.google.api.grpc</groupId>
       <artifactId>grpc-google-cloud-firestore-v1</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.opencensus</groupId>
-      <artifactId>opencensus-contrib-grpc-util</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
@@ -92,10 +89,6 @@
       <artifactId>grpc-stub</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.opencensus</groupId>
-      <artifactId>opencensus-api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.google.auth</groupId>
       <artifactId>google-auth-library-credentials</artifactId>
     </dependency>
@@ -113,6 +106,20 @@
       <artifactId>protobuf-java-util</artifactId>
     </dependency>
 
+    <!-- OpenTelemetry -->
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry.instrumentation</groupId>
+      <artifactId>opentelemetry-grpc-1.6</artifactId>
+    </dependency>
+    <!-- END OpenTelemetry -->
 
     <!-- Test dependencies -->
     <dependency>
@@ -170,9 +177,75 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.14.0</version>
+      <version>3.15.0</version>
       <scope>test</scope>
     </dependency>
+    <!-- OpenTelemetry -->
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk</artifactId>
+      <version>${opentelemetry.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk-testing</artifactId>
+      <version>${opentelemetry.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-semconv</artifactId>
+      <version>1.30.1-alpha</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk-trace</artifactId>
+      <version>${opentelemetry.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk-common</artifactId>
+      <version>${opentelemetry.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.cloud.opentelemetry</groupId>
+      <artifactId>exporter-trace</artifactId>
+      <version>0.31.0</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- END OpenTelemetry -->
+    <!-- Cloud Ops -->
+    <dependency>
+      <groupId>com.google.api.grpc</groupId>
+      <artifactId>proto-google-cloud-trace-v1</artifactId>
+      <version>2.47.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.cloud.opentelemetry</groupId>
+      <artifactId>exporter-trace</artifactId>
+      <version>0.31.0</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- END OpenTelemetry -->
+    <!-- Cloud Ops -->
+    <dependency>
+      <groupId>com.google.api.grpc</groupId>
+      <artifactId>proto-google-cloud-trace-v1</artifactId>
+      <version>2.47.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-trace</artifactId>
+      <version>2.47.0</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- END Cloud Ops -->
   </dependencies>
 
   <reporting>

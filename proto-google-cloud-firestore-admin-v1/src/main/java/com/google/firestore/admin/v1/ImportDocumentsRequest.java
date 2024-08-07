@@ -134,7 +134,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    * <pre>
    * Which collection ids to import. Unspecified means all collections included
-   * in the import.
+   * in the import. Each collection id in this list must be unique.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
@@ -149,7 +149,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    * <pre>
    * Which collection ids to import. Unspecified means all collections included
-   * in the import.
+   * in the import. Each collection id in this list must be unique.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
@@ -164,7 +164,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    * <pre>
    * Which collection ids to import. Unspecified means all collections included
-   * in the import.
+   * in the import. Each collection id in this list must be unique.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
@@ -180,7 +180,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
    *
    * <pre>
    * Which collection ids to import. Unspecified means all collections included
-   * in the import.
+   * in the import. Each collection id in this list must be unique.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
@@ -913,7 +913,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
-     * in the import.
+     * in the import. Each collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -929,7 +929,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
-     * in the import.
+     * in the import. Each collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -944,7 +944,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
-     * in the import.
+     * in the import. Each collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -960,7 +960,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
-     * in the import.
+     * in the import. Each collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -976,7 +976,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
-     * in the import.
+     * in the import. Each collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -1000,7 +1000,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
-     * in the import.
+     * in the import. Each collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -1023,7 +1023,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
-     * in the import.
+     * in the import. Each collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -1043,7 +1043,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
-     * in the import.
+     * in the import. Each collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
@@ -1062,7 +1062,7 @@ public final class ImportDocumentsRequest extends com.google.protobuf.GeneratedM
      *
      * <pre>
      * Which collection ids to import. Unspecified means all collections included
-     * in the import.
+     * in the import. Each collection id in this list must be unique.
      * </pre>
      *
      * <code>repeated string collection_ids = 2;</code>
