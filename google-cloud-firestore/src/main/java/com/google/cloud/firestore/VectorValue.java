@@ -39,7 +39,7 @@ public final class VectorValue implements Serializable {
    * @return A representation of the vector as an array of doubles
    */
   @Nonnull
-  public double[] getArray() {
+  public double[] toArray() {
     return this.values.clone();
   }
 

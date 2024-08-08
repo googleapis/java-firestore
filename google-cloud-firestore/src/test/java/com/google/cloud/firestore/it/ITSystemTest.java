@@ -1368,20 +1368,20 @@ public class ITSystemTest extends ITBaseTest {
     assertTrue(actual.get("vector3") instanceof VectorValue);
 
     assertArrayEquals(
-        expected.get("vector0").getArray(),
-        actual.get("vector0", VectorValue.class).getArray(),
+        expected.get("vector0").toArray(),
+        actual.get("vector0", VectorValue.class).toArray(),
         DOUBLE_EPSILON);
     assertArrayEquals(
-        expected.get("vector1").getArray(),
-        actual.get("vector1", VectorValue.class).getArray(),
+        expected.get("vector1").toArray(),
+        actual.get("vector1", VectorValue.class).toArray(),
         DOUBLE_EPSILON);
     assertArrayEquals(
-        expected.get("vector2").getArray(),
-        actual.get("vector2", VectorValue.class).getArray(),
+        expected.get("vector2").toArray(),
+        actual.get("vector2", VectorValue.class).toArray(),
         DOUBLE_EPSILON);
     assertArrayEquals(
-        expected.get("vector3").getArray(),
-        actual.get("vector3", VectorValue.class).getArray(),
+        expected.get("vector3").toArray(),
+        actual.get("vector3", VectorValue.class).toArray(),
         DOUBLE_EPSILON);
   }
 
