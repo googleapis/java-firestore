@@ -52,9 +52,12 @@ public class MetricsUtil {
 
     this.openTelemetry = openTelemetry;
 
+    Package pkg = this.getClass().getPackage();
+
     meter =
         openTelemetry
             .meterBuilder("firestore-java")
+            .setInstrumentationVersion(pkg.getImplementationVersion())
             .build();
 
     endToEndRequestLatency =

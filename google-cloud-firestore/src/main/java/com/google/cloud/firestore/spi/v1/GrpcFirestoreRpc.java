@@ -157,10 +157,6 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
         firestoreBuilder.batchGetDocumentsSettings().setRetrySettings(retrySettings);
       }
 
-      if (options.getApiTracerFactory() != null) {
-        firestoreBuilder.setTracerFactory(options.getApiTracerFactory());
-      }
-
       firestoreStub = GrpcFirestoreStub.create(firestoreBuilder.build());
     } catch (Exception e) {
       throw new IOException(e);
