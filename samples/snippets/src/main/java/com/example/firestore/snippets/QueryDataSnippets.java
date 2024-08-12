@@ -592,7 +592,7 @@ class QueryDataSnippets {
   }
 
   /* Example of Query with range and inequality filters. */
-  Query rangeMultipleInequailtyFilter() {
+  Query rangeMultipleInequalityFilter() {
     // [START firestore_query_filter_compound_multi_ineq]
     Query query = db.collection("cities")
         .whereGreaterThan("population", 1000000)
