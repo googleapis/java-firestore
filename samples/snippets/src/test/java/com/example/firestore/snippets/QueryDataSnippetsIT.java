@@ -271,6 +271,14 @@ public class QueryDataSnippetsIT extends BaseIntegrationTest {
     assertEquals(expected, actual);
   }
 
+  @Test
+  public void testRangeMultipleInequailtyFilter() throws Exception {
+    Query query = queryDataSnippets.rangeMultipleInequailtyFilter();
+    Set<String> expected = newHashSet("DC", "TOK");
+    Set<String> actual = getResultsAsSet(query);
+    assertEquals(expected, actual);
+  }
+
   private Set<String> getResultsAsSet(Query query) throws Exception {
     List<String> docIds = getResults(query);
     return new HashSet<>(docIds);
