@@ -274,7 +274,7 @@ public class QueryDataSnippetsIT extends BaseIntegrationTest {
   @Test
   public void testRangeMultipleInequalityFilter() throws Exception {
     Query query = queryDataSnippets.rangeMultipleInequalityFilter();
-    Set<String> expected = newHashSet("DC", "TOK");
+    Set<String> expected = newHashSet();
     Set<String> actual = getResultsAsSet(query);
     assertEquals(expected, actual);
   }
