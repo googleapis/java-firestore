@@ -35,7 +35,6 @@ import com.google.firestore.v1.Document;
 import com.google.firestore.v1.ExecutePipelineRequest;
 import com.google.firestore.v1.ExecutePipelineResponse;
 import com.google.firestore.v1.StructuredPipeline;
-import com.google.firestore.v1.Value;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
@@ -98,20 +97,20 @@ import java.util.logging.Logger;
 public final class Pipeline {
   private static Logger logger = Logger.getLogger(Pipeline.class.getName());
   private final FluentIterable<Stage> stages;
-  private final Firestore db;
+  private final FirestoreRpcContext<?> rpcContext;
 
-  private Pipeline(Firestore db, FluentIterable<Stage> stages) {
-    this.db = db;
+  private Pipeline(FirestoreRpcContext<?> rpcContext, FluentIterable<Stage> stages) {
+    this.rpcContext = rpcContext;
     this.stages = stages;
   }
 
   @InternalApi
-  Pipeline(Firestore db, Stage stage) {
-    this(db, FluentIterable.of(stage));
+  Pipeline(FirestoreRpcContext<?> rpcContext, Stage stage) {
+    this(rpcContext, FluentIterable.of(stage));
   }
 
   private Pipeline append(Stage stage) {
-    return new Pipeline(this.db, stages.append(stage));
+    return new Pipeline(this.rpcContext, stages.append(stage));
   }
 
   /**
@@ -607,47 +606,29 @@ public final class Pipeline {
    */
   @BetaApi
   public ApiFuture<List<PipelineResult>> execute() {
-    if (db instanceof FirestoreImpl) {
-      FirestoreImpl firestoreImpl = (FirestoreImpl) db;
-      Value pipelineValue = toProto();
-      ExecutePipelineRequest request =
-          ExecutePipelineRequest.newBuilder()
-              .setDatabase(firestoreImpl.getResourcePath().getDatabaseName().toString())
-              .setStructuredPipeline(
-                  StructuredPipeline.newBuilder()
-                      .setPipeline(pipelineValue.getPipelineValue())
-                      .build())
-              .build();
+    SettableApiFuture<List<PipelineResult>> futureResult = SettableApiFuture.create();
 
-      SettableApiFuture<List<PipelineResult>> futureResult = SettableApiFuture.create();
+    execute( // Assuming you have this method
+        new PipelineResultObserver() {
+          final List<PipelineResult> results = new ArrayList<>();
 
-      pipelineInternalStream( // Assuming you have this method
-          firestoreImpl,
-          request,
-          new PipelineResultObserver() {
-            final List<PipelineResult> results = new ArrayList<>();
+          @Override
+          public void onCompleted() {
+            futureResult.set(results);
+          }
 
-            @Override
-            public void onCompleted() {
-              futureResult.set(results);
-            }
+          @Override
+          public void onNext(PipelineResult result) {
+            results.add(result);
+          }
 
-            @Override
-            public void onNext(PipelineResult result) {
-              results.add(result);
-            }
+          @Override
+          public void onError(Throwable t) {
+            futureResult.setException(t);
+          }
+        });
 
-            @Override
-            public void onError(Throwable t) {
-              futureResult.setException(t);
-            }
-          });
-
-      return futureResult;
-    } else {
-      // Handle unsupported Firestore types
-      throw new IllegalArgumentException("Unsupported Firestore type");
-    }
+    return futureResult;
   }
 
   /**
@@ -697,60 +678,46 @@ public final class Pipeline {
    */
   @BetaApi
   public void execute(ApiStreamObserver<PipelineResult> observer) {
-    if (db instanceof FirestoreImpl) {
-      FirestoreImpl firestoreImpl = (FirestoreImpl) db;
-      Value pipelineValue = toProto();
-      ExecutePipelineRequest request =
-          ExecutePipelineRequest.newBuilder()
-              .setDatabase(firestoreImpl.getResourcePath().getDatabaseName().toString())
-              .setStructuredPipeline(
-                  StructuredPipeline.newBuilder()
-                      .setPipeline(pipelineValue.getPipelineValue())
-                      .build())
-              .build();
+    ExecutePipelineRequest request =
+        ExecutePipelineRequest.newBuilder()
+            .setDatabase(rpcContext.getDatabaseName())
+            .setStructuredPipeline(StructuredPipeline.newBuilder().setPipeline(toProto()).build())
+            .build();
 
-      pipelineInternalStream(
-          firestoreImpl,
-          request,
-          new PipelineResultObserver() {
-            @Override
-            public void onCompleted() {
-              observer.onCompleted();
-            }
+    pipelineInternalStream(
+        request,
+        new PipelineResultObserver() {
+          @Override
+          public void onCompleted() {
+            observer.onCompleted();
+          }
 
-            @Override
-            public void onNext(PipelineResult result) {
-              observer.onNext(result);
-            }
+          @Override
+          public void onNext(PipelineResult result) {
+            observer.onNext(result);
+          }
 
-            @Override
-            public void onError(Throwable t) {
-              observer.onError(t);
-            }
-          });
-    } else {
-      // Handle unsupported Firestore types
-      throw new IllegalArgumentException("Unsupported Firestore type");
-    }
+          @Override
+          public void onError(Throwable t) {
+            observer.onError(t);
+          }
+        });
   }
 
-  private Value toProto() {
-    return Value.newBuilder()
-        .setPipelineValue(
-            com.google.firestore.v1.Pipeline.newBuilder()
-                .addAllStages(stages.transform(StageUtils::toStageProto)))
+  private com.google.firestore.v1.Pipeline toProto() {
+    return com.google.firestore.v1.Pipeline.newBuilder()
+        .addAllStages(stages.transform(StageUtils::toStageProto))
         .build();
   }
 
   private void pipelineInternalStream(
-      FirestoreImpl rpcContext,
-      ExecutePipelineRequest request,
-      PipelineResultObserver resultObserver) {
+      ExecutePipelineRequest request, PipelineResultObserver resultObserver) {
     ResponseObserver<ExecutePipelineResponse> observer =
         new ResponseObserver<ExecutePipelineResponse>() {
           Timestamp executionTime = null;
           boolean firstResponse = false;
           int numDocuments = 0;
+          int totalNumDocuments = 0;
           boolean hasCompleted = false;
 
           @Override
@@ -769,15 +736,16 @@ public final class Pipeline {
             }
             if (response.getResultsCount() > 0) {
               numDocuments += response.getResultsCount();
-              if (numDocuments % 100 == 0) {
+              totalNumDocuments += response.getResultsCount();
+              if (numDocuments > 100) {
                 Tracing.getTracer()
                     .getCurrentSpan()
-                    .addAnnotation("Firestore.Query: Received 100 documents");
+                    .addAnnotation("Firestore.Query: Received " + numDocuments + " documents");
+                numDocuments = 0;
               }
+              Timestamp executionTime = Timestamp.fromProto(response.getExecutionTime());
               for (Document doc : response.getResultsList()) {
-                resultObserver.onNext(
-                    PipelineResult.fromDocument(
-                        rpcContext, Timestamp.fromProto(response.getExecutionTime()), doc));
+                resultObserver.onNext(PipelineResult.fromDocument(rpcContext, executionTime, doc));
               }
             }
 
@@ -804,7 +772,7 @@ public final class Pipeline {
                 .addAnnotation(
                     "Firestore.ExecutePipeline: Completed",
                     ImmutableMap.of(
-                        "numDocuments", AttributeValue.longAttributeValue((long) numDocuments)));
+                        "numDocuments", AttributeValue.longAttributeValue((long) totalNumDocuments)));
             resultObserver.onCompleted(executionTime);
           }
         };

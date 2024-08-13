@@ -79,14 +79,14 @@ public final class PipelineResult {
   }
 
   static PipelineResult fromDocument(
-      FirestoreRpcContext<?> rpcContext, Timestamp readTime, Document document) {
+      FirestoreRpcContext<?> rpcContext, Timestamp executionTime, Document document) {
     return new PipelineResult(
         rpcContext,
         document.getName().isEmpty()
             ? null
             : new DocumentReference(rpcContext, ResourcePath.create(document.getName())),
         document.getFieldsMap(),
-        readTime,
+        executionTime,
         Timestamp.fromProto(document.getUpdateTime()),
         Timestamp.fromProto(document.getCreateTime()));
   }
@@ -442,7 +442,7 @@ public final class PipelineResult {
   @Override
   public String toString() {
     return String.format(
-        "%s{doc=%s, fields=%s, readTime=%s, updateTime=%s, createTime=%s}",
+        "%s{doc=%s, fields=%s, executionTime=%s, updateTime=%s, createTime=%s}",
         getClass().getSimpleName(), docRef, fields, executionTime, updateTime, createTime);
   }
 }

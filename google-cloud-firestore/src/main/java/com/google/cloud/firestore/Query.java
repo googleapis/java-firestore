@@ -2128,9 +2128,8 @@ public class Query {
     // From
     Pipeline ppl =
         this.options.getAllDescendants()
-            ? new PipelineSource(this.getFirestore())
-                .collectionGroup(this.options.getCollectionId())
-            : new PipelineSource(this.getFirestore())
+            ? new PipelineSource(this.rpcContext).collectionGroup(this.options.getCollectionId())
+            : new PipelineSource(this.rpcContext)
                 .collection(
                     this.options.getParentPath().append(this.options.getCollectionId()).getPath());
 
