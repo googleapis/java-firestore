@@ -30,6 +30,7 @@ import com.google.cloud.ServiceOptions;
 import com.google.cloud.TransportOptions;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.spi.v1.GrpcFirestoreRpc;
+import com.google.cloud.firestore.telemetry.MetricsUtil;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.cloud.grpc.GrpcTransportOptions;
 import com.google.common.collect.ImmutableMap;
@@ -64,6 +65,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final String emulatorHost;
   private final transient @Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions;
   private final transient @Nonnull com.google.cloud.firestore.telemetry.TraceUtil traceUtil;
+  private final transient @Nonnull com.google.cloud.firestore.telemetry.MetricsUtil metricsUtil;
 
   public static class DefaultFirestoreFactory implements FirestoreFactory {
 
@@ -125,6 +127,11 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   @Nonnull
   com.google.cloud.firestore.telemetry.TraceUtil getTraceUtil() {
     return traceUtil;
+  }
+
+  @Nonnull
+  public com.google.cloud.firestore.telemetry.MetricsUtil getMetricsUtil() {
+    return metricsUtil;
   }
 
   @BetaApi
@@ -319,6 +326,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
             ? builder.openTelemetryOptions
             : FirestoreOpenTelemetryOptions.newBuilder().build();
     this.traceUtil = com.google.cloud.firestore.telemetry.TraceUtil.getInstance(this);
+    this.metricsUtil = new MetricsUtil(this);
 
     this.databaseId =
         builder.databaseId != null
