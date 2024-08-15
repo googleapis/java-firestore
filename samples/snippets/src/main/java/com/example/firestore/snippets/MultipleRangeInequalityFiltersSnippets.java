@@ -51,8 +51,6 @@ class MultipleRangeInequalityFiltersSnippets {
    * Creates cities collection and add sample documents to test queries.
    */
   void prepareExamples() throws Exception {
-    CollectionReference citiesCollection = db.collection("cities");
-
     // Data for each city
     Map<String, Object> sfData = new HashMap<>();
     sfData.put("name", "San Francisco");
@@ -98,6 +96,8 @@ class MultipleRangeInequalityFiltersSnippets {
     bjData.put("population", 21500000L);
     bjData.put("density", 3500L);
     bjData.put("regions", Arrays.asList("jingjinji", "hebei"));
+
+    CollectionReference citiesCollection = db.collection("cities");
 
     // Add each city document
     addCityDocument(citiesCollection, "SF", sfData);
