@@ -42,27 +42,46 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 @SuppressWarnings("checkstyle:abbreviationaswordinname")
-public class MultipleRangeInequalitySnippetsIT extends BaseIntegrationTest {
+public class MultipleRangeInequalityFiltersSnippetsIT extends BaseIntegrationTest {
 
-  private static MultipleRangeInequalitySnippets multipleRangeInequalitySnippets;
+  private static MultipleRangeInequalityFiltersSnippets multipleRangeInequalityFiltersSnippets;
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    multipleRangeInequalitySnippets = new MultipleRangeInequalitySnippets(db);
-    multipleRangeInequalitySnippets.prepareExamples();
+    multipleRangeInequalityFiltersSnippets = new MultipleRangeInequalityFiltersSnippets(db);
+    multipleRangeInequalityFiltersSnippets.prepareExamples();
   }
 
   @Test
   public void testRangeMultipleInequalityFilter() throws Exception {
-    Query query = multipleRangeInequalitySnippets.rangeMultipleInequalityFilter();
-    Set<String> expected = newHashSet();
+    Query query = multipleRangeInequalityFiltersSnippets.compoundMultiInequalities();
+
+    Set<String> expected = newHashSet("BJ", "LA");
     Set<String> actual = getResultsAsSet(query);
     assertEquals(expected, actual);
+  }
+
+  private Set<String> getResultsAsSet(Query query) throws Exception {
+    List<String> docIds = getResults(query);
+    return new HashSet<>(docIds);
+  }
+
+  private List<String> getResults(Query query) throws Exception {
+    // asynchronously retrieve query results
+    ApiFuture<QuerySnapshot> future = query.get();
+    // block on response
+    QuerySnapshot querySnapshot = future.get();
+
+    List<String> docIds = new ArrayList<>();
+    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+      docIds.add(document.getId());
+    }
+    return docIds;
   }
 
   @AfterClass
   public static void tearDown() throws Exception {
     deleteAllDocuments(db);
-    multipleRangeInequalitySnippets.close();
+    multipleRangeInequalityFiltersSnippets.close();
   }
 }
