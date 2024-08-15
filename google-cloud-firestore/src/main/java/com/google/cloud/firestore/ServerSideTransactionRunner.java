@@ -97,10 +97,10 @@ final class ServerSideTransactionRunner<T> {
     runTransactionSpan.setAttribute("numAttemptsAllowed", transactionOptions.getNumberOfAttempts());
     runTransactionSpan.setAttribute("attemptsRemaining", attemptsRemaining);
 
-    //MILA
-        MetricsUtil util = firestore.getOptions().getMetricsUtil();
-        double start = System.currentTimeMillis();
-    
+    // MILA
+    MetricsUtil util = firestore.getOptions().getMetricsUtil();
+    double start = System.currentTimeMillis();
+
     try (Scope ignored = runTransactionSpan.makeCurrent()) {
       runTransactionContext = getTraceUtil().currentContext();
       --attemptsRemaining;
@@ -111,7 +111,7 @@ final class ServerSideTransactionRunner<T> {
               Throwable.class,
               this::restartTransactionCallback,
               MoreExecutors.directExecutor());
-              util.endAtFuture(result, start, TraceUtil.SPAN_NAME_TRANSACTION_RUN);
+      util.endAtFuture(result, start, TraceUtil.SPAN_NAME_TRANSACTION_RUN);
       runTransactionSpan.endAtFuture(result);
       return result;
     } catch (Exception error) {

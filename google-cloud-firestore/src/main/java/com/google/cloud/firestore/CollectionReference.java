@@ -202,7 +202,7 @@ public class CollectionReference extends Query {
             .getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_COL_REF_ADD);
 
-                // MILA
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
 
@@ -213,7 +213,7 @@ public class CollectionReference extends Query {
           ApiFutures.transform(
               createFuture, writeResult -> documentReference, MoreExecutors.directExecutor());
 
-              util.endAtFuture(result, start, TraceUtil.SPAN_NAME_COL_REF_ADD);
+      util.endAtFuture(result, start, TraceUtil.SPAN_NAME_COL_REF_ADD);
 
       span.endAtFuture(result);
       return result;

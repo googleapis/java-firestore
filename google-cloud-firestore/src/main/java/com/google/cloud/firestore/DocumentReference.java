@@ -151,17 +151,15 @@ public class DocumentReference {
   public ApiFuture<WriteResult> create(@Nonnull Map<String, Object> fields) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_CREATE);
 
-        // MILA
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
-
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.create(this, fields).commit());
 
       util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_CREATE);
-
 
       span.endAtFuture(result);
       return result;
@@ -181,8 +179,8 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> create(@Nonnull Object pojo) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_CREATE);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
@@ -190,7 +188,6 @@ public class DocumentReference {
       ApiFuture<WriteResult> result = extractFirst(writeBatch.create(this, pojo).commit());
 
       util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_CREATE);
-
 
       span.endAtFuture(result);
       return result;
@@ -210,8 +207,8 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Map<String, Object> fields) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_SET);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
@@ -241,16 +238,16 @@ public class DocumentReference {
   public ApiFuture<WriteResult> set(
       @Nonnull Map<String, Object> fields, @Nonnull SetOptions options) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_SET);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, fields, options).commit());
-      
+
       util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_SET);
-      
+
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
@@ -269,16 +266,15 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Object pojo) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_SET);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, pojo).commit());
-     
-      util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_SET);
 
+      util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_SET);
 
       span.endAtFuture(result);
       return result;
@@ -300,16 +296,16 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Object pojo, @Nonnull SetOptions options) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_SET);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, pojo, options).commit());
-     
+
       util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_SET);
-      
+
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
@@ -328,16 +324,16 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> update(@Nonnull Map<String, Object> fields) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.update(this, fields).commit());
-      
+
       util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
-      
+
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
@@ -357,18 +353,18 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> update(@Nonnull Map<String, Object> fields, Precondition options) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result =
           extractFirst(writeBatch.update(this, fields, options).commit());
-      
+
       util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
 
-          span.endAtFuture(result);
+      span.endAtFuture(result);
       return result;
     } catch (Exception error) {
       span.end(error);
@@ -389,18 +385,18 @@ public class DocumentReference {
   public ApiFuture<WriteResult> update(
       @Nonnull String field, @Nullable Object value, Object... moreFieldsAndValues) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result =
           extractFirst(writeBatch.update(this, field, value, moreFieldsAndValues).commit());
-      
-          util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
-          
-          span.endAtFuture(result);
+
+      util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
+
+      span.endAtFuture(result);
       return result;
     } catch (Exception error) {
       span.end(error);
@@ -421,18 +417,18 @@ public class DocumentReference {
   public ApiFuture<WriteResult> update(
       @Nonnull FieldPath fieldPath, @Nullable Object value, Object... moreFieldsAndValues) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result =
           extractFirst(writeBatch.update(this, fieldPath, value, moreFieldsAndValues).commit());
-       
-          util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
 
-          span.endAtFuture(result);
+      util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
+
+      span.endAtFuture(result);
       return result;
     } catch (Exception error) {
       span.end(error);
@@ -457,8 +453,8 @@ public class DocumentReference {
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
@@ -466,10 +462,10 @@ public class DocumentReference {
       ApiFuture<WriteResult> result =
           extractFirst(
               writeBatch.update(this, options, field, value, moreFieldsAndValues).commit());
-            
-              util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
 
-              span.endAtFuture(result);
+      util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
+
+      span.endAtFuture(result);
       return result;
     } catch (Exception error) {
       span.end(error);
@@ -494,8 +490,8 @@ public class DocumentReference {
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
@@ -503,11 +499,10 @@ public class DocumentReference {
       ApiFuture<WriteResult> result =
           extractFirst(
               writeBatch.update(this, options, fieldPath, value, moreFieldsAndValues).commit());
-              
-              util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
 
+      util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_UPDATE);
 
-              span.endAtFuture(result);
+      span.endAtFuture(result);
       return result;
     } catch (Exception error) {
       span.end(error);
@@ -524,14 +519,14 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> delete(@Nonnull Precondition options) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_DELETE);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.delete(this, options).commit());
-     
+
       util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_DELETE);
 
       span.endAtFuture(result);
@@ -550,14 +545,14 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> delete() {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_DELETE);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.delete(this).commit());
-      
+
       util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_DELETE);
 
       span.endAtFuture(result);
@@ -579,10 +574,9 @@ public class DocumentReference {
   public ApiFuture<DocumentSnapshot> get() {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_GET);
 
-        // MILA
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
-
 
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<DocumentSnapshot> result = extractFirst(rpcContext.getFirestore().getAll(this));
@@ -607,17 +601,17 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<DocumentSnapshot> get(FieldMask fieldMask) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_GET);
-    
-        // MILA
+
+    // MILA
     MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<DocumentSnapshot> result =
-          extractFirst(rpcContext.getFirestore().getAll(new DocumentReference[] { this }, fieldMask));
-      
-          util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_GET);
+          extractFirst(rpcContext.getFirestore().getAll(new DocumentReference[] {this}, fieldMask));
 
-          span.endAtFuture(result);
+      util.endAtFuture(result, start, TraceUtil.SPAN_NAME_DOC_REF_GET);
+
+      span.endAtFuture(result);
       return result;
     } catch (Exception error) {
       span.end(error);
@@ -634,7 +628,6 @@ public class DocumentReference {
   @Nonnull
   public Iterable<CollectionReference> listCollections() {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_LIST_COLLECTIONS);
-    
 
     try (Scope ignored = span.makeCurrent()) {
       ListCollectionIdsRequest.Builder request = ListCollectionIdsRequest.newBuilder();
@@ -668,7 +661,6 @@ public class DocumentReference {
               };
             }
           };
-
 
       span.end();
       return result;

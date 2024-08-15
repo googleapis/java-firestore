@@ -124,7 +124,7 @@ public class AggregateQuery {
                     ? TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET
                     : TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
 
-         // MILA
+    // MILA
     MetricsUtil util = query.getFirestore().getOptions().getMetricsUtil();
     double start = System.currentTimeMillis();
 
@@ -137,9 +137,12 @@ public class AggregateQuery {
       runQuery(responseDeliverer, /* attempt= */ 0);
       ApiFuture<AggregateQuerySnapshot> result = responseDeliverer.getFuture();
 
-      util.endAtFuture(result, start, transactionId == null
-      ? TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET
-      : TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
+      util.endAtFuture(
+          result,
+          start,
+          transactionId == null
+              ? TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET
+              : TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
 
       span.endAtFuture(result);
       return result;

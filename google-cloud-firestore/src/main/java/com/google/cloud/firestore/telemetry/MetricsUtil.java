@@ -21,7 +21,6 @@ import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
@@ -29,8 +28,6 @@ import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.metrics.DoubleHistogram;
 import io.opentelemetry.api.metrics.Meter;
-import io.opentelemetry.api.trace.StatusCode;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,7 +98,6 @@ public class MetricsUtil {
     return attributesBuilder.build();
   }
 
-
   public <T> void end(ApiFuture<T> futureValue, double start, String method) {
     Map<String, String> attributes = new HashMap<>();
     attributes.put("language", "java");
@@ -111,7 +107,6 @@ public class MetricsUtil {
     double elapsedTime = end - start;
     endToEndRequestLatencyRecorder(elapsedTime, attributes);
   }
-
 
   public <T> void endAtFuture(ApiFuture<T> futureValue, double start, String method) {
     Map<String, String> attributes = new HashMap<>();
