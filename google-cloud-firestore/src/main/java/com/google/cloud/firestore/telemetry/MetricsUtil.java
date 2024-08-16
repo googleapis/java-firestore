@@ -112,7 +112,7 @@ public class MetricsUtil {
         new OpenTelemetryMetricsRecorder(openTelemetry, METRICS_INTERNAL);
 
     this.otelApiTracerFactory = new MetricsTracerFactory(recorder);
-    
+
     registerMetrics();
   }
 
@@ -126,14 +126,14 @@ public class MetricsUtil {
 
     this.endToEndRequestLatency =
         meter
-            .histogramBuilder(METRICS_INTERNAL+"/"+END_TO_END_LATENCIES_NAME)
+            .histogramBuilder(METRICS_INTERNAL + "/" + END_TO_END_LATENCIES_NAME)
             .setDescription("Firestore E2E metrics")
             .setUnit(MILLISECOND_UNIT)
             .build();
 
     this.firstResponseLatency =
         meter
-            .histogramBuilder(METRICS_INTERNAL+"/"+FIRST_RESPONSE_LATENCIES_NAME)
+            .histogramBuilder(METRICS_INTERNAL + "/" + FIRST_RESPONSE_LATENCIES_NAME)
             .setDescription("Firestore query first response latency")
             .setUnit(MILLISECOND_UNIT)
             .build();
