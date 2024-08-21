@@ -671,23 +671,6 @@ public interface Expr {
     return new Exists(this);
   }
 
-  /**
-   * Creates an expression that checks if this expression evaluates to null.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Check if the 'optionalField' is null
-   * Field.of("optionalField").isNull();
-   * }</pre>
-   *
-   * @return A new {@code Expr} representing the null check.
-   */
-  @BetaApi
-  default IsNull isNull() {
-    return new IsNull(this);
-  }
-
   // Aggregate Functions
 
   /**

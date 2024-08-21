@@ -64,8 +64,6 @@ public final class StageUtils {
           .setName(sortStage.getName())
           .addAllArgs(
               sortStage.getOrders().stream().map(Ordering::toProto).collect(Collectors.toList()))
-          .putOptions("density", encodeValue(sortStage.getDensity().toString()))
-          .putOptions("truncation", encodeValue(sortStage.getTruncation().toString()))
           .build();
     } else if (stage instanceof Offset) {
       Offset offsetStage = (Offset) stage;

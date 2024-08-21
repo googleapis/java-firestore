@@ -46,8 +46,6 @@ import com.google.cloud.firestore.pipeline.expressions.Exists;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Ordering;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
-import com.google.cloud.firestore.pipeline.stages.Sort.Density;
-import com.google.cloud.firestore.pipeline.stages.Sort.Truncation;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -2174,7 +2172,7 @@ public class Query {
                           ? Field.of(fieldOrder.fieldReference.getFieldPath()).ascending()
                           : Field.of(fieldOrder.fieldReference.getFieldPath()).descending())
               .collect(Collectors.toList());
-      ppl = ppl.sort(orders, Density.REQUIRED, Truncation.UNSPECIFIED);
+      ppl = ppl.sort(orders.toArray(new Ordering[] {}));
     }
 
     // Cursors, Limit and Offset

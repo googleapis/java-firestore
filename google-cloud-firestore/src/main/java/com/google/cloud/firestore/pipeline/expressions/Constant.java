@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public final class Constant implements Expr {
   private final Object value;
 
-  private Constant(Object value) {
+  Constant(Object value) {
     this.value = value;
   }
 

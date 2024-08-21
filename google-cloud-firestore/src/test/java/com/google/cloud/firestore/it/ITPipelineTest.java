@@ -34,7 +34,6 @@ import static com.google.cloud.firestore.pipeline.expressions.Function.endsWith;
 import static com.google.cloud.firestore.pipeline.expressions.Function.eq;
 import static com.google.cloud.firestore.pipeline.expressions.Function.euclideanDistance;
 import static com.google.cloud.firestore.pipeline.expressions.Function.gt;
-import static com.google.cloud.firestore.pipeline.expressions.Function.isNull;
 import static com.google.cloud.firestore.pipeline.expressions.Function.lt;
 import static com.google.cloud.firestore.pipeline.expressions.Function.neq;
 import static com.google.cloud.firestore.pipeline.expressions.Function.not;
@@ -763,7 +762,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .where(not(Field.of("rating").isNaN())) // Filter out any documents with NaN rating
             .select(
-                isNull("rating").as("ratingIsNull"),
+                eq("rating", null).as("ratingIsNull"),
                 not(Field.of("rating").isNaN()).as("ratingIsNotNaN"))
             .limit(1)
             .execute()
@@ -825,8 +824,9 @@ public class ITPipelineTest extends ITBaseTest {
     double[] sourceVector = {0.1, 0.1};
     double[] targetVector = {0.5, 0.8};
     List<PipelineResult> results =
-        collection
+        firestore
             .pipeline()
+            .collection(collection.getPath())
             .select(
                 cosineDistance(Constant.ofVector(sourceVector), targetVector).as("cosineDistance"),
                 dotProductDistance(Constant.ofVector(sourceVector), targetVector)

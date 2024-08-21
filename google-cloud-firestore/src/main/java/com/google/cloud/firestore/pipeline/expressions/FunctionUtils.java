@@ -11,7 +11,9 @@ import java.util.stream.Collectors;
 public final class FunctionUtils {
   @InternalApi
   public static Value exprToValue(Expr expr) {
-    if (expr instanceof Constant) {
+    if (expr == null) {
+      return Constant.of((String) null).toProto();
+    } else if (expr instanceof Constant) {
       return ((Constant) expr).toProto();
     } else if (expr instanceof Field) {
       return ((Field) expr).toProto();

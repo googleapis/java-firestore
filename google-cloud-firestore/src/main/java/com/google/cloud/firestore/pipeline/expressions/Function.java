@@ -2001,42 +2001,6 @@ public class Function implements Expr {
   }
 
   /**
-   * Creates an expression that checks if an expression evaluates to null.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Check if the 'optionalField' is null
-   * Function.isNull(Field.of("optionalField"));
-   * }</pre>
-   *
-   * @param expr The expression to check.
-   * @return A new {@code Expr} representing the null check.
-   */
-  @BetaApi
-  public static IsNull isNull(Expr expr) {
-    return new IsNull(expr);
-  }
-
-  /**
-   * Creates an expression that checks if a field's value is null.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Check if the 'optionalField' is null
-   * Function.isNull("optionalField");
-   * }</pre>
-   *
-   * @param field The name of the field to check.
-   * @return A new {@code Expr} representing the null check.
-   */
-  @BetaApi
-  public static IsNull isNull(String field) {
-    return new IsNull(Field.of(field));
-  }
-
-  /**
    * Creates an expression that negates a filter condition.
    *
    * <p>Example:

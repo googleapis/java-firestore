@@ -44,7 +44,6 @@ import com.google.firestore.v1.Value;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -544,47 +543,6 @@ public final class Pipeline {
    * <p>This stage allows you to order the results of your pipeline. You can specify multiple {@link
    * Ordering} instances to sort by multiple fields in ascending or descending order. If documents
    * have the same value for a field used for sorting, the next specified ordering will be used. If
-   * all orderings result in equal comparison, the documents are considered equal, and the order is
-   * unspecified.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Sort books by rating in descending order, and then by title in ascending order for books
-   * // with the same rating, with density required and truncation disabled.
-   * firestore.pipeline().collection("books")
-   *     .sort(
-   *         Arrays.asList(Ordering.of("rating").descending(), Ordering.of("title")),
-   *         Sort.Density.REQUIRED,
-   *         Sort.Truncation.DISABLED,
-   *         10);
-   * }</pre>
-   *
-   * @param orders One or more {@link Ordering} instances specifying the sorting criteria.
-   * @param density Specifies the index density semantics. See {@link
-   *     com.google.cloud.firestore.pipeline.stages.Sort.Density} for more information on density
-   *     sorting.
-   * @param truncation Specifies the index truncation semantics. See {@link
-   *     com.google.cloud.firestore.pipeline.stages.Sort.Truncation} for more information on
-   *     truncation options.
-   * @return A new {@code Pipeline} object with this stage appended to the stage list.
-   */
-  @BetaApi
-  public Pipeline sort(List<Ordering> orders, Sort.Density density, Sort.Truncation truncation) {
-    return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder()
-            .addAll(stages)
-            .add(new Sort(orders, density, truncation))
-            .build());
-  }
-
-  /**
-   * Sorts the documents from previous stages based on one or more {@link Ordering} criteria.
-   *
-   * <p>This stage allows you to order the results of your pipeline. You can specify multiple {@link
-   * Ordering} instances to sort by multiple fields in ascending or descending order. If documents
-   * have the same value for a field used for sorting, the next specified ordering will be used. If
    * all orderings result in equal comparison, the documents are considered equal and the order is
    * unspecified.
    *
@@ -604,7 +562,8 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline sort(Ordering... orders) {
-    return sort(Arrays.asList(orders), Sort.Density.UNSPECIFIED, Sort.Truncation.UNSPECIFIED);
+    return new Pipeline(
+        this.db, ImmutableList.<Stage>builder().addAll(stages).add(new Sort(orders)).build());
   }
 
   /**
