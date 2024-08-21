@@ -97,9 +97,9 @@ public class MetricsUtil {
           PROJECT_ID_KEY,
           DATABASE_ID_KEY,
           CLIENT_UID_KEY,
-          STATUS_KEY,
           CLIENT_LIBRARY_KEY,
-          LIBRARY_VERSION_KEY);
+          LIBRARY_VERSION_KEY,
+          STATUS_KEY);
 
   public static final Set<String> BUILTIN_METRICS =
       ImmutableSet.of(
@@ -200,35 +200,35 @@ public class MetricsUtil {
     // If metrics is enabled, but an OpenTelemetry instance is not provided, create a default OTel
     // instance.
     if (openTelemetry == null) {
+      SdkMeterProviderBuilder sdkMeterProviderBuilder = SdkMeterProvider.builder();
+
+      // Attach built-in exporter
       MetricExporter metricExporter =
           GoogleCloudMetricExporter.createWithConfiguration(
               MetricConfiguration.builder().setProjectId(firestoreOptions.getProjectId()).build());
+      sdkMeterProviderBuilder.registerMetricReader(
+          PeriodicMetricReader.builder(metricExporter).build());
 
-      SdkMeterProviderBuilder sdkMeterProviderBuilder = SdkMeterProvider.builder();
+      // Add static attributes to resource
+      Package pkg = this.getClass().getPackage();
+      sdkMeterProviderBuilder.setResource(
+          Resource.getDefault()
+              .merge(
+                  Resource.builder()
+                      .put(DATABASE_ID_KEY, firestoreOptions.getDatabaseId())
+                      .put(CLIENT_LIBRARY_KEY, FIRESTORE_METER_NAME)
+                      .put(LIBRARY_VERSION_KEY, pkg.getImplementationVersion())
+                      .build()));
 
-      // Remove "Language" attributes from GAX metrics
+      // Filter out attributes that are not defined
       for (Map.Entry<InstrumentSelector, View> entry : getAllViews().entrySet()) {
         sdkMeterProviderBuilder.registerView(entry.getKey(), entry.getValue());
       }
 
-      // This adds to Metrics.Resource.Attributes, doesn't show up on GC monitoring dashboard.
-      Package pkg = this.getClass().getPackage();
-      Resource resource =
-          Resource.getDefault()
-              .merge(
-                  Resource.builder()
-                      .put(CLIENT_LIBRARY_KEY, FIRESTORE_METER_NAME)
-                      .put(LIBRARY_VERSION_KEY, pkg.getImplementationVersion())
-                      .build());
-      sdkMeterProviderBuilder.setResource(resource);
-
-      SdkMeterProvider meterProvider =
-          sdkMeterProviderBuilder
-              .registerMetricReader(PeriodicMetricReader.builder(metricExporter).build())
-              .build();
-
-      openTelemetry = OpenTelemetrySdk.builder().setMeterProvider(meterProvider).build();
+      openTelemetry =
+          OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProviderBuilder.build()).build();
     }
+
     return openTelemetry;
   }
 
@@ -286,16 +286,15 @@ public class MetricsUtil {
 
   static void defineView(
       ImmutableMap.Builder<InstrumentSelector, View> viewMap,
-      String MeterName,
       String id,
       Set<AttributeKey> attributes) {
     InstrumentSelector selector =
-        InstrumentSelector.builder().setName(id).setMeterName(MeterName).build();
+        InstrumentSelector.builder().setName(METER_NAME + "/" + id).build();
     Set<String> attributesFilter =
         ImmutableSet.<String>builder()
             .addAll(attributes.stream().map(AttributeKey::getKey).collect(Collectors.toSet()))
             .build();
-    View view = View.builder().setName(id).setAttributeFilter(attributesFilter).build();
+    View view = View.builder().setAttributeFilter(attributesFilter).build();
 
     viewMap.put(selector, view);
   }
@@ -305,7 +304,6 @@ public class MetricsUtil {
 
     defineView(
         views,
-        GAX_METER_NAME,
         OPERATION_LATENCY_NAME,
         ImmutableSet.<AttributeKey>builder()
             .addAll(COMMON_ATTRIBUTES)
@@ -313,7 +311,6 @@ public class MetricsUtil {
             .build());
     defineView(
         views,
-        GAX_METER_NAME,
         ATTEMPT_LATENCY_NAME,
         ImmutableSet.<AttributeKey>builder()
             .addAll(COMMON_ATTRIBUTES)
@@ -322,7 +319,6 @@ public class MetricsUtil {
 
     defineView(
         views,
-        GAX_METER_NAME,
         OPERATION_COUNT_NAME,
         ImmutableSet.<AttributeKey>builder()
             .addAll(COMMON_ATTRIBUTES)
@@ -331,7 +327,6 @@ public class MetricsUtil {
 
     defineView(
         views,
-        GAX_METER_NAME,
         ATTEMPT_COUNT_NAME,
         ImmutableSet.<AttributeKey>builder()
             .addAll(COMMON_ATTRIBUTES)
@@ -340,7 +335,6 @@ public class MetricsUtil {
 
     defineView(
         views,
-        FIRESTORE_METER_NAME,
         FIRST_RESPONSE_LATENCY_NAME,
         ImmutableSet.<AttributeKey>builder()
             .addAll(COMMON_ATTRIBUTES)
@@ -349,7 +343,6 @@ public class MetricsUtil {
 
     defineView(
         views,
-        FIRESTORE_METER_NAME,
         END_TO_END_LATENCY_NAME,
         ImmutableSet.<AttributeKey>builder()
             .addAll(COMMON_ATTRIBUTES)
