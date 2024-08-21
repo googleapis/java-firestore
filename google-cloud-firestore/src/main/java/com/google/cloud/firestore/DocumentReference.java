@@ -21,11 +21,13 @@ import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
+import com.google.cloud.firestore.telemetry.MetricsUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.ListCollectionIdsRequest;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -473,8 +475,14 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<DocumentSnapshot> get() {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_DOC_REF_GET);
+
+    MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
+    double start = System.currentTimeMillis();
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<DocumentSnapshot> result = extractFirst(rpcContext.getFirestore().getAll(this));
+      Map<String, String> attributes = new HashMap<>();
+      attributes.put("method_name", "DocumentReference.get");
+      util.endAtFuture(result, start, attributes);
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
