@@ -1,5 +1,3 @@
-package com.google.cloud.firestore.telemetry;
-
 /*
  * Copyright 2023 Google LLC
  *
@@ -15,6 +13,7 @@ package com.google.cloud.firestore.telemetry;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.google.cloud.firestore.telemetry;
 
 import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.*;
 
