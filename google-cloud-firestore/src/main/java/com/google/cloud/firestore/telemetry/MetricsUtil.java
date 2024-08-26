@@ -39,6 +39,7 @@ import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.metrics.SdkMeterProvider;
 import io.opentelemetry.sdk.metrics.SdkMeterProviderBuilder;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
 
@@ -84,20 +85,26 @@ public class MetricsUtil {
 
     if (createEnabledInstance) {
       try {
-        createMetricsUtil();
+        createMetricsUtil(firestoreOptions);
       } catch (IOException e) {
         System.out.println(e);
       }
     }
   }
 
-  private void createMetricsUtil() throws IOException {
+  private void createMetricsUtil(FirestoreOptions firestoreOptions) throws IOException {
     this.openTelemetry = getDefaultOpenTelemetryInstance();
 
     OpenTelemetryMetricsRecorder recorder =
         new OpenTelemetryMetricsRecorder(openTelemetry, METER_NAME);
 
-    this.otelApiTracerFactory = new MetricsTracerFactory(recorder);
+    Map<String, String> attributes = new HashMap<>();
+    attributes.put(DATABASE_ID_KEY.toString(), firestoreOptions.getDatabaseId());
+    attributes.put(PROJECT_ID_KEY.toString(), firestoreOptions.getProjectId());
+
+    System.out.println("====1");
+    this.otelApiTracerFactory = new MetricsTracerFactory(recorder, attributes);
+    System.out.println("====2");
 
     registerMetrics();
   }

@@ -160,7 +160,8 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
       if (options.getApiTracerFactory() != null) {
         firestoreBuilder.setTracerFactory(options.getApiTracerFactory());
       } else if (options.getOpenTelemetryOptions().isMetricsEnabled()) {
-        // TODO: move this logic to Firestore options
+        // TODO: it should not be determined by isMetricsEnabled. move this whole logic to
+        // options.getApiTracerFactory()
         firestoreBuilder.setTracerFactory(
             options.getMetricsUtil().getOpenTelemetryApiTracerFactory());
       }
