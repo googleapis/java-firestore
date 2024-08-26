@@ -46,4 +46,9 @@
     <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
     <method>void updateBackupSchedule(com.google.firestore.admin.v1.UpdateBackupScheduleRequest, io.grpc.stub.StreamObserver)</method>
   </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
+    <method>void bulkDeleteDocuments(com.google.firestore.admin.v1.BulkDeleteDocumentsRequest, io.grpc.stub.StreamObserver)</method>
+  </difference>
 </differences>

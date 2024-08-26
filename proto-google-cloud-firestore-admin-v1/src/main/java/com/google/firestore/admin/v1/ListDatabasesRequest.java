@@ -120,6 +120,24 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
     }
   }
 
+  public static final int SHOW_DELETED_FIELD_NUMBER = 4;
+  private boolean showDeleted_ = false;
+  /**
+   *
+   *
+   * <pre>
+   * If true, also returns deleted resources.
+   * </pre>
+   *
+   * <code>bool show_deleted = 4;</code>
+   *
+   * @return The showDeleted.
+   */
+  @java.lang.Override
+  public boolean getShowDeleted() {
+    return showDeleted_;
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -137,6 +155,9 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(parent_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, parent_);
     }
+    if (showDeleted_ != false) {
+      output.writeBool(4, showDeleted_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -148,6 +169,9 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
     size = 0;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(parent_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, parent_);
+    }
+    if (showDeleted_ != false) {
+      size += com.google.protobuf.CodedOutputStream.computeBoolSize(4, showDeleted_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -166,6 +190,7 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
         (com.google.firestore.admin.v1.ListDatabasesRequest) obj;
 
     if (!getParent().equals(other.getParent())) return false;
+    if (getShowDeleted() != other.getShowDeleted()) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -179,6 +204,8 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + PARENT_FIELD_NUMBER;
     hash = (53 * hash) + getParent().hashCode();
+    hash = (37 * hash) + SHOW_DELETED_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(getShowDeleted());
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -319,6 +346,7 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
       super.clear();
       bitField0_ = 0;
       parent_ = "";
+      showDeleted_ = false;
       return this;
     }
 
@@ -357,6 +385,9 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.parent_ = parent_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.showDeleted_ = showDeleted_;
       }
     }
 
@@ -411,6 +442,9 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
         bitField0_ |= 0x00000001;
         onChanged();
       }
+      if (other.getShowDeleted() != false) {
+        setShowDeleted(other.getShowDeleted());
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -443,6 +477,12 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
                 bitField0_ |= 0x00000001;
                 break;
               } // case 10
+            case 32:
+              {
+                showDeleted_ = input.readBool();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 32
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -579,6 +619,59 @@ public final class ListDatabasesRequest extends com.google.protobuf.GeneratedMes
       checkByteStringIsUtf8(value);
       parent_ = value;
       bitField0_ |= 0x00000001;
+      onChanged();
+      return this;
+    }
+
+    private boolean showDeleted_;
+    /**
+     *
+     *
+     * <pre>
+     * If true, also returns deleted resources.
+     * </pre>
+     *
+     * <code>bool show_deleted = 4;</code>
+     *
+     * @return The showDeleted.
+     */
+    @java.lang.Override
+    public boolean getShowDeleted() {
+      return showDeleted_;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * If true, also returns deleted resources.
+     * </pre>
+     *
+     * <code>bool show_deleted = 4;</code>
+     *
+     * @param value The showDeleted to set.
+     * @return This builder for chaining.
+     */
+    public Builder setShowDeleted(boolean value) {
+
+      showDeleted_ = value;
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+    /**
+     *
+     *
+     * <pre>
+     * If true, also returns deleted resources.
+     * </pre>
+     *
+     * <code>bool show_deleted = 4;</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearShowDeleted() {
+      bitField0_ = (bitField0_ & ~0x00000002);
+      showDeleted_ = false;
       onChanged();
       return this;
     }

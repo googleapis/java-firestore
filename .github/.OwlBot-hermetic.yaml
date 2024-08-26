@@ -29,5 +29,5 @@ deep-copy-regex:
   dest: "/owl-bot-staging/$1/grpc-google-cloud-firestore-admin-$1/src"
 - source: "/google/firestore/admin/(v\\d)/.*-java/gapic-google-.*/src"
   dest: "/owl-bot-staging/$1/google-cloud-firestore-admin/src"
-- source: "/google/firestore/bundle/google-cloud-firestore-bundle-v1-java/proto-google-cloud-firestore-bundle-v1-java/src"
+- source: "/google/firestore/bundle/.*-java/proto-google-.*/src"
   dest: "/owl-bot-staging/v1/proto-google-cloud-firestore-bundle-v1/src"

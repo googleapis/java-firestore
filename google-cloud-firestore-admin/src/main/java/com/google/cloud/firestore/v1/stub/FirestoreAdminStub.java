@@ -24,6 +24,9 @@ import com.google.api.gax.rpc.OperationCallable;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.firestore.admin.v1.Backup;
 import com.google.firestore.admin.v1.BackupSchedule;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
@@ -148,6 +151,17 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
 
   public UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable() {
     throw new UnsupportedOperationException("Not implemented: importDocumentsCallable()");
+  }
+
+  public OperationCallable<
+          BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsOperationCallable() {
+    throw new UnsupportedOperationException(
+        "Not implemented: bulkDeleteDocumentsOperationCallable()");
+  }
+
+  public UnaryCallable<BulkDeleteDocumentsRequest, Operation> bulkDeleteDocumentsCallable() {
+    throw new UnsupportedOperationException("Not implemented: bulkDeleteDocumentsCallable()");
   }
 
   public OperationCallable<CreateDatabaseRequest, Database, CreateDatabaseMetadata>

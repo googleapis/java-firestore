@@ -10,6 +10,9 @@
         "grpc": {
           "libraryClient": "FirestoreAdminClient",
           "rpcs": {
+            "BulkDeleteDocuments": {
+              "methods": ["bulkDeleteDocumentsAsync", "bulkDeleteDocumentsAsync", "bulkDeleteDocumentsAsync", "bulkDeleteDocumentsOperationCallable", "bulkDeleteDocumentsCallable"]
+            },
             "CreateBackupSchedule": {
               "methods": ["createBackupSchedule", "createBackupSchedule", "createBackupSchedule", "createBackupScheduleCallable"]
             },

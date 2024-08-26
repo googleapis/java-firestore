@@ -38,6 +38,9 @@ import com.google.api.gax.rpc.UnaryCallable;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.admin.v1.Backup;
 import com.google.firestore.admin.v1.BackupSchedule;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
@@ -105,7 +108,9 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
           .add(ImportDocumentsMetadata.getDescriptor())
           .add(Database.getDescriptor())
           .add(FieldOperationMetadata.getDescriptor())
+          .add(BulkDeleteDocumentsResponse.getDescriptor())
           .add(DeleteDatabaseMetadata.getDescriptor())
+          .add(BulkDeleteDocumentsMetadata.getDescriptor())
           .add(UpdateDatabaseMetadata.getDescriptor())
           .add(Empty.getDescriptor())
           .add(Index.getDescriptor())
@@ -449,6 +454,46 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                       HttpJsonOperationSnapshot.create(response))
               .build();
 
+  private static final ApiMethodDescriptor<BulkDeleteDocumentsRequest, Operation>
+      bulkDeleteDocumentsMethodDescriptor =
+          ApiMethodDescriptor.<BulkDeleteDocumentsRequest, Operation>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/BulkDeleteDocuments")
+              .setHttpMethod("POST")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<BulkDeleteDocumentsRequest>newBuilder()
+                      .setPath(
+                          "/v1/{name=projects/*/databases/*}:bulkDeleteDocuments",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<BulkDeleteDocumentsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "name", request.getName());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<BulkDeleteDocumentsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("*", request.toBuilder().clearName().build(), true))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<Operation>newBuilder()
+                      .setDefaultInstance(Operation.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .setOperationSnapshotFactory(
+                  (BulkDeleteDocumentsRequest request, Operation response) ->
+                      HttpJsonOperationSnapshot.create(response))
+              .build();
+
   private static final ApiMethodDescriptor<CreateDatabaseRequest, Operation>
       createDatabaseMethodDescriptor =
           ApiMethodDescriptor.<CreateDatabaseRequest, Operation>newBuilder()
@@ -546,6 +591,8 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                             Map<String, List<String>> fields = new HashMap<>();
                             ProtoRestSerializer<ListDatabasesRequest> serializer =
                                 ProtoRestSerializer.create();
+                            serializer.putQueryParam(
+                                fields, "showDeleted", request.getShowDeleted());
                             serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
@@ -980,6 +1027,10 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   private final UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable;
   private final OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationCallable;
+  private final UnaryCallable<BulkDeleteDocumentsRequest, Operation> bulkDeleteDocumentsCallable;
+  private final OperationCallable<
+          BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsOperationCallable;
   private final UnaryCallable<CreateDatabaseRequest, Operation> createDatabaseCallable;
   private final OperationCallable<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
       createDatabaseOperationCallable;
@@ -1175,6 +1226,18 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                   return builder.build();
                 })
             .build();
+    HttpJsonCallSettings<BulkDeleteDocumentsRequest, Operation>
+        bulkDeleteDocumentsTransportSettings =
+            HttpJsonCallSettings.<BulkDeleteDocumentsRequest, Operation>newBuilder()
+                .setMethodDescriptor(bulkDeleteDocumentsMethodDescriptor)
+                .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("name", String.valueOf(request.getName()));
+                      return builder.build();
+                    })
+                .build();
     HttpJsonCallSettings<CreateDatabaseRequest, Operation> createDatabaseTransportSettings =
         HttpJsonCallSettings.<CreateDatabaseRequest, Operation>newBuilder()
             .setMethodDescriptor(createDatabaseMethodDescriptor)
@@ -1395,6 +1458,17 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
             settings.importDocumentsOperationSettings(),
             clientContext,
             httpJsonOperationsStub);
+    this.bulkDeleteDocumentsCallable =
+        callableFactory.createUnaryCallable(
+            bulkDeleteDocumentsTransportSettings,
+            settings.bulkDeleteDocumentsSettings(),
+            clientContext);
+    this.bulkDeleteDocumentsOperationCallable =
+        callableFactory.createOperationCallable(
+            bulkDeleteDocumentsTransportSettings,
+            settings.bulkDeleteDocumentsOperationSettings(),
+            clientContext,
+            httpJsonOperationsStub);
     this.createDatabaseCallable =
         callableFactory.createUnaryCallable(
             createDatabaseTransportSettings, settings.createDatabaseSettings(), clientContext);
@@ -1488,6 +1562,7 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
     methodDescriptors.add(listFieldsMethodDescriptor);
     methodDescriptors.add(exportDocumentsMethodDescriptor);
     methodDescriptors.add(importDocumentsMethodDescriptor);
+    methodDescriptors.add(bulkDeleteDocumentsMethodDescriptor);
     methodDescriptors.add(createDatabaseMethodDescriptor);
     methodDescriptors.add(getDatabaseMethodDescriptor);
     methodDescriptors.add(listDatabasesMethodDescriptor);
@@ -1586,6 +1661,18 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   public OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationCallable() {
     return importDocumentsOperationCallable;
+  }
+
+  @Override
+  public UnaryCallable<BulkDeleteDocumentsRequest, Operation> bulkDeleteDocumentsCallable() {
+    return bulkDeleteDocumentsCallable;
+  }
+
+  @Override
+  public OperationCallable<
+          BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsOperationCallable() {
+    return bulkDeleteDocumentsOperationCallable;
   }
 
   @Override

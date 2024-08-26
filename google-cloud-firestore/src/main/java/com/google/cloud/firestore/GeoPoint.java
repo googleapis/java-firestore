@@ -76,6 +76,7 @@ public class GeoPoint implements Serializable {
   public String toString() {
     return "GeoPoint { latitude=" + this.latitude + ", longitude=" + this.longitude + " }";
   }
+
   /**
    * Returns true if this GeoPoint is equal to the provided object.
    *

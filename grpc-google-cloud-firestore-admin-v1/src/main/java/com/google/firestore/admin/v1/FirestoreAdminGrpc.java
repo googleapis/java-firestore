@@ -443,6 +443,54 @@ public final class FirestoreAdminGrpc {
   }
 
   private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.BulkDeleteDocumentsRequest,
+          com.google.longrunning.Operation>
+      getBulkDeleteDocumentsMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "BulkDeleteDocuments",
+      requestType = com.google.firestore.admin.v1.BulkDeleteDocumentsRequest.class,
+      responseType = com.google.longrunning.Operation.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.BulkDeleteDocumentsRequest,
+          com.google.longrunning.Operation>
+      getBulkDeleteDocumentsMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.BulkDeleteDocumentsRequest,
+            com.google.longrunning.Operation>
+        getBulkDeleteDocumentsMethod;
+    if ((getBulkDeleteDocumentsMethod = FirestoreAdminGrpc.getBulkDeleteDocumentsMethod) == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getBulkDeleteDocumentsMethod = FirestoreAdminGrpc.getBulkDeleteDocumentsMethod)
+            == null) {
+          FirestoreAdminGrpc.getBulkDeleteDocumentsMethod =
+              getBulkDeleteDocumentsMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.BulkDeleteDocumentsRequest,
+                          com.google.longrunning.Operation>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(
+                          generateFullMethodName(SERVICE_NAME, "BulkDeleteDocuments"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.BulkDeleteDocumentsRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.longrunning.Operation.getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("BulkDeleteDocuments"))
+                      .build();
+        }
+      }
+    }
+    return getBulkDeleteDocumentsMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
           com.google.firestore.admin.v1.CreateDatabaseRequest, com.google.longrunning.Operation>
       getCreateDatabaseMethod;
 
@@ -1310,6 +1358,26 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
+     * Bulk deletes a subset of documents from Google Cloud Firestore.
+     * Documents created or updated after the underlying system starts to process
+     * the request will not be deleted. The bulk delete occurs in the background
+     * and its progress can be monitored and managed via the Operation resource
+     * that is created.
+     * For more details on bulk delete behavior, refer to:
+     * https://cloud.google.com/firestore/docs/manage-data/bulk-delete
+     * </pre>
+     */
+    default void bulkDeleteDocuments(
+        com.google.firestore.admin.v1.BulkDeleteDocumentsRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getBulkDeleteDocumentsMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Create a database.
      * </pre>
      */
@@ -1426,7 +1494,7 @@ public final class FirestoreAdminGrpc {
      * Creates a new database by restoring from an existing backup.
      * The new database must be in the same cloud region or multi-region location
      * as the existing backup. This behaves similar to
-     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase]
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase]
      * except instead of creating a new empty database, a new database is created
      * with the database type, index configuration, and documents from an existing
      * backup.
@@ -1777,6 +1845,28 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
+     * Bulk deletes a subset of documents from Google Cloud Firestore.
+     * Documents created or updated after the underlying system starts to process
+     * the request will not be deleted. The bulk delete occurs in the background
+     * and its progress can be monitored and managed via the Operation resource
+     * that is created.
+     * For more details on bulk delete behavior, refer to:
+     * https://cloud.google.com/firestore/docs/manage-data/bulk-delete
+     * </pre>
+     */
+    public void bulkDeleteDocuments(
+        com.google.firestore.admin.v1.BulkDeleteDocumentsRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getBulkDeleteDocumentsMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Create a database.
      * </pre>
      */
@@ -1908,7 +1998,7 @@ public final class FirestoreAdminGrpc {
      * Creates a new database by restoring from an existing backup.
      * The new database must be in the same cloud region or multi-region location
      * as the existing backup. This behaves similar to
-     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase]
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase]
      * except instead of creating a new empty database, a new database is created
      * with the database type, index configuration, and documents from an existing
      * backup.
@@ -2214,6 +2304,25 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
+     * Bulk deletes a subset of documents from Google Cloud Firestore.
+     * Documents created or updated after the underlying system starts to process
+     * the request will not be deleted. The bulk delete occurs in the background
+     * and its progress can be monitored and managed via the Operation resource
+     * that is created.
+     * For more details on bulk delete behavior, refer to:
+     * https://cloud.google.com/firestore/docs/manage-data/bulk-delete
+     * </pre>
+     */
+    public com.google.longrunning.Operation bulkDeleteDocuments(
+        com.google.firestore.admin.v1.BulkDeleteDocumentsRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getBulkDeleteDocumentsMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Create a database.
      * </pre>
      */
@@ -2321,7 +2430,7 @@ public final class FirestoreAdminGrpc {
      * Creates a new database by restoring from an existing backup.
      * The new database must be in the same cloud region or multi-region location
      * as the existing backup. This behaves similar to
-     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase]
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase]
      * except instead of creating a new empty database, a new database is created
      * with the database type, index configuration, and documents from an existing
      * backup.
@@ -2607,6 +2716,25 @@ public final class FirestoreAdminGrpc {
      *
      *
      * <pre>
+     * Bulk deletes a subset of documents from Google Cloud Firestore.
+     * Documents created or updated after the underlying system starts to process
+     * the request will not be deleted. The bulk delete occurs in the background
+     * and its progress can be monitored and managed via the Operation resource
+     * that is created.
+     * For more details on bulk delete behavior, refer to:
+     * https://cloud.google.com/firestore/docs/manage-data/bulk-delete
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
+        bulkDeleteDocuments(com.google.firestore.admin.v1.BulkDeleteDocumentsRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getBulkDeleteDocumentsMethod(), getCallOptions()), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Create a database.
      * </pre>
      */
@@ -2717,7 +2845,7 @@ public final class FirestoreAdminGrpc {
      * Creates a new database by restoring from an existing backup.
      * The new database must be in the same cloud region or multi-region location
      * as the existing backup. This behaves similar to
-     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.CreateDatabase]
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase]
      * except instead of creating a new empty database, a new database is created
      * with the database type, index configuration, and documents from an existing
      * backup.
@@ -2818,20 +2946,21 @@ public final class FirestoreAdminGrpc {
   private static final int METHODID_LIST_FIELDS = 6;
   private static final int METHODID_EXPORT_DOCUMENTS = 7;
   private static final int METHODID_IMPORT_DOCUMENTS = 8;
-  private static final int METHODID_CREATE_DATABASE = 9;
-  private static final int METHODID_GET_DATABASE = 10;
-  private static final int METHODID_LIST_DATABASES = 11;
-  private static final int METHODID_UPDATE_DATABASE = 12;
-  private static final int METHODID_DELETE_DATABASE = 13;
-  private static final int METHODID_GET_BACKUP = 14;
-  private static final int METHODID_LIST_BACKUPS = 15;
-  private static final int METHODID_DELETE_BACKUP = 16;
-  private static final int METHODID_RESTORE_DATABASE = 17;
-  private static final int METHODID_CREATE_BACKUP_SCHEDULE = 18;
-  private static final int METHODID_GET_BACKUP_SCHEDULE = 19;
-  private static final int METHODID_LIST_BACKUP_SCHEDULES = 20;
-  private static final int METHODID_UPDATE_BACKUP_SCHEDULE = 21;
-  private static final int METHODID_DELETE_BACKUP_SCHEDULE = 22;
+  private static final int METHODID_BULK_DELETE_DOCUMENTS = 9;
+  private static final int METHODID_CREATE_DATABASE = 10;
+  private static final int METHODID_GET_DATABASE = 11;
+  private static final int METHODID_LIST_DATABASES = 12;
+  private static final int METHODID_UPDATE_DATABASE = 13;
+  private static final int METHODID_DELETE_DATABASE = 14;
+  private static final int METHODID_GET_BACKUP = 15;
+  private static final int METHODID_LIST_BACKUPS = 16;
+  private static final int METHODID_DELETE_BACKUP = 17;
+  private static final int METHODID_RESTORE_DATABASE = 18;
+  private static final int METHODID_CREATE_BACKUP_SCHEDULE = 19;
+  private static final int METHODID_GET_BACKUP_SCHEDULE = 20;
+  private static final int METHODID_LIST_BACKUP_SCHEDULES = 21;
+  private static final int METHODID_UPDATE_BACKUP_SCHEDULE = 22;
+  private static final int METHODID_DELETE_BACKUP_SCHEDULE = 23;
 
   private static final class MethodHandlers<Req, Resp>
       implements io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -2895,6 +3024,11 @@ public final class FirestoreAdminGrpc {
         case METHODID_IMPORT_DOCUMENTS:
           serviceImpl.importDocuments(
               (com.google.firestore.admin.v1.ImportDocumentsRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.longrunning.Operation>) responseObserver);
+          break;
+        case METHODID_BULK_DELETE_DOCUMENTS:
+          serviceImpl.bulkDeleteDocuments(
+              (com.google.firestore.admin.v1.BulkDeleteDocumentsRequest) request,
               (io.grpc.stub.StreamObserver<com.google.longrunning.Operation>) responseObserver);
           break;
         case METHODID_CREATE_DATABASE:
@@ -3050,6 +3184,12 @@ public final class FirestoreAdminGrpc {
                     com.google.firestore.admin.v1.ImportDocumentsRequest,
                     com.google.longrunning.Operation>(service, METHODID_IMPORT_DOCUMENTS)))
         .addMethod(
+            getBulkDeleteDocumentsMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.BulkDeleteDocumentsRequest,
+                    com.google.longrunning.Operation>(service, METHODID_BULK_DELETE_DOCUMENTS)))
+        .addMethod(
             getCreateDatabaseMethod(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
                 new MethodHandlers<
@@ -3199,6 +3339,7 @@ public final class FirestoreAdminGrpc {
                       .addMethod(getListFieldsMethod())
                       .addMethod(getExportDocumentsMethod())
                       .addMethod(getImportDocumentsMethod())
+                      .addMethod(getBulkDeleteDocumentsMethod())
                       .addMethod(getCreateDatabaseMethod())
                       .addMethod(getGetDatabaseMethod())
                       .addMethod(getListDatabasesMethod())
