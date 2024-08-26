@@ -7,12 +7,12 @@ import com.google.api.core.InternalApi;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.GeoPoint;
 import com.google.firestore.v1.Value;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @BetaApi
 public final class Constant implements Expr {
@@ -112,9 +112,8 @@ public final class Constant implements Expr {
   }
 
   @BetaApi
-  public static Constant ofVector(double[] value) {
-    // Convert double array to List<Double>
-    return new Constant(Arrays.stream(value).boxed().collect(Collectors.toList()));
+  public static Constant vector(double[] value) {
+    return new Constant(FieldValue.vector(value));
   }
 
   @InternalApi

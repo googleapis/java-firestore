@@ -2277,7 +2277,7 @@ public class Function implements Expr {
    */
   @BetaApi
   public static CosineDistance cosineDistance(Expr expr, double[] other) {
-    return new CosineDistance(expr, Constant.ofVector(other));
+    return new CosineDistance(expr, Constant.vector(other));
   }
 
   /**
@@ -2315,7 +2315,7 @@ public class Function implements Expr {
    */
   @BetaApi
   public static CosineDistance cosineDistance(String field, double[] other) {
-    return new CosineDistance(Field.of(field), Constant.ofVector(other));
+    return new CosineDistance(Field.of(field), Constant.vector(other));
   }
 
   /**
@@ -2353,7 +2353,7 @@ public class Function implements Expr {
    */
   @BetaApi
   public static DotProductDistance dotProductDistance(Expr expr, double[] other) {
-    return new DotProductDistance(expr, Constant.ofVector(other));
+    return new DotProductDistance(expr, Constant.vector(other));
   }
 
   /**
@@ -2391,7 +2391,7 @@ public class Function implements Expr {
    */
   @BetaApi
   public static DotProductDistance dotProductDistance(String field, double[] other) {
-    return new DotProductDistance(Field.of(field), Constant.ofVector(other));
+    return new DotProductDistance(Field.of(field), Constant.vector(other));
   }
 
   /**
@@ -2429,7 +2429,7 @@ public class Function implements Expr {
    */
   @BetaApi
   public static EuclideanDistance euclideanDistance(Expr expr, double[] other) {
-    return new EuclideanDistance(expr, Constant.ofVector(other));
+    return new EuclideanDistance(expr, Constant.vector(other));
   }
 
   /**
@@ -2467,7 +2467,7 @@ public class Function implements Expr {
    */
   @BetaApi
   public static EuclideanDistance euclideanDistance(String field, double[] other) {
-    return new EuclideanDistance(Field.of(field), Constant.ofVector(other));
+    return new EuclideanDistance(Field.of(field), Constant.vector(other));
   }
 
   /**

@@ -1084,7 +1084,7 @@ public interface Expr {
    */
   @BetaApi
   default CosineDistance cosineDistance(double[] other) {
-    return new CosineDistance(this, Constant.ofVector(other));
+    return new CosineDistance(this, Constant.vector(other));
   }
 
   /**
@@ -1102,7 +1102,7 @@ public interface Expr {
    */
   @BetaApi
   default EuclideanDistance euclideanDistance(double[] other) {
-    return new EuclideanDistance(this, Constant.ofVector(other));
+    return new EuclideanDistance(this, Constant.vector(other));
   }
 
   /**
@@ -1138,7 +1138,7 @@ public interface Expr {
    */
   @BetaApi
   default DotProductDistance dotProductDistance(double[] other) {
-    return new DotProductDistance(this, Constant.ofVector(other));
+    return new DotProductDistance(this, Constant.vector(other));
   }
 
   /**

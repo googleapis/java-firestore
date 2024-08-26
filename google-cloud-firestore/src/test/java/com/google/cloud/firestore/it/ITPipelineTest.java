@@ -828,10 +828,10 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .collection(collection.getPath())
             .select(
-                cosineDistance(Constant.ofVector(sourceVector), targetVector).as("cosineDistance"),
-                dotProductDistance(Constant.ofVector(sourceVector), targetVector)
+                cosineDistance(Constant.vector(sourceVector), targetVector).as("cosineDistance"),
+                dotProductDistance(Constant.vector(sourceVector), targetVector)
                     .as("dotProductDistance"),
-                euclideanDistance(Constant.ofVector(sourceVector), targetVector)
+                euclideanDistance(Constant.vector(sourceVector), targetVector)
                     .as("euclideanDistance"))
             .limit(1)
             .execute()
