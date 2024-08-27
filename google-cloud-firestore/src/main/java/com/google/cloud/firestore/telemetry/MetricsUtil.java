@@ -100,17 +100,18 @@ public class MetricsUtil {
 
     Map<String, String> attributes = new HashMap<>();
     attributes.put(DATABASE_ID_KEY.toString(), firestoreOptions.getDatabaseId());
-    attributes.put(PROJECT_ID_KEY.toString(), firestoreOptions.getProjectId());
+    attributes.put(CLIENT_LIBRARY_KEY.toString(), FIRESTORE_LIBRARY_NAME);
+    String pkgVersion = this.getClass().getPackage().getImplementationVersion();
+    if (pkgVersion != null) {
+      attributes.put(LIBRARY_VERSION_KEY.toString(), pkgVersion);
+    }
 
-    System.out.println("====1");
     this.otelApiTracerFactory = new MetricsTracerFactory(recorder, attributes);
-    System.out.println("====2");
-
     registerMetrics();
   }
 
   void registerMetrics() {
-    this.meter = openTelemetry.getMeter(FIRESTORE_METER_NAME);
+    this.meter = openTelemetry.getMeter(FIRESTORE_LIBRARY_NAME);
 
     this.endToEndRequestLatency =
         meter

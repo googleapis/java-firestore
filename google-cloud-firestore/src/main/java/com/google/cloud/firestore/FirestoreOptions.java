@@ -326,12 +326,14 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
             ? builder.openTelemetryOptions
             : FirestoreOpenTelemetryOptions.newBuilder().build();
     this.traceUtil = com.google.cloud.firestore.telemetry.TraceUtil.getInstance(this);
-    this.metricsUtil = new MetricsUtil(this);
 
     this.databaseId =
         builder.databaseId != null
             ? builder.databaseId
             : FirestoreDefaults.INSTANCE.getDatabaseId();
+
+    // set metrics util after database ID is set
+    this.metricsUtil = new MetricsUtil(this);
 
     if (builder.channelProvider == null) {
       ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> channelConfigurator =

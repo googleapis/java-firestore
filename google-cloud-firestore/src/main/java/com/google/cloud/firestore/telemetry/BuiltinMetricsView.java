@@ -42,9 +42,6 @@ public class BuiltinMetricsView {
 
     builder.registerMetricReader(PeriodicMetricReader.builder(metricExporter).build());
 
-    // Add static attributes to resource
-    //        Package pkg = this.getClass().getPackage();
-
     // Filter out attributes that are not defined
     for (Map.Entry<InstrumentSelector, View> entry : getAllViews().entrySet()) {
       builder.registerView(entry.getKey(), entry.getValue());

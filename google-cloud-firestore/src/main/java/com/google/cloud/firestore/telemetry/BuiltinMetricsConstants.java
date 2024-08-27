@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 public class BuiltinMetricsConstants {
 
-  static final String FIRESTORE_METER_NAME = "firestore_java";
+  static final String FIRESTORE_LIBRARY_NAME = "firestore_java";
 
   // TODO: change to firestore.googleapis.com
   public static final String METER_NAME = "custom.googleapis.com/internal/client";
