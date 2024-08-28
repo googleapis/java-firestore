@@ -86,6 +86,7 @@ public class RecordDocumentReferenceTest {
 
   @Test
   public void doesNotSerializeAdvancedNumberTypes() {
+    System.out.println("========================== Record tests run on CI");
     Map<InvalidRecord, String> expectedErrorMessages = new HashMap<>();
 
     var record = new InvalidRecord(new BigInteger("0"), null, null);
