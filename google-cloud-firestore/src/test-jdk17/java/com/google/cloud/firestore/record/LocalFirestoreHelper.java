@@ -29,6 +29,7 @@ import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.BatchGetDocumentsResponse;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
+import com.google.firestore.v1.Document;
 import com.google.firestore.v1.DocumentMask;
 import com.google.firestore.v1.DocumentTransform.FieldTransform;
 import com.google.firestore.v1.MapValue;
@@ -39,6 +40,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.NullValue;
 import com.google.type.LatLng;
+import java.lang.reflect.Type;
 import org.mockito.stubbing.Answer;
 
 import javax.annotation.Nullable;

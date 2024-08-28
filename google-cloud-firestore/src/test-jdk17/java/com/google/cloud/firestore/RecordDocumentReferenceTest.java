@@ -119,7 +119,7 @@ public class RecordDocumentReferenceTest {
     Map<String, String> fieldNamesToTypeNames =
         map("bigIntegerValue", "BigInteger", "shortValue", "Short", "byteValue", "Byte");
 
-    for (Entry<String, String> testCase : fieldNamesToTypeNames.entrySet()) {
+    for (Map.Entry<String, String> testCase : fieldNamesToTypeNames.entrySet()) {
       String fieldName = testCase.getKey();
       String typeName = testCase.getValue();
       Map<String, Value> response = map(fieldName, Value.newBuilder().setIntegerValue(0).build());
