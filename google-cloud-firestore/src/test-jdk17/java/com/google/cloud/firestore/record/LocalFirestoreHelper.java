@@ -119,7 +119,7 @@ public final class LocalFirestoreHelper {
     Map<K, V> map = new HashMap<>();
     map.put(key, value);
 
-    for (var i = 0; i < moreKeysAndValues.length; i += 2) {
+    for (int i = 0; i < moreKeysAndValues.length; i += 2) {
       map.put((K) moreKeysAndValues[i], (V) moreKeysAndValues[i + 1]);
     }
 
@@ -128,14 +128,14 @@ public final class LocalFirestoreHelper {
 
   public static Answer<BatchGetDocumentsResponse> getAllResponse(
       final Map<String, Value>... fields) {
-    var responses = new BatchGetDocumentsResponse[fields.length];
+        BatchGetDocumentsResponse[] responses = new BatchGetDocumentsResponse[fields.length];
 
-    for (var i = 0; i < fields.length; ++i) {
-      var name = DOCUMENT_NAME;
+    for (int i = 0; i < fields.length; ++i) {
+      String name = DOCUMENT_NAME;
       if (fields.length > 1) {
         name += i + 1;
       }
-      var response = BatchGetDocumentsResponse.newBuilder();
+      BatchGetDocumentsResponse.Builder response = BatchGetDocumentsResponse.newBuilder();
       response
           .getFoundBuilder()
           .setCreateTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(2));
@@ -154,10 +154,10 @@ public final class LocalFirestoreHelper {
   public static <T> Answer<T> streamingResponse(
       final T[] response, @Nullable final Throwable throwable) {
     return invocation -> {
-      var args = invocation.getArguments();
-      var observer = (ResponseObserver<T>) args[1];
+      Object[] args = invocation.getArguments();
+      ResponseObserver<T> observer = (ResponseObserver<T>) args[1];
       observer.onStart(mock(StreamController.class));
-      for (var resp : response) {
+      for (T resp : response) {
         observer.onResponse(resp);
       }
       if (throwable != null) {
@@ -169,12 +169,12 @@ public final class LocalFirestoreHelper {
   }
 
   public static ApiFuture<CommitResponse> commitResponse(int adds, int deletes) {
-    var commitResponse = CommitResponse.newBuilder();
+    CommitResponse.Builder commitResponse = CommitResponse.newBuilder();
     commitResponse.getCommitTimeBuilder().setSeconds(0).setNanos(0);
-    for (var i = 0; i < adds; ++i) {
+    for (int i = 0; i < adds; ++i) {
       commitResponse.addWriteResultsBuilder().getUpdateTimeBuilder().setSeconds(i).setNanos(i);
     }
-    for (var i = 0; i < deletes; ++i) {
+    for (int i = 0; i < deletes; ++i) {
       commitResponse.addWriteResultsBuilder();
     }
     return ApiFutures.immediateFuture(commitResponse.build());
@@ -190,22 +190,22 @@ public final class LocalFirestoreHelper {
       String fieldPath, FieldTransform fieldTransform, Object... fieldPathOrTransform) {
 
     List<FieldTransform> transforms = new ArrayList<>();
-    var transformBuilder = FieldTransform.newBuilder();
+    FieldTransform.Builder transformBuilder = FieldTransform.newBuilder();
     transformBuilder.setFieldPath(fieldPath).mergeFrom(fieldTransform);
 
     transforms.add(transformBuilder.build());
 
-    for (var i = 0; i < fieldPathOrTransform.length; i += 2) {
-      var path = (String) fieldPathOrTransform[i];
-      var transform = (FieldTransform) fieldPathOrTransform[i + 1];
+    for (int i = 0; i < fieldPathOrTransform.length; i += 2) {
+      String path = (String) fieldPathOrTransform[i];
+      FieldTransform transform = (FieldTransform) fieldPathOrTransform[i + 1];
       transforms.add(FieldTransform.newBuilder().setFieldPath(path).mergeFrom(transform).build());
     }
     return transforms;
   }
 
   public static Write create(Map<String, Value> fields, String docPath) {
-    var write = Write.newBuilder();
-    var document = write.getUpdateBuilder();
+    Write.Builder write = Write.newBuilder();
+    Document.Builder document = write.getUpdateBuilder();
     document.setName(DOCUMENT_ROOT + docPath);
     document.putAllFields(fields);
     write.getCurrentDocumentBuilder().setExists(false);
@@ -226,8 +226,8 @@ public final class LocalFirestoreHelper {
 
   public static Write set(
       Map<String, Value> fields, @Nullable List<String> fieldMap, String docPath) {
-    var write = Write.newBuilder();
-    var document = write.getUpdateBuilder();
+        Write.Builder write = Write.newBuilder();
+        Document.Builder document = write.getUpdateBuilder();
     document.setName(DOCUMENT_ROOT + docPath);
     document.putAllFields(fields);
 
@@ -239,7 +239,7 @@ public final class LocalFirestoreHelper {
   }
 
   public static CommitRequest commit(@Nullable String transactionId, Write... writes) {
-    var commitRequest = CommitRequest.newBuilder();
+    CommitRequest.Builder commitRequest = CommitRequest.newBuilder();
     commitRequest.setDatabase(DATABASE_NAME);
     commitRequest.addAllWrites(Arrays.asList(writes));
 
@@ -263,17 +263,17 @@ public final class LocalFirestoreHelper {
   }
 
   private static CommitRequest sortCommit(CommitRequest commit) {
-    var builder = commit.toBuilder();
+    CommitRequest.Builder builder = commit.toBuilder();
 
-    for (var writes : builder.getWritesBuilderList()) {
+    for (Write.Builder writes : builder.getWritesBuilderList()) {
       if (writes.hasUpdateMask()) {
-        var updateMask = new ArrayList<>(writes.getUpdateMask().getFieldPathsList());
+        ArrayList<String> updateMask = new ArrayList<>(writes.getUpdateMask().getFieldPathsList());
         Collections.sort(updateMask);
         writes.setUpdateMask(DocumentMask.newBuilder().addAllFieldPaths(updateMask));
       }
 
       if (!writes.getUpdateTransformsList().isEmpty()) {
-        var transformList = new ArrayList<>(writes.getUpdateTransformsList());
+        ArrayList<FieldTransform>  transformList = new ArrayList<>(writes.getUpdateTransformsList());
         transformList.sort(Comparator.comparing(FieldTransform::getFieldPath));
         writes.clearUpdateTransforms().addAllUpdateTransforms(transformList);
       }
@@ -393,15 +393,15 @@ public final class LocalFirestoreHelper {
   @SuppressWarnings("unchecked")
   public static <T> Map<String, T> mapAnyType(Object... entries) {
     Map<String, T> res = new HashMap<>();
-    for (var i = 0; i < entries.length; i += 2) {
+    for (int i = 0; i < entries.length; i += 2) {
       res.put((String) entries[i], (T) entries[i + 1]);
     }
     return res;
   }
 
   private static Map<String, Object> fromJsonString(String json) {
-    var type = new TypeToken<Map<String, Object>>() {}.getType();
-    var gson = new Gson();
+    Type type = new TypeToken<Map<String, Object>>() {}.getType();
+    Gson gson = new Gson();
     return gson.fromJson(json, type);
   }
 

@@ -80,7 +80,7 @@ public class RecordDocumentReferenceTest {
 
     documentReference.set(ALL_SUPPORTED_TYPES_OBJECT).get();
 
-    var expectedCommit = commit(set(ALL_SUPPORTED_TYPES_PROTO));
+    CommitRequest expectedCommit = commit(set(ALL_SUPPORTED_TYPES_PROTO));
     assertCommitEquals(expectedCommit, commitCapture.getAllValues().get(0));
   }
 
@@ -89,7 +89,7 @@ public class RecordDocumentReferenceTest {
     System.out.println("========================== Record tests run on CI");
     Map<InvalidRecord, String> expectedErrorMessages = new HashMap<>();
 
-    var record = new InvalidRecord(new BigInteger("0"), null, null);
+    InvalidRecord record = new InvalidRecord(new BigInteger("0"), null, null);
     expectedErrorMessages.put(
         record,
         "Could not serialize object. Numbers of type BigInteger are not supported, please use an int, long, float, double or BigDecimal (found in field 'bigIntegerValue')");
@@ -104,7 +104,7 @@ public class RecordDocumentReferenceTest {
         record,
         "Could not serialize object. Numbers of type Short are not supported, please use an int, long, float, double or BigDecimal (found in field 'shortValue')");
 
-    for (var testCase : expectedErrorMessages.entrySet()) {
+    for (Map.Entry<InvalidRecord, String>  testCase : expectedErrorMessages.entrySet()) {
       try {
         documentReference.set(testCase.getKey());
         fail();
@@ -116,13 +116,13 @@ public class RecordDocumentReferenceTest {
 
   @Test
   public void doesNotDeserializeAdvancedNumberTypes() throws Exception {
-    var fieldNamesToTypeNames =
+    Map<String, String> fieldNamesToTypeNames =
         map("bigIntegerValue", "BigInteger", "shortValue", "Short", "byteValue", "Byte");
 
-    for (var testCase : fieldNamesToTypeNames.entrySet()) {
-      var fieldName = testCase.getKey();
-      var typeName = testCase.getValue();
-      var response = map(fieldName, Value.newBuilder().setIntegerValue(0).build());
+    for (Entry<String, String> testCase : fieldNamesToTypeNames.entrySet()) {
+      String fieldName = testCase.getKey();
+      String typeName = testCase.getValue();
+      Map<String, Value> response = map(fieldName, Value.newBuilder().setIntegerValue(0).build());
 
       doAnswer(getAllResponse(response))
           .when(firestoreMock)
@@ -131,7 +131,7 @@ public class RecordDocumentReferenceTest {
               streamObserverCapture.capture(),
               ArgumentMatchers.<ServerStreamingCallable>any());
 
-      var snapshot = documentReference.get().get();
+              DocumentSnapshot snapshot = documentReference.get().get();
       try {
         snapshot.toObject(InvalidRecord.class);
         fail();
@@ -169,12 +169,12 @@ public class RecordDocumentReferenceTest {
 
     documentReference.create(SERVER_TIMESTAMP_OBJECT).get();
 
-    var create =
+    CommitRequest create =
         commit(
             create(Collections.emptyMap()),
             transform("foo", serverTimestamp(), "inner.bar", serverTimestamp()));
 
-    var commitRequests = commitCapture.getAllValues();
+            List<CommitRequest> commitRequests = commitCapture.getAllValues();
     assertCommitEquals(create, commitRequests.get(0));
   }
 
@@ -187,12 +187,12 @@ public class RecordDocumentReferenceTest {
 
     documentReference.set(SERVER_TIMESTAMP_OBJECT).get();
 
-    var set =
+    CommitRequest set =
         commit(
             set(SERVER_TIMESTAMP_PROTO),
             transform("foo", serverTimestamp(), "inner.bar", serverTimestamp()));
 
-    var commitRequests = commitCapture.getAllValues();
+            List<CommitRequest> commitRequests = commitCapture.getAllValues();
     assertCommitEquals(set, commitRequests.get(0));
   }
 
@@ -207,12 +207,12 @@ public class RecordDocumentReferenceTest {
         .set(SERVER_TIMESTAMP_OBJECT, SetOptions.mergeFields("inner.bar"))
         .get();
 
-    var set =
+        CommitRequest set =
         commit(
             set(SERVER_TIMESTAMP_PROTO, new ArrayList<>()),
             transform("inner.bar", serverTimestamp()));
 
-    var commitRequests = commitCapture.getAllValues();
+            List<CommitRequest> commitRequests = commitCapture.getAllValues();
     assertCommitEquals(set, commitRequests.get(0));
   }
 
@@ -234,9 +234,9 @@ public class RecordDocumentReferenceTest {
             SetOptions.mergeFieldPaths(Arrays.asList(FieldPath.of("foo"))))
         .get();
 
-    var expectedCommit = commit(set(SINGLE_COMPONENT_PROTO, Arrays.asList("foo")));
+        CommitRequest expectedCommit = commit(set(SINGLE_COMPONENT_PROTO, Arrays.asList("foo")));
 
-    for (var i = 0; i < 4; ++i) {
+    for (int i = 0; i < 4; ++i) {
       assertCommitEquals(expectedCommit, commitCapture.getAllValues().get(i));
     }
   }
@@ -259,13 +259,13 @@ public class RecordDocumentReferenceTest {
         .get();
 
     Map<String, Value> nestedUpdate = new HashMap<>();
-    var nestedProto = Value.newBuilder();
+    Value.Builder nestedProto = Value.newBuilder();
     nestedProto.getMapValueBuilder().putAllFields(SINGLE_COMPONENT_PROTO);
     nestedUpdate.put("first", nestedProto.build());
 
-    var expectedCommit = commit(set(nestedUpdate, Arrays.asList("first.foo")));
+    CommitRequest expectedCommit = commit(set(nestedUpdate, Arrays.asList("first.foo")));
 
-    for (var i = 0; i < 3; ++i) {
+    for (int i = 0; i < 3; ++i) {
       assertCommitEquals(expectedCommit, commitCapture.getAllValues().get(i));
     }
   }
@@ -284,7 +284,7 @@ public class RecordDocumentReferenceTest {
         .get();
 
     Map<String, Value> nestedUpdate = new HashMap<>();
-    var nestedProto = Value.newBuilder();
+    Value.Builder nestedProto = Value.newBuilder();
     nestedProto.getMapValueBuilder().putAllFields(SINGLE_COMPONENT_PROTO);
     nestedUpdate.put("first", nestedProto.build());
     nestedProto
@@ -292,7 +292,7 @@ public class RecordDocumentReferenceTest {
         .putFields("trueValue", Value.newBuilder().setBooleanValue(true).build());
     nestedUpdate.put("second", nestedProto.build());
 
-    var expectedCommit =
+    CommitRequest expectedCommit =
         commit(set(nestedUpdate, Arrays.asList("first.foo", "second.foo", "second.trueValue")));
 
     assertCommitEquals(expectedCommit, commitCapture.getValue());
@@ -308,13 +308,13 @@ public class RecordDocumentReferenceTest {
     documentReference.set(NESTED_RECORD_OBJECT, SetOptions.mergeFields("first", "second")).get();
 
     Map<String, Value> nestedUpdate = new HashMap<>();
-    var nestedProto = Value.newBuilder();
+    Value.Builder nestedProto = Value.newBuilder();
     nestedProto.getMapValueBuilder().putAllFields(SINGLE_COMPONENT_PROTO);
     nestedUpdate.put("first", nestedProto.build());
     nestedProto.getMapValueBuilder().putAllFields(ALL_SUPPORTED_TYPES_PROTO);
     nestedUpdate.put("second", nestedProto.build());
 
-    var expectedCommit = commit(set(nestedUpdate, Arrays.asList("first", "second")));
+    CommitRequest expectedCommit = commit(set(nestedUpdate, Arrays.asList("first", "second")));
     assertCommitEquals(expectedCommit, commitCapture.getValue());
   }
 
@@ -328,13 +328,13 @@ public class RecordDocumentReferenceTest {
     documentReference.set(NESTED_RECORD_OBJECT, SetOptions.merge()).get();
 
     Map<String, Value> nestedUpdate = new HashMap<>();
-    var nestedProto = Value.newBuilder();
+    Value.Builder nestedProto = Value.newBuilder();
     nestedProto.getMapValueBuilder().putAllFields(SINGLE_COMPONENT_PROTO);
     nestedUpdate.put("first", nestedProto.build());
     nestedProto.getMapValueBuilder().putAllFields(ALL_SUPPORTED_TYPES_PROTO);
     nestedUpdate.put("second", nestedProto.build());
 
-    var updateMask =
+    List<String> updateMask =
         Arrays.asList(
             "first.foo",
             "second.arrayValue",
@@ -354,7 +354,7 @@ public class RecordDocumentReferenceTest {
             "second.trueValue",
             "second.model.foo");
 
-    var expectedCommit = commit(set(nestedUpdate, updateMask));
+            CommitRequest expectedCommit = commit(set(nestedUpdate, updateMask));
     assertCommitEquals(expectedCommit, commitCapture.getValue());
   }
 }
