@@ -717,7 +717,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Indicates that this field supports nearest neighbors and distance
+     * Indicates that this field supports nearest neighbor and distance
      * operations on vector.
      * </pre>
      *
@@ -730,7 +730,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Indicates that this field supports nearest neighbors and distance
+     * Indicates that this field supports nearest neighbor and distance
      * operations on vector.
      * </pre>
      *
@@ -743,7 +743,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Indicates that this field supports nearest neighbors and distance
+     * Indicates that this field supports nearest neighbor and distance
      * operations on vector.
      * </pre>
      *
@@ -2761,7 +2761,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Indicates that this field supports nearest neighbors and distance
+     * Indicates that this field supports nearest neighbor and distance
      * operations on vector.
      * </pre>
      *
@@ -2777,7 +2777,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Indicates that this field supports nearest neighbors and distance
+     * Indicates that this field supports nearest neighbor and distance
      * operations on vector.
      * </pre>
      *
@@ -2796,7 +2796,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
      *
      *
      * <pre>
-     * Indicates that this field supports nearest neighbors and distance
+     * Indicates that this field supports nearest neighbor and distance
      * operations on vector.
      * </pre>
      *
@@ -3645,7 +3645,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        *
        * <pre>
-       * Indicates that this field supports nearest neighbors and distance
+       * Indicates that this field supports nearest neighbor and distance
        * operations on vector.
        * </pre>
        *
@@ -3661,7 +3661,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        *
        * <pre>
-       * Indicates that this field supports nearest neighbors and distance
+       * Indicates that this field supports nearest neighbor and distance
        * operations on vector.
        * </pre>
        *
@@ -3687,7 +3687,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        *
        * <pre>
-       * Indicates that this field supports nearest neighbors and distance
+       * Indicates that this field supports nearest neighbor and distance
        * operations on vector.
        * </pre>
        *
@@ -3711,7 +3711,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        *
        * <pre>
-       * Indicates that this field supports nearest neighbors and distance
+       * Indicates that this field supports nearest neighbor and distance
        * operations on vector.
        * </pre>
        *
@@ -3732,7 +3732,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        *
        * <pre>
-       * Indicates that this field supports nearest neighbors and distance
+       * Indicates that this field supports nearest neighbor and distance
        * operations on vector.
        * </pre>
        *
@@ -3768,7 +3768,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        *
        * <pre>
-       * Indicates that this field supports nearest neighbors and distance
+       * Indicates that this field supports nearest neighbor and distance
        * operations on vector.
        * </pre>
        *
@@ -3794,7 +3794,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        *
        * <pre>
-       * Indicates that this field supports nearest neighbors and distance
+       * Indicates that this field supports nearest neighbor and distance
        * operations on vector.
        * </pre>
        *
@@ -3808,7 +3808,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        *
        * <pre>
-       * Indicates that this field supports nearest neighbors and distance
+       * Indicates that this field supports nearest neighbor and distance
        * operations on vector.
        * </pre>
        *
@@ -3830,7 +3830,7 @@ public final class Index extends com.google.protobuf.GeneratedMessageV3
        *
        *
        * <pre>
-       * Indicates that this field supports nearest neighbors and distance
+       * Indicates that this field supports nearest neighbor and distance
        * operations on vector.
        * </pre>
        *

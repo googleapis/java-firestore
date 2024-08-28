@@ -136,7 +136,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
    * only supports listing fields that have been explicitly overridden. To issue
    * this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
-   * with a filter that includes `indexConfig.usesAncestorConfig:false` .
+   * with a filter that includes `indexConfig.usesAncestorConfig:false` or
+   * `ttlConfig:*`.
    * </pre>
    *
    * <code>string filter = 2;</code>
@@ -164,7 +165,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
    * only supports listing fields that have been explicitly overridden. To issue
    * this query, call
    * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
-   * with a filter that includes `indexConfig.usesAncestorConfig:false` .
+   * with a filter that includes `indexConfig.usesAncestorConfig:false` or
+   * `ttlConfig:*`.
    * </pre>
    *
    * <code>string filter = 2;</code>
@@ -801,7 +803,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * only supports listing fields that have been explicitly overridden. To issue
      * this query, call
      * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
-     * with a filter that includes `indexConfig.usesAncestorConfig:false` .
+     * with a filter that includes `indexConfig.usesAncestorConfig:false` or
+     * `ttlConfig:*`.
      * </pre>
      *
      * <code>string filter = 2;</code>
@@ -828,7 +831,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * only supports listing fields that have been explicitly overridden. To issue
      * this query, call
      * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
-     * with a filter that includes `indexConfig.usesAncestorConfig:false` .
+     * with a filter that includes `indexConfig.usesAncestorConfig:false` or
+     * `ttlConfig:*`.
      * </pre>
      *
      * <code>string filter = 2;</code>
@@ -855,7 +859,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * only supports listing fields that have been explicitly overridden. To issue
      * this query, call
      * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
-     * with a filter that includes `indexConfig.usesAncestorConfig:false` .
+     * with a filter that includes `indexConfig.usesAncestorConfig:false` or
+     * `ttlConfig:*`.
      * </pre>
      *
      * <code>string filter = 2;</code>
@@ -881,7 +886,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * only supports listing fields that have been explicitly overridden. To issue
      * this query, call
      * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
-     * with a filter that includes `indexConfig.usesAncestorConfig:false` .
+     * with a filter that includes `indexConfig.usesAncestorConfig:false` or
+     * `ttlConfig:*`.
      * </pre>
      *
      * <code>string filter = 2;</code>
@@ -903,7 +909,8 @@ public final class ListFieldsRequest extends com.google.protobuf.GeneratedMessag
      * only supports listing fields that have been explicitly overridden. To issue
      * this query, call
      * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
-     * with a filter that includes `indexConfig.usesAncestorConfig:false` .
+     * with a filter that includes `indexConfig.usesAncestorConfig:false` or
+     * `ttlConfig:*`.
      * </pre>
      *
      * <code>string filter = 2;</code>

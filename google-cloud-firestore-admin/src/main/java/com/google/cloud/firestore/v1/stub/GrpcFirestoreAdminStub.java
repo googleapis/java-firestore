@@ -29,6 +29,9 @@ import com.google.api.gax.rpc.RequestParamsBuilder;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.firestore.admin.v1.Backup;
 import com.google.firestore.admin.v1.BackupSchedule;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
@@ -162,6 +165,16 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
               .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/ImportDocuments")
               .setRequestMarshaller(
                   ProtoUtils.marshaller(ImportDocumentsRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))
+              .build();
+
+  private static final MethodDescriptor<BulkDeleteDocumentsRequest, Operation>
+      bulkDeleteDocumentsMethodDescriptor =
+          MethodDescriptor.<BulkDeleteDocumentsRequest, Operation>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/BulkDeleteDocuments")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(BulkDeleteDocumentsRequest.getDefaultInstance()))
               .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))
               .build();
 
@@ -322,6 +335,10 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
   private final UnaryCallable<ImportDocumentsRequest, Operation> importDocumentsCallable;
   private final OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationCallable;
+  private final UnaryCallable<BulkDeleteDocumentsRequest, Operation> bulkDeleteDocumentsCallable;
+  private final OperationCallable<
+          BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsOperationCallable;
   private final UnaryCallable<CreateDatabaseRequest, Operation> createDatabaseCallable;
   private final OperationCallable<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
       createDatabaseOperationCallable;
@@ -475,6 +492,16 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
     GrpcCallSettings<ImportDocumentsRequest, Operation> importDocumentsTransportSettings =
         GrpcCallSettings.<ImportDocumentsRequest, Operation>newBuilder()
             .setMethodDescriptor(importDocumentsMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    GrpcCallSettings<BulkDeleteDocumentsRequest, Operation> bulkDeleteDocumentsTransportSettings =
+        GrpcCallSettings.<BulkDeleteDocumentsRequest, Operation>newBuilder()
+            .setMethodDescriptor(bulkDeleteDocumentsMethodDescriptor)
             .setParamsExtractor(
                 request -> {
                   RequestParamsBuilder builder = RequestParamsBuilder.create();
@@ -685,6 +712,17 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
             settings.importDocumentsOperationSettings(),
             clientContext,
             operationsStub);
+    this.bulkDeleteDocumentsCallable =
+        callableFactory.createUnaryCallable(
+            bulkDeleteDocumentsTransportSettings,
+            settings.bulkDeleteDocumentsSettings(),
+            clientContext);
+    this.bulkDeleteDocumentsOperationCallable =
+        callableFactory.createOperationCallable(
+            bulkDeleteDocumentsTransportSettings,
+            settings.bulkDeleteDocumentsOperationSettings(),
+            clientContext,
+            operationsStub);
     this.createDatabaseCallable =
         callableFactory.createUnaryCallable(
             createDatabaseTransportSettings, settings.createDatabaseSettings(), clientContext);
@@ -847,6 +885,18 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
   public OperationCallable<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationCallable() {
     return importDocumentsOperationCallable;
+  }
+
+  @Override
+  public UnaryCallable<BulkDeleteDocumentsRequest, Operation> bulkDeleteDocumentsCallable() {
+    return bulkDeleteDocumentsCallable;
+  }
+
+  @Override
+  public OperationCallable<
+          BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsOperationCallable() {
+    return bulkDeleteDocumentsOperationCallable;
   }
 
   @Override

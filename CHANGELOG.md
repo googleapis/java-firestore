@@ -1,5 +1,104 @@
 # Changelog
 
+## [3.25.1](https://github.com/googleapis/java-firestore/compare/v3.25.0...v3.25.1) (2024-08-20)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.34.0 ([#1795](https://github.com/googleapis/java-firestore/issues/1795)) ([abb3f7f](https://github.com/googleapis/java-firestore/commit/abb3f7fb25844b0a2b7c9eb2132c17eadb3c528a))
+* Update opentelemetry.version to v1.41.0 ([#1793](https://github.com/googleapis/java-firestore/issues/1793)) ([165aae9](https://github.com/googleapis/java-firestore/commit/165aae94f2628255f84e68eac08ecef75967a237))
+
+## [3.25.0](https://github.com/googleapis/java-firestore/compare/v3.24.3...v3.25.0) (2024-08-12)
+
+
+### Features
+
+* Add support for the VectorValue type ([#1716](https://github.com/googleapis/java-firestore/issues/1716)) ([81bfa0d](https://github.com/googleapis/java-firestore/commit/81bfa0daeb4b75b2b964e8480a9baae711540e02))
+* Expose the proto changes to support `FindNearest.distance_result_field` parameter and the `FindNearest.distance_threshold` parameter ([6456d85](https://github.com/googleapis/java-firestore/commit/6456d855b2eef93869fcb06e39246a6ada589948))
+
+## [3.24.3](https://github.com/googleapis/java-firestore/compare/v3.24.2...v3.24.3) (2024-08-06)
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.47.0 ([#1774](https://github.com/googleapis/java-firestore/issues/1774)) ([222629a](https://github.com/googleapis/java-firestore/commit/222629a97da72cfb32e9da6280896d3cee09885c))
+* Update dependency com.google.cloud:google-cloud-trace to v2.47.0 ([#1775](https://github.com/googleapis/java-firestore/issues/1775)) ([d3c2744](https://github.com/googleapis/java-firestore/commit/d3c274427d08a7e4ccbcdaa387645adc201360a5))
+
+## [3.24.2](https://github.com/googleapis/java-firestore/compare/v3.24.1...v3.24.2) (2024-07-29)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.33.0 ([#1762](https://github.com/googleapis/java-firestore/issues/1762)) ([76090ce](https://github.com/googleapis/java-firestore/commit/76090ce87a4614c9416a1738fe5edbd07f40e440))
+
+## [3.24.1](https://github.com/googleapis/java-firestore/compare/v3.24.0...v3.24.1) (2024-07-22)
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v1.4.2 ([#1749](https://github.com/googleapis/java-firestore/issues/1749)) ([b20371a](https://github.com/googleapis/java-firestore/commit/b20371a62fa261b50a4522786d4f91a5fac01487))
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2 ([#1755](https://github.com/googleapis/java-firestore/issues/1755)) ([fb71213](https://github.com/googleapis/java-firestore/commit/fb712130e51327a71d0c90f6f3cda76398ec9e0a))
+* Update dependency com.google.cloud:google-cloud-trace to v2 ([#1756](https://github.com/googleapis/java-firestore/issues/1756)) ([f6989d8](https://github.com/googleapis/java-firestore/commit/f6989d89211849cd301e799406f59283b8162ea9))
+* Update dependency com.google.cloud.opentelemetry:exporter-trace to v0.31.0 ([#1750](https://github.com/googleapis/java-firestore/issues/1750)) ([7219bb3](https://github.com/googleapis/java-firestore/commit/7219bb3f0e98462faeb8d7e24f1aedad4cd2de15))
+* Update opentelemetry.version to v1.40.0 ([#1753](https://github.com/googleapis/java-firestore/issues/1753)) ([23ce20b](https://github.com/googleapis/java-firestore/commit/23ce20b08d8da195cf32036de4e73cee831225ef))
+
+## [3.24.0](https://github.com/googleapis/java-firestore/compare/v3.23.1...v3.24.0) (2024-07-18)
+
+
+### Features
+
+* Tracing using OpenTelemetry ([#1728](https://github.com/googleapis/java-firestore/issues/1728)) ([00dc240](https://github.com/googleapis/java-firestore/commit/00dc2403d2a5a5b6809762010a716f17541204e0))
+
+
+### Dependencies
+
+* Update dependency org.apache.commons:commons-lang3 to v3.15.0 ([#1745](https://github.com/googleapis/java-firestore/issues/1745)) ([05a6f73](https://github.com/googleapis/java-firestore/commit/05a6f73f259050520880d670e5ab997d12e8cafb))
+
+## [3.23.1](https://github.com/googleapis/java-firestore/compare/v3.23.0...v3.23.1) (2024-07-10)
+
+
+### Dependencies
+
+* Update dependency com.android.tools.metalava:metalava to v1.0.0-alpha11 ([#1736](https://github.com/googleapis/java-firestore/issues/1736)) ([649d7b4](https://github.com/googleapis/java-firestore/commit/649d7b43424201168bf64a38d923b423d731f100))
+
+## [3.23.0](https://github.com/googleapis/java-firestore/compare/v3.22.0...v3.23.0) (2024-07-10)
+
+
+### Features
+
+* Enable hermetic library generation ([#1697](https://github.com/googleapis/java-firestore/issues/1697)) ([85e66df](https://github.com/googleapis/java-firestore/commit/85e66df5fc51f9aaafe71f784773b9107671c477))
+
+
+### Bug Fixes
+
+* Correct hermetic library generation script path ([#1727](https://github.com/googleapis/java-firestore/issues/1727)) ([172d224](https://github.com/googleapis/java-firestore/commit/172d224aa767a69e9c02419bb48f506a1861c787))
+
+## [3.22.0](https://github.com/googleapis/java-firestore/compare/v3.21.6...v3.22.0) (2024-06-27)
+
+
+### Features
+
+* Add bulk delete api ([#1704](https://github.com/googleapis/java-firestore/issues/1704)) ([5ef6254](https://github.com/googleapis/java-firestore/commit/5ef625456afbee781951d2a5c6a9c2548feea92e))
+
+
+### Dependencies
+
+* Update dependency org.junit.vintage:junit-vintage-engine to v5.10.3 ([#1722](https://github.com/googleapis/java-firestore/issues/1722)) ([c4627a4](https://github.com/googleapis/java-firestore/commit/c4627a4e664d67d5b34a27d791cd0c06ee789f85))
+
+## [3.21.6](https://github.com/googleapis/java-firestore/compare/v3.21.5...v3.21.6) (2024-06-26)
+
+
+### Dependencies
+
+* Update beam.version to v2.57.0 ([#1715](https://github.com/googleapis/java-firestore/issues/1715)) ([d8dcd5b](https://github.com/googleapis/java-firestore/commit/d8dcd5b93ce41c1bb985a3fd626f93ea3981880a))
+
+## [3.21.5](https://github.com/googleapis/java-firestore/compare/v3.21.4...v3.21.5) (2024-06-25)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.32.0 ([#1710](https://github.com/googleapis/java-firestore/issues/1710)) ([2906472](https://github.com/googleapis/java-firestore/commit/2906472816001d4ffdc21f3b94a36de7d925f6dc))
+
 ## [3.21.4](https://github.com/googleapis/java-firestore/compare/v3.21.3...v3.21.4) (2024-06-10)
 
 
