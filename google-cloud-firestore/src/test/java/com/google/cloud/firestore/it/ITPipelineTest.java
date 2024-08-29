@@ -344,8 +344,9 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void selectSpecificFields() throws Exception {
     List<PipelineResult> results =
-        collection
+        firestore
             .pipeline()
+            .collection(collection.getPath())
             .select("title", "author")
             .sort(Field.of("author").ascending())
             .execute()
@@ -402,8 +403,9 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void testPipelineWithOffsetAndLimit() throws Exception {
     List<PipelineResult> results =
-        collection
+        firestore
             .pipeline()
+            .collection(collection.getPath())
             .sort(Field.of("author").ascending())
             .offset(5)
             .limit(3)
@@ -758,8 +760,9 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void testChecks() throws Exception {
     List<PipelineResult> results =
-        collection
+        firestore
             .pipeline()
+            .collection(collection.getPath())
             .where(not(Field.of("rating").isNaN())) // Filter out any documents with NaN rating
             .select(
                 eq("rating", null).as("ratingIsNull"),
