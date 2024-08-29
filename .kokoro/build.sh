@@ -49,8 +49,8 @@ case ${JOB_TYPE} in
 test)
     echo "SUREFIRE_JVM_OPT: ${SUREFIRE_JVM_OPT}"
     mvn test -B -ntp -Dclirr.skip=true -Denforcer.skip=true ${SUREFIRE_JVM_OPT}
-    # javap -verbose -cp google-cloud-firestore/target/test-classes com/google/cloud/firestore/ToStringTest
     RETURN_CODE=$?
+    javap -verbose -cp google-cloud-firestore/target/test-classes com/google/cloud/firestore/ToStringTest
     ;;
 lint)
     mvn com.coveo:fmt-maven-plugin:check -B -ntp && mvn -pl google-cloud-firestore spotless:check -B -ntp
