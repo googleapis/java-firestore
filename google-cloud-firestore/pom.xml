@@ -322,7 +322,7 @@
       </dependencies>
     </profile>
     <profile>
-      <!-- And different set up for JDK 17+ -->
+      <!-- And different set up for JDK 17 -->
       <id>java17-test</id>
       <activation>
         <jdk>17</jdk>
