@@ -322,10 +322,10 @@
       </dependencies>
     </profile>
     <profile>
-      <!-- And different set up for JDK 17 -->
-      <id>java17</id>
+      <!-- And different set up for JDK 17+ -->
+      <id>java17-test</id>
       <activation>
-        <jdk>17</jdk>
+        <jdk>[17,)</jdk>
       </activation>
       <build>
         <plugins>
@@ -354,7 +354,6 @@
             <configuration>
               <!-- Enable Java 17 for all sources so that Intellij picks the right language level -->
               <source>17</source>
-              <release>17</release>
               <compilerArgs>
                 <arg>-parameters</arg>
                 <arg>--add-opens=java.base/java.lang=ALL-UNNAMED</arg>

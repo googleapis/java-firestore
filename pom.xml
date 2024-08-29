@@ -233,7 +233,7 @@
         </reportSet>
       </reportSets>
       <configuration>
-        <source>17</source>
+        <source>8</source>
         <links combine.self="override">
           <link>https://googleapis.dev/java/api-common/latest/</link>
           <link>https://googleapis.dev/java/gax/latest/</link>
