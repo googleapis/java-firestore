@@ -276,7 +276,6 @@
               <location>../../../../../google-api-grpc/grpc-google-cloud-firestore-v1/target/site/apidocs/</location>
             </offlineLink>
           </offlineLinks>
-          <source>17</source>
         </configuration>
       </plugin>
     </plugins>
