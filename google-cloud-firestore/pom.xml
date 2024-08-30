@@ -322,10 +322,10 @@
       </dependencies>
     </profile>
     <profile>
-      <!-- JDK17 set up for tests in test-jdk17 -->
+      <!-- JDK17 set up for tests in src/test-jdk17 -->
       <id>java17-test</id>
       <activation>
-        <jdk>[21,)</jdk>
+        <jdk>17</jdk>
       </activation>
       <build>
         <plugins>
@@ -353,13 +353,25 @@
             <inherited>true</inherited>
             <configuration>
               <!-- Enable Java 17 for all sources so that Intellij picks the right language level -->
-              <source>21</source>
-              <release>21</release>
+              <source>17</source>
+              <release>17</release>
               <compilerArgs>
                 <arg>-parameters</arg>
                 <arg>--add-opens=java.base/java.lang=ALL-UNNAMED</arg>
                 <arg>--add-opens=java.base/java.util=ALL-UNNAMED</arg>
               </compilerArgs>
+            </configuration>
+          </plugin>
+          <plugin>
+            <!-- javadoc sources java 8, but runs on java 17 on CI, raises version conflict -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <sourceFileIncludes> 
+                <include>src/test-jdk17/**/*.java</include> 
+              </sourceFileIncludes>
+              <source>17</source>
+              <release>17</release> 
             </configuration>
           </plugin>
         </plugins>
