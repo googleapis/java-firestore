@@ -362,6 +362,22 @@
               </compilerArgs>
             </configuration>
           </plugin>
+          <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>   
+
+          <version>3.10.0</version> 
+          <configuration>   
+            <sourceFileIncludes> 
+              <include>src/test-jdk17/**/*.java</include> 
+            </sourceFileIncludes>
+            <source>17</source>
+            <release>17</release> 
+            <compilerArgs>
+              <arg>--enable-preview</arg> 
+            </compilerArgs>
+          </configuration>
+        </plugin>
         </plugins>
       </build>
     </profile>
