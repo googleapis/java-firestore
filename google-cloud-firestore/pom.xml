@@ -322,7 +322,7 @@
       </dependencies>
     </profile>
     <profile>
-      <!-- JDK17 set up for tests in test-jdk17 -->
+      <!-- Set up test environment for test-jdk17 -->
       <id>java17-test</id>
       <activation>
         <jdk>[17,)</jdk>
@@ -371,9 +371,6 @@
               </sourceFileIncludes>
               <source>17</source>
               <release>17</release> 
-              <compilerArgs>
-                <arg>--enable-preview</arg> 
-              </compilerArgs>
             </configuration>
           </plugin>
         </plugins>
