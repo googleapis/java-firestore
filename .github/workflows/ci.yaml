@@ -39,7 +39,7 @@ jobs:
     - if: matrix.java == '17' # Conditionally add test source directory
       run: |
         mkdir -p test-jdk17/java 
-        cp -r src/test-jdk17/* test-jdk17/java 
+        cp -r google-cloud-firestore/src/test-jdk17/* test-jdk17/java 
     - run: .kokoro/build.sh # Assuming the script handles multiple test source dirs
       env:
         JOB_TYPE: test
