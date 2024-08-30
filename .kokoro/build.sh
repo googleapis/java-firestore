@@ -45,10 +45,17 @@ fi
 RETURN_CODE=0
 set +e
 
+# Detect Java Version (NEW)
+JAVA_MAJOR_VERSION=$(java -version 2>&1 | grep "version" | awk '{print $3}' | tr -d '"')
+
 case ${JOB_TYPE} in
 test)
     echo "SUREFIRE_JVM_OPT: ${SUREFIRE_JVM_OPT}"
-    mvn test -B -ntp -Dclirr.skip=true -Denforcer.skip=true ${SUREFIRE_JVM_OPT}
+    if [ ${JAVA_MAJOR_VERSION} -ge 17 ]; then # Conditional test execution (NEW)
+        mvn test -B -ntp -Dclirr.skip=true -Denforcer.skip=true ${SUREFIRE_JVM_OPT} -Dtest=**/*Test
+    else
+        mvn test -B -ntp -Dclirr.skip=true -Denforcer.skip=true ${SUREFIRE_JVM_OPT}
+    fi
     RETURN_CODE=$?
     javap -verbose -cp google-cloud-firestore/target/test-classes com/google/cloud/firestore/ToStringTest
     ;;
