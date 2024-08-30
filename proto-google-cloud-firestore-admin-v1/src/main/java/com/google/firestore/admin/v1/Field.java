@@ -26,7 +26,7 @@ package com.google.firestore.admin.v1;
  * Represents a single field in the database.
  *
  * Fields are grouped by their "Collection Group", which represent all
- * collections in the database with the same id.
+ * collections in the database with the same ID.
  * </pre>
  *
  * Protobuf type {@code google.firestore.admin.v1.Field}
@@ -2763,7 +2763,7 @@ public final class Field extends com.google.protobuf.GeneratedMessageV3
    * Represents a single field in the database.
    *
    * Fields are grouped by their "Collection Group", which represent all
-   * collections in the database with the same id.
+   * collections in the database with the same ID.
    * </pre>
    *
    * Protobuf type {@code google.firestore.admin.v1.Field}

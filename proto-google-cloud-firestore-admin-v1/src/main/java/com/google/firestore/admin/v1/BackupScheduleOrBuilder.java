@@ -158,6 +158,8 @@ public interface BackupScheduleOrBuilder
    * <pre>
    * At what relative time in the future, compared to its creation time,
    * the backup should be deleted, e.g. keep backups for 7 days.
+   *
+   * The maximum supported retention period is 14 weeks.
    * </pre>
    *
    * <code>.google.protobuf.Duration retention = 6;</code>
@@ -171,6 +173,8 @@ public interface BackupScheduleOrBuilder
    * <pre>
    * At what relative time in the future, compared to its creation time,
    * the backup should be deleted, e.g. keep backups for 7 days.
+   *
+   * The maximum supported retention period is 14 weeks.
    * </pre>
    *
    * <code>.google.protobuf.Duration retention = 6;</code>
@@ -184,6 +188,8 @@ public interface BackupScheduleOrBuilder
    * <pre>
    * At what relative time in the future, compared to its creation time,
    * the backup should be deleted, e.g. keep backups for 7 days.
+   *
+   * The maximum supported retention period is 14 weeks.
    * </pre>
    *
    * <code>.google.protobuf.Duration retention = 6;</code>
