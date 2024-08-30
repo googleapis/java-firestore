@@ -51,10 +51,6 @@ jobs:
         # https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#jvm
         run: echo "SUREFIRE_JVM_OPT=-Djvm=${JAVA_HOME}/bin/java" >> $GITHUB_ENV
         shell: bash
-      - uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: temurin
       - run: .kokoro/build.sh
         env:
           JOB_TYPE: test
