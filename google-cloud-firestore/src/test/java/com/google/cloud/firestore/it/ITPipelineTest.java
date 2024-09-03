@@ -29,7 +29,6 @@ import static com.google.cloud.firestore.pipeline.expressions.Function.avg;
 import static com.google.cloud.firestore.pipeline.expressions.Function.collectionId;
 import static com.google.cloud.firestore.pipeline.expressions.Function.cosineDistance;
 import static com.google.cloud.firestore.pipeline.expressions.Function.countAll;
-import static com.google.cloud.firestore.pipeline.expressions.Function.dotProductDistance;
 import static com.google.cloud.firestore.pipeline.expressions.Function.endsWith;
 import static com.google.cloud.firestore.pipeline.expressions.Function.eq;
 import static com.google.cloud.firestore.pipeline.expressions.Function.euclideanDistance;
@@ -479,7 +478,10 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(Field.of("tags").arrayConcat("newTag1", "newTag2").as("modifiedTags"))
+            .select(
+                Field.of("tags")
+                    .arrayConcat(Lists.newArrayList("newTag1", "newTag2"))
+                    .as("modifiedTags"))
             .limit(1)
             .execute()
             .get();
@@ -832,7 +834,7 @@ public class ITPipelineTest extends ITBaseTest {
             .collection(collection.getPath())
             .select(
                 cosineDistance(Constant.vector(sourceVector), targetVector).as("cosineDistance"),
-                dotProductDistance(Constant.vector(sourceVector), targetVector)
+                Function.dotProduct(Constant.vector(sourceVector), targetVector)
                     .as("dotProductDistance"),
                 euclideanDistance(Constant.vector(sourceVector), targetVector)
                     .as("euclideanDistance"))

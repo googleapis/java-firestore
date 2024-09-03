@@ -20,6 +20,7 @@ import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.toEx
 
 import com.google.api.core.BetaApi;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Represents an expression that can be evaluated to a value within the execution of a {@link
@@ -450,25 +451,7 @@ public interface Expr {
   // Array Functions
 
   /**
-   * Creates an expression that concatenates an array expression with one or more other arrays.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Combine the 'items' array with another array field.
-   * Field.of("items").arrayConcat(Field.of("otherItems"));
-   * }</pre>
-   *
-   * @param elements The array expressions to concatenate.
-   * @return A new {@code Expr} representing the concatenated array.
-   */
-  @BetaApi
-  default ArrayConcat arrayConcat(Expr... elements) {
-    return new ArrayConcat(this, Arrays.asList(elements));
-  }
-
-  /**
-   * Creates an expression that concatenates an array expression with one or more other arrays.
+   * Creates an expression that concatenates an array expression with another array.
    *
    * <p>Example:
    *
@@ -477,12 +460,12 @@ public interface Expr {
    * Field.of("tags").arrayConcat(Arrays.asList("newTag1", "newTag2"), Field.of("otherTag"));
    * }</pre>
    *
-   * @param elements The array expressions or values to concatenate.
+   * @param array The array of constants or expressions to concat with.
    * @return A new {@code Expr} representing the concatenated array.
    */
   @BetaApi
-  default ArrayConcat arrayConcat(Object... elements) {
-    return new ArrayConcat(this, toExprList(elements));
+  default ArrayConcat arrayConcat(List<Object> array) {
+    return new ArrayConcat(this, toExprList(array.toArray()));
   }
 
   /**
@@ -1140,39 +1123,39 @@ public interface Expr {
   }
 
   /**
-   * Calculates the dot product distance between two vectors.
+   * Calculates the dot product between two vectors.
    *
    * <p>Example:
    *
    * <pre>{@code
-   * // Calculate the dot product distance between a feature vector and a target vector
-   * Field.of("features").dotProductDistance(new double[] {0.5, 0.8, 0.2});
+   * // Calculate the dot product between a feature vector and a target vector
+   * Field.of("features").dotProduct(new double[] {0.5, 0.8, 0.2});
    * }</pre>
    *
-   * @param other The other vector (as an array of doubles) to compare against.
-   * @return A new {@code Expr} representing the dot product distance between the two vectors.
+   * @param other The other vector (represented as an Expr) to calculate dot product with.
+   * @return A new {@code Expr} representing the dot product between the two vectors.
    */
   @BetaApi
-  default DotProductDistance dotProductDistance(double[] other) {
-    return new DotProductDistance(this, Constant.vector(other));
+  default DotProduct dotProduct(double[] other) {
+    return new DotProduct(this, Constant.vector(other));
   }
 
   /**
-   * Calculates the dot product distance between two vectors.
+   * Calculates the dot product between two vectors.
    *
    * <p>Example:
    *
    * <pre>{@code
-   * // Calculate the dot product distance between two document vectors: 'docVector1' and 'docVector2'
-   * Field.of("docVector1").dotProductDistance(Field.of("docVector2"));
+   * // Calculate the dot product between two document vectors: 'docVector1' and 'docVector2'
+   * Field.of("docVector1").dotProduct(Field.of("docVector2"));
    * }</pre>
    *
-   * @param other The other vector (represented as an Expr) to compare against.
-   * @return A new {@code Expr} representing the dot product distance between the two vectors.
+   * @param other The other vector (represented as an Expr) to calculate dot product with.
+   * @return A new {@code Expr} representing the dot product between the two vectors.
    */
   @BetaApi
-  default DotProductDistance dotProductDistance(Expr other) {
-    return new DotProductDistance(this, other);
+  default DotProduct dotProduct(Expr other) {
+    return new DotProduct(this, other);
   }
 
   // Ordering

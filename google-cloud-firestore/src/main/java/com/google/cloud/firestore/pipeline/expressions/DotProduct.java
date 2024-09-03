@@ -21,9 +21,9 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.Lists;
 
 @BetaApi
-public final class DotProductDistance extends Function {
+public final class DotProduct extends Function {
   @InternalApi
-  DotProductDistance(Expr vector1, Expr vector2) {
+  DotProduct(Expr vector1, Expr vector2) {
     super("dot_product", Lists.newArrayList(vector1, vector2));
   }
 }

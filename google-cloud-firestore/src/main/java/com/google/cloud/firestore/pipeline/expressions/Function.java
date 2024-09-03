@@ -1172,79 +1172,41 @@ public class Function implements Expr {
   }
 
   /**
-   * Creates an expression that concatenates an array expression with other arrays.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Combine the 'items' array with two new item arrays
-   * Function.arrayConcat(Field.of("items"), Field.of("newItems"), Field.of("otherItems"));
-   * }</pre>
-   *
-   * @param expr The array expression to concatenate to.
-   * @param elements The array expressions to concatenate.
-   * @return A new {@code Expr} representing the concatenated array.
-   */
-  @BetaApi
-  public static ArrayConcat arrayConcat(Expr expr, Expr... elements) {
-    return new ArrayConcat(expr, Arrays.asList(elements));
-  }
-
-  /**
-   * Creates an expression that concatenates an array expression with other arrays and/or values.
+   * Creates an expression that concatenates an array expression with another array.
    *
    * <p>Example:
    *
    * <pre>{@code
    * // Combine the 'tags' array with a new array
-   * Function.arrayConcat(Field.of("tags"), Arrays.asList("newTag1", "newTag2"));
+   * Function.arrayConcat(Field.of("tags"), List.newArrayList("newTag1", "newTag2"));
    * }</pre>
    *
    * @param expr The array expression to concatenate to.
-   * @param elements The array expressions or single values to concatenate.
+   * @param array The array of constants or expressions to concat with.
    * @return A new {@code Expr} representing the concatenated array.
    */
   @BetaApi
-  public static ArrayConcat arrayConcat(Expr expr, Object... elements) {
-    return new ArrayConcat(expr, toExprList(elements));
+  public static ArrayConcat arrayConcat(Expr expr, List<Object> array) {
+    return new ArrayConcat(expr, toExprList(array.toArray()));
   }
 
   /**
-   * Creates an expression that concatenates a field's array value with other arrays.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Combine the 'items' array with two new item arrays
-   * Function.arrayConcat("items", Field.of("newItems"), Field.of("otherItems"));
-   * }</pre>
-   *
-   * @param field The field name containing array values.
-   * @param elements The array expressions to concatenate.
-   * @return A new {@code Expr} representing the concatenated array.
-   */
-  @BetaApi
-  public static ArrayConcat arrayConcat(String field, Expr... elements) {
-    return new ArrayConcat(Field.of(field), Arrays.asList(elements));
-  }
-
-  /**
-   * Creates an expression that concatenates a field's array value with other arrays and/or values.
+   * Creates an expression that concatenates a field's array value with another array.
    *
    * <p>Example:
    *
    * <pre>{@code
    * // Combine the 'tags' array with a new array
-   * Function.arrayConcat("tags", Arrays.asList("newTag1", "newTag2"));
+   * Function.arrayConcat("tags", List.newArrayList("newTag1", "newTag2"));
    * }</pre>
    *
    * @param field The field name containing array values.
-   * @param elements The array expressions or single values to concatenate.
+   * @param array The array of constants or expressions to concat with.
    * @return A new {@code Expr} representing the concatenated array.
    */
   @BetaApi
-  public static ArrayConcat arrayConcat(String field, Object... elements) {
-    return new ArrayConcat(Field.of(field), toExprList(elements));
+  public static ArrayConcat arrayConcat(String field, List<Object> array) {
+    return new ArrayConcat(Field.of(field), toExprList(array.toArray()));
   }
 
   /**
@@ -2335,79 +2297,79 @@ public class Function implements Expr {
   }
 
   /**
-   * Calculates the dot product distance between two vector expressions.
+   * Calculates the dot product between two vector expressions.
    *
    * <p>Example:
    *
    * <pre>{@code
-   * // Calculate the dot product distance between two document vectors: 'docVector1' and 'docVector2'
-   * Function.dotProductDistance(Field.of("docVector1"), Field.of("docVector2"));
+   * // Calculate the dot product between two document vectors: 'docVector1' and 'docVector2'
+   * Function.dotProduct(Field.of("docVector1"), Field.of("docVector2"));
    * }</pre>
    *
-   * @param expr The first vector (represented as an Expr) to compare against.
-   * @param other The other vector (represented as an Expr) to compare against.
-   * @return A new {@code Expr} representing the dot product distance between the two vectors.
+   * @param expr The first vector (represented as an Expr) to calculate dot product with.
+   * @param other The other vector (represented as an Expr) to calculate dot product with.
+   * @return A new {@code Expr} representing the dot product between the two vectors.
    */
   @BetaApi
-  public static DotProductDistance dotProductDistance(Expr expr, Expr other) {
-    return new DotProductDistance(expr, other);
+  public static DotProduct dotProduct(Expr expr, Expr other) {
+    return new DotProduct(expr, other);
   }
 
   /**
-   * Calculates the dot product distance between a vector expression and a double array.
+   * Calculates the dot product between a vector expression and a double array.
    *
    * <p>Example:
    *
    * <pre>{@code
-   * // Calculate the dot product distance between a feature vector and a target vector
-   * Function.dotProductDistance(Field.of("features"), new double[] {0.5, 0.8, 0.2});
+   * // Calculate the dot product between a feature vector and a target vector
+   * Function.dotProduct(Field.of("features"), new double[] {0.5, 0.8, 0.2});
    * }</pre>
    *
-   * @param expr The first vector (represented as an Expr) to compare against.
-   * @param other The other vector (as an array of doubles) to compare against.
-   * @return A new {@code Expr} representing the dot product distance between the two vectors.
+   * @param expr The first vector (represented as an Expr) to calculate dot product with.
+   * @param other The other vector (represented as an Expr) to calculate dot product with.
+   * @return A new {@code Expr} representing the dot product between the two vectors.
    */
   @BetaApi
-  public static DotProductDistance dotProductDistance(Expr expr, double[] other) {
-    return new DotProductDistance(expr, Constant.vector(other));
+  public static DotProduct dotProduct(Expr expr, double[] other) {
+    return new DotProduct(expr, Constant.vector(other));
   }
 
   /**
-   * Calculates the dot product distance between a field's vector value and a vector expression.
+   * Calculates the dot product between a field's vector value and a vector expression.
    *
    * <p>Example:
    *
    * <pre>{@code
-   * // Calculate the dot product distance between two document vectors: 'docVector1' and 'docVector2'
-   * Function.dotProductDistance("docVector1", Field.of("docVector2"));
+   * // Calculate the dot product between two document vectors: 'docVector1' and 'docVector2'
+   * Function.dotProduct("docVector1", Field.of("docVector2"));
    * }</pre>
    *
    * @param field The name of the field containing the first vector.
-   * @param other The other vector (represented as an Expr) to compare against.
+   * @param other The other vector (represented as an Expr) to calculate dot product with.
    * @return A new {@code Expr} representing the dot product distance between the two vectors.
    */
   @BetaApi
-  public static DotProductDistance dotProductDistance(String field, Expr other) {
-    return new DotProductDistance(Field.of(field), other);
+  public static DotProduct dotProduct(String field, Expr other) {
+    return new DotProduct(Field.of(field), other);
   }
 
   /**
-   * Calculates the dot product distance between a field's vector value and a double array.
+   * Calculates the dot product between a field's vector value and a double array.
    *
    * <p>Example:
    *
    * <pre>{@code
-   * // Calculate the dot product distance between a feature vector and a target vector
-   * Function.dotProductDistance("features", new double[] {0.5, 0.8, 0.2});
+   * // Calculate the dot product between a feature vector and a target vector
+   * Function.dotProduct("features", new double[] {0.5, 0.8, 0.2});
    * }</pre>
    *
    * @param field The name of the field containing the first vector.
-   * @param other The other vector (as an array of doubles) to compare against.
+   * @param other The other vector (represented as an Expr) to calculate dot product with.
    * @return A new {@code Expr} representing the dot product distance between the two vectors.
    */
   @BetaApi
-  public static DotProductDistance dotProductDistance(String field, double[] other) {
-    return new DotProductDistance(Field.of(field), Constant.vector(other));
+  public static DotProduct dotProduct(String field, double[] other) {
+    return new DotProduct(Field.of(field), Constant.vector(other));
   }
 
   /**
