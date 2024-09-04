@@ -32,6 +32,7 @@ public class BuiltinMetricsConstants {
 
   // TODO: change to firestore.googleapis.com
   public static final String METER_NAME = "custom.googleapis.com/internal/client";
+  static final String FIRESTORE_METER_NAME = "firestore_java";
   public static final String GAX_METER_NAME = OpenTelemetryMetricsRecorder.GAX_METER_NAME;
 
   // Metric attribute keys for monitored resource
@@ -89,9 +90,10 @@ public class BuiltinMetricsConstants {
   static void defineView(
       ImmutableMap.Builder<InstrumentSelector, View> viewMap,
       String id,
+      String meter,
       Set<AttributeKey> attributes) {
     InstrumentSelector selector =
-        InstrumentSelector.builder().setName(METER_NAME + "/" + id).build();
+        InstrumentSelector.builder().setMeterName(meter).setName(METER_NAME + "/" + id).build();
     Set<String> attributesFilter =
         ImmutableSet.<String>builder()
             .addAll(attributes.stream().map(AttributeKey::getKey).collect(Collectors.toSet()))
@@ -101,55 +103,52 @@ public class BuiltinMetricsConstants {
     viewMap.put(selector, view);
   }
 
+  private static Set<AttributeKey> withAdditionalAttributes(Set<AttributeKey> attributes) {
+    return ImmutableSet.<AttributeKey>builder()
+        .addAll(COMMON_ATTRIBUTES)
+        .addAll(attributes)
+        .build();
+  }
+
   public static Map<InstrumentSelector, View> getAllViews() {
     ImmutableMap.Builder<InstrumentSelector, View> views = ImmutableMap.builder();
 
+    // Define views with COMMON_ATTRIBUTES and METHOD_NAME_KEY
     defineView(
         views,
         OPERATION_LATENCY_NAME,
-        ImmutableSet.<AttributeKey>builder()
-            .addAll(COMMON_ATTRIBUTES)
-            .add(METHOD_NAME_KEY)
-            .build());
+        GAX_METER_NAME,
+        withAdditionalAttributes(ImmutableSet.of(METHOD_NAME_KEY)));
     defineView(
         views,
         ATTEMPT_LATENCY_NAME,
-        ImmutableSet.<AttributeKey>builder()
-            .addAll(COMMON_ATTRIBUTES)
-            .add(METHOD_NAME_KEY)
-            .build());
-
+        GAX_METER_NAME,
+        withAdditionalAttributes(ImmutableSet.of(METHOD_NAME_KEY)));
     defineView(
         views,
         OPERATION_COUNT_NAME,
-        ImmutableSet.<AttributeKey>builder()
-            .addAll(COMMON_ATTRIBUTES)
-            .add(METHOD_NAME_KEY)
-            .build());
-
+        GAX_METER_NAME,
+        withAdditionalAttributes(ImmutableSet.of(METHOD_NAME_KEY)));
     defineView(
         views,
         ATTEMPT_COUNT_NAME,
-        ImmutableSet.<AttributeKey>builder()
-            .addAll(COMMON_ATTRIBUTES)
-            .add(METHOD_NAME_KEY)
-            .build());
-
+        GAX_METER_NAME,
+        withAdditionalAttributes(ImmutableSet.of(METHOD_NAME_KEY)));
     defineView(
         views,
         FIRST_RESPONSE_LATENCY_NAME,
-        ImmutableSet.<AttributeKey>builder()
-            .addAll(COMMON_ATTRIBUTES)
-            .add(METHOD_NAME_KEY)
-            .build());
-
+        FIRESTORE_METER_NAME,
+        withAdditionalAttributes(ImmutableSet.of(METHOD_NAME_KEY)));
     defineView(
         views,
         END_TO_END_LATENCY_NAME,
-        ImmutableSet.<AttributeKey>builder()
-            .addAll(COMMON_ATTRIBUTES)
-            .add(METHOD_NAME_KEY)
-            .build());
+        FIRESTORE_METER_NAME,
+        withAdditionalAttributes(ImmutableSet.of(METHOD_NAME_KEY)));
+
+    // Define views with only COMMON_ATTRIBUTES
+    defineView(views, TRANSACTION_LATENCY_NAME, FIRESTORE_METER_NAME, COMMON_ATTRIBUTES);
+    defineView(views, TRANSACTION_ATTEMPT_COUNT_NAME, FIRESTORE_METER_NAME, COMMON_ATTRIBUTES);
+
     return views.build();
   }
 }
