@@ -26,6 +26,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -148,13 +149,13 @@ abstract class BeanMapper<T> {
   void applyFieldAnnotations(Field field) {
     if (field.isAnnotationPresent(ServerTimestamp.class)) {
       Class<?> fieldType = field.getType();
-      if (fieldType != Date.class && fieldType != Timestamp.class) {
+      if (fieldType != Date.class && fieldType != Timestamp.class && fieldType != Instant.class) {
         throw new IllegalArgumentException(
             "Field "
                 + field.getName()
                 + " is annotated with @ServerTimestamp but is "
                 + fieldType
-                + " instead of Date or Timestamp.");
+                + " instead of Date, Timestamp, or Instant.");
       }
       serverTimestamps.add(propertyName(field));
     }
