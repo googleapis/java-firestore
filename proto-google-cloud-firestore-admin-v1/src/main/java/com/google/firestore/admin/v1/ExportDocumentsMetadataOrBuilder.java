@@ -196,7 +196,7 @@ public interface ExportDocumentsMetadataOrBuilder
    *
    *
    * <pre>
-   * Which collection ids are being exported.
+   * Which collection IDs are being exported.
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
@@ -208,7 +208,7 @@ public interface ExportDocumentsMetadataOrBuilder
    *
    *
    * <pre>
-   * Which collection ids are being exported.
+   * Which collection IDs are being exported.
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
@@ -220,7 +220,7 @@ public interface ExportDocumentsMetadataOrBuilder
    *
    *
    * <pre>
-   * Which collection ids are being exported.
+   * Which collection IDs are being exported.
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
@@ -233,7 +233,7 @@ public interface ExportDocumentsMetadataOrBuilder
    *
    *
    * <pre>
-   * Which collection ids are being exported.
+   * Which collection IDs are being exported.
    * </pre>
    *
    * <code>repeated string collection_ids = 6;</code>
@@ -272,7 +272,7 @@ public interface ExportDocumentsMetadataOrBuilder
    *
    *
    * <pre>
-   * Which namespace ids are being exported.
+   * Which namespace IDs are being exported.
    * </pre>
    *
    * <code>repeated string namespace_ids = 8;</code>
@@ -284,7 +284,7 @@ public interface ExportDocumentsMetadataOrBuilder
    *
    *
    * <pre>
-   * Which namespace ids are being exported.
+   * Which namespace IDs are being exported.
    * </pre>
    *
    * <code>repeated string namespace_ids = 8;</code>
@@ -296,7 +296,7 @@ public interface ExportDocumentsMetadataOrBuilder
    *
    *
    * <pre>
-   * Which namespace ids are being exported.
+   * Which namespace IDs are being exported.
    * </pre>
    *
    * <code>repeated string namespace_ids = 8;</code>
@@ -309,7 +309,7 @@ public interface ExportDocumentsMetadataOrBuilder
    *
    *
    * <pre>
-   * Which namespace ids are being exported.
+   * Which namespace IDs are being exported.
    * </pre>
    *
    * <code>repeated string namespace_ids = 8;</code>

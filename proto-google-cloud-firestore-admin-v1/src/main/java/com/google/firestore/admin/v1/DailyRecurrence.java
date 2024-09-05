@@ -23,7 +23,7 @@ package com.google.firestore.admin.v1;
  *
  *
  * <pre>
- * Represents a recurring schedule that runs at a specific time every day.
+ * Represents a recurring schedule that runs every day.
  *
  * The time zone is UTC.
  * </pre>
@@ -217,7 +217,7 @@ public final class DailyRecurrence extends com.google.protobuf.GeneratedMessageV
    *
    *
    * <pre>
-   * Represents a recurring schedule that runs at a specific time every day.
+   * Represents a recurring schedule that runs every day.
    *
    * The time zone is UTC.
    * </pre>
