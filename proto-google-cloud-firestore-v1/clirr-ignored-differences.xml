@@ -91,4 +91,74 @@
     <className>com/google/firestore/v1/Run*QueryResponse$Builder</className>
     <method>* mergeStats(*)</method>
   </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/Run*QueryRequestOrBuilder</className>
+    <method>com.google.firestore.v1.ExplainOptions getExplainOptions()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/Run*QueryRequestOrBuilder</className>
+    <method>com.google.firestore.v1.ExplainOptionsOrBuilder getExplainOptionsOrBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/Run*QueryRequestOrBuilder</className>
+    <method>boolean hasExplainOptions()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/Run*QueryResponseOrBuilder</className>
+    <method>com.google.firestore.v1.ExplainMetrics getExplainMetrics()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/Run*QueryResponseOrBuilder</className>
+    <method>com.google.firestore.v1.ExplainMetricsOrBuilder getExplainMetricsOrBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/Run*QueryResponseOrBuilder</className>
+    <method>boolean hasExplainMetrics()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQueryOrBuilder</className>
+    <method>com.google.firestore.v1.StructuredQuery$FindNearest getFindNearest()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQueryOrBuilder</className>
+    <method>com.google.firestore.v1.StructuredQuery$FindNearestOrBuilder getFindNearestOrBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQueryOrBuilder</className>
+    <method>boolean hasFindNearest()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQuery$FindNearestOrBuilder</className>
+    <method>java.lang.String getDistanceResultField()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQuery$FindNearestOrBuilder</className>
+    <method>com.google.protobuf.ByteString getDistanceResultFieldBytes()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQuery$FindNearestOrBuilder</className>
+    <method>com.google.protobuf.DoubleValue getDistanceThreshold()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQuery$FindNearestOrBuilder</className>
+    <method>com.google.protobuf.DoubleValueOrBuilder getDistanceThresholdOrBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/StructuredQuery$FindNearestOrBuilder</className>
+    <method>boolean hasDistanceThreshold()</method>
+  </difference>
 </differences>

@@ -4,6 +4,51 @@
   <difference>
     <differenceType>7012</differenceType>
     <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
-    <method>*deleteDatabase(com.google.firestore.admin.v1.DeleteDatabaseRequest, io.grpc.stub.StreamObserver)</method>
+    <method>void createBackupSchedule(com.google.firestore.admin.v1.CreateBackupScheduleRequest, io.grpc.stub.StreamObserver)</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
+    <method>void deleteBackup(com.google.firestore.admin.v1.DeleteBackupRequest, io.grpc.stub.StreamObserver)</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
+    <method>void deleteBackupSchedule(com.google.firestore.admin.v1.DeleteBackupScheduleRequest, io.grpc.stub.StreamObserver)</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
+    <method>void getBackup(com.google.firestore.admin.v1.GetBackupRequest, io.grpc.stub.StreamObserver)</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
+    <method>void getBackupSchedule(com.google.firestore.admin.v1.GetBackupScheduleRequest, io.grpc.stub.StreamObserver)</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
+    <method>void listBackupSchedules(com.google.firestore.admin.v1.ListBackupSchedulesRequest, io.grpc.stub.StreamObserver)</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
+    <method>void listBackups(com.google.firestore.admin.v1.ListBackupsRequest, io.grpc.stub.StreamObserver)</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
+    <method>void restoreDatabase(com.google.firestore.admin.v1.RestoreDatabaseRequest, io.grpc.stub.StreamObserver)</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
+    <method>void updateBackupSchedule(com.google.firestore.admin.v1.UpdateBackupScheduleRequest, io.grpc.stub.StreamObserver)</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/admin/v1/FirestoreAdminGrpc*</className>
+    <method>void bulkDeleteDocuments(com.google.firestore.admin.v1.BulkDeleteDocumentsRequest, io.grpc.stub.StreamObserver)</method>
   </difference>
 </differences>

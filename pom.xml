@@ -4,7 +4,7 @@
   <groupId>com.google.cloud</groupId>
   <artifactId>google-cloud-firestore-parent</artifactId>
   <packaging>pom</packaging>
-  <version>3.17.2-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+  <version>3.25.1</version><!-- {x-version-update:google-cloud-firestore:current} -->
   <name>Google Cloud Firestore Parent</name>
   <url>https://github.com/googleapis/java-firestore</url>
   <description>
@@ -14,7 +14,7 @@
   <parent>
     <groupId>com.google.cloud</groupId>
     <artifactId>sdk-platform-java-config</artifactId>
-    <version>3.25.0</version>
+    <version>3.34.0</version>
   </parent>
 
   <developers>
@@ -150,32 +150,32 @@
       <dependency>
         <groupId>com.google.api.grpc</groupId>
         <artifactId>proto-google-cloud-firestore-admin-v1</artifactId>
-        <version>3.17.2-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-admin-v1:current} -->
+        <version>3.25.1</version><!-- {x-version-update:proto-google-cloud-firestore-admin-v1:current} -->
       </dependency>
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>google-cloud-firestore</artifactId>
-        <version>3.17.2-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+        <version>3.25.1</version><!-- {x-version-update:google-cloud-firestore:current} -->
       </dependency>
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>proto-google-cloud-firestore-bundle-v1</artifactId>
-        <version>3.17.2-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+        <version>3.25.1</version><!-- {x-version-update:google-cloud-firestore:current} -->
       </dependency>
       <dependency>
         <groupId>com.google.api.grpc</groupId>
         <artifactId>proto-google-cloud-firestore-v1</artifactId>
-        <version>3.17.2-SNAPSHOT</version><!-- {x-version-update:proto-google-cloud-firestore-v1:current} -->
+        <version>3.25.1</version><!-- {x-version-update:proto-google-cloud-firestore-v1:current} -->
       </dependency>
       <dependency>
         <groupId>com.google.api.grpc</groupId>
         <artifactId>grpc-google-cloud-firestore-admin-v1</artifactId>
-        <version>3.17.2-SNAPSHOT</version><!-- {x-version-update:grpc-google-cloud-firestore-admin-v1:current} -->
+        <version>3.25.1</version><!-- {x-version-update:grpc-google-cloud-firestore-admin-v1:current} -->
       </dependency>
       <dependency>
         <groupId>com.google.api.grpc</groupId>
         <artifactId>grpc-google-cloud-firestore-v1</artifactId>
-        <version>3.17.2-SNAPSHOT</version><!-- {x-version-update:grpc-google-cloud-firestore-v1:current} -->
+        <version>3.25.1</version><!-- {x-version-update:grpc-google-cloud-firestore-v1:current} -->
       </dependency>
 
       <dependency>
@@ -195,7 +195,7 @@
       <dependency>
         <groupId>com.google.truth</groupId>
         <artifactId>truth</artifactId>
-        <version>1.4.1</version>
+        <version>1.4.4</version>
         <scope>test</scope>
         <exclusions>
           <exclusion>
@@ -262,6 +262,27 @@
         <!-- exclude file causing error generating doc -->
         <sourceFileExclude>com/google/cloud/firestore/v1/package-info.java</sourceFileExclude>
       </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <sourceFileExcludes>
+                <exclude>${sourceFileExclude}</exclude>
+              </sourceFileExcludes>
+            </configuration>
+            <executions>
+              <execution>
+                <id>aggregate</id>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>

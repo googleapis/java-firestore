@@ -1107,7 +1107,11 @@ public class FirestoreClient implements BackgroundResource {
    * // - It may require specifying regional endpoints when creating the service client as shown in
    * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
-   *   RunQueryRequest request = RunQueryRequest.newBuilder().setParent("parent-995424086").build();
+   *   RunQueryRequest request =
+   *       RunQueryRequest.newBuilder()
+   *           .setParent("parent-995424086")
+   *           .setExplainOptions(ExplainOptions.newBuilder().build())
+   *           .build();
    *   ServerStream<RunQueryResponse> stream = firestoreClient.runQueryCallable().call(request);
    *   for (RunQueryResponse response : stream) {
    *     // Do something when a response is received.
@@ -1143,7 +1147,10 @@ public class FirestoreClient implements BackgroundResource {
    * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
    * try (FirestoreClient firestoreClient = FirestoreClient.create()) {
    *   RunAggregationQueryRequest request =
-   *       RunAggregationQueryRequest.newBuilder().setParent("parent-995424086").build();
+   *       RunAggregationQueryRequest.newBuilder()
+   *           .setParent("parent-995424086")
+   *           .setExplainOptions(ExplainOptions.newBuilder().build())
+   *           .build();
    *   ServerStream<RunAggregationQueryResponse> stream =
    *       firestoreClient.runAggregationQueryCallable().call(request);
    *   for (RunAggregationQueryResponse response : stream) {

@@ -64,7 +64,6 @@ import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.DocumentMask;
 import com.google.firestore.v1.Write;
-import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Message;
 import io.grpc.Status;
 import java.util.ArrayList;
@@ -88,7 +87,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionTest {
 
-  private final ApiFuture<GeneratedMessageV3> RETRYABLE_API_EXCEPTION =
+  private final ApiFuture<Message> RETRYABLE_API_EXCEPTION =
       immediateFailedFuture(
           new ApiException(
               new Exception("Test exception"), GrpcStatusCode.of(Status.Code.UNKNOWN), true));

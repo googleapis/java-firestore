@@ -32,6 +32,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -169,8 +170,12 @@ class CustomClassMapper {
         || o instanceof Blob
         || o instanceof DocumentReference
         || o instanceof FieldValue
-        || o instanceof Value) {
+        || o instanceof Value
+        || o instanceof VectorValue) {
       return o;
+    } else if (o instanceof Instant) {
+      Instant instant = (Instant) o;
+      return Timestamp.ofTimeSecondsAndNanos(instant.getEpochSecond(), instant.getNano());
     } else {
       Class<T> clazz = (Class<T>) o.getClass();
       BeanMapper<T> mapper = loadOrCreateBeanMapperForClass(clazz);
@@ -229,10 +234,14 @@ class CustomClassMapper {
       return (T) convertDate(o, context);
     } else if (Timestamp.class.isAssignableFrom(clazz)) {
       return (T) convertTimestamp(o, context);
+    } else if (Instant.class.isAssignableFrom(clazz)) {
+      return (T) convertInstant(o, context);
     } else if (Blob.class.isAssignableFrom(clazz)) {
       return (T) convertBlob(o, context);
     } else if (GeoPoint.class.isAssignableFrom(clazz)) {
       return (T) convertGeoPoint(o, context);
+    } else if (VectorValue.class.isAssignableFrom(clazz)) {
+      return (T) convertVectorValue(o, context);
     } else if (DocumentReference.class.isAssignableFrom(clazz)) {
       return (T) convertDocumentReference(o, context);
     } else if (clazz.isArray()) {
@@ -557,6 +566,19 @@ class CustomClassMapper {
     }
   }
 
+  private static Instant convertInstant(Object o, DeserializeContext context) {
+    if (o instanceof Timestamp) {
+      Timestamp timestamp = (Timestamp) o;
+      return Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos());
+    } else if (o instanceof Date) {
+      return Instant.ofEpochMilli(((Date) o).getTime());
+    } else {
+      throw deserializeError(
+          context.errorPath,
+          "Failed to convert value of type " + o.getClass().getName() + " to Instant");
+    }
+  }
+
   private static Blob convertBlob(Object o, DeserializeContext context) {
     if (o instanceof Blob) {
       return (Blob) o;
@@ -574,6 +596,16 @@ class CustomClassMapper {
       throw deserializeError(
           context.errorPath,
           "Failed to convert value of type " + o.getClass().getName() + " to GeoPoint");
+    }
+  }
+
+  private static VectorValue convertVectorValue(Object o, DeserializeContext context) {
+    if (o instanceof VectorValue) {
+      return (VectorValue) o;
+    } else {
+      throw deserializeError(
+          context.errorPath,
+          "Failed to convert value of type " + o.getClass().getName() + " to VectorValue");
     }
   }
 
@@ -930,16 +962,39 @@ class CustomClassMapper {
       return result;
     }
 
+    private void applyFieldAnnotations(Field field) {
+      if (field.isAnnotationPresent(ServerTimestamp.class)) {
+        Class<?> fieldType = field.getType();
+        if (fieldType != Date.class && fieldType != Timestamp.class) {
+          throw new IllegalArgumentException(
+              "Field "
+                  + field.getName()
+                  + " is annotated with @ServerTimestamp but is "
+                  + fieldType
+                  + " instead of Date or Timestamp.");
+        }
+        serverTimestamps.add(propertyName(field));
+      }
+
+      if (field.isAnnotationPresent(DocumentId.class)) {
+        Class<?> fieldType = field.getType();
+        ensureValidDocumentIdType("Field", "is", fieldType);
+        documentIdPropertyNames.add(propertyName(field));
+      }
+    }
+
     private void applyGetterAnnotations(Method method) {
       if (method.isAnnotationPresent(ServerTimestamp.class)) {
         Class<?> returnType = method.getReturnType();
-        if (returnType != Date.class && returnType != Timestamp.class) {
+        if (returnType != Date.class
+            && returnType != Timestamp.class
+            && returnType != Instant.class) {
           throw new IllegalArgumentException(
               "Method "
                   + method.getName()
                   + " is annotated with @ServerTimestamp but returns "
                   + returnType
-                  + " instead of Date or Timestamp.");
+                  + " instead of Date, Timestamp, or Instant.");
         }
         serverTimestamps.add(propertyName(method));
       }

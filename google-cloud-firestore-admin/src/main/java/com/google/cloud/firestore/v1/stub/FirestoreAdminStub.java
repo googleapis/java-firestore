@@ -22,10 +22,18 @@ import static com.google.cloud.firestore.v1.FirestoreAdminClient.ListIndexesPage
 import com.google.api.gax.core.BackgroundResource;
 import com.google.api.gax.rpc.OperationCallable;
 import com.google.api.gax.rpc.UnaryCallable;
+import com.google.firestore.admin.v1.Backup;
+import com.google.firestore.admin.v1.BackupSchedule;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
+import com.google.firestore.admin.v1.DeleteBackupRequest;
+import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
 import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
 import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
@@ -34,6 +42,8 @@ import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FieldOperationMetadata;
+import com.google.firestore.admin.v1.GetBackupRequest;
+import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
@@ -41,12 +51,19 @@ import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.IndexOperationMetadata;
+import com.google.firestore.admin.v1.ListBackupSchedulesRequest;
+import com.google.firestore.admin.v1.ListBackupSchedulesResponse;
+import com.google.firestore.admin.v1.ListBackupsRequest;
+import com.google.firestore.admin.v1.ListBackupsResponse;
 import com.google.firestore.admin.v1.ListDatabasesRequest;
 import com.google.firestore.admin.v1.ListDatabasesResponse;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.RestoreDatabaseMetadata;
+import com.google.firestore.admin.v1.RestoreDatabaseRequest;
+import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
@@ -136,6 +153,17 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
     throw new UnsupportedOperationException("Not implemented: importDocumentsCallable()");
   }
 
+  public OperationCallable<
+          BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsOperationCallable() {
+    throw new UnsupportedOperationException(
+        "Not implemented: bulkDeleteDocumentsOperationCallable()");
+  }
+
+  public UnaryCallable<BulkDeleteDocumentsRequest, Operation> bulkDeleteDocumentsCallable() {
+    throw new UnsupportedOperationException("Not implemented: bulkDeleteDocumentsCallable()");
+  }
+
   public OperationCallable<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
       createDatabaseOperationCallable() {
     throw new UnsupportedOperationException("Not implemented: createDatabaseOperationCallable()");
@@ -169,6 +197,48 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
 
   public UnaryCallable<DeleteDatabaseRequest, Operation> deleteDatabaseCallable() {
     throw new UnsupportedOperationException("Not implemented: deleteDatabaseCallable()");
+  }
+
+  public UnaryCallable<GetBackupRequest, Backup> getBackupCallable() {
+    throw new UnsupportedOperationException("Not implemented: getBackupCallable()");
+  }
+
+  public UnaryCallable<ListBackupsRequest, ListBackupsResponse> listBackupsCallable() {
+    throw new UnsupportedOperationException("Not implemented: listBackupsCallable()");
+  }
+
+  public UnaryCallable<DeleteBackupRequest, Empty> deleteBackupCallable() {
+    throw new UnsupportedOperationException("Not implemented: deleteBackupCallable()");
+  }
+
+  public OperationCallable<RestoreDatabaseRequest, Database, RestoreDatabaseMetadata>
+      restoreDatabaseOperationCallable() {
+    throw new UnsupportedOperationException("Not implemented: restoreDatabaseOperationCallable()");
+  }
+
+  public UnaryCallable<RestoreDatabaseRequest, Operation> restoreDatabaseCallable() {
+    throw new UnsupportedOperationException("Not implemented: restoreDatabaseCallable()");
+  }
+
+  public UnaryCallable<CreateBackupScheduleRequest, BackupSchedule> createBackupScheduleCallable() {
+    throw new UnsupportedOperationException("Not implemented: createBackupScheduleCallable()");
+  }
+
+  public UnaryCallable<GetBackupScheduleRequest, BackupSchedule> getBackupScheduleCallable() {
+    throw new UnsupportedOperationException("Not implemented: getBackupScheduleCallable()");
+  }
+
+  public UnaryCallable<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+      listBackupSchedulesCallable() {
+    throw new UnsupportedOperationException("Not implemented: listBackupSchedulesCallable()");
+  }
+
+  public UnaryCallable<UpdateBackupScheduleRequest, BackupSchedule> updateBackupScheduleCallable() {
+    throw new UnsupportedOperationException("Not implemented: updateBackupScheduleCallable()");
+  }
+
+  public UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable() {
+    throw new UnsupportedOperationException("Not implemented: deleteBackupScheduleCallable()");
   }
 
   @Override

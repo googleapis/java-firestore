@@ -65,7 +65,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
-import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Message;
 import com.google.protobuf.NullValue;
 import com.google.type.LatLng;
@@ -75,6 +74,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -148,6 +148,7 @@ public final class LocalFirestoreHelper {
 
   public static final Date DATE;
   public static final Timestamp TIMESTAMP;
+  public static final Instant INSTANT;
   public static final GeoPoint GEO_POINT;
   public static final Blob BLOB;
   public static final FooList<SingleField> FOO_LIST = new FooList<>();
@@ -373,7 +374,7 @@ public final class LocalFirestoreHelper {
         new RunAggregationQueryResponse[] {
           createCountQueryResponse(count, readTime),
         },
-        /*throwable=*/ null);
+        /* throwable= */ null);
   }
 
   public static Answer<RunAggregationQueryResponse> countQueryResponse(Throwable throwable) {
@@ -386,7 +387,7 @@ public final class LocalFirestoreHelper {
         new RunAggregationQueryResponse[] {
           createCountQueryResponse(count1, null), createCountQueryResponse(count2, null),
         },
-        /*throwable=*/ null);
+        /* throwable= */ null);
   }
 
   public static Answer<RunAggregationQueryResponse> aggregationQueryResponses(
@@ -942,11 +943,13 @@ public final class LocalFirestoreHelper {
     public SingleField objectValue = new SingleField();
     public Date dateValue = DATE;
     public Timestamp timestampValue = TIMESTAMP;
+    public Instant instantValue = INSTANT;
     public List<String> arrayValue = ImmutableList.of("foo");
     public String nullValue = null;
     public Blob bytesValue = BLOB;
     public GeoPoint geoPointValue = GEO_POINT;
     public Map<String, Object> model = ImmutableMap.of("foo", SINGLE_FIELD_OBJECT.foo);
+    public VectorValue vectorValue = FieldValue.vector(new double[] {0.1, 0.2, 0.3});
 
     @Override
     public boolean equals(Object o) {
@@ -968,11 +971,13 @@ public final class LocalFirestoreHelper {
           && Objects.equals(objectValue, that.objectValue)
           && Objects.equals(dateValue, that.dateValue)
           && Objects.equals(timestampValue, that.timestampValue)
+          && Objects.equals(instantValue, that.instantValue)
           && Objects.equals(arrayValue, that.arrayValue)
           && Objects.equals(nullValue, that.nullValue)
           && Objects.equals(bytesValue, that.bytesValue)
           && Objects.equals(geoPointValue, that.geoPointValue)
-          && Objects.equals(model, that.model);
+          && Objects.equals(model, that.model)
+          && Objects.equals(vectorValue, that.vectorValue);
     }
   }
 
@@ -987,6 +992,10 @@ public final class LocalFirestoreHelper {
 
     TIMESTAMP =
         Timestamp.ofTimeSecondsAndNanos(
+            TimeUnit.MILLISECONDS.toSeconds(DATE.getTime()),
+            123000); // Firestore truncates to microsecond precision.
+    INSTANT =
+        Instant.ofEpochSecond(
             TimeUnit.MILLISECONDS.toSeconds(DATE.getTime()),
             123000); // Firestore truncates to microsecond precision.
     GEO_POINT = new GeoPoint(50.1430847, -122.9477780);
@@ -1083,11 +1092,13 @@ public final class LocalFirestoreHelper {
     ALL_SUPPORTED_TYPES_MAP.put("objectValue", map("foo", (Object) "bar"));
     ALL_SUPPORTED_TYPES_MAP.put("dateValue", Timestamp.of(DATE));
     ALL_SUPPORTED_TYPES_MAP.put("timestampValue", TIMESTAMP);
+    ALL_SUPPORTED_TYPES_MAP.put("instantValue", TIMESTAMP);
     ALL_SUPPORTED_TYPES_MAP.put("arrayValue", ImmutableList.of("foo"));
     ALL_SUPPORTED_TYPES_MAP.put("nullValue", null);
     ALL_SUPPORTED_TYPES_MAP.put("bytesValue", BLOB);
     ALL_SUPPORTED_TYPES_MAP.put("geoPointValue", GEO_POINT);
     ALL_SUPPORTED_TYPES_MAP.put("model", map("foo", SINGLE_FIELD_OBJECT.foo));
+    ALL_SUPPORTED_TYPES_MAP.put("vectorValue", FieldValue.vector(new double[] {0.1, 0.2, 0.3}));
     ALL_SUPPORTED_TYPES_PROTO =
         ImmutableMap.<String, Value>builder()
             .put("foo", Value.newBuilder().setStringValue("bar").build())
@@ -1104,6 +1115,24 @@ public final class LocalFirestoreHelper {
                     .setMapValue(MapValue.newBuilder().putAllFields(SINGLE_FIELD_PROTO))
                     .build())
             .put(
+                "vectorValue",
+                Value.newBuilder()
+                    .setMapValue(
+                        MapValue.newBuilder()
+                            .putAllFields(
+                                map(
+                                    "__type__",
+                                    Value.newBuilder().setStringValue("__vector__").build(),
+                                    "value",
+                                    Value.newBuilder()
+                                        .setArrayValue(
+                                            ArrayValue.newBuilder()
+                                                .addValues(Value.newBuilder().setDoubleValue(0.1))
+                                                .addValues(Value.newBuilder().setDoubleValue(0.2))
+                                                .addValues(Value.newBuilder().setDoubleValue(0.3)))
+                                        .build())))
+                    .build())
+            .put(
                 "dateValue",
                 Value.newBuilder()
                     .setTimestampValue(
@@ -1118,6 +1147,14 @@ public final class LocalFirestoreHelper {
                         com.google.protobuf.Timestamp.newBuilder()
                             .setSeconds(479978400)
                             .setNanos(123000)) // Timestamps supports microsecond precision.
+                    .build())
+            .put(
+                "instantValue",
+                Value.newBuilder()
+                    .setTimestampValue(
+                        com.google.protobuf.Timestamp.newBuilder()
+                            .setSeconds(479978400)
+                            .setNanos(123000)) // Instants supports microsecond precision.
                     .build())
             .put(
                 "arrayValue",
@@ -1183,15 +1220,15 @@ public final class LocalFirestoreHelper {
   }
 
   static class RequestResponsePair {
-    GeneratedMessageV3 request;
-    ApiFuture<? extends GeneratedMessageV3> response;
+    Message request;
+    ApiFuture<? extends Message> response;
 
-    public RequestResponsePair(
-        GeneratedMessageV3 request, ApiFuture<? extends GeneratedMessageV3> response) {
+    public RequestResponsePair(Message request, ApiFuture<? extends Message> response) {
       this.request = request;
       this.response = response;
     }
   }
+
   /**
    * Contains a map of request/response pairs that are used to create stub responses when
    * `sendRequest()` is called.
@@ -1201,7 +1238,7 @@ public final class LocalFirestoreHelper {
 
     List<Object> actualRequestList = new CopyOnWriteArrayList<>();
 
-    void put(GeneratedMessageV3 request, ApiFuture<? extends GeneratedMessageV3> response) {
+    void put(Message request, ApiFuture<? extends Message> response) {
       operationList.add(new RequestResponsePair(request, response));
     }
 
@@ -1209,7 +1246,7 @@ public final class LocalFirestoreHelper {
         ArgumentCaptor<? extends Message> argumentCaptor, FirestoreImpl firestoreMock) {
       Stubber stubber = null;
       for (final RequestResponsePair entry : operationList) {
-        Answer<ApiFuture<? extends GeneratedMessageV3>> answer =
+        Answer<ApiFuture<? extends Message>> answer =
             invocationOnMock -> {
               actualRequestList.add(invocationOnMock.getArguments()[0]);
               return entry.response;
