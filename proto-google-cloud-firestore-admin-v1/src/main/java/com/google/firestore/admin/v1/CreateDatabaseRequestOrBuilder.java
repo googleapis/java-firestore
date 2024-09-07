@@ -107,7 +107,7 @@ public interface CreateDatabaseRequestOrBuilder
    * with first character a letter and the last a letter or a number. Must not
    * be UUID-like /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.
    *
-   * "(default)" database id is also valid.
+   * "(default)" database ID is also valid.
    * </pre>
    *
    * <code>string database_id = 3 [(.google.api.field_behavior) = REQUIRED];</code>
@@ -126,7 +126,7 @@ public interface CreateDatabaseRequestOrBuilder
    * with first character a letter and the last a letter or a number. Must not
    * be UUID-like /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.
    *
-   * "(default)" database id is also valid.
+   * "(default)" database ID is also valid.
    * </pre>
    *
    * <code>string database_id = 3 [(.google.api.field_behavior) = REQUIRED];</code>

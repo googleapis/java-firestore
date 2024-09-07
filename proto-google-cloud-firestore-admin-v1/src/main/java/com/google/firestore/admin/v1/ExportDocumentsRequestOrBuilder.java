@@ -59,8 +59,8 @@ public interface ExportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * Which collection ids to export. Unspecified means all collections. Each
-   * collection id in this list must be unique.
+   * Which collection IDs to export. Unspecified means all collections. Each
+   * collection ID in this list must be unique.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
@@ -72,8 +72,8 @@ public interface ExportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * Which collection ids to export. Unspecified means all collections. Each
-   * collection id in this list must be unique.
+   * Which collection IDs to export. Unspecified means all collections. Each
+   * collection ID in this list must be unique.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
@@ -85,8 +85,8 @@ public interface ExportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * Which collection ids to export. Unspecified means all collections. Each
-   * collection id in this list must be unique.
+   * Which collection IDs to export. Unspecified means all collections. Each
+   * collection ID in this list must be unique.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
@@ -99,8 +99,8 @@ public interface ExportDocumentsRequestOrBuilder
    *
    *
    * <pre>
-   * Which collection ids to export. Unspecified means all collections. Each
-   * collection id in this list must be unique.
+   * Which collection IDs to export. Unspecified means all collections. Each
+   * collection ID in this list must be unique.
    * </pre>
    *
    * <code>repeated string collection_ids = 2;</code>
