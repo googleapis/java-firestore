@@ -38,7 +38,10 @@ public class BuiltinMetricsView {
     // Attach built-in exporter
     MetricExporter metricExporter =
         GoogleCloudMetricExporter.createWithConfiguration(
-            MetricConfiguration.builder().setProjectId(projectId).build());
+            MetricConfiguration.builder()
+                .setProjectId(projectId)
+                .setInstrumentationLibraryLabelsEnabled(false)
+                .build());
 
     builder.registerMetricReader(PeriodicMetricReader.builder(metricExporter).build());
 

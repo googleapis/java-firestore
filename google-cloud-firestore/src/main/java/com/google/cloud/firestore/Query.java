@@ -39,7 +39,6 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
-import com.google.cloud.firestore.telemetry.MetricsUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
@@ -66,11 +65,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
@@ -1742,13 +1739,6 @@ public class Query {
             .build());
 
     final AtomicReference<QueryDocumentSnapshot> lastReceivedDocument = new AtomicReference<>();
-
-    MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
-    long start = System.currentTimeMillis();
-    Map<String, String> attributes = new HashMap<>();
-    String method = transactionId != null ? "Query.get" : "Transaction.get";
-    attributes.put("method_name", method);
-
     ResponseObserver<RunQueryResponse> observer =
         new ResponseObserver<RunQueryResponse>() {
           Timestamp readTime;
@@ -1977,11 +1967,6 @@ public class Query {
                     ? TraceUtil.SPAN_NAME_QUERY_GET
                     : TraceUtil.SPAN_NAME_TRANSACTION_GET_QUERY);
 
-    MetricsUtil util = getFirestore().getOptions().getMetricsUtil();
-    long start = System.currentTimeMillis();
-    Map<String, String> attributes = new HashMap<>();
-    String method = transactionId != null ? "Query.get" : "Transaction.get";
-    attributes.put("method_name", method);
     try (Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<QuerySnapshot> result = SettableApiFuture.create();
       internalStream(
@@ -2028,8 +2013,6 @@ public class Query {
           /* isRetryRequestWithCursor= */ false);
 
       span.endAtFuture(result);
-      util.endAtFuture(result, start, attributes);
-
       return result;
     } catch (Exception error) {
       span.end(error);
