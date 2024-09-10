@@ -35,6 +35,9 @@ import com.google.api.gax.rpc.UnaryCallSettings;
 import com.google.cloud.firestore.v1.stub.FirestoreAdminStubSettings;
 import com.google.firestore.admin.v1.Backup;
 import com.google.firestore.admin.v1.BackupSchedule;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
@@ -191,6 +194,18 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
   public OperationCallSettings<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationSettings() {
     return ((FirestoreAdminStubSettings) getStubSettings()).importDocumentsOperationSettings();
+  }
+
+  /** Returns the object with the settings used for calls to bulkDeleteDocuments. */
+  public UnaryCallSettings<BulkDeleteDocumentsRequest, Operation> bulkDeleteDocumentsSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).bulkDeleteDocumentsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to bulkDeleteDocuments. */
+  public OperationCallSettings<
+          BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsOperationSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).bulkDeleteDocumentsOperationSettings();
   }
 
   /** Returns the object with the settings used for calls to createDatabase. */
@@ -473,6 +488,19 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     public OperationCallSettings.Builder<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
         importDocumentsOperationSettings() {
       return getStubSettingsBuilder().importDocumentsOperationSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to bulkDeleteDocuments. */
+    public UnaryCallSettings.Builder<BulkDeleteDocumentsRequest, Operation>
+        bulkDeleteDocumentsSettings() {
+      return getStubSettingsBuilder().bulkDeleteDocumentsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to bulkDeleteDocuments. */
+    public OperationCallSettings.Builder<
+            BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+        bulkDeleteDocumentsOperationSettings() {
+      return getStubSettingsBuilder().bulkDeleteDocumentsOperationSettings();
     }
 
     /** Returns the builder for the settings used for calls to createDatabase. */
