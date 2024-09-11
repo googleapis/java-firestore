@@ -25,6 +25,7 @@ import static org.mockito.Mockito.doReturn;
 import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.firestore.record.LocalFirestoreHelper.InvalidRecord;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.CommitRequest;
@@ -376,4 +377,25 @@ public class RecordDocumentReferenceTest {
     assertCommitEquals(expectedCommit, commitCapture.getValue());
   }
 
+    @Test
+  public void setNestedPojoWithRecordMapWithMerge() throws Exception {
+    doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
+        .when(firestoreMock)
+        .sendRequest(
+            commitCapture.capture(),
+            ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+
+    documentReference.set(NESTED_POJO_WITH_RECORD_OBJECT, SetOptions.mergeFields("first", "second")).get();
+    System.out.println("=============");
+
+    Map<String, Value> nestedUpdate = new HashMap<>();
+    Value.Builder nestedProto = Value.newBuilder();
+    nestedProto.getMapValueBuilder().putAllFields(SINGLE_COMPONENT_PROTO);
+    nestedUpdate.put("first", nestedProto.build());
+    nestedProto.getMapValueBuilder().putAllFields(ALL_SUPPORTED_TYPES_PROTO);
+    nestedUpdate.put("second", nestedProto.build());
+
+    CommitRequest expectedCommit = commit(set(nestedUpdate, Arrays.asList("first", "second")));
+    assertCommitEquals(expectedCommit, commitCapture.getValue());
+  }
 }
