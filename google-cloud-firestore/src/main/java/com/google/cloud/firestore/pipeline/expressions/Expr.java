@@ -768,14 +768,14 @@ public interface Expr {
    *
    * <pre>{@code
    * // Get the length of the 'name' field
-   * Field.of("name").length();
+   * Field.of("name").strLength();
    * }</pre>
    *
    * @return A new {@code Expr} representing the length of the string.
    */
   @BetaApi
-  default Length length() {
-    return new Length(this);
+  default StrLength strLength() {
+    return new StrLength(this);
   }
 
   /**

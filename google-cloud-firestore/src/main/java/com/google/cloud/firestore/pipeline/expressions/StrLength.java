@@ -21,9 +21,9 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.Lists;
 
 @BetaApi
-public final class Length extends Function {
+public final class StrLength extends Function {
   @InternalApi
-  Length(Expr expr) {
+  StrLength(Expr expr) {
     super("length", Lists.newArrayList(expr));
   }
 }

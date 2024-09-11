@@ -590,7 +590,7 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(Field.of("title").length().as("titleLength"), Field.of("title"))
+            .select(Field.of("title").strLength().as("titleLength"), Field.of("title"))
             .where(gt("titleLength", 20))
             .execute()
             .get();

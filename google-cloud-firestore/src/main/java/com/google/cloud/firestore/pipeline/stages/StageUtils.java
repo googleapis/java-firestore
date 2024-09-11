@@ -112,7 +112,7 @@ public final class StageUtils {
           .setName(findNearestStage.getName())
           .addArgs(encodeValue(findNearestStage.getProperty()))
           .addArgs(encodeValue(findNearestStage.getVector()))
-          .addArgs(encodeValue(findNearestStage.getOptions().getDistanceMeasure().toProtoString()))
+          .addArgs(encodeValue(findNearestStage.getDistanceMeasure().toProtoString()))
           .putOptions("limit", encodeValue(findNearestStage.getOptions().getLimit()))
           .putOptions(
               "distance_field", encodeValue(findNearestStage.getOptions().getDistanceField()))

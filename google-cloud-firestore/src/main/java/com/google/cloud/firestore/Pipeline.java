@@ -41,6 +41,7 @@ import com.google.cloud.firestore.pipeline.stages.Database;
 import com.google.cloud.firestore.pipeline.stages.Distinct;
 import com.google.cloud.firestore.pipeline.stages.Documents;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
+import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
 import com.google.cloud.firestore.pipeline.stages.GenericStage;
 import com.google.cloud.firestore.pipeline.stages.Limit;
 import com.google.cloud.firestore.pipeline.stages.Offset;
@@ -495,23 +496,29 @@ public final class Pipeline {
    * <pre>{@code
    * // Find books with similar "topicVectors" to the given targetVector
    * firestore.pipeline().collection("books")
-   *     .findNearest("topicVectors", targetVector,
+   *     .findNearest("topicVectors", targetVector, FindNearest.DistanceMeasure.cosine(),
    *        FindNearestOptions
-   *          .withLimitAndMeasure(10, DistanceMeasure.cosine())
-   *          .withOutputField("distance"));
+   *          .builder()
+   *          .limit(10)
+   *          .distanceField("distance")
+   *          .build());
    * }</pre>
    *
    * @param fieldName The name of the field containing the vector data. This field should store
    *     {@link VectorValue}.
    * @param vector The target vector to compare against.
-   * @param options Configuration options for the nearest neighbor search, such as the distance
-   *     metric to use.
+   * @param distanceMeasure The distance measure to use: cosine, euclidean, etc.
+   * @param options Configuration options for the nearest neighbor search, such as limit and output
+   *     distance field name.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
   @BetaApi
   public Pipeline findNearest(
-      String fieldName, double[] vector, FindNearest.FindNearestOptions options) {
-    return findNearest(Field.of(fieldName), vector, options);
+      String fieldName,
+      double[] vector,
+      FindNearest.DistanceMeasure distanceMeasure,
+      FindNearestOptions options) {
+    return findNearest(Field.of(fieldName), vector, distanceMeasure, options);
   }
 
   /**
@@ -527,21 +534,27 @@ public final class Pipeline {
    * <pre>{@code
    * // Find books with similar "topicVectors" to the given targetVector
    * firestore.pipeline().collection("books")
-   *     .findNearest(Field.of("topicVectors"), targetVector,
+   *     .findNearest(Field.of("topicVectors"), targetVector, FindNearest.DistanceMeasure.cosine(),
    *        FindNearestOptions
-   *          .withLimitAndMeasure(10, DistanceMeasure.cosine())
-   *          .withOutputField("distance"));
+   *          .builder()
+   *          .limit(10)
+   *          .distanceField("distance")
+   *          .build());
    * }</pre>
    *
    * @param property The expression that evaluates to a vector value using the stage inputs.
    * @param vector The target vector to compare against.
-   * @param options Configuration options for the nearest neighbor search, such as the distance
-   *     metric to use.
+   * @param distanceMeasure The distance measure to use: cosine, euclidean, etc.
+   * @param options Configuration options for the nearest neighbor search, such as limit and output
+   *     distance field name.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
   @BetaApi
   public Pipeline findNearest(
-      Expr property, double[] vector, FindNearest.FindNearestOptions options) {
+      Expr property,
+      double[] vector,
+      FindNearest.DistanceMeasure distanceMeasure,
+      FindNearestOptions options) {
     // Implementation for findNearest (add the FindNearest stage if needed)
     return new Pipeline(
         this.db,
@@ -549,7 +562,10 @@ public final class Pipeline {
             .addAll(stages)
             .add(
                 new FindNearest(
-                    property, vector, options)) // Assuming FindNearest takes these arguments
+                    property,
+                    vector,
+                    distanceMeasure,
+                    options)) // Assuming FindNearest takes these arguments
             .build());
   }
 

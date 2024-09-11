@@ -1496,15 +1496,15 @@ public class Function implements Expr {
    *
    * <pre>{@code
    * // Get the length of the 'name' field
-   * Function.length(Field.of("name"));
+   * Function.strLength(Field.of("name"));
    * }</pre>
    *
    * @param expr The expression representing the string to calculate the length of.
    * @return A new {@code Expr} representing the length of the string.
    */
   @BetaApi
-  public static Length length(Expr expr) {
-    return new Length(expr);
+  public static StrLength strLength(Expr expr) {
+    return new StrLength(expr);
   }
 
   /**
@@ -1514,15 +1514,15 @@ public class Function implements Expr {
    *
    * <pre>{@code
    * // Get the length of the 'name' field
-   * Function.length("name");
+   * Function.strLength("name");
    * }</pre>
    *
    * @param field The name of the field containing the string.
    * @return A new {@code Expr} representing the length of the string.
    */
   @BetaApi
-  public static Length length(String field) {
-    return new Length(Field.of(field));
+  public static StrLength strLength(String field) {
+    return new StrLength(Field.of(field));
   }
 
   /**
