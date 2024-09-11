@@ -1,5 +1,5 @@
 gapic_generator_version: 2.45.0
-googleapis_commitish: 2b46b7546bd801cf9bc9449843666c4b55fc574d
+googleapis_commitish: cbf696d38a963c5ab333f85fc9a910b5698ad415
 libraries_bom_version: 26.45.0
 libraries:
   - api_shortname: firestore
