@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,7 +86,6 @@ public class RecordDocumentReferenceTest {
 
   @Test
   public void doesNotSerializeAdvancedNumberTypes() {
-    System.out.println("========================== Record tests run on CI");
     Map<InvalidRecord, String> expectedErrorMessages = new HashMap<>();
 
     InvalidRecord record = new InvalidRecord(new BigInteger("0"), null, null);
