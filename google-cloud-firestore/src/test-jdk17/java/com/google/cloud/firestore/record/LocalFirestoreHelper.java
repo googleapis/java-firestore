@@ -72,6 +72,8 @@ public final class LocalFirestoreHelper {
   public static final Map<String, Value> SINGLE_COMPONENT_PROTO;
 
   public static final NestedRecord NESTED_RECORD_OBJECT;
+  public static final NestedRecordWithPOJO NESTED_RECORD_WITH_POJO_OBJECT;
+  public static final NestedPOJOWithRecord NESTED_POJO_WITH_RECORD_OBJECT;
 
   public static final ServerTimestamp SERVER_TIMESTAMP_OBJECT;
   public static final Map<String, Value> SERVER_TIMESTAMP_PROTO;
@@ -90,14 +92,41 @@ public final class LocalFirestoreHelper {
 
 
   public record SingleComponent(
+      String foo) {
+  }
+  
+  public static class SingleField {
+    public String foo = "bar";
 
-    String foo
-  ){}
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+
+      SingleField that = (SingleField) o;
+
+      return foo.equals(that.foo);
+    }
+  }
 
   public record NestedRecord(
-    SingleComponent first,
-    AllSupportedTypes second
-  ){}
+      SingleComponent first,
+      AllSupportedTypes second) {
+  }
+
+  public record NestedRecordWithPOJO(
+      SingleField first,
+      AllSupportedTypes second) {
+  }
+
+  public static class NestedPOJOWithRecord {
+    public SingleField first = new SingleField();
+    public AllSupportedTypes second = ALL_SUPPORTED_TYPES_OBJECT;
+  }
 
   public record ServerTimestamp (
 
@@ -390,6 +419,10 @@ public final class LocalFirestoreHelper {
     FIELD_TRANSFORM_COMMIT_RESPONSE = commitResponse(/* adds= */ 2, /* deletes= */ 0);
 
     NESTED_RECORD_OBJECT = new NestedRecord(SINGLE_COMPONENT_OBJECT, ALL_SUPPORTED_TYPES_OBJECT);
+
+    NESTED_RECORD_WITH_POJO_OBJECT = new NestedRecordWithPOJO(new SingleField(), ALL_SUPPORTED_TYPES_OBJECT);
+
+    NESTED_POJO_WITH_RECORD_OBJECT = new NestedPOJOWithRecord();
   }
 
   @SuppressWarnings("unchecked")

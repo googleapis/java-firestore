@@ -333,27 +333,47 @@ public class RecordDocumentReferenceTest {
     nestedProto.getMapValueBuilder().putAllFields(ALL_SUPPORTED_TYPES_PROTO);
     nestedUpdate.put("second", nestedProto.build());
 
-    List<String> updateMask =
-        Arrays.asList(
-            "first.foo",
-            "second.arrayValue",
-            "second.bytesValue",
-            "second.dateValue",
-            "second.doubleValue",
-            "second.falseValue",
-            "second.foo",
-            "second.geoPointValue",
-            "second.infValue",
-            "second.longValue",
-            "second.nanValue",
-            "second.negInfValue",
-            "second.nullValue",
-            "second.objectValue.foo",
-            "second.timestampValue",
-            "second.trueValue",
-            "second.model.foo");
+    List<String> updateMask = Arrays.asList(
+        "first.foo",
+        "second.arrayValue",
+        "second.bytesValue",
+        "second.dateValue",
+        "second.doubleValue",
+        "second.falseValue",
+        "second.foo",
+        "second.geoPointValue",
+        "second.infValue",
+        "second.longValue",
+        "second.nanValue",
+        "second.negInfValue",
+        "second.nullValue",
+        "second.objectValue.foo",
+        "second.timestampValue",
+        "second.trueValue",
+        "second.model.foo");
 
-            CommitRequest expectedCommit = commit(set(nestedUpdate, updateMask));
+    CommitRequest expectedCommit = commit(set(nestedUpdate, updateMask));
     assertCommitEquals(expectedCommit, commitCapture.getValue());
   }
+  
+  @Test
+  public void setNestedRecordWithPojoMapWithMerge() throws Exception {
+    doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
+        .when(firestoreMock)
+        .sendRequest(
+            commitCapture.capture(), ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
+
+    documentReference.set(NESTED_RECORD_WITH_POJO_OBJECT, SetOptions.mergeFields("first", "second")).get();
+
+    Map<String, Value> nestedUpdate = new HashMap<>();
+    Value.Builder nestedProto = Value.newBuilder();
+    nestedProto.getMapValueBuilder().putAllFields(SINGLE_COMPONENT_PROTO);
+    nestedUpdate.put("first", nestedProto.build());
+    nestedProto.getMapValueBuilder().putAllFields(ALL_SUPPORTED_TYPES_PROTO);
+    nestedUpdate.put("second", nestedProto.build());
+
+    CommitRequest expectedCommit = commit(set(nestedUpdate, Arrays.asList("first", "second")));
+    assertCommitEquals(expectedCommit, commitCapture.getValue());
+  }
+
 }
