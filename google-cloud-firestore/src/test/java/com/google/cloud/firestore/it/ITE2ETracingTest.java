@@ -271,7 +271,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
 
   @BeforeClass
   public static void setup() throws IOException {
-    String jobType = System.getenv("ENV_VAR_KOKORO_JOB_TYPE");
+    String jobType = System.getenv("GITHUB_ENV_VAR_KOKORO_JOB_TYPE");
 
     if (jobType != null && jobType.equalsIgnoreCase("nightly")) {
       isNightlyTesting = true;
