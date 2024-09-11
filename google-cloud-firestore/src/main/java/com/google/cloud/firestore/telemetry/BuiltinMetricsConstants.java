@@ -41,7 +41,7 @@ public class BuiltinMetricsConstants {
 
   // Metric attribute keys for labels
   // static final AttributeKey<String> LANGUAGE_KEY = AttributeKey.stringKey("language");
-  static final AttributeKey<String> METHOD_NAME_KEY = AttributeKey.stringKey("method_name");
+  static final AttributeKey<String> METHOD_KEY = AttributeKey.stringKey("method");
   static final AttributeKey<String> STATUS_KEY = AttributeKey.stringKey("status");
   public static final AttributeKey<String> DATABASE_ID_KEY = AttributeKey.stringKey("database_id");
   static final AttributeKey<String> CLIENT_LIBRARY_KEY = AttributeKey.stringKey("client_library");
@@ -113,37 +113,37 @@ public class BuiltinMetricsConstants {
   public static Map<InstrumentSelector, View> getAllViews() {
     ImmutableMap.Builder<InstrumentSelector, View> views = ImmutableMap.builder();
 
-    // Define views with COMMON_ATTRIBUTES and METHOD_NAME_KEY
+    // Define views with COMMON_ATTRIBUTES and METHOD_KEY
     defineView(
         views,
         OPERATION_LATENCY_NAME,
         GAX_METER_NAME,
-        withAdditionalAttributes(ImmutableSet.of(METHOD_NAME_KEY)));
+        withAdditionalAttributes(ImmutableSet.of(METHOD_KEY)));
     defineView(
         views,
         ATTEMPT_LATENCY_NAME,
         GAX_METER_NAME,
-        withAdditionalAttributes(ImmutableSet.of(METHOD_NAME_KEY)));
+        withAdditionalAttributes(ImmutableSet.of(METHOD_KEY)));
     defineView(
         views,
         OPERATION_COUNT_NAME,
         GAX_METER_NAME,
-        withAdditionalAttributes(ImmutableSet.of(METHOD_NAME_KEY)));
+        withAdditionalAttributes(ImmutableSet.of(METHOD_KEY)));
     defineView(
         views,
         ATTEMPT_COUNT_NAME,
         GAX_METER_NAME,
-        withAdditionalAttributes(ImmutableSet.of(METHOD_NAME_KEY)));
+        withAdditionalAttributes(ImmutableSet.of(METHOD_KEY)));
     defineView(
         views,
         FIRST_RESPONSE_LATENCY_NAME,
         FIRESTORE_METER_NAME,
-        withAdditionalAttributes(ImmutableSet.of(METHOD_NAME_KEY)));
+        withAdditionalAttributes(ImmutableSet.of(METHOD_KEY)));
     defineView(
         views,
         END_TO_END_LATENCY_NAME,
         FIRESTORE_METER_NAME,
-        withAdditionalAttributes(ImmutableSet.of(METHOD_NAME_KEY)));
+        withAdditionalAttributes(ImmutableSet.of(METHOD_KEY)));
 
     // Define views with only COMMON_ATTRIBUTES
     defineView(views, TRANSACTION_LATENCY_NAME, FIRESTORE_METER_NAME, COMMON_ATTRIBUTES);

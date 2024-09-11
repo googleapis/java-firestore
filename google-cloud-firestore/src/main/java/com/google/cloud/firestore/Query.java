@@ -39,6 +39,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
@@ -1731,6 +1732,14 @@ public class Query {
     }
 
     TraceUtil.Span currentSpan = traceUtil.currentSpan();
+
+    // TODO(mila): record transaction latency, retry counts if applicable
+    MetricsContext metricsContext =
+        getFirestore()
+            .getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(TraceUtil.SPAN_NAME_RUN_QUERY);
+
     currentSpan.addEvent(
         TraceUtil.SPAN_NAME_RUN_QUERY,
         new ImmutableMap.Builder<String, Object>()
@@ -1757,6 +1766,7 @@ public class Query {
             if (!firstResponse) {
               firstResponse = true;
               currentSpan.addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": First Response");
+              metricsContext.recordFirstResponseLatency();
             }
 
             runQueryResponseObserver.onNext(response);
@@ -1777,6 +1787,7 @@ public class Query {
             if (response.getDone()) {
               currentSpan.addEvent(
                   TraceUtil.SPAN_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
+              metricsContext.recordEndToEndLatency();
               onComplete();
             }
           }
@@ -1784,6 +1795,7 @@ public class Query {
           @Override
           public void onError(Throwable throwable) {
             QueryDocumentSnapshot cursor = lastReceivedDocument.get();
+            // TODO(mila): how do we capture e2e latency when retries are present
             if (shouldRetry(cursor, throwable)) {
               currentSpan.addEvent(
                   TraceUtil.SPAN_NAME_RUN_QUERY + ": Retryable Error",
@@ -1802,6 +1814,7 @@ public class Query {
               currentSpan.addEvent(
                   TraceUtil.SPAN_NAME_RUN_QUERY + ": Error",
                   Collections.singletonMap("error.message", throwable.getMessage()));
+              metricsContext.recordEndToEndLatency(throwable);
               runQueryResponseObserver.onError(throwable);
             }
           }
@@ -1861,6 +1874,11 @@ public class Query {
   public ApiFuture<ExplainResults<QuerySnapshot>> explain(ExplainOptions options) {
     TraceUtil.Span span =
         getFirestore().getOptions().getTraceUtil().startSpan(TraceUtil.SPAN_NAME_QUERY_GET);
+    MetricsContext metricsContext =
+        getFirestore()
+            .getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(TraceUtil.SPAN_NAME_QUERY_GET);
 
     try (Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<ExplainResults<QuerySnapshot>> result = SettableApiFuture.create();
@@ -1925,9 +1943,12 @@ public class Query {
           /* isRetryRequestWithCursor= */ false);
 
       span.endAtFuture(result);
+      metricsContext.recordEndToEndLatencyAtFuture(result);
+
       return result;
     } catch (Exception error) {
       span.end(error);
+      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }
@@ -1963,6 +1984,15 @@ public class Query {
             .getOptions()
             .getTraceUtil()
             .startSpan(
+                transactionId == null
+                    ? TraceUtil.SPAN_NAME_QUERY_GET
+                    : TraceUtil.SPAN_NAME_TRANSACTION_GET_QUERY);
+
+    MetricsContext metricsContext =
+        getFirestore()
+            .getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(
                 transactionId == null
                     ? TraceUtil.SPAN_NAME_QUERY_GET
                     : TraceUtil.SPAN_NAME_TRANSACTION_GET_QUERY);
@@ -2013,9 +2043,12 @@ public class Query {
           /* isRetryRequestWithCursor= */ false);
 
       span.endAtFuture(result);
+      metricsContext.recordEndToEndLatencyAtFuture(result);
+
       return result;
     } catch (Exception error) {
       span.end(error);
+      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }

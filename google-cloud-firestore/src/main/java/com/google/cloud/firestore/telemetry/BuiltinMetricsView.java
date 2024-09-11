@@ -17,8 +17,6 @@ package com.google.cloud.firestore.telemetry;
 
 import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.*;
 
-import com.google.cloud.opentelemetry.metric.GoogleCloudMetricExporter;
-import com.google.cloud.opentelemetry.metric.MetricConfiguration;
 import io.opentelemetry.sdk.metrics.InstrumentSelector;
 import io.opentelemetry.sdk.metrics.SdkMeterProviderBuilder;
 import io.opentelemetry.sdk.metrics.View;
@@ -35,21 +33,12 @@ public class BuiltinMetricsView {
   public static void registerBuiltinMetrics(String projectId, SdkMeterProviderBuilder builder)
       throws IOException {
 
-    // Attach built-in exporter
-    MetricExporter metricExporter =
-        GoogleCloudMetricExporter.createWithConfiguration(
-            MetricConfiguration.builder()
-                .setProjectId(projectId)
-                .setInstrumentationLibraryLabelsEnabled(false)
-                .build());
-
-    builder.registerMetricReader(PeriodicMetricReader.builder(metricExporter).build());
-
     // Filter out attributes that are not defined
     for (Map.Entry<InstrumentSelector, View> entry : getAllViews().entrySet()) {
       builder.registerView(entry.getKey(), entry.getValue());
     }
 
+    MetricExporter metricExporter = FirestoreCloudMonitoringExporter.create(projectId);
     builder.registerMetricReader(PeriodicMetricReader.create(metricExporter));
   }
 }

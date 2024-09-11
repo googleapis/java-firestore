@@ -28,6 +28,7 @@ import com.google.api.gax.tracing.OpenTelemetryMetricsRecorder;
 import com.google.cloud.firestore.FirestoreException;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Status;
 import io.opentelemetry.api.OpenTelemetry;
@@ -41,6 +42,7 @@ import io.opentelemetry.sdk.metrics.SdkMeterProviderBuilder;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
 /**
@@ -68,6 +70,9 @@ public class MetricsUtil {
   public MetricsUtil(FirestoreOptions firestoreOptions) {
     this.firestoreOptions = firestoreOptions;
 
+    // TODO(mila): this checking should be done inside FirestoreOptions builder, so that we can
+    // setApiTracerFactory
+    // to collect GAX layer metrics
     boolean createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().isMetricsEnabled();
 
     // The environment variable can override options to enable/disable telemetry collection.
@@ -83,6 +88,7 @@ public class MetricsUtil {
       }
     }
 
+    // TODO(mila): re-assess if it should follow tracing's design: enabled/disabled MetricsUtil
     if (createEnabledInstance) {
       try {
         createMetricsUtil(firestoreOptions);
@@ -93,21 +99,56 @@ public class MetricsUtil {
   }
 
   private void createMetricsUtil(FirestoreOptions firestoreOptions) throws IOException {
+    // TODO(mila): re-locate this create otel instance logic to FirestoreOptions, as we might need
+    // 2 different OTELs based on customers config
     this.openTelemetry = getDefaultOpenTelemetryInstance();
 
     OpenTelemetryMetricsRecorder recorder =
         new OpenTelemetryMetricsRecorder(openTelemetry, METER_NAME);
 
-    Map<String, String> attributes = new HashMap<>();
-    attributes.put(DATABASE_ID_KEY.toString(), firestoreOptions.getDatabaseId());
-    attributes.put(CLIENT_LIBRARY_KEY.toString(), FIRESTORE_LIBRARY_NAME);
+    this.otelApiTracerFactory = new MetricsTracerFactory(recorder, createStaticAttributes());
+    registerMetrics();
+  }
+
+  private Map<String, String> createStaticAttributes() {
+    Map<String, String> staticAttributes = new HashMap<>();
+    // TODO(mila): add client_uid to static attributes
+    staticAttributes.put(DATABASE_ID_KEY.toString(), firestoreOptions.getDatabaseId());
+    staticAttributes.put(CLIENT_LIBRARY_KEY.toString(), FIRESTORE_LIBRARY_NAME);
     String pkgVersion = this.getClass().getPackage().getImplementationVersion();
     if (pkgVersion != null) {
-      attributes.put(LIBRARY_VERSION_KEY.toString(), pkgVersion);
+      staticAttributes.put(LIBRARY_VERSION_KEY.toString(), pkgVersion);
     }
 
-    this.otelApiTracerFactory = new MetricsTracerFactory(recorder, attributes);
-    registerMetrics();
+    return staticAttributes;
+  }
+
+  @VisibleForTesting
+  Attributes toOtelAttributes(Map<String, String> attributes) {
+    AttributesBuilder attributesBuilder = Attributes.builder();
+    attributes.forEach(attributesBuilder::put);
+    return attributesBuilder.build();
+  }
+
+  private OpenTelemetry getDefaultOpenTelemetryInstance() throws IOException {
+    OpenTelemetry openTelemetry = firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
+
+    // If metrics is enabled, but an OpenTelemetry instance is not provided, create a default OTel
+    // instance.
+    if (openTelemetry == null) {
+      SdkMeterProviderBuilder sdkMeterProviderBuilder = SdkMeterProvider.builder();
+      BuiltinMetricsView.registerBuiltinMetrics(
+          firestoreOptions.getProjectId(), sdkMeterProviderBuilder);
+
+      openTelemetry =
+          OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProviderBuilder.build()).build();
+    }
+
+    return openTelemetry;
+  }
+
+  public ApiTracerFactory getOpenTelemetryApiTracerFactory() {
+    return this.otelApiTracerFactory;
   }
 
   void registerMetrics() {
@@ -126,87 +167,88 @@ public class MetricsUtil {
             .setDescription("Firestore query first response latency")
             .setUnit(MILLISECOND_UNIT)
             .build();
+    // TODO(mila): add transaction latency and retry count metrics
   }
 
-  public void endToEndRequestLatencyRecorder(double latency, Map<String, String> attributes) {
+  public void endToEndRequestLatencyRecorder(double latency, Attributes attributes) {
     if (endToEndRequestLatency != null) {
-      endToEndRequestLatency.record(latency, toOtelAttributes(attributes));
+      endToEndRequestLatency.record(latency, attributes);
     }
   }
 
-  public void firstResponseLatencyRecorder(double latency, Map<String, String> attributes) {
+  public void firstResponseLatencyRecorder(double latency, Attributes attributes) {
     if (firstResponseLatency != null) {
-      firstResponseLatency.record(latency, toOtelAttributes(attributes));
+      firstResponseLatency.record(latency, attributes);
     }
   }
 
-  private OpenTelemetry getDefaultOpenTelemetryInstance() throws IOException {
-    OpenTelemetry openTelemetry = firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
+  public MetricsContext createMetricsContext(String methodName) {
+    return new MetricsContext(methodName);
+  }
 
-    // If metrics is enabled, but an OpenTelemetry instance is not provided, create a default OTel
-    // instance.
-    if (openTelemetry == null) {
-      SdkMeterProviderBuilder sdkMeterProviderBuilder = SdkMeterProvider.builder();
+  public class MetricsContext {
+    private final Stopwatch stopwatch;
+    private final String methodName;
 
-      BuiltinMetricsView.registerBuiltinMetrics(
-          firestoreOptions.getProjectId(), sdkMeterProviderBuilder);
-
-      openTelemetry =
-          OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProviderBuilder.build()).build();
+    public MetricsContext(String methodName) {
+      this.stopwatch = Stopwatch.createStarted();
+      this.methodName = methodName;
     }
 
-    return openTelemetry;
-  }
+    public <T> void recordEndToEndLatencyAtFuture(ApiFuture<T> futureValue) {
+      ApiFutures.addCallback(
+          futureValue,
+          new ApiFutureCallback<T>() {
+            @Override
+            public void onFailure(Throwable t) {
+              recordEndToEndLatency(t);
+            }
 
-  public ApiTracerFactory getOpenTelemetryApiTracerFactory() {
-    return this.otelApiTracerFactory;
-  }
-
-  @VisibleForTesting
-  Attributes toOtelAttributes(Map<String, String> attributes) {
-    AttributesBuilder attributesBuilder = Attributes.builder();
-    attributes.forEach(attributesBuilder::put);
-    return attributesBuilder.build();
-  }
-
-  public <T> void endAtFuture(
-      ApiFuture<T> futureValue, double start, Map<String, String> attributes) {
-    ApiFutures.addCallback(
-        futureValue,
-        new ApiFutureCallback<T>() {
-          @Override
-          public void onFailure(Throwable t) {
-            double end = System.currentTimeMillis();
-            double elapsedTime = end - start;
-            attributes.put("status", extractErrorStatus(t));
-            endToEndRequestLatencyRecorder(elapsedTime, attributes);
-          }
-
-          @Override
-          public void onSuccess(T result) {
-            double end = System.currentTimeMillis();
-            double elapsedTime = end - start;
-            attributes.put("status", "OK");
-            endToEndRequestLatencyRecorder(elapsedTime, attributes);
-          }
-        },
-        MoreExecutors.directExecutor());
-  }
-
-  public void end(Throwable t, double start, Map<String, String> attributes) {
-    attributes.put("status", extractErrorStatus(t));
-    double end = System.currentTimeMillis();
-    double elapsedTime = end - start;
-    endToEndRequestLatencyRecorder(elapsedTime, attributes);
-  }
-
-  /** Function to extract the status of the error as a string */
-  public static String extractErrorStatus(@Nullable Throwable throwable) {
-    if (!(throwable instanceof FirestoreException)) {
-      return StatusCode.Code.UNKNOWN.toString();
+            @Override
+            public void onSuccess(T result) {
+              recordEndToEndLatency();
+            }
+          },
+          MoreExecutors.directExecutor());
     }
-    Status status = ((FirestoreException) throwable).getStatus();
 
-    return status.getCode().name();
+    public void recordEndToEndLatency() {
+      recordEndToEndLatency(StatusCode.Code.OK.toString());
+    }
+
+    public void recordEndToEndLatency(Throwable t) {
+      recordEndToEndLatency(extractErrorStatus(t));
+    }
+
+    private void recordEndToEndLatency(String status) {
+      double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+      Attributes attributes =
+          Attributes.builder()
+              .put(METHOD_KEY, methodName)
+              .put(STATUS_KEY, status)
+              .putAll(toOtelAttributes(createStaticAttributes()))
+              .build();
+      endToEndRequestLatencyRecorder(elapsedTime, attributes);
+    }
+
+    public void recordFirstResponseLatency() {
+      double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+      Attributes attributes =
+          Attributes.builder()
+              .put(METHOD_KEY, methodName)
+              .put(STATUS_KEY, StatusCode.Code.OK.toString())
+              .putAll(toOtelAttributes(createStaticAttributes()))
+              .build();
+      firstResponseLatencyRecorder(elapsedTime, attributes);
+    }
+
+    /** Function to extract the status of the error as a string */
+    public String extractErrorStatus(@Nullable Throwable throwable) {
+      if (!(throwable instanceof FirestoreException)) {
+        return StatusCode.Code.UNKNOWN.toString();
+      }
+      Status status = ((FirestoreException) throwable).getStatus();
+      return status.getCode().name();
+    }
   }
 }
