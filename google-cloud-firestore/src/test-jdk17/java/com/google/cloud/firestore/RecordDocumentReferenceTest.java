@@ -386,7 +386,6 @@ public class RecordDocumentReferenceTest {
             ArgumentMatchers.<UnaryCallable<CommitRequest, CommitResponse>>any());
 
     documentReference.set(NESTED_POJO_WITH_RECORD_OBJECT, SetOptions.mergeFields("first", "second")).get();
-    System.out.println("=============");
 
     Map<String, Value> nestedUpdate = new HashMap<>();
     Value.Builder nestedProto = Value.newBuilder();

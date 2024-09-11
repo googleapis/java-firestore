@@ -363,7 +363,7 @@
             </configuration>
           </plugin>
           <plugin>
-            <!-- javadoc sources java 8, but runs on java 17 on CI, raises version conflict -->
+            <!-- On CI, javadoc runs on java 17, but it sources java8 to compile and raises version conflict -->
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
             <configuration>
