@@ -17,14 +17,11 @@
 package com.google.cloud.firestore.encoding;
 
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.firestore.annotation.IgnoreExtraProperties;
-import com.google.cloud.firestore.annotation.PropertyName;
 import com.google.cloud.firestore.annotation.ServerTimestamp;
 import com.google.cloud.firestore.annotation.ThrowOnExtraProperties;
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -93,18 +90,6 @@ abstract class BeanMapper<T> {
       Map<TypeVariable<Class<T>>, Type> types,
       DeserializeContext context);
 
-  void ensureValidDocumentIdType(String fieldDescription, String operation, Type type) {
-    if (type != String.class && type != DocumentReference.class) {
-      throw new IllegalArgumentException(
-          fieldDescription
-              + " is annotated with @DocumentId but "
-              + operation
-              + " "
-              + type
-              + " instead of String or DocumentReference.");
-    }
-  }
-
   void verifyValidType(T object) {
     if (!clazz.isAssignableFrom(object.getClass())) {
       throw new IllegalArgumentException(
@@ -159,28 +144,14 @@ abstract class BeanMapper<T> {
                 + fieldType
                 + " instead of Date, Timestamp, or Instant.");
       }
-      serverTimestamps.add(propertyName(field));
+      serverTimestamps.add(EncodingUtil.propertyName(field));
     }
 
     if (field.isAnnotationPresent(DocumentId.class)) {
       Class<?> fieldType = field.getType();
-      ensureValidDocumentIdType("Field", "is", fieldType);
-      documentIdPropertyNames.add(propertyName(field));
+      EncodingUtil.ensureValidDocumentIdType("Field", "is", fieldType);
+      documentIdPropertyNames.add(EncodingUtil.propertyName(field));
     }
-  }
-
-  static String propertyName(Field field) {
-    String annotatedName = annotatedName(field);
-    return annotatedName != null ? annotatedName : field.getName();
-  }
-
-  static String annotatedName(AccessibleObject obj) {
-    if (obj.isAnnotationPresent(PropertyName.class)) {
-      PropertyName annotation = obj.getAnnotation(PropertyName.class);
-      return annotation.value();
-    }
-
-    return null;
   }
 
   Object getSerializedValue(

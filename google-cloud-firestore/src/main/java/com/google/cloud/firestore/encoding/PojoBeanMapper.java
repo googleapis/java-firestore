@@ -18,13 +18,11 @@ package com.google.cloud.firestore.encoding;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;
-import com.google.cloud.firestore.annotation.Exclude;
 import com.google.cloud.firestore.annotation.ServerTimestamp;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.time.Instant;
@@ -71,8 +69,8 @@ class PojoBeanMapper<T> extends BeanMapper<T> {
     this.constructor = constructor;
     // Add any public getters to properties (including isXyz())
     for (Method method : clazz.getMethods()) {
-      if (shouldIncludeGetter(method)) {
-        String propertyName = propertyName(method);
+      if (EncodingUtil.shouldIncludeGetter(method)) {
+        String propertyName = EncodingUtil.propertyName(method);
         addProperty(propertyName);
         method.setAccessible(true);
         if (getters.containsKey(propertyName)) {
@@ -89,8 +87,8 @@ class PojoBeanMapper<T> extends BeanMapper<T> {
 
     // Add any public fields to properties
     for (Field field : clazz.getFields()) {
-      if (shouldIncludeField(field)) {
-        String propertyName = propertyName(field);
+      if (EncodingUtil.shouldIncludeField(field)) {
+        String propertyName = EncodingUtil.propertyName(field);
         addProperty(propertyName);
         applyFieldAnnotations(field);
       }
@@ -103,8 +101,8 @@ class PojoBeanMapper<T> extends BeanMapper<T> {
     do {
       // Add any setters
       for (Method method : currentClass.getDeclaredMethods()) {
-        if (shouldIncludeSetter(method)) {
-          String propertyName = propertyName(method);
+        if (EncodingUtil.shouldIncludeSetter(method)) {
+          String propertyName = EncodingUtil.propertyName(method);
           String existingPropertyName = properties.get(propertyName.toLowerCase(Locale.US));
           if (existingPropertyName != null) {
             if (!existingPropertyName.equals(propertyName)) {
@@ -119,7 +117,7 @@ class PojoBeanMapper<T> extends BeanMapper<T> {
                 method.setAccessible(true);
                 setters.put(propertyName, method);
                 applySetterAnnotations(method);
-              } else if (!isSetterOverride(method, existingSetter)) {
+              } else if (!EncodingUtil.isSetterOverride(method, existingSetter)) {
                 // We require that setters with conflicting property names are
                 // overrides from a base class
                 if (currentClass == clazz) {
@@ -147,7 +145,7 @@ class PojoBeanMapper<T> extends BeanMapper<T> {
       }
 
       for (Field field : currentClass.getDeclaredFields()) {
-        String propertyName = propertyName(field);
+        String propertyName = EncodingUtil.propertyName(field);
 
         // Case sensitivity is checked at deserialization time
         // Fields are only added if they don't exist on a subclass
@@ -353,14 +351,14 @@ class PojoBeanMapper<T> extends BeanMapper<T> {
                 + returnType
                 + " instead of Date, Timestamp, or Instant.");
       }
-      serverTimestamps.add(propertyName(method));
+      serverTimestamps.add(EncodingUtil.propertyName(method));
     }
 
     // Even though the value will be skipped, we still check for type matching for consistency.
     if (method.isAnnotationPresent(DocumentId.class)) {
       Class<?> returnType = method.getReturnType();
-      ensureValidDocumentIdType("Method", "returns", returnType);
-      documentIdPropertyNames.add(propertyName(method));
+      EncodingUtil.ensureValidDocumentIdType("Method", "returns", returnType);
+      documentIdPropertyNames.add(EncodingUtil.propertyName(method));
     }
   }
 
@@ -375,141 +373,8 @@ class PojoBeanMapper<T> extends BeanMapper<T> {
 
     if (method.isAnnotationPresent(DocumentId.class)) {
       Class<?> paramType = method.getParameterTypes()[0];
-      ensureValidDocumentIdType("Method", "accepts", paramType);
-      documentIdPropertyNames.add(propertyName(method));
+      EncodingUtil.ensureValidDocumentIdType("Method", "accepts", paramType);
+      documentIdPropertyNames.add(EncodingUtil.propertyName(method));
     }
-  }
-
-  private static boolean shouldIncludeGetter(Method method) {
-    if (!method.getName().startsWith("get") && !method.getName().startsWith("is")) {
-      return false;
-    }
-    // Exclude methods from Object.class
-    if (method.getDeclaringClass().equals(Object.class)) {
-      return false;
-    }
-    // Non-public methods
-    if (!Modifier.isPublic(method.getModifiers())) {
-      return false;
-    }
-    // Static methods
-    if (Modifier.isStatic(method.getModifiers())) {
-      return false;
-    }
-    // No return type
-    if (method.getReturnType().equals(Void.TYPE)) {
-      return false;
-    }
-    // Non-zero parameters
-    if (method.getParameterTypes().length != 0) {
-      return false;
-    }
-    // Excluded methods
-    if (method.isAnnotationPresent(Exclude.class)) {
-      return false;
-    }
-    return true;
-  }
-
-  private static boolean shouldIncludeSetter(Method method) {
-    if (!method.getName().startsWith("set")) {
-      return false;
-    }
-    // Exclude methods from Object.class
-    if (method.getDeclaringClass().equals(Object.class)) {
-      return false;
-    }
-    // Static methods
-    if (Modifier.isStatic(method.getModifiers())) {
-      return false;
-    }
-    // Has a return type
-    if (!method.getReturnType().equals(Void.TYPE)) {
-      return false;
-    }
-    // Methods without exactly one parameters
-    if (method.getParameterTypes().length != 1) {
-      return false;
-    }
-    // Excluded methods
-    if (method.isAnnotationPresent(Exclude.class)) {
-      return false;
-    }
-    return true;
-  }
-
-  private static boolean shouldIncludeField(Field field) {
-    // Exclude methods from Object.class
-    if (field.getDeclaringClass().equals(Object.class)) {
-      return false;
-    }
-    // Non-public fields
-    if (!Modifier.isPublic(field.getModifiers())) {
-      return false;
-    }
-    // Static fields
-    if (Modifier.isStatic(field.getModifiers())) {
-      return false;
-    }
-    // Transient fields
-    if (Modifier.isTransient(field.getModifiers())) {
-      return false;
-    }
-    // Excluded fields
-    if (field.isAnnotationPresent(Exclude.class)) {
-      return false;
-    }
-    return true;
-  }
-
-  private static void hardAssert(boolean assertion, String message) {
-    if (!assertion) {
-      throw new RuntimeException("Hard assert failed: " + message);
-    }
-  }
-
-  private static boolean isSetterOverride(Method base, Method override) {
-    // We expect an overridden setter here
-    hardAssert(
-        base.getDeclaringClass().isAssignableFrom(override.getDeclaringClass()),
-        "Expected override from a base class");
-    hardAssert(base.getReturnType().equals(Void.TYPE), "Expected void return type");
-    hardAssert(override.getReturnType().equals(Void.TYPE), "Expected void return type");
-
-    Type[] baseParameterTypes = base.getParameterTypes();
-    Type[] overrideParameterTypes = override.getParameterTypes();
-    hardAssert(baseParameterTypes.length == 1, "Expected exactly one parameter");
-    hardAssert(overrideParameterTypes.length == 1, "Expected exactly one parameter");
-
-    return base.getName().equals(override.getName())
-        && baseParameterTypes[0].equals(overrideParameterTypes[0]);
-  }
-
-  private static String propertyName(Method method) {
-    String annotatedName = annotatedName(method);
-    return annotatedName != null ? annotatedName : serializedName(method.getName());
-  }
-
-  private static String serializedName(String methodName) {
-    String[] prefixes = new String[] {"get", "set", "is"};
-    String methodPrefix = null;
-    for (String prefix : prefixes) {
-      if (methodName.startsWith(prefix)) {
-        methodPrefix = prefix;
-      }
-    }
-    if (methodPrefix == null) {
-      throw new IllegalArgumentException("Unknown Bean prefix for method: " + methodName);
-    }
-    String strippedName = methodName.substring(methodPrefix.length());
-
-    // Make sure the first word or upper-case prefix is converted to lower-case
-    char[] chars = strippedName.toCharArray();
-    int pos = 0;
-    while (pos < chars.length && Character.isUpperCase(chars[pos])) {
-      chars[pos] = Character.toLowerCase(chars[pos]);
-      pos++;
-    }
-    return new String(chars);
   }
 }

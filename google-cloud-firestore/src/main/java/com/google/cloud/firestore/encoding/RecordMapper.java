@@ -60,7 +60,7 @@ class RecordMapper<T> extends BeanMapper<T> {
     try {
       for (int i = 0; i < recordComponents.length; i++) {
         Field field = clazz.getDeclaredField(RECORD_INSPECTOR.getName(recordComponents[i]));
-        String propertyName = propertyName(field);
+        String propertyName = EncodingUtil.propertyName(field);
         constructorParamIndexes.put(propertyName, i);
         accessors.put(propertyName, RECORD_INSPECTOR.getAccessor(recordComponents[i]));
         applyFieldAnnotations(field);

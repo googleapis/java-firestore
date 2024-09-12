@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore.encoding;
 
+import com.google.api.core.InternalApi;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.DocumentReference;
@@ -43,22 +44,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /** Helper class to convert to/from custom POJO classes and plain Java types. */
+@InternalApi
 public class CustomClassMapper {
 
   /** Maximum depth before we give up and assume it's a recursive object graph. */
   private static final int MAX_DEPTH = 500;
 
   private static final ConcurrentMap<Class<?>, BeanMapper<?>> mappers = new ConcurrentHashMap<>();
-
-  private static void hardAssert(boolean assertion) {
-    hardAssert(assertion, "Internal inconsistency");
-  }
-
-  private static void hardAssert(boolean assertion, String message) {
-    if (!assertion) {
-      throw new RuntimeException("Hard assert failed: " + message);
-    }
-  }
 
   /**
    * Converts a Java representation of JSON data to standard library Java data types: Map, Array,
@@ -73,7 +65,7 @@ public class CustomClassMapper {
 
   public static Map<String, Object> convertToPlainJavaTypes(Map<?, Object> update) {
     Object converted = serialize(update);
-    hardAssert(converted instanceof Map);
+    EncodingUtil.hardAssert(converted instanceof Map);
     @SuppressWarnings("unchecked")
     Map<String, Object> convertedMap = (Map<String, Object>) converted;
     return convertedMap;
@@ -155,7 +147,7 @@ public class CustomClassMapper {
       String enumName = ((Enum<?>) o).name();
       try {
         Field enumField = o.getClass().getField(enumName);
-        return BeanMapper.propertyName(enumField);
+        return EncodingUtil.propertyName(enumField);
       } catch (NoSuchFieldException ex) {
         return enumName;
       }
@@ -198,12 +190,13 @@ public class CustomClassMapper {
       // that this array always has at least one element, since the unbounded wildcard <?> always
       // has at least an upper bound of Object.
       Type[] upperBounds = ((WildcardType) type).getUpperBounds();
-      hardAssert(upperBounds.length > 0, "Unexpected type bounds on wildcard " + type);
+      EncodingUtil.hardAssert(upperBounds.length > 0, "Unexpected type bounds on wildcard " + type);
       return deserializeToType(o, upperBounds[0], context);
     } else if (type instanceof TypeVariable) {
       // As above, TypeVariables always have at least one upper bound of Object.
       Type[] upperBounds = ((TypeVariable<?>) type).getBounds();
-      hardAssert(upperBounds.length > 0, "Unexpected type bounds on type variable " + type);
+      EncodingUtil.hardAssert(
+          upperBounds.length > 0, "Unexpected type bounds on type variable " + type);
       return deserializeToType(o, upperBounds[0], context);
 
     } else if (type instanceof GenericArrayType) {
@@ -211,48 +204,6 @@ public class CustomClassMapper {
           "Generic Arrays are not supported, please use Lists instead");
     } else {
       throw context.errorPath.deserializeError("Unknown type encountered: " + type);
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private static <T> T deserializeToClass(Object o, Class<T> clazz, DeserializeContext context) {
-    if (o == null) {
-      return null;
-    } else if (clazz.isPrimitive()
-        || Number.class.isAssignableFrom(clazz)
-        || Boolean.class.isAssignableFrom(clazz)
-        || Character.class.isAssignableFrom(clazz)) {
-      return deserializeToPrimitive(o, clazz, context);
-    } else if (String.class.isAssignableFrom(clazz)) {
-      return (T) convertString(o, context);
-    } else if (Date.class.isAssignableFrom(clazz)) {
-      return (T) convertDate(o, context);
-    } else if (Timestamp.class.isAssignableFrom(clazz)) {
-      return (T) convertTimestamp(o, context);
-    } else if (Instant.class.isAssignableFrom(clazz)) {
-      return (T) convertInstant(o, context);
-    } else if (Blob.class.isAssignableFrom(clazz)) {
-      return (T) convertBlob(o, context);
-    } else if (GeoPoint.class.isAssignableFrom(clazz)) {
-      return (T) convertGeoPoint(o, context);
-    } else if (VectorValue.class.isAssignableFrom(clazz)) {
-      return (T) convertVectorValue(o, context);
-    } else if (DocumentReference.class.isAssignableFrom(clazz)) {
-      return (T) convertDocumentReference(o, context);
-    } else if (clazz.isArray()) {
-      throw context.errorPath.deserializeError(
-          "Converting to Arrays is not supported, please use Lists instead");
-    } else if (clazz.getTypeParameters().length > 0) {
-      throw context.errorPath.deserializeError(
-          "Class "
-              + clazz.getName()
-              + " has generic type parameters, please use GenericTypeIndicator instead");
-    } else if (clazz.equals(Object.class)) {
-      return (T) o;
-    } else if (clazz.isEnum()) {
-      return deserializeToEnum(o, clazz, context);
-    } else {
-      return convertBean(o, clazz, context);
     }
   }
 
@@ -297,7 +248,7 @@ public class CustomClassMapper {
         throw context.errorPath.deserializeError(
             "Only Maps with string keys are supported, but found Map with key type " + keyType);
       }
-      Map<String, Object> map = expectMap(o, context);
+      Map<String, Object> map = EncodingUtil.expectMap(o, context);
       HashMap<String, Object> result;
       try {
         result =
@@ -325,7 +276,7 @@ public class CustomClassMapper {
       throw context.errorPath.deserializeError(
           "Collections are not supported, please use Lists instead");
     } else {
-      Map<String, Object> map = expectMap(o, context);
+      Map<String, Object> map = EncodingUtil.expectMap(o, context);
       BeanMapper<T> mapper = (BeanMapper<T>) loadOrCreateBeanMapperForClass(rawType);
       HashMap<TypeVariable<Class<T>>, Type> typeMapping = new HashMap<>();
       TypeVariable<Class<T>>[] typeVariables = mapper.getClazz().getTypeParameters();
@@ -341,58 +292,54 @@ public class CustomClassMapper {
   }
 
   @SuppressWarnings("unchecked")
-  private static <T> T deserializeToPrimitive(
-      Object o, Class<T> clazz, DeserializeContext context) {
-    if (Integer.class.isAssignableFrom(clazz) || int.class.isAssignableFrom(clazz)) {
-      return (T) convertInteger(o, context);
-    } else if (Boolean.class.isAssignableFrom(clazz) || boolean.class.isAssignableFrom(clazz)) {
-      return (T) convertBoolean(o, context);
-    } else if (Double.class.isAssignableFrom(clazz) || double.class.isAssignableFrom(clazz)) {
-      return (T) convertDouble(o, context);
-    } else if (Long.class.isAssignableFrom(clazz) || long.class.isAssignableFrom(clazz)) {
-      return (T) convertLong(o, context);
-    } else if (BigDecimal.class.isAssignableFrom(clazz)) {
-      return (T) convertBigDecimal(o, context);
-    } else if (Float.class.isAssignableFrom(clazz) || float.class.isAssignableFrom(clazz)) {
-      return (T) (Float) convertDouble(o, context).floatValue();
-    } else {
+  static <T> T deserializeToClass(Object o, Class<T> clazz, DeserializeContext context) {
+    if (o == null) {
+      return null;
+    } else if (clazz.isPrimitive()
+        || Number.class.isAssignableFrom(clazz)
+        || Boolean.class.isAssignableFrom(clazz)
+        || Character.class.isAssignableFrom(clazz)) {
+      return EncodingUtil.deserializeToPrimitive(o, clazz, context);
+    } else if (String.class.isAssignableFrom(clazz)) {
+      return (T) EncodingUtil.convertString(o, context);
+    } else if (Date.class.isAssignableFrom(clazz)) {
+      return (T) EncodingUtil.convertDate(o, context);
+    } else if (Timestamp.class.isAssignableFrom(clazz)) {
+      return (T) EncodingUtil.convertTimestamp(o, context);
+    } else if (Instant.class.isAssignableFrom(clazz)) {
+      return (T) EncodingUtil.convertInstant(o, context);
+    } else if (Blob.class.isAssignableFrom(clazz)) {
+      return (T) EncodingUtil.convertBlob(o, context);
+    } else if (GeoPoint.class.isAssignableFrom(clazz)) {
+      return (T) EncodingUtil.convertGeoPoint(o, context);
+    } else if (VectorValue.class.isAssignableFrom(clazz)) {
+      return (T) EncodingUtil.convertVectorValue(o, context);
+    } else if (DocumentReference.class.isAssignableFrom(clazz)) {
+      return (T) EncodingUtil.convertDocumentReference(o, context);
+    } else if (clazz.isArray()) {
       throw context.errorPath.deserializeError(
-          String.format("Deserializing values to %s is not supported", clazz.getSimpleName()));
+          "Converting to Arrays is not supported, please use Lists instead");
+    } else if (clazz.getTypeParameters().length > 0) {
+      throw context.errorPath.deserializeError(
+          "Class "
+              + clazz.getName()
+              + " has generic type parameters, please use GenericTypeIndicator instead");
+    } else if (clazz.equals(Object.class)) {
+      return (T) o;
+    } else if (clazz.isEnum()) {
+      return EncodingUtil.deserializeToEnum(o, clazz, context);
+    } else {
+      return convertBean(o, clazz, context);
     }
   }
 
-  @SuppressWarnings("unchecked")
-  private static <T> T deserializeToEnum(
-      Object object, Class<T> clazz, DeserializeContext context) {
-    if (object instanceof String) {
-      String value = (String) object;
-      // We cast to Class without generics here since we can't prove the bound
-      // T extends Enum<T> statically
-
-      // try to use PropertyName if exist
-      Field[] enumFields = clazz.getFields();
-      for (Field field : enumFields) {
-        if (field.isEnumConstant()) {
-          String propertyName = BeanMapper.propertyName(field);
-          if (value.equals(propertyName)) {
-            value = field.getName();
-            break;
-          }
-        }
-      }
-
-      try {
-        return (T) Enum.valueOf((Class) clazz, value);
-      } catch (IllegalArgumentException e) {
-        throw context.errorPath.deserializeError(
-            "Could not find enum value of " + clazz.getName() + " for value \"" + value + "\"");
-      }
+  private static <T> T convertBean(Object o, Class<T> clazz, DeserializeContext context) {
+    BeanMapper<T> mapper = loadOrCreateBeanMapperForClass(clazz);
+    if (o instanceof Map) {
+      return mapper.deserialize(EncodingUtil.expectMap(o, context), context);
     } else {
       throw context.errorPath.deserializeError(
-          "Expected a String while deserializing to enum "
-              + clazz
-              + " but got a "
-              + object.getClass());
+          "Can't convert object of type " + o.getClass().getName() + " to type " + clazz.getName());
     }
   }
 
@@ -410,195 +357,6 @@ public class CustomClassMapper {
       mappers.put(clazz, mapper);
     }
     return mapper;
-  }
-
-  @SuppressWarnings("unchecked")
-  private static Map<String, Object> expectMap(Object object, DeserializeContext context) {
-    if (object instanceof Map) {
-      // TODO: runtime validation of keys?
-      return (Map<String, Object>) object;
-    } else {
-      throw context.errorPath.deserializeError(
-          "Expected a Map while deserializing, but got a " + object.getClass());
-    }
-  }
-
-  private static Integer convertInteger(Object o, DeserializeContext context) {
-    if (o instanceof Integer) {
-      return (Integer) o;
-    } else if (o instanceof Long || o instanceof Double) {
-      double value = ((Number) o).doubleValue();
-      if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE) {
-        return ((Number) o).intValue();
-      } else {
-        throw context.errorPath.deserializeError(
-            "Numeric value out of 32-bit integer range: "
-                + value
-                + ". Did you mean to use a long or double instead of an int?");
-      }
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert a value of type " + o.getClass().getName() + " to int");
-    }
-  }
-
-  private static Long convertLong(Object o, DeserializeContext context) {
-    if (o instanceof Integer) {
-      return ((Integer) o).longValue();
-    } else if (o instanceof Long) {
-      return (Long) o;
-    } else if (o instanceof Double) {
-      Double value = (Double) o;
-      if (value >= Long.MIN_VALUE && value <= Long.MAX_VALUE) {
-        return value.longValue();
-      } else {
-        throw context.errorPath.deserializeError(
-            "Numeric value out of 64-bit long range: "
-                + value
-                + ". Did you mean to use a double instead of a long?");
-      }
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert a value of type " + o.getClass().getName() + " to long");
-    }
-  }
-
-  private static Double convertDouble(Object o, DeserializeContext context) {
-    if (o instanceof Integer) {
-      return ((Integer) o).doubleValue();
-    } else if (o instanceof Long) {
-      Long value = (Long) o;
-      Double doubleValue = ((Long) o).doubleValue();
-      if (doubleValue.longValue() == value) {
-        return doubleValue;
-      } else {
-        throw context.errorPath.deserializeError(
-            "Loss of precision while converting number to "
-                + "double: "
-                + o
-                + ". Did you mean to use a 64-bit long instead?");
-      }
-    } else if (o instanceof Double) {
-      return (Double) o;
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert a value of type " + o.getClass().getName() + " to double");
-    }
-  }
-
-  private static BigDecimal convertBigDecimal(Object o, DeserializeContext context) {
-    if (o instanceof Integer) {
-      return BigDecimal.valueOf(((Integer) o).intValue());
-    } else if (o instanceof Long) {
-      return BigDecimal.valueOf(((Long) o).longValue());
-    } else if (o instanceof Double) {
-      return BigDecimal.valueOf(((Double) o).doubleValue()).abs();
-    } else if (o instanceof BigDecimal) {
-      return (BigDecimal) o;
-    } else if (o instanceof String) {
-      return new BigDecimal((String) o);
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert a value of type " + o.getClass().getName() + " to BigDecimal");
-    }
-  }
-
-  private static Boolean convertBoolean(Object o, DeserializeContext context) {
-    if (o instanceof Boolean) {
-      return (Boolean) o;
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert value of type " + o.getClass().getName() + " to boolean");
-    }
-  }
-
-  private static String convertString(Object o, DeserializeContext context) {
-    if (o instanceof String) {
-      return (String) o;
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert value of type " + o.getClass().getName() + " to String");
-    }
-  }
-
-  private static Date convertDate(Object o, DeserializeContext context) {
-    if (o instanceof Date) {
-      return (Date) o;
-    } else if (o instanceof Timestamp) {
-      return ((Timestamp) o).toDate();
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert value of type " + o.getClass().getName() + " to Date");
-    }
-  }
-
-  private static Timestamp convertTimestamp(Object o, DeserializeContext context) {
-    if (o instanceof Timestamp) {
-      return (Timestamp) o;
-    } else if (o instanceof Date) {
-      return Timestamp.of((Date) o);
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert value of type " + o.getClass().getName() + " to Timestamp");
-    }
-  }
-
-  private static Instant convertInstant(Object o, DeserializeContext context) {
-    if (o instanceof Timestamp) {
-      Timestamp timestamp = (Timestamp) o;
-      return Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos());
-    } else if (o instanceof Date) {
-      return Instant.ofEpochMilli(((Date) o).getTime());
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert value of type " + o.getClass().getName() + " to Instant");
-    }
-  }
-
-  private static Blob convertBlob(Object o, DeserializeContext context) {
-    if (o instanceof Blob) {
-      return (Blob) o;
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert value of type " + o.getClass().getName() + " to Blob");
-    }
-  }
-
-  private static GeoPoint convertGeoPoint(Object o, DeserializeContext context) {
-    if (o instanceof GeoPoint) {
-      return (GeoPoint) o;
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert value of type " + o.getClass().getName() + " to GeoPoint");
-    }
-  }
-
-  private static VectorValue convertVectorValue(Object o, DeserializeContext context) {
-    if (o instanceof VectorValue) {
-      return (VectorValue) o;
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert value of type " + o.getClass().getName() + " to VectorValue");
-    }
-  }
-
-  private static DocumentReference convertDocumentReference(Object o, DeserializeContext context) {
-    if (o instanceof DocumentReference) {
-      return (DocumentReference) o;
-    } else {
-      throw context.errorPath.deserializeError(
-          "Failed to convert value of type " + o.getClass().getName() + " to DocumentReference");
-    }
-  }
-
-  private static <T> T convertBean(Object o, Class<T> clazz, DeserializeContext context) {
-    BeanMapper<T> mapper = loadOrCreateBeanMapperForClass(clazz);
-    if (o instanceof Map) {
-      return mapper.deserialize(expectMap(o, context), context);
-    } else {
-      throw context.errorPath.deserializeError(
-          "Can't convert object of type " + o.getClass().getName() + " to type " + clazz.getName());
-    }
   }
 
   private static boolean isRecordType(Class<?> cls) {
