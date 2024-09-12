@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import com.google.cloud.firestore.annotation.DocumentId;
+
 /** Holds information a deserialization operation needs to complete the job. */
 class DeserializeContext {
   /**
@@ -53,6 +55,22 @@ class DeserializeContext {
 
     int getLength() {
       return length;
+    }
+
+    IllegalArgumentException serializeError(String reason) {
+      reason = "Could not serialize object. " + reason;
+      if (getLength() > 0) {
+        reason = reason + " (found in field '" + toString() + "')";
+      }
+      return new IllegalArgumentException(reason);
+    }
+
+    RuntimeException deserializeError(String reason) {
+      reason = "Could not deserialize object. " + reason;
+      if (getLength() > 0) {
+        reason = reason + " (found in field '" + toString() + "')";
+      }
+      return new RuntimeException(reason);
     }
   }
 

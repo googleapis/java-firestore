@@ -18,15 +18,10 @@ package com.google.cloud.firestore;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;
-import com.google.cloud.firestore.annotation.Exclude;
-import com.google.cloud.firestore.annotation.ServerTimestamp;
 import com.google.firestore.v1.Value;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -37,17 +32,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.logging.Logger;
 
 /** Helper class to convert to/from custom POJO classes and plain Java types. */
 class CustomClassMapper {
-  private static final Logger LOGGER = Logger.getLogger(CustomClassMapper.class.getName());
 
   /** Maximum depth before we give up and assume it's a recursive object graph. */
   private static final int MAX_DEPTH = 500;
@@ -104,8 +95,7 @@ class CustomClassMapper {
   @SuppressWarnings("unchecked")
   static <T> Object serialize(T o, DeserializeContext.ErrorPath path) {
     if (path.getLength() > MAX_DEPTH) {
-      throw serializeError(
-          path,
+      throw path.serializeError(
           "Exceeded maximum depth of "
               + MAX_DEPTH
               + ", which likely indicates there's an object cycle");
@@ -118,8 +108,7 @@ class CustomClassMapper {
       } else if (o instanceof BigDecimal) {
         return String.valueOf(o);
       } else {
-        throw serializeError(
-            path,
+        throw path.serializeError(
             String.format(
                 "Numbers of type %s are not supported, please use an int, long, float, double or BigDecimal",
                 o.getClass().getSimpleName()));
@@ -129,7 +118,7 @@ class CustomClassMapper {
     } else if (o instanceof Boolean) {
       return o;
     } else if (o instanceof Character) {
-      throw serializeError(path, "Characters are not supported, please use Strings");
+      throw path.serializeError("Characters are not supported, please use Strings");
     } else if (o instanceof Map) {
       Map<String, Object> result = new HashMap<>();
       for (Map.Entry<Object, Object> entry : ((Map<Object, Object>) o).entrySet()) {
@@ -138,7 +127,7 @@ class CustomClassMapper {
           String keyString = (String) key;
           result.put(keyString, serialize(entry.getValue(), path.child(keyString)));
         } else {
-          throw serializeError(path, "Maps with non-string keys are not supported");
+          throw path.serializeError("Maps with non-string keys are not supported");
         }
       }
       return result;
@@ -151,11 +140,11 @@ class CustomClassMapper {
         }
         return result;
       } else {
-        throw serializeError(
-            path, "Serializing Collections is not supported, please use Lists instead");
+        throw path.serializeError(
+            "Serializing Collections is not supported, please use Lists instead");
       }
     } else if (o.getClass().isArray()) {
-      throw serializeError(path, "Serializing Arrays is not supported, please use Lists instead");
+      throw path.serializeError("Serializing Arrays is not supported, please use Lists instead");
     } else if (o instanceof Enum) {
       String enumName = ((Enum<?>) o).name();
       try {
@@ -194,8 +183,8 @@ class CustomClassMapper {
     } else if (type instanceof WildcardType) {
       Type[] lowerBounds = ((WildcardType) type).getLowerBounds();
       if (lowerBounds.length > 0) {
-        throw deserializeError(
-            context.errorPath, "Generic lower-bounded wildcard types are not supported");
+        throw context.errorPath.deserializeError(
+            "Generic lower-bounded wildcard types are not supported");
       }
 
       // Upper bounded wildcards are of the form <? extends Foo>. Multiple upper bounds are allowed
@@ -212,10 +201,10 @@ class CustomClassMapper {
       return deserializeToType(o, upperBounds[0], context);
 
     } else if (type instanceof GenericArrayType) {
-      throw deserializeError(
-          context.errorPath, "Generic Arrays are not supported, please use Lists instead");
+      throw context.errorPath.deserializeError(
+          "Generic Arrays are not supported, please use Lists instead");
     } else {
-      throw deserializeError(context.errorPath, "Unknown type encountered: " + type);
+      throw context.errorPath.deserializeError("Unknown type encountered: " + type);
     }
   }
 
@@ -245,11 +234,10 @@ class CustomClassMapper {
     } else if (DocumentReference.class.isAssignableFrom(clazz)) {
       return (T) convertDocumentReference(o, context);
     } else if (clazz.isArray()) {
-      throw deserializeError(
-          context.errorPath, "Converting to Arrays is not supported, please use Lists instead");
+      throw context.errorPath.deserializeError(
+          "Converting to Arrays is not supported, please use Lists instead");
     } else if (clazz.getTypeParameters().length > 0) {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Class "
               + clazz.getName()
               + " has generic type parameters, please use GenericTypeIndicator instead");
@@ -281,8 +269,7 @@ class CustomClassMapper {
             | IllegalAccessException
             | NoSuchMethodException
             | InvocationTargetException e) {
-          throw deserializeError(
-              context.errorPath,
+          throw context.errorPath.deserializeError(
               String.format(
                   "Unable to deserialize to %s: %s", rawType.getSimpleName(), e.toString()));
         }
@@ -295,14 +282,13 @@ class CustomClassMapper {
         }
         return (T) result;
       } else {
-        throw deserializeError(context.errorPath, "Expected a List, but got a " + o.getClass());
+        throw context.errorPath.deserializeError("Expected a List, but got a " + o.getClass());
       }
     } else if (Map.class.isAssignableFrom(rawType)) {
       Type keyType = type.getActualTypeArguments()[0];
       Type valueType = type.getActualTypeArguments()[1];
       if (!keyType.equals(String.class)) {
-        throw deserializeError(
-            context.errorPath,
+        throw context.errorPath.deserializeError(
             "Only Maps with string keys are supported, but found Map with key type " + keyType);
       }
       Map<String, Object> map = expectMap(o, context);
@@ -316,8 +302,7 @@ class CustomClassMapper {
           | IllegalAccessException
           | NoSuchMethodException
           | InvocationTargetException e) {
-        throw deserializeError(
-            context.errorPath,
+        throw context.errorPath.deserializeError(
             String.format(
                 "Unable to deserialize to %s: %s", rawType.getSimpleName(), e.toString()));
       }
@@ -331,8 +316,8 @@ class CustomClassMapper {
       }
       return (T) result;
     } else if (Collection.class.isAssignableFrom(rawType)) {
-      throw deserializeError(
-          context.errorPath, "Collections are not supported, please use Lists instead");
+      throw context.errorPath.deserializeError(
+          "Collections are not supported, please use Lists instead");
     } else {
       Map<String, Object> map = expectMap(o, context);
       BeanMapper<T> mapper = (BeanMapper<T>) loadOrCreateBeanMapperForClass(rawType);
@@ -365,8 +350,7 @@ class CustomClassMapper {
     } else if (Float.class.isAssignableFrom(clazz) || float.class.isAssignableFrom(clazz)) {
       return (T) (Float) convertDouble(o, context).floatValue();
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           String.format("Deserializing values to %s is not supported", clazz.getSimpleName()));
     }
   }
@@ -394,13 +378,11 @@ class CustomClassMapper {
       try {
         return (T) Enum.valueOf((Class) clazz, value);
       } catch (IllegalArgumentException e) {
-        throw deserializeError(
-            context.errorPath,
+        throw context.errorPath.deserializeError(
             "Could not find enum value of " + clazz.getName() + " for value \"" + value + "\"");
       }
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Expected a String while deserializing to enum "
               + clazz
               + " but got a "
@@ -430,8 +412,8 @@ class CustomClassMapper {
       // TODO: runtime validation of keys?
       return (Map<String, Object>) object;
     } else {
-      throw deserializeError(
-          context.errorPath, "Expected a Map while deserializing, but got a " + object.getClass());
+      throw context.errorPath.deserializeError(
+          "Expected a Map while deserializing, but got a " + object.getClass());
     }
   }
 
@@ -443,15 +425,13 @@ class CustomClassMapper {
       if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE) {
         return ((Number) o).intValue();
       } else {
-        throw deserializeError(
-            context.errorPath,
+        throw context.errorPath.deserializeError(
             "Numeric value out of 32-bit integer range: "
                 + value
                 + ". Did you mean to use a long or double instead of an int?");
       }
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert a value of type " + o.getClass().getName() + " to int");
     }
   }
@@ -466,15 +446,13 @@ class CustomClassMapper {
       if (value >= Long.MIN_VALUE && value <= Long.MAX_VALUE) {
         return value.longValue();
       } else {
-        throw deserializeError(
-            context.errorPath,
+        throw context.errorPath.deserializeError(
             "Numeric value out of 64-bit long range: "
                 + value
                 + ". Did you mean to use a double instead of a long?");
       }
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert a value of type " + o.getClass().getName() + " to long");
     }
   }
@@ -488,8 +466,7 @@ class CustomClassMapper {
       if (doubleValue.longValue() == value) {
         return doubleValue;
       } else {
-        throw deserializeError(
-            context.errorPath,
+        throw context.errorPath.deserializeError(
             "Loss of precision while converting number to "
                 + "double: "
                 + o
@@ -498,8 +475,7 @@ class CustomClassMapper {
     } else if (o instanceof Double) {
       return (Double) o;
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert a value of type " + o.getClass().getName() + " to double");
     }
   }
@@ -516,8 +492,7 @@ class CustomClassMapper {
     } else if (o instanceof String) {
       return new BigDecimal((String) o);
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert a value of type " + o.getClass().getName() + " to BigDecimal");
     }
   }
@@ -526,8 +501,7 @@ class CustomClassMapper {
     if (o instanceof Boolean) {
       return (Boolean) o;
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert value of type " + o.getClass().getName() + " to boolean");
     }
   }
@@ -536,8 +510,7 @@ class CustomClassMapper {
     if (o instanceof String) {
       return (String) o;
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert value of type " + o.getClass().getName() + " to String");
     }
   }
@@ -548,8 +521,7 @@ class CustomClassMapper {
     } else if (o instanceof Timestamp) {
       return ((Timestamp) o).toDate();
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert value of type " + o.getClass().getName() + " to Date");
     }
   }
@@ -560,8 +532,7 @@ class CustomClassMapper {
     } else if (o instanceof Date) {
       return Timestamp.of((Date) o);
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert value of type " + o.getClass().getName() + " to Timestamp");
     }
   }
@@ -573,8 +544,7 @@ class CustomClassMapper {
     } else if (o instanceof Date) {
       return Instant.ofEpochMilli(((Date) o).getTime());
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert value of type " + o.getClass().getName() + " to Instant");
     }
   }
@@ -583,8 +553,7 @@ class CustomClassMapper {
     if (o instanceof Blob) {
       return (Blob) o;
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert value of type " + o.getClass().getName() + " to Blob");
     }
   }
@@ -593,8 +562,7 @@ class CustomClassMapper {
     if (o instanceof GeoPoint) {
       return (GeoPoint) o;
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert value of type " + o.getClass().getName() + " to GeoPoint");
     }
   }
@@ -603,8 +571,7 @@ class CustomClassMapper {
     if (o instanceof VectorValue) {
       return (VectorValue) o;
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert value of type " + o.getClass().getName() + " to VectorValue");
     }
   }
@@ -613,8 +580,7 @@ class CustomClassMapper {
     if (o instanceof DocumentReference) {
       return (DocumentReference) o;
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Failed to convert value of type " + o.getClass().getName() + " to DocumentReference");
     }
   }
@@ -624,509 +590,13 @@ class CustomClassMapper {
     if (o instanceof Map) {
       return mapper.deserialize(expectMap(o, context), context);
     } else {
-      throw deserializeError(
-          context.errorPath,
+      throw context.errorPath.deserializeError(
           "Can't convert object of type " + o.getClass().getName() + " to type " + clazz.getName());
     }
-  }
-
-  private static IllegalArgumentException serializeError(
-      DeserializeContext.ErrorPath path, String reason) {
-    reason = "Could not serialize object. " + reason;
-    if (path.getLength() > 0) {
-      reason = reason + " (found in field '" + path.toString() + "')";
-    }
-    return new IllegalArgumentException(reason);
-  }
-
-  private static RuntimeException deserializeError(
-      DeserializeContext.ErrorPath path, String reason) {
-    reason = "Could not deserialize object. " + reason;
-    if (path.getLength() > 0) {
-      reason = reason + " (found in field '" + path.toString() + "')";
-    }
-    return new RuntimeException(reason);
   }
 
   private static boolean isRecordType(Class<?> cls) {
     Class<?> parent = cls.getSuperclass();
     return parent != null && "java.lang.Record".equals(parent.getName());
-  }
-
-  // Helper class to convert from maps to custom objects (Beans), and vice versa.
-  private static class PojoBeanMapper<T> extends BeanMapper<T> {
-    private final Constructor<T> constructor;
-
-    // Case insensitive mapping of properties to their case sensitive versions
-    private final Map<String, String> properties;
-
-    // Below are maps to find getter/setter/field from a given property name.
-    // A property name is the name annotated by @PropertyName, if exists; or their property name
-    // following the Java Bean convention: field name is kept as-is while getters/setters will have
-    // their prefixes removed. See method propertyName for details.
-    private final Map<String, Method> getters;
-    private final Map<String, Method> setters;
-    private final Map<String, Field> fields;
-
-    PojoBeanMapper(Class<T> clazz) {
-      super(clazz);
-      properties = new HashMap<>();
-
-      setters = new HashMap<>();
-      getters = new HashMap<>();
-      fields = new HashMap<>();
-
-      Constructor<T> constructor;
-      try {
-        constructor = clazz.getDeclaredConstructor();
-        constructor.setAccessible(true);
-      } catch (NoSuchMethodException e) {
-        // We will only fail at deserialization time if no constructor is present
-        constructor = null;
-      }
-      this.constructor = constructor;
-      // Add any public getters to properties (including isXyz())
-      for (Method method : clazz.getMethods()) {
-        if (shouldIncludeGetter(method)) {
-          String propertyName = propertyName(method);
-          addProperty(propertyName);
-          method.setAccessible(true);
-          if (getters.containsKey(propertyName)) {
-            throw new RuntimeException(
-                "Found conflicting getters for name "
-                    + method.getName()
-                    + " on class "
-                    + clazz.getName());
-          }
-          getters.put(propertyName, method);
-          applyGetterAnnotations(method);
-        }
-      }
-
-      // Add any public fields to properties
-      for (Field field : clazz.getFields()) {
-        if (shouldIncludeField(field)) {
-          String propertyName = propertyName(field);
-          addProperty(propertyName);
-          applyFieldAnnotations(field);
-        }
-      }
-
-      // We can use private setters and fields for known (public) properties/getters. Since
-      // getMethods/getFields only returns public methods/fields we need to traverse the
-      // class hierarchy to find the appropriate setter or field.
-      Class<? super T> currentClass = clazz;
-      do {
-        // Add any setters
-        for (Method method : currentClass.getDeclaredMethods()) {
-          if (shouldIncludeSetter(method)) {
-            String propertyName = propertyName(method);
-            String existingPropertyName = properties.get(propertyName.toLowerCase(Locale.US));
-            if (existingPropertyName != null) {
-              if (!existingPropertyName.equals(propertyName)) {
-                throw new RuntimeException(
-                    "Found setter on "
-                        + currentClass.getName()
-                        + " with invalid case-sensitive name: "
-                        + method.getName());
-              } else {
-                Method existingSetter = setters.get(propertyName);
-                if (existingSetter == null) {
-                  method.setAccessible(true);
-                  setters.put(propertyName, method);
-                  applySetterAnnotations(method);
-                } else if (!isSetterOverride(method, existingSetter)) {
-                  // We require that setters with conflicting property names are
-                  // overrides from a base class
-                  if (currentClass == clazz) {
-                    // TODO: Should we support overloads?
-                    throw new RuntimeException(
-                        "Class "
-                            + clazz.getName()
-                            + " has multiple setter overloads with name "
-                            + method.getName());
-                  } else {
-                    throw new RuntimeException(
-                        "Found conflicting setters "
-                            + "with name: "
-                            + method.getName()
-                            + " (conflicts with "
-                            + existingSetter.getName()
-                            + " defined on "
-                            + existingSetter.getDeclaringClass().getName()
-                            + ")");
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        for (Field field : currentClass.getDeclaredFields()) {
-          String propertyName = propertyName(field);
-
-          // Case sensitivity is checked at deserialization time
-          // Fields are only added if they don't exist on a subclass
-          if (properties.containsKey(propertyName.toLowerCase(Locale.US))
-              && !fields.containsKey(propertyName)) {
-            field.setAccessible(true);
-            fields.put(propertyName, field);
-            applyFieldAnnotations(field);
-          }
-        }
-
-        // Traverse class hierarchy until we reach java.lang.Object which contains a bunch
-        // of fields/getters we don't want to serialize
-        currentClass = currentClass.getSuperclass();
-      } while (currentClass != null && !currentClass.equals(Object.class));
-
-      if (properties.isEmpty()) {
-        throw new RuntimeException("No properties to serialize found on class " + clazz.getName());
-      }
-
-      // Make sure we can write to @DocumentId annotated properties before proceeding.
-      for (String docIdProperty : documentIdPropertyNames) {
-        if (!setters.containsKey(docIdProperty) && !fields.containsKey(docIdProperty)) {
-          throw new RuntimeException(
-              "@DocumentId is annotated on property "
-                  + docIdProperty
-                  + " of class "
-                  + clazz.getName()
-                  + " but no field or public setter was found");
-        }
-      }
-    }
-
-    private void addProperty(String property) {
-      String oldValue = properties.put(property.toLowerCase(Locale.US), property);
-      if (oldValue != null && !property.equals(oldValue)) {
-        throw new RuntimeException(
-            "Found two getters or fields with conflicting case "
-                + "sensitivity for property: "
-                + property.toLowerCase(Locale.US));
-      }
-    }
-
-    @Override
-    T deserialize(
-        Map<String, Object> values,
-        Map<TypeVariable<Class<T>>, Type> types,
-        DeserializeContext context) {
-      if (constructor == null) {
-        throw deserializeError(
-            context.errorPath,
-            "Class "
-                + getClazz().getName()
-                + " does not define a no-argument constructor. If you are using ProGuard, make "
-                + "sure these constructors are not stripped");
-      }
-
-      T instance;
-      try {
-        instance = constructor.newInstance();
-      } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-        throw new RuntimeException(e);
-      }
-      HashSet<String> deserialzedProperties = new HashSet<>();
-      for (Map.Entry<String, Object> entry : values.entrySet()) {
-        String propertyName = entry.getKey();
-        DeserializeContext.ErrorPath childPath = context.errorPath.child(propertyName);
-        if (setters.containsKey(propertyName)) {
-          Method setter = setters.get(propertyName);
-          Type[] params = setter.getGenericParameterTypes();
-          if (params.length != 1) {
-            throw deserializeError(childPath, "Setter does not have exactly one parameter");
-          }
-          Type resolvedType = resolveType(params[0], types);
-          Object value =
-              CustomClassMapper.deserializeToType(
-                  entry.getValue(), resolvedType, context.newInstanceWithErrorPath(childPath));
-          try {
-            setter.invoke(instance, value);
-          } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-          }
-          deserialzedProperties.add(propertyName);
-        } else if (fields.containsKey(propertyName)) {
-          Field field = fields.get(propertyName);
-          Type resolvedType = resolveType(field.getGenericType(), types);
-          Object value =
-              CustomClassMapper.deserializeToType(
-                  entry.getValue(), resolvedType, context.newInstanceWithErrorPath(childPath));
-          try {
-            field.set(instance, value);
-          } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-          }
-          deserialzedProperties.add(propertyName);
-        } else {
-          String message =
-              "No setter/field for " + propertyName + " found on class " + getClazz().getName();
-          if (properties.containsKey(propertyName.toLowerCase(Locale.US))) {
-            message += " (fields/setters are case sensitive!)";
-          }
-          if (isThrowOnUnknownProperties()) {
-            throw new RuntimeException(message);
-          } else if (isWarnOnUnknownProperties()) {
-            LOGGER.warning(message);
-          }
-        }
-      }
-      populateDocumentIdProperties(types, context, instance, deserialzedProperties);
-
-      return instance;
-    }
-
-    // Populate @DocumentId annotated fields. If there is a conflict (@DocumentId annotation is
-    // applied to a property that is already deserialized from the firestore document)
-    // a runtime exception will be thrown.
-    private void populateDocumentIdProperties(
-        Map<TypeVariable<Class<T>>, Type> types,
-        DeserializeContext context,
-        T instance,
-        HashSet<String> deserialzedProperties) {
-      for (String docIdPropertyName : documentIdPropertyNames) {
-        checkForDocIdConflict(docIdPropertyName, deserialzedProperties, context);
-        DeserializeContext.ErrorPath childPath = context.errorPath.child(docIdPropertyName);
-        if (setters.containsKey(docIdPropertyName)) {
-          Method setter = setters.get(docIdPropertyName);
-          Type[] params = setter.getGenericParameterTypes();
-          if (params.length != 1) {
-            throw deserializeError(childPath, "Setter does not have exactly one parameter");
-          }
-          Type resolvedType = resolveType(params[0], types);
-          try {
-            if (resolvedType == String.class) {
-              setter.invoke(instance, context.documentRef.getId());
-            } else {
-              setter.invoke(instance, context.documentRef);
-            }
-          } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-          }
-        } else {
-          Field docIdField = fields.get(docIdPropertyName);
-          try {
-            if (docIdField.getType() == String.class) {
-              docIdField.set(instance, context.documentRef.getId());
-            } else {
-              docIdField.set(instance, context.documentRef);
-            }
-          } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-          }
-        }
-      }
-    }
-
-    @Override
-    Map<String, Object> serialize(T object, DeserializeContext.ErrorPath path) {
-      verifyValidType(object);
-      Map<String, Object> result = new HashMap<>();
-      for (String property : properties.values()) {
-        // Skip @DocumentId annotated properties;
-        if (documentIdPropertyNames.contains(property)) {
-          continue;
-        }
-
-        Object propertyValue;
-        if (getters.containsKey(property)) {
-          Method getter = getters.get(property);
-          try {
-            propertyValue = getter.invoke(object);
-          } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-          }
-        } else {
-          // Must be a field
-          Field field = fields.get(property);
-          if (field == null) {
-            throw new IllegalStateException("Bean property without field or getter: " + property);
-          }
-          try {
-            propertyValue = field.get(object);
-          } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-          }
-        }
-
-        Object serializedValue;
-        if (serverTimestamps.contains(property) && propertyValue == null) {
-          // Replace null ServerTimestamp-annotated fields with the sentinel.
-          serializedValue = FieldValue.serverTimestamp();
-        } else {
-          serializedValue = CustomClassMapper.serialize(propertyValue, path.child(property));
-        }
-        result.put(property, serializedValue);
-      }
-      return result;
-    }
-
-    private void applyGetterAnnotations(Method method) {
-      if (method.isAnnotationPresent(ServerTimestamp.class)) {
-        Class<?> returnType = method.getReturnType();
-        if (returnType != Date.class
-            && returnType != Timestamp.class
-            && returnType != Instant.class) {
-          throw new IllegalArgumentException(
-              "Method "
-                  + method.getName()
-                  + " is annotated with @ServerTimestamp but returns "
-                  + returnType
-                  + " instead of Date, Timestamp, or Instant.");
-        }
-        serverTimestamps.add(propertyName(method));
-      }
-
-      // Even though the value will be skipped, we still check for type matching for consistency.
-      if (method.isAnnotationPresent(DocumentId.class)) {
-        Class<?> returnType = method.getReturnType();
-        ensureValidDocumentIdType("Method", "returns", returnType);
-        documentIdPropertyNames.add(propertyName(method));
-      }
-    }
-
-    private void applySetterAnnotations(Method method) {
-      if (method.isAnnotationPresent(ServerTimestamp.class)) {
-        throw new IllegalArgumentException(
-            "Method "
-                + method.getName()
-                + " is annotated with @ServerTimestamp but should not be. @ServerTimestamp can"
-                + " only be applied to fields and getters, not setters.");
-      }
-
-      if (method.isAnnotationPresent(DocumentId.class)) {
-        Class<?> paramType = method.getParameterTypes()[0];
-        ensureValidDocumentIdType("Method", "accepts", paramType);
-        documentIdPropertyNames.add(propertyName(method));
-      }
-    }
-
-    private static boolean shouldIncludeGetter(Method method) {
-      if (!method.getName().startsWith("get") && !method.getName().startsWith("is")) {
-        return false;
-      }
-      // Exclude methods from Object.class
-      if (method.getDeclaringClass().equals(Object.class)) {
-        return false;
-      }
-      // Non-public methods
-      if (!Modifier.isPublic(method.getModifiers())) {
-        return false;
-      }
-      // Static methods
-      if (Modifier.isStatic(method.getModifiers())) {
-        return false;
-      }
-      // No return type
-      if (method.getReturnType().equals(Void.TYPE)) {
-        return false;
-      }
-      // Non-zero parameters
-      if (method.getParameterTypes().length != 0) {
-        return false;
-      }
-      // Excluded methods
-      if (method.isAnnotationPresent(Exclude.class)) {
-        return false;
-      }
-      return true;
-    }
-
-    private static boolean shouldIncludeSetter(Method method) {
-      if (!method.getName().startsWith("set")) {
-        return false;
-      }
-      // Exclude methods from Object.class
-      if (method.getDeclaringClass().equals(Object.class)) {
-        return false;
-      }
-      // Static methods
-      if (Modifier.isStatic(method.getModifiers())) {
-        return false;
-      }
-      // Has a return type
-      if (!method.getReturnType().equals(Void.TYPE)) {
-        return false;
-      }
-      // Methods without exactly one parameters
-      if (method.getParameterTypes().length != 1) {
-        return false;
-      }
-      // Excluded methods
-      if (method.isAnnotationPresent(Exclude.class)) {
-        return false;
-      }
-      return true;
-    }
-
-    private static boolean shouldIncludeField(Field field) {
-      // Exclude methods from Object.class
-      if (field.getDeclaringClass().equals(Object.class)) {
-        return false;
-      }
-      // Non-public fields
-      if (!Modifier.isPublic(field.getModifiers())) {
-        return false;
-      }
-      // Static fields
-      if (Modifier.isStatic(field.getModifiers())) {
-        return false;
-      }
-      // Transient fields
-      if (Modifier.isTransient(field.getModifiers())) {
-        return false;
-      }
-      // Excluded fields
-      if (field.isAnnotationPresent(Exclude.class)) {
-        return false;
-      }
-      return true;
-    }
-
-    private static boolean isSetterOverride(Method base, Method override) {
-      // We expect an overridden setter here
-      hardAssert(
-          base.getDeclaringClass().isAssignableFrom(override.getDeclaringClass()),
-          "Expected override from a base class");
-      hardAssert(base.getReturnType().equals(Void.TYPE), "Expected void return type");
-      hardAssert(override.getReturnType().equals(Void.TYPE), "Expected void return type");
-
-      Type[] baseParameterTypes = base.getParameterTypes();
-      Type[] overrideParameterTypes = override.getParameterTypes();
-      hardAssert(baseParameterTypes.length == 1, "Expected exactly one parameter");
-      hardAssert(overrideParameterTypes.length == 1, "Expected exactly one parameter");
-
-      return base.getName().equals(override.getName())
-          && baseParameterTypes[0].equals(overrideParameterTypes[0]);
-    }
-
-    private static String propertyName(Method method) {
-      String annotatedName = annotatedName(method);
-      return annotatedName != null ? annotatedName : serializedName(method.getName());
-    }
-
-    private static String serializedName(String methodName) {
-      String[] prefixes = new String[] {"get", "set", "is"};
-      String methodPrefix = null;
-      for (String prefix : prefixes) {
-        if (methodName.startsWith(prefix)) {
-          methodPrefix = prefix;
-        }
-      }
-      if (methodPrefix == null) {
-        throw new IllegalArgumentException("Unknown Bean prefix for method: " + methodName);
-      }
-      String strippedName = methodName.substring(methodPrefix.length());
-
-      // Make sure the first word or upper-case prefix is converted to lower-case
-      char[] chars = strippedName.toCharArray();
-      int pos = 0;
-      while (pos < chars.length && Character.isUpperCase(chars[pos])) {
-        chars[pos] = Character.toLowerCase(chars[pos]);
-        pos++;
-      }
-      return new String(chars);
-    }
   }
 }

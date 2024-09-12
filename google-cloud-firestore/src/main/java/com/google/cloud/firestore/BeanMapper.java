@@ -180,4 +180,14 @@ abstract class BeanMapper<T> {
 
     return null;
   }
+
+  Object getSerializedValue(
+      String property, Object propertyValue, DeserializeContext.ErrorPath path) {
+    if (serverTimestamps.contains(property) && propertyValue == null) {
+      // Replace null ServerTimestamp-annotated fields with the sentinel.
+      return FieldValue.serverTimestamp();
+    } else {
+      return CustomClassMapper.serialize(propertyValue, path.child(property));
+    }
+  }
 }

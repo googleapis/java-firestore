@@ -35,8 +35,6 @@ import java.util.logging.Logger;
  * exclusion of fields is not supported. Supports DocumentId, PropertyName, and ServerTimestamp
  * annotations on record components. Since records are not supported in JDK versions < 16,
  * reflection is used for inspecting record metadata.
- *
- * @author Eran Leshem
  */
 class RecordMapper<T> extends BeanMapper<T> {
   private static final Logger LOGGER = Logger.getLogger(RecordMapper.class.getName());
@@ -91,13 +89,8 @@ class RecordMapper<T> extends BeanMapper<T> {
         throw new RuntimeException(e);
       }
 
-      Object serializedValue;
-      if (serverTimestamps.contains(property) && propertyValue == null) {
-        // Replace null ServerTimestamp-annotated fields with the sentinel.
-        serializedValue = FieldValue.serverTimestamp();
-      } else {
-        serializedValue = CustomClassMapper.serialize(propertyValue, path.child(property));
-      }
+      Object serializedValue = getSerializedValue(property, propertyValue, path);
+
       result.put(property, serializedValue);
     }
     return result;
@@ -108,6 +101,13 @@ class RecordMapper<T> extends BeanMapper<T> {
       Map<String, Object> values,
       Map<TypeVariable<Class<T>>, Type> types,
       DeserializeContext context) {
+    if (constructor == null) {
+      throw context.errorPath.deserializeError(
+          "Class "
+              + getClazz().getName()
+              + " does not define a no-argument constructor. If you are using ProGuard, make "
+              + "sure these constructors are not stripped");
+    }
     Object[] constructorParams = new Object[constructor.getParameterCount()];
     Set<String> deserializedProperties = new HashSet<>(values.size());
     for (Map.Entry<String, Object> entry : values.entrySet()) {
@@ -127,7 +127,6 @@ class RecordMapper<T> extends BeanMapper<T> {
         if (isThrowOnUnknownProperties()) {
           throw new RuntimeException(message);
         }
-
         if (isWarnOnUnknownProperties()) {
           LOGGER.warning(message);
         }
@@ -150,9 +149,9 @@ class RecordMapper<T> extends BeanMapper<T> {
       Map<TypeVariable<Class<T>>, Type> types,
       DeserializeContext context,
       Object[] params,
-      Set<String> deserialzedProperties) {
+      Set<String> deserializedProperties) {
     for (String docIdPropertyName : documentIdPropertyNames) {
-      checkForDocIdConflict(docIdPropertyName, deserialzedProperties, context);
+      checkForDocIdConflict(docIdPropertyName, deserializedProperties, context);
 
       if (accessors.containsKey(docIdPropertyName)) {
         Object id;
