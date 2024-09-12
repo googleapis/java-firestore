@@ -16,7 +16,15 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.record.LocalFirestoreHelper.*;
+import static com.google.cloud.firestore.LocalFirestoreHelper.assertCommitEquals;
+import static com.google.cloud.firestore.LocalFirestoreHelper.commit;
+import static com.google.cloud.firestore.LocalFirestoreHelper.create;
+import static com.google.cloud.firestore.LocalFirestoreHelper.getAllResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.map;
+import static com.google.cloud.firestore.LocalFirestoreHelper.serverTimestamp;
+import static com.google.cloud.firestore.LocalFirestoreHelper.set;
+import static com.google.cloud.firestore.LocalFirestoreHelper.transform;
+import static com.google.cloud.firestore.RecordTestHelper.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
@@ -25,7 +33,6 @@ import static org.mockito.Mockito.doReturn;
 import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.UnaryCallable;
-import com.google.cloud.firestore.record.LocalFirestoreHelper.InvalidRecord;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.firestore.v1.BatchGetDocumentsRequest;
 import com.google.firestore.v1.CommitRequest;

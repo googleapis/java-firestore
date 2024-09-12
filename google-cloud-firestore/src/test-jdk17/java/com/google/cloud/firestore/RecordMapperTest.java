@@ -40,8 +40,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.cloud.firestore.record.LocalFirestoreHelper.fromSingleQuotedString;
-import static com.google.cloud.firestore.record.LocalFirestoreHelper.mapAnyType;
+import static com.google.cloud.firestore.LocalFirestoreHelper.fromSingleQuotedString;
+import static com.google.cloud.firestore.LocalFirestoreHelper.mapAnyType;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;

@@ -14,54 +14,34 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore.record;
+package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutures;
-import com.google.api.gax.rpc.ResponseObserver;
-import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.Blob;
-import com.google.cloud.firestore.GeoPoint;
+import com.google.cloud.firestore.LocalFirestoreHelper.SingleField;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.ArrayValue;
-import com.google.firestore.v1.BatchGetDocumentsResponse;
-import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
-import com.google.firestore.v1.Document;
-import com.google.firestore.v1.DocumentMask;
-import com.google.firestore.v1.DocumentTransform.FieldTransform;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
-import com.google.firestore.v1.Write;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.protobuf.ByteString;
 import com.google.protobuf.NullValue;
 import com.google.type.LatLng;
-import java.lang.reflect.Type;
-import org.mockito.stubbing.Answer;
 
-import javax.annotation.Nullable;
+import static com.google.cloud.firestore.LocalFirestoreHelper.commitResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.map;
+
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
-
-public final class LocalFirestoreHelper {
+public final class RecordTestHelper {
 
   public static final String DATABASE_NAME;
   public static final String DOCUMENT_PATH;
@@ -95,24 +75,6 @@ public final class LocalFirestoreHelper {
       String foo) {
   }
   
-  public static class SingleField {
-    public String foo = "bar";
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (o == null || getClass() != o.getClass()) {
-        return false;
-      }
-
-      SingleField that = (SingleField) o;
-
-      return foo.equals(that.foo);
-    }
-  }
-
   public record NestedRecord(
       SingleComponent first,
       AllSupportedTypes second) {
@@ -146,172 +108,6 @@ public final class LocalFirestoreHelper {
     Short shortValue
   ){}
 
-  public static <K, V> Map<K, V> map(K key, V value, Object... moreKeysAndValues) {
-    Map<K, V> map = new HashMap<>();
-    map.put(key, value);
-
-    for (int i = 0; i < moreKeysAndValues.length; i += 2) {
-      map.put((K) moreKeysAndValues[i], (V) moreKeysAndValues[i + 1]);
-    }
-
-    return map;
-  }
-
-  public static Answer<BatchGetDocumentsResponse> getAllResponse(
-      final Map<String, Value>... fields) {
-        BatchGetDocumentsResponse[] responses = new BatchGetDocumentsResponse[fields.length];
-
-    for (int i = 0; i < fields.length; ++i) {
-      String name = DOCUMENT_NAME;
-      if (fields.length > 1) {
-        name += i + 1;
-      }
-      BatchGetDocumentsResponse.Builder response = BatchGetDocumentsResponse.newBuilder();
-      response
-          .getFoundBuilder()
-          .setCreateTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(1).setNanos(2));
-      response
-          .getFoundBuilder()
-          .setUpdateTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(3).setNanos(4));
-      response.setReadTime(com.google.protobuf.Timestamp.newBuilder().setSeconds(5).setNanos(6));
-      response.getFoundBuilder().setName(name).putAllFields(fields[i]);
-      responses[i] = response.build();
-    }
-
-    return streamingResponse(responses, null);
-  }
-
-  /** Returns a stream of responses followed by an optional exception. */
-  public static <T> Answer<T> streamingResponse(
-      final T[] response, @Nullable final Throwable throwable) {
-    return invocation -> {
-      Object[] args = invocation.getArguments();
-      ResponseObserver<T> observer = (ResponseObserver<T>) args[1];
-      observer.onStart(mock(StreamController.class));
-      for (T resp : response) {
-        observer.onResponse(resp);
-      }
-      if (throwable != null) {
-        observer.onError(throwable);
-      }
-      observer.onComplete();
-      return null;
-    };
-  }
-
-  public static ApiFuture<CommitResponse> commitResponse(int adds, int deletes) {
-    CommitResponse.Builder commitResponse = CommitResponse.newBuilder();
-    commitResponse.getCommitTimeBuilder().setSeconds(0).setNanos(0);
-    for (int i = 0; i < adds; ++i) {
-      commitResponse.addWriteResultsBuilder().getUpdateTimeBuilder().setSeconds(i).setNanos(i);
-    }
-    for (int i = 0; i < deletes; ++i) {
-      commitResponse.addWriteResultsBuilder();
-    }
-    return ApiFutures.immediateFuture(commitResponse.build());
-  }
-
-  public static FieldTransform serverTimestamp() {
-    return FieldTransform.newBuilder()
-        .setSetToServerValue(FieldTransform.ServerValue.REQUEST_TIME)
-        .build();
-  }
-
-  public static List<FieldTransform> transform(
-      String fieldPath, FieldTransform fieldTransform, Object... fieldPathOrTransform) {
-
-    List<FieldTransform> transforms = new ArrayList<>();
-    FieldTransform.Builder transformBuilder = FieldTransform.newBuilder();
-    transformBuilder.setFieldPath(fieldPath).mergeFrom(fieldTransform);
-
-    transforms.add(transformBuilder.build());
-
-    for (int i = 0; i < fieldPathOrTransform.length; i += 2) {
-      String path = (String) fieldPathOrTransform[i];
-      FieldTransform transform = (FieldTransform) fieldPathOrTransform[i + 1];
-      transforms.add(FieldTransform.newBuilder().setFieldPath(path).mergeFrom(transform).build());
-    }
-    return transforms;
-  }
-
-  public static Write create(Map<String, Value> fields, String docPath) {
-    Write.Builder write = Write.newBuilder();
-    Document.Builder document = write.getUpdateBuilder();
-    document.setName(DOCUMENT_ROOT + docPath);
-    document.putAllFields(fields);
-    write.getCurrentDocumentBuilder().setExists(false);
-    return write.build();
-  }
-
-  public static Write create(Map<String, Value> fields) {
-    return create(fields, DOCUMENT_PATH);
-  }
-
-  public static Write set(Map<String, Value> fields) {
-    return set(fields, null, DOCUMENT_PATH);
-  }
-
-  public static Write set(Map<String, Value> fields, @Nullable List<String> fieldMap) {
-    return set(fields, fieldMap, DOCUMENT_PATH);
-  }
-
-  public static Write set(
-      Map<String, Value> fields, @Nullable List<String> fieldMap, String docPath) {
-        Write.Builder write = Write.newBuilder();
-        Document.Builder document = write.getUpdateBuilder();
-    document.setName(DOCUMENT_ROOT + docPath);
-    document.putAllFields(fields);
-
-    if (fieldMap != null) {
-      write.getUpdateMaskBuilder().addAllFieldPaths(fieldMap);
-    }
-
-    return write.build();
-  }
-
-  public static CommitRequest commit(@Nullable String transactionId, Write... writes) {
-    CommitRequest.Builder commitRequest = CommitRequest.newBuilder();
-    commitRequest.setDatabase(DATABASE_NAME);
-    commitRequest.addAllWrites(Arrays.asList(writes));
-
-    if (transactionId != null) {
-      commitRequest.setTransaction(ByteString.copyFromUtf8(transactionId));
-    }
-
-    return commitRequest.build();
-  }
-
-  public static CommitRequest commit(Write... writes) {
-    return commit(null, writes);
-  }
-
-  public static CommitRequest commit(Write write, List<FieldTransform> transforms) {
-    return commit((String) null, write.toBuilder().addAllUpdateTransforms(transforms).build());
-  }
-
-  public static void assertCommitEquals(CommitRequest expected, CommitRequest actual) {
-    assertEquals(sortCommit(expected), sortCommit(actual));
-  }
-
-  private static CommitRequest sortCommit(CommitRequest commit) {
-    CommitRequest.Builder builder = commit.toBuilder();
-
-    for (Write.Builder writes : builder.getWritesBuilderList()) {
-      if (writes.hasUpdateMask()) {
-        ArrayList<String> updateMask = new ArrayList<>(writes.getUpdateMask().getFieldPathsList());
-        Collections.sort(updateMask);
-        writes.setUpdateMask(DocumentMask.newBuilder().addAllFieldPaths(updateMask));
-      }
-
-      if (!writes.getUpdateTransformsList().isEmpty()) {
-        ArrayList<FieldTransform>  transformList = new ArrayList<>(writes.getUpdateTransformsList());
-        transformList.sort(Comparator.comparing(FieldTransform::getFieldPath));
-        writes.clearUpdateTransforms().addAllUpdateTransforms(transformList);
-      }
-    }
-
-    return builder.build();
-  }
 
   public record AllSupportedTypes (
 
@@ -425,22 +221,4 @@ public final class LocalFirestoreHelper {
     NESTED_POJO_WITH_RECORD_OBJECT = new NestedPOJOWithRecord();
   }
 
-  @SuppressWarnings("unchecked")
-  public static <T> Map<String, T> mapAnyType(Object... entries) {
-    Map<String, T> res = new HashMap<>();
-    for (int i = 0; i < entries.length; i += 2) {
-      res.put((String) entries[i], (T) entries[i + 1]);
-    }
-    return res;
-  }
-
-  private static Map<String, Object> fromJsonString(String json) {
-    Type type = new TypeToken<Map<String, Object>>() {}.getType();
-    Gson gson = new Gson();
-    return gson.fromJson(json, type);
-  }
-
-  public static Map<String, Object> fromSingleQuotedString(String json) {
-    return fromJsonString(json.replace("'", "\""));
-  }
 }
