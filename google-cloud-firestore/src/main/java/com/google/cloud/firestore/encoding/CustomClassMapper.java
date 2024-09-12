@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore;
+package com.google.cloud.firestore.encoding;
 
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.Blob;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.FieldValue;
+import com.google.cloud.firestore.GeoPoint;
+import com.google.cloud.firestore.VectorValue;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.firestore.v1.Value;
 import java.lang.reflect.Field;
@@ -38,7 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /** Helper class to convert to/from custom POJO classes and plain Java types. */
-class CustomClassMapper {
+public class CustomClassMapper {
 
   /** Maximum depth before we give up and assume it's a recursive object graph. */
   private static final int MAX_DEPTH = 500;
@@ -62,7 +67,7 @@ class CustomClassMapper {
    * @param object The representation of the JSON data
    * @return JSON representation containing only standard library Java types
    */
-  static Object convertToPlainJavaTypes(Object object) {
+  public static Object convertToPlainJavaTypes(Object object) {
     return serialize(object);
   }
 
@@ -83,12 +88,13 @@ class CustomClassMapper {
    * @param docRef The value to set to {@link DocumentId} annotated fields in the custom class.
    * @return The POJO object.
    */
-  static <T> T convertToCustomClass(Object object, Class<T> clazz, DocumentReference docRef) {
+  public static <T> T convertToCustomClass(
+      Object object, Class<T> clazz, DocumentReference docRef) {
     return deserializeToClass(
         object, clazz, new DeserializeContext(DeserializeContext.ErrorPath.EMPTY, docRef));
   }
 
-  static <T> Object serialize(T o) {
+  public static <T> Object serialize(T o) {
     return serialize(o, DeserializeContext.ErrorPath.EMPTY);
   }
 

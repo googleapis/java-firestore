@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore;
+package com.google.cloud.firestore.encoding;
 
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.annotation.DocumentId;
 
 /** Holds information a deserialization operation needs to complete the job. */

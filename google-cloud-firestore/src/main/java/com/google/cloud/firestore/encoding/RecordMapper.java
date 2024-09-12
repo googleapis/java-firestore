@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore;
+package com.google.cloud.firestore.encoding;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
