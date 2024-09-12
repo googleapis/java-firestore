@@ -72,7 +72,7 @@ public final class Field implements Expr, Selectable {
   @BetaApi
   public static Field of(String path) {
     if (path.equals(DOCUMENT_ID)) {
-      return new Field(FieldPath.of("__path__"));
+      return new Field(FieldPath.documentId());
     }
     return new Field(FieldPath.fromDotSeparatedString(path));
   }
