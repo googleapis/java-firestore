@@ -16,17 +16,22 @@
 
 package com.google.cloud.firestore.encoding;
 
+import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.firestore.annotation.IgnoreExtraProperties;
+import com.google.cloud.firestore.annotation.PropertyName;
 import com.google.cloud.firestore.annotation.ServerTimestamp;
 import com.google.cloud.firestore.annotation.ThrowOnExtraProperties;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -144,40 +149,56 @@ abstract class BeanMapper<T> {
   protected void applyFieldAnnotations(Field field) {
     Class<?> fieldType = field.getType();
     if (field.isAnnotationPresent(ServerTimestamp.class)) {
-      EncodingUtil.validateServerTimestampType("Field", "is", fieldType);
-      serverTimestamps.add(EncodingUtil.propertyName(field));
+      validateServerTimestampType("Field", "is", fieldType);
+      serverTimestamps.add(propertyName(field));
     }
     if (field.isAnnotationPresent(DocumentId.class)) {
-      EncodingUtil.validateDocumentIdType("Field", "is", fieldType);
-      documentIdPropertyNames.add(EncodingUtil.propertyName(field));
+      validateDocumentIdType("Field", "is", fieldType);
+      documentIdPropertyNames.add(propertyName(field));
     }
   }
 
-  protected void applyGetterAnnotations(Method method) {
-    Class<?> returnType = method.getReturnType();
-    if (method.isAnnotationPresent(ServerTimestamp.class)) {
-      EncodingUtil.validateServerTimestampType("Method", "returns", returnType);
-      serverTimestamps.add(EncodingUtil.propertyName(method));
-    }
-    // Even though the value will be skipped, we still check for type matching for consistency.
-    if (method.isAnnotationPresent(DocumentId.class)) {
-      EncodingUtil.validateDocumentIdType("Method", "returns", returnType);
-      documentIdPropertyNames.add(EncodingUtil.propertyName(method));
-    }
-  }
-
-  protected void applySetterAnnotations(Method method) {
-    if (method.isAnnotationPresent(ServerTimestamp.class)) {
+  protected void validateDocumentIdType(String fieldDescription, String operation, Type type) {
+    if (type != String.class && type != DocumentReference.class) {
       throw new IllegalArgumentException(
-          "Method "
-              + method.getName()
-              + " is annotated with @ServerTimestamp but should not be. @ServerTimestamp can"
-              + " only be applied to fields and getters, not setters.");
+          fieldDescription
+              + " is annotated with @DocumentId but "
+              + operation
+              + " "
+              + type
+              + " instead of String or DocumentReference.");
     }
-    if (method.isAnnotationPresent(DocumentId.class)) {
-      Class<?> paramType = method.getParameterTypes()[0];
-      EncodingUtil.validateDocumentIdType("Method", "accepts", paramType);
-      documentIdPropertyNames.add(EncodingUtil.propertyName(method));
+  }
+
+  protected void validateServerTimestampType(String fieldDescription, String operation, Type type) {
+    if (type != Date.class && type != Timestamp.class && type != Instant.class) {
+      throw new IllegalArgumentException(
+          fieldDescription
+              + " is annotated with @ServerTimestamp but "
+              + operation
+              + " "
+              + type
+              + " instead of Date, Timestamp, or Instant.");
+    }
+  }
+
+  protected String propertyName(Field field) {
+    String annotatedName = annotatedName(field);
+    return annotatedName != null ? annotatedName : field.getName();
+  }
+
+  protected String annotatedName(AccessibleObject obj) {
+    if (obj.isAnnotationPresent(PropertyName.class)) {
+      PropertyName annotation = obj.getAnnotation(PropertyName.class);
+      return annotation.value();
+    }
+
+    return null;
+  }
+
+  protected void hardAssert(boolean assertion, String message) {
+    if (!assertion) {
+      throw new RuntimeException("Hard assert failed: " + message);
     }
   }
 }
