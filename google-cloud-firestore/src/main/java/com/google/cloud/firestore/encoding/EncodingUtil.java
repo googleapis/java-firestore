@@ -33,8 +33,8 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
 
+/** A utility class for serializing and deserializing operations. */
 class EncodingUtil {
-
   static void hardAssert(boolean assertion) {
     hardAssert(assertion, "Internal inconsistency");
   }
@@ -283,6 +283,11 @@ class EncodingUtil {
     return annotatedName != null ? annotatedName : field.getName();
   }
 
+  static String propertyName(Method method) {
+    String annotatedName = EncodingUtil.annotatedName(method);
+    return annotatedName != null ? annotatedName : serializedName(method.getName());
+  }
+
   static String annotatedName(AccessibleObject obj) {
     if (obj.isAnnotationPresent(PropertyName.class)) {
       PropertyName annotation = obj.getAnnotation(PropertyName.class);
@@ -292,12 +297,7 @@ class EncodingUtil {
     return null;
   }
 
-  static String propertyName(Method method) {
-    String annotatedName = EncodingUtil.annotatedName(method);
-    return annotatedName != null ? annotatedName : serializedName(method.getName());
-  }
-
-  private static String serializedName(String methodName) {
+  static String serializedName(String methodName) {
     String[] prefixes = new String[] {"get", "set", "is"};
     String methodPrefix = null;
     for (String prefix : prefixes) {

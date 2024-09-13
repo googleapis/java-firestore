@@ -143,12 +143,10 @@ abstract class BeanMapper<T> {
 
   protected void applyFieldAnnotations(Field field) {
     Class<?> fieldType = field.getType();
-
     if (field.isAnnotationPresent(ServerTimestamp.class)) {
       EncodingUtil.validateServerTimestampType("Field", "is", fieldType);
       serverTimestamps.add(EncodingUtil.propertyName(field));
     }
-
     if (field.isAnnotationPresent(DocumentId.class)) {
       EncodingUtil.validateDocumentIdType("Field", "is", fieldType);
       documentIdPropertyNames.add(EncodingUtil.propertyName(field));
@@ -157,12 +155,10 @@ abstract class BeanMapper<T> {
 
   protected void applyGetterAnnotations(Method method) {
     Class<?> returnType = method.getReturnType();
-
     if (method.isAnnotationPresent(ServerTimestamp.class)) {
       EncodingUtil.validateServerTimestampType("Method", "returns", returnType);
       serverTimestamps.add(EncodingUtil.propertyName(method));
     }
-
     // Even though the value will be skipped, we still check for type matching for consistency.
     if (method.isAnnotationPresent(DocumentId.class)) {
       EncodingUtil.validateDocumentIdType("Method", "returns", returnType);
@@ -178,7 +174,6 @@ abstract class BeanMapper<T> {
               + " is annotated with @ServerTimestamp but should not be. @ServerTimestamp can"
               + " only be applied to fields and getters, not setters.");
     }
-
     if (method.isAnnotationPresent(DocumentId.class)) {
       Class<?> paramType = method.getParameterTypes()[0];
       EncodingUtil.validateDocumentIdType("Method", "accepts", paramType);
