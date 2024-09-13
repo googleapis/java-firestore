@@ -16,6 +16,9 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.PipelineUtils.toPaginatedPipeline;
+import static com.google.cloud.firestore.PipelineUtils.toPipelineFilterCondition;
+import static com.google.cloud.firestore.pipeline.expressions.Function.and;
 import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 import static com.google.common.collect.Lists.reverse;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS;
@@ -30,6 +33,7 @@ import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.NOT_E
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.NOT_IN;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.BetaApi;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
@@ -39,6 +43,10 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
+import com.google.cloud.firestore.pipeline.expressions.Exists;
+import com.google.cloud.firestore.pipeline.expressions.Field;
+import com.google.cloud.firestore.pipeline.expressions.Ordering;
+import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
@@ -57,6 +65,7 @@ import com.google.firestore.v1.StructuredQuery.FieldFilter.Operator;
 import com.google.firestore.v1.StructuredQuery.FieldReference;
 import com.google.firestore.v1.StructuredQuery.Filter;
 import com.google.firestore.v1.StructuredQuery.Order;
+import com.google.firestore.v1.StructuredQuery.UnaryFilter;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Int32Value;
@@ -75,6 +84,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.threeten.bp.Duration;
@@ -173,6 +183,11 @@ public class Query {
       return filters;
     }
 
+    @Nonnull
+    CompositeFilter.Operator getOperator() {
+      return this.operator;
+    }
+
     @Nullable
     @Override
     public FieldReference getFirstInequalityField() {
@@ -238,7 +253,7 @@ public class Query {
     }
   }
 
-  private static class UnaryFilterInternal extends FieldFilterInternal {
+  static class UnaryFilterInternal extends FieldFilterInternal {
 
     private final StructuredQuery.UnaryFilter.Operator operator;
 
@@ -263,6 +278,11 @@ public class Query {
       Filter.Builder result = Filter.newBuilder();
       result.getUnaryFilterBuilder().setField(fieldReference).setOp(operator);
       return result.build();
+    }
+
+    @Nonnull
+    UnaryFilter.Operator getOperator() {
+      return this.operator;
     }
 
     @Override
@@ -2125,6 +2145,85 @@ public class Query {
     aggregateFieldList.add(aggregateField1);
     aggregateFieldList.addAll(Arrays.asList(aggregateFields));
     return new AggregateQuery(this, aggregateFieldList);
+  }
+
+  @Nonnull
+  @BetaApi
+  public Pipeline pipeline() {
+    // From
+    Pipeline ppl =
+        this.options.getAllDescendants()
+            ? new PipelineSource(this.getFirestore())
+                .collectionGroup(this.options.getCollectionId())
+            : new PipelineSource(this.getFirestore())
+                .collection(
+                    this.options.getParentPath().append(this.options.getCollectionId()).getPath());
+
+    // Filters
+    for (FilterInternal f : this.options.getFilters()) {
+      ppl = ppl.where(toPipelineFilterCondition(f));
+    }
+
+    // Projections
+    if (this.options.getFieldProjections() != null
+        && !this.options.getFieldProjections().isEmpty()) {
+      ppl =
+          ppl.select(
+              this.options.getFieldProjections().stream()
+                  .map(fieldReference -> Field.of(fieldReference.getFieldPath()))
+                  .toArray(Selectable[]::new));
+    }
+
+    // Orders
+    List<FieldOrder> normalizedOrderbys = this.createImplicitOrderBy();
+    if (normalizedOrderbys != null && !normalizedOrderbys.isEmpty()) {
+      // Add exists filters to match Query's implicit orderby semantics.
+      List<Exists> exists =
+          normalizedOrderbys.stream()
+              // .filter(order -> !order.fieldReference.getFieldPath().equals("__name__"))
+              .map(order -> Field.of(order.fieldReference.getFieldPath()).exists())
+              .collect(Collectors.toList());
+      if (exists.size() > 1) {
+        ppl =
+            ppl.where(
+                and(exists.get(0), exists.subList(1, exists.size()).toArray(new Exists[] {})));
+      } else if (exists.size() == 1) {
+        ppl = ppl.where(exists.get(0));
+      }
+
+      List<Ordering> orders =
+          normalizedOrderbys.stream()
+              .map(
+                  fieldOrder ->
+                      fieldOrder.direction == Direction.ASCENDING
+                          ? Field.of(fieldOrder.fieldReference.getFieldPath()).ascending()
+                          : Field.of(fieldOrder.fieldReference.getFieldPath()).descending())
+              .collect(Collectors.toList());
+      ppl = ppl.sort(orders.toArray(new Ordering[] {}));
+    }
+
+    // Cursors, Limit and Offset
+    if (this.options.getStartCursor() != null
+        || this.options.getEndCursor() != null
+        || this.options.getLimitType() == LimitType.Last) {
+      ppl =
+          toPaginatedPipeline(
+              ppl,
+              options.getStartCursor(),
+              options.getEndCursor(),
+              options.getLimit(),
+              options.getLimitType(),
+              options.getOffset());
+    } else { // Limit & Offset without cursors
+      if (this.options.getOffset() != null) {
+        ppl = ppl.offset(this.options.getOffset());
+      }
+      if (this.options.getLimit() != null) {
+        ppl = ppl.limit(this.options.getLimit());
+      }
+    }
+
+    return ppl;
   }
 
   /**

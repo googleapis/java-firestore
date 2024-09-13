@@ -47,8 +47,8 @@ import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.DeleteDocumentRequest;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.DocumentMask;
-import com.google.firestore.v1.ExplainMetrics;
-import com.google.firestore.v1.ExplainOptions;
+import com.google.firestore.v1.ExecutePipelineRequest;
+import com.google.firestore.v1.ExecutePipelineResponse;
 import com.google.firestore.v1.GetDocumentRequest;
 import com.google.firestore.v1.ListCollectionIdsRequest;
 import com.google.firestore.v1.ListCollectionIdsResponse;
@@ -507,14 +507,9 @@ public class FirestoreClientTest {
             .setDocument(Document.newBuilder().build())
             .setReadTime(Timestamp.newBuilder().build())
             .setSkippedResults(880286183)
-            .setExplainMetrics(ExplainMetrics.newBuilder().build())
             .build();
     mockFirestore.addResponse(expectedResponse);
-    RunQueryRequest request =
-        RunQueryRequest.newBuilder()
-            .setParent("parent-995424086")
-            .setExplainOptions(ExplainOptions.newBuilder().build())
-            .build();
+    RunQueryRequest request = RunQueryRequest.newBuilder().setParent("parent-995424086").build();
 
     MockStreamObserver<RunQueryResponse> responseObserver = new MockStreamObserver<>();
 
@@ -530,11 +525,7 @@ public class FirestoreClientTest {
   public void runQueryExceptionTest() throws Exception {
     StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
     mockFirestore.addException(exception);
-    RunQueryRequest request =
-        RunQueryRequest.newBuilder()
-            .setParent("parent-995424086")
-            .setExplainOptions(ExplainOptions.newBuilder().build())
-            .build();
+    RunQueryRequest request = RunQueryRequest.newBuilder().setParent("parent-995424086").build();
 
     MockStreamObserver<RunQueryResponse> responseObserver = new MockStreamObserver<>();
 
@@ -552,20 +543,62 @@ public class FirestoreClientTest {
   }
 
   @Test
+  public void executePipelineTest() throws Exception {
+    ExecutePipelineResponse expectedResponse =
+        ExecutePipelineResponse.newBuilder()
+            .setTransaction(ByteString.EMPTY)
+            .addAllResults(new ArrayList<Document>())
+            .setExecutionTime(Timestamp.newBuilder().build())
+            .build();
+    mockFirestore.addResponse(expectedResponse);
+    ExecutePipelineRequest request =
+        ExecutePipelineRequest.newBuilder().setDatabase("database1789464955").build();
+
+    MockStreamObserver<ExecutePipelineResponse> responseObserver = new MockStreamObserver<>();
+
+    ServerStreamingCallable<ExecutePipelineRequest, ExecutePipelineResponse> callable =
+        client.executePipelineCallable();
+    callable.serverStreamingCall(request, responseObserver);
+
+    List<ExecutePipelineResponse> actualResponses = responseObserver.future().get();
+    Assert.assertEquals(1, actualResponses.size());
+    Assert.assertEquals(expectedResponse, actualResponses.get(0));
+  }
+
+  @Test
+  public void executePipelineExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestore.addException(exception);
+    ExecutePipelineRequest request =
+        ExecutePipelineRequest.newBuilder().setDatabase("database1789464955").build();
+
+    MockStreamObserver<ExecutePipelineResponse> responseObserver = new MockStreamObserver<>();
+
+    ServerStreamingCallable<ExecutePipelineRequest, ExecutePipelineResponse> callable =
+        client.executePipelineCallable();
+    callable.serverStreamingCall(request, responseObserver);
+
+    try {
+      List<ExecutePipelineResponse> actualResponses = responseObserver.future().get();
+      Assert.fail("No exception thrown");
+    } catch (ExecutionException e) {
+      Assert.assertTrue(e.getCause() instanceof InvalidArgumentException);
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
   public void runAggregationQueryTest() throws Exception {
     RunAggregationQueryResponse expectedResponse =
         RunAggregationQueryResponse.newBuilder()
             .setResult(AggregationResult.newBuilder().build())
             .setTransaction(ByteString.EMPTY)
             .setReadTime(Timestamp.newBuilder().build())
-            .setExplainMetrics(ExplainMetrics.newBuilder().build())
             .build();
     mockFirestore.addResponse(expectedResponse);
     RunAggregationQueryRequest request =
-        RunAggregationQueryRequest.newBuilder()
-            .setParent("parent-995424086")
-            .setExplainOptions(ExplainOptions.newBuilder().build())
-            .build();
+        RunAggregationQueryRequest.newBuilder().setParent("parent-995424086").build();
 
     MockStreamObserver<RunAggregationQueryResponse> responseObserver = new MockStreamObserver<>();
 
@@ -583,10 +616,7 @@ public class FirestoreClientTest {
     StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
     mockFirestore.addException(exception);
     RunAggregationQueryRequest request =
-        RunAggregationQueryRequest.newBuilder()
-            .setParent("parent-995424086")
-            .setExplainOptions(ExplainOptions.newBuilder().build())
-            .build();
+        RunAggregationQueryRequest.newBuilder().setParent("parent-995424086").build();
 
     MockStreamObserver<RunAggregationQueryResponse> responseObserver = new MockStreamObserver<>();
 

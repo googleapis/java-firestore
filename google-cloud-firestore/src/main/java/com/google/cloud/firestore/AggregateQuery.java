@@ -20,6 +20,7 @@ import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_ATTEM
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_RUN_AGGREGATION_QUERY;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.BetaApi;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ResponseObserver;
@@ -27,6 +28,7 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.pipeline.expressions.ExprWithAlias;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
@@ -74,6 +76,17 @@ public class AggregateQuery {
   @Nonnull
   public Query getQuery() {
     return query;
+  }
+
+  @Nonnull
+  @BetaApi
+  public Pipeline pipeline() {
+    return getQuery()
+        .pipeline()
+        .aggregate(
+            this.aggregateFieldList.stream()
+                .map(PipelineUtils::toPipelineAggregatorTarget)
+                .toArray(ExprWithAlias[]::new));
   }
 
   /**

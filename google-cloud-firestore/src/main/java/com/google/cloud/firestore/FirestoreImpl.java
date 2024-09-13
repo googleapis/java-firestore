@@ -20,6 +20,7 @@ import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 
 import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
+import com.google.api.core.BetaApi;
 import com.google.api.core.NanoClock;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
@@ -31,6 +32,8 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.Transaction.AsyncFunction;
+import com.google.cloud.firestore.Transaction.Function;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
@@ -401,7 +404,14 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
 
   @Nonnull
   @Override
-  public <T> ApiFuture<T> runTransaction(@Nonnull final Transaction.Function<T> updateFunction) {
+  @BetaApi
+  public PipelineSource pipeline() {
+    return new PipelineSource(this);
+  }
+
+  @Nonnull
+  @Override
+  public <T> ApiFuture<T> runTransaction(@Nonnull final Function<T> updateFunction) {
     return runAsyncTransaction(
         new TransactionAsyncAdapter<>(updateFunction), TransactionOptions.create());
   }
@@ -409,22 +419,20 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Nonnull
   @Override
   public <T> ApiFuture<T> runTransaction(
-      @Nonnull final Transaction.Function<T> updateFunction,
-      @Nonnull TransactionOptions transactionOptions) {
+      @Nonnull final Function<T> updateFunction, @Nonnull TransactionOptions transactionOptions) {
     return runAsyncTransaction(new TransactionAsyncAdapter<>(updateFunction), transactionOptions);
   }
 
   @Nonnull
   @Override
-  public <T> ApiFuture<T> runAsyncTransaction(
-      @Nonnull final Transaction.AsyncFunction<T> updateFunction) {
+  public <T> ApiFuture<T> runAsyncTransaction(@Nonnull final AsyncFunction<T> updateFunction) {
     return runAsyncTransaction(updateFunction, TransactionOptions.create());
   }
 
   @Nonnull
   @Override
   public <T> ApiFuture<T> runAsyncTransaction(
-      @Nonnull final Transaction.AsyncFunction<T> updateFunction,
+      @Nonnull final AsyncFunction<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
 
     if (transactionOptions.getReadTime() != null) {
@@ -535,10 +543,10 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     closed = true;
   }
 
-  private static class TransactionAsyncAdapter<T> implements Transaction.AsyncFunction<T> {
-    private final Transaction.Function<T> syncFunction;
+  private static class TransactionAsyncAdapter<T> implements AsyncFunction<T> {
+    private final Function<T> syncFunction;
 
-    public TransactionAsyncAdapter(Transaction.Function<T> syncFunction) {
+    public TransactionAsyncAdapter(Function<T> syncFunction) {
       this.syncFunction = syncFunction;
     }
 

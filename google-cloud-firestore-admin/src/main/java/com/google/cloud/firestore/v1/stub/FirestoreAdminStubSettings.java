@@ -507,6 +507,15 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
             "Transport not supported: %s", getTransportChannelProvider().getTransportName()));
   }
 
+  /** Returns the endpoint set by the user or the the service's default endpoint. */
+  @Override
+  public String getEndpoint() {
+    if (super.getEndpoint() != null) {
+      return super.getEndpoint();
+    }
+    return getDefaultEndpoint();
+  }
+
   /** Returns the default service name. */
   @Override
   public String getServiceName() {
@@ -1456,6 +1465,15 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     public UnaryCallSettings.Builder<DeleteBackupScheduleRequest, Empty>
         deleteBackupScheduleSettings() {
       return deleteBackupScheduleSettings;
+    }
+
+    /** Returns the endpoint set by the user or the the service's default endpoint. */
+    @Override
+    public String getEndpoint() {
+      if (super.getEndpoint() != null) {
+        return super.getEndpoint();
+      }
+      return getDefaultEndpoint();
     }
 
     @Override

@@ -45,6 +45,8 @@ import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.CreateDocumentRequest;
 import com.google.firestore.v1.DeleteDocumentRequest;
 import com.google.firestore.v1.Document;
+import com.google.firestore.v1.ExecutePipelineRequest;
+import com.google.firestore.v1.ExecutePipelineResponse;
 import com.google.firestore.v1.GetDocumentRequest;
 import com.google.firestore.v1.ListCollectionIdsRequest;
 import com.google.firestore.v1.ListCollectionIdsResponse;
@@ -430,6 +432,43 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                       .build())
               .build();
 
+  private static final ApiMethodDescriptor<ExecutePipelineRequest, ExecutePipelineResponse>
+      executePipelineMethodDescriptor =
+          ApiMethodDescriptor.<ExecutePipelineRequest, ExecutePipelineResponse>newBuilder()
+              .setFullMethodName("google.firestore.v1.Firestore/ExecutePipeline")
+              .setHttpMethod("POST")
+              .setType(ApiMethodDescriptor.MethodType.SERVER_STREAMING)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<ExecutePipelineRequest>newBuilder()
+                      .setPath(
+                          "/v1beta1/{database=projects/*/databases/*}:executePipeline",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<ExecutePipelineRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "database", request.getDatabase());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<ExecutePipelineRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("*", request.toBuilder().clearDatabase().build(), true))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<ExecutePipelineResponse>newBuilder()
+                      .setDefaultInstance(ExecutePipelineResponse.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
   private static final ApiMethodDescriptor<RunAggregationQueryRequest, RunAggregationQueryResponse>
       runAggregationQueryMethodDescriptor =
           ApiMethodDescriptor.<RunAggregationQueryRequest, RunAggregationQueryResponse>newBuilder()
@@ -638,6 +677,8 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
   private final UnaryCallable<CommitRequest, CommitResponse> commitCallable;
   private final UnaryCallable<RollbackRequest, Empty> rollbackCallable;
   private final ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable;
+  private final ServerStreamingCallable<ExecutePipelineRequest, ExecutePipelineResponse>
+      executePipelineCallable;
   private final ServerStreamingCallable<RunAggregationQueryRequest, RunAggregationQueryResponse>
       runAggregationQueryCallable;
   private final UnaryCallable<PartitionQueryRequest, PartitionQueryResponse> partitionQueryCallable;
@@ -794,6 +835,18 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                   return builder.build();
                 })
             .build();
+    HttpJsonCallSettings<ExecutePipelineRequest, ExecutePipelineResponse>
+        executePipelineTransportSettings =
+            HttpJsonCallSettings.<ExecutePipelineRequest, ExecutePipelineResponse>newBuilder()
+                .setMethodDescriptor(executePipelineMethodDescriptor)
+                .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("database", String.valueOf(request.getDatabase()));
+                      return builder.build();
+                    })
+                .build();
     HttpJsonCallSettings<RunAggregationQueryRequest, RunAggregationQueryResponse>
         runAggregationQueryTransportSettings =
             HttpJsonCallSettings
@@ -887,6 +940,9 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
     this.runQueryCallable =
         callableFactory.createServerStreamingCallable(
             runQueryTransportSettings, settings.runQuerySettings(), clientContext);
+    this.executePipelineCallable =
+        callableFactory.createServerStreamingCallable(
+            executePipelineTransportSettings, settings.executePipelineSettings(), clientContext);
     this.runAggregationQueryCallable =
         callableFactory.createServerStreamingCallable(
             runAggregationQueryTransportSettings,
@@ -931,6 +987,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
     methodDescriptors.add(commitMethodDescriptor);
     methodDescriptors.add(rollbackMethodDescriptor);
     methodDescriptors.add(runQueryMethodDescriptor);
+    methodDescriptors.add(executePipelineMethodDescriptor);
     methodDescriptors.add(runAggregationQueryMethodDescriptor);
     methodDescriptors.add(partitionQueryMethodDescriptor);
     methodDescriptors.add(listCollectionIdsMethodDescriptor);
@@ -990,6 +1047,12 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
   @Override
   public ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable() {
     return runQueryCallable;
+  }
+
+  @Override
+  public ServerStreamingCallable<ExecutePipelineRequest, ExecutePipelineResponse>
+      executePipelineCallable() {
+    return executePipelineCallable;
   }
 
   @Override
