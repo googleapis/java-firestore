@@ -16,19 +16,17 @@
 
 package com.google.cloud.firestore.encoding;
 
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.firestore.annotation.IgnoreExtraProperties;
 import com.google.cloud.firestore.annotation.ServerTimestamp;
 import com.google.cloud.firestore.annotation.ThrowOnExtraProperties;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -90,7 +88,11 @@ abstract class BeanMapper<T> {
       Map<TypeVariable<Class<T>>, Type> types,
       DeserializeContext context);
 
-  void verifyValidType(T object) {
+  T deserialize(Map<String, Object> values, DeserializeContext context) {
+    return deserialize(values, Collections.emptyMap(), context);
+  }
+
+  protected void verifyValidType(T object) {
     if (!clazz.isAssignableFrom(object.getClass())) {
       throw new IllegalArgumentException(
           "Can't serialize object of class "
@@ -100,7 +102,7 @@ abstract class BeanMapper<T> {
     }
   }
 
-  Type resolveType(Type type, Map<TypeVariable<Class<T>>, Type> types) {
+  protected Type resolveType(Type type, Map<TypeVariable<Class<T>>, Type> types) {
     if (type instanceof TypeVariable) {
       Type resolvedType = types.get(type);
       if (resolvedType == null) {
@@ -113,7 +115,7 @@ abstract class BeanMapper<T> {
     return type;
   }
 
-  void checkForDocIdConflict(
+  protected void checkForDocIdConflict(
       String docIdPropertyName,
       Collection<String> deserializedProperties,
       DeserializeContext context) {
@@ -129,38 +131,58 @@ abstract class BeanMapper<T> {
     }
   }
 
-  T deserialize(Map<String, Object> values, DeserializeContext context) {
-    return deserialize(values, Collections.emptyMap(), context);
-  }
-
-  void applyFieldAnnotations(Field field) {
-    if (field.isAnnotationPresent(ServerTimestamp.class)) {
-      Class<?> fieldType = field.getType();
-      if (fieldType != Date.class && fieldType != Timestamp.class && fieldType != Instant.class) {
-        throw new IllegalArgumentException(
-            "Field "
-                + field.getName()
-                + " is annotated with @ServerTimestamp but is "
-                + fieldType
-                + " instead of Date, Timestamp, or Instant.");
-      }
-      serverTimestamps.add(EncodingUtil.propertyName(field));
-    }
-
-    if (field.isAnnotationPresent(DocumentId.class)) {
-      Class<?> fieldType = field.getType();
-      EncodingUtil.ensureValidDocumentIdType("Field", "is", fieldType);
-      documentIdPropertyNames.add(EncodingUtil.propertyName(field));
-    }
-  }
-
-  Object getSerializedValue(
+  protected Object getSerializedValue(
       String property, Object propertyValue, DeserializeContext.ErrorPath path) {
     if (serverTimestamps.contains(property) && propertyValue == null) {
       // Replace null ServerTimestamp-annotated fields with the sentinel.
       return FieldValue.serverTimestamp();
     } else {
       return CustomClassMapper.serialize(propertyValue, path.child(property));
+    }
+  }
+
+  protected void applyFieldAnnotations(Field field) {
+    Class<?> fieldType = field.getType();
+
+    if (field.isAnnotationPresent(ServerTimestamp.class)) {
+      EncodingUtil.validateServerTimestampType("Field", "is", fieldType);
+      serverTimestamps.add(EncodingUtil.propertyName(field));
+    }
+
+    if (field.isAnnotationPresent(DocumentId.class)) {
+      EncodingUtil.validateDocumentIdType("Field", "is", fieldType);
+      documentIdPropertyNames.add(EncodingUtil.propertyName(field));
+    }
+  }
+
+  protected void applyGetterAnnotations(Method method) {
+    Class<?> returnType = method.getReturnType();
+
+    if (method.isAnnotationPresent(ServerTimestamp.class)) {
+      EncodingUtil.validateServerTimestampType("Method", "returns", returnType);
+      serverTimestamps.add(EncodingUtil.propertyName(method));
+    }
+
+    // Even though the value will be skipped, we still check for type matching for consistency.
+    if (method.isAnnotationPresent(DocumentId.class)) {
+      EncodingUtil.validateDocumentIdType("Method", "returns", returnType);
+      documentIdPropertyNames.add(EncodingUtil.propertyName(method));
+    }
+  }
+
+  protected void applySetterAnnotations(Method method) {
+    if (method.isAnnotationPresent(ServerTimestamp.class)) {
+      throw new IllegalArgumentException(
+          "Method "
+              + method.getName()
+              + " is annotated with @ServerTimestamp but should not be. @ServerTimestamp can"
+              + " only be applied to fields and getters, not setters.");
+    }
+
+    if (method.isAnnotationPresent(DocumentId.class)) {
+      Class<?> paramType = method.getParameterTypes()[0];
+      EncodingUtil.validateDocumentIdType("Method", "accepts", paramType);
+      documentIdPropertyNames.add(EncodingUtil.propertyName(method));
     }
   }
 }

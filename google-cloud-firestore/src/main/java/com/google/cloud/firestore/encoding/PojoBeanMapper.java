@@ -16,17 +16,12 @@
 
 package com.google.cloud.firestore.encoding;
 
-import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.annotation.DocumentId;
-import com.google.cloud.firestore.annotation.ServerTimestamp;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.time.Instant;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -179,16 +174,6 @@ class PojoBeanMapper<T> extends BeanMapper<T> {
     }
   }
 
-  private void addProperty(String property) {
-    String oldValue = properties.put(property.toLowerCase(Locale.US), property);
-    if (oldValue != null && !property.equals(oldValue)) {
-      throw new RuntimeException(
-          "Found two getters or fields with conflicting case "
-              + "sensitivity for property: "
-              + property.toLowerCase(Locale.US));
-    }
-  }
-
   @Override
   Map<String, Object> serialize(T object, DeserializeContext.ErrorPath path) {
     verifyValidType(object);
@@ -296,6 +281,16 @@ class PojoBeanMapper<T> extends BeanMapper<T> {
     return instance;
   }
 
+  private void addProperty(String property) {
+    String oldValue = properties.put(property.toLowerCase(Locale.US), property);
+    if (oldValue != null && !property.equals(oldValue)) {
+      throw new RuntimeException(
+          "Found two getters or fields with conflicting case "
+              + "sensitivity for property: "
+              + property.toLowerCase(Locale.US));
+    }
+  }
+
   // Populate @DocumentId annotated fields. If there is a conflict (@DocumentId annotation is
   // applied to a property that is already deserialized from the firestore document)
   // a runtime exception will be thrown.
@@ -335,46 +330,6 @@ class PojoBeanMapper<T> extends BeanMapper<T> {
           throw new RuntimeException(e);
         }
       }
-    }
-  }
-
-  private void applyGetterAnnotations(Method method) {
-    if (method.isAnnotationPresent(ServerTimestamp.class)) {
-      Class<?> returnType = method.getReturnType();
-      if (returnType != Date.class
-          && returnType != Timestamp.class
-          && returnType != Instant.class) {
-        throw new IllegalArgumentException(
-            "Method "
-                + method.getName()
-                + " is annotated with @ServerTimestamp but returns "
-                + returnType
-                + " instead of Date, Timestamp, or Instant.");
-      }
-      serverTimestamps.add(EncodingUtil.propertyName(method));
-    }
-
-    // Even though the value will be skipped, we still check for type matching for consistency.
-    if (method.isAnnotationPresent(DocumentId.class)) {
-      Class<?> returnType = method.getReturnType();
-      EncodingUtil.ensureValidDocumentIdType("Method", "returns", returnType);
-      documentIdPropertyNames.add(EncodingUtil.propertyName(method));
-    }
-  }
-
-  private void applySetterAnnotations(Method method) {
-    if (method.isAnnotationPresent(ServerTimestamp.class)) {
-      throw new IllegalArgumentException(
-          "Method "
-              + method.getName()
-              + " is annotated with @ServerTimestamp but should not be. @ServerTimestamp can"
-              + " only be applied to fields and getters, not setters.");
-    }
-
-    if (method.isAnnotationPresent(DocumentId.class)) {
-      Class<?> paramType = method.getParameterTypes()[0];
-      EncodingUtil.ensureValidDocumentIdType("Method", "accepts", paramType);
-      documentIdPropertyNames.add(EncodingUtil.propertyName(method));
     }
   }
 }

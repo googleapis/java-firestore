@@ -320,7 +320,7 @@ class EncodingUtil {
     return new String(chars);
   }
 
-  static void ensureValidDocumentIdType(String fieldDescription, String operation, Type type) {
+  static void validateDocumentIdType(String fieldDescription, String operation, Type type) {
     if (type != String.class && type != DocumentReference.class) {
       throw new IllegalArgumentException(
           fieldDescription
@@ -329,6 +329,18 @@ class EncodingUtil {
               + " "
               + type
               + " instead of String or DocumentReference.");
+    }
+  }
+
+  static void validateServerTimestampType(String fieldDescription, String operation, Type type) {
+    if (type != Date.class && type != Timestamp.class && type != Instant.class) {
+      throw new IllegalArgumentException(
+          fieldDescription
+              + " is annotated with @ServerTimestamp but "
+              + operation
+              + " "
+              + type
+              + " instead of Date, Timestamp, or Instant.");
     }
   }
 

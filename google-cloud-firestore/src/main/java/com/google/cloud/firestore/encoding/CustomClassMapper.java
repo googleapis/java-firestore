@@ -292,7 +292,7 @@ public class CustomClassMapper {
   }
 
   @SuppressWarnings("unchecked")
-  static <T> T deserializeToClass(Object o, Class<T> clazz, DeserializeContext context) {
+  private static <T> T deserializeToClass(Object o, Class<T> clazz, DeserializeContext context) {
     if (o == null) {
       return null;
     } else if (clazz.isPrimitive()
