@@ -101,13 +101,6 @@ class RecordMapper<T> extends BeanMapper<T> {
       Map<String, Object> values,
       Map<TypeVariable<Class<T>>, Type> types,
       DeserializeContext context) {
-    if (constructor == null) {
-      throw context.errorPath.deserializeError(
-          "Class "
-              + getClazz().getName()
-              + " does not define a no-argument constructor. If you are using ProGuard, make "
-              + "sure these constructors are not stripped");
-    }
     Object[] constructorParams = new Object[constructor.getParameterCount()];
     Set<String> deserializedProperties = new HashSet<>(values.size());
     for (Map.Entry<String, Object> entry : values.entrySet()) {
