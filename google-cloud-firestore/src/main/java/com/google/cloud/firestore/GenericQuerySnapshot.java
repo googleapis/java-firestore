@@ -1,0 +1,160 @@
+/*
+ * Copyright 2024 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.cloud.firestore;
+
+import com.google.cloud.Timestamp;
+import com.google.common.collect.ImmutableList;
+import java.util.*;
+import javax.annotation.Nonnull;
+
+public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocumentSnapshot> {
+  protected final QueryT query;
+  protected final Timestamp readTime;
+
+  volatile List<DocumentChange> documentChanges;
+  volatile List<QueryDocumentSnapshot> documents;
+
+  volatile DocumentSet documentSet;
+
+  protected GenericQuerySnapshot(
+      QueryT query,
+      Timestamp readTime,
+      final List<QueryDocumentSnapshot> documents,
+      final DocumentSet documentSet,
+      final List<DocumentChange> documentChanges) { // Elevated access level for mocking.
+    this.query = query;
+    this.readTime = readTime;
+    this.documentChanges =
+        documentChanges != null ? Collections.unmodifiableList(documentChanges) : documentChanges;
+    this.documentSet = documentSet;
+    this.documents = documents;
+  }
+
+  /**
+   * Returns the query for the snapshot.
+   *
+   * @return The backing query that produced this snapshot.
+   */
+  @Nonnull
+  public QueryT getQuery() {
+    return query;
+  }
+
+  /**
+   * Returns the time at which this snapshot was read.
+   *
+   * @return The read time of this snapshot.
+   */
+  @Nonnull
+  public Timestamp getReadTime() {
+    return readTime;
+  }
+
+  /**
+   * Returns the documents in this QuerySnapshot as a List in order of the query.
+   *
+   * @return The list of documents.
+   */
+  @Nonnull
+  public List<QueryDocumentSnapshot> getDocuments() {
+    if (documents == null) {
+      synchronized (documentSet) {
+        if (documents == null) {
+          documents = documentSet.toList();
+        }
+      }
+    }
+    return Collections.unmodifiableList(documents);
+  }
+
+  /** Returns true if there are no documents in the QuerySnapshot. */
+  public boolean isEmpty() {
+    return this.size() == 0;
+  }
+
+  @Nonnull
+  public Iterator<QueryDocumentSnapshot> iterator() {
+    return getDocuments().iterator();
+  }
+
+  /**
+   * Returns the contents of the documents in the QuerySnapshot, converted to the provided class, as
+   * a list.
+   *
+   * @param clazz The POJO type used to convert the documents in the list.
+   */
+  @Nonnull
+  public <T> List<T> toObjects(@Nonnull Class<T> clazz) {
+    List<QueryDocumentSnapshot> documents = getDocuments();
+    List<T> results = new ArrayList<>(documents.size());
+    for (DocumentSnapshot documentSnapshot : documents) {
+      results.add(
+          CustomClassMapper.convertToCustomClass(
+              documentSnapshot.getData(), clazz, documentSnapshot.getReference()));
+    }
+
+    return results;
+  }
+
+  /**
+   * Returns the list of documents that changed since the last snapshot. If it's the first snapshot
+   * all documents will be in the list as added changes.
+   *
+   * @return The list of documents that changed since the last snapshot.
+   */
+  @Nonnull
+  public List<DocumentChange> getDocumentChanges() {
+    if (documentChanges == null) {
+      synchronized (documents) {
+        if (documentChanges == null) {
+          int size = documents.size();
+          ImmutableList.Builder<DocumentChange> builder =
+              ImmutableList.builderWithExpectedSize(size);
+          for (int i = 0; i < size; ++i) {
+            builder.add(new DocumentChange(documents.get(i), DocumentChange.Type.ADDED, -1, i));
+          }
+          documentChanges = builder.build();
+        }
+      }
+    }
+
+    return Collections.unmodifiableList(documentChanges);
+  }
+
+  public int size() {
+    return getDocuments().size();
+  }
+
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    QuerySnapshot that = (QuerySnapshot) o;
+    return Objects.equals(query, that.query)
+        && Objects.equals(this.size(), that.size())
+        && Objects.equals(this.getDocumentChanges(), that.getDocumentChanges())
+        && Objects.equals(this.getDocuments(), that.getDocuments());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(query, this.getDocumentChanges(), this.getDocuments());
+  }
+}
