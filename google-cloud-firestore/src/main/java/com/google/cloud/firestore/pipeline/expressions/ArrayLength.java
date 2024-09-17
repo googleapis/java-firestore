@@ -18,12 +18,12 @@ package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 
 @BetaApi
 public final class ArrayLength extends Function {
   @InternalApi
   ArrayLength(Expr array) {
-    super("array_length", Lists.newArrayList(array));
+    super("array_length", ImmutableList.of(array));
   }
 }

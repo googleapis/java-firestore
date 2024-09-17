@@ -722,7 +722,7 @@ public interface Expr {
    */
   @BetaApi
   default Count count() {
-    return new Count(this, false);
+    return new Count(this);
   }
 
   /**

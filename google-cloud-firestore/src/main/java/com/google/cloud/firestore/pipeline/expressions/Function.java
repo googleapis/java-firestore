@@ -2163,7 +2163,7 @@ public class Function implements Expr {
    */
   @BetaApi
   public static Count count(Expr expr) {
-    return new Count(expr, false);
+    return new Count(expr);
   }
 
   /**
@@ -2182,7 +2182,7 @@ public class Function implements Expr {
    */
   @BetaApi
   public static Count count(String field) {
-    return new Count(Field.of(field), false);
+    return new Count(Field.of(field));
   }
 
   /**
@@ -2218,7 +2218,7 @@ public class Function implements Expr {
    */
   @BetaApi
   public static Count countAll() {
-    return new Count(null, false);
+    return new Count(null);
   }
 
   /**

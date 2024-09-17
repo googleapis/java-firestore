@@ -83,6 +83,11 @@ public final class Constant implements Expr {
     return new Constant(value);
   }
 
+  @InternalApi
+  public static Constant nullValue() {
+    return new Constant(null);
+  }
+
   @BetaApi
   static Constant of(Object value) {
     if (value == null) {

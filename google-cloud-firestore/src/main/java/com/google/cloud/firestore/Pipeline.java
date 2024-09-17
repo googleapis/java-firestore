@@ -836,7 +836,7 @@ public final class Pipeline {
               if (numDocuments > 100) {
                 Tracing.getTracer()
                     .getCurrentSpan()
-                    .addAnnotation("Firestore.Pipeline: Received "+numDocuments+" results");
+                    .addAnnotation("Firestore.Pipeline: Received " + numDocuments + " results");
                 docCounterPerTraceUpdate = 0;
               }
 

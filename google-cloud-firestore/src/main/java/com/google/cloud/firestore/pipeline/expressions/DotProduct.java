@@ -18,12 +18,12 @@ package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 
 @BetaApi
 public final class DotProduct extends Function {
   @InternalApi
   DotProduct(Expr vector1, Expr vector2) {
-    super("dot_product", Lists.newArrayList(vector1, vector2));
+    super("dot_product", ImmutableList.of(vector1, vector2));
   }
 }

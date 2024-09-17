@@ -32,7 +32,6 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.Transaction;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
@@ -418,13 +417,15 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Nonnull
   @Override
   public <T> ApiFuture<T> runTransaction(
-      @Nonnull final Transaction.Function<T> updateFunction, @Nonnull TransactionOptions transactionOptions) {
+      @Nonnull final Transaction.Function<T> updateFunction,
+      @Nonnull TransactionOptions transactionOptions) {
     return runAsyncTransaction(new TransactionAsyncAdapter<>(updateFunction), transactionOptions);
   }
 
   @Nonnull
   @Override
-  public <T> ApiFuture<T> runAsyncTransaction(@Nonnull final Transaction.AsyncFunction<T> updateFunction) {
+  public <T> ApiFuture<T> runAsyncTransaction(
+      @Nonnull final Transaction.AsyncFunction<T> updateFunction) {
     return runAsyncTransaction(updateFunction, TransactionOptions.create());
   }
 
@@ -444,7 +445,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       // that cannot be tracked client side.
       return new ServerSideTransactionRunner<>(this, updateFunction, transactionOptions).run();
     }
-}
+  }
 
   @Nonnull
   @Override
