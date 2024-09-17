@@ -813,6 +813,7 @@ public final class Pipeline {
           Timestamp executionTime = null;
           boolean firstResponse = false;
           int numDocuments = 0;
+          int docCounterPerTraceUpdate = 0;
           boolean hasCompleted = false;
 
           @Override
@@ -831,11 +832,14 @@ public final class Pipeline {
             }
             if (response.getResultsCount() > 0) {
               numDocuments += response.getResultsCount();
-              if (numDocuments % 100 == 0) {
+              docCounterPerTraceUpdate += response.getResultsCount();
+              if (numDocuments > 100) {
                 Tracing.getTracer()
                     .getCurrentSpan()
-                    .addAnnotation("Firestore.Query: Received 100 documents");
+                    .addAnnotation("Firestore.Pipeline: Received "+numDocuments+" results");
+                docCounterPerTraceUpdate = 0;
               }
+
               for (Document doc : response.getResultsList()) {
                 resultObserver.onNext(
                     PipelineResult.fromDocument(

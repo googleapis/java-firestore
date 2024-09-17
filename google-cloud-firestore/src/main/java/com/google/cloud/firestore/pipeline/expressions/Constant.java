@@ -119,7 +119,7 @@ public final class Constant implements Expr {
 
   @BetaApi
   public static <T> Constant of(T[] value) {
-    return new Constant(Arrays.asList(value)); // Convert array to list
+    return new Constant(Arrays.asList(value.clone())); // Convert array to list
   }
 
   @BetaApi

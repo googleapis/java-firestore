@@ -22,6 +22,7 @@ import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.firestore.v1.Value;
 import java.util.Arrays;
@@ -48,7 +49,7 @@ public class Function implements Expr {
   private final String name;
   private final List<Expr> params;
 
-  protected Function(String name, List<? extends Expr> params) {
+  protected Function(String name, ImmutableList<? extends Expr> params) {
     this.name = name;
     this.params = Collections.unmodifiableList(params);
   }
@@ -2483,7 +2484,7 @@ public class Function implements Expr {
    */
   @BetaApi
   public static Function genericFunction(String name, List<Expr> params) {
-    return new Function(name, params);
+    return new Function(name, ImmutableList.copyOf(params));
   }
 
   @Override
