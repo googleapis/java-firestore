@@ -163,7 +163,10 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
         // TODO: it should not be determined by isMetricsEnabled. move this whole logic to
         // options.getApiTracerFactory()
         firestoreBuilder.setTracerFactory(
-            options.getMetricsUtil().getOpenTelemetryApiTracerFactory());
+            options
+                .getMetricsUtil()
+                .getDefaultOpenTelemetryMetricsProvider()
+                .getOpenTelemetryApiTracerFactory());
       }
 
       firestoreStub = GrpcFirestoreStub.create(firestoreBuilder.build());

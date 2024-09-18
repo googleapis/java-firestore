@@ -29,12 +29,12 @@ import javax.annotation.Nullable;
 public class FirestoreOpenTelemetryOptions {
   private final boolean tracingEnabled;
   private final boolean metricsEnabled;
-  private final @Nullable OpenTelemetry openTelemetry;
+  private final @Nullable OpenTelemetry customOpenTelemetry;
 
   FirestoreOpenTelemetryOptions(Builder builder) {
     this.tracingEnabled = builder.tracingEnabled;
     this.metricsEnabled = builder.metricsEnabled;
-    this.openTelemetry = builder.openTelemetry;
+    this.customOpenTelemetry = builder.customOpenTelemetry;
   }
 
   public boolean isTracingEnabled() {
@@ -46,7 +46,7 @@ public class FirestoreOpenTelemetryOptions {
   }
 
   public OpenTelemetry getOpenTelemetry() {
-    return openTelemetry;
+    return customOpenTelemetry;
   }
 
   @Nonnull
@@ -65,18 +65,18 @@ public class FirestoreOpenTelemetryOptions {
 
     private boolean metricsEnabled;
 
-    @Nullable private OpenTelemetry openTelemetry;
+    @Nullable private OpenTelemetry customOpenTelemetry;
 
     private Builder() {
       tracingEnabled = false;
       metricsEnabled = false;
-      openTelemetry = null;
+      customOpenTelemetry = null;
     }
 
     private Builder(FirestoreOpenTelemetryOptions options) {
       this.tracingEnabled = options.tracingEnabled;
       this.metricsEnabled = options.metricsEnabled;
-      this.openTelemetry = options.openTelemetry;
+      this.customOpenTelemetry = options.customOpenTelemetry;
     }
 
     @Nonnull
@@ -116,7 +116,7 @@ public class FirestoreOpenTelemetryOptions {
     @Nonnull
     public FirestoreOpenTelemetryOptions.Builder setOpenTelemetry(
         @Nonnull OpenTelemetry openTelemetry) {
-      this.openTelemetry = openTelemetry;
+      this.customOpenTelemetry = openTelemetry;
       return this;
     }
   }
