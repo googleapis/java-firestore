@@ -367,11 +367,9 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
             <configuration>
-              <sourceFileIncludes> 
-                <include>src/test-jdk17/**/*.java</include> 
-              </sourceFileIncludes>
-              <source>17</source>
-              <release>17</release> 
+              <sourceFileExcludes>
+                <include>src/test-jdk17/**/*.java</include>
+              </sourceFileExcludes>
             </configuration>
           </plugin>
         </plugins>
