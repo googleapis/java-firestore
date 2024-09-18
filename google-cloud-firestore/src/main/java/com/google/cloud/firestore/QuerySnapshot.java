@@ -24,6 +24,10 @@ import java.util.List;
  * objects.
  */
 public class QuerySnapshot extends GenericQuerySnapshot<Query> {
+  protected QuerySnapshot(Query query, Timestamp readTime) {
+    super(query, readTime, null, null, null);
+  }
+
   protected QuerySnapshot(
       Query query,
       Timestamp readTime,
@@ -46,5 +50,15 @@ public class QuerySnapshot extends GenericQuerySnapshot<Query> {
       final DocumentSet documentSet,
       final List<DocumentChange> documentChanges) {
     return new QuerySnapshot(query, readTime, null, documentSet, documentChanges);
+  }
+
+  /**
+   * Returns the query for the snapshot.
+   *
+   * @return The backing query that produced this snapshot.
+   */
+  @Override
+  public Query getQuery() {
+    return super.getQuery();
   }
 }

@@ -17,17 +17,13 @@
 package com.google.cloud.firestore;
 
 import com.google.cloud.Timestamp;
-import com.google.common.collect.ImmutableList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import javax.annotation.Nonnull;
 
 /**
  * A QuerySnapshot contains the results of a query. It can contain zero or more DocumentSnapshot
  * objects.
  */
-public abstract class VectorQuerySnapshot extends GenericQuerySnapshot<VectorQuery> {
+public class VectorQuerySnapshot extends GenericQuerySnapshot<VectorQuery> {
   protected VectorQuerySnapshot(
       VectorQuery query,
       Timestamp readTime,
@@ -40,57 +36,16 @@ public abstract class VectorQuerySnapshot extends GenericQuerySnapshot<VectorQue
   /** Creates a new QuerySnapshot representing the results of a Query with added documents. */
   public static VectorQuerySnapshot withDocuments(
       final VectorQuery query, Timestamp readTime, final List<QueryDocumentSnapshot> documents) {
-    return new VectorQuerySnapshot(query, readTime, documents, null, null) {
-      volatile ImmutableList<DocumentChange> documentChanges;
+    return new VectorQuerySnapshot(query, readTime, documents, null, null);
+  }
 
-      @Nonnull
-      @Override
-      public List<QueryDocumentSnapshot> getDocuments() {
-        return Collections.unmodifiableList(documents);
-      }
-
-      @Nonnull
-      @Override
-      public List<DocumentChange> getDocumentChanges() {
-        if (documentChanges == null) {
-          synchronized (documents) {
-            if (documentChanges == null) {
-              int size = documents.size();
-              ImmutableList.Builder<DocumentChange> builder =
-                  ImmutableList.builderWithExpectedSize(size);
-              for (int i = 0; i < size; ++i) {
-                builder.add(new DocumentChange(documents.get(i), DocumentChange.Type.ADDED, -1, i));
-              }
-              documentChanges = builder.build();
-            }
-          }
-        }
-        return documentChanges;
-      }
-
-      @Override
-      public int size() {
-        return documents.size();
-      }
-
-      @Override
-      public boolean equals(Object o) {
-        if (this == o) {
-          return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-          return false;
-        }
-        QuerySnapshot that = (QuerySnapshot) o;
-        return Objects.equals(query, that.query)
-            && Objects.equals(this.size(), that.size())
-            && Objects.equals(this.getDocuments(), that.getDocuments());
-      }
-
-      @Override
-      public int hashCode() {
-        return Objects.hash(query, this.getDocuments());
-      }
-    };
+  /**
+   * Returns the query for the snapshot.
+   *
+   * @return The backing query that produced this snapshot.
+   */
+  @Override
+  public VectorQuery getQuery() {
+    return super.getQuery();
   }
 }
