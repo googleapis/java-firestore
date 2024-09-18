@@ -368,7 +368,7 @@
             <artifactId>maven-javadoc-plugin</artifactId>
             <configuration>
               <sourceFileExcludes>
-                <include>src/test-jdk17/**/*.java</include>
+                <exclude>src/test-jdk17/**/*.java</exclude>
               </sourceFileExcludes>
             </configuration>
           </plugin>
