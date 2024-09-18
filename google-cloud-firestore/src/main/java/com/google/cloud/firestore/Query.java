@@ -36,9 +36,6 @@ import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
 import com.google.cloud.firestore.encoding.CustomClassMapper;
-import com.google.cloud.firestore.telemetry.TraceUtil;
-import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
-import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.bundle.BundledQuery;
@@ -635,6 +632,24 @@ public class Query extends StreamableQuery<QuerySnapshot> {
     }
 
     return reference;
+  }
+
+  @Override
+  public ApiFuture<QuerySnapshot> get() {
+    return get(null, null);
+  }
+
+  /**
+   * Plans and optionally executes this query. Returns an ApiFuture that will be resolved with the
+   * planner information, statistics from the query execution (if any), and the query results (if
+   * any).
+   *
+   * @return An ApiFuture that will be resolved with the planner information, statistics from the
+   *     query execution (if any), and the query results (if any).
+   */
+  @Override
+  public ApiFuture<ExplainResults<QuerySnapshot>> explain(ExplainOptions options) {
+    return super.explain(options);
   }
 
   /**

@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredQuery;
@@ -52,6 +53,24 @@ public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
     this.queryVector = queryVector;
     this.limit = limit;
     this.distanceMeasure = distanceMeasure;
+  }
+
+  @Override
+  public ApiFuture<VectorQuerySnapshot> get() {
+    return get(null, null);
+  }
+
+  /**
+   * Plans and optionally executes this query. Returns an ApiFuture that will be resolved with the
+   * planner information, statistics from the query execution (if any), and the query results (if
+   * any).
+   *
+   * @return An ApiFuture that will be resolved with the planner information, statistics from the
+   *     query execution (if any), and the query results (if any).
+   */
+  @Override
+  public ApiFuture<ExplainResults<VectorQuerySnapshot>> explain(ExplainOptions options) {
+    return super.explain(options);
   }
 
   /**
@@ -116,11 +135,22 @@ public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
     }
     findNearestBuilder.getVectorFieldBuilder().setFieldPath(this.vectorField.toString());
 
+    if (this.options != null) {
+      if (this.options.getDistanceThreshold() != null) {
+        findNearestBuilder
+            .getDistanceThresholdBuilder()
+            .setValue(this.options.getDistanceThreshold().doubleValue());
+      }
+      if (this.options.getDistanceResultField() != null) {
+        findNearestBuilder.setDistanceResultField(this.options.getDistanceResultField().toString());
+      }
+    }
+
     return requestBuilder;
   }
 
   @Override
-  public boolean isRetryableWithCursor() {
+  boolean isRetryableWithCursor() {
     return false;
   }
 

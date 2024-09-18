@@ -85,9 +85,7 @@ public abstract class StreamableQuery<SnapshotType> {
    * @return An ApiFuture that will be resolved with the results of the Query.
    */
   @Nonnull
-  public ApiFuture<SnapshotType> get() {
-    return get(null, null);
-  }
+  public abstract ApiFuture<SnapshotType> get();
 
   ApiFuture<SnapshotType> get(
       @Nullable ByteString transactionId, @Nullable Timestamp requestReadTime) {
