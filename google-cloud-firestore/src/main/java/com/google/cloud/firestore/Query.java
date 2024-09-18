@@ -634,24 +634,6 @@ public class Query extends StreamableQuery<QuerySnapshot> {
     return reference;
   }
 
-  @Override
-  public ApiFuture<QuerySnapshot> get() {
-    return get(null, null);
-  }
-
-  /**
-   * Plans and optionally executes this query. Returns an ApiFuture that will be resolved with the
-   * planner information, statistics from the query execution (if any), and the query results (if
-   * any).
-   *
-   * @return An ApiFuture that will be resolved with the planner information, statistics from the
-   *     query execution (if any), and the query results (if any).
-   */
-  @Override
-  public ApiFuture<ExplainResults<QuerySnapshot>> explain(ExplainOptions options) {
-    return super.explain(options);
-  }
-
   /**
    * Creates and returns a new Query with the additional filter that documents must contain the
    * specified field and the value should be equal to the specified value.
@@ -1727,6 +1709,29 @@ public class Query extends StreamableQuery<QuerySnapshot> {
           "Cannot use Firestore sentinels in FieldFilter or cursors");
     }
     return encodedValue;
+  }
+
+  /**
+   * Executes the query and returns the results as QuerySnapshot.
+   *
+   * @return An ApiFuture that will be resolved with the results of the Query.
+   */
+  @Override
+  public ApiFuture<QuerySnapshot> get() {
+    return get(null, null);
+  }
+
+  /**
+   * Plans and optionally executes this query. Returns an ApiFuture that will be resolved with the
+   * planner information, statistics from the query execution (if any), and the query results (if
+   * any).
+   *
+   * @return An ApiFuture that will be resolved with the planner information, statistics from the
+   *     query execution (if any), and the query results (if any).
+   */
+  @Override
+  public ApiFuture<ExplainResults<QuerySnapshot>> explain(ExplainOptions options) {
+    return super.explain(options);
   }
 
   /**

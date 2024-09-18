@@ -87,6 +87,11 @@ public abstract class StreamableQuery<SnapshotType> {
   @Nonnull
   public abstract ApiFuture<SnapshotType> get();
 
+  /**
+   * Executes the query and returns the results as QuerySnapshot.
+   *
+   * @return An ApiFuture that will be resolved with the results of the Query.
+   */
   ApiFuture<SnapshotType> get(
       @Nullable ByteString transactionId, @Nullable Timestamp requestReadTime) {
     TraceUtil.Span span =

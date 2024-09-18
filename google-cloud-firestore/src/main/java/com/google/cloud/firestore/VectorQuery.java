@@ -21,15 +21,12 @@ import com.google.cloud.Timestamp;
 import com.google.firestore.v1.RunQueryRequest;
 import com.google.firestore.v1.StructuredQuery;
 import com.google.protobuf.ByteString;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
-  static final Comparator<QueryDocumentSnapshot> DOCUMENT_ID_COMPARATOR =
-      QueryDocumentSnapshot::compareDocumentId;
   final Query query;
   final FieldPath vectorField;
   final VectorValue queryVector;
@@ -55,6 +52,11 @@ public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
     this.distanceMeasure = distanceMeasure;
   }
 
+  /**
+   * Executes the query and returns the results as QuerySnapshot.
+   *
+   * @return An ApiFuture that will be resolved with the results of the Query.
+   */
   @Override
   public ApiFuture<VectorQuerySnapshot> get() {
     return get(null, null);
