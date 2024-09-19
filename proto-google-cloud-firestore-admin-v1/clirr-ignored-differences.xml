@@ -33,6 +33,7 @@
     <method>boolean has*(*)</method>
   </difference>
 
+  <!-- The following 7006 exemptions are related to Protobuf 4.27.4+ runtime upgrade -->
   <difference>
     <differenceType>7006</differenceType>
     <className>com/google/firestore/admin/v1/**</className>
@@ -43,12 +44,6 @@
     <differenceType>7006</differenceType>
     <className>com/google/firestore/admin/v1/**</className>
     <method>* addRepeatedField(*)</method>
-    <to>**</to>
-  </difference>
-  <difference>
-    <differenceType>7006</differenceType>
-    <className>com/google/firestore/admin/v1/**</className>
-    <method>* clear()</method>
     <to>**</to>
   </difference>
   <difference>
