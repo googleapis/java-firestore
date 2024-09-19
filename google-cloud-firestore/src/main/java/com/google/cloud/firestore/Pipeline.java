@@ -504,17 +504,7 @@ public final class Pipeline {
       FindNearest.DistanceMeasure distanceMeasure,
       FindNearestOptions options) {
     // Implementation for findNearest (add the FindNearest stage if needed)
-    return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder()
-            .addAll(stages)
-            .add(
-                new FindNearest(
-                    property,
-                    vector,
-                    distanceMeasure,
-                    options)) // Assuming FindNearest takes these arguments
-            .build());
+    return append(new FindNearest(property, vector, distanceMeasure, options));
   }
 
   /**
@@ -542,8 +532,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline sort(Ordering... orders) {
-    return new Pipeline(
-        this.db, ImmutableList.<Stage>builder().addAll(stages).add(new Sort(orders)).build());
+    return append(new Sort(orders));
   }
 
   /**
@@ -774,7 +763,7 @@ public final class Pipeline {
                 .addAnnotation(
                     "Firestore.ExecutePipeline: Completed",
                     ImmutableMap.of(
-                        "numDocuments", AttributeValue.longAttributeValue((long) totalNumDocuments)));
+                        "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
             resultObserver.onCompleted(executionTime);
           }
         };
