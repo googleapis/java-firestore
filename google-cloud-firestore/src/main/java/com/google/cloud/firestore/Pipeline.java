@@ -35,11 +35,7 @@ import com.google.cloud.firestore.pipeline.expressions.Ordering;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.cloud.firestore.pipeline.stages.AddFields;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
-import com.google.cloud.firestore.pipeline.stages.Collection;
-import com.google.cloud.firestore.pipeline.stages.CollectionGroup;
-import com.google.cloud.firestore.pipeline.stages.Database;
 import com.google.cloud.firestore.pipeline.stages.Distinct;
-import com.google.cloud.firestore.pipeline.stages.Documents;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
 import com.google.cloud.firestore.pipeline.stages.GenericStage;
@@ -50,21 +46,18 @@ import com.google.cloud.firestore.pipeline.stages.Sort;
 import com.google.cloud.firestore.pipeline.stages.Stage;
 import com.google.cloud.firestore.pipeline.stages.StageUtils;
 import com.google.cloud.firestore.pipeline.stages.Where;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.ExecutePipelineRequest;
 import com.google.firestore.v1.ExecutePipelineResponse;
 import com.google.firestore.v1.StructuredPipeline;
-import com.google.firestore.v1.Value;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * The Pipeline class provides a flexible and expressive framework for building complex data
@@ -119,32 +112,21 @@ import java.util.stream.Collectors;
 @BetaApi
 public final class Pipeline {
   private static Logger logger = Logger.getLogger(Pipeline.class.getName());
-  private final ImmutableList<Stage> stages;
-  private final Firestore db;
+  private final FluentIterable<Stage> stages;
+  private final FirestoreRpcContext<?> rpcContext;
 
-  private Pipeline(Firestore db, List<Stage> stages) {
-    this.db = db;
-    this.stages = ImmutableList.copyOf(stages);
+  private Pipeline(FirestoreRpcContext<?> rpcContext, FluentIterable<Stage> stages) {
+    this.rpcContext = rpcContext;
+    this.stages = stages;
   }
 
   @InternalApi
-  Pipeline(Firestore db, Collection collection) {
-    this(db, Lists.newArrayList(collection));
+  Pipeline(FirestoreRpcContext<?> rpcContext, Stage stage) {
+    this(rpcContext, FluentIterable.of(stage));
   }
 
-  @InternalApi
-  Pipeline(Firestore db, CollectionGroup group) {
-    this(db, Lists.newArrayList(group));
-  }
-
-  @InternalApi
-  Pipeline(Firestore firestore, Database db) {
-    this(firestore, Lists.newArrayList(db));
-  }
-
-  @InternalApi
-  Pipeline(Firestore db, Documents docs) {
-    this(db, Lists.newArrayList(docs));
+  private Pipeline append(Stage stage) {
+    return new Pipeline(this.rpcContext, stages.append(stage));
   }
 
   /**
@@ -178,12 +160,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline addFields(Selectable... fields) {
-    return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder()
-            .addAll(stages)
-            .add(new AddFields(PipelineUtils.selectablesToMap(fields)))
-            .build());
+    return append(new AddFields(PipelineUtils.selectablesToMap(fields)));
   }
 
   /**
@@ -217,12 +194,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline select(Selectable... selections) {
-    return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder()
-            .addAll(stages)
-            .add(new Select(PipelineUtils.selectablesToMap(selections)))
-            .build());
+    return append(new Select(PipelineUtils.selectablesToMap(selections)));
   }
 
   /**
@@ -248,12 +220,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline select(String... fields) {
-    return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder()
-            .addAll(stages)
-            .add(new Select(PipelineUtils.fieldNamesToMap(fields)))
-            .build());
+    return append(new Select(PipelineUtils.fieldNamesToMap(fields)));
   }
 
   /**
@@ -289,8 +256,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline where(FilterCondition condition) {
-    return new Pipeline(
-        this.db, ImmutableList.<Stage>builder().addAll(stages).add(new Where(condition)).build());
+    return append(new Where(condition));
   }
 
   /**
@@ -315,8 +281,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline offset(int offset) {
-    return new Pipeline(
-        this.db, ImmutableList.<Stage>builder().addAll(stages).add(new Offset(offset)).build());
+    return append(new Offset(offset));
   }
 
   /**
@@ -346,8 +311,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline limit(int limit) {
-    return new Pipeline(
-        this.db, ImmutableList.<Stage>builder().addAll(stages).add(new Limit(limit)).build());
+    return append(new Limit(limit));
   }
 
   /**
@@ -374,12 +338,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline aggregate(ExprWithAlias<Accumulator>... accumulators) {
-    return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder()
-            .addAll(stages)
-            .add(Aggregate.withAccumulators(accumulators))
-            .build());
+    return append(Aggregate.withAccumulators(accumulators));
   }
 
   /**
@@ -416,8 +375,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline aggregate(Aggregate aggregate) {
-    return new Pipeline(
-        this.db, ImmutableList.<Stage>builder().addAll(stages).add(aggregate).build());
+    return append(aggregate);
   }
 
   /**
@@ -439,12 +397,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline distinct(String... fields) {
-    return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder()
-            .addAll(stages)
-            .add(new Distinct(PipelineUtils.fieldNamesToMap(fields)))
-            .build());
+    return append(new Distinct(PipelineUtils.fieldNamesToMap(fields)));
   }
 
   /**
@@ -476,12 +429,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline distinct(Selectable... selectables) {
-    return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder()
-            .addAll(stages)
-            .add(new Distinct(PipelineUtils.selectablesToMap(selectables)))
-            .build());
+    return append(new Distinct(PipelineUtils.selectablesToMap(selectables)));
   }
 
   /**
@@ -624,12 +572,7 @@ public final class Pipeline {
   @BetaApi
   public Pipeline genericStage(String name, List<Object> params) {
     // Implementation for genericStage (add the GenericStage if needed)
-    return new Pipeline(
-        this.db,
-        ImmutableList.<Stage>builder()
-            .addAll(stages)
-            .add(new GenericStage(name, params)) // Assuming GenericStage takes a list of params
-            .build());
+    return append(new GenericStage(name, params)); // Assuming GenericStage takes a list of params
   }
 
   /**
@@ -665,47 +608,29 @@ public final class Pipeline {
    */
   @BetaApi
   public ApiFuture<List<PipelineResult>> execute() {
-    if (db instanceof FirestoreImpl) {
-      FirestoreImpl firestoreImpl = (FirestoreImpl) db;
-      Value pipelineValue = toProto();
-      ExecutePipelineRequest request =
-          ExecutePipelineRequest.newBuilder()
-              .setDatabase(firestoreImpl.getResourcePath().getDatabaseName().toString())
-              .setStructuredPipeline(
-                  StructuredPipeline.newBuilder()
-                      .setPipeline(pipelineValue.getPipelineValue())
-                      .build())
-              .build();
+    SettableApiFuture<List<PipelineResult>> futureResult = SettableApiFuture.create();
 
-      SettableApiFuture<List<PipelineResult>> futureResult = SettableApiFuture.create();
+    execute( // Assuming you have this method
+        new PipelineResultObserver() {
+          final List<PipelineResult> results = new ArrayList<>();
 
-      pipelineInternalStream( // Assuming you have this method
-          firestoreImpl,
-          request,
-          new PipelineResultObserver() {
-            final List<PipelineResult> results = new ArrayList<>();
+          @Override
+          public void onCompleted() {
+            futureResult.set(results);
+          }
 
-            @Override
-            public void onCompleted() {
-              futureResult.set(results);
-            }
+          @Override
+          public void onNext(PipelineResult result) {
+            results.add(result);
+          }
 
-            @Override
-            public void onNext(PipelineResult result) {
-              results.add(result);
-            }
+          @Override
+          public void onError(Throwable t) {
+            futureResult.setException(t);
+          }
+        });
 
-            @Override
-            public void onError(Throwable t) {
-              futureResult.setException(t);
-            }
-          });
-
-      return futureResult;
-    } else {
-      // Handle unsupported Firestore types
-      throw new IllegalArgumentException("Unsupported Firestore type");
-    }
+    return futureResult;
   }
 
   /**
@@ -755,59 +680,40 @@ public final class Pipeline {
    */
   @BetaApi
   public void execute(ApiStreamObserver<PipelineResult> observer) {
-    if (db instanceof FirestoreImpl) {
-      FirestoreImpl firestoreImpl = (FirestoreImpl) db;
-      Value pipelineValue = toProto();
-      ExecutePipelineRequest request =
-          ExecutePipelineRequest.newBuilder()
-              .setDatabase(firestoreImpl.getResourcePath().getDatabaseName().toString())
-              .setStructuredPipeline(
-                  StructuredPipeline.newBuilder()
-                      .setPipeline(pipelineValue.getPipelineValue())
-                      .build())
-              .build();
+    ExecutePipelineRequest request =
+        ExecutePipelineRequest.newBuilder()
+            .setDatabase(rpcContext.getDatabaseName())
+            .setStructuredPipeline(StructuredPipeline.newBuilder().setPipeline(toProto()).build())
+            .build();
 
-      pipelineInternalStream(
-          firestoreImpl,
-          request,
-          new PipelineResultObserver() {
-            @Override
-            public void onCompleted() {
-              observer.onCompleted();
-            }
+    pipelineInternalStream(
+        request,
+        new PipelineResultObserver() {
+          @Override
+          public void onCompleted() {
+            observer.onCompleted();
+          }
 
-            @Override
-            public void onNext(PipelineResult result) {
-              observer.onNext(result);
-            }
+          @Override
+          public void onNext(PipelineResult result) {
+            observer.onNext(result);
+          }
 
-            @Override
-            public void onError(Throwable t) {
-              observer.onError(t);
-            }
-          });
-    } else {
-      // Handle unsupported Firestore types
-      throw new IllegalArgumentException("Unsupported Firestore type");
-    }
+          @Override
+          public void onError(Throwable t) {
+            observer.onError(t);
+          }
+        });
   }
 
-  private Value toProto() {
-    return Value.newBuilder()
-        .setPipelineValue(
-            com.google.firestore.v1.Pipeline.newBuilder()
-                .addAllStages(
-                    stages.stream()
-                        .map(StageUtils::toStageProto)
-                        .collect(Collectors.toList())) // Use the static method
-            )
+  private com.google.firestore.v1.Pipeline toProto() {
+    return com.google.firestore.v1.Pipeline.newBuilder()
+        .addAllStages(stages.transform(StageUtils::toStageProto))
         .build();
   }
 
   private void pipelineInternalStream(
-      FirestoreImpl rpcContext,
-      ExecutePipelineRequest request,
-      PipelineResultObserver resultObserver) {
+      ExecutePipelineRequest request, PipelineResultObserver resultObserver) {
     ResponseObserver<ExecutePipelineResponse> observer =
         new ResponseObserver<ExecutePipelineResponse>() {
           Timestamp executionTime = null;
@@ -841,9 +747,7 @@ public final class Pipeline {
               }
 
               for (Document doc : response.getResultsList()) {
-                resultObserver.onNext(
-                    PipelineResult.fromDocument(
-                        rpcContext, Timestamp.fromProto(response.getExecutionTime()), doc));
+                resultObserver.onNext(PipelineResult.fromDocument(rpcContext, executionTime, doc));
               }
             }
 
@@ -870,7 +774,7 @@ public final class Pipeline {
                 .addAnnotation(
                     "Firestore.ExecutePipeline: Completed",
                     ImmutableMap.of(
-                        "numDocuments", AttributeValue.longAttributeValue((long) numDocuments)));
+                        "numDocuments", AttributeValue.longAttributeValue((long) totalNumDocuments)));
             resultObserver.onCompleted(executionTime);
           }
         };

@@ -46,11 +46,11 @@ import javax.annotation.Nonnull;
  */
 @BetaApi
 public class PipelineSource {
-  private final Firestore db;
+  private final FirestoreRpcContext<?> rpcContext;
 
   @InternalApi
-  PipelineSource(Firestore db) {
-    this.db = db;
+  PipelineSource(FirestoreRpcContext<?> rpcContext) {
+    this.rpcContext = rpcContext;
   }
 
   /**
@@ -62,7 +62,7 @@ public class PipelineSource {
   @Nonnull
   @BetaApi
   public Pipeline collection(@Nonnull String path) {
-    return new Pipeline(this.db, new Collection(path));
+    return new Pipeline(this.rpcContext, new Collection(path));
   }
 
   /**
@@ -82,7 +82,7 @@ public class PipelineSource {
         !collectionId.contains("/"),
         "Invalid collectionId '%s'. Collection IDs must not contain '/'.",
         collectionId);
-    return new Pipeline(this.db, new CollectionGroup(collectionId));
+    return new Pipeline(this.rpcContext, new CollectionGroup(collectionId));
   }
 
   /**
@@ -96,7 +96,7 @@ public class PipelineSource {
   @Nonnull
   @BetaApi
   public Pipeline database() {
-    return new Pipeline(this.db, new Database());
+    return new Pipeline(this.rpcContext, new Database());
   }
 
   /**
@@ -109,6 +109,6 @@ public class PipelineSource {
   @Nonnull
   @BetaApi
   public Pipeline documents(DocumentReference... docs) {
-    return new Pipeline(this.db, Documents.of(docs));
+    return new Pipeline(this.rpcContext, Documents.of(docs));
   }
 }
