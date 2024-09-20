@@ -320,20 +320,6 @@
           <artifactId>javax.annotation-api</artifactId>
         </dependency>
       </dependencies>
-      <build>
-        <plugins>
-            <plugin>
-            <!-- On CI, javadoc runs on java 17, but it sources java8 to compile and raises version conflict -->
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-              <sourceFileExcludes> 
-                <exclude>src/test-jdk17/**/*.java</exclude> 
-              </sourceFileExcludes>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
     <profile>
       <!-- JDK17 set up for tests in src/test-jdk17 -->
