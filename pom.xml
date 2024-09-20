@@ -242,7 +242,7 @@
         </links>
         <sourceFileExcludes>
           <exclude>com/google/cloud/firestore/v1/package-info.java</exclude>
-          <sourceFileExclude>test-jdk17/com/google/cloud/firestore/*.java</sourceFileExclude>
+          <sourceFileExclude>test-jdk17/java/com/google/cloud/firestore/*.java</sourceFileExclude>
         </sourceFileExcludes>
       </configuration>
     </plugin>
