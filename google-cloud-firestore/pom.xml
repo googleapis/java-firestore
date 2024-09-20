@@ -362,15 +362,6 @@
               </compilerArgs>
             </configuration>
           </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-              <sourceFileIncludes>
-                <include>src/test-jdk21/**/*.java</include>
-              </sourceFileIncludes>
-            </configuration>
-          </plugin>
         </plugins>
       </build>
     </profile>
