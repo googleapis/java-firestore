@@ -348,18 +348,15 @@
             </executions>
           </plugin>
           <plugin>
+            <!-- On CI, javadoc runs on java 17, but it sources java8 to compile and raises version conflict -->
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <inherited>true</inherited>
+            <artifactId>maven-javadoc-plugin</artifactId>
             <configuration>
-              <!-- Enable Java 17 for all sources so that Intellij picks the right language level -->
+              <sourceFileIncludes> 
+                <include>src/test-jdk17/**/*.java</include> 
+              </sourceFileIncludes>
               <source>17</source>
-              <release>17</release>
-              <compilerArgs>
-                <arg>-parameters</arg>
-                <arg>--add-opens=java.base/java.lang=ALL-UNNAMED</arg>
-                <arg>--add-opens=java.base/java.util=ALL-UNNAMED</arg>
-              </compilerArgs>
+              <release>17</release> 
             </configuration>
           </plugin>
         </plugins>
