@@ -303,7 +303,7 @@
     <!-- Reverted a change to make CustomClassMapper public -->
   <difference>
     <differenceType>8001</differenceType>
-    <className>com.google.cloud.firestore.encoding.CustomClassMapper</className>
+    <className>com/google/cloud/firestore/encoding/CustomClassMapper</className>
     <to>*</to>
   </difference>
 </differences>
