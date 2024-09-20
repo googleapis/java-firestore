@@ -362,18 +362,6 @@
               </compilerArgs>
             </configuration>
           </plugin>
-          <plugin>
-            <!-- On CI, javadoc runs on java 17, but it sources java8 to compile and raises version conflict -->
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-              <sourceFileIncludes> 
-                <include>src/test-jdk17/**/*.java</include> 
-              </sourceFileIncludes>
-              <source>17</source>
-              <release>17</release> 
-            </configuration>
-          </plugin>
         </plugins>
       </build>
     </profile>
