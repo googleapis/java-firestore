@@ -24,6 +24,7 @@ import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.api.gax.core.GoogleCredentialsProvider;
 import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider;
 import com.google.api.gax.rpc.TransportChannelProvider;
+import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.auth.Credentials;
 import com.google.cloud.ServiceDefaults;
 import com.google.cloud.ServiceOptions;
@@ -38,6 +39,7 @@ import com.google.common.collect.ImmutableSet;
 import io.grpc.ManagedChannelBuilder;
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -106,6 +108,35 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   @Override
   protected String getDefaultHost() {
     return FirestoreDefaults.INSTANCE.getHost();
+  }
+
+  @Override
+  public ApiTracerFactory getApiTracerFactory() {
+    return createApiTracerFactory();
+  }
+
+  private ApiTracerFactory createApiTracerFactory() {
+    List<ApiTracerFactory> apiTracerFactories = new ArrayList<>();
+    // Prefer any direct ApiTracerFactory that might have been set on the builder.
+    if (super.getApiTracerFactory() != null) {
+      apiTracerFactories.add(super.getApiTracerFactory());
+    }
+    // Add Metrics Tracer factory if built in metrics are enabled and if the client is data client
+    // and if emulator is not enabled.
+    if (metricsUtil.isBuiltInMetricsEnabled()) {
+      ApiTracerFactory defaultMetricsTracerFactory =
+          metricsUtil.getDefaultOpenTelemetryMetricsProvider().getOpenTelemetryApiTracerFactory();
+      ApiTracerFactory customMetricsTracerFactory =
+          metricsUtil.getCustomOpenTelemetryMetricsProvider().getOpenTelemetryApiTracerFactory();
+      if (defaultMetricsTracerFactory != null) {
+        apiTracerFactories.add(defaultMetricsTracerFactory);
+      }
+      if (customMetricsTracerFactory != null) {
+        apiTracerFactories.add(customMetricsTracerFactory);
+      }
+    }
+
+    return new CompositeApiTracerFactory(apiTracerFactories);
   }
 
   public String getDatabaseId() {

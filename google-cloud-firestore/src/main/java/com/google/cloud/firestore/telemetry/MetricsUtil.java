@@ -51,6 +51,7 @@ import javax.annotation.Nullable;
 public class MetricsUtil {
 
   private final FirestoreOptions firestoreOptions;
+  private final boolean isBuiltInMetricsEnabled;
 
   BuiltinMetricsProvider defaultOpenTelemetryMetricsProvider;
   BuiltinMetricsProvider customOpenTelemetryMetricsProvider;
@@ -64,15 +65,20 @@ public class MetricsUtil {
    */
   public MetricsUtil(FirestoreOptions firestoreOptions) {
     this.firestoreOptions = firestoreOptions;
+    this.isBuiltInMetricsEnabled = createEnabledInstance();
 
     // TODO(mila): re-assess if it should follow tracing's design: enabled/disabled MetricsUtil
-    if (createEnabledInstance()) {
+    if (isBuiltInMetricsEnabled) {
       try {
         createMetricsUtil();
       } catch (IOException e) {
         System.out.println(e);
       }
     }
+  }
+
+  public boolean isBuiltInMetricsEnabled() {
+    return isBuiltInMetricsEnabled;
   }
 
   private boolean createEnabledInstance() {
@@ -163,8 +169,7 @@ public class MetricsUtil {
     }
 
     private void recordEndToEndLatency(String status) {
-      if (defaultOpenTelemetryMetricsProvider == null)
-        return;
+      if (defaultOpenTelemetryMetricsProvider == null) return;
       double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
       Map<String, String> attributes = new HashMap<>();
       attributes.put(METHOD_KEY.toString(), methodName);
@@ -175,8 +180,7 @@ public class MetricsUtil {
     }
 
     public void recordFirstResponseLatency() {
-      if (defaultOpenTelemetryMetricsProvider == null)
-      return;
+      if (defaultOpenTelemetryMetricsProvider == null) return;
 
       double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
       Map<String, String> attributes = new HashMap<>();
@@ -198,12 +202,10 @@ public class MetricsUtil {
   }
 
   public BuiltinMetricsProvider getDefaultOpenTelemetryMetricsProvider() {
-    // TODO Auto-generated method stub
     return this.defaultOpenTelemetryMetricsProvider;
   }
 
   public BuiltinMetricsProvider getCustomOpenTelemetryMetricsProvider() {
-    // TODO Auto-generated method stub
     return this.customOpenTelemetryMetricsProvider;
   }
 }

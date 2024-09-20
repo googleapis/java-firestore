@@ -39,12 +39,16 @@ public class BuiltinMetricsProvider {
   private DoubleHistogram firstResponseLatency;
 
   public BuiltinMetricsProvider(OpenTelemetry openTelemetry) {
-    OpenTelemetryMetricsRecorder recorder =
-        new OpenTelemetryMetricsRecorder(openTelemetry, METER_NAME);
 
-    this.otelApiTracerFactory = new MetricsTracerFactory(recorder, createStaticAttributes());
+    this.openTelemetry = openTelemetry;
+    if (openTelemetry != null) {
+      OpenTelemetryMetricsRecorder recorder =
+          new OpenTelemetryMetricsRecorder(openTelemetry, METER_NAME);
 
-    registerMetrics();
+      this.otelApiTracerFactory = new MetricsTracerFactory(recorder, createStaticAttributes());
+
+      registerMetrics();
+    }
   }
 
   private Map<String, String> createStaticAttributes() {
@@ -79,18 +83,6 @@ public class BuiltinMetricsProvider {
             .build();
     // TODO(mila): add transaction latency and retry count metrics
   }
-
-  // public void endToEndRequestLatencyRecorder(double latency, Attributes attributes) {
-  //   if (endToEndRequestLatency != null) {
-  //     endToEndRequestLatency.record(latency, attributes);
-  //   }
-  // }
-
-  // public void firstResponseLatencyRecorder(double latency, Attributes attributes) {
-  //   if (firstResponseLatency != null) {
-  //     firstResponseLatency.record(latency, attributes);
-  //   }
-  // }
 
   public void endToEndRequestLatencyRecorder(double latency, Map<String, String> attributes) {
     if (endToEndRequestLatency != null) {
