@@ -27,6 +27,8 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.telemetry.MetricsUtil;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
@@ -70,6 +72,11 @@ public class AggregateQuery {
     return query.getFirestore().getOptions().getTraceUtil();
   }
 
+  @Nonnull
+  private MetricsUtil getMetricsUtil() {
+    return query.getFirestore().getOptions().getMetricsUtil();
+  }
+
   /** Returns the query whose aggregations will be calculated by this object. */
   @Nonnull
   public Query getQuery() {
@@ -97,6 +104,10 @@ public class AggregateQuery {
   @Nonnull
   public ApiFuture<ExplainResults<AggregateQuerySnapshot>> explain(ExplainOptions options) {
     TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET);
+
+    MetricsContext metricsContext =
+        getMetricsUtil().createMetricsContext(TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET);
+
     try (Scope ignored = span.makeCurrent()) {
       AggregateQueryExplainResponseDeliverer responseDeliverer =
           new AggregateQueryExplainResponseDeliverer(
@@ -106,10 +117,14 @@ public class AggregateQuery {
               /* explainOptions= */ options);
       runQuery(responseDeliverer, /* attempt */ 0);
       ApiFuture<ExplainResults<AggregateQuerySnapshot>> result = responseDeliverer.getFuture();
+
       span.endAtFuture(result);
+      metricsContext.recordEndToEndLatencyAtFuture(result);
+
       return result;
     } catch (Exception error) {
       span.end(error);
+      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }
@@ -123,6 +138,14 @@ public class AggregateQuery {
                 transactionId == null
                     ? TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET
                     : TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
+
+    MetricsContext metricsContext =
+        getMetricsUtil()
+            .createMetricsContext(
+                transactionId == null
+                    ? TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET
+                    : TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
+
     try (Scope ignored = span.makeCurrent()) {
       AggregateQueryResponseDeliverer responseDeliverer =
           new AggregateQueryResponseDeliverer(
@@ -132,9 +155,11 @@ public class AggregateQuery {
       runQuery(responseDeliverer, /* attempt= */ 0);
       ApiFuture<AggregateQuerySnapshot> result = responseDeliverer.getFuture();
       span.endAtFuture(result);
+      metricsContext.recordEndToEndLatencyAtFuture(result);
       return result;
     } catch (Exception error) {
       span.end(error);
+      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }

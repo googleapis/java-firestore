@@ -18,6 +18,7 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -58,6 +59,13 @@ final class ReadTimeTransaction extends Transaction {
     TraceUtil.Span span =
         getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, transactionTraceContext);
+
+    MetricsContext metricsContext =
+        firestore
+            .getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT);
+
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<DocumentSnapshot> result =
           ApiFutures.transform(
@@ -66,9 +74,12 @@ final class ReadTimeTransaction extends Transaction {
               snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
               MoreExecutors.directExecutor());
       span.endAtFuture(result);
+      metricsContext.recordEndToEndLatencyAtFuture(result);
+
       return result;
     } catch (Exception error) {
       span.end(error);
+      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }
@@ -80,13 +91,23 @@ final class ReadTimeTransaction extends Transaction {
     TraceUtil.Span span =
         getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
+
+    MetricsContext metricsContext =
+        firestore
+            .getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS);
+
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, /* fieldMask= */ null, readTime);
       span.endAtFuture(result);
+      metricsContext.recordEndToEndLatencyAtFuture(result);
+
       return result;
     } catch (Exception error) {
       span.end(error);
+      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }
@@ -98,13 +119,23 @@ final class ReadTimeTransaction extends Transaction {
     TraceUtil.Span span =
         getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
+
+    MetricsContext metricsContext =
+        firestore
+            .getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS);
+
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, /* fieldMask= */ null, readTime);
       span.endAtFuture(result);
+      metricsContext.recordEndToEndLatencyAtFuture(result);
+
       return result;
     } catch (Exception error) {
       span.end(error);
+      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }

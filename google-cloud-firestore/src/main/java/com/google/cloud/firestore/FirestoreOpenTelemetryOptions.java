@@ -28,15 +28,21 @@ import javax.annotation.Nullable;
 @BetaApi
 public class FirestoreOpenTelemetryOptions {
   private final boolean tracingEnabled;
+  private final boolean metricsEnabled;
   private final @Nullable OpenTelemetry openTelemetry;
 
   FirestoreOpenTelemetryOptions(Builder builder) {
     this.tracingEnabled = builder.tracingEnabled;
+    this.metricsEnabled = builder.metricsEnabled;
     this.openTelemetry = builder.openTelemetry;
   }
 
   public boolean isTracingEnabled() {
     return tracingEnabled;
+  }
+
+  public boolean isMetricsEnabled() {
+    return metricsEnabled;
   }
 
   public OpenTelemetry getOpenTelemetry() {
@@ -57,15 +63,19 @@ public class FirestoreOpenTelemetryOptions {
 
     private boolean tracingEnabled;
 
+    private boolean metricsEnabled;
+
     @Nullable private OpenTelemetry openTelemetry;
 
     private Builder() {
       tracingEnabled = false;
+      metricsEnabled = false;
       openTelemetry = null;
     }
 
     private Builder(FirestoreOpenTelemetryOptions options) {
       this.tracingEnabled = options.tracingEnabled;
+      this.metricsEnabled = options.metricsEnabled;
       this.openTelemetry = options.openTelemetry;
     }
 
@@ -82,6 +92,17 @@ public class FirestoreOpenTelemetryOptions {
     @Nonnull
     public FirestoreOpenTelemetryOptions.Builder setTracingEnabled(boolean tracingEnabled) {
       this.tracingEnabled = tracingEnabled;
+      return this;
+    }
+
+    /**
+     * Sets whether client side metrics should be enabled.
+     *
+     * @param metricsEnabled Whether client side metrics should be enabled.
+     */
+    @Nonnull
+    public FirestoreOpenTelemetryOptions.Builder setMetricsEnabled(boolean metricsEnabled) {
+      this.metricsEnabled = metricsEnabled;
       return this;
     }
 
