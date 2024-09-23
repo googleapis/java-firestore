@@ -122,7 +122,6 @@
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk</artifactId>
-      <version>${opentelemetry.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.cloud.opentelemetry</groupId>
@@ -132,7 +131,6 @@
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk-common</artifactId>
-      <version>${opentelemetry.version}</version>
     </dependency>
     <!-- END OpenTelemetry -->
 
