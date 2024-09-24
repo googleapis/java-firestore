@@ -322,10 +322,10 @@
       </dependencies>
     </profile>
     <profile>
-      <!-- JDK17 set up for tests in src/test-jdk17 -->
-      <id>java17-test</id>
+      <!-- JDK21 set up for tests in src/test-jdk21 -->
+      <id>java21-test</id>
       <activation>
-        <jdk>17</jdk>
+        <jdk>21</jdk>
       </activation>
       <build>
         <plugins>
@@ -341,7 +341,7 @@
                 </goals>
                 <configuration>
                   <sources>
-                    <source>src/test-jdk17/java</source>
+                    <source>src/test-jdk21/java</source>
                   </sources>
                 </configuration>
               </execution>
@@ -352,14 +352,24 @@
             <artifactId>maven-compiler-plugin</artifactId>
             <inherited>true</inherited>
             <configuration>
-              <!-- Enable Java 17 for all sources so that Intellij picks the right language level -->
-              <source>17</source>
-              <release>17</release>
+              <!-- Enable Java 21 for all sources so that Intellij picks the right language level -->
+              <source>21</source>
+              <release>21</release>
               <compilerArgs>
                 <arg>-parameters</arg>
                 <arg>--add-opens=java.base/java.lang=ALL-UNNAMED</arg>
                 <arg>--add-opens=java.base/java.util=ALL-UNNAMED</arg>
               </compilerArgs>
+            </configuration>
+          </plugin>
+          <plugin>
+             <!-- skip javadoc test for src/test-jdk21-->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <sourceFileExcludes>
+                <exclude>src/test-jdk21/**/*.java</exclude>
+              </sourceFileExcludes>
             </configuration>
           </plugin>
         </plugins>
