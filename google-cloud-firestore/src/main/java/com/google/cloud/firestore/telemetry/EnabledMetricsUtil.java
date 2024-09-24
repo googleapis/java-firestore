@@ -45,35 +45,28 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
-/**
- * A utility interface for trace collection. Classes that implement this interface may make their
- * own design choices for how they approach trace collection. For instance, they may be no-op, or
- * they may use a particular tracing framework such as OpenTelemetry.
- */
-public class EnabledMetricsUtil implements MetricsUtil {
+class EnabledMetricsUtil implements MetricsUtil {
 
-  private final FirestoreOptions firestoreOptions;
-
-  private static BuiltinMetricsProvider defaultOpenTelemetryMetricsProvider;
-  private static BuiltinMetricsProvider customOpenTelemetryMetricsProvider;
+  private BuiltinMetricsProvider defaultOpenTelemetryMetricsProvider;
+  private BuiltinMetricsProvider customOpenTelemetryMetricsProvider;
 
   EnabledMetricsUtil(FirestoreOptions firestoreOptions) {
-    this.firestoreOptions = firestoreOptions;
     try {
-      createMetricsUtil();
+      createMetricsUtil(firestoreOptions);
     } catch (IOException e) {
       // TODO: Handle the exception appropriately (e.g., logging)
     }
   }
 
-  private void createMetricsUtil() throws IOException {
-    EnabledMetricsUtil.defaultOpenTelemetryMetricsProvider =
-        new BuiltinMetricsProvider(getDefaultOpenTelemetryInstance());
-    EnabledMetricsUtil.customOpenTelemetryMetricsProvider =
+  private void createMetricsUtil(FirestoreOptions firestoreOptions) throws IOException {
+    this.defaultOpenTelemetryMetricsProvider =
+        new BuiltinMetricsProvider(
+            getDefaultOpenTelemetryInstance(firestoreOptions.getProjectId()));
+    this.customOpenTelemetryMetricsProvider =
         new BuiltinMetricsProvider(firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry());
   }
 
-  private OpenTelemetry getDefaultOpenTelemetryInstance() throws IOException {
+  private OpenTelemetry getDefaultOpenTelemetryInstance(String projectId) throws IOException {
 
     SdkMeterProviderBuilder sdkMeterProviderBuilder = SdkMeterProvider.builder();
 
@@ -85,7 +78,7 @@ public class EnabledMetricsUtil implements MetricsUtil {
     MetricExporter metricExporter =
         GoogleCloudMetricExporter.createWithConfiguration(
             MetricConfiguration.builder()
-                .setProjectId(firestoreOptions.getProjectId())
+                .setProjectId(projectId)
                 .setInstrumentationLibraryLabelsEnabled(false)
                 // .setMonitoredResourceDescription((null))
                 // .setUseServiceTimeSeries(false)
@@ -114,7 +107,7 @@ public class EnabledMetricsUtil implements MetricsUtil {
     }
   }
 
-  static class MetricsContext implements MetricsUtil.MetricsContext {
+  class MetricsContext implements MetricsUtil.MetricsContext {
     private final Stopwatch stopwatch;
     private final String methodName;
 
@@ -169,7 +162,7 @@ public class EnabledMetricsUtil implements MetricsUtil {
     }
 
     /** Function to extract the status of the error as a string */
-    public String extractErrorStatus(@Nullable Throwable throwable) {
+    private String extractErrorStatus(@Nullable Throwable throwable) {
       if (!(throwable instanceof FirestoreException)) {
         return StatusCode.Code.UNKNOWN.toString();
       }

@@ -19,6 +19,7 @@ package com.google.cloud.firestore.telemetry;
 import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.*;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.InternalApi;
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.cloud.firestore.FirestoreOptions;
 import java.util.List;
@@ -29,6 +30,7 @@ import javax.annotation.Nonnull;
  * own design choices for how they approach trace collection. For instance, they may be no-op, or
  * they may use a particular tracing framework such as OpenTelemetry.
  */
+@InternalApi
 public interface MetricsUtil {
 
   static MetricsUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
@@ -65,7 +67,7 @@ public interface MetricsUtil {
 
   abstract void addMetricsTracerFactory(List<ApiTracerFactory> apiTracerFactories);
 
-  public interface MetricsContext {
+  interface MetricsContext {
 
     /**
      * If an operation ends in the future, its relevant metrics should be recorded _after_ the

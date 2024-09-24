@@ -20,9 +20,9 @@ import com.google.api.core.ApiFuture;
 import com.google.api.gax.tracing.ApiTracerFactory;
 import java.util.List;
 
-public class DisabledMetricsUtil implements MetricsUtil {
+class DisabledMetricsUtil implements MetricsUtil {
 
-  static class MetricsContext implements MetricsUtil.MetricsContext {
+  class MetricsContext implements MetricsUtil.MetricsContext {
 
     @Override
     public <T> void recordEndToEndLatencyAtFuture(ApiFuture<T> futureValue) {}
