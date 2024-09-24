@@ -322,10 +322,14 @@
       </dependencies>
     </profile>
     <profile>
-      <!-- JDK21 set up for tests in src/test-jdk21 -->
+      <!-- JDK17 set up for tests in src/test-jdk17 -->
       <id>java17-test</id>
       <activation>
-        <jdk>17</jdk>
+        <!-- Activate the tests only on CI unit(17) tests using flag -->
+        <property>
+          <name>runTestsWithJava17</name>
+          <value>true</value>
+        </property>
         <activeByDefault>false</activeByDefault>
       </activation>
       <build>
@@ -353,7 +357,7 @@
             <artifactId>maven-compiler-plugin</artifactId>
             <inherited>true</inherited>
             <configuration>
-              <!-- Enable Java 21 for all sources so that Intellij picks the right language level -->
+              <!-- Enable Java 17 for all sources so that Intellij picks the right language level -->
               <source>17</source>
               <release>17</release>
               <compilerArgs>
@@ -362,28 +366,6 @@
                 <arg>--add-opens=java.base/java.util=ALL-UNNAMED</arg>
               </compilerArgs>
             </configuration>
-            <executions>
-              <execution>
-                <id>add-test-source_new</id>
-                <phase>generate-test-sources</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-             <!-- javadoc test for src/test-jdk21-->
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-              <sourceFileIncludes>
-                <include>src/test-jdk17/**/*.java</include>
-              </sourceFileIncludes>
-            </configuration>
-            <executions>
-              <execution>
-                <id>add-test-source_newer</id>
-                <phase>generate-test-sources</phase>
-              </execution>
-            </executions>
           </plugin>
         </plugins>
       </build>

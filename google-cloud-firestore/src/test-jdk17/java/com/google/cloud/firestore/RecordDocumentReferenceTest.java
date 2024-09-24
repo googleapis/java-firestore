@@ -94,6 +94,7 @@ public class RecordDocumentReferenceTest {
 
   @Test
   public void doesNotSerializeAdvancedNumberTypes() {
+    System.out.println("===============");
     Map<InvalidRecord, String> expectedErrorMessages = new HashMap<>();
 
     InvalidRecord record = new InvalidRecord(new BigInteger("0"), null, null);
@@ -363,7 +364,7 @@ public class RecordDocumentReferenceTest {
     CommitRequest expectedCommit = commit(set(nestedUpdate, updateMask));
     assertCommitEquals(expectedCommit, commitCapture.getValue());
   }
-  
+
   @Test
   public void setNestedRecordWithPojoMapWithMerge() throws Exception {
     doReturn(SINGLE_WRITE_COMMIT_RESPONSE)
