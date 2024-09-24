@@ -19,12 +19,11 @@ package com.google.cloud.firestore.pipeline.expressions;
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
-import javax.annotation.Nonnull;
 
 @BetaApi
-public final class Count extends Function implements Accumulator {
+public final class BitLeftShift extends Function {
   @InternalApi
-  Count(@Nonnull Expr value) {
-    super("count", ImmutableList.of(value));
+  BitLeftShift(Expr left, Expr right) {
+    super("bit_left_shift", ImmutableList.of(left, right));
   }
 }

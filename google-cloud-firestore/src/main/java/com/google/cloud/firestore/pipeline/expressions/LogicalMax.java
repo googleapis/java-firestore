@@ -19,11 +19,12 @@ package com.google.cloud.firestore.pipeline.expressions;
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
+import javax.annotation.Nonnull;
 
 @BetaApi
-public final class ToUppercase extends Function {
+public final class LogicalMax extends Function {
   @InternalApi
-  ToUppercase(Expr expr) {
-    super("to_uppercase", ImmutableList.of(expr));
+  LogicalMax(@Nonnull Expr left, @Nonnull Expr right) {
+    super("logical_max", ImmutableList.of(left, right));
   }
 }

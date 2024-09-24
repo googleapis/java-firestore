@@ -24,6 +24,6 @@ import com.google.common.collect.ImmutableList;
 public final class CountIf extends Function implements Accumulator {
   @InternalApi
   CountIf(Expr value, boolean distinct) {
-    super("count_if", (value != null) ? ImmutableList.of(value) : ImmutableList.of());
+    super("countif", (value != null) ? ImmutableList.of(value) : ImmutableList.of());
   }
 }

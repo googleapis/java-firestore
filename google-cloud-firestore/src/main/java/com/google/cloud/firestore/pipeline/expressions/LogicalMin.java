@@ -22,9 +22,9 @@ import com.google.common.collect.ImmutableList;
 import javax.annotation.Nonnull;
 
 @BetaApi
-public final class Count extends Function implements Accumulator {
+public final class LogicalMin extends Function {
   @InternalApi
-  Count(@Nonnull Expr value) {
-    super("count", ImmutableList.of(value));
+  LogicalMin(@Nonnull Expr left, @Nonnull Expr right) {
+    super("logical_min", ImmutableList.of(left, right));
   }
 }

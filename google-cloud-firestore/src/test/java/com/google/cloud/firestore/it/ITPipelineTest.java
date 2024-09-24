@@ -22,22 +22,19 @@ import static com.google.cloud.firestore.pipeline.expressions.Function.and;
 import static com.google.cloud.firestore.pipeline.expressions.Function.arrayContains;
 import static com.google.cloud.firestore.pipeline.expressions.Function.arrayContainsAll;
 import static com.google.cloud.firestore.pipeline.expressions.Function.arrayContainsAny;
-import static com.google.cloud.firestore.pipeline.expressions.Function.arrayElement;
-import static com.google.cloud.firestore.pipeline.expressions.Function.arrayFilter;
-import static com.google.cloud.firestore.pipeline.expressions.Function.arrayTransform;
 import static com.google.cloud.firestore.pipeline.expressions.Function.avg;
-import static com.google.cloud.firestore.pipeline.expressions.Function.collectionId;
 import static com.google.cloud.firestore.pipeline.expressions.Function.cosineDistance;
 import static com.google.cloud.firestore.pipeline.expressions.Function.countAll;
 import static com.google.cloud.firestore.pipeline.expressions.Function.endsWith;
 import static com.google.cloud.firestore.pipeline.expressions.Function.eq;
 import static com.google.cloud.firestore.pipeline.expressions.Function.euclideanDistance;
 import static com.google.cloud.firestore.pipeline.expressions.Function.gt;
+import static com.google.cloud.firestore.pipeline.expressions.Function.logicalMax;
+import static com.google.cloud.firestore.pipeline.expressions.Function.logicalMin;
 import static com.google.cloud.firestore.pipeline.expressions.Function.lt;
 import static com.google.cloud.firestore.pipeline.expressions.Function.neq;
 import static com.google.cloud.firestore.pipeline.expressions.Function.not;
 import static com.google.cloud.firestore.pipeline.expressions.Function.or;
-import static com.google.cloud.firestore.pipeline.expressions.Function.parent;
 import static com.google.cloud.firestore.pipeline.expressions.Function.startsWith;
 import static com.google.cloud.firestore.pipeline.expressions.Function.strConcat;
 import static com.google.cloud.firestore.pipeline.expressions.Function.subtract;
@@ -294,7 +291,7 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .where(lt("published", 1900))
-            .distinct(Field.of("genre").toLowercase().as("lower_genre"))
+            .distinct(Field.of("genre").toLower().as("lower_genre"))
             .execute()
             .get();
     assertThat(data(results))
@@ -494,42 +491,42 @@ public class ITPipelineTest extends ITBaseTest {
                     Lists.newArrayList("comedy", "space", "adventure", "newTag1", "newTag2"))));
   }
 
-  @Test
-  public void testArrayFilter() throws Exception {
-    List<PipelineResult> results =
-        collection
-            .pipeline()
-            .select(
-                arrayFilter(Field.of("tags"), Function.eq(arrayElement(), "comedy"))
-                    .as("filteredTags"))
-            .limit(1)
-            .execute()
-            .get();
+  // @Test
+  // public void testArrayFilter() throws Exception {
+  //   List<PipelineResult> results =
+  //       collection
+  //           .pipeline()
+  //           .select(
+  //               arrayFilter(Field.of("tags"), Function.eq(arrayElement(), "comedy"))
+  //                   .as("filteredTags"))
+  //           .limit(1)
+  //           .execute()
+  //           .get();
+  //
+  //   assertThat(data(results))
+  //       .isEqualTo(Lists.newArrayList(map("filteredTags", Lists.newArrayList("comedy"))));
+  // }
 
-    assertThat(data(results))
-        .isEqualTo(Lists.newArrayList(map("filteredTags", Lists.newArrayList("comedy"))));
-  }
-
-  @Test
-  public void testArrayTransform() throws Exception {
-    List<PipelineResult> results =
-        collection
-            .pipeline()
-            .select(
-                arrayTransform(Field.of("tags"), strConcat(arrayElement(), "transformed"))
-                    .as("transformedTags"))
-            .limit(1)
-            .execute()
-            .get();
-
-    assertThat(data(results))
-        .isEqualTo(
-            Lists.newArrayList(
-                map(
-                    "transformedTags",
-                    Lists.newArrayList(
-                        "comedytransformed", "spacetransformed", "adventuretransformed"))));
-  }
+  // @Test
+  // public void testArrayTransform() throws Exception {
+  //   List<PipelineResult> results =
+  //       collection
+  //           .pipeline()
+  //           .select(
+  //               arrayTransform(Field.of("tags"), strConcat(arrayElement(), "transformed"))
+  //                   .as("transformedTags"))
+  //           .limit(1)
+  //           .execute()
+  //           .get();
+  //
+  //   assertThat(data(results))
+  //       .isEqualTo(
+  //           Lists.newArrayList(
+  //               map(
+  //                   "transformedTags",
+  //                   Lists.newArrayList(
+  //                       "comedytransformed", "spacetransformed", "adventuretransformed"))));
+  // }
 
   @Test
   public void testStrConcat() throws Exception {
@@ -590,7 +587,7 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(Field.of("title").strLength().as("titleLength"), Field.of("title"))
+            .select(Field.of("title").charLength().as("titleLength"), Field.of("title"))
             .where(gt("titleLength", 20))
             .execute()
             .get();
@@ -600,11 +597,71 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
+  public void testStringFunctions() throws Exception {
+    List<PipelineResult> results;
+
+    // Reverse
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .select(Field.of("title").reverse().as("reversed_title"))
+            .where(Field.of("author").eq("Douglas Adams"))
+            .execute()
+            .get();
+    assertThat(data(results).get(0).get("reversed_title"))
+        .isEqualTo("yxalaG ot ediug s'reknhiHcH ehT");
+
+    // ReplaceFirst
+    results =
+        collection
+            .pipeline()
+            .select(Field.of("title").replaceFirst("The", "A").as("replaced_title"))
+            .where(Field.of("author").eq("Douglas Adams"))
+            .execute()
+            .get();
+    assertThat(data(results).get(0).get("replaced_title"))
+        .isEqualTo("A Hitchhiker's Guide to the Galaxy");
+
+    // ReplaceAll
+    results =
+        collection
+            .pipeline()
+            .select(Field.of("title").replaceAll(" ", "_").as("replaced_title"))
+            .where(Field.of("author").eq("Douglas Adams"))
+            .execute()
+            .get();
+    assertThat(data(results).get(0).get("replaced_title"))
+        .isEqualTo("The_Hitchhiker's_Guide_to_the_Galaxy");
+
+    // CharLength
+    results =
+        collection
+            .pipeline()
+            .select(Field.of("title").charLength().as("title_length"))
+            .where(Field.of("author").eq("Douglas Adams"))
+            .execute()
+            .get();
+    assertThat(data(results).get(0).get("title_length")).isEqualTo(30L);
+
+    // ByteLength
+    results =
+        collection
+            .pipeline()
+            .select(Field.of("title").strConcat("_银河系漫游指南").byteLength().as("title_byte_length"))
+            .where(Field.of("author").eq("Douglas Adams"))
+            .execute()
+            .get();
+    assertThat(data(results).get(0).get("title_byte_length"))
+        .isEqualTo(30L); // Assuming UTF-8 encoding where each character is 1 byte
+  }
+
+  @Test
   public void testToLowercase() throws Exception {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(Field.of("title").toLowercase().as("lowercaseTitle"))
+            .select(Field.of("title").toLower().as("lowercaseTitle"))
             .limit(1)
             .execute()
             .get();
@@ -619,7 +676,7 @@ public class ITPipelineTest extends ITBaseTest {
     List<PipelineResult> results =
         collection
             .pipeline()
-            .select(Field.of("author").toUppercase().as("uppercaseAuthor"))
+            .select(Field.of("author").toUpper().as("uppercaseAuthor"))
             .limit(1)
             .execute()
             .get();
@@ -778,6 +835,121 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
+  public void testBitwiseOperations() throws Exception {
+    List<PipelineResult> results;
+
+    // Bitwise AND
+    results =
+        collection
+            .pipeline()
+            .where(Field.of("author").eq("Douglas Adams"))
+            .select(
+                Field.of("published").bitAnd(0xFF).as("published_masked"),
+                Function.bitAnd(Field.of("published"), 0xFF).as("published_masked_func"))
+            .execute()
+            .get();
+    assertThat(data(results))
+        .containsExactly(
+            map("published_masked", 1979 & 0xFF, "published_masked_func", 1979 & 0xFF));
+
+    // Bitwise OR
+    results =
+        collection
+            .pipeline()
+            .where(Field.of("author").eq("Douglas Adams"))
+            .select(
+                Field.of("published").bitOr(0x100).as("published_ored"),
+                Function.bitOr(Field.of("published"), 0x100).as("published_ored_func"))
+            .execute()
+            .get();
+    assertThat(data(results))
+        .containsExactly(map("published_ored", 1979 | 0x100, "published_ored_func", 1979 | 0x100));
+
+    // Bitwise XOR
+    results =
+        collection
+            .pipeline()
+            .where(Field.of("author").eq("Douglas Adams"))
+            .select(
+                Field.of("published").bitXor(0x100).as("published_xored"),
+                Function.bitXor(Field.of("published"), 0x100).as("published_xored_func"))
+            .execute()
+            .get();
+    assertThat(data(results))
+        .containsExactly(
+            map("published_xored", 1979 ^ 0x100, "published_xored_func", 1979 ^ 0x100));
+
+    // Bitwise NOT
+    results =
+        collection
+            .pipeline()
+            .where(Field.of("author").eq("Douglas Adams"))
+            .select(
+                Field.of("published").bitNot().as("published_not"),
+                Function.bitNot(Field.of("published")).as("published_not_func"))
+            .execute()
+            .get();
+    assertThat(data(results))
+        .containsExactly(map("published_not", ~1979, "published_not_func", ~1979));
+
+    // Bitwise Left Shift
+    results =
+        collection
+            .pipeline()
+            .where(Field.of("author").eq("Douglas Adams"))
+            .select(
+                Field.of("published").bitLeftShift(2).as("published_shifted_left"),
+                Function.bitLeftShift(Field.of("published"), 2).as("published_shifted_left_func"))
+            .execute()
+            .get();
+    assertThat(data(results))
+        .containsExactly(
+            map("published_shifted_left", 1979 << 2, "published_shifted_left_func", 1979 << 2));
+
+    // Bitwise Right Shift
+    results =
+        collection
+            .pipeline()
+            .where(Field.of("author").eq("Douglas Adams"))
+            .select(
+                Field.of("published").bitRightShift(2).as("published_shifted_right"),
+                Function.bitRightShift(Field.of("published"), 2).as("published_shifted_right_func"))
+            .execute()
+            .get();
+    assertThat(data(results))
+        .containsExactly(
+            map("published_shifted_right", 1979 >> 2, "published_shifted_right_func", 1979 >> 2));
+  }
+
+  @Test
+  public void testLogicalMinMax() throws Exception {
+    List<PipelineResult> results;
+
+    // logicalMax
+    results =
+        collection
+            .pipeline()
+            .where(Field.of("author").eq("Douglas Adams"))
+            .select(
+                Field.of("rating").logicalMax(4.5).as("max_rating"),
+                logicalMax(Field.of("published"), 1900).as("max_published"))
+            .execute()
+            .get();
+    assertThat(data(results)).containsExactly(map("max_rating", 4.5, "max_published", 1979L));
+
+    // logicalMin
+    results =
+        collection
+            .pipeline()
+            .select(
+                Field.of("rating").logicalMin(4.5).as("min_rating"),
+                logicalMin(Field.of("published"), 1900).as("min_published"))
+            .execute()
+            .get();
+    assertThat(data(results)).containsExactly(map("min_rating", 4.2, "min_published", 1900L));
+  }
+
+  @Test
   public void testMapGet() throws Exception {
     List<PipelineResult> results =
         collection
@@ -792,36 +964,6 @@ public class ITPipelineTest extends ITBaseTest {
             Lists.newArrayList(
                 map("hugoAward", true, "title", "The Hitchhiker's Guide to the Galaxy"),
                 map("hugoAward", true, "title", "Dune")));
-  }
-
-  @Test
-  public void testParent() throws Exception {
-    List<PipelineResult> results =
-        collection
-            .pipeline()
-            .select(
-                parent(collection.document("chile").collection("subCollection").getPath())
-                    .as("parent"))
-            .limit(1)
-            .execute()
-            .get();
-
-    assertThat(data(results))
-        .isEqualTo(
-            Lists.newArrayList(map("parent", "projects/projectId/databases/(default)/documents")));
-  }
-
-  @Test
-  public void testCollectionId() throws Exception {
-    List<PipelineResult> results =
-        collection
-            .pipeline()
-            .select(collectionId(collection.document("chile")).as("collectionId"))
-            .limit(1)
-            .execute()
-            .get();
-
-    assertThat(data(results)).isEqualTo(Lists.newArrayList(map("collectionId", "books")));
   }
 
   @Test

@@ -19,12 +19,12 @@ package com.google.cloud.firestore.pipeline.expressions;
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
-import javax.annotation.Nonnull;
 
 @BetaApi
-public final class Count extends Function implements Accumulator {
+public final class CountAll extends Function implements Accumulator {
   @InternalApi
-  Count(@Nonnull Expr value) {
-    super("count", ImmutableList.of(value));
+  CountAll() {
+    // The same name as count, with no arguments
+    super("count", ImmutableList.of());
   }
 }

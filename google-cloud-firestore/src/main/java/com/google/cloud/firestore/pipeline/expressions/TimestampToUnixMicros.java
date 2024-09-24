@@ -19,12 +19,11 @@ package com.google.cloud.firestore.pipeline.expressions;
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
-import javax.annotation.Nonnull;
 
 @BetaApi
-public final class Count extends Function implements Accumulator {
+public final class TimestampToUnixMicros extends Function {
   @InternalApi
-  Count(@Nonnull Expr value) {
-    super("count", ImmutableList.of(value));
+  TimestampToUnixMicros(Expr input) {
+    super("timestamp_to_unix_micros", ImmutableList.of(input));
   }
 }

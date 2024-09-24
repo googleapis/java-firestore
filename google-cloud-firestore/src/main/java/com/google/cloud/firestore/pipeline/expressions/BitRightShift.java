@@ -21,9 +21,9 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class ToLowercase extends Function {
+public final class BitRightShift extends Function {
   @InternalApi
-  ToLowercase(Expr expr) {
-    super("to_lowercase", ImmutableList.of(expr));
+  BitRightShift(Expr left, Expr right) {
+    super("bit_right_shift", ImmutableList.of(left, right));
   }
 }

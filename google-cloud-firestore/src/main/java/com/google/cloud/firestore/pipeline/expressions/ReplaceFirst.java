@@ -21,9 +21,9 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class StrLength extends Function {
+public final class ReplaceFirst extends Function {
   @InternalApi
-  StrLength(Expr expr) {
-    super("length", ImmutableList.of(expr));
+  ReplaceFirst(Expr value, Expr find, Expr replacement) {
+    super("replace_first", ImmutableList.of(value, find, replacement));
   }
 }

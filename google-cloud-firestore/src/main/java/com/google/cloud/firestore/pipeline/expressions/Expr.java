@@ -188,6 +188,325 @@ public interface Expr {
     return new Divide(this, Constant.of(other));
   }
 
+  /**
+   * Creates an expression that calculates the modulo (remainder) to another expression.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculate the remainder of dividing the 'value' field by field 'divisor'.
+   * Field.of("value").mod(Field.of("divisor"));
+   * }</pre>
+   *
+   * @param other The divisor expression.
+   * @return A new {@code Expr} representing the modulo operation.
+   */
+  @BetaApi
+  default Mod mod(Expr other) {
+    return new Mod(this, other);
+  }
+
+  /**
+   * Creates an expression that calculates the modulo (remainder) to another constant.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculate the remainder of dividing the 'value' field by 5.
+   * Field.of("value").mod(5);
+   * }</pre>
+   *
+   * @param other The divisor constant.
+   * @return A new {@code Expr} representing the modulo operation.
+   */
+  @BetaApi
+  default Mod mod(Object other) {
+    return new Mod(this, Constant.of(other));
+  }
+
+  /**
+   * Creates an expression that applies an AND (&) operation with another expression.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculates the AND operation result from field 'flag' and 'mask'.
+   * Field.of("flag").bitAnd(Field.of("mask"));
+   * }</pre>
+   *
+   * @param other The expression to divide by.
+   * @return A new {@code Expr} representing the division operation.
+   */
+  @BetaApi
+  default BitAnd bitAnd(Expr other) {
+    return new BitAnd(this, other);
+  }
+
+  /**
+   * Creates an expression that applies an AND (&) operation with a constant.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculates the AND operation result of field 'flag' and 0xff.
+   * Field.of("flag").bigAnd(0xff);
+   * }</pre>
+   *
+   * @param other The constant value to divide by.
+   * @return A new {@code Expr} representing the division operation.
+   */
+  @BetaApi
+  default BitAnd bitAnd(Object other) {
+    return new BitAnd(this, Constant.of(other));
+  }
+
+  /**
+   * Creates an expression that applies an OR (|) operation with another expression.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculates the OR operation result from field 'flag' and 'mask'.
+   * Field.of("flag").bitOr(Field.of("mask"));
+   * }</pre>
+   *
+   * @param other The expression to apply OR with.
+   * @return A new {@code Expr} representing the OR operation.
+   */
+  @BetaApi
+  default BitOr bitOr(Expr other) {
+    return new BitOr(this, other);
+  }
+
+  /**
+   * Creates an expression that applies an OR (|) operation with a constant.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculates the OR operation result of field 'flag' and 0xff.
+   * Field.of("flag").bitOr(0xff);
+   * }</pre>
+   *
+   * @param other The constant value to apply OR with.
+   * @return A new {@code Expr} representing the OR operation.
+   */
+  @BetaApi
+  default BitOr bitOr(Object other) {
+    return new BitOr(this, Constant.of(other));
+  }
+
+  /**
+   * Creates an expression that applies an XOR (^) operation with another expression.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculates the XOR operation result from field 'flag' and 'mask'.
+   * Field.of("flag").bitXor(Field.of("mask"));
+   * }</pre>
+   *
+   * @param other The expression to apply XOR with.
+   * @return A new {@code Expr} representing the XOR operation.
+   */
+  @BetaApi
+  default BitXor bitXor(Expr other) {
+    return new BitXor(this, other);
+  }
+
+  /**
+   * Creates an expression that applies an XOR (^) operation with a constant.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculates the XOR operation result of field 'flag' and 0xff.
+   * Field.of("flag").bitXor(0xff);
+   * }</pre>
+   *
+   * @param other The constant value to apply XOR with.
+   * @return A new {@code Expr} representing the XOR operation.
+   */
+  @BetaApi
+  default BitXor bitXor(Object other) {
+    return new BitXor(this, Constant.of(other));
+  }
+
+  /**
+   * Creates an expression that applies a NOT (~) operation.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculates the NOT operation result of field 'flag'.
+   * Field.of("flag").bitNot();
+   * }</pre>
+   *
+   * @return A new {@code Expr} representing the NOT operation.
+   */
+  @BetaApi
+  default BitNot bitNot() {
+    return new BitNot(this);
+  }
+
+  /**
+   * Creates an expression that applies a left shift (<<) operation with another expression.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculates the left shift operation result from field 'flag' by 'shift' bits.
+   * Field.of("flag").bitLeftShift(Field.of("shift"));
+   * }</pre>
+   *
+   * @param other The expression representing the number of bits to shift left by.
+   * @return A new {@code Expr} representing the left shift operation.
+   */
+  @BetaApi
+  default BitLeftShift bitLeftShift(Expr other) {
+    return new BitLeftShift(this, other);
+  }
+
+  /**
+   * Creates an expression that applies a left shift (<<) operation with a constant.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculates the left shift operation result of field 'flag' by 2 bits.
+   * Field.of("flag").bitLeftShift(2);
+   * }</pre>
+   *
+   * @param other The constant number of bits to shift left by.
+   * @return A new {@code Expr} representing the left shift operation.
+   */
+  @BetaApi
+  default BitLeftShift bitLeftShift(Object other) {
+    return new BitLeftShift(this, Constant.of(other));
+  }
+
+  /**
+   * Creates an expression that applies a right shift (>>) operation with another expression.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculates the right shift operation result from field 'flag' by 'shift' bits.
+   * Field.of("flag").bitRightShift(Field.of("shift"));
+   * }</pre>
+   *
+   * @param other The expression representing the number of bits to shift right by.
+   * @return A new {@code Expr} representing the right shift operation.
+   */
+  @BetaApi
+  default BitRightShift bitRightShift(Expr other) {
+    return new BitRightShift(this, other);
+  }
+
+  /**
+   * Creates an expression that applies a right shift (>>) operation with a constant.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Calculates the right shift operation result of field 'flag' by 2 bits.
+   * Field.of("flag").bitRightShift(2);
+   * }</pre>
+   *
+   * @param other The constant number of bits to shift right by.
+   * @return A new {@code Expr} representing the right shift operation.
+   */
+  @BetaApi
+  default BitRightShift bitRightShift(Object other) {
+    return new BitRightShift(this, Constant.of(other));
+  }
+
+  // Logical Functions
+
+  /**
+   * Creates an expression that returns the larger value between this expression and another
+   * expression, based on Firestore's value type ordering.
+   *
+   * <p>Firestore's value type ordering is described here: <a
+   * href="https://cloud.google.com/firestore/docs/concepts/data-types#value_type_ordering">...</a>
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Returns the larger value between the 'discount' field and the 'cap' field.
+   * Field.of("discount").logicalMax(Field.of("cap"));
+   * }</pre>
+   *
+   * @param other The other expression to compare with.
+   * @return A new {@code Expr} representing the logical max operation.
+   */
+  default LogicalMax logicalMax(Expr other) {
+    return new LogicalMax(this, other);
+  }
+
+  /**
+   * Creates an expression that returns the larger value between this expression and a constant
+   * value, based on Firestore's value type ordering.
+   *
+   * <p>Firestore's value type ordering is described here: <a
+   * href="https://cloud.google.com/firestore/docs/concepts/data-types#value_type_ordering">...</a>
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Returns the larger value between the 'value' field and 10.
+   * Field.of("value").logicalMax(10);
+   * }</pre>
+   *
+   * @param other The constant value to compare with.
+   * @return A new {@code Expr} representing the logical max operation.
+   */
+  default LogicalMax logicalMax(Object other) {
+    return new LogicalMax(this, Constant.of(other));
+  }
+
+  /**
+   * Creates an expression that returns the smaller value between this expression and another
+   * expression, based on Firestore's value type ordering.
+   *
+   * <p>Firestore's value type ordering is described here: <a
+   * href="https://cloud.google.com/firestore/docs/concepts/data-types#value_type_ordering">...</a>
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Returns the smaller value between the 'discount' field and the 'floor' field.
+   * Field.of("discount").logicalMin(Field.of("floor"));
+   * }</pre>
+   *
+   * @param other The other expression to compare with.
+   * @return A new {@code Expr} representing the logical min operation.
+   */
+  default LogicalMin logicalMin(Expr other) {
+    return new LogicalMin(this, other);
+  }
+
+  /**
+   * Creates an expression that returns the smaller value between this expression and a constant
+   * value, based on Firestore's value type ordering.
+   *
+   * <p>Firestore's value type ordering is described here: <a
+   * href="https://cloud.google.com/firestore/docs/concepts/data-types#value_type_ordering">...</a>
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Returns the smaller value between the 'value' field and 10.
+   * Field.of("value").logicalMin(10);
+   * }</pre>
+   *
+   * @param other The constant value to compare with.
+   * @return A new {@code Expr} representing the logical min operation.
+   */
+  default LogicalMin logicalMin(Object other) {
+    return new LogicalMin(this, Constant.of(other));
+  }
+
   // Comparison Operators
 
   /**
@@ -578,27 +897,6 @@ public interface Expr {
   }
 
   /**
-   * Creates an expression that filters elements from an array using the given {@link
-   * FilterCondition} and returns the filtered elements as a new array.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Get items from the 'inventoryPrices' array where the array item is greater than 0
-   * // Note we use {@link Function#arrayElement} to represent array elements to construct a
-   * // filtering condition.
-   * Field.of("inventoryPrices").arrayFilter(arrayElement().gt(0));
-   * }</pre>
-   *
-   * @param filter The {@link FilterCondition} to apply to the array elements.
-   * @return A new {@code Expr} representing the filtered array.
-   */
-  @BetaApi
-  default ArrayFilter arrayFilter(FilterCondition filter) {
-    return new ArrayFilter(this, filter);
-  }
-
-  /**
    * Creates an expression that calculates the length of an array.
    *
    * <p>Example:
@@ -616,22 +914,20 @@ public interface Expr {
   }
 
   /**
-   * Creates an expression that applies a transformation function to each element in an array and
-   * returns the new array as the result of the evaluation.
+   * Creates an expression that returns the reversed content of an array.
    *
    * <p>Example:
    *
    * <pre>{@code
-   * // Convert all strings in the 'names' array to uppercase
-   * Field.of("names").arrayTransform(arrayElement().toUppercase());
+   * // Get the 'preferences' array in reversed order.
+   * Field.of("preferences").arrayReverse();
    * }</pre>
    *
-   * @param transform The {@link Function} to apply to each array element.
-   * @return A new {@code Expr} representing the transformed array.
+   * @return A new {@code Expr} representing the length of the array.
    */
   @BetaApi
-  default ArrayTransform arrayTransform(Function transform) {
-    return new ArrayTransform(this, transform);
+  default ArrayReverse arrayReverse() {
+    return new ArrayReverse(this);
   }
 
   // Other Functions
@@ -762,20 +1058,37 @@ public interface Expr {
   // String Functions
 
   /**
-   * Creates an expression that calculates the length of a string.
+   * Creates an expression that calculates the character length of a string.
    *
    * <p>Example:
    *
    * <pre>{@code
-   * // Get the length of the 'name' field
-   * Field.of("name").strLength();
+   * // Get the character length of the 'name' field
+   * Field.of("name").charLength();
    * }</pre>
    *
    * @return A new {@code Expr} representing the length of the string.
    */
   @BetaApi
-  default StrLength strLength() {
-    return new StrLength(this);
+  default CharLength charLength() {
+    return new CharLength(this);
+  }
+
+  /**
+   * Creates an expression that calculates the byte length of a string in its UTF-8 form.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Get the byte length of the 'name' field
+   * Field.of("name").byteLength();
+   * }</pre>
+   *
+   * @return A new {@code Expr} representing the byte length of the string.
+   */
+  @BetaApi
+  default ByteLength byteLength() {
+    return new ByteLength(this);
   }
 
   /**
@@ -993,8 +1306,8 @@ public interface Expr {
    * @return A new {@code Expr} representing the lowercase string.
    */
   @BetaApi
-  default ToLowercase toLowercase() {
-    return new ToLowercase(this);
+  default ToLower toLower() {
+    return new ToLower(this);
   }
 
   /**
@@ -1004,14 +1317,14 @@ public interface Expr {
    *
    * <pre>{@code
    * // Convert the 'title' field to uppercase
-   * Field.of("title").toUpperCase();
+   * Field.of("title").toUpper();
    * }</pre>
    *
    * @return A new {@code Expr} representing the uppercase string.
    */
   @BetaApi
-  default ToUppercase toUppercase() {
-    return new ToUppercase(this);
+  default ToUpper toUpper() {
+    return new ToUpper(this);
   }
 
   /**
@@ -1030,6 +1343,109 @@ public interface Expr {
   default Trim trim() {
     return new Trim(this);
   }
+
+  /**
+   * Creates an expression that reverses a string.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Reverse the 'userInput' field
+   * Field.of("userInput").reverse();
+   * }</pre>
+   *
+   * @return A new {@code Expr} representing the reversed string.
+   */
+  @BetaApi
+  default Reverse reverse() {
+    return new Reverse(this);
+  }
+
+  /**
+   * Creates an expression that replaces the first occurrence of a substring within a string with
+   * another substring.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Replace the first occurrence of "hello" with "hi" in the 'message' field
+   * Field.of("message").replaceFirst("hello", "hi");
+   * }</pre>
+   *
+   * @param find The substring to search for.
+   * @param replace The substring to replace the first occurrence of 'find' with.
+   * @return A new {@code Expr} representing the string with the first occurrence replaced.
+   */
+  @BetaApi
+  default ReplaceFirst replaceFirst(String find, String replace) {
+    return new ReplaceFirst(this, Constant.of(find), Constant.of(replace));
+  }
+
+  /**
+   * Creates an expression that replaces the first occurrence of a substring within a string with
+   * another substring, where the substring to find and the replacement substring are specified by
+   * expressions.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Replace the first occurrence of the value in 'findField' with the value in 'replaceField' in the 'message' field
+   * Field.of("message").replaceFirst(Field.of("findField"), Field.of("replaceField"));
+   * }</pre>
+   *
+   * @param find The expression representing the substring to search for.
+   * @param replace The expression representing the substring to replace the first occurrence of
+   *     'find' with.
+   * @return A new {@code Expr} representing the string with the first occurrence replaced.
+   */
+  @BetaApi
+  default ReplaceFirst replaceFirst(Expr find, Expr replace) {
+    return new ReplaceFirst(this, find, replace);
+  }
+
+  /**
+   * Creates an expression that replaces all occurrences of a substring within a string with another
+   * substring.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Replace all occurrences of "hello" with "hi" in the 'message' field
+   * Field.of("message").replaceAll("hello", "hi");
+   * }</pre>
+   *
+   * @param find The substring to search for.
+   * @param replace The substring to replace all occurrences of 'find' with.
+   * @return A new {@code Expr} representing the string with all occurrences replaced.
+   */
+  @BetaApi
+  default ReplaceAll replaceAll(String find, String replace) {
+    return new ReplaceAll(this, Constant.of(find), Constant.of(replace));
+  }
+
+  /**
+   * Creates an expression that replaces all occurrences of a substring within a string with another
+   * substring, where the substring to find and the replacement substring are specified by
+   * expressions.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Replace all occurrences of the value in 'findField' with the value in 'replaceField' in the 'message' field
+   * Field.of("message").replaceAll(Field.of("findField"), Field.of("replaceField"));
+   * }</pre>
+   *
+   * @param find The expression representing the substring to search for.
+   * @param replace The expression representing the substring to replace all occurrences of 'find'
+   *     with.
+   * @return A new {@code Expr} representing the string with all occurrences replaced.
+   */
+  @BetaApi
+  default ReplaceAll replaceAll(Expr find, Expr replace) {
+    return new ReplaceAll(this, find, replace);
+  }
+
+  // map functions
 
   /**
    * Accesses a value from a map (object) field using the provided key.
@@ -1156,6 +1572,139 @@ public interface Expr {
   @BetaApi
   default DotProduct dotProduct(Expr other) {
     return new DotProduct(this, other);
+  }
+
+  /**
+   * Creates an expression that calculates the length of a Firestore Vector.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Get the vector length (dimension) of the field 'embedding'.
+   * Field.of("embedding").vectorLength();
+   * }</pre>
+   *
+   * @return A new {@code Expr} representing the length of the array.
+   */
+  @BetaApi
+  default VectorLength vectorLength() {
+    return new VectorLength(this);
+  }
+
+  // Timestamps
+
+  /**
+   * Creates an expression that converts a timestamp to the number of microseconds since the epoch
+   * (1970-01-01 00:00:00 UTC).
+   *
+   * <p>Truncates higher levels of precision by rounding down to the beginning of the microsecond.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Convert the 'timestamp' field to microseconds since the epoch.
+   * Field.of("timestamp").timestampToUnixMicros();
+   * }</pre>
+   *
+   * @return A new {@code Expr} representing the number of microseconds since the epoch.
+   */
+  @BetaApi
+  default TimestampToUnixMicros timestampToUnixMicros() {
+    return new TimestampToUnixMicros(this);
+  }
+
+  /**
+   * Creates an expression that converts a number of microseconds since the epoch (1970-01-01
+   * 00:00:00 UTC) to a timestamp.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Convert the 'microseconds' field to a timestamp.
+   * Field.of("microseconds").unixMicrosToTimestamp();
+   * }</pre>
+   *
+   * @return A new {@code Expr} representing the timestamp.
+   */
+  @BetaApi
+  default UnixMicrosToTimestamp unixMicrosToTimestamp() {
+    return new UnixMicrosToTimestamp(this);
+  }
+
+  /**
+   * Creates an expression that converts a timestamp to the number of milliseconds since the epoch
+   * (1970-01-01 00:00:00 UTC).
+   *
+   * <p>Truncates higher levels of precision by rounding down to the beginning of the millisecond.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Convert the 'timestamp' field to milliseconds since the epoch.
+   * Field.of("timestamp").timestampToUnixMillis();
+   * }</pre>
+   *
+   * @return A new {@code Expr} representing the number of milliseconds since the epoch.
+   */
+  @BetaApi
+  default TimestampToUnixMillis timestampToUnixMillis() {
+    return new TimestampToUnixMillis(this);
+  }
+
+  /**
+   * Creates an expression that converts a number of milliseconds since the epoch (1970-01-01
+   * 00:00:00 UTC) to a timestamp.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Convert the 'milliseconds' field to a timestamp.
+   * Field.of("milliseconds").unixMillisToTimestamp();
+   * }</pre>
+   *
+   * @return A new {@code Expr} representing the timestamp.
+   */
+  @BetaApi
+  default UnixMillisToTimestamp unixMillisToTimestamp() {
+    return new UnixMillisToTimestamp(this);
+  }
+
+  /**
+   * Creates an expression that converts a timestamp to the number of seconds since the epoch
+   * (1970-01-01 00:00:00 UTC).
+   *
+   * <p>Truncates higher levels of precision by rounding down to the beginning of the second.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Convert the 'timestamp' field to seconds since the epoch.
+   * Field.of("timestamp").timestampToUnixSeconds();
+   * }</pre>
+   *
+   * @return A new {@code Expr} representing the number of seconds since the epoch.
+   */
+  @BetaApi
+  default TimestampToUnixSeconds timestampToUnixSeconds() {
+    return new TimestampToUnixSeconds(this);
+  }
+
+  /**
+   * Creates an expression that converts a number of seconds since the epoch (1970-01-01 00:00:00
+   * UTC) to a timestamp.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Convert the 'seconds' field to a timestamp.
+   * Field.of("seconds").unixSecondsToTimestamp();
+   * }</pre>
+   *
+   * @return A new {@code Expr} representing the timestamp.
+   */
+  @BetaApi
+  default UnixSecondsToTimestamp unixSecondsToTimestamp() {
+    return new UnixSecondsToTimestamp(this);
   }
 
   // Ordering
