@@ -52,22 +52,17 @@ class EnabledMetricsUtil implements MetricsUtil {
 
   EnabledMetricsUtil(FirestoreOptions firestoreOptions) {
     try {
-      createMetricsUtil(firestoreOptions);
+      this.defaultOpenTelemetryMetricsProvider =
+          new BuiltinMetricsProvider(
+              getDefaultOpenTelemetryInstance(firestoreOptions.getProjectId()));
+      this.customOpenTelemetryMetricsProvider =
+          new BuiltinMetricsProvider(firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry());
     } catch (IOException e) {
       // TODO: Handle the exception appropriately (e.g., logging)
     }
   }
 
-  private void createMetricsUtil(FirestoreOptions firestoreOptions) throws IOException {
-    this.defaultOpenTelemetryMetricsProvider =
-        new BuiltinMetricsProvider(
-            getDefaultOpenTelemetryInstance(firestoreOptions.getProjectId()));
-    this.customOpenTelemetryMetricsProvider =
-        new BuiltinMetricsProvider(firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry());
-  }
-
   private OpenTelemetry getDefaultOpenTelemetryInstance(String projectId) throws IOException {
-
     SdkMeterProviderBuilder sdkMeterProviderBuilder = SdkMeterProvider.builder();
 
     // Filter out attributes that are not defined
@@ -97,11 +92,12 @@ class EnabledMetricsUtil implements MetricsUtil {
   public void addMetricsTracerFactory(List<ApiTracerFactory> apiTracerFactories) {
     ApiTracerFactory defaultMetricsTracerFactory =
         defaultOpenTelemetryMetricsProvider.getOpenTelemetryApiTracerFactory();
-    ApiTracerFactory customMetricsTracerFactory =
-        customOpenTelemetryMetricsProvider.getOpenTelemetryApiTracerFactory();
     if (defaultMetricsTracerFactory != null) {
       apiTracerFactories.add(defaultMetricsTracerFactory);
     }
+
+    ApiTracerFactory customMetricsTracerFactory =
+        customOpenTelemetryMetricsProvider.getOpenTelemetryApiTracerFactory();
     if (customMetricsTracerFactory != null) {
       apiTracerFactories.add(customMetricsTracerFactory);
     }

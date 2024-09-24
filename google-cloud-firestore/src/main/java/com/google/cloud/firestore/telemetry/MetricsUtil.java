@@ -34,29 +34,29 @@ import javax.annotation.Nonnull;
 public interface MetricsUtil {
 
   static MetricsUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
-    boolean isBuiltInMetricsEnabled = createEnabledInstance(firestoreOptions);
-
-    if (isBuiltInMetricsEnabled) {
+    if (isBuiltInMetricsEnabled(firestoreOptions)) {
       return new EnabledMetricsUtil(firestoreOptions);
     } else {
       return new DisabledMetricsUtil();
     }
   }
 
-  static boolean createEnabledInstance(FirestoreOptions firestoreOptions) {
+  static boolean isBuiltInMetricsEnabled(FirestoreOptions firestoreOptions) {
     // Start with the value from FirestoreOptions
     boolean createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().isMetricsEnabled();
 
     // Override based on the environment variable
     String enableMetricsEnvVar = System.getenv(ENABLE_METRICS_ENV_VAR);
     if (enableMetricsEnvVar != null) {
-      if (enableMetricsEnvVar.equalsIgnoreCase("true")
-          || enableMetricsEnvVar.equalsIgnoreCase("on")) {
-        createEnabledInstance = true;
-      }
-      if (enableMetricsEnvVar.equalsIgnoreCase("false")
-          || enableMetricsEnvVar.equalsIgnoreCase("off")) {
-        createEnabledInstance = false;
+      switch (enableMetricsEnvVar.toLowerCase()) {
+        case "true":
+        case "on":
+          createEnabledInstance = true;
+          break;
+        case "false":
+        case "off":
+          createEnabledInstance = false;
+          break;
       }
     }
 

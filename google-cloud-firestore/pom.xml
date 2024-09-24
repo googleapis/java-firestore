@@ -212,7 +212,6 @@
       <version>${opentelemetry.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>com.google.cloud.opentelemetry</groupId>
       <artifactId>exporter-trace</artifactId>

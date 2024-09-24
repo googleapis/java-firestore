@@ -121,10 +121,8 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     if (super.getApiTracerFactory() != null) {
       apiTracerFactories.add(super.getApiTracerFactory());
     }
-    // Add Metrics Tracer factory if built in metrics are enabled and if the client is data client
-    // and if emulator is not enabled.
+    // Add Metrics Tracer factory if built in metrics are enabled.
     metricsUtil.addMetricsTracerFactory(apiTracerFactories);
-
     return new CompositeApiTracerFactory(apiTracerFactories);
   }
 
