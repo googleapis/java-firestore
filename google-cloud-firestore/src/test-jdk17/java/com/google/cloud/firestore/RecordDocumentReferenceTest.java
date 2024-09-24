@@ -94,7 +94,6 @@ public class RecordDocumentReferenceTest {
 
   @Test
   public void doesNotSerializeAdvancedNumberTypes() {
-    System.out.println("===============");
     Map<InvalidRecord, String> expectedErrorMessages = new HashMap<>();
 
     InvalidRecord record = new InvalidRecord(new BigInteger("0"), null, null);
