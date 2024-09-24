@@ -123,18 +123,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     }
     // Add Metrics Tracer factory if built in metrics are enabled and if the client is data client
     // and if emulator is not enabled.
-    if (metricsUtil.isBuiltInMetricsEnabled()) {
-      ApiTracerFactory defaultMetricsTracerFactory =
-          metricsUtil.getDefaultOpenTelemetryMetricsProvider().getOpenTelemetryApiTracerFactory();
-      ApiTracerFactory customMetricsTracerFactory =
-          metricsUtil.getCustomOpenTelemetryMetricsProvider().getOpenTelemetryApiTracerFactory();
-      if (defaultMetricsTracerFactory != null) {
-        apiTracerFactories.add(defaultMetricsTracerFactory);
-      }
-      if (customMetricsTracerFactory != null) {
-        apiTracerFactories.add(customMetricsTracerFactory);
-      }
-    }
+    metricsUtil.addMetricsTracerFactory(apiTracerFactories);
 
     return new CompositeApiTracerFactory(apiTracerFactories);
   }
@@ -364,7 +353,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
             : FirestoreDefaults.INSTANCE.getDatabaseId();
 
     // set metrics util after database ID is set
-    this.metricsUtil = new MetricsUtil(this);
+    this.metricsUtil = MetricsUtil.getInstance(this);
 
     if (builder.channelProvider == null) {
       ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> channelConfigurator =

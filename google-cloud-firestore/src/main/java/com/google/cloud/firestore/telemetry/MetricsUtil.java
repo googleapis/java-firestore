@@ -19,69 +19,29 @@ package com.google.cloud.firestore.telemetry;
 import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.*;
 
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutureCallback;
-import com.google.api.core.ApiFutures;
-import com.google.api.gax.rpc.StatusCode;
-import com.google.cloud.firestore.FirestoreException;
+import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.cloud.firestore.FirestoreOptions;
-import com.google.cloud.opentelemetry.metric.GoogleCloudMetricExporter;
-import com.google.cloud.opentelemetry.metric.MetricConfiguration;
-import com.google.common.base.Stopwatch;
-import com.google.common.util.concurrent.MoreExecutors;
-import io.grpc.Status;
-import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.metrics.InstrumentSelector;
-import io.opentelemetry.sdk.metrics.SdkMeterProvider;
-import io.opentelemetry.sdk.metrics.SdkMeterProviderBuilder;
-import io.opentelemetry.sdk.metrics.View;
-import io.opentelemetry.sdk.metrics.export.MetricExporter;
-import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import javax.annotation.Nullable;
+import java.util.List;
+import javax.annotation.Nonnull;
 
 /**
  * A utility interface for trace collection. Classes that implement this interface may make their
  * own design choices for how they approach trace collection. For instance, they may be no-op, or
  * they may use a particular tracing framework such as OpenTelemetry.
  */
-public class MetricsUtil {
+public interface MetricsUtil {
 
-  private final FirestoreOptions firestoreOptions;
-  private final boolean isBuiltInMetricsEnabled;
+  static MetricsUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
+    boolean isBuiltInMetricsEnabled = createEnabledInstance(firestoreOptions);
 
-  BuiltinMetricsProvider defaultOpenTelemetryMetricsProvider;
-  BuiltinMetricsProvider customOpenTelemetryMetricsProvider;
-
-  /**
-   * Creates and returns an instance of the MetricsUtil class.
-   *
-   * @param firestoreOptions The FirestoreOptions object that is requesting an instance of
-   *     MetricsUtil.
-   * @return An instance of the MetricsUtil class.
-   */
-  public MetricsUtil(FirestoreOptions firestoreOptions) {
-    this.firestoreOptions = firestoreOptions;
-    this.isBuiltInMetricsEnabled = createEnabledInstance();
-
-    // TODO(mila): re-assess if it should follow tracing's design: enabled/disabled MetricsUtil
     if (isBuiltInMetricsEnabled) {
-      try {
-        createMetricsUtil();
-      } catch (IOException e) {
-        System.out.println(e);
-      }
+      return new EnabledMetricsUtil(firestoreOptions);
+    } else {
+      return new DisabledMetricsUtil();
     }
   }
 
-  public boolean isBuiltInMetricsEnabled() {
-    return isBuiltInMetricsEnabled;
-  }
-
-  private boolean createEnabledInstance() {
+  static boolean createEnabledInstance(FirestoreOptions firestoreOptions) {
     // Start with the value from FirestoreOptions
     boolean createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().isMetricsEnabled();
 
@@ -101,111 +61,24 @@ public class MetricsUtil {
     return createEnabledInstance;
   }
 
-  private void createMetricsUtil() throws IOException {
-    this.defaultOpenTelemetryMetricsProvider =
-        new BuiltinMetricsProvider(getDefaultOpenTelemetryInstance());
-    this.customOpenTelemetryMetricsProvider =
-        new BuiltinMetricsProvider(firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry());
-  }
+  abstract MetricsContext createMetricsContext(String methodName);
 
-  private OpenTelemetry getDefaultOpenTelemetryInstance() throws IOException {
+  abstract void addMetricsTracerFactory(List<ApiTracerFactory> apiTracerFactories);
 
-    SdkMeterProviderBuilder sdkMeterProviderBuilder = SdkMeterProvider.builder();
+  public interface MetricsContext {
 
-    // Filter out attributes that are not defined
-    for (Map.Entry<InstrumentSelector, View> entry : getAllViews().entrySet()) {
-      sdkMeterProviderBuilder.registerView(entry.getKey(), entry.getValue());
-    }
+    /**
+     * If an operation ends in the future, its relevant metrics should be recorded _after_ the
+     * future has been completed. This method "appends" the metrics recording code at the completion
+     * of the given future.
+     */
+    <T> void recordEndToEndLatencyAtFuture(ApiFuture<T> futureValue);
 
-    MetricExporter metricExporter =
-        GoogleCloudMetricExporter.createWithConfiguration(
-            MetricConfiguration.builder()
-                .setProjectId(firestoreOptions.getProjectId())
-                .setInstrumentationLibraryLabelsEnabled(false)
-                // .setMonitoredResourceDescription((null))
-                // .setUseServiceTimeSeries(false)
-                .build());
+    void recordEndToEndLatency();
 
-    sdkMeterProviderBuilder.registerMetricReader(PeriodicMetricReader.create(metricExporter));
-    return OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProviderBuilder.build()).build();
-  }
+    void recordEndToEndLatency(Throwable t);
 
-  public MetricsContext createMetricsContext(String methodName) {
-    return new MetricsContext(methodName);
-  }
-
-  public class MetricsContext {
-    private final Stopwatch stopwatch;
-    private final String methodName;
-
-    public MetricsContext(String methodName) {
-      this.stopwatch = Stopwatch.createStarted();
-      this.methodName = methodName;
-    }
-
-    public <T> void recordEndToEndLatencyAtFuture(ApiFuture<T> futureValue) {
-      ApiFutures.addCallback(
-          futureValue,
-          new ApiFutureCallback<T>() {
-            @Override
-            public void onFailure(Throwable t) {
-              recordEndToEndLatency(t);
-            }
-
-            @Override
-            public void onSuccess(T result) {
-              recordEndToEndLatency();
-            }
-          },
-          MoreExecutors.directExecutor());
-    }
-
-    public void recordEndToEndLatency() {
-      recordEndToEndLatency(StatusCode.Code.OK.toString());
-    }
-
-    public void recordEndToEndLatency(Throwable t) {
-      recordEndToEndLatency(extractErrorStatus(t));
-    }
-
-    private void recordEndToEndLatency(String status) {
-      if (defaultOpenTelemetryMetricsProvider == null) return;
-      double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-      Map<String, String> attributes = new HashMap<>();
-      attributes.put(METHOD_KEY.toString(), methodName);
-      attributes.put(STATUS_KEY.toString(), status);
-
-      defaultOpenTelemetryMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
-      customOpenTelemetryMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
-    }
-
-    public void recordFirstResponseLatency() {
-      if (defaultOpenTelemetryMetricsProvider == null) return;
-
-      double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-      Map<String, String> attributes = new HashMap<>();
-      attributes.put(METHOD_KEY.toString(), methodName);
-      attributes.put(STATUS_KEY.toString(), StatusCode.Code.OK.toString());
-
-      defaultOpenTelemetryMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);
-      customOpenTelemetryMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);
-    }
-
-    /** Function to extract the status of the error as a string */
-    public String extractErrorStatus(@Nullable Throwable throwable) {
-      if (!(throwable instanceof FirestoreException)) {
-        return StatusCode.Code.UNKNOWN.toString();
-      }
-      Status status = ((FirestoreException) throwable).getStatus();
-      return status.getCode().name();
-    }
-  }
-
-  public BuiltinMetricsProvider getDefaultOpenTelemetryMetricsProvider() {
-    return this.defaultOpenTelemetryMetricsProvider;
-  }
-
-  public BuiltinMetricsProvider getCustomOpenTelemetryMetricsProvider() {
-    return this.customOpenTelemetryMetricsProvider;
+    /** Records first response latency for the current operation. */
+    void recordFirstResponseLatency();
   }
 }
