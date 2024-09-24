@@ -363,13 +363,13 @@
             </configuration>
           </plugin>
           <plugin>
-             <!-- skip javadoc test for src/test-jdk21-->
+             <!-- javadoc test for src/test-jdk21-->
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
             <configuration>
-              <sourceFileExcludes>
-                <exclude>src/test-jdk21/**/*.java</exclude>
-              </sourceFileExcludes>
+              <sourceFileIncludes>
+                <include>src/test-jdk21/**/*.java</include>
+              </sourceFileIncludes>
             </configuration>
           </plugin>
         </plugins>
