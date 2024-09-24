@@ -378,6 +378,12 @@
                 <include>src/test-jdk17/**/*.java</include>
               </sourceFileIncludes>
             </configuration>
+            <executions>
+              <execution>
+                <id>add-test-source_newer</id>
+                <phase>generate-test-sources</phase>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>
