@@ -21,9 +21,9 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class BitRightShift extends Function {
+public final class StrContains extends Function implements FilterCondition {
   @InternalApi
-  BitRightShift(Expr left, Expr right) {
-    super("bit_right_shift", ImmutableList.of(left, right));
+  StrContains(Expr expr, Expr substring) {
+    super("str_contains", ImmutableList.of(expr, substring));
   }
 }

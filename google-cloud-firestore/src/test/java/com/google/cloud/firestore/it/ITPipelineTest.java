@@ -834,92 +834,96 @@ public class ITPipelineTest extends ITBaseTest {
         .isEqualTo(Lists.newArrayList(map("ratingIsNull", false, "ratingIsNotNaN", true)));
   }
 
-  @Test
-  public void testBitwiseOperations() throws Exception {
-    List<PipelineResult> results;
-
-    // Bitwise AND
-    results =
-        collection
-            .pipeline()
-            .where(Field.of("author").eq("Douglas Adams"))
-            .select(
-                Field.of("published").bitAnd(0xFF).as("published_masked"),
-                Function.bitAnd(Field.of("published"), 0xFF).as("published_masked_func"))
-            .execute()
-            .get();
-    assertThat(data(results))
-        .containsExactly(
-            map("published_masked", 1979 & 0xFF, "published_masked_func", 1979 & 0xFF));
-
-    // Bitwise OR
-    results =
-        collection
-            .pipeline()
-            .where(Field.of("author").eq("Douglas Adams"))
-            .select(
-                Field.of("published").bitOr(0x100).as("published_ored"),
-                Function.bitOr(Field.of("published"), 0x100).as("published_ored_func"))
-            .execute()
-            .get();
-    assertThat(data(results))
-        .containsExactly(map("published_ored", 1979 | 0x100, "published_ored_func", 1979 | 0x100));
-
-    // Bitwise XOR
-    results =
-        collection
-            .pipeline()
-            .where(Field.of("author").eq("Douglas Adams"))
-            .select(
-                Field.of("published").bitXor(0x100).as("published_xored"),
-                Function.bitXor(Field.of("published"), 0x100).as("published_xored_func"))
-            .execute()
-            .get();
-    assertThat(data(results))
-        .containsExactly(
-            map("published_xored", 1979 ^ 0x100, "published_xored_func", 1979 ^ 0x100));
-
-    // Bitwise NOT
-    results =
-        collection
-            .pipeline()
-            .where(Field.of("author").eq("Douglas Adams"))
-            .select(
-                Field.of("published").bitNot().as("published_not"),
-                Function.bitNot(Field.of("published")).as("published_not_func"))
-            .execute()
-            .get();
-    assertThat(data(results))
-        .containsExactly(map("published_not", ~1979, "published_not_func", ~1979));
-
-    // Bitwise Left Shift
-    results =
-        collection
-            .pipeline()
-            .where(Field.of("author").eq("Douglas Adams"))
-            .select(
-                Field.of("published").bitLeftShift(2).as("published_shifted_left"),
-                Function.bitLeftShift(Field.of("published"), 2).as("published_shifted_left_func"))
-            .execute()
-            .get();
-    assertThat(data(results))
-        .containsExactly(
-            map("published_shifted_left", 1979 << 2, "published_shifted_left_func", 1979 << 2));
-
-    // Bitwise Right Shift
-    results =
-        collection
-            .pipeline()
-            .where(Field.of("author").eq("Douglas Adams"))
-            .select(
-                Field.of("published").bitRightShift(2).as("published_shifted_right"),
-                Function.bitRightShift(Field.of("published"), 2).as("published_shifted_right_func"))
-            .execute()
-            .get();
-    assertThat(data(results))
-        .containsExactly(
-            map("published_shifted_right", 1979 >> 2, "published_shifted_right_func", 1979 >> 2));
-  }
+  // @Test
+  // public void testBitwiseOperations() throws Exception {
+  //   List<PipelineResult> results;
+  //
+  //   // Bitwise AND
+  //   results =
+  //       collection
+  //           .pipeline()
+  //           .where(Field.of("author").eq("Douglas Adams"))
+  //           .select(
+  //               Field.of("published").bitAnd(0xFF).as("published_masked"),
+  //               Function.bitAnd(Field.of("published"), 0xFF).as("published_masked_func"))
+  //           .execute()
+  //           .get();
+  //   assertThat(data(results))
+  //       .containsExactly(
+  //           map("published_masked", 1979 & 0xFF, "published_masked_func", 1979 & 0xFF));
+  //
+  //   // Bitwise OR
+  //   results =
+  //       collection
+  //           .pipeline()
+  //           .where(Field.of("author").eq("Douglas Adams"))
+  //           .select(
+  //               Field.of("published").bitOr(0x100).as("published_ored"),
+  //               Function.bitOr(Field.of("published"), 0x100).as("published_ored_func"))
+  //           .execute()
+  //           .get();
+  //   assertThat(data(results))
+  //       .containsExactly(map("published_ored", 1979 | 0x100, "published_ored_func", 1979 |
+  // 0x100));
+  //
+  //   // Bitwise XOR
+  //   results =
+  //       collection
+  //           .pipeline()
+  //           .where(Field.of("author").eq("Douglas Adams"))
+  //           .select(
+  //               Field.of("published").bitXor(0x100).as("published_xored"),
+  //               Function.bitXor(Field.of("published"), 0x100).as("published_xored_func"))
+  //           .execute()
+  //           .get();
+  //   assertThat(data(results))
+  //       .containsExactly(
+  //           map("published_xored", 1979 ^ 0x100, "published_xored_func", 1979 ^ 0x100));
+  //
+  //   // Bitwise NOT
+  //   results =
+  //       collection
+  //           .pipeline()
+  //           .where(Field.of("author").eq("Douglas Adams"))
+  //           .select(
+  //               Field.of("published").bitNot().as("published_not"),
+  //               Function.bitNot(Field.of("published")).as("published_not_func"))
+  //           .execute()
+  //           .get();
+  //   assertThat(data(results))
+  //       .containsExactly(map("published_not", ~1979, "published_not_func", ~1979));
+  //
+  //   // Bitwise Left Shift
+  //   results =
+  //       collection
+  //           .pipeline()
+  //           .where(Field.of("author").eq("Douglas Adams"))
+  //           .select(
+  //               Field.of("published").bitLeftShift(2).as("published_shifted_left"),
+  //               Function.bitLeftShift(Field.of("published"),
+  // 2).as("published_shifted_left_func"))
+  //           .execute()
+  //           .get();
+  //   assertThat(data(results))
+  //       .containsExactly(
+  //           map("published_shifted_left", 1979 << 2, "published_shifted_left_func", 1979 << 2));
+  //
+  //   // Bitwise Right Shift
+  //   results =
+  //       collection
+  //           .pipeline()
+  //           .where(Field.of("author").eq("Douglas Adams"))
+  //           .select(
+  //               Field.of("published").bitRightShift(2).as("published_shifted_right"),
+  //               Function.bitRightShift(Field.of("published"),
+  // 2).as("published_shifted_right_func"))
+  //           .execute()
+  //           .get();
+  //   assertThat(data(results))
+  //       .containsExactly(
+  //           map("published_shifted_right", 1979 >> 2, "published_shifted_right_func", 1979 >>
+  // 2));
+  // }
 
   @Test
   public void testLogicalMinMax() throws Exception {

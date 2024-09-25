@@ -449,437 +449,441 @@ public class Function implements Expr {
     return new Mod(Field.of(left), Constant.of(right));
   }
 
-  // BitAnd
-
-  /**
-   * Creates an expression that applies an AND (&) operation between two expressions.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the AND operation result from field 'flag' and 'mask'.
-   * Function.bitAnd(Field.of("flag"), Field.of("mask"));
-   * }</pre>
-   *
-   * @param left The left operand expression.
-   * @param right The right operand expression.
-   * @return A new {@code Expr} representing the AND operation.
-   */
-  @BetaApi
-  public static BitAnd bitAnd(Expr left, Expr right) {
-    return new BitAnd(left, right);
-  }
-
-  /**
-   * Creates an expression that applies an AND (&) operation between an expression and a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the AND operation result of field 'flag' and 0xff.
-   * Function.bitAnd(Field.of("flag"), 0xff);
-   * }</pre>
-   *
-   * @param left The left operand expression.
-   * @param right The right operand constant.
-   * @return A new {@code Expr} representing the AND operation.
-   */
-  @BetaApi
-  public static BitAnd bitAnd(Expr left, Object right) {
-    return new BitAnd(left, Constant.of(right));
-  }
-
-  /**
-   * Creates an expression that applies an AND (&) operation between a field and an expression.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the AND operation result from field 'flag' and 'mask'.
-   * Function.bitAnd("flag", Field.of("mask"));
-   * }</pre>
-   *
-   * @param left The left operand field name.
-   * @param right The right operand expression.
-   * @return A new {@code Expr} representing the AND operation.
-   */
-  @BetaApi
-  public static BitAnd bitAnd(String left, Expr right) {
-    return new BitAnd(Field.of(left), right);
-  }
-
-  /**
-   * Creates an expression that applies an AND (&) operation between a field and a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the AND operation result of field 'flag' and 0xff.
-   * Function.bitAnd("flag", 0xff);
-   * }</pre>
-   *
-   * @param left The left operand field name.
-   * @param right The right operand constant.
-   * @return A new {@code Expr} representing the AND operation.
-   */
-  @BetaApi
-  public static BitAnd bitAnd(String left, Object right) {
-    return new BitAnd(Field.of(left), Constant.of(right));
-  }
-
-  // BitOr
-
-  /**
-   * Creates an expression that applies an OR (|) operation between two expressions.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the OR operation result from field 'flag' and 'mask'.
-   * Function.bitOr(Field.of("flag"), Field.of("mask"));
-   * }</pre>
-   *
-   * @param left The left operand expression.
-   * @param right The right operand expression.
-   * @return A new {@code Expr} representing the OR operation.
-   */
-  @BetaApi
-  public static BitOr bitOr(Expr left, Expr right) {
-    return new BitOr(left, right);
-  }
-
-  /**
-   * Creates an expression that applies an OR (|) operation between an expression and a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the OR operation result of field 'flag' and 0xff.
-   * Function.bitOr(Field.of("flag"), 0xff);
-   * }</pre>
-   *
-   * @param left The left operand expression.
-   * @param right The right operand constant.
-   * @return A new {@code Expr} representing the OR operation.
-   */
-  @BetaApi
-  public static BitOr bitOr(Expr left, Object right) {
-    return new BitOr(left, Constant.of(right));
-  }
-
-  /**
-   * Creates an expression that applies an OR (|) operation between a field and an expression.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the OR operation result from field 'flag' and 'mask'.
-   * Function.bitOr("flag", Field.of("mask"));
-   * }</pre>
-   *
-   * @param left The left operand field name.
-   * @param right The right operand expression.
-   * @return A new {@code Expr} representing the OR operation.
-   */
-  @BetaApi
-  public static BitOr bitOr(String left, Expr right) {
-    return new BitOr(Field.of(left), right);
-  }
-
-  /**
-   * Creates an expression that applies an OR (|) operation between a field and a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the OR operation result of field 'flag' and 0xff.
-   * Function.bitOr("flag", 0xff);
-   * }</pre>
-   *
-   * @param left The left operand field name.
-   * @param right The right operand constant.
-   * @return A new {@code Expr} representing the OR operation.
-   */
-  @BetaApi
-  public static BitOr bitOr(String left, Object right) {
-    return new BitOr(Field.of(left), Constant.of(right));
-  }
-
-  // BitXor
-
-  /**
-   * Creates an expression that applies an XOR (^) operation between two expressions.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the XOR operation result from field 'flag' and 'mask'.
-   * Function.bitXor(Field.of("flag"), Field.of("mask"));
-   * }</pre>
-   *
-   * @param left The left operand expression.
-   * @param right The right operand expression.
-   * @return A new {@code Expr} representing the XOR operation.
-   */
-  @BetaApi
-  public static BitXor bitXor(Expr left, Expr right) {
-    return new BitXor(left, right);
-  }
-
-  /**
-   * Creates an expression that applies an XOR (^) operation between an expression and a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the XOR operation result of field 'flag' and 0xff.
-   * Function.bitXor(Field.of("flag"), 0xff);
-   * }</pre>
-   *
-   * @param left The left operand expression.
-   * @param right The right operand constant.
-   * @return A new {@code Expr} representing the XOR operation.
-   */
-  @BetaApi
-  public static BitXor bitXor(Expr left, Object right) {
-    return new BitXor(left, Constant.of(right));
-  }
-
-  /**
-   * Creates an expression that applies an XOR (^) operation between a field and an expression.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the XOR operation result from field 'flag' and 'mask'.
-   * Function.bitXor("flag", Field.of("mask"));
-   * }</pre>
-   *
-   * @param left The left operand field name.
-   * @param right The right operand expression.
-   * @return A new {@code Expr} representing the XOR operation.
-   */
-  @BetaApi
-  public static BitXor bitXor(String left, Expr right) {
-    return new BitXor(Field.of(left), right);
-  }
-
-  /**
-   * Creates an expression that applies an XOR (^) operation between a field and a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the XOR operation result of field 'flag' and 0xff.
-   * Function.bitXor("flag", 0xff);
-   * }</pre>
-   *
-   * @param left The left operand field name.
-   * @param right The right operand constant.
-   * @return A new {@code Expr} representing the XOR operation.
-   */
-  @BetaApi
-  public static BitXor bitXor(String left, Object right) {
-    return new BitXor(Field.of(left), Constant.of(right));
-  }
-
-  // BitNot
-
-  /**
-   * Creates an expression that applies a NOT (~) operation to an expression.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the NOT operation result of field 'flag'.
-   * Function.bitNot(Field.of("flag"));
-   * }</pre>
-   *
-   * @param operand The operand expression.
-   * @return A new {@code Expr} representing the NOT operation.
-   */
-  @BetaApi
-  public static BitNot bitNot(Expr operand) {
-    return new BitNot(operand);
-  }
-
-  /**
-   * Creates an expression that applies a NOT (~) operation to a field.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the NOT operation result of field 'flag'.
-   * Function.bitNot("flag");
-   * }</pre>
-   *
-   * @param operand The operand field name.
-   * @return A new {@code Expr} representing the NOT operation.
-   */
-  @BetaApi
-  public static BitNot bitNot(String operand) {
-    return new BitNot(Field.of(operand));
-  }
-
-  // BitLeftShift
-
-  /**
-   * Creates an expression that applies a left shift (<<) operation between two expressions.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the left shift operation result from field 'flag' by 'shift' bits.
-   * Function.bitLeftShift(Field.of("flag"), Field.of("shift"));
-   * }</pre>
-   *
-   * @param left The left operand expression.
-   * @param right The right operand expression representing the number of bits to shift.
-   * @return A new {@code Expr} representing the left shift operation.
-   */
-  @BetaApi
-  public static BitLeftShift bitLeftShift(Expr left, Expr right) {
-    return new BitLeftShift(left, right);
-  }
-
-  /**
-   * Creates an expression that applies a left shift (<<) operation between an expression and a
-   * constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the left shift operation result of field 'flag' by 2 bits.
-   * Function.bitLeftShift(Field.of("flag"), 2);
-   * }</pre>
-   *
-   * @param left The left operand expression.
-   * @param right The right operand constant representing the number of bits to shift.
-   * @return A new {@code Expr} representing the left shift operation.
-   */
-  @BetaApi
-  public static BitLeftShift bitLeftShift(Expr left, Object right) {
-    return new BitLeftShift(left, Constant.of(right));
-  }
-
-  /**
-   * Creates an expression that applies a left shift (<<) operation between a field and an
-   * expression.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the left shift operation result from field 'flag' by 'shift' bits.
-   * Function.bitLeftShift("flag", Field.of("shift"));
-   * }</pre>
-   *
-   * @param left The left operand field name.
-   * @param right The right operand expression representing the number of bits to shift.
-   * @return A new {@code Expr} representing the left shift operation.
-   */
-  @BetaApi
-  public static BitLeftShift bitLeftShift(String left, Expr right) {
-    return new BitLeftShift(Field.of(left), right);
-  }
-
-  /**
-   * Creates an expression that applies a left shift (<<) operation between a field and a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the left shift operation result of field 'flag' by 2 bits.
-   * Function.bitLeftShift("flag", 2);
-   * }</pre>
-   *
-   * @param left The left operand field name.
-   * @param right The right operand constant representing the number of bits to shift.
-   * @return A new {@code Expr} representing the left shift operation.
-   */
-  @BetaApi
-  public static BitLeftShift bitLeftShift(String left, Object right) {
-    return new BitLeftShift(Field.of(left), Constant.of(right));
-  }
-
-  // BitRightShift
-
-  /**
-   * Creates an expression that applies a right shift (>>) operation between two expressions.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the right shift operation result from field 'flag' by 'shift' bits.
-   * Function.bitRightShift(Field.of("flag"), Field.of("shift"));
-   * }</pre>
-   *
-   * @param left The left operand expression.
-   * @param right The right operand expression representing the number of bits to shift.
-   * @return A new {@code Expr} representing the right shift operation.
-   */
-  @BetaApi
-  public static BitRightShift bitRightShift(Expr left, Expr right) {
-    return new BitRightShift(left, right);
-  }
-
-  /**
-   * Creates an expression that applies a right shift (>>) operation between an expression and a
-   * constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the right shift operation result of field 'flag' by 2 bits.
-   * Function.bitRightShift(Field.of("flag"), 2);
-   * }</pre>
-   *
-   * @param left The left operand expression.
-   * @param right The right operand constant representing the number of bits to shift.
-   * @return A new {@code Expr} representing the right shift operation.
-   */
-  @BetaApi
-  public static BitRightShift bitRightShift(Expr left, Object right) {
-    return new BitRightShift(left, Constant.of(right));
-  }
-
-  /**
-   * Creates an expression that applies a right shift (>>) operation between a field and an
-   * expression.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the right shift operation result from field 'flag' by 'shift' bits.
-   * Function.bitRightShift("flag", Field.of("shift"));
-   * }</pre>
-   *
-   * @param left The left operand field name.
-   * @param right The right operand expression representing the number of bits to shift.
-   * @return A new {@code Expr} representing the right shift operation.
-   */
-  @BetaApi
-  public static BitRightShift bitRightShift(String left, Expr right) {
-    return new BitRightShift(Field.of(left), right);
-  }
-
-  /**
-   * Creates an expression that applies a right shift (>>) operation between a field and a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the right shift operation result of field 'flag' by 2 bits.
-   * Function.bitRightShift("flag", 2);
-   * }</pre>
-   *
-   * @param left The left operand field name.
-   * @param right The right operand constant representing the number of bits to shift.
-   * @return A new {@code Expr} representing the right shift operation.
-   */
-  @BetaApi
-  public static BitRightShift bitRightShift(String left, Object right) {
-    return new BitRightShift(Field.of(left), Constant.of(right));
-  }
+  // // BitAnd
+  //
+  // /**
+  //  * Creates an expression that applies an AND (&) operation between two expressions.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the AND operation result from field 'flag' and 'mask'.
+  //  * Function.bitAnd(Field.of("flag"), Field.of("mask"));
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand expression.
+  //  * @param right The right operand expression.
+  //  * @return A new {@code Expr} representing the AND operation.
+  //  */
+  // @BetaApi
+  // public static BitAnd bitAnd(Expr left, Expr right) {
+  //   return new BitAnd(left, right);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an AND (&) operation between an expression and a
+  // constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the AND operation result of field 'flag' and 0xff.
+  //  * Function.bitAnd(Field.of("flag"), 0xff);
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand expression.
+  //  * @param right The right operand constant.
+  //  * @return A new {@code Expr} representing the AND operation.
+  //  */
+  // @BetaApi
+  // public static BitAnd bitAnd(Expr left, Object right) {
+  //   return new BitAnd(left, Constant.of(right));
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an AND (&) operation between a field and an expression.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the AND operation result from field 'flag' and 'mask'.
+  //  * Function.bitAnd("flag", Field.of("mask"));
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand field name.
+  //  * @param right The right operand expression.
+  //  * @return A new {@code Expr} representing the AND operation.
+  //  */
+  // @BetaApi
+  // public static BitAnd bitAnd(String left, Expr right) {
+  //   return new BitAnd(Field.of(left), right);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an AND (&) operation between a field and a constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the AND operation result of field 'flag' and 0xff.
+  //  * Function.bitAnd("flag", 0xff);
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand field name.
+  //  * @param right The right operand constant.
+  //  * @return A new {@code Expr} representing the AND operation.
+  //  */
+  // @BetaApi
+  // public static BitAnd bitAnd(String left, Object right) {
+  //   return new BitAnd(Field.of(left), Constant.of(right));
+  // }
+  //
+  // // BitOr
+  //
+  // /**
+  //  * Creates an expression that applies an OR (|) operation between two expressions.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the OR operation result from field 'flag' and 'mask'.
+  //  * Function.bitOr(Field.of("flag"), Field.of("mask"));
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand expression.
+  //  * @param right The right operand expression.
+  //  * @return A new {@code Expr} representing the OR operation.
+  //  */
+  // @BetaApi
+  // public static BitOr bitOr(Expr left, Expr right) {
+  //   return new BitOr(left, right);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an OR (|) operation between an expression and a constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the OR operation result of field 'flag' and 0xff.
+  //  * Function.bitOr(Field.of("flag"), 0xff);
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand expression.
+  //  * @param right The right operand constant.
+  //  * @return A new {@code Expr} representing the OR operation.
+  //  */
+  // @BetaApi
+  // public static BitOr bitOr(Expr left, Object right) {
+  //   return new BitOr(left, Constant.of(right));
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an OR (|) operation between a field and an expression.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the OR operation result from field 'flag' and 'mask'.
+  //  * Function.bitOr("flag", Field.of("mask"));
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand field name.
+  //  * @param right The right operand expression.
+  //  * @return A new {@code Expr} representing the OR operation.
+  //  */
+  // @BetaApi
+  // public static BitOr bitOr(String left, Expr right) {
+  //   return new BitOr(Field.of(left), right);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an OR (|) operation between a field and a constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the OR operation result of field 'flag' and 0xff.
+  //  * Function.bitOr("flag", 0xff);
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand field name.
+  //  * @param right The right operand constant.
+  //  * @return A new {@code Expr} representing the OR operation.
+  //  */
+  // @BetaApi
+  // public static BitOr bitOr(String left, Object right) {
+  //   return new BitOr(Field.of(left), Constant.of(right));
+  // }
+  //
+  // // BitXor
+  //
+  // /**
+  //  * Creates an expression that applies an XOR (^) operation between two expressions.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the XOR operation result from field 'flag' and 'mask'.
+  //  * Function.bitXor(Field.of("flag"), Field.of("mask"));
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand expression.
+  //  * @param right The right operand expression.
+  //  * @return A new {@code Expr} representing the XOR operation.
+  //  */
+  // @BetaApi
+  // public static BitXor bitXor(Expr left, Expr right) {
+  //   return new BitXor(left, right);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an XOR (^) operation between an expression and a
+  // constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the XOR operation result of field 'flag' and 0xff.
+  //  * Function.bitXor(Field.of("flag"), 0xff);
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand expression.
+  //  * @param right The right operand constant.
+  //  * @return A new {@code Expr} representing the XOR operation.
+  //  */
+  // @BetaApi
+  // public static BitXor bitXor(Expr left, Object right) {
+  //   return new BitXor(left, Constant.of(right));
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an XOR (^) operation between a field and an expression.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the XOR operation result from field 'flag' and 'mask'.
+  //  * Function.bitXor("flag", Field.of("mask"));
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand field name.
+  //  * @param right The right operand expression.
+  //  * @return A new {@code Expr} representing the XOR operation.
+  //  */
+  // @BetaApi
+  // public static BitXor bitXor(String left, Expr right) {
+  //   return new BitXor(Field.of(left), right);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an XOR (^) operation between a field and a constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the XOR operation result of field 'flag' and 0xff.
+  //  * Function.bitXor("flag", 0xff);
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand field name.
+  //  * @param right The right operand constant.
+  //  * @return A new {@code Expr} representing the XOR operation.
+  //  */
+  // @BetaApi
+  // public static BitXor bitXor(String left, Object right) {
+  //   return new BitXor(Field.of(left), Constant.of(right));
+  // }
+  //
+  // // BitNot
+  //
+  // /**
+  //  * Creates an expression that applies a NOT (~) operation to an expression.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the NOT operation result of field 'flag'.
+  //  * Function.bitNot(Field.of("flag"));
+  //  * }</pre>
+  //  *
+  //  * @param operand The operand expression.
+  //  * @return A new {@code Expr} representing the NOT operation.
+  //  */
+  // @BetaApi
+  // public static BitNot bitNot(Expr operand) {
+  //   return new BitNot(operand);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies a NOT (~) operation to a field.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the NOT operation result of field 'flag'.
+  //  * Function.bitNot("flag");
+  //  * }</pre>
+  //  *
+  //  * @param operand The operand field name.
+  //  * @return A new {@code Expr} representing the NOT operation.
+  //  */
+  // @BetaApi
+  // public static BitNot bitNot(String operand) {
+  //   return new BitNot(Field.of(operand));
+  // }
+  //
+  // // BitLeftShift
+  //
+  // /**
+  //  * Creates an expression that applies a left shift (<<) operation between two expressions.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the left shift operation result from field 'flag' by 'shift' bits.
+  //  * Function.bitLeftShift(Field.of("flag"), Field.of("shift"));
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand expression.
+  //  * @param right The right operand expression representing the number of bits to shift.
+  //  * @return A new {@code Expr} representing the left shift operation.
+  //  */
+  // @BetaApi
+  // public static BitLeftShift bitLeftShift(Expr left, Expr right) {
+  //   return new BitLeftShift(left, right);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies a left shift (<<) operation between an expression and a
+  //  * constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the left shift operation result of field 'flag' by 2 bits.
+  //  * Function.bitLeftShift(Field.of("flag"), 2);
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand expression.
+  //  * @param right The right operand constant representing the number of bits to shift.
+  //  * @return A new {@code Expr} representing the left shift operation.
+  //  */
+  // @BetaApi
+  // public static BitLeftShift bitLeftShift(Expr left, Object right) {
+  //   return new BitLeftShift(left, Constant.of(right));
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies a left shift (<<) operation between a field and an
+  //  * expression.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the left shift operation result from field 'flag' by 'shift' bits.
+  //  * Function.bitLeftShift("flag", Field.of("shift"));
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand field name.
+  //  * @param right The right operand expression representing the number of bits to shift.
+  //  * @return A new {@code Expr} representing the left shift operation.
+  //  */
+  // @BetaApi
+  // public static BitLeftShift bitLeftShift(String left, Expr right) {
+  //   return new BitLeftShift(Field.of(left), right);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies a left shift (<<) operation between a field and a
+  // constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the left shift operation result of field 'flag' by 2 bits.
+  //  * Function.bitLeftShift("flag", 2);
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand field name.
+  //  * @param right The right operand constant representing the number of bits to shift.
+  //  * @return A new {@code Expr} representing the left shift operation.
+  //  */
+  // @BetaApi
+  // public static BitLeftShift bitLeftShift(String left, Object right) {
+  //   return new BitLeftShift(Field.of(left), Constant.of(right));
+  // }
+  //
+  // // BitRightShift
+  //
+  // /**
+  //  * Creates an expression that applies a right shift (>>) operation between two expressions.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the right shift operation result from field 'flag' by 'shift' bits.
+  //  * Function.bitRightShift(Field.of("flag"), Field.of("shift"));
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand expression.
+  //  * @param right The right operand expression representing the number of bits to shift.
+  //  * @return A new {@code Expr} representing the right shift operation.
+  //  */
+  // @BetaApi
+  // public static BitRightShift bitRightShift(Expr left, Expr right) {
+  //   return new BitRightShift(left, right);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies a right shift (>>) operation between an expression and a
+  //  * constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the right shift operation result of field 'flag' by 2 bits.
+  //  * Function.bitRightShift(Field.of("flag"), 2);
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand expression.
+  //  * @param right The right operand constant representing the number of bits to shift.
+  //  * @return A new {@code Expr} representing the right shift operation.
+  //  */
+  // @BetaApi
+  // public static BitRightShift bitRightShift(Expr left, Object right) {
+  //   return new BitRightShift(left, Constant.of(right));
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies a right shift (>>) operation between a field and an
+  //  * expression.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the right shift operation result from field 'flag' by 'shift' bits.
+  //  * Function.bitRightShift("flag", Field.of("shift"));
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand field name.
+  //  * @param right The right operand expression representing the number of bits to shift.
+  //  * @return A new {@code Expr} representing the right shift operation.
+  //  */
+  // @BetaApi
+  // public static BitRightShift bitRightShift(String left, Expr right) {
+  //   return new BitRightShift(Field.of(left), right);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies a right shift (>>) operation between a field and a
+  // constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the right shift operation result of field 'flag' by 2 bits.
+  //  * Function.bitRightShift("flag", 2);
+  //  * }</pre>
+  //  *
+  //  * @param left The left operand field name.
+  //  * @param right The right operand constant representing the number of bits to shift.
+  //  * @return A new {@code Expr} representing the right shift operation.
+  //  */
+  // @BetaApi
+  // public static BitRightShift bitRightShift(String left, Object right) {
+  //   return new BitRightShift(Field.of(left), Constant.of(right));
+  // }
 
   /**
    * Creates an expression that checks if two expressions are equal.
@@ -2365,6 +2369,44 @@ public class Function implements Expr {
   }
 
   /**
+   * Creates an expression that checks if a string expression contains a specified substring.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Check if the 'description' field contains "example".
+   * Function.regexContains(Field.of("description"), "example");
+   * }</pre>
+   *
+   * @param expr The expression representing the string to perform the comparison on.
+   * @param substring The substring to use for the search.
+   * @return A new {@code Expr} representing the 'contains' comparison.
+   */
+  @BetaApi
+  public static StrContains strContains(Expr expr, String substring) {
+    return new StrContains(expr, Constant.of(substring));
+  }
+
+  /**
+   * Creates an expression that checks if a string field contains a specified substring.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Check if the 'description' field contains "example".
+   * Function.regexContains("description", "example");
+   * }</pre>
+   *
+   * @param field The name of the field containing the string.
+   * @param substring The substring to use for the search.
+   * @return A new {@code Expr} representing the 'contains' comparison.
+   */
+  @BetaApi
+  public static StrContains strContains(String field, String substring) {
+    return new StrContains(Field.of(field), Constant.of(substring));
+  }
+
+  /**
    * Creates an expression that checks if a field's value starts with a given prefix.
    *
    * <p>Example:
@@ -3615,6 +3657,178 @@ public class Function implements Expr {
   @BetaApi
   public static UnixSecondsToTimestamp unixSecondsToTimestamp(String field) {
     return new UnixSecondsToTimestamp(Field.of(field));
+  }
+
+  /**
+   * Creates an expression that adds a specified amount of time to a timestamp.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Add a duration specified by the 'unit' and 'amount' fields to the 'timestamp' field.
+   * Function.timestampAdd(Field.of("timestamp"), Field.of("unit"), Field.of("amount"));
+   * }</pre>
+   *
+   * @param timestamp The expression representing the timestamp.
+   * @param unit The expression evaluating to the unit of time to add, must be one of 'microsecond',
+   *     'millisecond', 'second', 'minute', 'hour', 'day'.
+   * @param amount The expression representing the amount of time to add.
+   * @return A new {@code Expr} representing the resulting timestamp.
+   */
+  @BetaApi
+  public static TimestampAdd timestampAdd(Expr timestamp, Expr unit, Expr amount) {
+    return new TimestampAdd(timestamp, unit, amount);
+  }
+
+  /**
+   * Creates an expression that adds a specified amount of time to a timestamp represented by a
+   * field.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Add a duration specified by the 'unit' and 'amount' fields to the 'timestamp' field.
+   * Function.timestampAdd("timestamp", Field.of("unit"), Field.of("amount"));
+   * }</pre>
+   *
+   * @param field The name of the field representing the timestamp.
+   * @param unit The expression evaluating to the unit of time to add, must be one of 'microsecond',
+   *     'millisecond', 'second', 'minute', 'hour', 'day'.
+   * @param amount The expression representing the amount of time to add.
+   * @return A new {@code Expr} representing the resulting timestamp.
+   */
+  @BetaApi
+  public static TimestampAdd timestampAdd(String field, Expr unit, Expr amount) {
+    return new TimestampAdd(Field.of(field), unit, amount);
+  }
+
+  /**
+   * Creates an expression that adds a specified amount of time to a timestamp.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Add 1.5 days to the 'timestamp' field.
+   * Function.timestampAdd(Field.of("timestamp"), "day", 1.5);
+   * }</pre>
+   *
+   * @param timestamp The expression representing the timestamp.
+   * @param unit The unit of time to add, must be one of 'microsecond', 'millisecond', 'second',
+   *     'minute', 'hour', 'day'.
+   * @param amount The amount of time to add.
+   * @return A new {@code Expr} representing the resulting timestamp.
+   */
+  @BetaApi
+  public static TimestampAdd timestampAdd(Expr timestamp, String unit, Double amount) {
+    return new TimestampAdd(timestamp, Constant.of(unit), Constant.of(amount));
+  }
+
+  /**
+   * Creates an expression that adds a specified amount of time to a timestamp represented by a
+   * field.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Add 1.5 days to the 'timestamp' field.
+   * Function.timestampAdd("timestamp", "day", 1.5);
+   * }</pre>
+   *
+   * @param field The name of the field representing the timestamp.
+   * @param unit The unit of time to add, must be one of 'microsecond', 'millisecond', 'second',
+   *     'minute', 'hour', 'day'.
+   * @param amount The amount of time to add.
+   * @return A new {@code Expr} representing the resulting timestamp.
+   */
+  @BetaApi
+  public static TimestampAdd timestampAdd(String field, String unit, Double amount) {
+    return new TimestampAdd(Field.of(field), Constant.of(unit), Constant.of(amount));
+  }
+
+  /**
+   * Creates an expression that subtracts a specified amount of time from a timestamp.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Subtract a duration specified by the 'unit' and 'amount' fields from the 'timestamp' field.
+   * Function.timestampSub(Field.of("timestamp"), Field.of("unit"), Field.of("amount"));
+   * }</pre>
+   *
+   * @param timestamp The expression representing the timestamp.
+   * @param unit The expression evaluating to the unit of time to subtract, must be one of
+   *     'microsecond', 'millisecond', 'second', 'minute', 'hour', 'day'.
+   * @param amount The expression representing the amount of time to subtract.
+   * @return A new {@code Expr} representing the resulting timestamp.
+   */
+  @BetaApi
+  public static TimestampSub timestampSub(Expr timestamp, Expr unit, Expr amount) {
+    return new TimestampSub(timestamp, unit, amount);
+  }
+
+  /**
+   * Creates an expression that subtracts a specified amount of time from a timestamp represented by
+   * a field.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Subtract a duration specified by the 'unit' and 'amount' fields from the 'timestamp' field.
+   * Function.timestampSub("timestamp", Field.of("unit"), Field.of("amount"));
+   * }</pre>
+   *
+   * @param field The name of the field representing the timestamp.
+   * @param unit The expression evaluating to the unit of time to subtract, must be one of
+   *     'microsecond', 'millisecond', 'second', 'minute', 'hour', 'day'.
+   * @param amount The expression representing the amount of time to subtract.
+   * @return A new {@code Expr} representing the resulting timestamp.
+   */
+  @BetaApi
+  public static TimestampSub timestampSub(String field, Expr unit, Expr amount) {
+    return new TimestampSub(Field.of(field), unit, amount);
+  }
+
+  /**
+   * Creates an expression that subtracts a specified amount of time from a timestamp.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Subtract 2.5 hours from the 'timestamp' field.
+   * Function.timestampSub(Field.of("timestamp"), "hour", 2.5);
+   * }</pre>
+   *
+   * @param timestamp The expression representing the timestamp.
+   * @param unit The unit of time to subtract, must be one of 'microsecond', 'millisecond',
+   *     'second', 'minute', 'hour', 'day'.
+   * @param amount The amount of time to subtract.
+   * @return A new {@code Expr} representing the resulting timestamp.
+   */
+  @BetaApi
+  public static TimestampSub timestampSub(Expr timestamp, String unit, Double amount) {
+    return new TimestampSub(timestamp, Constant.of(unit), Constant.of(amount));
+  }
+
+  /**
+   * Creates an expression that subtracts a specified amount of time from a timestamp represented by
+   * a field.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Subtract 2.5 hours from the 'timestamp' field.
+   * Function.timestampSub("timestamp", "hour", 2.5);
+   * }</pre>
+   *
+   * @param field The name of the field representing the timestamp.
+   * @param unit The unit of time to subtract, must be one of 'microsecond', 'millisecond',
+   *     'second', 'minute', 'hour', 'day'.
+   * @param amount The amount of time to subtract.
+   * @return A new {@code Expr} representing the resulting timestamp.
+   */
+  @BetaApi
+  public static TimestampSub timestampSub(String field, String unit, Double amount) {
+    return new TimestampSub(Field.of(field), Constant.of(unit), Constant.of(amount));
   }
 
   // /**

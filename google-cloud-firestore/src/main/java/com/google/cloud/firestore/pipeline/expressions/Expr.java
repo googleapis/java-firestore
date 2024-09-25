@@ -224,202 +224,202 @@ public interface Expr {
     return new Mod(this, Constant.of(other));
   }
 
-  /**
-   * Creates an expression that applies an AND (&) operation with another expression.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the AND operation result from field 'flag' and 'mask'.
-   * Field.of("flag").bitAnd(Field.of("mask"));
-   * }</pre>
-   *
-   * @param other The expression to divide by.
-   * @return A new {@code Expr} representing the division operation.
-   */
-  @BetaApi
-  default BitAnd bitAnd(Expr other) {
-    return new BitAnd(this, other);
-  }
-
-  /**
-   * Creates an expression that applies an AND (&) operation with a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the AND operation result of field 'flag' and 0xff.
-   * Field.of("flag").bigAnd(0xff);
-   * }</pre>
-   *
-   * @param other The constant value to divide by.
-   * @return A new {@code Expr} representing the division operation.
-   */
-  @BetaApi
-  default BitAnd bitAnd(Object other) {
-    return new BitAnd(this, Constant.of(other));
-  }
-
-  /**
-   * Creates an expression that applies an OR (|) operation with another expression.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the OR operation result from field 'flag' and 'mask'.
-   * Field.of("flag").bitOr(Field.of("mask"));
-   * }</pre>
-   *
-   * @param other The expression to apply OR with.
-   * @return A new {@code Expr} representing the OR operation.
-   */
-  @BetaApi
-  default BitOr bitOr(Expr other) {
-    return new BitOr(this, other);
-  }
-
-  /**
-   * Creates an expression that applies an OR (|) operation with a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the OR operation result of field 'flag' and 0xff.
-   * Field.of("flag").bitOr(0xff);
-   * }</pre>
-   *
-   * @param other The constant value to apply OR with.
-   * @return A new {@code Expr} representing the OR operation.
-   */
-  @BetaApi
-  default BitOr bitOr(Object other) {
-    return new BitOr(this, Constant.of(other));
-  }
-
-  /**
-   * Creates an expression that applies an XOR (^) operation with another expression.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the XOR operation result from field 'flag' and 'mask'.
-   * Field.of("flag").bitXor(Field.of("mask"));
-   * }</pre>
-   *
-   * @param other The expression to apply XOR with.
-   * @return A new {@code Expr} representing the XOR operation.
-   */
-  @BetaApi
-  default BitXor bitXor(Expr other) {
-    return new BitXor(this, other);
-  }
-
-  /**
-   * Creates an expression that applies an XOR (^) operation with a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the XOR operation result of field 'flag' and 0xff.
-   * Field.of("flag").bitXor(0xff);
-   * }</pre>
-   *
-   * @param other The constant value to apply XOR with.
-   * @return A new {@code Expr} representing the XOR operation.
-   */
-  @BetaApi
-  default BitXor bitXor(Object other) {
-    return new BitXor(this, Constant.of(other));
-  }
-
-  /**
-   * Creates an expression that applies a NOT (~) operation.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the NOT operation result of field 'flag'.
-   * Field.of("flag").bitNot();
-   * }</pre>
-   *
-   * @return A new {@code Expr} representing the NOT operation.
-   */
-  @BetaApi
-  default BitNot bitNot() {
-    return new BitNot(this);
-  }
-
-  /**
-   * Creates an expression that applies a left shift (<<) operation with another expression.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the left shift operation result from field 'flag' by 'shift' bits.
-   * Field.of("flag").bitLeftShift(Field.of("shift"));
-   * }</pre>
-   *
-   * @param other The expression representing the number of bits to shift left by.
-   * @return A new {@code Expr} representing the left shift operation.
-   */
-  @BetaApi
-  default BitLeftShift bitLeftShift(Expr other) {
-    return new BitLeftShift(this, other);
-  }
-
-  /**
-   * Creates an expression that applies a left shift (<<) operation with a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the left shift operation result of field 'flag' by 2 bits.
-   * Field.of("flag").bitLeftShift(2);
-   * }</pre>
-   *
-   * @param other The constant number of bits to shift left by.
-   * @return A new {@code Expr} representing the left shift operation.
-   */
-  @BetaApi
-  default BitLeftShift bitLeftShift(Object other) {
-    return new BitLeftShift(this, Constant.of(other));
-  }
-
-  /**
-   * Creates an expression that applies a right shift (>>) operation with another expression.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the right shift operation result from field 'flag' by 'shift' bits.
-   * Field.of("flag").bitRightShift(Field.of("shift"));
-   * }</pre>
-   *
-   * @param other The expression representing the number of bits to shift right by.
-   * @return A new {@code Expr} representing the right shift operation.
-   */
-  @BetaApi
-  default BitRightShift bitRightShift(Expr other) {
-    return new BitRightShift(this, other);
-  }
-
-  /**
-   * Creates an expression that applies a right shift (>>) operation with a constant.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculates the right shift operation result of field 'flag' by 2 bits.
-   * Field.of("flag").bitRightShift(2);
-   * }</pre>
-   *
-   * @param other The constant number of bits to shift right by.
-   * @return A new {@code Expr} representing the right shift operation.
-   */
-  @BetaApi
-  default BitRightShift bitRightShift(Object other) {
-    return new BitRightShift(this, Constant.of(other));
-  }
+  // /**
+  //  * Creates an expression that applies an AND (&) operation with another expression.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the AND operation result from field 'flag' and 'mask'.
+  //  * Field.of("flag").bitAnd(Field.of("mask"));
+  //  * }</pre>
+  //  *
+  //  * @param other The expression to divide by.
+  //  * @return A new {@code Expr} representing the division operation.
+  //  */
+  // @BetaApi
+  // default BitAnd bitAnd(Expr other) {
+  //   return new BitAnd(this, other);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an AND (&) operation with a constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the AND operation result of field 'flag' and 0xff.
+  //  * Field.of("flag").bigAnd(0xff);
+  //  * }</pre>
+  //  *
+  //  * @param other The constant value to divide by.
+  //  * @return A new {@code Expr} representing the division operation.
+  //  */
+  // @BetaApi
+  // default BitAnd bitAnd(Object other) {
+  //   return new BitAnd(this, Constant.of(other));
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an OR (|) operation with another expression.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the OR operation result from field 'flag' and 'mask'.
+  //  * Field.of("flag").bitOr(Field.of("mask"));
+  //  * }</pre>
+  //  *
+  //  * @param other The expression to apply OR with.
+  //  * @return A new {@code Expr} representing the OR operation.
+  //  */
+  // @BetaApi
+  // default BitOr bitOr(Expr other) {
+  //   return new BitOr(this, other);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an OR (|) operation with a constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the OR operation result of field 'flag' and 0xff.
+  //  * Field.of("flag").bitOr(0xff);
+  //  * }</pre>
+  //  *
+  //  * @param other The constant value to apply OR with.
+  //  * @return A new {@code Expr} representing the OR operation.
+  //  */
+  // @BetaApi
+  // default BitOr bitOr(Object other) {
+  //   return new BitOr(this, Constant.of(other));
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an XOR (^) operation with another expression.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the XOR operation result from field 'flag' and 'mask'.
+  //  * Field.of("flag").bitXor(Field.of("mask"));
+  //  * }</pre>
+  //  *
+  //  * @param other The expression to apply XOR with.
+  //  * @return A new {@code Expr} representing the XOR operation.
+  //  */
+  // @BetaApi
+  // default BitXor bitXor(Expr other) {
+  //   return new BitXor(this, other);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies an XOR (^) operation with a constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the XOR operation result of field 'flag' and 0xff.
+  //  * Field.of("flag").bitXor(0xff);
+  //  * }</pre>
+  //  *
+  //  * @param other The constant value to apply XOR with.
+  //  * @return A new {@code Expr} representing the XOR operation.
+  //  */
+  // @BetaApi
+  // default BitXor bitXor(Object other) {
+  //   return new BitXor(this, Constant.of(other));
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies a NOT (~) operation.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the NOT operation result of field 'flag'.
+  //  * Field.of("flag").bitNot();
+  //  * }</pre>
+  //  *
+  //  * @return A new {@code Expr} representing the NOT operation.
+  //  */
+  // @BetaApi
+  // default BitNot bitNot() {
+  //   return new BitNot(this);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies a left shift (<<) operation with another expression.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the left shift operation result from field 'flag' by 'shift' bits.
+  //  * Field.of("flag").bitLeftShift(Field.of("shift"));
+  //  * }</pre>
+  //  *
+  //  * @param other The expression representing the number of bits to shift left by.
+  //  * @return A new {@code Expr} representing the left shift operation.
+  //  */
+  // @BetaApi
+  // default BitLeftShift bitLeftShift(Expr other) {
+  //   return new BitLeftShift(this, other);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies a left shift (<<) operation with a constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the left shift operation result of field 'flag' by 2 bits.
+  //  * Field.of("flag").bitLeftShift(2);
+  //  * }</pre>
+  //  *
+  //  * @param other The constant number of bits to shift left by.
+  //  * @return A new {@code Expr} representing the left shift operation.
+  //  */
+  // @BetaApi
+  // default BitLeftShift bitLeftShift(Object other) {
+  //   return new BitLeftShift(this, Constant.of(other));
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies a right shift (>>) operation with another expression.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the right shift operation result from field 'flag' by 'shift' bits.
+  //  * Field.of("flag").bitRightShift(Field.of("shift"));
+  //  * }</pre>
+  //  *
+  //  * @param other The expression representing the number of bits to shift right by.
+  //  * @return A new {@code Expr} representing the right shift operation.
+  //  */
+  // @BetaApi
+  // default BitRightShift bitRightShift(Expr other) {
+  //   return new BitRightShift(this, other);
+  // }
+  //
+  // /**
+  //  * Creates an expression that applies a right shift (>>) operation with a constant.
+  //  *
+  //  * <p>Example:
+  //  *
+  //  * <pre>{@code
+  //  * // Calculates the right shift operation result of field 'flag' by 2 bits.
+  //  * Field.of("flag").bitRightShift(2);
+  //  * }</pre>
+  //  *
+  //  * @param other The constant number of bits to shift right by.
+  //  * @return A new {@code Expr} representing the right shift operation.
+  //  */
+  // @BetaApi
+  // default BitRightShift bitRightShift(Object other) {
+  //   return new BitRightShift(this, Constant.of(other));
+  // }
 
   // Logical Functions
 
@@ -1184,6 +1184,43 @@ public interface Expr {
   }
 
   /**
+   * Creates an expression that checks if this string expression contains a specified substring.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Check if the 'description' field contains "example".
+   * Field.of("description").strContains("example");
+   * }</pre>
+   *
+   * @param substring The substring to use for the search.
+   * @return A new {@code Expr} representing the 'contains' comparison.
+   */
+  @BetaApi
+  default StrContains strContains(String substring) {
+    return new StrContains(this, Constant.of(substring));
+  }
+
+  /**
+   * Creates an expression that checks if this string expression contains the string represented by
+   * another expression.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Check if the 'description' field contains the value of the 'keyword' field.
+   * Field.of("description").strContains(Field.of("keyword"));
+   * }</pre>
+   *
+   * @param expr The expression representing the substring to search for.
+   * @return A new {@code Expr} representing the 'contains' comparison.
+   */
+  @BetaApi
+  default StrContains strContains(Expr expr) {
+    return new StrContains(this, expr);
+  }
+
+  /**
    * Creates an expression that checks if a string starts with a given prefix.
    *
    * <p>Example:
@@ -1705,6 +1742,86 @@ public interface Expr {
   @BetaApi
   default UnixSecondsToTimestamp unixSecondsToTimestamp() {
     return new UnixSecondsToTimestamp(this);
+  }
+
+  /**
+   * Creates an expression that adds a specified amount of time to this timestamp expression.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Add a duration specified by the 'unit' and 'amount' fields to the 'timestamp' field.
+   * Field.of("timestamp").timestampAdd(Field.of("unit"), Field.of("amount"));
+   * }</pre>
+   *
+   * @param unit The expression evaluating to the unit of time to add, must be one of 'microsecond',
+   *     'millisecond', 'second', 'minute', 'hour', 'day'.
+   * @param amount The expression representing the amount of time to add.
+   * @return A new {@code Expr} representing the resulting timestamp.
+   */
+  @BetaApi
+  default TimestampAdd timestampAdd(Expr unit, Expr amount) {
+    return new TimestampAdd(this, unit, amount);
+  }
+
+  /**
+   * Creates an expression that adds a specified amount of time to this timestamp expression.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Add 1.5 days to the 'timestamp' field.
+   * Field.of("timestamp").timestampAdd("day", 1.5);
+   * }</pre>
+   *
+   * @param unit The unit of time to add, must be one of 'microsecond', 'millisecond', 'second',
+   *     'minute', 'hour', 'day'.
+   * @param amount The amount of time to add.
+   * @return A new {@code Expr} representing the resulting timestamp.
+   */
+  @BetaApi
+  default TimestampAdd timestampAdd(String unit, Double amount) {
+    return new TimestampAdd(this, Constant.of(unit), Constant.of(amount));
+  }
+
+  /**
+   * Creates an expression that subtracts a specified amount of time from this timestamp expression.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Subtract a duration specified by the 'unit' and 'amount' fields from the 'timestamp' field.
+   * Field.of("timestamp").timestampSub(Field.of("unit"), Field.of("amount"));
+   * }</pre>
+   *
+   * @param unit The expression evaluating to the unit of time to add, must be one of 'microsecond',
+   *     'millisecond', 'second', 'minute', 'hour', 'day'.
+   * @param amount The expression representing the amount of time to subtract.
+   * @return A new {@code Expr} representing the resulting timestamp.
+   */
+  @BetaApi
+  default TimestampSub timestampSub(Expr unit, Expr amount) {
+    return new TimestampSub(this, unit, amount);
+  }
+
+  /**
+   * Creates an expression that subtracts a specified amount of time from this timestamp expression.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Subtract 2.5 hours from the 'timestamp' field.
+   * Field.of("timestamp").timestampSub("hour", 2.5);
+   * }</pre>
+   *
+   * @param unit The unit of time to subtract must be one of 'microsecond', 'millisecond', 'second',
+   *     'minute', 'hour', 'day'.
+   * @param amount The amount of time to subtract.
+   * @return A new {@code Expr} representing the resulting timestamp.
+   */
+  @BetaApi
+  default TimestampSub timestampSub(String unit, Double amount) {
+    return new TimestampSub(this, Constant.of(unit), Constant.of(amount));
   }
 
   // Ordering
