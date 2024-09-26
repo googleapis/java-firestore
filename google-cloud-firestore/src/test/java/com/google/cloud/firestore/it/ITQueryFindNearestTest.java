@@ -99,6 +99,37 @@ public class ITQueryFindNearestTest extends ITBaseTest {
   }
 
   @Test
+  public void findNearestWithEuclideanDistanceFirestoreTypeOverride() throws Exception {
+    CollectionReference collection =
+        testCollectionWithDocs(
+            map(
+                "a", map("foo", "bar"),
+                "b", map("foo", "xxx", "embedding", FieldValue.vector(new double[] {10, 10})),
+                "c", map("foo", "bar", "embedding", FieldValue.vector(new double[] {1, 1})),
+                "d", map("foo", "bar", "embedding", FieldValue.vector(new double[] {10, 0})),
+                "e", map("foo", "bar", "embedding", FieldValue.vector(new double[] {20, 0})),
+                "f", map("foo", "bar", "embedding", FieldValue.vector(new double[] {100, 100}))));
+
+    VectorQuery vectorQuery =
+        collection
+            .whereEqualTo("foo", "bar")
+            .whereEqualTo("testId", getUniqueTestId())
+            .findNearest(
+                FieldPath.of("embedding"),
+                FieldValue.vector(new double[] {10, 10}),
+                3,
+                VectorQuery.DistanceMeasure.EUCLIDEAN);
+
+    VectorQuerySnapshot snapshot = vectorQuery.get().get();
+
+    assertThat(snapshot.size()).isEqualTo(3);
+
+    assertThat(snapshot.getDocuments().get(0).get("docId")).isEqualTo(getUniqueDocId("d"));
+    assertThat(snapshot.getDocuments().get(1).get("docId")).isEqualTo(getUniqueDocId("c"));
+    assertThat(snapshot.getDocuments().get(2).get("docId")).isEqualTo(getUniqueDocId("e"));
+  }
+
+  @Test
   public void findNearestWithCosineDistance() throws Exception {
     CollectionReference collection =
         testCollectionWithDocs(
@@ -398,7 +429,7 @@ public class ITQueryFindNearestTest extends ITBaseTest {
                 new double[] {1, 0},
                 5,
                 VectorQuery.DistanceMeasure.COSINE,
-                FindNearestOptions.newBuilder().setDistanceResultField("distance").build());
+                VectorQueryOptions.newBuilder().setDistanceResultField("distance").build());
 
     VectorQuerySnapshot snapshot = vectorQuery.get().get();
 
@@ -438,7 +469,7 @@ public class ITQueryFindNearestTest extends ITBaseTest {
                 new double[] {1, 0},
                 5,
                 VectorQuery.DistanceMeasure.EUCLIDEAN,
-                FindNearestOptions.newBuilder().setDistanceResultField("distance").build());
+                VectorQueryOptions.newBuilder().setDistanceResultField("distance").build());
 
     VectorQuerySnapshot snapshot = vectorQuery.get().get();
 
@@ -481,7 +512,7 @@ public class ITQueryFindNearestTest extends ITBaseTest {
                 new double[] {1, 0},
                 5,
                 VectorQuery.DistanceMeasure.DOT_PRODUCT,
-                FindNearestOptions.newBuilder().setDistanceResultField("distance").build());
+                VectorQueryOptions.newBuilder().setDistanceResultField("distance").build());
 
     VectorQuerySnapshot snapshot = vectorQuery.get().get();
 
@@ -522,7 +553,7 @@ public class ITQueryFindNearestTest extends ITBaseTest {
                 new double[] {1, 0},
                 5,
                 VectorQuery.DistanceMeasure.COSINE,
-                FindNearestOptions.newBuilder().setDistanceResultField("distance").build());
+                VectorQueryOptions.newBuilder().setDistanceResultField("distance").build());
 
     VectorQuerySnapshot snapshot = vectorQuery.get().get();
 
@@ -557,7 +588,7 @@ public class ITQueryFindNearestTest extends ITBaseTest {
                 new double[] {1, 0},
                 5,
                 VectorQuery.DistanceMeasure.COSINE,
-                FindNearestOptions.newBuilder().setDistanceResultField("distance").build());
+                VectorQueryOptions.newBuilder().setDistanceResultField("distance").build());
 
     VectorQuerySnapshot snapshot = vectorQuery.get().get();
 
@@ -597,7 +628,7 @@ public class ITQueryFindNearestTest extends ITBaseTest {
                 new double[] {1, 0},
                 5,
                 VectorQuery.DistanceMeasure.COSINE,
-                FindNearestOptions.newBuilder().setDistanceThreshold(1.0).build());
+                VectorQueryOptions.newBuilder().setDistanceThreshold(1.0).build());
 
     VectorQuerySnapshot snapshot = vectorQuery.get().get();
 
@@ -632,7 +663,7 @@ public class ITQueryFindNearestTest extends ITBaseTest {
                 new double[] {1, 0},
                 5,
                 VectorQuery.DistanceMeasure.EUCLIDEAN,
-                FindNearestOptions.newBuilder().setDistanceThreshold(5.0).build());
+                VectorQueryOptions.newBuilder().setDistanceThreshold(5.0).build());
 
     VectorQuerySnapshot snapshot = vectorQuery.get().get();
 
@@ -667,7 +698,7 @@ public class ITQueryFindNearestTest extends ITBaseTest {
                 new double[] {1, 0},
                 5,
                 VectorQuery.DistanceMeasure.DOT_PRODUCT,
-                FindNearestOptions.newBuilder().setDistanceThreshold(1.0).build());
+                VectorQueryOptions.newBuilder().setDistanceThreshold(1.0).build());
 
     VectorQuerySnapshot snapshot = vectorQuery.get().get();
 
@@ -678,7 +709,7 @@ public class ITQueryFindNearestTest extends ITBaseTest {
   }
 
   @Test
-  public void worksWithDistanceResultField() throws Exception {
+  public void queryWithDistanceResultFieldAndDistanceThreshold() throws Exception {
     CollectionReference collection =
         testCollectionWithDocs(
             map(
@@ -701,7 +732,48 @@ public class ITQueryFindNearestTest extends ITBaseTest {
                 new double[] {1, 0},
                 5,
                 VectorQuery.DistanceMeasure.DOT_PRODUCT,
-                FindNearestOptions.newBuilder()
+                VectorQueryOptions.newBuilder()
+                    .setDistanceThreshold(0.11)
+                    .setDistanceResultField("foo")
+                    .build());
+
+    VectorQuerySnapshot snapshot = vectorQuery.get().get();
+
+    assertThat(snapshot.size()).isEqualTo(2);
+
+    assertThat(snapshot.getDocuments().get(0).get("docId")).isEqualTo(getUniqueDocId("2"));
+    assertThat(snapshot.getDocuments().get(0).getDouble("foo")).isEqualTo(2);
+
+    assertThat(snapshot.getDocuments().get(1).get("docId")).isEqualTo(getUniqueDocId("3"));
+    assertThat(snapshot.getDocuments().get(1).getDouble("foo")).isEqualTo(1);
+  }
+
+  @Test
+  public void queryWithDistanceResultFieldAndDistanceThresholdWithFirestoreTypes()
+      throws Exception {
+    CollectionReference collection =
+        testCollectionWithDocs(
+            map(
+                "1",
+                map("foo", "bar"),
+                "2",
+                map("foo", "bar", "embedding", FieldValue.vector(new double[] {2, 0})),
+                "3",
+                map("foo", "bar", "embedding", FieldValue.vector(new double[] {1, 100})),
+                "4",
+                map("foo", "bar", "embedding", FieldValue.vector(new double[] {-20, 0})),
+                "5",
+                map("foo", "bar", "embedding", FieldValue.vector(new double[] {0.1, 4}))));
+
+    VectorQuery vectorQuery =
+        collection
+            .whereEqualTo("testId", getUniqueTestId())
+            .findNearest(
+                FieldPath.of("embedding"),
+                FieldValue.vector(new double[] {1, 0}),
+                5,
+                VectorQuery.DistanceMeasure.DOT_PRODUCT,
+                VectorQueryOptions.newBuilder()
                     .setDistanceThreshold(0.11)
                     .setDistanceResultField("foo")
                     .build());
@@ -742,7 +814,7 @@ public class ITQueryFindNearestTest extends ITBaseTest {
                 new double[] {1, 0},
                 2, // limit set to 2
                 VectorQuery.DistanceMeasure.DOT_PRODUCT,
-                FindNearestOptions.newBuilder().setDistanceThreshold(0.0).build());
+                VectorQueryOptions.newBuilder().setDistanceThreshold(0.0).build());
 
     VectorQuerySnapshot snapshot = vectorQuery.get().get();
 

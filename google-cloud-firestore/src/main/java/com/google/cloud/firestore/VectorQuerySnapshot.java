@@ -20,8 +20,8 @@ import com.google.cloud.Timestamp;
 import java.util.List;
 
 /**
- * A QuerySnapshot contains the results of a query. It can contain zero or more DocumentSnapshot
- * objects.
+ * A VectorQuerySnapshot contains the results of a VectorQuery. It can contain zero or more
+ * DocumentSnapshot objects.
  */
 public class VectorQuerySnapshot extends GenericQuerySnapshot<VectorQuery> {
   protected VectorQuerySnapshot(
@@ -33,14 +33,17 @@ public class VectorQuerySnapshot extends GenericQuerySnapshot<VectorQuery> {
     super(query, readTime, documents, documentSet, documentChanges);
   }
 
-  /** Creates a new QuerySnapshot representing the results of a Query with added documents. */
+  /**
+   * Creates a new VectorQuerySnapshot representing the results of a VectorQuery with added
+   * documents.
+   */
   public static VectorQuerySnapshot withDocuments(
       final VectorQuery query, Timestamp readTime, final List<QueryDocumentSnapshot> documents) {
     return new VectorQuerySnapshot(query, readTime, documents, null, null);
   }
 
   /**
-   * Returns the query for the snapshot.
+   * Returns the VectorQuery for the snapshot.
    *
    * @return The backing query that produced this snapshot.
    */

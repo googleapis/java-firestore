@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS_ANY;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.EQUAL;
@@ -1824,6 +1823,32 @@ public class Query extends StreamableQuery<QuerySnapshot> {
     return new AggregateQuery(this, aggregateFieldList);
   }
 
+  /**
+   * Returns a VectorQuery that can perform vector distance (similarity) search with given
+   * parameters.
+   *
+   * <p>The returned query, when executed, performs a distance (similarity) search on the specified
+   * `vectorField` against the given `queryVector` and returns the top documents that are closest to
+   * the `queryVector`.
+   *
+   * <p>Only documents whose `vectorField` field is a {@link VectorValue} of the same dimension as
+   * `queryVector` participate in the query, all other documents are ignored.
+   *
+   * @example ``` // Returns the closest 10 documents whose Euclidean distance from their
+   *     'embedding' fields are closed to [41, 42]. VectorQuery vectorQuery = col.findNearest(
+   *     "embedding", new double[] {41, 42}, 10, VectorQuery.DistanceMeasure.EUCLIDEAN);
+   *     <p>QuerySnapshot querySnapshot = await vectorQuery.get().get(); DocumentSnapshot
+   *     mostSimilarDocument = querySnapshot.getDocuments().get(0); ```
+   * @param vectorField A string specifying the vector field to search on.
+   * @param queryVector A representation of the vector used to measure the distance from
+   *     `vectorField` values in the documents.
+   * @param limit The upper bound of documents to return, must be a positive integer with a maximum
+   *     value of 1000.
+   * @param distanceMeasure What type of distance is calculated when performing the query. See
+   *     {@link VectorQuery.DistanceMeasure}.
+   * @return an {@link VectorQuery} that performs vector distance (similarity) search with the given
+   *     parameters.
+   */
   public VectorQuery findNearest(
       String vectorField,
       double[] queryVector,
@@ -1834,48 +1859,135 @@ public class Query extends StreamableQuery<QuerySnapshot> {
         FieldValue.vector(queryVector),
         limit,
         distanceMeasure,
-        FindNearestOptions.newBuilder().build());
+        VectorQueryOptions.newBuilder().build());
   }
 
+  /**
+   * Returns a VectorQuery that can perform vector distance (similarity) search with given
+   * parameters.
+   *
+   * <p>The returned query, when executed, performs a distance (similarity) search on the specified
+   * `vectorField` against the given `queryVector` and returns the top documents that are closest to
+   * the `queryVector`.
+   *
+   * <p>Only documents whose `vectorField` field is a {@link VectorValue} of the same dimension as
+   * `queryVector` participate in the query, all other documents are ignored.
+   *
+   * @example ``` // Returns the closest 10 documents whose Euclidean distance from their
+   *     'embedding' fields are closed to [41, 42]. VectorQuery vectorQuery = col.findNearest(
+   *     "embedding", new double[] {41, 42}, 10, VectorQuery.DistanceMeasure.EUCLIDEAN
+   *     FindNearestOptions.newBuilder() .setDistanceThreshold(0.11) .setDistanceResultField("foo")
+   *     .build());
+   *     <p>QuerySnapshot querySnapshot = await vectorQuery.get().get(); DocumentSnapshot
+   *     mostSimilarDocument = querySnapshot.getDocuments().get(0); ```
+   * @param vectorField A string specifying the vector field to search on.
+   * @param queryVector A representation of the vector used to measure the distance from
+   *     `vectorField` values in the documents.
+   * @param limit The upper bound of documents to return, must be a positive integer with a maximum
+   *     value of 1000.
+   * @param distanceMeasure What type of distance is calculated when performing the query. See
+   *     {@link VectorQuery.DistanceMeasure}.
+   * @param vectorQueryOptions Optional arguments for VectorQueries, see {@link VectorQueryOptions}.
+   * @return an {@link VectorQuery} that performs vector distance (similarity) search with the given
+   *     parameters.
+   */
   public VectorQuery findNearest(
       String vectorField,
       double[] queryVector,
       int limit,
       VectorQuery.DistanceMeasure distanceMeasure,
-      FindNearestOptions findNearestOptions) {
+      VectorQueryOptions vectorQueryOptions) {
     return findNearest(
         FieldPath.fromDotSeparatedString(vectorField),
         FieldValue.vector(queryVector),
         limit,
         distanceMeasure,
-        findNearestOptions);
+        vectorQueryOptions);
   }
 
+  /**
+   * Returns a VectorQuery that can perform vector distance (similarity) search with given
+   * parameters.
+   *
+   * <p>The returned query, when executed, performs a distance (similarity) search on the specified
+   * `vectorField` against the given `queryVector` and returns the top documents that are closest to
+   * the `queryVector`.
+   *
+   * <p>Only documents whose `vectorField` field is a {@link VectorValue} of the same dimension as
+   * `queryVector` participate in the query, all other documents are ignored.
+   *
+   * @example ``` // Returns the closest 10 documents whose Euclidean distance from their
+   *     'embedding' fields are closed to [41, 42]. VectorValue queryVector = FieldValue.vector(new
+   *     double[] {41, 42}); VectorQuery vectorQuery = col.findNearest( FieldPath.of("embedding"),
+   *     queryVector, 10, VectorQuery.DistanceMeasure.EUCLIDEAN);
+   *     <p>QuerySnapshot querySnapshot = await vectorQuery.get().get(); DocumentSnapshot
+   *     mostSimilarDocument = querySnapshot.getDocuments().get(0); ```
+   * @param vectorField A {@link FieldPath} specifying the vector field to search on.
+   * @param queryVector The {@link VectorValue} used to measure the distance from `vectorField`
+   *     values in the documents.
+   * @param limit The upper bound of documents to return, must be a positive integer with a maximum
+   *     value of 1000.
+   * @param distanceMeasure What type of distance is calculated when performing the query. See
+   *     {@link VectorQuery.DistanceMeasure}.
+   * @return an {@link VectorQuery} that performs vector distance (similarity) search with the given
+   *     parameters.
+   */
   public VectorQuery findNearest(
       FieldPath vectorField,
       VectorValue queryVector,
       int limit,
       VectorQuery.DistanceMeasure distanceMeasure) {
     return findNearest(
-        vectorField, queryVector, limit, distanceMeasure, FindNearestOptions.newBuilder().build());
+        vectorField, queryVector, limit, distanceMeasure, VectorQueryOptions.newBuilder().build());
   }
 
+  /**
+   * Returns a VectorQuery that can perform vector distance (similarity) search with given
+   * parameters.
+   *
+   * <p>The returned query, when executed, performs a distance (similarity) search on the specified
+   * `vectorField` against the given `queryVector` and returns the top documents that are closest to
+   * the `queryVector`.
+   *
+   * <p>Only documents whose `vectorField` field is a {@link VectorValue} of the same dimension as
+   * `queryVector` participate in the query, all other documents are ignored.
+   *
+   * @example ``` // Returns the closest 10 documents whose Euclidean distance from their
+   *     'embedding' fields are closed to [41, 42]. VectorValue queryVector = FieldValue.vector(new
+   *     double[] {41, 42}); VectorQuery vectorQuery = col.findNearest( FieldPath.of("embedding"),
+   *     queryVector, 10, VectorQuery.DistanceMeasure.EUCLIDEAN, FindNearestOptions.newBuilder()
+   *     .setDistanceThreshold(0.11) .setDistanceResultField("foo") .build());
+   *     <p>QuerySnapshot querySnapshot = await vectorQuery.get().get(); DocumentSnapshot
+   *     mostSimilarDocument = querySnapshot.getDocuments().get(0); ```
+   * @param vectorField A {@link FieldPath} specifying the vector field to search on.
+   * @param queryVector The {@link VectorValue} used to measure the distance from `vectorField`
+   *     values in the documents.
+   * @param limit The upper bound of documents to return, must be a positive integer with a maximum
+   *     value of 1000.
+   * @param distanceMeasure What type of distance is calculated when performing the query. See
+   *     {@link VectorQuery.DistanceMeasure}.
+   * @param vectorQueryOptions Optional arguments for VectorQueries, see {@link VectorQueryOptions}.
+   * @return an {@link VectorQuery} that performs vector distance (similarity) search with the given
+   *     parameters.
+   */
   public VectorQuery findNearest(
       FieldPath vectorField,
       VectorValue queryVector,
       int limit,
       VectorQuery.DistanceMeasure distanceMeasure,
-      FindNearestOptions findNearestOptions) {
+      VectorQueryOptions vectorQueryOptions) {
     if (limit <= 0) {
-      throw FirestoreException.forInvalidArgument("limit must be larger than 0");
+      throw FirestoreException.forInvalidArgument(
+          "Not a valid positive `limit` number. `limit` must be larger than 0.");
     }
 
     if (queryVector.toArray().length == 0) {
-      throw FirestoreException.forInvalidArgument("queryVector size must be larger than 0");
+      throw FirestoreException.forInvalidArgument(
+          "Not a valid vector size. `queryVector` size must be larger than 0.");
     }
 
     return new VectorQuery(
-        this, vectorField, queryVector, limit, distanceMeasure, findNearestOptions);
+        this, vectorField, queryVector, limit, distanceMeasure, vectorQueryOptions);
   }
 
   /**

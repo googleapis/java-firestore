@@ -26,22 +26,26 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * A query that finds the documents whose vector fields are closest to a certain query vector.
+ * Create an instance of `VectorQuery` with {@link Query#findNearest}.
+ */
 public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
   final Query query;
   final FieldPath vectorField;
   final VectorValue queryVector;
   final int limit;
   final DistanceMeasure distanceMeasure;
-  final FindNearestOptions options;
+  final VectorQueryOptions options;
 
-  /** Creates a VectorQuery for documents in a single collection */
+  /** Creates a VectorQuery */
   VectorQuery(
       Query query,
       FieldPath vectorField,
       VectorValue queryVector,
       int limit,
       DistanceMeasure distanceMeasure,
-      FindNearestOptions options) {
+      VectorQueryOptions options) {
     super(query.rpcContext, query.options);
 
     this.query = query;
@@ -53,9 +57,9 @@ public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
   }
 
   /**
-   * Executes the query and returns the results as QuerySnapshot.
+   * Executes the query and returns the results as {@link QuerySnapshot}.
    *
-   * @return An ApiFuture that will be resolved with the results of the Query.
+   * @return An ApiFuture that will be resolved with the results of the VectorQuery.
    */
   @Override
   public ApiFuture<VectorQuerySnapshot> get() {
@@ -63,9 +67,9 @@ public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
   }
 
   /**
-   * Plans and optionally executes this query. Returns an ApiFuture that will be resolved with the
-   * planner information, statistics from the query execution (if any), and the query results (if
-   * any).
+   * Plans and optionally executes this VectorQuery. Returns an ApiFuture that will be resolved with
+   * the planner information, statistics from the query execution (if any), and the query results
+   * (if any).
    *
    * @return An ApiFuture that will be resolved with the planner information, statistics from the
    *     query execution (if any), and the query results (if any).
@@ -91,7 +95,6 @@ public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
     }
     VectorQuery otherQuery = (VectorQuery) obj;
     return Objects.equals(query, otherQuery.query)
-        && Objects.equals(options, otherQuery.options)
         && Objects.equals(vectorField, otherQuery.vectorField)
         && Objects.equals(queryVector, otherQuery.queryVector)
         && Objects.equals(options, otherQuery.options)

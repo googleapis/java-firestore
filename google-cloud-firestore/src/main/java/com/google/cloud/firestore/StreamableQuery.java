@@ -45,8 +45,8 @@ import org.threeten.bp.Duration;
 
 /**
  * Represents a query whose results can be streamed. If the stream fails with a retryable error,
- * implementations of IStreamableQuery can optionally support retries with a cursor, as indicated by
- * `isRetryableWithCursor`. Retrying with a cursor means that the IStreamableQuery can be resumed
+ * implementations of StreamableQuery can optionally support retries with a cursor, as indicated by
+ * `isRetryableWithCursor`. Retrying with a cursor means that the StreamableQuery can be resumed
  * where it failed by first calling `startAfter(lastDocumentReceived)`.
  */
 public abstract class StreamableQuery<SnapshotType> {

@@ -22,6 +22,10 @@ import com.google.common.collect.ImmutableList;
 import java.util.*;
 import javax.annotation.Nonnull;
 
+/**
+ * Abstract. A GenericQuerySnapshot represents the results of a query that returns documents. It can
+ * contain zero or more DocumentSnapshot objects.
+ */
 public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocumentSnapshot> {
   protected final QueryT query;
   protected final Timestamp readTime;
@@ -31,12 +35,13 @@ public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocu
 
   volatile DocumentSet documentSet;
 
+  // Elevated access level for mocking.
   protected GenericQuerySnapshot(
       QueryT query,
       Timestamp readTime,
       final List<QueryDocumentSnapshot> documents,
       final DocumentSet documentSet,
-      final List<DocumentChange> documentChanges) { // Elevated access level for mocking.
+      final List<DocumentChange> documentChanges) {
     this.query = query;
     this.readTime = readTime;
     this.documentChanges =
@@ -136,10 +141,17 @@ public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocu
     return Collections.unmodifiableList(documentChanges);
   }
 
+  /** Returns the number of DocumentSnapshots in this snapshot. */
   public int size() {
     return getDocuments().size();
   }
 
+  /**
+   * Tests for equality with this object.
+   *
+   * @param o is tested for equality with this object.
+   * @return `true` if equal, otherwise `false`
+   */
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -147,7 +159,7 @@ public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocu
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    QuerySnapshot that = (QuerySnapshot) o;
+    GenericQuerySnapshot that = (GenericQuerySnapshot) o;
     return Objects.equals(query, that.query)
         && Objects.equals(this.size(), that.size())
         && Objects.equals(this.getDocumentChanges(), that.getDocumentChanges())
