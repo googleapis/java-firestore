@@ -34,14 +34,14 @@ import javax.annotation.Nonnull;
 public interface MetricsUtil {
 
   static MetricsUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
-    if (isBuiltInMetricsEnabled(firestoreOptions)) {
+    if (createEnabledInstance(firestoreOptions)) {
       return new EnabledMetricsUtil(firestoreOptions);
     } else {
       return new DisabledMetricsUtil();
     }
   }
 
-  static boolean isBuiltInMetricsEnabled(FirestoreOptions firestoreOptions) {
+  static boolean createEnabledInstance(FirestoreOptions firestoreOptions) {
     // Start with the value from FirestoreOptions
     boolean createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().isMetricsEnabled();
 
