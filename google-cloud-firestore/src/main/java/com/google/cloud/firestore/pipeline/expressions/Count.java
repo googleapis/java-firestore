@@ -27,4 +27,9 @@ public final class Count extends Function implements Accumulator {
   Count(@Nonnull Expr value) {
     super("count", ImmutableList.of(value));
   }
+
+  @InternalApi
+  Count() {
+    super("count", ImmutableList.of());
+  }
 }

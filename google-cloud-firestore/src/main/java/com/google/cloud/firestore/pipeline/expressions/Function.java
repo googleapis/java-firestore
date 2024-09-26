@@ -3118,6 +3118,23 @@ public class Function implements Expr {
   }
 
   /**
+   * Creates an aggregation that counts the total number of stage inputs.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Count the total number of users
+   * Function.countAll().as("totalUsers");
+   * }</pre>
+   *
+   * @return A new {@code Accumulator} representing the 'countAll' aggregation.
+   */
+  @BetaApi
+  public static Count countAll() {
+    return new Count();
+  }
+
+  /**
    * Creates an aggregation that counts the number of stage inputs that satisfy the provided filter
    * condition.
    *
@@ -3134,23 +3151,6 @@ public class Function implements Expr {
   @BetaApi
   public static CountIf countIf(FilterCondition condition) {
     return new CountIf(condition, false);
-  }
-
-  /**
-   * Creates an aggregation that counts the total number of stage inputs.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Count the total number of users
-   * Function.countAll().as("totalUsers");
-   * }</pre>
-   *
-   * @return A new {@code Accumulator} representing the 'countAll' aggregation.
-   */
-  @BetaApi
-  public static CountAll countAll() {
-    return new CountAll();
   }
 
   /**
