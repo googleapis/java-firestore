@@ -18,7 +18,6 @@ package com.google.cloud.firestore;
 
 import com.google.cloud.Timestamp;
 import java.util.List;
-import javax.annotation.Nonnull;
 
 /**
  * A VectorQuerySnapshot contains the results of a VectorQuery. It can contain zero or more
@@ -41,16 +40,5 @@ public class VectorQuerySnapshot extends GenericQuerySnapshot<VectorQuery> {
   public static VectorQuerySnapshot withDocuments(
       final VectorQuery query, Timestamp readTime, final List<QueryDocumentSnapshot> documents) {
     return new VectorQuerySnapshot(query, readTime, documents, null, null);
-  }
-
-  /**
-   * Returns the VectorQuery for the snapshot.
-   *
-   * @return The backing query that produced this snapshot.
-   */
-  @Nonnull
-  @Override
-  public VectorQuery getQuery() {
-    return super.getQuery();
   }
 }

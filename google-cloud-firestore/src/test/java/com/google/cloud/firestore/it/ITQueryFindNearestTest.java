@@ -26,13 +26,12 @@ import com.google.cloud.firestore.*;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Map;
+import javax.annotation.Nullable;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import javax.annotation.Nullable;
 
 @RunWith(JUnit4.class)
 public class ITQueryFindNearestTest extends ITBaseTest {
@@ -906,5 +905,29 @@ public class ITQueryFindNearestTest extends ITBaseTest {
     assertThat(stats.getReadOperations()).isEqualTo(5);
     assertThat(stats.getResultsReturned()).isEqualTo(4);
     assertThat(stats.getExecutionDuration()).isGreaterThan(Duration.ZERO);
+  }
+
+  @Test
+  public void vectorQuerySnapshotReturnsVectorQuery() throws Exception {
+    CollectionReference collection =
+        testCollectionWithDocs(
+            map(
+                "a", map("foo", "bar"),
+                "b", map("foo", "xxx", "embedding", FieldValue.vector(new double[] {10, 10})),
+                "c", map("foo", "bar", "embedding", FieldValue.vector(new double[] {1, 1})),
+                "d", map("foo", "bar", "embedding", FieldValue.vector(new double[] {10, 0})),
+                "e", map("foo", "bar", "embedding", FieldValue.vector(new double[] {20, 0})),
+                "f", map("foo", "bar", "embedding", FieldValue.vector(new double[] {100, 100}))));
+
+    VectorQuery vectorQuery =
+        collection
+            .whereEqualTo("foo", "bar")
+            .whereEqualTo("testId", getUniqueTestId())
+            .findNearest(
+                "embedding", new double[] {10, 10}, 3, VectorQuery.DistanceMeasure.EUCLIDEAN);
+
+    VectorQuerySnapshot snapshot = vectorQuery.get().get();
+
+    assertTrue(snapshot.getQuery() == vectorQuery);
   }
 }
