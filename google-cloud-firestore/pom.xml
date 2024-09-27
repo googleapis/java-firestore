@@ -128,10 +128,6 @@
       <artifactId>exporter-metrics</artifactId>
       <version>0.31.0</version>
     </dependency>
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-sdk-common</artifactId>
-    </dependency>
     <!-- END OpenTelemetry -->
 
     <!-- Test dependencies -->
@@ -209,6 +205,12 @@
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk-trace</artifactId>
+      <version>${opentelemetry.version}</version>
+      <scope>test</scope>
+    </dependency>
+        <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk-common</artifactId>
       <version>${opentelemetry.version}</version>
       <scope>test</scope>
     </dependency>
