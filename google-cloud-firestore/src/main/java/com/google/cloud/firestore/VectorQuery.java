@@ -122,22 +122,7 @@ public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
         requestBuilder.getStructuredQueryBuilder().getFindNearestBuilder();
     findNearestBuilder.getQueryVectorBuilder().setMapValue(this.queryVector.toProto());
     findNearestBuilder.getLimitBuilder().setValue(this.limit);
-    switch (this.distanceMeasure) {
-      case COSINE:
-        findNearestBuilder.setDistanceMeasure(StructuredQuery.FindNearest.DistanceMeasure.COSINE);
-        break;
-      case EUCLIDEAN:
-        findNearestBuilder.setDistanceMeasure(
-            StructuredQuery.FindNearest.DistanceMeasure.EUCLIDEAN);
-        break;
-      case DOT_PRODUCT:
-        findNearestBuilder.setDistanceMeasure(
-            StructuredQuery.FindNearest.DistanceMeasure.DOT_PRODUCT);
-        break;
-      default:
-        findNearestBuilder.setDistanceMeasure(
-            StructuredQuery.FindNearest.DistanceMeasure.UNRECOGNIZED);
-    }
+    findNearestBuilder.setDistanceMeasure(toProto(this.distanceMeasure));
     findNearestBuilder.getVectorFieldBuilder().setFieldPath(this.vectorField.toString());
 
     if (this.options != null) {
@@ -152,6 +137,20 @@ public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
     }
 
     return requestBuilder;
+  }
+
+  private static StructuredQuery.FindNearest.DistanceMeasure toProto(
+      DistanceMeasure distanceMeasure) {
+    switch (distanceMeasure) {
+      case COSINE:
+        return StructuredQuery.FindNearest.DistanceMeasure.COSINE;
+      case EUCLIDEAN:
+        return StructuredQuery.FindNearest.DistanceMeasure.EUCLIDEAN;
+      case DOT_PRODUCT:
+        return StructuredQuery.FindNearest.DistanceMeasure.DOT_PRODUCT;
+      default:
+        return StructuredQuery.FindNearest.DistanceMeasure.UNRECOGNIZED;
+    }
   }
 
   @Override

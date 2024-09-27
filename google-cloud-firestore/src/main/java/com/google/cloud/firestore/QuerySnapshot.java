@@ -18,6 +18,7 @@ package com.google.cloud.firestore;
 
 import com.google.cloud.Timestamp;
 import java.util.List;
+import javax.annotation.Nonnull;
 
 /**
  * A QuerySnapshot contains the results of a query. It can contain zero or more DocumentSnapshot
@@ -57,6 +58,7 @@ public class QuerySnapshot extends GenericQuerySnapshot<Query> {
    *
    * @return The backing query that produced this snapshot.
    */
+  @Nonnull
   @Override
   public Query getQuery() {
     return super.getQuery();

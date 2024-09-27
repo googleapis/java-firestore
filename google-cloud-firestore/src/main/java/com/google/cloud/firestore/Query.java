@@ -317,8 +317,8 @@ public class Query extends StreamableQuery<QuerySnapshot> {
   }
 
   static final class FieldOrder implements Comparator<QueryDocumentSnapshot> {
-    final FieldReference fieldReference;
-    final Direction direction;
+    private final FieldReference fieldReference;
+    private final Direction direction;
 
     FieldOrder(FieldReference fieldReference, Direction direction) {
       this.fieldReference = fieldReference;
@@ -1212,7 +1212,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
   }
 
   @Override
-  public boolean isRetryableWithCursor() {
+  boolean isRetryableWithCursor() {
     return true;
   }
 
@@ -1859,7 +1859,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
         FieldValue.vector(queryVector),
         limit,
         distanceMeasure,
-        VectorQueryOptions.newBuilder().build());
+        VectorQueryOptions.getDefaultInstance());
   }
 
   /**
@@ -1938,7 +1938,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
       int limit,
       VectorQuery.DistanceMeasure distanceMeasure) {
     return findNearest(
-        vectorField, queryVector, limit, distanceMeasure, VectorQueryOptions.newBuilder().build());
+        vectorField, queryVector, limit, distanceMeasure, VectorQueryOptions.getDefaultInstance());
   }
 
   /**
@@ -1981,7 +1981,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
           "Not a valid positive `limit` number. `limit` must be larger than 0.");
     }
 
-    if (queryVector.toArray().length == 0) {
+    if (queryVector.size() == 0) {
       throw FirestoreException.forInvalidArgument(
           "Not a valid vector size. `queryVector` size must be larger than 0.");
     }

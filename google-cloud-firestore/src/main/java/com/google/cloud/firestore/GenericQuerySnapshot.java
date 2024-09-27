@@ -19,7 +19,11 @@ package com.google.cloud.firestore;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.encoding.CustomClassMapper;
 import com.google.common.collect.ImmutableList;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 
 /**
@@ -30,10 +34,10 @@ public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocu
   protected final QueryT query;
   protected final Timestamp readTime;
 
-  volatile List<DocumentChange> documentChanges;
-  volatile List<QueryDocumentSnapshot> documents;
+  private List<DocumentChange> documentChanges;
+  private List<QueryDocumentSnapshot> documents;
 
-  volatile DocumentSet documentSet;
+  private final DocumentSet documentSet;
 
   // Elevated access level for mocking.
   protected GenericQuerySnapshot(
@@ -138,7 +142,7 @@ public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocu
       }
     }
 
-    return Collections.unmodifiableList(documentChanges);
+    return documentChanges;
   }
 
   /** Returns the number of DocumentSnapshots in this snapshot. */
@@ -161,7 +165,6 @@ public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocu
     }
     GenericQuerySnapshot that = (GenericQuerySnapshot) o;
     return Objects.equals(query, that.query)
-        && Objects.equals(this.size(), that.size())
         && Objects.equals(this.getDocumentChanges(), that.getDocumentChanges())
         && Objects.equals(this.getDocuments(), that.getDocuments());
   }
