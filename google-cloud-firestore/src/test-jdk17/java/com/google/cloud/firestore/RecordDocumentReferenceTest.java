@@ -363,7 +363,7 @@ public class RecordDocumentReferenceTest {
     CommitRequest expectedCommit = commit(set(nestedUpdate, updateMask));
     assertCommitEquals(expectedCommit, commitCapture.getValue());
   }
-  
+
   @Test
   public void setNestedRecordWithPojoMapWithMerge() throws Exception {
     doReturn(SINGLE_WRITE_COMMIT_RESPONSE)

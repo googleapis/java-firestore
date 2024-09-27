@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>google-cloud-firestore</artifactId>
-  <version>3.26.3-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+  <version>3.26.5-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
   <packaging>jar</packaging>
   <name>Google Cloud Firestore</name>
   <url>https://github.com/googleapis/java-firestore</url>
@@ -12,7 +12,7 @@
   <parent>
     <groupId>com.google.cloud</groupId>
     <artifactId>google-cloud-firestore-parent</artifactId>
-    <version>3.26.3-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+    <version>3.26.5-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
   </parent>
   <properties>
     <site.installationModule>google-cloud-firestore</site.installationModule>
@@ -214,7 +214,7 @@
     <dependency>
       <groupId>com.google.cloud.opentelemetry</groupId>
       <artifactId>exporter-trace</artifactId>
-      <version>0.31.0</version>
+      <version>0.32.0</version>
       <scope>test</scope>
     </dependency>
     <!-- END OpenTelemetry -->
@@ -228,7 +228,7 @@
     <dependency>
       <groupId>com.google.cloud.opentelemetry</groupId>
       <artifactId>exporter-trace</artifactId>
-      <version>0.31.0</version>
+      <version>0.32.0</version>
       <scope>test</scope>
     </dependency>
     <!-- END OpenTelemetry -->
@@ -325,7 +325,12 @@
       <!-- JDK17 set up for tests in src/test-jdk17 -->
       <id>java17-test</id>
       <activation>
-        <jdk>17</jdk>
+        <!-- Activate the tests only on CI unit(17) tests using flag -->
+        <property>
+          <name>runTestsWithJava17</name>
+          <value>true</value>
+        </property>
+        <activeByDefault>false</activeByDefault>
       </activation>
       <build>
         <plugins>
@@ -360,18 +365,6 @@
                 <arg>--add-opens=java.base/java.lang=ALL-UNNAMED</arg>
                 <arg>--add-opens=java.base/java.util=ALL-UNNAMED</arg>
               </compilerArgs>
-            </configuration>
-          </plugin>
-          <plugin>
-            <!-- On CI, javadoc runs on java 17, but it sources java8 to compile and raises version conflict -->
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-              <sourceFileIncludes> 
-                <include>src/test-jdk17/**/*.java</include> 
-              </sourceFileIncludes>
-              <source>17</source>
-              <release>17</release> 
             </configuration>
           </plugin>
         </plugins>
