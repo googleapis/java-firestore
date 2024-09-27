@@ -40,6 +40,7 @@ import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
+import com.google.cloud.firestore.encoding.CustomClassMapper;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
