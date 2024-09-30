@@ -24,6 +24,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATED_FIELD_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATED_FIELD_PROTO;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static com.google.cloud.firestore.LocalFirestoreHelper.string;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -169,10 +170,11 @@ public class WatchTest {
 
   @After
   public void after() {
-    assertTrue(exceptions.isEmpty());
-    assertTrue(requests.isEmpty());
-    assertTrue(documentSnapshots.isEmpty());
-    assertTrue(querySnapshots.isEmpty());
+    Object[] emptyArray = new Object[0];
+    assertArrayEquals(exceptions.toArray(), emptyArray);
+    assertArrayEquals(requests.toArray(), emptyArray);
+    assertArrayEquals(documentSnapshots.toArray(), emptyArray);
+    assertArrayEquals(querySnapshots.toArray(), emptyArray);
     listenerRegistration.remove();
   }
 
