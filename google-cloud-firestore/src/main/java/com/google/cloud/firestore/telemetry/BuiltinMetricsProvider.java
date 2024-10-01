@@ -16,7 +16,12 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.*;
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METER_NAME;
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_KEY_LIBRARY_NAME;
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_KEY_LIBRARY_VERSION;
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_NAME_END_TO_END_LATENCY;
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY;
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.MILLISECOND_UNIT;
 
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.api.gax.tracing.MetricsTracerFactory;
@@ -38,6 +43,8 @@ public class BuiltinMetricsProvider {
   private DoubleHistogram endToEndRequestLatency;
   private DoubleHistogram firstResponseLatency;
 
+  static final String FIRESTORE_LIBRARY_NAME = "java_firestore";
+
   public BuiltinMetricsProvider(OpenTelemetry openTelemetry) {
 
     this.openTelemetry = openTelemetry;
@@ -53,10 +60,10 @@ public class BuiltinMetricsProvider {
 
   private Map<String, String> createStaticAttributes() {
     Map<String, String> staticAttributes = new HashMap<>();
-    staticAttributes.put(CLIENT_LIBRARY_KEY.toString(), FIRESTORE_LIBRARY_NAME);
+    staticAttributes.put(METRIC_KEY_LIBRARY_NAME.toString(), FIRESTORE_LIBRARY_NAME);
     String pkgVersion = this.getClass().getPackage().getImplementationVersion();
     if (pkgVersion != null) {
-      staticAttributes.put(LIBRARY_VERSION_KEY.toString(), pkgVersion);
+      staticAttributes.put(METRIC_KEY_LIBRARY_VERSION.toString(), pkgVersion);
     }
     return staticAttributes;
   }
@@ -70,14 +77,14 @@ public class BuiltinMetricsProvider {
 
     this.endToEndRequestLatency =
         meter
-            .histogramBuilder(METER_NAME + "/" + END_TO_END_LATENCY_NAME)
+            .histogramBuilder(METER_NAME + "/" + METRIC_NAME_END_TO_END_LATENCY)
             .setDescription("Firestore E2E metrics")
             .setUnit(MILLISECOND_UNIT)
             .build();
 
     this.firstResponseLatency =
         meter
-            .histogramBuilder(METER_NAME + "/" + FIRST_RESPONSE_LATENCY_NAME)
+            .histogramBuilder(METER_NAME + "/" + METRIC_NAME_FIRST_RESPONSE_LATENCY)
             .setDescription("Firestore query first response latency")
             .setUnit(MILLISECOND_UNIT)
             .build();

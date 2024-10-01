@@ -16,7 +16,9 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.*;
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_KEY_METHOD;
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_KEY_STATUS;
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.getAllViews;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
@@ -55,10 +57,11 @@ class EnabledMetricsUtil implements MetricsUtil {
       this.defaultOpenTelemetryMetricsProvider =
           new BuiltinMetricsProvider(
               getDefaultOpenTelemetryInstance(firestoreOptions.getProjectId()));
+      // TODO(metrics): decide if we want to fall back to global opentelemetry
       this.customOpenTelemetryMetricsProvider =
           new BuiltinMetricsProvider(firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry());
     } catch (IOException e) {
-      // TODO: Handle the exception appropriately (e.g., logging)
+      // TODO(metrics): Handle the exception appropriately (e.g., logging)
     }
   }
 
@@ -140,8 +143,8 @@ class EnabledMetricsUtil implements MetricsUtil {
     private void recordEndToEndLatency(String status) {
       double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
       Map<String, String> attributes = new HashMap<>();
-      attributes.put(METHOD_KEY.toString(), methodName);
-      attributes.put(STATUS_KEY.toString(), status);
+      attributes.put(METRIC_KEY_METHOD.toString(), methodName);
+      attributes.put(METRIC_KEY_STATUS.toString(), status);
 
       defaultOpenTelemetryMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
       customOpenTelemetryMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
@@ -150,8 +153,8 @@ class EnabledMetricsUtil implements MetricsUtil {
     public void recordFirstResponseLatency() {
       double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
       Map<String, String> attributes = new HashMap<>();
-      attributes.put(METHOD_KEY.toString(), methodName);
-      attributes.put(STATUS_KEY.toString(), StatusCode.Code.OK.toString());
+      attributes.put(METRIC_KEY_METHOD.toString(), methodName);
+      attributes.put(METRIC_KEY_STATUS.toString(), StatusCode.Code.OK.toString());
 
       defaultOpenTelemetryMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);
       customOpenTelemetryMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);

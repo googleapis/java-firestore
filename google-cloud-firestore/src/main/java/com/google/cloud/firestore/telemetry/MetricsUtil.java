@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.*;
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.ENABLE_METRICS_ENV_VAR;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalApi;

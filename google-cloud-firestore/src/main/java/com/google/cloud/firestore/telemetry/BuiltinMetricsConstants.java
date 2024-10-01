@@ -28,66 +28,56 @@ import java.util.stream.Collectors;
 
 public class BuiltinMetricsConstants {
 
-  static final String FIRESTORE_LIBRARY_NAME = "firestore_java";
-
   // TODO: change to firestore.googleapis.com
   public static final String METER_NAME = "custom.googleapis.com/internal/client";
-  static final String FIRESTORE_METER_NAME = "firestore_java";
+  public static final String FIRESTORE_METER_NAME = "java_firestore";
   public static final String GAX_METER_NAME = OpenTelemetryMetricsRecorder.GAX_METER_NAME;
 
   // Metric attribute keys for monitored resource
-  static final AttributeKey<String> PROJECT_ID_KEY = AttributeKey.stringKey("project_id");
-  // public static final AttributeKey<String> INSTANCE_ID_KEY = AttributeKey.stringKey("instance");
+  public static final AttributeKey<String> METRIC_KEY_PROJECT_ID =
+      AttributeKey.stringKey("project_id");
+  public static final AttributeKey<String> METRIC_KEY_DATABASE_ID =
+      AttributeKey.stringKey("database_id");
 
   // Metric attribute keys for labels
-  // static final AttributeKey<String> LANGUAGE_KEY = AttributeKey.stringKey("language");
-  static final AttributeKey<String> METHOD_KEY = AttributeKey.stringKey("method");
-  static final AttributeKey<String> STATUS_KEY = AttributeKey.stringKey("status");
-  public static final AttributeKey<String> DATABASE_ID_KEY = AttributeKey.stringKey("database_id");
-  static final AttributeKey<String> CLIENT_LIBRARY_KEY = AttributeKey.stringKey("client_library");
-  static final AttributeKey<String> LIBRARY_VERSION_KEY = AttributeKey.stringKey("library_version");
-  static final AttributeKey<String> CLIENT_UID_KEY = AttributeKey.stringKey("client_uid");
+  public static final AttributeKey<String> METRIC_KEY_METHOD = AttributeKey.stringKey("method");
+  public static final AttributeKey<String> METRIC_KEY_STATUS = AttributeKey.stringKey("status");
+  public static final AttributeKey<String> METRIC_KEY_LIBRARY_NAME =
+      AttributeKey.stringKey("library_name");
+  public static final AttributeKey<String> METRIC_KEY_LIBRARY_VERSION =
+      AttributeKey.stringKey("library_version");
+  public static final AttributeKey<String> METRIC_KEY_CLIENT_UID =
+      AttributeKey.stringKey("client_uid");
 
-  static final AttributeKey<String> Language_KEY = AttributeKey.stringKey("language");
-  public static final AttributeKey<String> SERVICE_NAME = AttributeKey.stringKey("service.name");
   // Metric
-  static final String OPERATION_LATENCY_NAME = "operation_latency";
-  static final String OPERATION_COUNT_NAME = "operation_count";
-  static final String ATTEMPT_LATENCY_NAME = "attempt_latency";
-  static final String ATTEMPT_COUNT_NAME = "attempt_count";
-  static final String FIRST_RESPONSE_LATENCY_NAME = "first_response_latency";
-  static final String END_TO_END_LATENCY_NAME = "end_to_end_latency";
-  static final String TRANSACTION_LATENCY_NAME = "transaction_latency";
-  static final String TRANSACTION_ATTEMPT_COUNT_NAME = "transaction_attempt_count";
+  public static final String METRIC_NAME_OPERATION_LATENCY = "operation_latency";
+  public static final String METRIC_NAME_OPERATION_COUNT = "operation_count";
+  public static final String METRIC_NAME_ATTEMPT_LATENCY = "attempt_latency";
+  public static final String METRIC_NAME_ATTEMPT_COUNT = "attempt_count";
+  public static final String METRIC_NAME_FIRST_RESPONSE_LATENCY = "first_response_latency";
+  public static final String METRIC_NAME_END_TO_END_LATENCY = "end_to_end_latency";
+  public static final String METRIC_NAME_TRANSACTION_LATENCY = "transaction_latency";
+  public static final String METRIC_NAME_TRANSACTION_ATTEMPT_COUNT = "transaction_attempt_count";
 
-  static final String MILLISECOND_UNIT = "ms";
+  public static final String MILLISECOND_UNIT = "ms";
 
   public static final String ENABLE_METRICS_ENV_VAR = "FIRESTORE_ENABLE_TRACING";
 
-  public static final Set<AttributeKey> COMMON_ATTRIBUTES =
-      ImmutableSet.of(
-          PROJECT_ID_KEY,
-          DATABASE_ID_KEY,
-          CLIENT_UID_KEY,
-          CLIENT_LIBRARY_KEY,
-          LIBRARY_VERSION_KEY,
-          STATUS_KEY);
-
   public static final Set<String> BUILTIN_METRICS =
       ImmutableSet.of(
-              OPERATION_LATENCY_NAME,
-              ATTEMPT_LATENCY_NAME,
-              OPERATION_COUNT_NAME,
-              ATTEMPT_COUNT_NAME,
-              FIRST_RESPONSE_LATENCY_NAME,
-              END_TO_END_LATENCY_NAME,
-              TRANSACTION_LATENCY_NAME,
-              TRANSACTION_ATTEMPT_COUNT_NAME)
+              METRIC_NAME_OPERATION_LATENCY,
+              METRIC_NAME_ATTEMPT_LATENCY,
+              METRIC_NAME_OPERATION_COUNT,
+              METRIC_NAME_ATTEMPT_COUNT,
+              METRIC_NAME_FIRST_RESPONSE_LATENCY,
+              METRIC_NAME_END_TO_END_LATENCY,
+              METRIC_NAME_TRANSACTION_LATENCY,
+              METRIC_NAME_TRANSACTION_ATTEMPT_COUNT)
           .stream()
           .map(m -> METER_NAME + '/' + m)
           .collect(Collectors.toSet());
 
-  static void defineView(
+  public static void defineView(
       ImmutableMap.Builder<InstrumentSelector, View> viewMap,
       String id,
       String meter,
@@ -103,6 +93,13 @@ public class BuiltinMetricsConstants {
     viewMap.put(selector, view);
   }
 
+  public static final Set<AttributeKey> COMMON_ATTRIBUTES =
+      ImmutableSet.of(
+          METRIC_KEY_CLIENT_UID,
+          METRIC_KEY_LIBRARY_NAME,
+          METRIC_KEY_LIBRARY_VERSION,
+          METRIC_KEY_STATUS);
+
   private static Set<AttributeKey> withAdditionalAttributes(Set<AttributeKey> attributes) {
     return ImmutableSet.<AttributeKey>builder()
         .addAll(COMMON_ATTRIBUTES)
@@ -116,38 +113,39 @@ public class BuiltinMetricsConstants {
     // Define views with COMMON_ATTRIBUTES and METHOD_KEY
     defineView(
         views,
-        OPERATION_LATENCY_NAME,
+        METRIC_NAME_OPERATION_LATENCY,
         GAX_METER_NAME,
-        withAdditionalAttributes(ImmutableSet.of(METHOD_KEY)));
+        withAdditionalAttributes(ImmutableSet.of(METRIC_KEY_METHOD)));
     defineView(
         views,
-        ATTEMPT_LATENCY_NAME,
+        METRIC_NAME_ATTEMPT_LATENCY,
         GAX_METER_NAME,
-        withAdditionalAttributes(ImmutableSet.of(METHOD_KEY)));
+        withAdditionalAttributes(ImmutableSet.of(METRIC_KEY_METHOD)));
     defineView(
         views,
-        OPERATION_COUNT_NAME,
+        METRIC_NAME_OPERATION_COUNT,
         GAX_METER_NAME,
-        withAdditionalAttributes(ImmutableSet.of(METHOD_KEY)));
+        withAdditionalAttributes(ImmutableSet.of(METRIC_KEY_METHOD)));
     defineView(
         views,
-        ATTEMPT_COUNT_NAME,
+        METRIC_NAME_ATTEMPT_COUNT,
         GAX_METER_NAME,
-        withAdditionalAttributes(ImmutableSet.of(METHOD_KEY)));
+        withAdditionalAttributes(ImmutableSet.of(METRIC_KEY_METHOD)));
     defineView(
         views,
-        FIRST_RESPONSE_LATENCY_NAME,
+        METRIC_NAME_FIRST_RESPONSE_LATENCY,
         FIRESTORE_METER_NAME,
-        withAdditionalAttributes(ImmutableSet.of(METHOD_KEY)));
+        withAdditionalAttributes(ImmutableSet.of(METRIC_KEY_METHOD)));
     defineView(
         views,
-        END_TO_END_LATENCY_NAME,
+        METRIC_NAME_END_TO_END_LATENCY,
         FIRESTORE_METER_NAME,
-        withAdditionalAttributes(ImmutableSet.of(METHOD_KEY)));
+        withAdditionalAttributes(ImmutableSet.of(METRIC_KEY_METHOD)));
 
     // Define views with only COMMON_ATTRIBUTES
-    defineView(views, TRANSACTION_LATENCY_NAME, FIRESTORE_METER_NAME, COMMON_ATTRIBUTES);
-    defineView(views, TRANSACTION_ATTEMPT_COUNT_NAME, FIRESTORE_METER_NAME, COMMON_ATTRIBUTES);
+    defineView(views, METRIC_NAME_TRANSACTION_LATENCY, FIRESTORE_METER_NAME, COMMON_ATTRIBUTES);
+    defineView(
+        views, METRIC_NAME_TRANSACTION_ATTEMPT_COUNT, FIRESTORE_METER_NAME, COMMON_ATTRIBUTES);
 
     return views.build();
   }

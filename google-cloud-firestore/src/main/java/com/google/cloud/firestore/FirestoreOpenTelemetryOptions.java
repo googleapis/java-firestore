@@ -69,7 +69,7 @@ public class FirestoreOpenTelemetryOptions {
 
     private Builder() {
       tracingEnabled = false;
-      metricsEnabled = false;
+      metricsEnabled = true;
       openTelemetry = null;
     }
 
