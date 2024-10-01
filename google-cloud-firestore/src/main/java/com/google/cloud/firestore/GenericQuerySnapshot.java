@@ -35,23 +35,20 @@ public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocu
   protected final Timestamp readTime;
 
   private List<DocumentChange> documentChanges;
-  private List<QueryDocumentSnapshot> documents;
-
-  private final DocumentSet documentSet;
+  private final List<QueryDocumentSnapshot> documents;
 
   // Elevated access level for mocking.
   protected GenericQuerySnapshot(
       QueryT query,
       Timestamp readTime,
+      @Nonnull
       final List<QueryDocumentSnapshot> documents,
-      final DocumentSet documentSet,
       final List<DocumentChange> documentChanges) {
     this.query = query;
     this.readTime = readTime;
     this.documentChanges =
         documentChanges != null ? Collections.unmodifiableList(documentChanges) : documentChanges;
-    this.documentSet = documentSet;
-    this.documents = documents;
+    this.documents = Collections.unmodifiableList(documents);
   }
 
   /**
@@ -81,14 +78,7 @@ public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocu
    */
   @Nonnull
   public List<QueryDocumentSnapshot> getDocuments() {
-    if (documents == null) {
-      synchronized (documentSet) {
-        if (documents == null) {
-          documents = documentSet.toList();
-        }
-      }
-    }
-    return Collections.unmodifiableList(documents);
+    return this.documents;
   }
 
   /** Returns true if there are no documents in the QuerySnapshot. */

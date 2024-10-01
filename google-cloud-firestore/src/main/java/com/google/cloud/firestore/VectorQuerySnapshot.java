@@ -28,9 +28,8 @@ public class VectorQuerySnapshot extends GenericQuerySnapshot<VectorQuery> {
       VectorQuery query,
       Timestamp readTime,
       final List<QueryDocumentSnapshot> documents,
-      final DocumentSet documentSet,
       final List<DocumentChange> documentChanges) {
-    super(query, readTime, documents, documentSet, documentChanges);
+    super(query, readTime, documents, documentChanges);
   }
 
   /**
@@ -39,6 +38,6 @@ public class VectorQuerySnapshot extends GenericQuerySnapshot<VectorQuery> {
    */
   public static VectorQuerySnapshot withDocuments(
       final VectorQuery query, Timestamp readTime, final List<QueryDocumentSnapshot> documents) {
-    return new VectorQuerySnapshot(query, readTime, documents, null, null);
+    return new VectorQuerySnapshot(query, readTime, documents, null);
   }
 }

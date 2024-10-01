@@ -25,22 +25,21 @@ import java.util.List;
  */
 public class QuerySnapshot extends GenericQuerySnapshot<Query> {
   protected QuerySnapshot(Query query, Timestamp readTime) {
-    super(query, readTime, null, null, null);
+    super(query, readTime, null, null);
   }
 
   protected QuerySnapshot(
       Query query,
       Timestamp readTime,
       final List<QueryDocumentSnapshot> documents,
-      final DocumentSet documentSet,
       final List<DocumentChange> documentChanges) {
-    super(query, readTime, documents, documentSet, documentChanges);
+    super(query, readTime, documents, documentChanges);
   }
 
   /** Creates a new QuerySnapshot representing the results of a Query with added documents. */
   public static QuerySnapshot withDocuments(
       final Query query, Timestamp readTime, final List<QueryDocumentSnapshot> documents) {
-    return new QuerySnapshot(query, readTime, documents, null, null);
+    return new QuerySnapshot(query, readTime, documents, null);
   }
 
   /** Creates a new QuerySnapshot representing a snapshot of a Query with changed documents. */
@@ -49,6 +48,6 @@ public class QuerySnapshot extends GenericQuerySnapshot<Query> {
       Timestamp readTime,
       final DocumentSet documentSet,
       final List<DocumentChange> documentChanges) {
-    return new QuerySnapshot(query, readTime, null, documentSet, documentChanges);
+    return new QuerySnapshot(query, readTime, documentSet.toList(), documentChanges);
   }
 }
