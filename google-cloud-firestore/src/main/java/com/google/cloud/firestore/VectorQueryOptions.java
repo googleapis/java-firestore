@@ -104,11 +104,16 @@ public class VectorQueryOptions {
      * Specifies a threshold for which no less similar documents will be returned. The behavior of
      * the specified `distanceMeasure` will affect the meaning of the distance threshold.
      *
-     * <p>- For `distanceMeasure: "EUCLIDEAN"`, the meaning of `distanceThreshold` is: SELECT docs
-     * WHERE euclidean_distance <= distanceThreshold - For `distanceMeasure: "COSINE"`, the meaning
-     * of `distanceThreshold` is: SELECT docs WHERE cosine_distance <= distanceThreshold - For
-     * `distanceMeasure: "DOT_PRODUCT"`, the meaning of `distanceThreshold` is: SELECT docs WHERE
-     * dot_product_distance >= distanceThreshold
+     * <p>
+     *
+     * <ul>
+     *   <li>For `distanceMeasure: "EUCLIDEAN"`, the meaning of `distanceThreshold` is: {@code
+     *       SELECT docs WHERE euclidean_distance <= distanceThreshold}
+     *   <li>For `distanceMeasure: "COSINE"`, the meaning of `distanceThreshold` is: {@code SELECT
+     *       docs WHERE cosine_distance <= distanceThreshold}
+     *   <li>For `distanceMeasure: "DOT_PRODUCT"`, the meaning of `distanceThreshold` is: {@code
+     *       SELECT docs WHERE dot_product_distance >= distanceThreshold}
+     * </ul>
      *
      * <p>If `null`, then the computed distance will not be returned. Default value: `null`.
      *
