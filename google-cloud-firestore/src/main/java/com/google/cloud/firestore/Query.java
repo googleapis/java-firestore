@@ -1837,11 +1837,11 @@ public class Query extends StreamableQuery<QuerySnapshot> {
    * <p>Only documents whose `vectorField` field is a {@link VectorValue} of the same dimension as
    * `queryVector` participate in the query, all other documents are ignored.
    *
-   * @example ``` // Returns the closest 10 documents whose Euclidean distance from their
-   *     'embedding' fields are closed to [41, 42]. VectorQuery vectorQuery = col.findNearest(
-   *     "embedding", new double[] {41, 42}, 10, VectorQuery.DistanceMeasure.EUCLIDEAN);
-   *     <p>QuerySnapshot querySnapshot = await vectorQuery.get().get(); DocumentSnapshot
-   *     mostSimilarDocument = querySnapshot.getDocuments().get(0); ```
+   * <p>{@code VectorQuery vectorQuery = col.findNearest("embedding", new double[] {41, 42}, 10,
+   * VectorQuery.DistanceMeasure.EUCLIDEAN); QuerySnapshot querySnapshot = await
+   * vectorQuery.get().get(); DocumentSnapshot mostSimilarDocument =
+   * querySnapshot.getDocuments().get(0);}
+   *
    * @param vectorField A string specifying the vector field to search on.
    * @param queryVector A representation of the vector used to measure the distance from
    *     `vectorField` values in the documents.
@@ -1876,13 +1876,12 @@ public class Query extends StreamableQuery<QuerySnapshot> {
    * <p>Only documents whose `vectorField` field is a {@link VectorValue} of the same dimension as
    * `queryVector` participate in the query, all other documents are ignored.
    *
-   * @example ``` // Returns the closest 10 documents whose Euclidean distance from their
-   *     'embedding' fields are closed to [41, 42]. VectorQuery vectorQuery = col.findNearest(
-   *     "embedding", new double[] {41, 42}, 10, VectorQuery.DistanceMeasure.EUCLIDEAN
-   *     FindNearestOptions.newBuilder() .setDistanceThreshold(0.11) .setDistanceResultField("foo")
-   *     .build());
-   *     <p>QuerySnapshot querySnapshot = await vectorQuery.get().get(); DocumentSnapshot
-   *     mostSimilarDocument = querySnapshot.getDocuments().get(0); ```
+   * <p>{@code VectorQuery vectorQuery = col.findNearest( "embedding", new double[] {41, 42}, 10,
+   * VectorQuery.DistanceMeasure.EUCLIDEAN,
+   * FindNearestOptions.newBuilder().setDistanceThreshold(0.11).setDistanceResultField("foo").build());
+   * QuerySnapshot querySnapshot = await vectorQuery.get().get(); DocumentSnapshot
+   * mostSimilarDocument = querySnapshot.getDocuments().get(0);}
+   *
    * @param vectorField A string specifying the vector field to search on.
    * @param queryVector A representation of the vector used to measure the distance from
    *     `vectorField` values in the documents.
@@ -1919,12 +1918,12 @@ public class Query extends StreamableQuery<QuerySnapshot> {
    * <p>Only documents whose `vectorField` field is a {@link VectorValue} of the same dimension as
    * `queryVector` participate in the query, all other documents are ignored.
    *
-   * @example ``` // Returns the closest 10 documents whose Euclidean distance from their
-   *     'embedding' fields are closed to [41, 42]. VectorValue queryVector = FieldValue.vector(new
-   *     double[] {41, 42}); VectorQuery vectorQuery = col.findNearest( FieldPath.of("embedding"),
-   *     queryVector, 10, VectorQuery.DistanceMeasure.EUCLIDEAN);
-   *     <p>QuerySnapshot querySnapshot = await vectorQuery.get().get(); DocumentSnapshot
-   *     mostSimilarDocument = querySnapshot.getDocuments().get(0); ```
+   * <p>{@code VectorValue queryVector = FieldValue.vector(new double[] {41, 42}); VectorQuery
+   * vectorQuery = col.findNearest( FieldPath.of("embedding"), queryVector, 10,
+   * VectorQuery.DistanceMeasure.EUCLIDEAN); QuerySnapshot querySnapshot = await
+   * vectorQuery.get().get(); DocumentSnapshot mostSimilarDocument =
+   * querySnapshot.getDocuments().get(0);}
+   *
    * @param vectorField A {@link FieldPath} specifying the vector field to search on.
    * @param queryVector The {@link VectorValue} used to measure the distance from `vectorField`
    *     values in the documents.
@@ -1955,13 +1954,12 @@ public class Query extends StreamableQuery<QuerySnapshot> {
    * <p>Only documents whose `vectorField` field is a {@link VectorValue} of the same dimension as
    * `queryVector` participate in the query, all other documents are ignored.
    *
-   * @example ``` // Returns the closest 10 documents whose Euclidean distance from their
-   *     'embedding' fields are closed to [41, 42]. VectorValue queryVector = FieldValue.vector(new
-   *     double[] {41, 42}); VectorQuery vectorQuery = col.findNearest( FieldPath.of("embedding"),
-   *     queryVector, 10, VectorQuery.DistanceMeasure.EUCLIDEAN, FindNearestOptions.newBuilder()
-   *     .setDistanceThreshold(0.11) .setDistanceResultField("foo") .build());
-   *     <p>QuerySnapshot querySnapshot = await vectorQuery.get().get(); DocumentSnapshot
-   *     mostSimilarDocument = querySnapshot.getDocuments().get(0); ```
+   * <p>{@code VectorQuery vectorQuery = col.findNearest( FieldPath.of("embedding"), queryVector,
+   * 10, VectorQuery.DistanceMeasure.EUCLIDEAN,
+   * FindNearestOptions.newBuilder().setDistanceThreshold(0.11).setDistanceResultField("foo").build());
+   * QuerySnapshot querySnapshot = await vectorQuery.get().get(); DocumentSnapshot
+   * mostSimilarDocument = querySnapshot.getDocuments().get(0);}
+   *
    * @param vectorField A {@link FieldPath} specifying the vector field to search on.
    * @param queryVector The {@link VectorValue} used to measure the distance from `vectorField`
    *     values in the documents.
