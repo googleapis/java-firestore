@@ -62,6 +62,7 @@ public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
    * @return An ApiFuture that will be resolved with the results of the VectorQuery.
    */
   @Override
+  @Nonnull
   public ApiFuture<VectorQuerySnapshot> get() {
     return get(null, null);
   }
@@ -75,6 +76,7 @@ public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
    *     query execution (if any), and the query results (if any).
    */
   @Override
+  @Nonnull
   public ApiFuture<ExplainResults<VectorQuerySnapshot>> explain(ExplainOptions options) {
     return super.explain(options);
   }
@@ -159,7 +161,7 @@ public final class VectorQuery extends StreamableQuery<VectorQuerySnapshot> {
   }
 
   @Override
-  StreamableQuery startAfter(@Nonnull DocumentSnapshot snapshot) {
+  VectorQuery startAfter(@Nonnull DocumentSnapshot snapshot) {
     throw new RuntimeException("Not implemented");
   }
 

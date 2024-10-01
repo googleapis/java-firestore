@@ -16,8 +16,16 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.LocalFirestoreHelper.*;
-import static org.junit.Assert.*;
+import static com.google.cloud.firestore.LocalFirestoreHelper.COLLECTION_ID;
+import static com.google.cloud.firestore.LocalFirestoreHelper.DOCUMENT_NAME;
+import static com.google.cloud.firestore.LocalFirestoreHelper.findNearest;
+import static com.google.cloud.firestore.LocalFirestoreHelper.query;
+import static com.google.cloud.firestore.LocalFirestoreHelper.queryResponse;
+import static com.google.cloud.firestore.LocalFirestoreHelper.queryResponseWithDone;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;

@@ -1225,6 +1225,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
    * @return The created Query.
    */
   @Nonnull
+  @Override
   public Query startAfter(@Nonnull DocumentSnapshot snapshot) {
     ImmutableList<FieldOrder> fieldOrders = createImplicitOrderBy();
     Cursor cursor = createCursor(fieldOrders, snapshot, false);
@@ -1716,6 +1717,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
    * @return An ApiFuture that will be resolved with the results of the Query.
    */
   @Override
+  @Nonnull
   public ApiFuture<QuerySnapshot> get() {
     return get(null, null);
   }
@@ -1729,6 +1731,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
    *     query execution (if any), and the query results (if any).
    */
   @Override
+  @Nonnull
   public ApiFuture<ExplainResults<QuerySnapshot>> explain(ExplainOptions options) {
     return super.explain(options);
   }

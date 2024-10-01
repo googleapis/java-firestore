@@ -65,7 +65,7 @@ public abstract class StreamableQuery<SnapshotType> {
 
   abstract boolean isRetryableWithCursor();
 
-  abstract StreamableQuery startAfter(@Nonnull DocumentSnapshot snapshot);
+  abstract StreamableQuery<SnapshotType> startAfter(@Nonnull DocumentSnapshot snapshot);
 
   abstract SnapshotType createSnaphot(
       Timestamp readTime, final List<QueryDocumentSnapshot> documents);

@@ -143,11 +143,14 @@ public class VectorQueryOptions {
         && Objects.equals(distanceThreshold, otherOptions.distanceThreshold);
   }
 
+  /** Default VectorQueryOptions instance. */
+  private static VectorQueryOptions DEFAULT = newBuilder().build();
+
   /**
    * Returns a default {@code FirestoreOptions} instance. Note: package private until API review can
    * be completed.
    */
   static VectorQueryOptions getDefaultInstance() {
-    return newBuilder().build();
+    return DEFAULT;
   }
 }
