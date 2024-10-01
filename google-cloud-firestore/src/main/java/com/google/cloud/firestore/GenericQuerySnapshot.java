@@ -41,8 +41,7 @@ public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocu
   protected GenericQuerySnapshot(
       QueryT query,
       Timestamp readTime,
-      @Nonnull
-      final List<QueryDocumentSnapshot> documents,
+      @Nonnull final List<QueryDocumentSnapshot> documents,
       final List<DocumentChange> documentChanges) {
     this.query = query;
     this.readTime = readTime;
