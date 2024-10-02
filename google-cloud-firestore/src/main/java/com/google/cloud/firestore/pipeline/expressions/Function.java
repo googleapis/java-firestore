@@ -2256,6 +2256,25 @@ public class Function implements Expr {
    * <p>Example:
    *
    * <pre>{@code
+   * // Check if the 'title' field contains the pattern specified in field 'pattern'.
+   * Function.like(Field.of("title"), Field.of("pattern"));
+   * }</pre>
+   *
+   * @param expr The expression representing the string to perform the comparison on.
+   * @param pattern The expression evaluates to the pattern to compare to.
+   * @return A new {@code Expr} representing the 'like' comparison.
+   */
+  @BetaApi
+  public static Like like(Expr expr, Expr pattern) {
+    return new Like(expr, pattern);
+  }
+
+  /**
+   * Creates an expression that performs a case-sensitive wildcard string comparison.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
    * // Check if the 'title' field contains the string "guide"
    * Function.like(Field.of("title"), "%guide%");
    * }</pre>
@@ -2287,6 +2306,26 @@ public class Function implements Expr {
   @BetaApi
   public static Like like(String field, String pattern) {
     return new Like(Field.of(field), Constant.of(pattern));
+  }
+
+  /**
+   * Creates an expression that checks if a string expression contains a specified regular
+   * expression as a substring.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Check if the 'description' field contains "example" (case-insensitive)
+   * Function.regexContains(Field.of("description"), Constant.of("(?i)example"));
+   * }</pre>
+   *
+   * @param expr The expression representing the string to perform the comparison on.
+   * @param pattern The expression evaluates to a regular expression string.
+   * @return A new {@code Expr} representing the 'contains' comparison.
+   */
+  @BetaApi
+  public static RegexContains regexContains(Expr expr, Expr pattern) {
+    return new RegexContains(expr, pattern);
   }
 
   /**
@@ -2337,6 +2376,26 @@ public class Function implements Expr {
    *
    * <pre>{@code
    * // Check if the 'email' field matches a valid email pattern
+   * Function.regexMatch(Field.of("email"), Constant.of("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"));
+   * }</pre>
+   *
+   * @param expr The expression representing the string to match against.
+   * @param pattern The expression evaluates to a regular expression string.
+   * @return A new {@code Expr} representing the regular expression match.
+   */
+  @BetaApi
+  public static RegexMatch regexMatch(Expr expr, Expr pattern) {
+    return new RegexMatch(expr, pattern);
+  }
+
+  /**
+   * Creates an expression that checks if a string expression matches a specified regular
+   * expression.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Check if the 'email' field matches a valid email pattern
    * Function.regexMatch(Field.of("email"), "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}");
    * }</pre>
    *
@@ -2366,6 +2425,25 @@ public class Function implements Expr {
   @BetaApi
   public static RegexMatch regexMatch(String field, String pattern) {
     return new RegexMatch(Field.of(field), Constant.of(pattern));
+  }
+
+  /**
+   * Creates an expression that checks if a string expression contains a specified substring.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Check if the 'description' field contains "example".
+   * Function.regexContains(Field.of("description"), Constant.of("example"));
+   * }</pre>
+   *
+   * @param expr The expression representing the string to perform the comparison on.
+   * @param substring The expression evaluates to a substring to use for the search.
+   * @return A new {@code Expr} representing the 'contains' comparison.
+   */
+  @BetaApi
+  public static StrContains strContains(Expr expr, Expr substring) {
+    return new StrContains(expr, Constant.of(substring));
   }
 
   /**

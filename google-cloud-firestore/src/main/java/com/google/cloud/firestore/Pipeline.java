@@ -718,6 +718,10 @@ public final class Pipeline {
 
           @Override
           public void onResponse(ExecutePipelineResponse response) {
+            if (executionTime == null) {
+              executionTime = Timestamp.fromProto(response.getExecutionTime());
+            }
+
             if (!firstResponse) {
               firstResponse = true;
               Tracing.getTracer()
@@ -738,10 +742,6 @@ public final class Pipeline {
               for (Document doc : response.getResultsList()) {
                 resultObserver.onNext(PipelineResult.fromDocument(rpcContext, executionTime, doc));
               }
-            }
-
-            if (executionTime == null) {
-              executionTime = Timestamp.fromProto(response.getExecutionTime());
             }
           }
 

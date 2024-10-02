@@ -1110,6 +1110,24 @@ public interface Expr {
   }
 
   /**
+   * Creates an expression that performs a case-sensitive string comparison.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Check if the 'title' field matches the pattern specified in field 'pattern'.
+   * Field.of("title").like(Field.of("pattern"));
+   * }</pre>
+   *
+   * @param pattern The expression evaluates to a pattern.
+   * @return A new {@code Expr} representing the 'like' comparison.
+   */
+  @BetaApi
+  default Like like(Expr pattern) {
+    return new Like(this, pattern);
+  }
+
+  /**
    * Creates an expression that checks if a string contains a specified regular expression as a
    * substring.
    *
