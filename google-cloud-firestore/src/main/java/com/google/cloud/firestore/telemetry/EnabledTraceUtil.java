@@ -31,6 +31,7 @@ import io.opentelemetry.api.trace.SpanBuilder;
 import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.api.trace.TracerProvider;
 import io.opentelemetry.instrumentation.grpc.v1_6.GrpcTelemetry;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -84,6 +85,11 @@ public class EnabledTraceUtil implements TraceUtil {
   @Override
   @Nullable
   public ApiFunction<ManagedChannelBuilder, ManagedChannelBuilder> getChannelConfigurator() {
+    // Note: using `==` rather than `.equals` since OpenTelemetry has only 1 static instance of
+    // `TracerProvider.noop`.
+    if (openTelemetry.getTracerProvider() == TracerProvider.noop()) {
+      return null;
+    }
     return new OpenTelemetryGrpcChannelConfigurator();
   }
 
