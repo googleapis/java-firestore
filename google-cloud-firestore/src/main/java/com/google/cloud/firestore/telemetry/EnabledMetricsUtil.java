@@ -32,6 +32,7 @@ import com.google.cloud.opentelemetry.metric.MetricConfiguration;
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Status;
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.metrics.InstrumentSelector;
@@ -45,6 +46,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Nullable;
 
 class EnabledMetricsUtil implements MetricsUtil {
@@ -52,16 +55,25 @@ class EnabledMetricsUtil implements MetricsUtil {
   private BuiltinMetricsProvider defaultOpenTelemetryMetricsProvider;
   private BuiltinMetricsProvider customOpenTelemetryMetricsProvider;
 
+  private static final Logger logger = Logger.getLogger(EnabledMetricsUtil.class.getName());
+
   EnabledMetricsUtil(FirestoreOptions firestoreOptions) {
     try {
       this.defaultOpenTelemetryMetricsProvider =
           new BuiltinMetricsProvider(
               getDefaultOpenTelemetryInstance(firestoreOptions.getProjectId()));
-      // TODO(metrics): decide if we want to fall back to global opentelemetry
-      this.customOpenTelemetryMetricsProvider =
-          new BuiltinMetricsProvider(firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry());
+
+      OpenTelemetry customOpenTelemetry =
+          firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
+      if (customOpenTelemetry == null) {
+        customOpenTelemetry = GlobalOpenTelemetry.get();
+      }
+      this.customOpenTelemetryMetricsProvider = new BuiltinMetricsProvider(customOpenTelemetry);
     } catch (IOException e) {
-      // TODO(metrics): Handle the exception appropriately (e.g., logging)
+      logger.log(
+          Level.WARNING,
+          "Unable to get create MetricsUtil object for client side metrics, will skip exporting client side metrics",
+          e);
     }
   }
 
@@ -73,13 +85,18 @@ class EnabledMetricsUtil implements MetricsUtil {
       sdkMeterProviderBuilder.registerView(entry.getKey(), entry.getValue());
     }
 
+    // MonitoredResourceDescription monitoredResourceMapping =
+    //     new MonitoredResourceDescription(FIRESTORE_RESOURCE_TYPE, FIRESTORE_RESOURCE_LABELS);
+
     MetricExporter metricExporter =
         GoogleCloudMetricExporter.createWithConfiguration(
             MetricConfiguration.builder()
                 .setProjectId(projectId)
+                // Ignore library info as it is collected by the metric attributes as well
                 .setInstrumentationLibraryLabelsEnabled(false)
-                // .setMonitoredResourceDescription((null))
-                // .setUseServiceTimeSeries(false)
+                // TODO(metrics): enable the configuration below when backend is ready
+                // .setMonitoredResourceDescription(monitoredResourceMapping)
+                // .setUseServiceTimeSeries(true)
                 .build());
 
     sdkMeterProviderBuilder.registerMetricReader(PeriodicMetricReader.create(metricExporter));

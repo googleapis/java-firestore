@@ -1734,12 +1734,15 @@ public class Query {
 
     TraceUtil.Span currentSpan = traceUtil.currentSpan();
 
-    // TODO(mila): record transaction latency, retry counts if applicable
+    String method =
+        transactionId != null
+            ? ".Transaction"
+            : explainOptions != null ? ".ExplainQuery" : ".Query";
     MetricsContext metricsContext =
         getFirestore()
             .getOptions()
             .getMetricsUtil()
-            .createMetricsContext(TraceUtil.SPAN_NAME_RUN_QUERY);
+            .createMetricsContext(TraceUtil.SPAN_NAME_RUN_QUERY + method);
 
     currentSpan.addEvent(
         TraceUtil.SPAN_NAME_RUN_QUERY,
@@ -1796,7 +1799,7 @@ public class Query {
           @Override
           public void onError(Throwable throwable) {
             QueryDocumentSnapshot cursor = lastReceivedDocument.get();
-            // TODO(mila): how do we capture e2e latency when retries are present
+            // TODO(metrics): record transaction latency, retry counts if applicable
             if (shouldRetry(cursor, throwable)) {
               currentSpan.addEvent(
                   TraceUtil.SPAN_NAME_RUN_QUERY + ": Retryable Error",

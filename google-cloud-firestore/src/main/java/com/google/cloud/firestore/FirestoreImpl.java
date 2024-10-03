@@ -32,6 +32,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -249,6 +250,9 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             DocumentReference documentReference;
             DocumentSnapshot documentSnapshot;
 
+            // TODO(metrics): record first_response_latency here. Need to come up with a way to
+            // access the method and stopWatch. Maybe share the Context and Scope used by tracing
+
             numResponses++;
             if (numResponses == 1) {
               getTraceUtil()
@@ -427,16 +431,30 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nonnull final Transaction.AsyncFunction<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
 
-    if (transactionOptions.getReadTime() != null) {
-      // READ_ONLY transactions with readTime have no retry, nor transaction state, so we don't need
-      // a runner.
-      return updateFunction.updateCallback(
-          new ReadTimeTransaction(this, transactionOptions.getReadTime()));
-    } else {
-      // For READ_ONLY transactions without readTime, there is still strong consistency applied,
-      // that cannot be tracked client side.
-      return new ServerSideTransactionRunner<>(this, updateFunction, transactionOptions).run();
+    MetricsContext metricsContext =
+        getOptions().getMetricsUtil().createMetricsContext("RunTransaction");
+
+    ApiFuture<T> result;
+    try {
+      if (transactionOptions.getReadTime() != null) {
+        // READ_ONLY transactions with readTime have no retry, nor transaction state, so we don't
+        // need a runner.
+        result =
+            updateFunction.updateCallback(
+                new ReadTimeTransaction(this, transactionOptions.getReadTime()));
+        metricsContext.recordEndToEndLatencyAtFuture(result);
+      } else {
+        // For READ_ONLY transactions without readTime, there is still strong consistency applied,
+        // that cannot be tracked client side.
+        result = new ServerSideTransactionRunner<>(this, updateFunction, transactionOptions).run();
+        metricsContext.recordEndToEndLatencyAtFuture(result);
+      }
+    } catch (Exception error) {
+      metricsContext.recordEndToEndLatency(error);
+      throw error;
     }
+
+    return result;
   }
 
   @Nonnull

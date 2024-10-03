@@ -50,6 +50,7 @@ public abstract class Transaction extends UpdateBuilder<Transaction> {
     return firestore.getOptions().getTraceUtil();
   }
 
+  // TODO(Metrics): implement transaction latency and attempt count metrics
   @Nonnull
   MetricsUtil getMetricsUtil() {
     return firestore.getOptions().getMetricsUtil();

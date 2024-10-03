@@ -26,7 +26,6 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
-import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.telemetry.TraceUtil.Span;
@@ -95,6 +94,7 @@ final class ServerSideTransactionRunner<T> {
 
   ApiFuture<T> run() {
     runTransactionSpan = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_RUN);
+
     runTransactionSpan.setAttribute(
         ATTRIBUTE_KEY_TRANSACTION_TYPE, transactionOptions.getType().name());
     runTransactionSpan.setAttribute(
@@ -122,12 +122,6 @@ final class ServerSideTransactionRunner<T> {
     TraceUtil.Span span =
         getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_BEGIN, runTransactionContext);
 
-    MetricsContext metricsContext =
-        firestore
-            .getOptions()
-            .getMetricsUtil()
-            .createMetricsContext(TraceUtil.SPAN_NAME_TRANSACTION_BEGIN);
-
     try (Scope ignored = span.makeCurrent()) {
       ServerSideTransaction previousTransaction = this.transaction;
       this.transaction = null;
@@ -141,12 +135,9 @@ final class ServerSideTransactionRunner<T> {
                 return serverSideTransaction;
               });
       span.endAtFuture(result);
-      metricsContext.recordEndToEndLatencyAtFuture(result);
-
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }

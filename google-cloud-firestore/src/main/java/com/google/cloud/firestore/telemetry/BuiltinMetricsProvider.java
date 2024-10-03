@@ -16,12 +16,15 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.FIRESTORE_METER_NAME;
 import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METER_NAME;
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_KEY_CLIENT_UID;
 import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_KEY_LIBRARY_NAME;
 import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_KEY_LIBRARY_VERSION;
 import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_NAME_END_TO_END_LATENCY;
 import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY;
 import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.MILLISECOND_UNIT;
+import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.getClientUid;
 
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.api.gax.tracing.MetricsTracerFactory;
@@ -60,6 +63,7 @@ public class BuiltinMetricsProvider {
 
   private Map<String, String> createStaticAttributes() {
     Map<String, String> staticAttributes = new HashMap<>();
+    staticAttributes.put(METRIC_KEY_CLIENT_UID.toString(), getClientUid());
     staticAttributes.put(METRIC_KEY_LIBRARY_NAME.toString(), FIRESTORE_LIBRARY_NAME);
     String pkgVersion = this.getClass().getPackage().getImplementationVersion();
     if (pkgVersion != null) {
@@ -73,7 +77,7 @@ public class BuiltinMetricsProvider {
   }
 
   void registerMetrics() {
-    this.meter = openTelemetry.getMeter(FIRESTORE_LIBRARY_NAME);
+    this.meter = openTelemetry.getMeter(FIRESTORE_METER_NAME);
 
     this.endToEndRequestLatency =
         meter
@@ -88,7 +92,7 @@ public class BuiltinMetricsProvider {
             .setDescription("Firestore query first response latency")
             .setUnit(MILLISECOND_UNIT)
             .build();
-    // TODO(mila): add transaction latency and retry count metrics
+    // TODO(metrics): add transaction latency and retry count metrics
   }
 
   public void endToEndRequestLatencyRecorder(double latency, Map<String, String> attributes) {

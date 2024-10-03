@@ -19,7 +19,6 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
-import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -111,12 +110,6 @@ final class ServerSideTransaction extends Transaction {
     TraceUtil.Span span =
         getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_ROLLBACK, transactionTraceContext);
 
-    MetricsContext metricsContext =
-        firestore
-            .getOptions()
-            .getMetricsUtil()
-            .createMetricsContext(TraceUtil.SPAN_NAME_TRANSACTION_ROLLBACK);
-
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       RollbackRequest req =
           RollbackRequest.newBuilder()
@@ -143,12 +136,10 @@ final class ServerSideTransaction extends Transaction {
               },
               MoreExecutors.directExecutor());
       span.endAtFuture(result);
-      metricsContext.recordEndToEndLatencyAtFuture(result);
 
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }
@@ -171,12 +162,6 @@ final class ServerSideTransaction extends Transaction {
         getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, transactionTraceContext);
 
-    MetricsContext metricsContext =
-        firestore
-            .getOptions()
-            .getMetricsUtil()
-            .createMetricsContext(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT);
-
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
       ApiFuture<DocumentSnapshot> result =
@@ -189,12 +174,10 @@ final class ServerSideTransaction extends Transaction {
               snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
               MoreExecutors.directExecutor());
       span.endAtFuture(result);
-      metricsContext.recordEndToEndLatencyAtFuture(result);
 
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }
@@ -214,23 +197,14 @@ final class ServerSideTransaction extends Transaction {
         getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
 
-    MetricsContext metricsContext =
-        firestore
-            .getOptions()
-            .getMetricsUtil()
-            .createMetricsContext(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS);
-
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(
               documentReferences, /* fieldMask= */ null, transactionId, /* readTime= */ null);
       span.endAtFuture(result);
-      metricsContext.recordEndToEndLatencyAtFuture(result);
-
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }
@@ -252,22 +226,13 @@ final class ServerSideTransaction extends Transaction {
         getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
 
-    MetricsContext metricsContext =
-        firestore
-            .getOptions()
-            .getMetricsUtil()
-            .createMetricsContext(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS);
-
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, fieldMask, transactionId, /* readTime= */ null);
       span.endAtFuture(result);
-      metricsContext.recordEndToEndLatencyAtFuture(result);
-
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }

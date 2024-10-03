@@ -22,22 +22,28 @@ import com.google.common.collect.ImmutableSet;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.sdk.metrics.InstrumentSelector;
 import io.opentelemetry.sdk.metrics.View;
+import java.lang.management.ManagementFactory;
+import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class BuiltinMetricsConstants {
+
+  public static final String FIRESTORE_RESOURCE_TYPE = "firestore_client_raw";
 
   // TODO: change to firestore.googleapis.com
   public static final String METER_NAME = "custom.googleapis.com/internal/client";
   public static final String FIRESTORE_METER_NAME = "java_firestore";
   public static final String GAX_METER_NAME = OpenTelemetryMetricsRecorder.GAX_METER_NAME;
 
-  // Metric attribute keys for monitored resource
-  public static final AttributeKey<String> METRIC_KEY_PROJECT_ID =
-      AttributeKey.stringKey("project_id");
-  public static final AttributeKey<String> METRIC_KEY_DATABASE_ID =
-      AttributeKey.stringKey("database_id");
+  // Monitored resource labels
+  static final String RESOURCE_KEY_RESOURCE_CONTAINER = "resource_container";
+  static final String RESOURCE_KEY_LOCATION = "location";
+  static final String RESOURCE_KEY_DATABASE_ID = "database_id";
 
   // Metric attribute keys for labels
   public static final AttributeKey<String> METRIC_KEY_METHOD = AttributeKey.stringKey("method");
@@ -59,9 +65,16 @@ public class BuiltinMetricsConstants {
   public static final String METRIC_NAME_TRANSACTION_LATENCY = "transaction_latency";
   public static final String METRIC_NAME_TRANSACTION_ATTEMPT_COUNT = "transaction_attempt_count";
 
+  // TODO(metrics): an app should have one client_uid, and it is contant. should this be hold here?
+  private static String CLIENT_UID;
+
   public static final String MILLISECOND_UNIT = "ms";
 
   public static final String ENABLE_METRICS_ENV_VAR = "FIRESTORE_ENABLE_TRACING";
+
+  static final Set<String> FIRESTORE_RESOURCE_LABELS =
+      ImmutableSet.of(
+          RESOURCE_KEY_RESOURCE_CONTAINER, RESOURCE_KEY_LOCATION, RESOURCE_KEY_DATABASE_ID);
 
   public static final Set<String> BUILTIN_METRICS =
       ImmutableSet.of(
@@ -148,5 +161,40 @@ public class BuiltinMetricsConstants {
         views, METRIC_NAME_TRANSACTION_ATTEMPT_COUNT, FIRESTORE_METER_NAME, COMMON_ATTRIBUTES);
 
     return views.build();
+  }
+
+  public static String getClientUid() {
+    if (CLIENT_UID == null) {
+      String identifier = UUID.randomUUID().toString();
+      String pid = getProcessId();
+
+      try {
+        String hostname = InetAddress.getLocalHost().getHostName();
+        CLIENT_UID = identifier + "@" + pid + "@" + hostname;
+      } catch (UnknownHostException e) {
+        CLIENT_UID = identifier + "@" + pid + "@localhost";
+      }
+    }
+    return CLIENT_UID;
+  }
+
+  private static String getProcessId() {
+    try {
+      // Check if Java 9+ and ProcessHandle class is available
+      Class<?> processHandleClass = Class.forName("java.lang.ProcessHandle");
+      Method currentMethod = processHandleClass.getMethod("current");
+      Object processHandleInstance = currentMethod.invoke(null);
+      Method pidMethod = processHandleClass.getMethod("pid");
+      long pid = (long) pidMethod.invoke(processHandleInstance);
+      return Long.toString(pid);
+    } catch (Exception e) {
+      // Fallback to Java 8 method
+      final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
+      if (jvmName != null && jvmName.contains("@")) {
+        return jvmName.split("@")[0];
+      } else {
+        return "unknown";
+      }
+    }
   }
 }
