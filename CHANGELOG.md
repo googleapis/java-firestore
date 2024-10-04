@@ -1,5 +1,30 @@
 # Changelog
 
+## [3.27.0](https://github.com/googleapis/java-firestore/compare/v3.26.5...v3.27.0) (2024-10-02)
+
+
+### Features
+
+* Add support for vector search with Query#findNearest ([#1827](https://github.com/googleapis/java-firestore/issues/1827)) ([4ad463a](https://github.com/googleapis/java-firestore/commit/4ad463a6932b90ca0cb3dd015b2543ffbf850eb9))
+
+
+### Dependencies
+
+* Update googleapis/sdk-platform-java action to v2.46.1 ([#1862](https://github.com/googleapis/java-firestore/issues/1862)) ([f35bcdb](https://github.com/googleapis/java-firestore/commit/f35bcdbfced37438379b969efe071958b6ac94a0))
+
+## [3.26.5](https://github.com/googleapis/java-firestore/compare/v3.26.4...v3.26.5) (2024-09-30)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.46.1 ([f9ddf32](https://github.com/googleapis/java-firestore/commit/f9ddf32e6a9c071d5008b101523b83ffbacf712e))
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.51.0 ([#1852](https://github.com/googleapis/java-firestore/issues/1852)) ([1efbb10](https://github.com/googleapis/java-firestore/commit/1efbb10c20b7cb3e696b14867b1149d83cb53a16))
+* Update dependency com.google.cloud:google-cloud-trace to v2.51.0 ([#1853](https://github.com/googleapis/java-firestore/issues/1853)) ([e674b7a](https://github.com/googleapis/java-firestore/commit/e674b7a77915a5f55582ee54f5304ea958e274b4))
+
 ## [3.26.4](https://github.com/googleapis/java-firestore/compare/v3.26.3...v3.26.4) (2024-09-27)
 
 
