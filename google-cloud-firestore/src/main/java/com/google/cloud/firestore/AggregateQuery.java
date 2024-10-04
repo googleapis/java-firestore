@@ -340,7 +340,7 @@ public class AggregateQuery {
             .currentSpan()
             .addEvent(
                 SPAN_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
-                Collections.singletonMap("error.message", throwable.getMessage()));
+                Collections.singletonMap("error.message", throwable.toString()));
 
         runQuery(responseDeliverer, attempt + 1);
       } else {
@@ -348,7 +348,7 @@ public class AggregateQuery {
             .currentSpan()
             .addEvent(
                 SPAN_NAME_RUN_AGGREGATION_QUERY + ": Error",
-                Collections.singletonMap("error.message", throwable.getMessage()));
+                Collections.singletonMap("error.message", throwable.toString()));
         responseDeliverer.deliverError(throwable);
       }
     }
