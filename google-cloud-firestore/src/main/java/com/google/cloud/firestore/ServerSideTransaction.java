@@ -260,4 +260,12 @@ final class ServerSideTransaction extends Transaction {
       return query.get(transactionId, null);
     }
   }
+
+  @Nonnull
+  @Override
+  public ApiFuture<List<PipelineResult>> execute(@Nonnull Pipeline pipeline) {
+    try (TraceUtil.Scope ignored = transactionTraceContext.makeCurrent()) {
+      return pipeline.execute(transactionId, null);
+    }
+  }
 }

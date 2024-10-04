@@ -127,6 +127,14 @@ final class ReadTimeTransaction extends Transaction {
 
   @Nonnull
   @Override
+  public ApiFuture<List<PipelineResult>> execute(@Nonnull Pipeline pipeline) {
+    try (TraceUtil.Scope ignored = transactionTraceContext.makeCurrent()) {
+      return pipeline.execute(null, readTime);
+    }
+  }
+
+  @Nonnull
+  @Override
   public Transaction create(
       @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields) {
     throw new IllegalStateException(WRITE_EXCEPTION_MSG);

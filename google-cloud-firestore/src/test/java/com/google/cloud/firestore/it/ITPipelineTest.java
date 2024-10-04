@@ -43,6 +43,7 @@ import static org.junit.Assert.assertThrows;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.LocalFirestoreHelper;
+import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.PipelineResult;
 import com.google.cloud.firestore.pipeline.expressions.Constant;
 import com.google.cloud.firestore.pipeline.expressions.Field;
@@ -1012,5 +1013,36 @@ public class ITPipelineTest extends ITBaseTest {
             Lists.newArrayList(
                 map("title", "The Hitchhiker's Guide to the Galaxy", "awards.hugo", true),
                 map("title", "Dune", "awards.hugo", true)));
+  }
+
+  @Test
+  public void testPipelineInTransactions() throws Exception {
+    Pipeline pipeline =
+        collection
+            .pipeline()
+            .where(eq("awards.hugo", true))
+            .select("title", "awards.hugo", Field.DOCUMENT_ID);
+
+    firestore
+        .runTransaction(
+            transaction -> {
+              List<PipelineResult> results = transaction.execute(pipeline).get();
+
+              assertThat(data(results))
+                  .isEqualTo(
+                      Lists.newArrayList(
+                          map("title", "The Hitchhiker's Guide to the Galaxy", "awards.hugo", true),
+                          map("title", "Dune", "awards.hugo", true)));
+
+              transaction.update(collection.document("book1"), map("foo", "bar"));
+
+              return "done";
+            })
+        .get();
+
+    List<PipelineResult> result =
+        collection.pipeline().where(eq("foo", "bar")).select("title").execute().get();
+    assertThat(data(result))
+        .isEqualTo(Lists.newArrayList(map("title", "The Hitchhiker's Guide to the Galaxy")));
   }
 }

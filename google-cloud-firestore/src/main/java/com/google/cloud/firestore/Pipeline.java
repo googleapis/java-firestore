@@ -52,12 +52,14 @@ import com.google.firestore.v1.Document;
 import com.google.firestore.v1.ExecutePipelineRequest;
 import com.google.firestore.v1.ExecutePipelineResponse;
 import com.google.firestore.v1.StructuredPipeline;
+import com.google.protobuf.ByteString;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Nullable;
 
 /**
  * The Pipeline class provides a flexible and expressive framework for building complex data
@@ -597,29 +599,7 @@ public final class Pipeline {
    */
   @BetaApi
   public ApiFuture<List<PipelineResult>> execute() {
-    SettableApiFuture<List<PipelineResult>> futureResult = SettableApiFuture.create();
-
-    execute( // Assuming you have this method
-        new PipelineResultObserver() {
-          final List<PipelineResult> results = new ArrayList<>();
-
-          @Override
-          public void onCompleted() {
-            futureResult.set(results);
-          }
-
-          @Override
-          public void onNext(PipelineResult result) {
-            results.add(result);
-          }
-
-          @Override
-          public void onError(Throwable t) {
-            futureResult.setException(t);
-          }
-        });
-
-    return futureResult;
+    return execute(null, null);
   }
 
   /**
@@ -669,14 +649,57 @@ public final class Pipeline {
    */
   @BetaApi
   public void execute(ApiStreamObserver<PipelineResult> observer) {
-    ExecutePipelineRequest request =
+    executeInternal(null, null, observer);
+  }
+
+  ApiFuture<List<PipelineResult>> execute(
+      @Nullable final ByteString transactionId, @Nullable com.google.protobuf.Timestamp readTime) {
+    SettableApiFuture<List<PipelineResult>> futureResult = SettableApiFuture.create();
+
+    executeInternal(
+        transactionId,
+        readTime,
+        new PipelineResultObserver() {
+          final List<PipelineResult> results = new ArrayList<>();
+
+          @Override
+          public void onCompleted() {
+            futureResult.set(results);
+          }
+
+          @Override
+          public void onNext(PipelineResult result) {
+            results.add(result);
+          }
+
+          @Override
+          public void onError(Throwable t) {
+            futureResult.setException(t);
+          }
+        });
+
+    return futureResult;
+  }
+
+  void executeInternal(
+      @Nullable final ByteString transactionId,
+      @Nullable com.google.protobuf.Timestamp readTime,
+      ApiStreamObserver<PipelineResult> observer) {
+    ExecutePipelineRequest.Builder request =
         ExecutePipelineRequest.newBuilder()
             .setDatabase(rpcContext.getDatabaseName())
-            .setStructuredPipeline(StructuredPipeline.newBuilder().setPipeline(toProto()).build())
-            .build();
+            .setStructuredPipeline(StructuredPipeline.newBuilder().setPipeline(toProto()).build());
+
+    if (transactionId != null) {
+      request.setTransaction(transactionId);
+    }
+
+    if (readTime != null) {
+      request.setReadTime(readTime);
+    }
 
     pipelineInternalStream(
-        request,
+        request.build(),
         new PipelineResultObserver() {
           @Override
           public void onCompleted() {
