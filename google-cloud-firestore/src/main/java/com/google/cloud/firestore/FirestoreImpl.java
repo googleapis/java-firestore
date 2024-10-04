@@ -33,6 +33,7 @@ import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
+import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -228,6 +229,11 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     // that we receive from the server.
     final int NUM_RESPONSES_PER_TRACE_EVENT = 100;
 
+    MetricsContext metricsContext =
+        getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS);
+
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
         new ResponseObserver<BatchGetDocumentsResponse>() {
           int numResponses = 0;
@@ -238,7 +244,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             getTraceUtil()
                 .currentSpan()
                 .addEvent(
-                    TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": Start",
+                    TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS + ": Start",
                     new ImmutableMap.Builder<String, Object>()
                         .put(ATTRIBUTE_KEY_DOC_COUNT, documentReferences.length)
                         .put(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null)
@@ -250,19 +256,19 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             DocumentReference documentReference;
             DocumentSnapshot documentSnapshot;
 
-            // TODO(metrics): record first_response_latency here. Need to come up with a way to
-            // access the method and stopWatch. Maybe share the Context and Scope used by tracing
-
             numResponses++;
             if (numResponses == 1) {
               getTraceUtil()
                   .currentSpan()
-                  .addEvent(TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": First response received");
+                  .addEvent(
+                      TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS
+                          + ": First response received");
+              metricsContext.recordFirstResponseLatency();
             } else if (numResponses % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
               getTraceUtil()
                   .currentSpan()
                   .addEvent(
-                      TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS
+                      TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS
                           + ": Received "
                           + numResponses
                           + " responses");
@@ -302,6 +308,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
           @Override
           public void onError(Throwable throwable) {
             getTraceUtil().currentSpan().end(throwable);
+            metricsContext.recordEndToEndLatency(throwable);
             apiStreamObserver.onError(throwable);
           }
 
@@ -312,11 +319,12 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             getTraceUtil()
                 .currentSpan()
                 .addEvent(
-                    TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS
+                    TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS
                         + ": Completed with "
                         + numResponses
                         + " responses.",
                     Collections.singletonMap(ATTRIBUTE_KEY_NUM_RESPONSES, numResponses));
+            metricsContext.recordEndToEndLatency();
             apiStreamObserver.onCompleted();
           }
         };
@@ -432,7 +440,9 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nonnull TransactionOptions transactionOptions) {
 
     MetricsContext metricsContext =
-        getOptions().getMetricsUtil().createMetricsContext("RunTransaction");
+        getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_TRANSACTION);
 
     ApiFuture<T> result;
     try {

@@ -26,7 +26,10 @@ import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
+import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.Document;
@@ -100,8 +103,8 @@ public abstract class StreamableQuery<SnapshotType> {
             .getTraceUtil()
             .startSpan(
                 transactionId == null
-                    ? TraceUtil.SPAN_NAME_QUERY_GET
-                    : TraceUtil.SPAN_NAME_TRANSACTION_GET_QUERY);
+                    ? TelemetryConstants.METHOD_NAME_QUERY_GET
+                    : TelemetryConstants.METHOD_NAME_TRANSACTION_GET_QUERY);
     try (Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<SnapshotType> result = SettableApiFuture.create();
       internalStream(
@@ -165,7 +168,10 @@ public abstract class StreamableQuery<SnapshotType> {
   @Nonnull
   public ApiFuture<ExplainResults<SnapshotType>> explain(ExplainOptions options) {
     TraceUtil.Span span =
-        getFirestore().getOptions().getTraceUtil().startSpan(TraceUtil.SPAN_NAME_QUERY_GET);
+        getFirestore()
+            .getOptions()
+            .getTraceUtil()
+            .startSpan(TelemetryConstants.METHOD_NAME_QUERY_GET);
 
     try (Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<ExplainResults<SnapshotType>> result = SettableApiFuture.create();
@@ -245,17 +251,27 @@ public abstract class StreamableQuery<SnapshotType> {
       @Nullable final ExplainOptions explainOptions,
       final boolean isRetryRequestWithCursor) {
     TraceUtil traceUtil = getFirestore().getOptions().getTraceUtil();
+
     // To reduce the size of traces, we only register one event for every 100 responses
     // that we receive from the server.
     final int NUM_RESPONSES_PER_TRACE_EVENT = 100;
 
     TraceUtil.Span currentSpan = traceUtil.currentSpan();
     currentSpan.addEvent(
-        TraceUtil.SPAN_NAME_RUN_QUERY,
+        TelemetryConstants.METHOD_NAME_RUN_QUERY,
         new ImmutableMap.Builder<String, Object>()
             .put(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null)
             .put(ATTRIBUTE_KEY_IS_RETRY_WITH_CURSOR, isRetryRequestWithCursor)
             .build());
+
+    String method =
+        transactionId != null
+            ? TelemetryConstants.METHOD_NAME_RUN_QUERY_TRANSACTION
+            : explainOptions != null
+                ? TelemetryConstants.METHOD_NAME_RUN_QUERY_EXPLAIN_QUERY
+                : TelemetryConstants.METHOD_NAME_RUN_QUERY_QUERY;
+    MetricsContext metricsContext =
+        getFirestore().getOptions().getMetricsUtil().createMetricsContext(method);
 
     final AtomicReference<QueryDocumentSnapshot> lastReceivedDocument = new AtomicReference<>();
 
@@ -276,7 +292,8 @@ public abstract class StreamableQuery<SnapshotType> {
           public void onResponse(RunQueryResponse response) {
             if (!firstResponse) {
               firstResponse = true;
-              currentSpan.addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": First Response");
+              currentSpan.addEvent(TelemetryConstants.METHOD_NAME_RUN_QUERY + ": First Response");
+              metricsContext.recordFirstResponseLatency();
             }
 
             runQueryResponseObserver.onNext(response);
@@ -285,7 +302,10 @@ public abstract class StreamableQuery<SnapshotType> {
               numDocuments++;
               if (numDocuments % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
                 currentSpan.addEvent(
-                    TraceUtil.SPAN_NAME_RUN_QUERY + ": Received " + numDocuments + " documents");
+                    TelemetryConstants.METHOD_NAME_RUN_QUERY
+                        + ": Received "
+                        + numDocuments
+                        + " documents");
               }
               Document document = response.getDocument();
               QueryDocumentSnapshot documentSnapshot =
@@ -296,7 +316,7 @@ public abstract class StreamableQuery<SnapshotType> {
 
             if (response.getDone()) {
               currentSpan.addEvent(
-                  TraceUtil.SPAN_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
+                  TelemetryConstants.METHOD_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
               onComplete();
             }
           }
@@ -306,7 +326,7 @@ public abstract class StreamableQuery<SnapshotType> {
             QueryDocumentSnapshot cursor = lastReceivedDocument.get();
             if (isRetryableWithCursor() && shouldRetry(cursor, throwable)) {
               currentSpan.addEvent(
-                  TraceUtil.SPAN_NAME_RUN_QUERY + ": Retryable Error",
+                  TelemetryConstants.METHOD_NAME_RUN_QUERY + ": Retryable Error",
                   Collections.singletonMap("error.message", throwable.getMessage()));
 
               startAfter(cursor)
@@ -319,8 +339,9 @@ public abstract class StreamableQuery<SnapshotType> {
                       /* isRetryRequestWithCursor= */ true);
             } else {
               currentSpan.addEvent(
-                  TraceUtil.SPAN_NAME_RUN_QUERY + ": Error",
+                  TelemetryConstants.METHOD_NAME_RUN_QUERY + ": Error",
                   Collections.singletonMap("error.message", throwable.getMessage()));
+              metricsContext.recordEndToEndLatency(throwable);
               runQueryResponseObserver.onError(throwable);
             }
           }
@@ -330,8 +351,9 @@ public abstract class StreamableQuery<SnapshotType> {
             if (hasCompleted) return;
             hasCompleted = true;
             currentSpan.addEvent(
-                TraceUtil.SPAN_NAME_RUN_QUERY + ": Completed",
+                TelemetryConstants.METHOD_NAME_RUN_QUERY + ": Completed",
                 Collections.singletonMap(ATTRIBUTE_KEY_DOC_COUNT, numDocuments));
+            metricsContext.recordEndToEndLatency();
             runQueryResponseObserver.onCompleted();
           }
 
