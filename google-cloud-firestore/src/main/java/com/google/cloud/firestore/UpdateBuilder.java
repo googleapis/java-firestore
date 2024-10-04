@@ -618,7 +618,6 @@ public abstract class UpdateBuilder<T> {
                 transactionId == null
                     ? TraceUtil.SPAN_NAME_BATCH_COMMIT
                     : TraceUtil.SPAN_NAME_TRANSACTION_COMMIT);
-
     span.setAttribute(ATTRIBUTE_KEY_DOC_COUNT, writes.size());
     span.setAttribute(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null);
     try (Scope ignored = span.makeCurrent()) {

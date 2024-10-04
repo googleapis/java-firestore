@@ -69,7 +69,8 @@ public class FirestoreOpenTelemetryOptions {
 
     private Builder() {
       tracingEnabled = false;
-      metricsEnabled = true;
+      // TODO(metrics): set this to default on
+      metricsEnabled = false;
       openTelemetry = null;
     }
 

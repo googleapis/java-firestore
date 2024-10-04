@@ -109,7 +109,6 @@ final class ServerSideTransaction extends Transaction {
   ApiFuture<Void> rollback() {
     TraceUtil.Span span =
         getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_ROLLBACK, transactionTraceContext);
-
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       RollbackRequest req =
           RollbackRequest.newBuilder()
@@ -136,7 +135,6 @@ final class ServerSideTransaction extends Transaction {
               },
               MoreExecutors.directExecutor());
       span.endAtFuture(result);
-
       return result;
     } catch (Exception error) {
       span.end(error);
@@ -161,7 +159,6 @@ final class ServerSideTransaction extends Transaction {
     TraceUtil.Span span =
         getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, transactionTraceContext);
-
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       Preconditions.checkState(isEmpty(), READ_BEFORE_WRITE_ERROR_MSG);
       ApiFuture<DocumentSnapshot> result =
@@ -174,7 +171,6 @@ final class ServerSideTransaction extends Transaction {
               snapshots -> snapshots.isEmpty() ? null : snapshots.get(0),
               MoreExecutors.directExecutor());
       span.endAtFuture(result);
-
       return result;
     } catch (Exception error) {
       span.end(error);
@@ -196,7 +192,6 @@ final class ServerSideTransaction extends Transaction {
     TraceUtil.Span span =
         getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
-
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(
@@ -225,7 +220,6 @@ final class ServerSideTransaction extends Transaction {
     TraceUtil.Span span =
         getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
-
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, fieldMask, transactionId, /* readTime= */ null);

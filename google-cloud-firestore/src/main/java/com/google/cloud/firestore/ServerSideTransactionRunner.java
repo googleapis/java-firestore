@@ -94,7 +94,6 @@ final class ServerSideTransactionRunner<T> {
 
   ApiFuture<T> run() {
     runTransactionSpan = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_RUN);
-
     runTransactionSpan.setAttribute(
         ATTRIBUTE_KEY_TRANSACTION_TYPE, transactionOptions.getType().name());
     runTransactionSpan.setAttribute(
@@ -121,7 +120,6 @@ final class ServerSideTransactionRunner<T> {
   ApiFuture<ServerSideTransaction> begin() {
     TraceUtil.Span span =
         getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_BEGIN, runTransactionContext);
-
     try (Scope ignored = span.makeCurrent()) {
       ServerSideTransaction previousTransaction = this.transaction;
       this.transaction = null;

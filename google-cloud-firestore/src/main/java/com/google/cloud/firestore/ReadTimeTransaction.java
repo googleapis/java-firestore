@@ -58,7 +58,6 @@ final class ReadTimeTransaction extends Transaction {
     TraceUtil.Span span =
         getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENT, transactionTraceContext);
-
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<DocumentSnapshot> result =
           ApiFutures.transform(
@@ -81,7 +80,6 @@ final class ReadTimeTransaction extends Transaction {
     TraceUtil.Span span =
         getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
-
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, /* fieldMask= */ null, readTime);
@@ -100,7 +98,6 @@ final class ReadTimeTransaction extends Transaction {
     TraceUtil.Span span =
         getTraceUtil()
             .startSpan(TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS, transactionTraceContext);
-
     try (TraceUtil.Scope ignored = span.makeCurrent()) {
       ApiFuture<List<DocumentSnapshot>> result =
           firestore.getAll(documentReferences, /* fieldMask= */ null, readTime);

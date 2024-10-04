@@ -208,7 +208,7 @@
       <version>${opentelemetry.version}</version>
       <scope>test</scope>
     </dependency>
-        <dependency>
+    <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk-common</artifactId>
       <version>${opentelemetry.version}</version>
