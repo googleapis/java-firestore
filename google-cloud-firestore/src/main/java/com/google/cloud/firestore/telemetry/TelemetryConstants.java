@@ -16,6 +16,11 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import com.google.api.gax.tracing.OpenTelemetryMetricsRecorder;
+import com.google.common.collect.ImmutableSet;
+import io.opentelemetry.api.common.AttributeKey;
+import java.util.Set;
+
 public interface TelemetryConstants {
   String METHOD_NAME_DOC_REF_CREATE = "DocumentReference.Create";
   String METHOD_NAME_DOC_REF_SET = "DocumentReference.Set";
@@ -46,4 +51,58 @@ public interface TelemetryConstants {
   String METHOD_NAME_PARTITION_QUERY = "PartitionQuery";
   String METHOD_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
   String METHOD_NAME_RUN_TRANSACTION = "RunTransaction";
+
+  // OpenTelemetry built-in metrics constants
+  String FIRESTORE_RESOURCE_TYPE = "firestore_client_raw";
+  String METRIC_PREFIX =
+      "custom.googleapis.com/internal/client"; // TODO: change to firestore.googleapis.com
+  String FIRESTORE_METER_NAME = "java_firestore";
+  String GAX_METER_NAME = OpenTelemetryMetricsRecorder.GAX_METER_NAME;
+
+  // Monitored resource keys for labels
+  String RESOURCE_KEY_RESOURCE_CONTAINER = "resource_container";
+  String RESOURCE_KEY_LOCATION = "location";
+  String RESOURCE_KEY_DATABASE_ID = "database_id";
+  Set<String> FIRESTORE_RESOURCE_LABELS =
+      ImmutableSet.of(
+          RESOURCE_KEY_RESOURCE_CONTAINER, RESOURCE_KEY_LOCATION, RESOURCE_KEY_DATABASE_ID);
+
+  // Metric attribute keys for labels
+  AttributeKey<String> METRIC_KEY_METHOD = AttributeKey.stringKey("method");
+  AttributeKey<String> METRIC_KEY_STATUS = AttributeKey.stringKey("status");
+  AttributeKey<String> METRIC_KEY_LIBRARY_NAME = AttributeKey.stringKey("library_name");
+  AttributeKey<String> METRIC_KEY_LIBRARY_VERSION = AttributeKey.stringKey("library_version");
+  AttributeKey<String> METRIC_KEY_CLIENT_UID = AttributeKey.stringKey("client_uid");
+  Set<AttributeKey> COMMON_ATTRIBUTES =
+      ImmutableSet.of(
+          METRIC_KEY_CLIENT_UID,
+          METRIC_KEY_LIBRARY_NAME,
+          METRIC_KEY_LIBRARY_VERSION,
+          METRIC_KEY_STATUS,
+          METRIC_KEY_METHOD);
+
+  // Metric
+  String METRIC_NAME_OPERATION_LATENCY = "operation_latency";
+  String METRIC_NAME_OPERATION_COUNT = "operation_count";
+  String METRIC_NAME_ATTEMPT_LATENCY = "attempt_latency";
+  String METRIC_NAME_ATTEMPT_COUNT = "attempt_count";
+  String METRIC_NAME_FIRST_RESPONSE_LATENCY = "first_response_latency";
+  String METRIC_NAME_END_TO_END_LATENCY = "end_to_end_latency";
+  String METRIC_NAME_TRANSACTION_LATENCY = "transaction_latency";
+  String METRIC_NAME_TRANSACTION_ATTEMPT_COUNT = "transaction_attempt_count";
+
+  // Define views for GAX and Firestore meters
+  Set<String> gaxMetrics =
+      ImmutableSet.of(
+          METRIC_NAME_OPERATION_LATENCY,
+          METRIC_NAME_ATTEMPT_LATENCY,
+          METRIC_NAME_OPERATION_COUNT,
+          METRIC_NAME_ATTEMPT_COUNT);
+
+  Set<String> firestoreMetrics =
+      ImmutableSet.of(
+          METRIC_NAME_FIRST_RESPONSE_LATENCY,
+          METRIC_NAME_END_TO_END_LATENCY,
+          METRIC_NAME_TRANSACTION_LATENCY,
+          METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
 }

@@ -16,20 +16,17 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.FIRESTORE_METER_NAME;
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METER_NAME;
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_KEY_CLIENT_UID;
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_KEY_LIBRARY_NAME;
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_KEY_LIBRARY_VERSION;
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_NAME_END_TO_END_LATENCY;
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY;
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.MILLISECOND_UNIT;
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.getClientUid;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.FIRESTORE_METER_NAME;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_CLIENT_UID;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_LIBRARY_NAME;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_LIBRARY_VERSION;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_PREFIX;
 
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.api.gax.tracing.MetricsTracerFactory;
 import com.google.api.gax.tracing.OpenTelemetryMetricsRecorder;
-import com.google.common.annotations.VisibleForTesting;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
@@ -40,55 +37,47 @@ import java.util.Map;
 
 public class BuiltinMetricsProvider {
   private OpenTelemetry openTelemetry;
-  private ApiTracerFactory otelApiTracerFactory;
+  private ApiTracerFactory apiTracerFactory;
 
   private Meter meter;
   private DoubleHistogram endToEndRequestLatency;
   private DoubleHistogram firstResponseLatency;
 
-  static final String FIRESTORE_LIBRARY_NAME = "java_firestore";
+  private static final String MILLISECOND_UNIT = "ms";
+  private static final String FIRESTORE_LIBRARY_NAME = "java_firestore";
 
   public BuiltinMetricsProvider(OpenTelemetry openTelemetry) {
-
     this.openTelemetry = openTelemetry;
+
     if (openTelemetry != null) {
-      OpenTelemetryMetricsRecorder recorder =
-          new OpenTelemetryMetricsRecorder(openTelemetry, METER_NAME);
-
-      this.otelApiTracerFactory = new MetricsTracerFactory(recorder, createStaticAttributes());
-
-      registerMetrics();
+      configureGaxLayerMetrics();
+      configureFirestoreLayerMetrics();
     }
   }
 
-  private Map<String, String> createStaticAttributes() {
-    Map<String, String> staticAttributes = new HashMap<>();
-    staticAttributes.put(METRIC_KEY_CLIENT_UID.toString(), getClientUid());
-    staticAttributes.put(METRIC_KEY_LIBRARY_NAME.toString(), FIRESTORE_LIBRARY_NAME);
-    String pkgVersion = this.getClass().getPackage().getImplementationVersion();
-    if (pkgVersion != null) {
-      staticAttributes.put(METRIC_KEY_LIBRARY_VERSION.toString(), pkgVersion);
-    }
-    return staticAttributes;
+  public ApiTracerFactory getApiTracerFactory() {
+    return this.apiTracerFactory;
   }
 
-  public ApiTracerFactory getOpenTelemetryApiTracerFactory() {
-    return this.otelApiTracerFactory;
+  void configureGaxLayerMetrics() {
+    OpenTelemetryMetricsRecorder recorder =
+        new OpenTelemetryMetricsRecorder(openTelemetry, METRIC_PREFIX);
+    this.apiTracerFactory = new MetricsTracerFactory(recorder, createStaticAttributes());
   }
 
-  void registerMetrics() {
+  void configureFirestoreLayerMetrics() {
     this.meter = openTelemetry.getMeter(FIRESTORE_METER_NAME);
 
     this.endToEndRequestLatency =
         meter
-            .histogramBuilder(METER_NAME + "/" + METRIC_NAME_END_TO_END_LATENCY)
+            .histogramBuilder(METRIC_PREFIX + "/" + METRIC_NAME_END_TO_END_LATENCY)
             .setDescription("Firestore E2E metrics")
             .setUnit(MILLISECOND_UNIT)
             .build();
 
     this.firstResponseLatency =
         meter
-            .histogramBuilder(METER_NAME + "/" + METRIC_NAME_FIRST_RESPONSE_LATENCY)
+            .histogramBuilder(METRIC_PREFIX + "/" + METRIC_NAME_FIRST_RESPONSE_LATENCY)
             .setDescription("Firestore query first response latency")
             .setUnit(MILLISECOND_UNIT)
             .build();
@@ -109,8 +98,18 @@ public class BuiltinMetricsProvider {
     }
   }
 
-  @VisibleForTesting
-  Attributes toOtelAttributes(Map<String, String> attributes) {
+  private Map<String, String> createStaticAttributes() {
+    Map<String, String> staticAttributes = new HashMap<>();
+    staticAttributes.put(METRIC_KEY_CLIENT_UID.toString(), TelemetryHelper.getClientUid());
+    staticAttributes.put(METRIC_KEY_LIBRARY_NAME.toString(), FIRESTORE_LIBRARY_NAME);
+    String pkgVersion = this.getClass().getPackage().getImplementationVersion();
+    if (pkgVersion != null) {
+      staticAttributes.put(METRIC_KEY_LIBRARY_VERSION.toString(), pkgVersion);
+    }
+    return staticAttributes;
+  }
+
+  private Attributes toOtelAttributes(Map<String, String> attributes) {
     AttributesBuilder attributesBuilder = Attributes.builder();
     attributes.forEach(attributesBuilder::put);
     return attributesBuilder.build();

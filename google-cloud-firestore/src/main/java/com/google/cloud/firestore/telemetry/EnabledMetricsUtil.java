@@ -16,9 +16,8 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_KEY_METHOD;
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.METRIC_KEY_STATUS;
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.getAllViews;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_METHOD;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_STATUS;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
@@ -46,34 +45,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
 
 class EnabledMetricsUtil implements MetricsUtil {
-
-  private BuiltinMetricsProvider defaultOpenTelemetryMetricsProvider;
-  private BuiltinMetricsProvider customOpenTelemetryMetricsProvider;
+  private BuiltinMetricsProvider defaultMetricsProvider;
+  private BuiltinMetricsProvider customMetricsProvider;
 
   private static final Logger logger = Logger.getLogger(EnabledMetricsUtil.class.getName());
 
   EnabledMetricsUtil(FirestoreOptions firestoreOptions) {
     try {
-      this.defaultOpenTelemetryMetricsProvider =
-          new BuiltinMetricsProvider(
-              getDefaultOpenTelemetryInstance(firestoreOptions.getProjectId()));
+      OpenTelemetry defaultOpenTelemetry =
+          getDefaultOpenTelemetryInstance(firestoreOptions.getProjectId());
+      this.defaultMetricsProvider = new BuiltinMetricsProvider(defaultOpenTelemetry);
 
       OpenTelemetry customOpenTelemetry =
           firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
       if (customOpenTelemetry == null) {
         customOpenTelemetry = GlobalOpenTelemetry.get();
       }
-      this.customOpenTelemetryMetricsProvider = new BuiltinMetricsProvider(customOpenTelemetry);
+      this.customMetricsProvider = new BuiltinMetricsProvider(customOpenTelemetry);
     } catch (IOException e) {
-      logger.log(
-          Level.WARNING,
-          "Unable to get create MetricsUtil object for client side metrics, will skip exporting client side metrics",
-          e);
+      logger.warning(
+          "Unable to get create MetricsUtil object for client side metrics, will skip exporting client side metrics"
+              + e);
     }
   }
 
@@ -81,12 +77,9 @@ class EnabledMetricsUtil implements MetricsUtil {
     SdkMeterProviderBuilder sdkMeterProviderBuilder = SdkMeterProvider.builder();
 
     // Filter out attributes that are not defined
-    for (Map.Entry<InstrumentSelector, View> entry : getAllViews().entrySet()) {
+    for (Map.Entry<InstrumentSelector, View> entry : TelemetryHelper.getAllViews().entrySet()) {
       sdkMeterProviderBuilder.registerView(entry.getKey(), entry.getValue());
     }
-
-    // MonitoredResourceDescription monitoredResourceMapping =
-    //     new MonitoredResourceDescription(FIRESTORE_RESOURCE_TYPE, FIRESTORE_RESOURCE_LABELS);
 
     MetricExporter metricExporter =
         GoogleCloudMetricExporter.createWithConfiguration(
@@ -94,10 +87,21 @@ class EnabledMetricsUtil implements MetricsUtil {
                 .setProjectId(projectId)
                 // Ignore library info as it is collected by the metric attributes as well
                 .setInstrumentationLibraryLabelsEnabled(false)
-                // TODO(metrics): enable the configuration below when backend is ready
-                // .setMonitoredResourceDescription(monitoredResourceMapping)
-                // .setUseServiceTimeSeries(true)
                 .build());
+
+    // TODO: utlize the new features on GoogleCloudMetricExporter when backend is ready
+    // MonitoredResourceDescription monitoredResourceMapping =
+    //     new MonitoredResourceDescription(FIRESTORE_RESOURCE_TYPE, FIRESTORE_RESOURCE_LABELS);
+
+    // MetricExporter metricExporter =
+    //     GoogleCloudMetricExporter.createWithConfiguration(
+    //         MetricConfiguration.builder()
+    //             .setProjectId(projectId)
+    //             // Ignore library info as it is collected by the metric attributes as well
+    //             .setInstrumentationLibraryLabelsEnabled(false)
+    //             .setMonitoredResourceDescription(monitoredResourceMapping)
+    //             .setUseServiceTimeSeries(true)
+    //             .build());
 
     sdkMeterProviderBuilder.registerMetricReader(PeriodicMetricReader.create(metricExporter));
     return OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProviderBuilder.build()).build();
@@ -110,16 +114,15 @@ class EnabledMetricsUtil implements MetricsUtil {
 
   @Override
   public void addMetricsTracerFactory(List<ApiTracerFactory> apiTracerFactories) {
-    ApiTracerFactory defaultMetricsTracerFactory =
-        defaultOpenTelemetryMetricsProvider.getOpenTelemetryApiTracerFactory();
-    if (defaultMetricsTracerFactory != null) {
-      apiTracerFactories.add(defaultMetricsTracerFactory);
-    }
+    addTracerFactory(apiTracerFactories, defaultMetricsProvider);
+    addTracerFactory(apiTracerFactories, customMetricsProvider);
+  }
 
-    ApiTracerFactory customMetricsTracerFactory =
-        customOpenTelemetryMetricsProvider.getOpenTelemetryApiTracerFactory();
-    if (customMetricsTracerFactory != null) {
-      apiTracerFactories.add(customMetricsTracerFactory);
+  private void addTracerFactory(
+      List<ApiTracerFactory> apiTracerFactories, BuiltinMetricsProvider metricsProvider) {
+    ApiTracerFactory tracerFactory = metricsProvider.getApiTracerFactory();
+    if (tracerFactory != null) {
+      apiTracerFactories.add(tracerFactory);
     }
   }
 
@@ -159,22 +162,23 @@ class EnabledMetricsUtil implements MetricsUtil {
 
     private void recordEndToEndLatency(String status) {
       double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-      Map<String, String> attributes = new HashMap<>();
-      attributes.put(METRIC_KEY_METHOD.toString(), methodName);
-      attributes.put(METRIC_KEY_STATUS.toString(), status);
-
-      defaultOpenTelemetryMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
-      customOpenTelemetryMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
+      Map<String, String> attributes = createAttributes(status);
+      defaultMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
+      customMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
     }
 
     public void recordFirstResponseLatency() {
       double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+      Map<String, String> attributes = createAttributes(StatusCode.Code.OK.toString());
+      defaultMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);
+      customMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);
+    }
+
+    private Map<String, String> createAttributes(String status) {
       Map<String, String> attributes = new HashMap<>();
       attributes.put(METRIC_KEY_METHOD.toString(), methodName);
-      attributes.put(METRIC_KEY_STATUS.toString(), StatusCode.Code.OK.toString());
-
-      defaultOpenTelemetryMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);
-      customOpenTelemetryMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);
+      attributes.put(METRIC_KEY_STATUS.toString(), status);
+      return attributes;
     }
 
     /** Function to extract the status of the error as a string */

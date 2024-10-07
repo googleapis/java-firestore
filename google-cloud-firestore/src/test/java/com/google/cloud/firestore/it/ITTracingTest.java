@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore.it;
 
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.*;
 import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;

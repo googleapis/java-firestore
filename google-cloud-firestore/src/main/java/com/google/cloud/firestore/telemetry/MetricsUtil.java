@@ -16,13 +16,12 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import static com.google.cloud.firestore.telemetry.BuiltinMetricsConstants.ENABLE_METRICS_ENV_VAR;
-
 import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalApi;
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.cloud.firestore.FirestoreOptions;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 
 /**
@@ -32,18 +31,23 @@ import javax.annotation.Nonnull;
  */
 @InternalApi
 public interface MetricsUtil {
+  // TODO: rename the env based on OTEL convention
+  static final String ENABLE_METRICS_ENV_VAR = "FIRESTORE_ENABLE_METRICS";
+
+  final Logger logger = Logger.getLogger(MetricsUtil.class.getName());
 
   static MetricsUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
-    if (createEnabledInstance(firestoreOptions)) {
+    if (shouldCreateEnabledInstance(firestoreOptions)) {
       return new EnabledMetricsUtil(firestoreOptions);
     } else {
       return new DisabledMetricsUtil();
     }
   }
 
-  static boolean createEnabledInstance(FirestoreOptions firestoreOptions) {
+  static boolean shouldCreateEnabledInstance(FirestoreOptions firestoreOptions) {
     // Start with the value from FirestoreOptions
-    boolean createEnabledInstance = firestoreOptions.getOpenTelemetryOptions().isMetricsEnabled();
+    boolean shouldCreateEnabledInstance =
+        firestoreOptions.getOpenTelemetryOptions().isMetricsEnabled();
 
     // Override based on the environment variable
     String enableMetricsEnvVar = System.getenv(ENABLE_METRICS_ENV_VAR);
@@ -51,16 +55,18 @@ public interface MetricsUtil {
       switch (enableMetricsEnvVar.toLowerCase()) {
         case "true":
         case "on":
-          createEnabledInstance = true;
+          shouldCreateEnabledInstance = true;
           break;
         case "false":
         case "off":
-          createEnabledInstance = false;
+          shouldCreateEnabledInstance = false;
           break;
+        default:
+          logger.warning("Invalid value for ENABLE_METRICS_ENV_VAR: " + enableMetricsEnvVar);
       }
     }
 
-    return createEnabledInstance;
+    return shouldCreateEnabledInstance;
   }
 
   abstract MetricsContext createMetricsContext(String methodName);

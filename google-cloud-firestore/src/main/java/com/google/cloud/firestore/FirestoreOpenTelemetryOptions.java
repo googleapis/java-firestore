@@ -101,6 +101,7 @@ public class FirestoreOpenTelemetryOptions {
      *
      * @param metricsEnabled Whether client side metrics should be enabled.
      */
+    // TODO: change this to public when the feature is ready
     @Nonnull
     private FirestoreOpenTelemetryOptions.Builder setMetricsEnabled(boolean metricsEnabled) {
       this.metricsEnabled = metricsEnabled;
