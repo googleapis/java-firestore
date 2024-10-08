@@ -44,11 +44,10 @@ public interface MetricsUtil {
    * @return An instance of {@code MetricsUtil}.
    */
   static MetricsUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
+    // TODO(metrics): add debug level logging if possible
     if (shouldCreateEnabledInstance(firestoreOptions)) {
-      logger.info("Client side metrics is enabled");
       return new EnabledMetricsUtil(firestoreOptions);
     } else {
-      logger.info("Client side metrics is disabled");
       return new DisabledMetricsUtil();
     }
   }
