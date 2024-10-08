@@ -1,48 +1,35 @@
+/*
+ * Copyright 2024 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.google.cloud.firestore.telemetry;
 
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.*;
-
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import io.opentelemetry.api.common.AttributeKey;
-import io.opentelemetry.sdk.metrics.InstrumentSelector;
-import io.opentelemetry.sdk.metrics.View;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-public final class TelemetryHelper {
+/** A utility class for retrieving a unique client identifier (CLIENT_UID) */
+final class ClientIdentifier {
 
-  private TelemetryHelper() {} // Private constructor to prevent instantiation
+  private ClientIdentifier() {}
 
   private static String CLIENT_UID;
 
-  public static Map<InstrumentSelector, View> getAllViews() {
-    ImmutableMap.Builder<InstrumentSelector, View> views = ImmutableMap.builder();
-    gaxMetrics.forEach(metric -> defineView(views, metric, GAX_METER_NAME));
-    firestoreMetrics.forEach(metric -> defineView(views, metric, FIRESTORE_METER_NAME));
-    return views.build();
-  }
-
-  public static void defineView(
-      ImmutableMap.Builder<InstrumentSelector, View> viewMap, String id, String meter) {
-    InstrumentSelector selector =
-        InstrumentSelector.builder().setMeterName(meter).setName(METRIC_PREFIX + "/" + id).build();
-    Set<String> attributesFilter =
-        ImmutableSet.<String>builder()
-            .addAll(
-                COMMON_ATTRIBUTES.stream().map(AttributeKey::getKey).collect(Collectors.toSet()))
-            .build();
-    View view = View.builder().setAttributeFilter(attributesFilter).build();
-
-    viewMap.put(selector, view);
-  }
-
+  /** Gets the unique identifier for the client. */
   public static String getClientUid() {
     if (CLIENT_UID == null) {
       CLIENT_UID = generateClientUid();
@@ -50,6 +37,10 @@ public final class TelemetryHelper {
     return CLIENT_UID;
   }
 
+  /**
+   * Generates a unique identifier for the client that is composed of a random UUID, the process ID,
+   * and the hostname of the machine.
+   */
   private static String generateClientUid() {
     String identifier = UUID.randomUUID().toString();
     String pid = getProcessId();

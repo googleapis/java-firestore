@@ -123,6 +123,10 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     }
     // Add Metrics Tracer factory if built in metrics are enabled.
     metricsUtil.addMetricsTracerFactory(apiTracerFactories);
+
+    if (apiTracerFactories.isEmpty()) {
+      return null;
+    }
     return new CompositeApiTracerFactory(apiTracerFactories);
   }
 

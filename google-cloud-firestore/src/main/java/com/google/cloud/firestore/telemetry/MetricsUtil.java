@@ -25,21 +25,30 @@ import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 
 /**
- * A utility interface for trace collection. Classes that implement this interface may make their
- * own design choices for how they approach trace collection. For instance, they may be no-op, or
- * they may use a particular tracing framework such as OpenTelemetry.
+ * A utility interface for metrics collection. Classes that implement this interface may make their
+ * own design choices for how they approach metrics collection. For instance, they may be no-op, or
+ * they may use a particular metrics framework such as OpenTelemetry.
  */
 @InternalApi
 public interface MetricsUtil {
-  // TODO: rename the env based on OTEL convention
-  static final String ENABLE_METRICS_ENV_VAR = "FIRESTORE_ENABLE_METRICS";
-
   final Logger logger = Logger.getLogger(MetricsUtil.class.getName());
 
+  static final String ENABLE_METRICS_ENV_VAR = "FIRESTORE_ENABLE_METRICS";
+
+  /**
+   * Creates an instance of {@code MetricsUtil}. If the environment variable
+   * `FIRESTORE_ENABLE_METRICS` is set to false or off, an instance of {@link DisabledMetricsUtil}
+   * will be returned. Otherwise, an instance of {@link EnabledMetricsUtil} will be returned.
+   *
+   * @param firestoreOptions The Firestore options that configures client side metrics.
+   * @return An instance of {@code MetricsUtil}.
+   */
   static MetricsUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
     if (shouldCreateEnabledInstance(firestoreOptions)) {
+      logger.info("Client side metrics is enabled");
       return new EnabledMetricsUtil(firestoreOptions);
     } else {
+      logger.info("Client side metrics is disabled");
       return new DisabledMetricsUtil();
     }
   }
@@ -69,21 +78,35 @@ public interface MetricsUtil {
     return shouldCreateEnabledInstance;
   }
 
+  /**
+   * Creates a new {@code MetricsContext} for the given method and starts timing.
+   *
+   * @param methodName The name of the method.
+   * @return A new {@code MetricsContext}.
+   */
   abstract MetricsContext createMetricsContext(String methodName);
 
+  /**
+   * Adds a metrics tracer factory to the given list of API tracer factories.
+   *
+   * @param apiTracerFactories The list of API tracer factories.
+   */
   abstract void addMetricsTracerFactory(List<ApiTracerFactory> apiTracerFactories);
 
+  /** A context for recording metrics. */
   interface MetricsContext {
 
     /**
-     * If an operation ends in the future, its relevant metrics should be recorded _after_ the
+     * If the operation ends in the future, its relevant metrics should be recorded _after_ the
      * future has been completed. This method "appends" the metrics recording code at the completion
      * of the given future.
      */
     <T> void recordEndToEndLatencyAtFuture(ApiFuture<T> futureValue);
 
+    /** Records end-to-end latency for the current operation. */
     void recordEndToEndLatency();
 
+    /** Records end-to-end latency for the current operation, which ended with a throwable. */
     void recordEndToEndLatency(Throwable t);
 
     /** Records first response latency for the current operation. */

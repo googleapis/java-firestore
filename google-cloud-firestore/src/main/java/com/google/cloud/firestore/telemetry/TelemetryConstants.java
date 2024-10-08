@@ -16,12 +16,16 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import com.google.api.core.InternalApi;
 import com.google.api.gax.tracing.OpenTelemetryMetricsRecorder;
 import com.google.common.collect.ImmutableSet;
 import io.opentelemetry.api.common.AttributeKey;
 import java.util.Set;
 
+/** Constants used for telemetry in the Firestore SDK. */
+@InternalApi
 public interface TelemetryConstants {
+  // Method names for Firestore operations
   String METHOD_NAME_DOC_REF_CREATE = "DocumentReference.Create";
   String METHOD_NAME_DOC_REF_SET = "DocumentReference.Set";
   String METHOD_NAME_DOC_REF_UPDATE = "DocumentReference.Update";
@@ -54,8 +58,8 @@ public interface TelemetryConstants {
 
   // OpenTelemetry built-in metrics constants
   String FIRESTORE_RESOURCE_TYPE = "firestore_client_raw";
-  String METRIC_PREFIX =
-      "custom.googleapis.com/internal/client"; // TODO: change to firestore.googleapis.com
+  // TODO: change to firestore.googleapis.com
+  String METRIC_PREFIX = "custom.googleapis.com/internal/client";
   String FIRESTORE_METER_NAME = "java_firestore";
   String GAX_METER_NAME = OpenTelemetryMetricsRecorder.GAX_METER_NAME;
 
@@ -81,7 +85,7 @@ public interface TelemetryConstants {
           METRIC_KEY_STATUS,
           METRIC_KEY_METHOD);
 
-  // Metric
+  // Metric names
   String METRIC_NAME_OPERATION_LATENCY = "operation_latency";
   String METRIC_NAME_OPERATION_COUNT = "operation_count";
   String METRIC_NAME_ATTEMPT_LATENCY = "attempt_latency";
@@ -91,15 +95,15 @@ public interface TelemetryConstants {
   String METRIC_NAME_TRANSACTION_LATENCY = "transaction_latency";
   String METRIC_NAME_TRANSACTION_ATTEMPT_COUNT = "transaction_attempt_count";
 
-  // Define views for GAX and Firestore meters
-  Set<String> gaxMetrics =
+  // Metrics collected on GAX and Firestore SDK layer
+  Set<String> GAX_METRICS =
       ImmutableSet.of(
           METRIC_NAME_OPERATION_LATENCY,
           METRIC_NAME_ATTEMPT_LATENCY,
           METRIC_NAME_OPERATION_COUNT,
           METRIC_NAME_ATTEMPT_COUNT);
 
-  Set<String> firestoreMetrics =
+  Set<String> FIRESTORE_METRICS =
       ImmutableSet.of(
           METRIC_NAME_FIRST_RESPONSE_LATENCY,
           METRIC_NAME_END_TO_END_LATENCY,

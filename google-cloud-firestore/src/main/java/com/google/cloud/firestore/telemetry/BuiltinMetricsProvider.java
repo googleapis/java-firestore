@@ -32,26 +32,33 @@ import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.metrics.DoubleHistogram;
 import io.opentelemetry.api.metrics.Meter;
+import io.opentelemetry.api.metrics.MeterProvider;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BuiltinMetricsProvider {
+/**
+ * A provider for built-in metrics. This class is responsible for storing OpenTelemetry metrics
+ * configuration and recording built-in metrics for the Firestore SDK.
+ */
+class BuiltinMetricsProvider {
   private OpenTelemetry openTelemetry;
-  private ApiTracerFactory apiTracerFactory;
-
   private Meter meter;
   private DoubleHistogram endToEndRequestLatency;
   private DoubleHistogram firstResponseLatency;
+
+  private ApiTracerFactory apiTracerFactory;
+  private final Map<String, String> staticAttributes;
 
   private static final String MILLISECOND_UNIT = "ms";
   private static final String FIRESTORE_LIBRARY_NAME = "java_firestore";
 
   public BuiltinMetricsProvider(OpenTelemetry openTelemetry) {
     this.openTelemetry = openTelemetry;
+    this.staticAttributes = createStaticAttributes();
 
-    if (openTelemetry != null) {
-      configureGaxLayerMetrics();
-      configureFirestoreLayerMetrics();
+    if (openTelemetry != null && openTelemetry.getMeterProvider() != MeterProvider.noop()) {
+      configureRPCLayerMetrics();
+      configureSDKLayerMetrics();
     }
   }
 
@@ -59,13 +66,31 @@ public class BuiltinMetricsProvider {
     return this.apiTracerFactory;
   }
 
-  void configureGaxLayerMetrics() {
-    OpenTelemetryMetricsRecorder recorder =
-        new OpenTelemetryMetricsRecorder(openTelemetry, METRIC_PREFIX);
-    this.apiTracerFactory = new MetricsTracerFactory(recorder, createStaticAttributes());
+  public void endToEndRequestLatencyRecorder(double latency, Map<String, String> attributes) {
+    recordLatency(endToEndRequestLatency, latency, attributes);
   }
 
-  void configureFirestoreLayerMetrics() {
+  public void firstResponseLatencyRecorder(double latency, Map<String, String> attributes) {
+    recordLatency(firstResponseLatency, latency, attributes);
+  }
+
+  private void recordLatency(
+      DoubleHistogram latencyHistogram, double latency, Map<String, String> attributes) {
+    if (latencyHistogram != null) {
+      attributes.putAll(staticAttributes);
+      latencyHistogram.record(latency, toOtelAttributes(attributes));
+    }
+  }
+
+  /** Creates an ApiTracerFactory to be passed into GAX library and collect RPC layer metrics. */
+  private void configureRPCLayerMetrics() {
+    OpenTelemetryMetricsRecorder recorder =
+        new OpenTelemetryMetricsRecorder(openTelemetry, METRIC_PREFIX);
+    this.apiTracerFactory = new MetricsTracerFactory(recorder, staticAttributes);
+  }
+
+  /** Registers metrics to be collected at the Firestore SDK layer */
+  private void configureSDKLayerMetrics() {
     this.meter = openTelemetry.getMeter(FIRESTORE_METER_NAME);
 
     this.endToEndRequestLatency =
@@ -84,27 +109,13 @@ public class BuiltinMetricsProvider {
     // TODO(metrics): add transaction latency and retry count metrics
   }
 
-  public void endToEndRequestLatencyRecorder(double latency, Map<String, String> attributes) {
-    if (endToEndRequestLatency != null) {
-      attributes.putAll(createStaticAttributes());
-      endToEndRequestLatency.record(latency, toOtelAttributes(attributes));
-    }
-  }
-
-  public void firstResponseLatencyRecorder(double latency, Map<String, String> attributes) {
-    if (firstResponseLatency != null) {
-      attributes.putAll(createStaticAttributes());
-      firstResponseLatency.record(latency, toOtelAttributes(attributes));
-    }
-  }
-
   private Map<String, String> createStaticAttributes() {
     Map<String, String> staticAttributes = new HashMap<>();
-    staticAttributes.put(METRIC_KEY_CLIENT_UID.toString(), TelemetryHelper.getClientUid());
-    staticAttributes.put(METRIC_KEY_LIBRARY_NAME.toString(), FIRESTORE_LIBRARY_NAME);
+    staticAttributes.put(METRIC_KEY_CLIENT_UID.getKey(), ClientIdentifier.getClientUid());
+    staticAttributes.put(METRIC_KEY_LIBRARY_NAME.getKey(), FIRESTORE_LIBRARY_NAME);
     String pkgVersion = this.getClass().getPackage().getImplementationVersion();
     if (pkgVersion != null) {
-      staticAttributes.put(METRIC_KEY_LIBRARY_VERSION.toString(), pkgVersion);
+      staticAttributes.put(METRIC_KEY_LIBRARY_VERSION.getKey(), pkgVersion);
     }
     return staticAttributes;
   }

@@ -20,6 +20,10 @@ import com.google.api.core.ApiFuture;
 import com.google.api.gax.tracing.ApiTracerFactory;
 import java.util.List;
 
+/**
+ * A fully disabled (No-op) MetricsUtil class that does not perform any metrics collection actions
+ * and has near-zero overhead.
+ */
 class DisabledMetricsUtil implements MetricsUtil {
 
   class MetricsContext implements MetricsUtil.MetricsContext {

@@ -16,8 +16,14 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.COMMON_ATTRIBUTES;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.FIRESTORE_METER_NAME;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.FIRESTORE_METRICS;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.GAX_METER_NAME;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.GAX_METRICS;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_METHOD;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_STATUS;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_PREFIX;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
@@ -29,10 +35,13 @@ import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.opentelemetry.metric.GoogleCloudMetricExporter;
 import com.google.cloud.opentelemetry.metric.MetricConfiguration;
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Status;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.metrics.InstrumentSelector;
 import io.opentelemetry.sdk.metrics.SdkMeterProvider;
@@ -44,10 +53,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
+/**
+ * An implementation of {@link MetricsUtil} that uses OpenTelemetry to collect and export metrics.
+ * `FirestoreOpenTelemetryOptions` in `FirestoreOptions` can be used to configure its behavior.
+ */
 class EnabledMetricsUtil implements MetricsUtil {
   private BuiltinMetricsProvider defaultMetricsProvider;
   private BuiltinMetricsProvider customMetricsProvider;
@@ -73,11 +88,26 @@ class EnabledMetricsUtil implements MetricsUtil {
     }
   }
 
+  @Override
+  public MetricsContext createMetricsContext(String methodName) {
+    return new MetricsContext(methodName);
+  }
+
+  @Override
+  public void addMetricsTracerFactory(List<ApiTracerFactory> apiTracerFactories) {
+    addTracerFactory(apiTracerFactories, defaultMetricsProvider);
+    addTracerFactory(apiTracerFactories, customMetricsProvider);
+  }
+
+  /**
+   * Creates a default {@link OpenTelemetry} instance to collect and export built-in client side
+   * metrics to Google Cloud Monitoring.
+   */
   private OpenTelemetry getDefaultOpenTelemetryInstance(String projectId) throws IOException {
     SdkMeterProviderBuilder sdkMeterProviderBuilder = SdkMeterProvider.builder();
 
     // Filter out attributes that are not defined
-    for (Map.Entry<InstrumentSelector, View> entry : TelemetryHelper.getAllViews().entrySet()) {
+    for (Map.Entry<InstrumentSelector, View> entry : getAllViews().entrySet()) {
       sdkMeterProviderBuilder.registerView(entry.getKey(), entry.getValue());
     }
 
@@ -107,15 +137,25 @@ class EnabledMetricsUtil implements MetricsUtil {
     return OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProviderBuilder.build()).build();
   }
 
-  @Override
-  public MetricsContext createMetricsContext(String methodName) {
-    return new MetricsContext(methodName);
+  private static Map<InstrumentSelector, View> getAllViews() {
+    ImmutableMap.Builder<InstrumentSelector, View> views = ImmutableMap.builder();
+    GAX_METRICS.forEach(metric -> defineView(views, metric, GAX_METER_NAME));
+    FIRESTORE_METRICS.forEach(metric -> defineView(views, metric, FIRESTORE_METER_NAME));
+    return views.build();
   }
 
-  @Override
-  public void addMetricsTracerFactory(List<ApiTracerFactory> apiTracerFactories) {
-    addTracerFactory(apiTracerFactories, defaultMetricsProvider);
-    addTracerFactory(apiTracerFactories, customMetricsProvider);
+  private static void defineView(
+      ImmutableMap.Builder<InstrumentSelector, View> viewMap, String id, String meter) {
+    InstrumentSelector selector =
+        InstrumentSelector.builder().setMeterName(meter).setName(METRIC_PREFIX + "/" + id).build();
+    Set<String> attributesFilter =
+        ImmutableSet.<String>builder()
+            .addAll(
+                COMMON_ATTRIBUTES.stream().map(AttributeKey::getKey).collect(Collectors.toSet()))
+            .build();
+    View view = View.builder().setAttributeFilter(attributesFilter).build();
+
+    viewMap.put(selector, view);
   }
 
   private void addTracerFactory(
@@ -160,13 +200,6 @@ class EnabledMetricsUtil implements MetricsUtil {
       recordEndToEndLatency(extractErrorStatus(t));
     }
 
-    private void recordEndToEndLatency(String status) {
-      double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-      Map<String, String> attributes = createAttributes(status);
-      defaultMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
-      customMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
-    }
-
     public void recordFirstResponseLatency() {
       double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
       Map<String, String> attributes = createAttributes(StatusCode.Code.OK.toString());
@@ -174,14 +207,20 @@ class EnabledMetricsUtil implements MetricsUtil {
       customMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);
     }
 
+    private void recordEndToEndLatency(String status) {
+      double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+      Map<String, String> attributes = createAttributes(status);
+      defaultMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
+      customMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
+    }
+
     private Map<String, String> createAttributes(String status) {
       Map<String, String> attributes = new HashMap<>();
-      attributes.put(METRIC_KEY_METHOD.toString(), methodName);
-      attributes.put(METRIC_KEY_STATUS.toString(), status);
+      attributes.put(METRIC_KEY_METHOD.getKey(), methodName);
+      attributes.put(METRIC_KEY_STATUS.getKey(), status);
       return attributes;
     }
 
-    /** Function to extract the status of the error as a string */
     private String extractErrorStatus(@Nullable Throwable throwable) {
       if (!(throwable instanceof FirestoreException)) {
         return StatusCode.Code.UNKNOWN.toString();
