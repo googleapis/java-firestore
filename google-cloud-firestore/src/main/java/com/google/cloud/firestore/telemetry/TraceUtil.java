@@ -18,6 +18,7 @@ package com.google.cloud.firestore.telemetry;
 
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
+import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.FirestoreOptions;
 import io.grpc.ManagedChannelBuilder;
 import java.util.Map;
@@ -74,6 +75,7 @@ public interface TraceUtil {
    *     TraceUtil.
    * @return An instance of the TraceUtil class.
    */
+  @InternalApi
   static TraceUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
     boolean createEnabledInstance = true;
 

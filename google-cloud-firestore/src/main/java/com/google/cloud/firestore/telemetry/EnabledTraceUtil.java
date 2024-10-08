@@ -20,6 +20,7 @@ import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
+import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.common.base.Throwables;
 import io.grpc.ManagedChannelBuilder;
@@ -41,6 +42,7 @@ import javax.annotation.Nullable;
  * A utility class that uses OpenTelemetry for trace collection. `FirestoreOpenTelemetryOptions` in
  * `FirestoreOptions` can be used to configure its behavior.
  */
+@InternalApi
 public class EnabledTraceUtil implements TraceUtil {
   private final Tracer tracer;
   private final OpenTelemetry openTelemetry;
@@ -49,8 +51,7 @@ public class EnabledTraceUtil implements TraceUtil {
   EnabledTraceUtil(FirestoreOptions firestoreOptions) {
     OpenTelemetry openTelemetry = firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
 
-    // If tracing is enabled, but an OpenTelemetry instance is not provided, fall back
-    // to using GlobalOpenTelemetry.
+    // If an OpenTelemetry instance is not provided, fall back to using GlobalOpenTelemetry.
     if (openTelemetry == null) {
       openTelemetry = GlobalOpenTelemetry.get();
     }
