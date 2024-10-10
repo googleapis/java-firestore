@@ -119,6 +119,15 @@
       <groupId>io.opentelemetry.instrumentation</groupId>
       <artifactId>opentelemetry-grpc-1.6</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.cloud.opentelemetry</groupId>
+      <artifactId>exporter-metrics</artifactId>
+      <version>0.31.0</version>
+    </dependency>
     <!-- END OpenTelemetry -->
 
     <!-- Test dependencies -->
@@ -181,12 +190,6 @@
       <scope>test</scope>
     </dependency>
     <!-- OpenTelemetry -->
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-sdk</artifactId>
-      <version>${opentelemetry.version}</version>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk-testing</artifactId>
