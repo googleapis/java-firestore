@@ -266,10 +266,10 @@ public abstract class StreamableQuery<SnapshotType> {
 
     String method =
         transactionId != null
-            ? TelemetryConstants.METHOD_NAME_RUN_QUERY_TRANSACTION
+            ? TelemetryConstants.METHOD_NAME_RUN_QUERY_TRANSACTIONAL
             : explainOptions != null
-                ? TelemetryConstants.METHOD_NAME_RUN_QUERY_EXPLAIN_QUERY
-                : TelemetryConstants.METHOD_NAME_RUN_QUERY_QUERY;
+                ? TelemetryConstants.METHOD_NAME_RUN_QUERY_EXPLAIN
+                : TelemetryConstants.METHOD_NAME_RUN_QUERY_GET;
     MetricsContext metricsContext =
         getFirestore().getOptions().getMetricsUtil().createMetricsContext(method);
 

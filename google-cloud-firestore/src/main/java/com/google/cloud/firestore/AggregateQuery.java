@@ -107,11 +107,6 @@ public class AggregateQuery {
     TraceUtil.Span span =
         getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET);
 
-    MetricsContext metricsContext =
-        getMetricsUtil()
-            .createMetricsContext(
-                TelemetryConstants.METHOD_NAME_RUN_QUERY_EXPLAIN_AGGREGATION_QUERY);
-
     try (Scope ignored = span.makeCurrent()) {
       AggregateQueryExplainResponseDeliverer responseDeliverer =
           new AggregateQueryExplainResponseDeliverer(
@@ -121,14 +116,10 @@ public class AggregateQuery {
               /* explainOptions= */ options);
       runQuery(responseDeliverer, /* attempt */ 0);
       ApiFuture<ExplainResults<AggregateQuerySnapshot>> result = responseDeliverer.getFuture();
-
       span.endAtFuture(result);
-      metricsContext.recordEndToEndLatencyAtFuture(result);
-
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }
@@ -143,13 +134,6 @@ public class AggregateQuery {
                     ? TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET
                     : TelemetryConstants.METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
 
-    MetricsContext metricsContext =
-        getMetricsUtil()
-            .createMetricsContext(
-                transactionId == null
-                    ? TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET
-                    : TelemetryConstants.METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
-
     try (Scope ignored = span.makeCurrent()) {
       AggregateQueryResponseDeliverer responseDeliverer =
           new AggregateQueryResponseDeliverer(
@@ -159,11 +143,9 @@ public class AggregateQuery {
       runQuery(responseDeliverer, /* attempt= */ 0);
       ApiFuture<AggregateQuerySnapshot> result = responseDeliverer.getFuture();
       span.endAtFuture(result);
-      metricsContext.recordEndToEndLatencyAtFuture(result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordEndToEndLatency(error);
       throw error;
     }
   }
@@ -313,10 +295,21 @@ public class AggregateQuery {
     @Nullable private Map<String, Value> aggregateFieldsMap = null;
     @Nullable private ExplainMetrics metrics = null;
     private int attempt;
+    private boolean firstResponse = false;
+    private MetricsContext metricsContext;
 
     AggregateQueryResponseObserver(ResponseDeliverer<T> responseDeliverer, int attempt) {
       this.responseDeliverer = responseDeliverer;
       this.attempt = attempt;
+
+      String method =
+          responseDeliverer.getTransactionId() != null
+              ? TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_TRANSACTIONAL
+              : responseDeliverer.getExplainOptions() != null
+                  ? TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_EXPLAIN
+                  : TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_GET;
+
+      this.metricsContext = getMetricsUtil().createMetricsContext(method);
     }
 
     Map<String, Object> getAttemptAttributes() {
@@ -336,6 +329,11 @@ public class AggregateQuery {
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
+      if (!firstResponse) {
+        firstResponse = true;
+        metricsContext.recordFirstResponseLatency();
+      }
+
       getTraceUtil()
           .currentSpan()
           .addEvent(
@@ -370,7 +368,6 @@ public class AggregateQuery {
             .addEvent(
                 METHOD_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
                 Collections.singletonMap("error.message", throwable.getMessage()));
-
         runQuery(responseDeliverer, attempt + 1);
       } else {
         getTraceUtil()
@@ -379,6 +376,7 @@ public class AggregateQuery {
                 METHOD_NAME_RUN_AGGREGATION_QUERY + ": Error",
                 Collections.singletonMap("error.message", throwable.getMessage()));
         responseDeliverer.deliverError(throwable);
+        metricsContext.recordEndToEndLatency(throwable);
       }
     }
 
@@ -402,6 +400,7 @@ public class AggregateQuery {
     @Override
     public void onComplete() {
       responseDeliverer.deliverResult(aggregateFieldsMap, readTime, metrics);
+      metricsContext.recordEndToEndLatency();
     }
   }
 
