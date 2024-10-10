@@ -207,6 +207,10 @@ public final class BulkWriter implements AutoCloseable {
   @GuardedBy("lock")
   private ApiFuture<Void> lastOperation = ApiFutures.immediateFuture(null);
 
+  /** A pointer to the lastOperation pointer as of last flush operation. */
+  @GuardedBy("lock")
+  private ApiFuture<Void> lastFlushOperation = lastOperation;
+
   /** Whether this BulkWriter instance is closed. Once closed, it cannot be opened again. */
   @GuardedBy("lock")
   private boolean closed = false;
@@ -696,7 +700,10 @@ public final class BulkWriter implements AutoCloseable {
 
   private ApiFuture<Void> flushLocked() {
     verifyNotClosedLocked();
-    scheduleCurrentBatchLocked(/* flush= */ true);
+    if (!lastOperation.isDone()) {
+      lastFlushOperation = lastOperation;
+      scheduleCurrentBatchLocked();
+    }
     return lastOperation;
   }
 
@@ -870,14 +877,8 @@ public final class BulkWriter implements AutoCloseable {
     }
   }
 
-  /**
-   * Sends the current batch and resets {@link #bulkCommitBatch}.
-   *
-   * @param flush If provided, keeps re-sending operations until no more operations are enqueued.
-   *     This allows retries to resolve as part of a {@link BulkWriter#flush()} or {@link
-   *     BulkWriter#close()} call.
-   */
-  private void scheduleCurrentBatchLocked(final boolean flush) {
+  /** Sends the current batch and resets {@link #bulkCommitBatch}. */
+  private void scheduleCurrentBatchLocked() {
     if (bulkCommitBatch.getMutationsSize() == 0) return;
 
     final BulkCommitBatch pendingBatch = bulkCommitBatch;
@@ -895,7 +896,7 @@ public final class BulkWriter implements AutoCloseable {
     bulkWriterExecutor.schedule(
         () -> {
           synchronized (lock) {
-            sendBatchLocked(pendingBatch, flush);
+            sendBatchLocked(pendingBatch);
           }
         },
         backoffMsWithJitter,
@@ -903,7 +904,7 @@ public final class BulkWriter implements AutoCloseable {
   }
 
   /** Sends the provided batch once the rate limiter does not require any delay. */
-  private void sendBatchLocked(final BulkCommitBatch batch, final boolean flush) {
+  private void sendBatchLocked(final BulkCommitBatch batch) {
     // Send the batch if it does not require any delay, or schedule another attempt after the
     // appropriate timeout.
     boolean underRateLimit = rateLimiter.tryMakeRequest(batch.getMutationsSize());
@@ -916,15 +917,17 @@ public final class BulkWriter implements AutoCloseable {
               .setAttribute(ATTRIBUTE_KEY_DOC_COUNT, batch.getMutationsSize());
       try (Scope ignored = span.makeCurrent()) {
         ApiFuture<Void> result = batch.bulkCommit();
-        result.addListener(
-            () -> {
-              if (flush) {
-                synchronized (lock) {
-                  scheduleCurrentBatchLocked(/* flush= */ true);
+        if (!lastFlushOperation.isDone()) {
+          result.addListener(
+              () -> {
+                if (!lastFlushOperation.isDone()) {
+                  synchronized (lock) {
+                    scheduleCurrentBatchLocked();
+                  }
                 }
-              }
-            },
-            bulkWriterExecutor);
+              },
+              bulkWriterExecutor);
+        }
         span.endAtFuture(result);
       } catch (Exception error) {
         span.end(error);
@@ -936,7 +939,7 @@ public final class BulkWriter implements AutoCloseable {
       bulkWriterExecutor.schedule(
           () -> {
             synchronized (lock) {
-              sendBatchLocked(batch, flush);
+              sendBatchLocked(batch);
             }
           },
           delayMs,
@@ -979,7 +982,7 @@ public final class BulkWriter implements AutoCloseable {
     // that the batch is under the 10MiB limit.
     if (op.getBackoffDuration() > 0) {
       if (bulkCommitBatch.getMutationsSize() >= RETRY_MAX_BATCH_SIZE) {
-        scheduleCurrentBatchLocked(/* flush= */ false);
+        scheduleCurrentBatchLocked();
       }
       bulkCommitBatch.setMaxBatchSize(RETRY_MAX_BATCH_SIZE);
     }
@@ -987,7 +990,7 @@ public final class BulkWriter implements AutoCloseable {
     if (bulkCommitBatch.has(op.getDocumentReference())) {
       // Create a new batch since the backend doesn't support batches with two writes to the same
       // document.
-      scheduleCurrentBatchLocked(/* flush= */ false);
+      scheduleCurrentBatchLocked();
     }
 
     // Run the operation on the current batch and advance the `lastOperation` pointer. This
@@ -996,8 +999,8 @@ public final class BulkWriter implements AutoCloseable {
     bulkCommitBatch.enqueueOperation(op);
     enqueueOperationOnBatchCallback.apply(bulkCommitBatch);
 
-    if (bulkCommitBatch.getMutationsSize() == bulkCommitBatch.getMaxBatchSize()) {
-      scheduleCurrentBatchLocked(/* flush= */ false);
+    if (bulkCommitBatch.getMutationsSize() >= bulkCommitBatch.getMaxBatchSize()) {
+      scheduleCurrentBatchLocked();
     }
   }
 
