@@ -96,14 +96,14 @@ class BuiltinMetricsProvider {
     this.endToEndRequestLatency =
         meter
             .histogramBuilder(METRIC_PREFIX + "/" + METRIC_NAME_END_TO_END_LATENCY)
-            .setDescription("Firestore E2E metrics")
+            .setDescription("Firestore operations' end-to-end latency")
             .setUnit(MILLISECOND_UNIT)
             .build();
 
     this.firstResponseLatency =
         meter
             .histogramBuilder(METRIC_PREFIX + "/" + METRIC_NAME_FIRST_RESPONSE_LATENCY)
-            .setDescription("Firestore query first response latency")
+            .setDescription("Firestore streaming operations' first response latency")
             .setUnit(MILLISECOND_UNIT)
             .build();
     // TODO(metrics): add transaction latency and retry count metrics
