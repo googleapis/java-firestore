@@ -36,7 +36,6 @@ If you are using Maven with [BOM][libraries-bom], add this to your pom.xml file:
 
 If you are using Maven without the BOM, add this to your dependencies:
 
-<!-- {x-version-update-start:google-cloud-firestore:released} -->
 
 ```xml
 <dependency>
@@ -65,7 +64,6 @@ If you are using SBT, add this to your dependencies:
 ```Scala
 libraryDependencies += "com.google.cloud" % "google-cloud-firestore" % "3.27.1"
 ```
-<!-- {x-version-update-end} -->
 
 ## Authentication
 
