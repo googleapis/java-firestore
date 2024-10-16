@@ -1,5 +1,35 @@
 # Changelog
 
+## [3.27.3](https://github.com/googleapis/java-firestore/compare/v3.27.2...v3.27.3) (2024-10-16)
+
+
+### Dependencies
+
+* Update opentelemetry.version to v1.43.0 ([#1884](https://github.com/googleapis/java-firestore/issues/1884)) ([f07ac99](https://github.com/googleapis/java-firestore/commit/f07ac990fece6d59d898419d1cca0b2a91a64248))
+
+## [3.27.2](https://github.com/googleapis/java-firestore/compare/v3.27.1...v3.27.2) (2024-10-10)
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.52.0 ([#1879](https://github.com/googleapis/java-firestore/issues/1879)) ([33cdd41](https://github.com/googleapis/java-firestore/commit/33cdd41949739d37c66830d9b85757d19dbbe31e))
+* Update dependency com.google.cloud:google-cloud-trace to v2.52.0 ([#1880](https://github.com/googleapis/java-firestore/issues/1880)) ([2827f77](https://github.com/googleapis/java-firestore/commit/2827f777bf08bdda3599f1a81193e6957533aa19))
+* Update dependency com.google.cloud.opentelemetry:exporter-trace to v0.33.0 ([#1876](https://github.com/googleapis/java-firestore/issues/1876)) ([b3fba1f](https://github.com/googleapis/java-firestore/commit/b3fba1f58317e00573f37060bd082283ce9ec2ed))
+
+## [3.27.1](https://github.com/googleapis/java-firestore/compare/v3.27.0...v3.27.1) (2024-10-07)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.47.0 ([c606cea](https://github.com/googleapis/java-firestore/commit/c606ceaccd61cede8799d12b074682a15a03ccff))
+* Update to Java 11, since runtime doesn't support 8. ([#1867](https://github.com/googleapis/java-firestore/issues/1867)) ([723c7cc](https://github.com/googleapis/java-firestore/commit/723c7ccc783b2f56ca72867cd741df197a9f68d7))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.37.0 ([#1871](https://github.com/googleapis/java-firestore/issues/1871)) ([8503a3e](https://github.com/googleapis/java-firestore/commit/8503a3e6badc31eaae4d318925097d010d9d73e4))
+* Update googleapis/sdk-platform-java action to v2.47.0 ([#1870](https://github.com/googleapis/java-firestore/issues/1870)) ([971b164](https://github.com/googleapis/java-firestore/commit/971b164104fe072255a26dfaa4e93958fb43b706))
+
 ## [3.27.0](https://github.com/googleapis/java-firestore/compare/v3.26.5...v3.27.0) (2024-10-02)
 
 
