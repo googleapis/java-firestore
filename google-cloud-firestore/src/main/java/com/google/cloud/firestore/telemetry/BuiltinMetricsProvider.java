@@ -22,6 +22,8 @@ import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_LIBRARY_VERSION;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_PREFIX;
 
 import com.google.api.gax.tracing.ApiTracerFactory;
@@ -31,6 +33,7 @@ import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.metrics.DoubleHistogram;
+import io.opentelemetry.api.metrics.LongCounter;
 import io.opentelemetry.api.metrics.Meter;
 import io.opentelemetry.api.metrics.MeterProvider;
 import java.util.HashMap;
@@ -45,11 +48,14 @@ class BuiltinMetricsProvider {
   private Meter meter;
   private DoubleHistogram endToEndRequestLatency;
   private DoubleHistogram firstResponseLatency;
+  private DoubleHistogram transactionLatency;
+  private LongCounter transactionAttemptCount;
 
   private ApiTracerFactory apiTracerFactory;
   private final Map<String, String> staticAttributes;
 
   private static final String MILLISECOND_UNIT = "ms";
+  private static final String INTEGER_UNIT = "1";
   private static final String FIRESTORE_LIBRARY_NAME = "java_firestore";
 
   public BuiltinMetricsProvider(OpenTelemetry openTelemetry) {
@@ -59,26 +65,6 @@ class BuiltinMetricsProvider {
     if (openTelemetry != null && openTelemetry.getMeterProvider() != MeterProvider.noop()) {
       configureRPCLayerMetrics();
       configureSDKLayerMetrics();
-    }
-  }
-
-  public ApiTracerFactory getApiTracerFactory() {
-    return this.apiTracerFactory;
-  }
-
-  public void endToEndRequestLatencyRecorder(double latency, Map<String, String> attributes) {
-    recordLatency(endToEndRequestLatency, latency, attributes);
-  }
-
-  public void firstResponseLatencyRecorder(double latency, Map<String, String> attributes) {
-    recordLatency(firstResponseLatency, latency, attributes);
-  }
-
-  private void recordLatency(
-      DoubleHistogram latencyHistogram, double latency, Map<String, String> attributes) {
-    if (latencyHistogram != null) {
-      attributes.putAll(staticAttributes);
-      latencyHistogram.record(latency, toOtelAttributes(attributes));
     }
   }
 
@@ -96,17 +82,61 @@ class BuiltinMetricsProvider {
     this.endToEndRequestLatency =
         meter
             .histogramBuilder(METRIC_PREFIX + "/" + METRIC_NAME_END_TO_END_LATENCY)
-            .setDescription("Firestore E2E metrics")
+            .setDescription("Firestore operations' end-to-end latency")
             .setUnit(MILLISECOND_UNIT)
             .build();
 
     this.firstResponseLatency =
         meter
             .histogramBuilder(METRIC_PREFIX + "/" + METRIC_NAME_FIRST_RESPONSE_LATENCY)
-            .setDescription("Firestore query first response latency")
+            .setDescription("Firestore streaming operations' first response latency")
             .setUnit(MILLISECOND_UNIT)
             .build();
-    // TODO(metrics): add transaction latency and retry count metrics
+
+    this.transactionLatency =
+        meter
+            .histogramBuilder(METRIC_PREFIX + "/" + METRIC_NAME_TRANSACTION_LATENCY)
+            .setDescription("Firestore transactions' end-to-end latency")
+            .setUnit(MILLISECOND_UNIT)
+            .build();
+
+    this.transactionAttemptCount =
+        meter
+            .counterBuilder(METRIC_PREFIX + "/" + METRIC_NAME_TRANSACTION_ATTEMPT_COUNT)
+            .setDescription("Number of Firestore transaction attempts including retries")
+            .setUnit(INTEGER_UNIT)
+            .build();
+  }
+
+  public ApiTracerFactory getApiTracerFactory() {
+    return this.apiTracerFactory;
+  }
+
+  public void endToEndRequestLatencyRecorder(double latency, Map<String, String> attributes) {
+    recordLatency(endToEndRequestLatency, latency, attributes);
+  }
+
+  public void firstResponseLatencyRecorder(double latency, Map<String, String> attributes) {
+    recordLatency(firstResponseLatency, latency, attributes);
+  }
+
+  public void transactionLatencyRecorder(double latency, Map<String, String> attributes) {
+    recordLatency(transactionLatency, latency, attributes);
+  }
+
+  private void recordLatency(
+      DoubleHistogram latencyHistogram, double latency, Map<String, String> attributes) {
+    if (latencyHistogram != null) {
+      attributes.putAll(staticAttributes);
+      latencyHistogram.record(latency, toOtelAttributes(attributes));
+    }
+  }
+
+  public void transactionAttemptCountRecorder(long count, Map<String, String> attributes) {
+    if (transactionAttemptCount != null) {
+      attributes.putAll(staticAttributes);
+      transactionAttemptCount.add(count, toOtelAttributes(attributes));
+    }
   }
 
   private Map<String, String> createStaticAttributes() {
