@@ -126,7 +126,6 @@
     <dependency>
       <groupId>com.google.cloud.opentelemetry</groupId>
       <artifactId>exporter-metrics</artifactId>
-      <version>0.31.0</version>
     </dependency>
     <!-- END OpenTelemetry -->
 
