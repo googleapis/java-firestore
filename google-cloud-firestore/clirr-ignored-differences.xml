@@ -314,4 +314,16 @@
     <method>com.google.cloud.firestore.Query getQuery()</method>
   </difference>
 
+  <!-- Removed an OpenTelemetry Tracing Beta Api -->
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/FirestoreOpenTelemetryOptions</className>
+    <method>boolean isTracingEnabled()</method>
+  </difference>
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/FirestoreOpenTelemetryOptions$Builder</className>
+    <method>com.google.cloud.firestore.FirestoreOpenTelemetryOptions$Builder setTracingEnabled(boolean)</method>
+  </difference>
+
 </differences>
