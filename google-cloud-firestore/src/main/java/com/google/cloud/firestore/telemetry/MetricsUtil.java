@@ -44,33 +44,32 @@ public interface MetricsUtil {
    * @return An instance of {@code MetricsUtil}.
    */
   static MetricsUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
-    // TODO(metrics): add debug level logging if possible
-    if (shouldCreateEnabledInstance(firestoreOptions)) {
+    if (shouldCreateEnabledInstance()) {
       return new EnabledMetricsUtil(firestoreOptions);
     } else {
       return new DisabledMetricsUtil();
     }
   }
 
-  static boolean shouldCreateEnabledInstance(FirestoreOptions firestoreOptions) {
-    // Start with the value from FirestoreOptions
-    boolean shouldCreateEnabledInstance =
-        firestoreOptions.getOpenTelemetryOptions().isMetricsEnabled();
+  static boolean shouldCreateEnabledInstance() {
+    // Client side metrics feature is default on unless it is manually turned off by
+    // environment variables
+    // TODO(metrics): The feature is disabled before it is ready for general release.
+    boolean shouldCreateEnabledInstance = false;
 
-    // Override based on the environment variable
     String enableMetricsEnvVar = System.getenv(ENABLE_METRICS_ENV_VAR);
     if (enableMetricsEnvVar != null) {
       switch (enableMetricsEnvVar.toLowerCase()) {
         case "true":
         case "on":
-          shouldCreateEnabledInstance = true;
+          // The feature is default on.
           break;
         case "false":
         case "off":
           shouldCreateEnabledInstance = false;
           break;
         default:
-          logger.warning("Invalid value for ENABLE_METRICS_ENV_VAR: " + enableMetricsEnvVar);
+          logger.warning("Invalid value for FIRESTORE_ENABLE_METRICS: " + enableMetricsEnvVar);
       }
     }
 

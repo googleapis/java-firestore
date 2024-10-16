@@ -62,7 +62,7 @@ public interface TelemetryConstants {
 
   // OpenTelemetry built-in metrics constants
   String FIRESTORE_RESOURCE_TYPE = "firestore_client_raw";
-  // TODO: change to firestore.googleapis.com
+  // TODO(metrics): change to firestore.googleapis.com
   String METRIC_PREFIX = "custom.googleapis.com/internal/client";
   String FIRESTORE_METER_NAME = "java_firestore";
   String GAX_METER_NAME = OpenTelemetryMetricsRecorder.GAX_METER_NAME;
@@ -76,18 +76,19 @@ public interface TelemetryConstants {
           RESOURCE_KEY_RESOURCE_CONTAINER, RESOURCE_KEY_LOCATION, RESOURCE_KEY_DATABASE_ID);
 
   // Metric attribute keys for labels
-  AttributeKey<String> METRIC_KEY_METHOD = AttributeKey.stringKey("method");
-  AttributeKey<String> METRIC_KEY_STATUS = AttributeKey.stringKey("status");
-  AttributeKey<String> METRIC_KEY_LIBRARY_NAME = AttributeKey.stringKey("library_name");
-  AttributeKey<String> METRIC_KEY_LIBRARY_VERSION = AttributeKey.stringKey("library_version");
-  AttributeKey<String> METRIC_KEY_CLIENT_UID = AttributeKey.stringKey("client_uid");
+  AttributeKey<String> METRIC_ATTRIBUTE_KEY_METHOD = AttributeKey.stringKey("method");
+  AttributeKey<String> METRIC_ATTRIBUTE_KEY_STATUS = AttributeKey.stringKey("status");
+  AttributeKey<String> METRIC_ATTRIBUTE_KEY_LIBRARY_NAME = AttributeKey.stringKey("library_name");
+  AttributeKey<String> METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION =
+      AttributeKey.stringKey("library_version");
+  AttributeKey<String> METRIC_ATTRIBUTE_KEY_CLIENT_UID = AttributeKey.stringKey("client_uid");
   Set<AttributeKey> COMMON_ATTRIBUTES =
       ImmutableSet.of(
-          METRIC_KEY_CLIENT_UID,
-          METRIC_KEY_LIBRARY_NAME,
-          METRIC_KEY_LIBRARY_VERSION,
-          METRIC_KEY_STATUS,
-          METRIC_KEY_METHOD);
+          METRIC_ATTRIBUTE_KEY_CLIENT_UID,
+          METRIC_ATTRIBUTE_KEY_LIBRARY_NAME,
+          METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION,
+          METRIC_ATTRIBUTE_KEY_STATUS,
+          METRIC_ATTRIBUTE_KEY_METHOD);
 
   // Metric names
   String METRIC_NAME_OPERATION_LATENCY = "operation_latency";

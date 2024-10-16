@@ -31,6 +31,7 @@ import com.google.cloud.ServiceOptions;
 import com.google.cloud.TransportOptions;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.spi.v1.GrpcFirestoreRpc;
+import com.google.cloud.firestore.telemetry.CompositeApiTracerFactory;
 import com.google.cloud.firestore.telemetry.MetricsUtil;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.cloud.grpc.GrpcTransportOptions;
@@ -110,18 +111,15 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return FirestoreDefaults.INSTANCE.getHost();
   }
 
+  @InternalApi
   @Override
   public ApiTracerFactory getApiTracerFactory() {
-    return createApiTracerFactory();
-  }
-
-  private ApiTracerFactory createApiTracerFactory() {
     List<ApiTracerFactory> apiTracerFactories = new ArrayList<>();
     // Prefer any direct ApiTracerFactory that might have been set on the builder.
     if (super.getApiTracerFactory() != null) {
       apiTracerFactories.add(super.getApiTracerFactory());
     }
-    // Add Metrics Tracer factory if built in metrics are enabled.
+    // Add Metrics Tracer factory if built-in metrics are enabled.
     metricsUtil.addMetricsTracerFactory(apiTracerFactories);
 
     if (apiTracerFactories.isEmpty()) {
@@ -152,7 +150,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   }
 
   @Nonnull
-  public com.google.cloud.firestore.telemetry.MetricsUtil getMetricsUtil() {
+  com.google.cloud.firestore.telemetry.MetricsUtil getMetricsUtil() {
     return metricsUtil;
   }
 
@@ -354,7 +352,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
             ? builder.databaseId
             : FirestoreDefaults.INSTANCE.getDatabaseId();
 
-    // set metrics util after database ID is set
+    // Set up the `MetricsUtil` instance after the database ID has been set.
     this.metricsUtil = MetricsUtil.getInstance(this);
 
     if (builder.channelProvider == null) {
