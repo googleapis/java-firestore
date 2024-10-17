@@ -165,7 +165,8 @@ public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocu
 
   @Override
   public String toString() {
-    return String.format("%s{query=%s, readTime=%s, documentChanges=%s, documents=%s}", getClass().getSimpleName(),
-                         query, readTime, documentChanges, documents);
+    return String.format(
+        "%s{query=%s, readTime=%s, documentChanges=%s, documents=%s}",
+        getClass().getSimpleName(), query, readTime, documentChanges, documents);
   }
 }

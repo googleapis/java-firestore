@@ -150,8 +150,9 @@ public class VectorQueryOptions {
 
   @Override
   public String toString() {
-    return String.format("VectorQueryOptions{distanceResultField=%s, distanceThreshold=%s}", distanceResultField,
-                         distanceThreshold);
+    return String.format(
+        "VectorQueryOptions{distanceResultField=%s, distanceThreshold=%s}",
+        distanceResultField, distanceThreshold);
   }
 
   /** Default VectorQueryOptions instance. */

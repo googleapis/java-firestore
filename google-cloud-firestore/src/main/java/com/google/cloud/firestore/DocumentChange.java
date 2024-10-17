@@ -117,7 +117,8 @@ public class DocumentChange {
 
   @Override
   public String toString() {
-    return String.format("DocumentChange{type=%s, document=%s, oldIndex=%d, newIndex=%d}", type, document, oldIndex,
-                         newIndex);
+    return String.format(
+        "DocumentChange{type=%s, document=%s, oldIndex=%d, newIndex=%d}",
+        type, document, oldIndex, newIndex);
   }
 }
