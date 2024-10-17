@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.27.4](https://github.com/googleapis/java-firestore/compare/v3.27.3...v3.27.4) (2024-10-17)
+
+
+### Bug Fixes
+
+* Add the deprecation notice for tracing enable/disable option. ([#1866](https://github.com/googleapis/java-firestore/issues/1866)) ([d213245](https://github.com/googleapis/java-firestore/commit/d213245a77b42eca110ef579a0c9fa7108357717))
+
 ## [3.27.3](https://github.com/googleapis/java-firestore/compare/v3.27.2...v3.27.3) (2024-10-16)
 
 
