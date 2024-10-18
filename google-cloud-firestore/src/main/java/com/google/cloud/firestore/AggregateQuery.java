@@ -16,8 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY;
 import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_ATTEMPT;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_RUN_AGGREGATION_QUERY;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalExtensionOnly;
@@ -27,6 +27,9 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.telemetry.MetricsUtil;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
+import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
@@ -70,6 +73,11 @@ public class AggregateQuery {
     return query.getFirestore().getOptions().getTraceUtil();
   }
 
+  @Nonnull
+  private MetricsUtil getMetricsUtil() {
+    return query.getFirestore().getOptions().getMetricsUtil();
+  }
+
   /** Returns the query whose aggregations will be calculated by this object. */
   @Nonnull
   public Query getQuery() {
@@ -96,7 +104,9 @@ public class AggregateQuery {
    */
   @Nonnull
   public ApiFuture<ExplainResults<AggregateQuerySnapshot>> explain(ExplainOptions options) {
-    TraceUtil.Span span = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET);
+    TraceUtil.Span span =
+        getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET);
+
     try (Scope ignored = span.makeCurrent()) {
       AggregateQueryExplainResponseDeliverer responseDeliverer =
           new AggregateQueryExplainResponseDeliverer(
@@ -121,8 +131,9 @@ public class AggregateQuery {
         getTraceUtil()
             .startSpan(
                 transactionId == null
-                    ? TraceUtil.SPAN_NAME_AGGREGATION_QUERY_GET
-                    : TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
+                    ? TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET
+                    : TelemetryConstants.METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
+
     try (Scope ignored = span.makeCurrent()) {
       AggregateQueryResponseDeliverer responseDeliverer =
           new AggregateQueryResponseDeliverer(
@@ -284,10 +295,21 @@ public class AggregateQuery {
     @Nullable private Map<String, Value> aggregateFieldsMap = null;
     @Nullable private ExplainMetrics metrics = null;
     private int attempt;
+    private boolean firstResponse = false;
+    private MetricsContext metricsContext;
 
     AggregateQueryResponseObserver(ResponseDeliverer<T> responseDeliverer, int attempt) {
       this.responseDeliverer = responseDeliverer;
       this.attempt = attempt;
+
+      String method =
+          responseDeliverer.getTransactionId() != null
+              ? TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_TRANSACTIONAL
+              : responseDeliverer.getExplainOptions() != null
+                  ? TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_EXPLAIN
+                  : TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_GET;
+
+      this.metricsContext = getMetricsUtil().createMetricsContext(method);
     }
 
     Map<String, Object> getAttemptAttributes() {
@@ -302,15 +324,20 @@ public class AggregateQuery {
     public void onStart(StreamController streamController) {
       getTraceUtil()
           .currentSpan()
-          .addEvent(SPAN_NAME_RUN_AGGREGATION_QUERY + " Stream started.", getAttemptAttributes());
+          .addEvent(METHOD_NAME_RUN_AGGREGATION_QUERY + " Stream started.", getAttemptAttributes());
     }
 
     @Override
     public void onResponse(RunAggregationQueryResponse response) {
+      if (!firstResponse) {
+        firstResponse = true;
+        metricsContext.recordFirstResponseLatency();
+      }
+
       getTraceUtil()
           .currentSpan()
           .addEvent(
-              SPAN_NAME_RUN_AGGREGATION_QUERY + " Response Received.", getAttemptAttributes());
+              METHOD_NAME_RUN_AGGREGATION_QUERY + " Response Received.", getAttemptAttributes());
       if (response.hasReadTime()) {
         readTime = Timestamp.fromProto(response.getReadTime());
       }
@@ -339,17 +366,17 @@ public class AggregateQuery {
         getTraceUtil()
             .currentSpan()
             .addEvent(
-                SPAN_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
+                METHOD_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
                 Collections.singletonMap("error.message", throwable.getMessage()));
-
         runQuery(responseDeliverer, attempt + 1);
       } else {
         getTraceUtil()
             .currentSpan()
             .addEvent(
-                SPAN_NAME_RUN_AGGREGATION_QUERY + ": Error",
+                METHOD_NAME_RUN_AGGREGATION_QUERY + ": Error",
                 Collections.singletonMap("error.message", throwable.getMessage()));
         responseDeliverer.deliverError(throwable);
+        metricsContext.recordEndToEndLatency(throwable);
       }
     }
 
@@ -373,6 +400,7 @@ public class AggregateQuery {
     @Override
     public void onComplete() {
       responseDeliverer.deliverResult(aggregateFieldsMap, readTime, metrics);
+      metricsContext.recordEndToEndLatency();
     }
   }
 

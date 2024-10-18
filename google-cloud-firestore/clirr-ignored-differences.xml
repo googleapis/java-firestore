@@ -314,4 +314,11 @@
     <method>com.google.cloud.firestore.Query getQuery()</method>
   </difference>
 
+    <!-- Relocate constants in TraceUtil -->
+  <difference>
+    <differenceType>6011</differenceType>
+    <className>com/google/cloud/firestore/telemetry/TraceUtil</className>
+    <field>SPAN_NAME_*</field>
+  </difference>
+
 </differences>
