@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.27.4](https://github.com/googleapis/java-firestore/compare/v3.27.3...v3.27.4) (2024-10-18)
+
+
+### Bug Fixes
+
+* Add the deprecation notice for tracing enable/disable option. ([#1866](https://github.com/googleapis/java-firestore/issues/1866)) ([d213245](https://github.com/googleapis/java-firestore/commit/d213245a77b42eca110ef579a0c9fa7108357717))
+
+
+### Dependencies
+
+* Update beam.version to v2.60.0 ([#1894](https://github.com/googleapis/java-firestore/issues/1894)) ([434e6e0](https://github.com/googleapis/java-firestore/commit/434e6e0b9a738f9ac08788dbf5dd94a0678733aa))
+
 ## [3.27.3](https://github.com/googleapis/java-firestore/compare/v3.27.2...v3.27.3) (2024-10-16)
 
 
