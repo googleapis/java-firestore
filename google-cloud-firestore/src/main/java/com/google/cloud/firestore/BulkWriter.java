@@ -936,7 +936,6 @@ public final class BulkWriter implements AutoCloseable {
             bulkWriterExecutor);
         span.endAtFuture(result);
         metricsContext.recordEndToEndLatencyAtFuture(result);
-
       } catch (Exception error) {
         span.end(error);
         metricsContext.recordEndToEndLatency(error);

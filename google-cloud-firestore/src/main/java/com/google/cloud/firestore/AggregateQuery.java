@@ -27,7 +27,6 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.telemetry.MetricsUtil;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TraceUtil;
@@ -74,8 +73,8 @@ public class AggregateQuery {
   }
 
   @Nonnull
-  private MetricsUtil getMetricsUtil() {
-    return query.getFirestore().getOptions().getMetricsUtil();
+  private MetricsContext createMetricsContext(String method) {
+    return query.getFirestore().getOptions().getMetricsUtil().createMetricsContext(method);
   }
 
   /** Returns the query whose aggregations will be calculated by this object. */
@@ -107,13 +106,17 @@ public class AggregateQuery {
     TraceUtil.Span span =
         getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET);
 
+    MetricsContext metricsContext =
+        createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_EXPLAIN);
+
     try (Scope ignored = span.makeCurrent()) {
       AggregateQueryExplainResponseDeliverer responseDeliverer =
           new AggregateQueryExplainResponseDeliverer(
               /* transactionId= */ null,
               /* readTime= */ null,
               /* startTimeNanos= */ query.rpcContext.getClock().nanoTime(),
-              /* explainOptions= */ options);
+              /* explainOptions= */ options,
+              metricsContext);
       runQuery(responseDeliverer, /* attempt */ 0);
       ApiFuture<ExplainResults<AggregateQuerySnapshot>> result = responseDeliverer.getFuture();
       span.endAtFuture(result);
@@ -134,12 +137,19 @@ public class AggregateQuery {
                     ? TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET
                     : TelemetryConstants.METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
 
+    MetricsContext metricsContext =
+        createMetricsContext(
+            transactionId == null
+                ? TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_GET
+                : TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_TRANSACTIONAL);
+
     try (Scope ignored = span.makeCurrent()) {
       AggregateQueryResponseDeliverer responseDeliverer =
           new AggregateQueryResponseDeliverer(
               transactionId,
               readTime,
-              /* startTimeNanos= */ query.rpcContext.getClock().nanoTime());
+              /* startTimeNanos= */ query.rpcContext.getClock().nanoTime(),
+              metricsContext);
       runQuery(responseDeliverer, /* attempt= */ 0);
       ApiFuture<AggregateQuerySnapshot> result = responseDeliverer.getFuture();
       span.endAtFuture(result);
@@ -176,14 +186,17 @@ public class AggregateQuery {
     private final @Nullable com.google.protobuf.Timestamp readTime;
     private final long startTimeNanos;
     private final SettableApiFuture<T> future = SettableApiFuture.create();
+    private MetricsContext metricsContext;
 
     ResponseDeliverer(
         @Nullable ByteString transactionId,
         @Nullable com.google.protobuf.Timestamp readTime,
-        long startTimeNanos) {
+        long startTimeNanos,
+        MetricsContext metricsContext) {
       this.transactionId = transactionId;
       this.readTime = readTime;
       this.startTimeNanos = startTimeNanos;
+      this.metricsContext = metricsContext;
     }
 
     @Nullable
@@ -209,15 +222,29 @@ public class AggregateQuery {
       return future;
     }
 
-    protected void setFuture(T value) {
-      future.set(value);
+    void deliverFirstResponse() {
+      metricsContext.recordFirstResponseLatency();
     }
 
     void deliverError(Throwable throwable) {
       future.setException(throwable);
+      metricsContext.recordEndToEndLatency(throwable);
     }
 
-    abstract void deliverResult(
+    void deliverResult(
+        @Nullable Map<String, Value> serverData,
+        Timestamp readTime,
+        @Nullable ExplainMetrics metrics) {
+      try {
+        T result = processResult(serverData, readTime, metrics);
+        future.set(result);
+        metricsContext.recordEndToEndLatency();
+      } catch (Exception error) {
+        deliverError(error);
+      }
+    }
+
+    abstract T processResult(
         @Nullable Map<String, Value> serverData,
         Timestamp readTime,
         @Nullable ExplainMetrics metrics);
@@ -227,24 +254,23 @@ public class AggregateQuery {
     AggregateQueryResponseDeliverer(
         @Nullable ByteString transactionId,
         @Nullable com.google.protobuf.Timestamp readTime,
-        long startTimeNanos) {
-      super(transactionId, readTime, startTimeNanos);
+        long startTimeNanos,
+        MetricsContext metricsContext) {
+      super(transactionId, readTime, startTimeNanos, metricsContext);
     }
 
     @Override
-    void deliverResult(
+    AggregateQuerySnapshot processResult(
         @Nullable Map<String, Value> serverData,
         Timestamp readTime,
         @Nullable ExplainMetrics metrics) {
       if (serverData == null) {
-        deliverError(new RuntimeException("Did not receive any aggregate query results."));
-        return;
+        throw new RuntimeException("Did not receive any aggregate query results.");
       }
-      setFuture(
-          new AggregateQuerySnapshot(
-              AggregateQuery.this,
-              readTime,
-              convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData)));
+      return new AggregateQuerySnapshot(
+          AggregateQuery.this,
+          readTime,
+          convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData));
     }
   }
 
@@ -256,8 +282,9 @@ public class AggregateQuery {
         @Nullable ByteString transactionId,
         @Nullable com.google.protobuf.Timestamp readTime,
         long startTimeNanos,
-        @Nullable ExplainOptions explainOptions) {
-      super(transactionId, readTime, startTimeNanos);
+        @Nullable ExplainOptions explainOptions,
+        MetricsContext metricsContext) {
+      super(transactionId, readTime, startTimeNanos, metricsContext);
       this.explainOptions = explainOptions;
     }
 
@@ -268,14 +295,13 @@ public class AggregateQuery {
     }
 
     @Override
-    void deliverResult(
+    ExplainResults<AggregateQuerySnapshot> processResult(
         @Nullable Map<String, Value> serverData,
         Timestamp readTime,
         @Nullable ExplainMetrics metrics) {
       // The server is required to provide ExplainMetrics for explain queries.
       if (metrics == null) {
-        deliverError(new RuntimeException("Did not receive any metrics for explain query."));
-        return;
+        throw new RuntimeException("Did not receive any metrics for explain query.");
       }
       AggregateQuerySnapshot snapshot =
           serverData == null
@@ -284,7 +310,7 @@ public class AggregateQuery {
                   AggregateQuery.this,
                   readTime,
                   convertServerAggregateFieldsMapToClientAggregateFieldsMap(serverData));
-      setFuture(new ExplainResults<>(metrics, snapshot));
+      return new ExplainResults<>(metrics, snapshot);
     }
   }
 
@@ -296,20 +322,10 @@ public class AggregateQuery {
     @Nullable private ExplainMetrics metrics = null;
     private int attempt;
     private boolean firstResponse = false;
-    private MetricsContext metricsContext;
 
     AggregateQueryResponseObserver(ResponseDeliverer<T> responseDeliverer, int attempt) {
       this.responseDeliverer = responseDeliverer;
       this.attempt = attempt;
-
-      String method =
-          responseDeliverer.getTransactionId() != null
-              ? TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_TRANSACTIONAL
-              : responseDeliverer.getExplainOptions() != null
-                  ? TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_EXPLAIN
-                  : TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_GET;
-
-      this.metricsContext = getMetricsUtil().createMetricsContext(method);
     }
 
     Map<String, Object> getAttemptAttributes() {
@@ -331,7 +347,7 @@ public class AggregateQuery {
     public void onResponse(RunAggregationQueryResponse response) {
       if (!firstResponse) {
         firstResponse = true;
-        metricsContext.recordFirstResponseLatency();
+        responseDeliverer.deliverFirstResponse();
       }
 
       getTraceUtil()
@@ -376,7 +392,6 @@ public class AggregateQuery {
                 METHOD_NAME_RUN_AGGREGATION_QUERY + ": Error",
                 Collections.singletonMap("error.message", throwable.getMessage()));
         responseDeliverer.deliverError(throwable);
-        metricsContext.recordEndToEndLatency(throwable);
       }
     }
 
@@ -400,7 +415,6 @@ public class AggregateQuery {
     @Override
     public void onComplete() {
       responseDeliverer.deliverResult(aggregateFieldsMap, readTime, metrics);
-      metricsContext.recordEndToEndLatency();
     }
   }
 
