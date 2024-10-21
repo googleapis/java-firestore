@@ -321,4 +321,12 @@
     <field>SPAN_NAME_*</field>
   </difference>
 
+  <!-- Change the parameter type of internalStream function -->
+  <difference>
+    <differenceType>7005</differenceType>
+    <className>com/google/cloud/firestore/StreamableQuery</className>
+    <method>* internalStream(com.google.api.gax.rpc.ApiStreamObserver, long, com.google.protobuf.ByteString, com.google.cloud.Timestamp, com.google.cloud.firestore.ExplainOptions, boolean)</method>
+    <to>*</to>
+  </difference>
+
 </differences>
