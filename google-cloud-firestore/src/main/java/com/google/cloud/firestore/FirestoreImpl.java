@@ -446,8 +446,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
         getOptions()
             .getMetricsUtil()
             .createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_TRANSACTION);
-
     ApiFuture<T> result;
+
     try {
       if (transactionOptions.getReadTime() != null) {
         // READ_ONLY transactions with readTime have no retry, nor transaction state, so we don't
@@ -455,18 +455,16 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
         result =
             updateFunction.updateCallback(
                 new ReadTimeTransaction(this, transactionOptions.getReadTime()));
-        metricsContext.recordEndToEndLatencyAtFuture(result);
       } else {
         // For READ_ONLY transactions without readTime, there is still strong consistency applied,
         // that cannot be tracked client side.
         result = new ServerSideTransactionRunner<>(this, updateFunction, transactionOptions).run();
-        metricsContext.recordEndToEndLatencyAtFuture(result);
       }
+      metricsContext.recordEndToEndLatencyAtFuture(result);
     } catch (Exception error) {
       metricsContext.recordEndToEndLatency(error);
       throw error;
     }
-
     return result;
   }
 
