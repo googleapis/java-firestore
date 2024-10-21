@@ -19,7 +19,6 @@ package com.google.cloud.firestore.telemetry;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.UUID;
 
 /** A utility class for retrieving a unique client identifier (CLIENT_UID) */
@@ -51,7 +50,7 @@ final class ClientIdentifier {
   private static String getHostName() {
     try {
       return InetAddress.getLocalHost().getHostName();
-    } catch (UnknownHostException e) {
+    } catch (Exception e) {
       return "localhost";
     }
   }

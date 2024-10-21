@@ -21,8 +21,8 @@ import static com.google.cloud.firestore.telemetry.TelemetryConstants.FIRESTORE_
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.FIRESTORE_METRICS;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.GAX_METER_NAME;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.GAX_METRICS;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_METHOD;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_STATUS;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_PREFIX;
 
 import com.google.api.core.ApiFuture;
@@ -83,7 +83,7 @@ class EnabledMetricsUtil implements MetricsUtil {
       this.customMetricsProvider = new BuiltinMetricsProvider(customOpenTelemetry);
     } catch (IOException e) {
       logger.warning(
-          "Unable to get create MetricsUtil object for client side metrics, will skip exporting client side metrics"
+          "Unable to create MetricsUtil object for client side metrics, will skip exporting client side metrics"
               + e);
     }
   }
@@ -118,22 +118,8 @@ class EnabledMetricsUtil implements MetricsUtil {
                 // Ignore library info as it is collected by the metric attributes as well
                 .setInstrumentationLibraryLabelsEnabled(false)
                 .build());
-
-    // TODO: utlize the new features on GoogleCloudMetricExporter when backend is ready
-    // MonitoredResourceDescription monitoredResourceMapping =
-    //     new MonitoredResourceDescription(FIRESTORE_RESOURCE_TYPE, FIRESTORE_RESOURCE_LABELS);
-
-    // MetricExporter metricExporter =
-    //     GoogleCloudMetricExporter.createWithConfiguration(
-    //         MetricConfiguration.builder()
-    //             .setProjectId(projectId)
-    //             // Ignore library info as it is collected by the metric attributes as well
-    //             .setInstrumentationLibraryLabelsEnabled(false)
-    //             .setMonitoredResourceDescription(monitoredResourceMapping)
-    //             .setUseServiceTimeSeries(true)
-    //             .build());
-
     sdkMeterProviderBuilder.registerMetricReader(PeriodicMetricReader.create(metricExporter));
+
     return OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProviderBuilder.build()).build();
   }
 
@@ -216,8 +202,8 @@ class EnabledMetricsUtil implements MetricsUtil {
 
     private Map<String, String> createAttributes(String status) {
       Map<String, String> attributes = new HashMap<>();
-      attributes.put(METRIC_KEY_METHOD.getKey(), methodName);
-      attributes.put(METRIC_KEY_STATUS.getKey(), status);
+      attributes.put(METRIC_ATTRIBUTE_KEY_METHOD.getKey(), methodName);
+      attributes.put(METRIC_ATTRIBUTE_KEY_STATUS.getKey(), status);
       return attributes;
     }
 
@@ -226,6 +212,9 @@ class EnabledMetricsUtil implements MetricsUtil {
         return StatusCode.Code.UNKNOWN.toString();
       }
       Status status = ((FirestoreException) throwable).getStatus();
+      if (status == null) {
+        return StatusCode.Code.UNKNOWN.toString();
+      }
       return status.getCode().name();
     }
   }

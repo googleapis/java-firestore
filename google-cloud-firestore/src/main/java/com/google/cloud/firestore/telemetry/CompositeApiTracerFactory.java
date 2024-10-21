@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore;
+package com.google.cloud.firestore.telemetry;
 
+import com.google.api.core.InternalApi;
 import com.google.api.gax.tracing.ApiTracer;
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.api.gax.tracing.BaseApiTracerFactory;
@@ -24,7 +25,9 @@ import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.List;
 
-class CompositeApiTracerFactory extends BaseApiTracerFactory {
+/** Combines multiple {@link ApiTracerFactory} into a single {@link ApiTracerFactory}. */
+@InternalApi
+public class CompositeApiTracerFactory extends BaseApiTracerFactory {
 
   private final List<ApiTracerFactory> apiTracerFactories;
 
@@ -39,6 +42,6 @@ class CompositeApiTracerFactory extends BaseApiTracerFactory {
     for (ApiTracerFactory factory : apiTracerFactories) {
       children.add(factory.newTracer(parent, spanName, operationType));
     }
-    return new CompositeTracer(children);
+    return new CompositeApiTracer(children);
   }
 }

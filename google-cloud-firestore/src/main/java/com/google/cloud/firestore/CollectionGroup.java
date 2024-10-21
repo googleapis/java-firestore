@@ -138,17 +138,14 @@ public class CollectionGroup extends Query {
                 MoreExecutors.directExecutor());
         span.endAtFuture(result);
         metricsContext.recordEndToEndLatencyAtFuture(result);
-
         return result;
       } catch (ApiException exception) {
         span.end(exception);
         metricsContext.recordEndToEndLatency(exception);
-
         throw FirestoreException.forApiException(exception);
       } catch (Throwable throwable) {
         span.end(throwable);
         metricsContext.recordEndToEndLatency(throwable);
-
         throw throwable;
       }
     }

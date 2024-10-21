@@ -17,9 +17,9 @@
 package com.google.cloud.firestore.telemetry;
 
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.FIRESTORE_METER_NAME;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_CLIENT_UID;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_LIBRARY_NAME;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_KEY_LIBRARY_VERSION;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_CLIENT_UID;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_NAME;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT;
@@ -56,7 +56,7 @@ class BuiltinMetricsProvider {
 
   private static final String MILLISECOND_UNIT = "ms";
   private static final String INTEGER_UNIT = "1";
-  private static final String FIRESTORE_LIBRARY_NAME = "java_firestore";
+  private static final String FIRESTORE_LIBRARY_NAME = "com.google.cloud.firestore";
 
   public BuiltinMetricsProvider(OpenTelemetry openTelemetry) {
     this.openTelemetry = openTelemetry;
@@ -141,11 +141,11 @@ class BuiltinMetricsProvider {
 
   private Map<String, String> createStaticAttributes() {
     Map<String, String> staticAttributes = new HashMap<>();
-    staticAttributes.put(METRIC_KEY_CLIENT_UID.getKey(), ClientIdentifier.getClientUid());
-    staticAttributes.put(METRIC_KEY_LIBRARY_NAME.getKey(), FIRESTORE_LIBRARY_NAME);
+    staticAttributes.put(METRIC_ATTRIBUTE_KEY_CLIENT_UID.getKey(), ClientIdentifier.getClientUid());
+    staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_NAME.getKey(), FIRESTORE_LIBRARY_NAME);
     String pkgVersion = this.getClass().getPackage().getImplementationVersion();
     if (pkgVersion != null) {
-      staticAttributes.put(METRIC_KEY_LIBRARY_VERSION.getKey(), pkgVersion);
+      staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION.getKey(), pkgVersion);
     }
     return staticAttributes;
   }
