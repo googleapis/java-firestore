@@ -21,6 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.cloud.firestore.FirestoreOptions;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 
@@ -55,7 +56,7 @@ public interface MetricsUtil {
     // Client side metrics feature is default on unless it is manually turned off by
     // environment variables
     // TODO(metrics): The feature is disabled before it is ready for general release.
-    boolean shouldCreateEnabledInstance = false;
+    boolean shouldCreateEnabledInstance = true;
 
     String enableMetricsEnvVar = System.getenv(ENABLE_METRICS_ENV_VAR);
     if (enableMetricsEnvVar != null) {
@@ -109,5 +110,15 @@ public interface MetricsUtil {
 
     /** Records first response latency for the current operation. */
     void recordFirstResponseLatency();
+
+    /**
+     * Transaction latency should be recorded _after_ all the operations, including the retires has
+     * been completed. This method "appends" the metrics recording code at the completion of the
+     * given future.
+     */
+    <T> void recordTransactionLatencyAtFuture(ApiFuture<T> futureValue);
+
+    <T> void recordTransactionAttemptsAtFuture(
+        ApiFuture<T> futureValue, Supplier<Integer> attemptsSupplier);
   }
 }

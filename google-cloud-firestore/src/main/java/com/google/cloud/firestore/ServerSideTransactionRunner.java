@@ -26,6 +26,7 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
@@ -60,6 +61,7 @@ final class ServerSideTransactionRunner<T> {
   private int attemptsRemaining;
   private Span runTransactionSpan;
   private TraceUtil.Context runTransactionContext;
+  private MetricsContext metricsContext;
 
   /**
    * @param firestore The active Firestore instance
@@ -86,6 +88,8 @@ final class ServerSideTransactionRunner<T> {
         new ExponentialRetryAlgorithm(
             firestore.getOptions().getRetrySettings(), CurrentMillisClock.getDefaultClock());
     this.nextBackoffAttempt = backoffAlgorithm.createFirstAttempt();
+    this.metricsContext =
+        firestore.getOptions().getMetricsUtil().createMetricsContext("ServerSideTransaction");
   }
 
   @Nonnull
@@ -93,7 +97,18 @@ final class ServerSideTransactionRunner<T> {
     return firestore.getOptions().getTraceUtil();
   }
 
+  private int attemptsMade() {
+    return transactionOptions.getNumberOfAttempts() - this.attemptsRemaining;
+  }
+
   ApiFuture<T> run() {
+    ApiFuture<T> result = runInternally();
+    metricsContext.recordTransactionLatencyAtFuture(result);
+    metricsContext.recordTransactionAttemptsAtFuture(result, () -> this.attemptsMade());
+    return result;
+  }
+
+  ApiFuture<T> runInternally() {
     runTransactionSpan = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_TRANSACTION_RUN);
     runTransactionSpan.setAttribute(
         ATTRIBUTE_KEY_TRANSACTION_TYPE, transactionOptions.getType().name());
@@ -237,7 +252,7 @@ final class ServerSideTransactionRunner<T> {
         getTraceUtil()
             .currentSpan()
             .addEvent("Initiating transaction retry. Attempts remaining: " + attemptsRemaining);
-        return run();
+        return runInternally();
       } else {
         final FirestoreException firestoreException =
             FirestoreException.forApiException(
