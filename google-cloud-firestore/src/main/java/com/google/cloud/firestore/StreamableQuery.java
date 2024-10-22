@@ -21,7 +21,6 @@ import static com.google.common.collect.Lists.reverse;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalApi;
-import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ResponseObserver;
@@ -52,7 +51,6 @@ import org.threeten.bp.Duration;
  * where it failed by first calling `startAfter(lastDocumentReceived)`.
  */
 @InternalApi
-@InternalExtensionOnly
 public abstract class StreamableQuery<SnapshotType> {
   final Query.QueryOptions options;
   final FirestoreRpcContext<?> rpcContext;
