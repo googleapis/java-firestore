@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.encoding.CustomClassMapper;
 import com.google.common.collect.ImmutableList;
@@ -30,6 +31,7 @@ import javax.annotation.Nonnull;
  * Abstract. A GenericQuerySnapshot represents the results of a query that returns documents. It can
  * contain zero or more DocumentSnapshot objects.
  */
+@InternalExtensionOnly
 public abstract class GenericQuerySnapshot<QueryT> implements Iterable<QueryDocumentSnapshot> {
   protected final QueryT query;
   protected final Timestamp readTime;
