@@ -56,7 +56,7 @@ class BuiltinMetricsProvider {
     this.openTelemetry = openTelemetry;
     this.staticAttributes = createStaticAttributes();
 
-    if (openTelemetry != null && openTelemetry.getMeterProvider() != MeterProvider.noop()) {
+    if (openTelemetry.getMeterProvider() != MeterProvider.noop()) {
       configureRPCLayerMetrics();
       configureSDKLayerMetrics();
     }
@@ -66,7 +66,7 @@ class BuiltinMetricsProvider {
     return this.apiTracerFactory;
   }
 
-  public void endToEndRequestLatencyRecorder(double latency, Map<String, String> attributes) {
+  public void endToEndLatencyRecorder(double latency, Map<String, String> attributes) {
     recordLatency(endToEndRequestLatency, latency, attributes);
   }
 
