@@ -19,6 +19,7 @@ package com.google.cloud.firestore.telemetry;
 import com.google.api.core.ApiFuture;
 import com.google.api.gax.tracing.ApiTracerFactory;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * A fully disabled (No-op) MetricsUtil class that does not perform any metrics collection actions
@@ -39,6 +40,13 @@ class DisabledMetricsUtil implements MetricsUtil {
 
     @Override
     public void recordFirstResponseLatency() {}
+
+    @Override
+    public <T> void recordTransactionLatencyAtFuture(ApiFuture<T> futureValue) {}
+
+    @Override
+    public <T> void recordTransactionAttemptsAtFuture(
+        ApiFuture<T> futureValue, Supplier<Integer> attemptsSupplier) {}
   }
 
   @Override

@@ -55,6 +55,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
@@ -200,6 +201,55 @@ class EnabledMetricsUtil implements MetricsUtil {
       customMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
     }
 
+    public <T> void recordTransactionLatencyAtFuture(ApiFuture<T> futureValue) {
+      ApiFutures.addCallback(
+          futureValue,
+          new ApiFutureCallback<T>() {
+            @Override
+            public void onFailure(Throwable t) {
+              recordTransactionLatency(extractErrorStatus(t));
+            }
+
+            @Override
+            public void onSuccess(T result) {
+
+              recordTransactionLatency(StatusCode.Code.OK.toString());
+            }
+          },
+          MoreExecutors.directExecutor());
+    }
+
+    private void recordTransactionLatency(String status) {
+      double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+      Map<String, String> attributes = createAttributes(status);
+      defaultMetricsProvider.transactionLatencyRecorder(elapsedTime, attributes);
+      customMetricsProvider.transactionLatencyRecorder(elapsedTime, attributes);
+    }
+
+    public <T> void recordTransactionAttemptsAtFuture(
+        ApiFuture<T> futureValue, Supplier<Integer> attemptsSupplier) {
+      ApiFutures.addCallback(
+          futureValue,
+          new ApiFutureCallback<T>() {
+            @Override
+            public void onFailure(Throwable t) {
+              recordTransactionAttempts(extractErrorStatus(t), attemptsSupplier.get());
+            }
+
+            @Override
+            public void onSuccess(T result) {
+              recordTransactionAttempts(StatusCode.Code.OK.toString(), attemptsSupplier.get());
+            }
+          },
+          MoreExecutors.directExecutor());
+    }
+
+    private void recordTransactionAttempts(String status, int attempts) {
+      Map<String, String> attributes = createAttributes(status);
+      defaultMetricsProvider.transactionAttemptCountRecorder((long) attempts, attributes);
+      customMetricsProvider.transactionAttemptCountRecorder((long) attempts, attributes);
+    }
+
     private Map<String, String> createAttributes(String status) {
       Map<String, String> attributes = new HashMap<>();
       attributes.put(METRIC_ATTRIBUTE_KEY_METHOD.getKey(), methodName);
@@ -211,6 +261,7 @@ class EnabledMetricsUtil implements MetricsUtil {
       if (!(throwable instanceof FirestoreException)) {
         return StatusCode.Code.UNKNOWN.toString();
       }
+
       Status status = ((FirestoreException) throwable).getStatus();
       if (status == null) {
         return StatusCode.Code.UNKNOWN.toString();
