@@ -16,23 +16,13 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.cloud.firestore.FirestoreOptions;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 public class MetricsUtilTest {
-
-  @Rule public EnvironmentVariables environmentVariables = new EnvironmentVariables();
-
-  public static void main(String[] args) {
-    // This is just for demonstration purposes to run the tests with the VM argument
-    String[] arg = new String[] {"--add-opens", "java.base/java.util=ALL-UNNAMED"};
-    org.junit.runner.JUnitCore.main(arg);
-  }
-
   @Test
   public void defaultOptionsUseEnabledMetricsUtil() {
     System.out.println("============start");
@@ -46,20 +36,22 @@ public class MetricsUtilTest {
     assertThat(util instanceof EnabledMetricsUtil).isTrue();
   }
 
-  // @Test
-  // public void environmentVariableCanSetToUseDisabledMetricsUtil() {
-  //   System.out.println("============start");
+  @Test
+  public void testFirestoreWithMetricsEnabled() throws Exception {
+    System.out.println("============start2");
 
-  //   environmentVariables.set("FIRESTORE_ENABLE_METRICS", "off");
-  //   System.out.println("============set");
+    withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "true")
+        .execute(
+            () -> {
+              System.out.println("============call");
+              MetricsUtil util =
+                  MetricsUtil.getInstance(
+                      FirestoreOptions.newBuilder()
+                          .setProjectId("test-project")
+                          .setDatabaseId("(default)")
+                          .build());
 
-  //   MetricsUtil util =
-  //       MetricsUtil.getInstance(
-  //           FirestoreOptions.newBuilder()
-  //               .setProjectId("test-project")
-  //               .setDatabaseId("(default)")
-  //               .build());
-
-  //   assertThat(util instanceof DisabledMetricsUtil).isTrue();
-  // }
+              assertThat(util instanceof DisabledMetricsUtil).isTrue();
+            });
+  }
 }
