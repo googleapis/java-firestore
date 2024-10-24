@@ -42,8 +42,10 @@ public class MetricsUtilTest {
 
   @Test
   public void environmentVariableCanSetToUseDisabledMetricsUtil() {
+    System.out.println("============start");
 
     environmentVariables.set("FIRESTORE_ENABLE_METRICS", "off");
+    System.out.println("============set");
 
     MetricsUtil util =
         MetricsUtil.getInstance(
