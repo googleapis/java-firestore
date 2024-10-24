@@ -59,7 +59,7 @@ public interface MetricsUtil {
 
     System.out.println("============1");
     String enableMetricsEnvVar = System.getenv(ENABLE_METRICS_ENV_VAR);
-    System.out.println("============2:"+enableMetricsEnvVar);
+    System.out.println("============2:" + enableMetricsEnvVar);
 
     if (enableMetricsEnvVar != null) {
       switch (enableMetricsEnvVar.toLowerCase()) {
