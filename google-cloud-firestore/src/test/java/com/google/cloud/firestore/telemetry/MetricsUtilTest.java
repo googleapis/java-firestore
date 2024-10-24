@@ -25,12 +25,17 @@ import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 public class MetricsUtilTest {
 
-  @Rule
-  public EnvironmentVariables environmentVariables = new EnvironmentVariables();
+  @Rule public EnvironmentVariables environmentVariables = new EnvironmentVariables();
+
+  public static void main(String[] args) {
+    // This is just for demonstration purposes to run the tests with the VM argument
+    String[] arg = new String[] {"--add-opens", "java.base/java.util=ALL-UNNAMED"};
+    org.junit.runner.JUnitCore.main(arg);
+  }
 
   @Test
   public void defaultOptionsUseEnabledMetricsUtil() {
-
+    System.out.println("============start");
     MetricsUtil util =
         MetricsUtil.getInstance(
             FirestoreOptions.newBuilder()
