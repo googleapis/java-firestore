@@ -52,6 +52,6 @@ public class MetricsUtilTest {
                 .setDatabaseId("(default)")
                 .build());
 
-    assertThat(util instanceof DisabledTraceUtil).isTrue();
+    assertThat(util instanceof DisabledMetricsUtil).isTrue();
   }
 }
