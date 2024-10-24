@@ -25,7 +25,8 @@ import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 public class MetricsUtilTest {
 
-  // @Rule public EnvironmentVariables environmentVariables = new EnvironmentVariables();
+  @Rule
+  public EnvironmentVariables environmentVariables = new EnvironmentVariables();
 
   @Test
   public void defaultOptionsUseEnabledMetricsUtil() {
