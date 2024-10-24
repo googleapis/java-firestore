@@ -19,9 +19,9 @@ package com.google.cloud.firestore.telemetry;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.cloud.firestore.FirestoreOptions;
-// import org.junit.Rule;
+import org.junit.Rule;
 import org.junit.Test;
-// import org.junit.contrib.java.lang.system.EnvironmentVariables;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 public class MetricsUtilTest {
 
