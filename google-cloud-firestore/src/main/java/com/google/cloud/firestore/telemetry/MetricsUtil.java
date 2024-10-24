@@ -57,10 +57,7 @@ public interface MetricsUtil {
     // TODO(metrics): The feature is disabled before it is ready for general release.
     boolean shouldCreateEnabledInstance = true;
 
-    System.out.println("============1");
     String enableMetricsEnvVar = System.getenv(ENABLE_METRICS_ENV_VAR);
-    System.out.println("============2:" + enableMetricsEnvVar);
-
     if (enableMetricsEnvVar != null) {
       switch (enableMetricsEnvVar.toLowerCase()) {
         case "true":

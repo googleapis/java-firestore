@@ -25,7 +25,6 @@ import org.junit.Test;
 public class MetricsUtilTest {
   @Test
   public void defaultOptionsUseEnabledMetricsUtil() {
-    System.out.println("============start");
     MetricsUtil util =
         MetricsUtil.getInstance(
             FirestoreOptions.newBuilder()
@@ -37,20 +36,16 @@ public class MetricsUtilTest {
   }
 
   @Test
-  public void testFirestoreWithMetricsEnabled() throws Exception {
-    System.out.println("============start2");
-
-    withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "true")
+  public void disabledMetricsUtilWhenEnvVarIsOff() throws Exception {
+    withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "off")
         .execute(
             () -> {
-              System.out.println("============call");
               MetricsUtil util =
                   MetricsUtil.getInstance(
                       FirestoreOptions.newBuilder()
                           .setProjectId("test-project")
                           .setDatabaseId("(default)")
                           .build());
-
               assertThat(util instanceof DisabledMetricsUtil).isTrue();
             });
   }
