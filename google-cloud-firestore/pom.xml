@@ -150,10 +150,15 @@
       <version>4.11.0</version>
       <scope>test</scope>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>com.github.stefanbirkner</groupId>-->
+<!--      <artifactId>system-lambda</artifactId>-->
+<!--      <version>1.2.1</version>-->
+<!--    </dependency>-->
     <dependency>
-      <groupId>com.github.stefanbirkner</groupId>
-      <artifactId>system-lambda</artifactId>
-      <version>1.2.1</version>
+      <groupId>uk.org.webcompere</groupId>
+      <artifactId>system-stubs-junit4</artifactId>
+      <version>2.1.7</version>
       <scope>test</scope>
     </dependency>
     <!-- Need testing utility classes for generated gRPC clients tests -->
