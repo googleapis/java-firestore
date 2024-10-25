@@ -153,6 +153,7 @@
     <dependency>
       <groupId>com.github.stefanbirkner</groupId>
       <artifactId>system-lambda</artifactId>
+      <scope>test</scope>
       <version>1.2.1</version>
     </dependency>
     <!-- Need testing utility classes for generated gRPC clients tests -->
