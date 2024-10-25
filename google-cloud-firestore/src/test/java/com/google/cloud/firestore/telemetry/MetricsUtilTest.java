@@ -16,13 +16,18 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
+// import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.cloud.firestore.FirestoreOptions;
+import org.junit.Rule;
 import org.junit.Test;
+import uk.org.webcompere.systemstubs.rules.EnvironmentVariablesRule;
 
 public class MetricsUtilTest {
+
+  @Rule public EnvironmentVariablesRule rule = new EnvironmentVariablesRule();
+
   @Test
   public void defaultOptionsUseEnabledMetricsUtil() {
     MetricsUtil util =
@@ -35,19 +40,32 @@ public class MetricsUtilTest {
     assertThat(util instanceof EnabledMetricsUtil).isTrue();
   }
 
+  //  @Test
+  //  public void disabledMetricsUtilWhenEnvVarIsOff() throws Exception {
+  //    withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "off")
+  //        .execute(
+  //            () -> {
+  //              MetricsUtil util =
+  //                  MetricsUtil.getInstance(
+  //                      FirestoreOptions.newBuilder()
+  //                          .setProjectId("test-project")
+  //                          .setDatabaseId("(default)")
+  //                          .build());
+  //
+  //              assertThat(util instanceof DisabledMetricsUtil).isTrue();
+  //            });
+  //  }
+
   @Test
   public void disabledMetricsUtilWhenEnvVarIsOff() throws Exception {
-    withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "off")
-        .execute(
-            () -> {
-              MetricsUtil util =
-                  MetricsUtil.getInstance(
-                      FirestoreOptions.newBuilder()
-                          .setProjectId("test-project")
-                          .setDatabaseId("(default)")
-                          .build());
+    rule.set("FIRESTORE_ENABLE_METRICS", "off");
 
-              assertThat(util instanceof DisabledMetricsUtil).isTrue();
-            });
+    MetricsUtil util =
+        MetricsUtil.getInstance(
+            FirestoreOptions.newBuilder()
+                .setProjectId("test-project")
+                .setDatabaseId("(default)")
+                .build());
+    assertThat(util instanceof DisabledMetricsUtil).isTrue();
   }
 }
