@@ -26,7 +26,7 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
-import com.google.cloud.firestore.telemetry.MetricsUtil.TransactionMetricsContext;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
@@ -62,7 +62,7 @@ final class ServerSideTransactionRunner<T> {
   private int attemptsRemaining;
   private Span runTransactionSpan;
   private TraceUtil.Context runTransactionContext;
-  private TransactionMetricsContext metricsContext;
+  private MetricsContext metricsContext;
 
   /**
    * @param firestore The active Firestore instance
@@ -89,7 +89,11 @@ final class ServerSideTransactionRunner<T> {
         new ExponentialRetryAlgorithm(
             firestore.getOptions().getRetrySettings(), CurrentMillisClock.getDefaultClock());
     this.nextBackoffAttempt = backoffAlgorithm.createFirstAttempt();
-    this.metricsContext = firestore.getOptions().getMetricsUtil().createTransactionMetricsContext();
+    this.metricsContext =
+        firestore
+            .getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(TelemetryConstants.METHOD_NAME_SERVER_SIDE_TRANSACTION);
   }
 
   @Nonnull
@@ -114,7 +118,7 @@ final class ServerSideTransactionRunner<T> {
     try (Scope ignored = runTransactionSpan.makeCurrent()) {
       runTransactionContext = getTraceUtil().currentContext();
       --attemptsRemaining;
-      metricsContext.incrementAttemptsCount();
+      metricsContext.incrementCounter();
       ApiFuture<T> result =
           ApiFutures.catchingAsync(
               ApiFutures.transformAsync(

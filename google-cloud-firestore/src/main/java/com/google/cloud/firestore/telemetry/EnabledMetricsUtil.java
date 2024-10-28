@@ -110,11 +110,6 @@ class EnabledMetricsUtil implements MetricsUtil {
   }
 
   @Override
-  public TransactionMetricsContext createTransactionMetricsContext() {
-    return new TransactionMetricsContext();
-  }
-
-  @Override
   public void addMetricsTracerFactory(List<ApiTracerFactory> apiTracerFactories) {
     addTracerFactory(apiTracerFactories, defaultMetricsProvider);
     addTracerFactory(apiTracerFactories, customMetricsProvider);
@@ -175,11 +170,13 @@ class EnabledMetricsUtil implements MetricsUtil {
 
   class MetricsContext implements MetricsUtil.MetricsContext {
     private final Stopwatch stopwatch;
-    private final String methodName;
+    private int counter;
+    protected final String methodName;
 
     public MetricsContext(String methodName) {
       this.stopwatch = Stopwatch.createStarted();
       this.methodName = methodName;
+      this.counter = 0;
     }
 
     public <T> void recordLatencyAtFuture(MetricType metric, ApiFuture<T> futureValue) {
@@ -213,20 +210,9 @@ class EnabledMetricsUtil implements MetricsUtil {
       defaultMetricsProvider.latencyRecorder(metric, elapsedTime, attributes);
       customMetricsProvider.latencyRecorder(metric, elapsedTime, attributes);
     }
-  }
 
-  class TransactionMetricsContext extends MetricsContext
-      implements MetricsUtil.TransactionMetricsContext {
-    private int attemptsMade;
-    private final String METHOD_NAME = "ServerSideTransaction";
-
-    public TransactionMetricsContext() {
-      super("ServerSideTransaction");
-      this.attemptsMade = 0;
-    }
-
-    public void incrementAttemptsCount() {
-      attemptsMade++;
+    public void incrementCounter() {
+      counter++;
     }
 
     public <T> void recordCounterAtFuture(MetricType metric, ApiFuture<T> futureValue) {
@@ -247,11 +233,11 @@ class EnabledMetricsUtil implements MetricsUtil {
     }
 
     private void recordCounter(MetricType metric, String status) {
-      Map<String, String> attributes = createAttributes(status, METHOD_NAME);
+      Map<String, String> attributes = createAttributes(status, methodName);
       defaultMetricsProvider.counterRecorder(
-          MetricType.TRANSACTION_ATTEMPT, (long) attemptsMade, attributes);
+          MetricType.TRANSACTION_ATTEMPT, (long) counter, attributes);
       customMetricsProvider.counterRecorder(
-          MetricType.TRANSACTION_ATTEMPT, (long) attemptsMade, attributes);
+          MetricType.TRANSACTION_ATTEMPT, (long) counter, attributes);
     }
   }
 

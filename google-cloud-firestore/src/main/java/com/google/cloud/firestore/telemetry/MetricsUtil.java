@@ -56,7 +56,7 @@ public interface MetricsUtil {
     // Client side metrics feature is default on unless it is manually turned off by
     // environment variables
     // TODO(metrics): The feature is disabled before it is ready for general release.
-    boolean shouldCreateEnabledInstance = true;
+    boolean shouldCreateEnabledInstance = false;
 
     String enableMetricsEnvVar = System.getenv(ENABLE_METRICS_ENV_VAR);
     if (enableMetricsEnvVar != null) {
@@ -86,21 +86,13 @@ public interface MetricsUtil {
   abstract MetricsContext createMetricsContext(String methodName);
 
   /**
-   * Creates a new {@code TransactionMetricsContext} for the given server side transaction and
-   * starts timing.
-   *
-   * @return A new {@code MetricsContext}.
-   */
-  abstract TransactionMetricsContext createTransactionMetricsContext();
-
-  /**
    * Adds a metrics tracer factory to the given list of API tracer factories.
    *
    * @param apiTracerFactories The list of API tracer factories.
    */
   abstract void addMetricsTracerFactory(List<ApiTracerFactory> apiTracerFactories);
 
-  /** A context for recording metrics. */
+  /** A context for recording metrics in the Firestore SDK. */
   interface MetricsContext {
     /**
      * If the operation ends in the future, its relevant metrics should be recorded _after_ the
@@ -109,17 +101,19 @@ public interface MetricsUtil {
      */
     <T> void recordLatencyAtFuture(MetricType metric, ApiFuture<T> futureValue);
 
-    /** Records end-to-end latency for the current operation. */
+    /** Records specific type of latency for the current operation. */
     void recordLatency(MetricType metric);
 
-    /** Records end-to-end latency for the current operation, which ended with a throwable. */
+    /** Records specific type of latency for the current operation, which ended with a throwable. */
     void recordLatency(MetricType metric, Throwable t);
-  }
 
-  /** InnerMetricsUtil */
-  interface TransactionMetricsContext extends MetricsContext {
+    /**
+     * Records the counter value for a metric type _after_ the future has been completed. This
+     * method "appends" the metrics recording code at the completion of the given future.
+     */
     <T> void recordCounterAtFuture(MetricType metric, ApiFuture<T> futureValue);
 
-    void incrementAttemptsCount();
+    /** Increments the counter tracked inside the MetricsContext. */
+    void incrementCounter();
   }
 }

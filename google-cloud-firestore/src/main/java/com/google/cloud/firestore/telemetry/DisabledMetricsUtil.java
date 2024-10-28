@@ -37,26 +37,17 @@ class DisabledMetricsUtil implements MetricsUtil {
 
     @Override
     public void recordLatency(MetricType metric, Throwable t) {}
-  }
-
-  class TransactionMetricsContext extends MetricsContext
-      implements MetricsUtil.TransactionMetricsContext {
 
     @Override
     public <T> void recordCounterAtFuture(MetricType metric, ApiFuture<T> futureValue) {}
 
     @Override
-    public void incrementAttemptsCount() {}
+    public void incrementCounter() {}
   }
 
   @Override
   public MetricsContext createMetricsContext(String methodName) {
     return new MetricsContext();
-  }
-
-  @Override
-  public TransactionMetricsContext createTransactionMetricsContext() {
-    return new TransactionMetricsContext();
   }
 
   @Override
