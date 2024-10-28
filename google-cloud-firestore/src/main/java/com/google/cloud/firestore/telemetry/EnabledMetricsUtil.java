@@ -72,21 +72,36 @@ class EnabledMetricsUtil implements MetricsUtil {
 
   EnabledMetricsUtil(FirestoreOptions firestoreOptions) {
     try {
-      OpenTelemetry defaultOpenTelemetry =
-          getDefaultOpenTelemetryInstance(firestoreOptions.getProjectId());
-      this.defaultMetricsProvider = new BuiltinMetricsProvider(defaultOpenTelemetry);
-
-      OpenTelemetry customOpenTelemetry =
-          firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
-      if (customOpenTelemetry == null) {
-        customOpenTelemetry = GlobalOpenTelemetry.get();
-      }
-      this.customMetricsProvider = new BuiltinMetricsProvider(customOpenTelemetry);
+      configureDefaultMetricsProvider(firestoreOptions);
+      configureCustomMetricsProvider(firestoreOptions);
     } catch (IOException e) {
       logger.warning(
           "Unable to create MetricsUtil object for client side metrics, will skip exporting client side metrics"
               + e);
     }
+  }
+
+  private void configureDefaultMetricsProvider(FirestoreOptions firestoreOptions)
+      throws IOException {
+    OpenTelemetry defaultOpenTelemetry;
+    boolean exportBuiltinMetricsToGoogleCloudMonitoring =
+        firestoreOptions.getOpenTelemetryOptions().exportBuiltinMetricsToGoogleCloudMonitoring();
+    if (exportBuiltinMetricsToGoogleCloudMonitoring) {
+      defaultOpenTelemetry = getDefaultOpenTelemetryInstance(firestoreOptions.getProjectId());
+    } else {
+      defaultOpenTelemetry = OpenTelemetry.noop();
+    }
+    this.defaultMetricsProvider = new BuiltinMetricsProvider(defaultOpenTelemetry);
+  }
+
+  private void configureCustomMetricsProvider(FirestoreOptions firestoreOptions)
+      throws IOException {
+    OpenTelemetry customOpenTelemetry =
+        firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
+    if (customOpenTelemetry == null) {
+      customOpenTelemetry = GlobalOpenTelemetry.get();
+    }
+    this.customMetricsProvider = new BuiltinMetricsProvider(customOpenTelemetry);
   }
 
   @Override
@@ -197,8 +212,8 @@ class EnabledMetricsUtil implements MetricsUtil {
     private void recordEndToEndLatency(String status) {
       double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
       Map<String, String> attributes = createAttributes(status);
-      defaultMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
-      customMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
+      defaultMetricsProvider.endToEndLatencyRecorder(elapsedTime, attributes);
+      customMetricsProvider.endToEndLatencyRecorder(elapsedTime, attributes);
     }
 
     public <T> void recordTransactionLatencyAtFuture(ApiFuture<T> futureValue) {

@@ -62,7 +62,7 @@ class BuiltinMetricsProvider {
     this.openTelemetry = openTelemetry;
     this.staticAttributes = createStaticAttributes();
 
-    if (openTelemetry != null && openTelemetry.getMeterProvider() != MeterProvider.noop()) {
+    if (openTelemetry.getMeterProvider() != MeterProvider.noop()) {
       configureRPCLayerMetrics();
       configureSDKLayerMetrics();
     }
