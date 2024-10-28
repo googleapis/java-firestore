@@ -49,7 +49,12 @@ import com.google.cloud.firestore.pipeline.expressions.Constant;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Function;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
+import com.google.cloud.firestore.pipeline.stages.SampleOptions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -64,6 +69,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ITPipelineTest extends ITBaseTest {
   private CollectionReference collection;
+  private Map<String, Map<String, Object>> bookDocs;
 
   public CollectionReference testCollectionWithDocs(Map<String, Map<String, Object>> docs)
       throws ExecutionException, InterruptedException, TimeoutException {
@@ -84,168 +90,167 @@ public class ITPipelineTest extends ITBaseTest {
       return;
     }
 
-    Map<String, Map<String, Object>> bookDocs =
-        map(
-            "book1",
-                map(
-                    "title",
-                    "The Hitchhiker's Guide to the Galaxy",
-                    "author",
-                    "Douglas Adams",
-                    "genre",
-                    "Science Fiction",
-                    "published",
-                    1979,
-                    "rating",
-                    4.2,
-                    "tags",
-                    Lists.newArrayList("comedy", "space", "adventure"),
-                    "awards",
-                    map("hugo", true, "nebula", false)),
-            "book2",
-                map(
-                    "title",
-                    "Pride and Prejudice",
-                    "author",
-                    "Jane Austen",
-                    "genre",
-                    "Romance",
-                    "published",
-                    1813,
-                    "rating",
-                    4.5,
-                    "tags",
-                    Lists.newArrayList("classic", "social commentary", "love"),
-                    "awards",
-                    map("none", true)),
-            "book3",
-                map(
-                    "title",
-                    "One Hundred Years of Solitude",
-                    "author",
-                    "Gabriel García Márquez",
-                    "genre",
-                    "Magical Realism",
-                    "published",
-                    1967,
-                    "rating",
-                    4.3,
-                    "tags",
-                    Lists.newArrayList("family", "history", "fantasy"),
-                    "awards",
-                    map("nobel", true, "nebula", false)),
-            "book4",
-                map(
-                    "title",
-                    "The Lord of the Rings",
-                    "author",
-                    "J.R.R. Tolkien",
-                    "genre",
-                    "Fantasy",
-                    "published",
-                    1954,
-                    "rating",
-                    4.7,
-                    "tags",
-                    Lists.newArrayList("adventure", "magic", "epic"),
-                    "awards",
-                    map("hugo", false, "nebula", false)),
-            "book5",
-                map(
-                    "title",
-                    "The Handmaid's Tale",
-                    "author",
-                    "Margaret Atwood",
-                    "genre",
-                    "Dystopian",
-                    "published",
-                    1985,
-                    "rating",
-                    4.1,
-                    "tags",
-                    Lists.newArrayList("feminism", "totalitarianism", "resistance"),
-                    "awards",
-                    map("arthur c. clarke", true, "booker prize", false)),
-            "book6",
-                map(
-                    "title",
-                    "Crime and Punishment",
-                    "author",
-                    "Fyodor Dostoevsky",
-                    "genre",
-                    "Psychological Thriller",
-                    "published",
-                    1866,
-                    "rating",
-                    4.3,
-                    "tags",
-                    Lists.newArrayList("philosophy", "crime", "redemption"),
-                    "awards",
-                    map("none", true)),
-            "book7",
-                map(
-                    "title",
-                    "To Kill a Mockingbird",
-                    "author",
-                    "Harper Lee",
-                    "genre",
-                    "Southern Gothic",
-                    "published",
-                    1960,
-                    "rating",
-                    4.2,
-                    "tags",
-                    Lists.newArrayList("racism", "injustice", "coming-of-age"),
-                    "awards",
-                    map("pulitzer", true)),
-            "book8",
-                map(
-                    "title",
-                    "1984",
-                    "author",
-                    "George Orwell",
-                    "genre",
-                    "Dystopian",
-                    "published",
-                    1949,
-                    "rating",
-                    4.2,
-                    "tags",
-                    Lists.newArrayList("surveillance", "totalitarianism", "propaganda"),
-                    "awards",
-                    map("prometheus", true)),
-            "book9",
-                map(
-                    "title",
-                    "The Great Gatsby",
-                    "author",
-                    "F. Scott Fitzgerald",
-                    "genre",
-                    "Modernist",
-                    "published",
-                    1925,
-                    "rating",
-                    4.0,
-                    "tags",
-                    Lists.newArrayList("wealth", "american dream", "love"),
-                    "awards",
-                    map("none", true)),
-            "book10",
-                map(
-                    "title",
-                    "Dune",
-                    "author",
-                    "Frank Herbert",
-                    "genre",
-                    "Science Fiction",
-                    "published",
-                    1965,
-                    "rating",
-                    4.6,
-                    "tags",
-                    Lists.newArrayList("politics", "desert", "ecology"),
-                    "awards",
-                    map("hugo", true, "nebula", true)));
+    bookDocs = ImmutableMap.of(
+        "book1",
+            ImmutableMap.of(
+                "title",
+                "The Hitchhiker's Guide to the Galaxy",
+                "author",
+                "Douglas Adams",
+                "genre",
+                "Science Fiction",
+                "published",
+                1979,
+                "rating",
+                4.2,
+                "tags",
+                ImmutableList.of("comedy", "space", "adventure"),
+                "awards",
+                ImmutableMap.of("hugo", true, "nebula", false)),
+        "book2",
+            ImmutableMap.of(
+                "title",
+                "Pride and Prejudice",
+                "author",
+                "Jane Austen",
+                "genre",
+                "Romance",
+                "published",
+                1813,
+                "rating",
+                4.5,
+                "tags",
+                ImmutableList.of("classic", "social commentary", "love"),
+                "awards",
+                ImmutableMap.of("none", true)),
+        "book3",
+            ImmutableMap.of(
+                "title",
+                "One Hundred Years of Solitude",
+                "author",
+                "Gabriel García Márquez",
+                "genre",
+                "Magical Realism",
+                "published",
+                1967,
+                "rating",
+                4.3,
+                "tags",
+                ImmutableList.of("family", "history", "fantasy"),
+                "awards",
+                ImmutableMap.of("nobel", true, "nebula", false)),
+        "book4",
+            ImmutableMap.of(
+                "title",
+                "The Lord of the Rings",
+                "author",
+                "J.R.R. Tolkien",
+                "genre",
+                "Fantasy",
+                "published",
+                1954,
+                "rating",
+                4.7,
+                "tags",
+                ImmutableList.of("adventure", "magic", "epic"),
+                "awards",
+                ImmutableMap.of("hugo", false, "nebula", false)),
+        "book5",
+            ImmutableMap.of(
+                "title",
+                "The Handmaid's Tale",
+                "author",
+                "Margaret Atwood",
+                "genre",
+                "Dystopian",
+                "published",
+                1985,
+                "rating",
+                4.1,
+                "tags",
+                ImmutableList.of("feminism", "totalitarianism", "resistance"),
+                "awards",
+                ImmutableMap.of("arthur c. clarke", true, "booker prize", false)),
+        "book6",
+            ImmutableMap.of(
+                "title",
+                "Crime and Punishment",
+                "author",
+                "Fyodor Dostoevsky",
+                "genre",
+                "Psychological Thriller",
+                "published",
+                1866,
+                "rating",
+                4.3,
+                "tags",
+                ImmutableList.of("philosophy", "crime", "redemption"),
+                "awards",
+                ImmutableMap.of("none", true)),
+        "book7",
+            ImmutableMap.of(
+                "title",
+                "To Kill a Mockingbird",
+                "author",
+                "Harper Lee",
+                "genre",
+                "Southern Gothic",
+                "published",
+                1960,
+                "rating",
+                4.2,
+                "tags",
+                ImmutableList.of("racism", "injustice", "coming-of-age"),
+                "awards",
+                ImmutableMap.of("pulitzer", true)),
+        "book8",
+            ImmutableMap.of(
+                "title",
+                "1984",
+                "author",
+                "George Orwell",
+                "genre",
+                "Dystopian",
+                "published",
+                1949,
+                "rating",
+                4.2,
+                "tags",
+                ImmutableList.of("surveillance", "totalitarianism", "propaganda"),
+                "awards",
+                ImmutableMap.of("prometheus", true)),
+        "book9",
+            ImmutableMap.of(
+                "title",
+                "The Great Gatsby",
+                "author",
+                "F. Scott Fitzgerald",
+                "genre",
+                "Modernist",
+                "published",
+                1925,
+                "rating",
+                4.0,
+                "tags",
+                ImmutableList.of("wealth", "american dream", "love"),
+                "awards",
+                ImmutableMap.of("none", true)),
+        "book10",
+            ImmutableMap.of(
+                "title",
+                "Dune",
+                "author",
+                "Frank Herbert",
+                "genre",
+                "Science Fiction",
+                "published",
+                1965,
+                "rating",
+                4.6,
+                "tags",
+                ImmutableList.of("politics", "desert", "ecology"),
+                "awards",
+                ImmutableMap.of("hugo", true, "nebula", true)));
     collection = testCollectionWithDocs(bookDocs);
   }
 
@@ -1044,5 +1049,78 @@ public class ITPipelineTest extends ITBaseTest {
         collection.pipeline().where(eq("foo", "bar")).select("title").execute().get();
     assertThat(data(result))
         .isEqualTo(Lists.newArrayList(map("title", "The Hitchhiker's Guide to the Galaxy")));
+  }
+
+  @Test
+  public void testReplace() throws Exception {
+    List<PipelineResult> results =
+        collection.pipeline()
+            .replace("awards")
+            .execute()
+            .get();
+
+    List<HashMap<String, Object>> list = bookDocs.values().stream()
+        .map(book -> {
+          HashMap<String, Object> awards = (HashMap<String, Object>) book.get("awards");
+          HashMap<String, Object> map = Maps.newHashMap(book);
+          // Remove "awards" field.
+          map.remove("awards");
+          // Life nested "awards".
+          map.putAll(awards);
+          return map;
+        })
+        .toList();
+
+    assertThat(data(results))
+        .containsExactly(list);
+  }
+
+  @Test
+  public void testSampleLimit() throws Exception {
+    List<PipelineResult> results =
+        collection
+            .pipeline()
+            .sample(3)
+            .execute()
+            .get();
+
+    assertThat(results).hasSize(3);
+  }
+
+  @Test
+  public void testSamplePercentage() throws Exception {
+    List<PipelineResult> results =
+        collection
+            .pipeline()
+            .sample(SampleOptions.percentage(0.6))
+            .execute()
+            .get();
+
+    assertThat(results).hasSize(6);
+  }
+
+  @Test
+  public void testUnion() throws Exception {
+    List<PipelineResult> results =
+        collection
+            .pipeline()
+            .union(collection.pipeline())
+            .execute()
+            .get();
+
+    assertThat(results).hasSize(20);
+  }
+
+  @Test
+  public void testUnnest() throws Exception {
+    List<PipelineResult> results =
+        collection
+            .pipeline()
+            .where(eq(Field.of("title"), "The Hitchhiker's Guide to the Galaxy"))
+            .unnest("tags")
+            .execute()
+            .get();
+
+    assertThat(results).hasSize(3);
   }
 }

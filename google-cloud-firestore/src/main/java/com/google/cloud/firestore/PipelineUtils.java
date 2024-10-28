@@ -34,7 +34,6 @@ import com.google.cloud.firestore.pipeline.expressions.AccumulatorTarget;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.cloud.firestore.pipeline.expressions.ExprWithAlias;
 import com.google.cloud.firestore.pipeline.expressions.Field;
-import com.google.cloud.firestore.pipeline.expressions.Fields;
 import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.common.collect.Lists;
@@ -173,11 +172,6 @@ public class PipelineUtils {
       } else if (proj instanceof AccumulatorTarget) {
         AccumulatorTarget aggregatorProj = (AccumulatorTarget) proj;
         projMap.put(aggregatorProj.getFieldName(), aggregatorProj.getAccumulator());
-      } else if (proj instanceof Fields) {
-        Fields fieldsProj = (Fields) proj;
-        if (fieldsProj.getFields() != null) {
-          fieldsProj.getFields().forEach(f -> projMap.put(f.getPath().getEncodedPath(), f));
-        }
       } else if (proj instanceof ExprWithAlias) {
         ExprWithAlias exprWithAlias = (ExprWithAlias) proj;
         projMap.put(exprWithAlias.getAlias(), exprWithAlias.getExpr());

@@ -14,34 +14,19 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore.pipeline.expressions;
+package com.google.cloud.firestore.pipeline.stages;
 
-import com.google.api.core.InternalApi;
+import javax.annotation.Nonnull;
 
-@InternalApi
-public final class ExprWithAlias<T extends Expr> implements Expr, Selectable {
+public class UnnestOptions {
 
-  private final String alias;
-  private final T expr;
+  final String indexField;
 
-  @InternalApi
-  ExprWithAlias(T expr, String alias) {
-    this.expr = expr;
-    this.alias = alias;
+  public static UnnestOptions indexField(@Nonnull String indexField) {
+    return new UnnestOptions(indexField);
   }
 
-  @InternalApi
-  public String getAlias() {
-    return alias;
-  }
-
-  @InternalApi
-  public T getExpr() {
-    return expr;
-  }
-
-  @Override
-  public Selectable as(String alias) {
-    return new ExprWithAlias<>(this.expr, alias);
+  private UnnestOptions(String indexField) {
+    this.indexField = indexField;
   }
 }

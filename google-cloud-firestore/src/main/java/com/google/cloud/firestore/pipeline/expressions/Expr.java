@@ -1902,6 +1902,6 @@ public interface Expr {
    */
   @BetaApi
   default Selectable as(String alias) {
-    return new ExprWithAlias(this, alias);
+    return new ExprWithAlias<>(this, alias);
   }
 }
