@@ -74,6 +74,15 @@ public final class StageUtils {
           .setName(addFieldsStage.getName())
           .addArgs(encodeValue(addFieldsStage.getFields()))
           .build();
+    } else if (stage instanceof RemoveFields) {
+      RemoveFields removeFieldsStage = (RemoveFields) stage;
+      return com.google.firestore.v1.Pipeline.Stage.newBuilder()
+          .setName(removeFieldsStage.getName())
+          .addAllArgs(
+              removeFieldsStage.getFields().stream()
+                  .map(f -> encodeValue(f))
+                  .collect(Collectors.toList()))
+          .build();
     } else if (stage instanceof Where) {
       Where whereStage = (Where) stage; // Use wildcard for generic type
       return com.google.firestore.v1.Pipeline.Stage.newBuilder()

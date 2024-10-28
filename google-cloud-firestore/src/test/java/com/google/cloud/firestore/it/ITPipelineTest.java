@@ -370,6 +370,60 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
+  public void addAndRemoveFields() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .addFields(
+                strConcat(Field.of("author"), "_", Field.of("title")).as("author_title"),
+                strConcat(Field.of("title"), "_", Field.of("author")).as("title_author"))
+            .removeFields("title_author", "tags", "awards", "rating", "title")
+            .removeFields(Field.of("published"), Field.of("genre"), Field.of("nestedField"))
+            .sort(Field.of("author_title").ascending())
+            .execute()
+            .get();
+
+    assertThat(data(results))
+        .isEqualTo(
+            Lists.newArrayList(
+                map(
+                    "author_title",
+                    "Douglas Adams_The Hitchhiker's Guide to the Galaxy",
+                    "author",
+                    "Douglas Adams"),
+                map(
+                    "author_title",
+                    "F. Scott Fitzgerald_The Great Gatsby",
+                    "author",
+                    "F. Scott Fitzgerald"),
+                map("author_title", "Frank Herbert_Dune", "author", "Frank Herbert"),
+                map(
+                    "author_title",
+                    "Fyodor Dostoevsky_Crime and Punishment",
+                    "author",
+                    "Fyodor Dostoevsky"),
+                map(
+                    "author_title",
+                    "Gabriel García Márquez_One Hundred Years of Solitude",
+                    "author",
+                    "Gabriel García Márquez"),
+                map("author_title", "George Orwell_1984", "author", "George Orwell"),
+                map("author_title", "Harper Lee_To Kill a Mockingbird", "author", "Harper Lee"),
+                map(
+                    "author_title",
+                    "J.R.R. Tolkien_The Lord of the Rings",
+                    "author",
+                    "J.R.R. Tolkien"),
+                map("author_title", "Jane Austen_Pride and Prejudice", "author", "Jane Austen"),
+                map(
+                    "author_title",
+                    "Margaret Atwood_The Handmaid's Tale",
+                    "author",
+                    "Margaret Atwood")));
+  }
+
+  @Test
   public void whereByMultipleConditions() throws Exception {
     List<PipelineResult> results =
         collection

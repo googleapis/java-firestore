@@ -41,6 +41,7 @@ import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
 import com.google.cloud.firestore.pipeline.stages.GenericStage;
 import com.google.cloud.firestore.pipeline.stages.Limit;
 import com.google.cloud.firestore.pipeline.stages.Offset;
+import com.google.cloud.firestore.pipeline.stages.RemoveFields;
 import com.google.cloud.firestore.pipeline.stages.Replace;
 import com.google.cloud.firestore.pipeline.stages.Sample;
 import com.google.cloud.firestore.pipeline.stages.SampleOptions;
@@ -53,6 +54,7 @@ import com.google.cloud.firestore.pipeline.stages.Unnest;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
 import com.google.cloud.firestore.pipeline.stages.Where;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.ExecutePipelineRequest;
@@ -63,6 +65,7 @@ import com.google.protobuf.ByteString;
 import io.opencensus.trace.AttributeValue;
 import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -170,6 +173,52 @@ public final class Pipeline {
   @BetaApi
   public Pipeline addFields(Selectable... fields) {
     return append(new AddFields(PipelineUtils.selectablesToMap(fields)));
+  }
+
+  /**
+   * Remove fields from outputs of previous stages.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * firestore.pipeline().collection("books")
+   *   .removeFields(
+   *     "rating", "cost"
+   *   );
+   * }</pre>
+   *
+   * @param fields The fields to remove.
+   * @return A new Pipeline object with this stage appended to the stage list.
+   */
+  @BetaApi
+  public Pipeline removeFields(String... fields) {
+    return append(
+        new RemoveFields(
+            ImmutableList.<Field>builder()
+                .addAll(Arrays.stream(fields).map(f -> Field.of(f)).iterator())
+                .build()));
+  }
+
+  /**
+   * Remove fields from outputs of previous stages.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * firestore.pipeline().collection("books")
+   *   .removeFields(
+   *     Field.of("rating"), Field.of("cost")
+   *   );
+   * }</pre>
+   *
+   * @param fields The fields to remove.
+   * @return A new Pipeline object with this stage appended to the stage list.
+   */
+  @BetaApi
+  public Pipeline removeFields(Field... fields) {
+    return append(
+        new RemoveFields(
+            ImmutableList.<Field>builder().addAll(Arrays.stream(fields).iterator()).build()));
   }
 
   /**
