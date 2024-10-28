@@ -21,7 +21,6 @@ import com.google.api.core.InternalApi;
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.cloud.firestore.FirestoreOptions;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 
@@ -86,6 +85,14 @@ public interface MetricsUtil {
   abstract MetricsContext createMetricsContext(String methodName);
 
   /**
+   * Creates a new {@code TransactionMetricsContext} for the given server side transaction and
+   * starts timing.
+   *
+   * @return A new {@code MetricsContext}.
+   */
+  abstract TransactionMetricsContext createTransactionMetricsContext();
+
+  /**
    * Adds a metrics tracer factory to the given list of API tracer factories.
    *
    * @param apiTracerFactories The list of API tracer factories.
@@ -110,6 +117,10 @@ public interface MetricsUtil {
 
     /** Records first response latency for the current operation. */
     void recordFirstResponseLatency();
+  }
+
+  /** InnerMetricsUtil */
+  public interface TransactionMetricsContext {
 
     /**
      * Transaction latency should be recorded _after_ all the operations, including the retires has
@@ -118,7 +129,8 @@ public interface MetricsUtil {
      */
     <T> void recordTransactionLatencyAtFuture(ApiFuture<T> futureValue);
 
-    <T> void recordTransactionAttemptsAtFuture(
-        ApiFuture<T> futureValue, Supplier<Integer> attemptsSupplier);
+    <T> void recordTransactionAttemptsAtFuture(ApiFuture<T> futureValue);
+
+    void incrementAttemptsCount();
   }
 }

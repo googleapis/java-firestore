@@ -26,7 +26,7 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
-import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
+import com.google.cloud.firestore.telemetry.MetricsUtil.TransactionMetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
@@ -61,7 +61,7 @@ final class ServerSideTransactionRunner<T> {
   private int attemptsRemaining;
   private Span runTransactionSpan;
   private TraceUtil.Context runTransactionContext;
-  private MetricsContext metricsContext;
+  private TransactionMetricsContext metricsContext;
 
   /**
    * @param firestore The active Firestore instance
@@ -88,8 +88,7 @@ final class ServerSideTransactionRunner<T> {
         new ExponentialRetryAlgorithm(
             firestore.getOptions().getRetrySettings(), CurrentMillisClock.getDefaultClock());
     this.nextBackoffAttempt = backoffAlgorithm.createFirstAttempt();
-    this.metricsContext =
-        firestore.getOptions().getMetricsUtil().createMetricsContext("ServerSideTransaction");
+    this.metricsContext = firestore.getOptions().getMetricsUtil().createTransactionMetricsContext();
   }
 
   @Nonnull
@@ -97,14 +96,10 @@ final class ServerSideTransactionRunner<T> {
     return firestore.getOptions().getTraceUtil();
   }
 
-  private int attemptsMade() {
-    return transactionOptions.getNumberOfAttempts() - this.attemptsRemaining;
-  }
-
   ApiFuture<T> run() {
     ApiFuture<T> result = runInternally();
     metricsContext.recordTransactionLatencyAtFuture(result);
-    metricsContext.recordTransactionAttemptsAtFuture(result, () -> this.attemptsMade());
+    metricsContext.recordTransactionAttemptsAtFuture(result);
     return result;
   }
 
@@ -118,6 +113,7 @@ final class ServerSideTransactionRunner<T> {
     try (Scope ignored = runTransactionSpan.makeCurrent()) {
       runTransactionContext = getTraceUtil().currentContext();
       --attemptsRemaining;
+      metricsContext.incrementAttemptsCount();
       ApiFuture<T> result =
           ApiFutures.catchingAsync(
               ApiFutures.transformAsync(

@@ -55,7 +55,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
@@ -107,6 +106,11 @@ class EnabledMetricsUtil implements MetricsUtil {
   @Override
   public MetricsContext createMetricsContext(String methodName) {
     return new MetricsContext(methodName);
+  }
+
+  @Override
+  public TransactionMetricsContext createTransactionMetricsContext() {
+    return new TransactionMetricsContext();
   }
 
   @Override
@@ -204,16 +208,30 @@ class EnabledMetricsUtil implements MetricsUtil {
 
     public void recordFirstResponseLatency() {
       double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-      Map<String, String> attributes = createAttributes(StatusCode.Code.OK.toString());
+      Map<String, String> attributes = createAttributes(StatusCode.Code.OK.toString(), methodName);
       defaultMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);
       customMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);
     }
 
     private void recordEndToEndLatency(String status) {
       double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-      Map<String, String> attributes = createAttributes(status);
-      defaultMetricsProvider.endToEndLatencyRecorder(elapsedTime, attributes);
-      customMetricsProvider.endToEndLatencyRecorder(elapsedTime, attributes);
+      Map<String, String> attributes = createAttributes(status, methodName);
+      defaultMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
+      customMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
+    }
+  }
+
+  class TransactionMetricsContext implements MetricsUtil.TransactionMetricsContext {
+    private final Stopwatch stopwatch;
+    private int attemptsMade = 0;
+    private final String METHOD_NAME = "ServerSideTransaction";
+
+    public TransactionMetricsContext() {
+      this.stopwatch = Stopwatch.createStarted();
+    }
+
+    public void incrementAttemptsCount() {
+      attemptsMade++;
     }
 
     public <T> void recordTransactionLatencyAtFuture(ApiFuture<T> futureValue) {
@@ -236,52 +254,51 @@ class EnabledMetricsUtil implements MetricsUtil {
 
     private void recordTransactionLatency(String status) {
       double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-      Map<String, String> attributes = createAttributes(status);
+      Map<String, String> attributes = createAttributes(status, METHOD_NAME);
       defaultMetricsProvider.transactionLatencyRecorder(elapsedTime, attributes);
       customMetricsProvider.transactionLatencyRecorder(elapsedTime, attributes);
     }
 
-    public <T> void recordTransactionAttemptsAtFuture(
-        ApiFuture<T> futureValue, Supplier<Integer> attemptsSupplier) {
+    public <T> void recordTransactionAttemptsAtFuture(ApiFuture<T> futureValue) {
       ApiFutures.addCallback(
           futureValue,
           new ApiFutureCallback<T>() {
             @Override
             public void onFailure(Throwable t) {
-              recordTransactionAttempts(extractErrorStatus(t), attemptsSupplier.get());
+              recordTransactionAttempts(extractErrorStatus(t));
             }
 
             @Override
             public void onSuccess(T result) {
-              recordTransactionAttempts(StatusCode.Code.OK.toString(), attemptsSupplier.get());
+              recordTransactionAttempts(StatusCode.Code.OK.toString());
             }
           },
           MoreExecutors.directExecutor());
     }
 
-    private void recordTransactionAttempts(String status, int attempts) {
-      Map<String, String> attributes = createAttributes(status);
-      defaultMetricsProvider.transactionAttemptCountRecorder((long) attempts, attributes);
-      customMetricsProvider.transactionAttemptCountRecorder((long) attempts, attributes);
+    private void recordTransactionAttempts(String status) {
+      Map<String, String> attributes = createAttributes(status, METHOD_NAME);
+      defaultMetricsProvider.transactionAttemptCountRecorder((long) attemptsMade, attributes);
+      customMetricsProvider.transactionAttemptCountRecorder((long) attemptsMade, attributes);
+    }
+  }
+
+  private Map<String, String> createAttributes(String status, String methodName) {
+    Map<String, String> attributes = new HashMap<>();
+    attributes.put(METRIC_ATTRIBUTE_KEY_METHOD.getKey(), methodName);
+    attributes.put(METRIC_ATTRIBUTE_KEY_STATUS.getKey(), status);
+    return attributes;
+  }
+
+  private String extractErrorStatus(@Nullable Throwable throwable) {
+    if (!(throwable instanceof FirestoreException)) {
+      return StatusCode.Code.UNKNOWN.toString();
     }
 
-    private Map<String, String> createAttributes(String status) {
-      Map<String, String> attributes = new HashMap<>();
-      attributes.put(METRIC_ATTRIBUTE_KEY_METHOD.getKey(), methodName);
-      attributes.put(METRIC_ATTRIBUTE_KEY_STATUS.getKey(), status);
-      return attributes;
+    Status status = ((FirestoreException) throwable).getStatus();
+    if (status == null) {
+      return StatusCode.Code.UNKNOWN.toString();
     }
-
-    private String extractErrorStatus(@Nullable Throwable throwable) {
-      if (!(throwable instanceof FirestoreException)) {
-        return StatusCode.Code.UNKNOWN.toString();
-      }
-
-      Status status = ((FirestoreException) throwable).getStatus();
-      if (status == null) {
-        return StatusCode.Code.UNKNOWN.toString();
-      }
-      return status.getCode().name();
-    }
+    return status.getCode().name();
   }
 }
