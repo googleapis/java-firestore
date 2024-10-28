@@ -29,6 +29,7 @@ import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_PRE
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.api.gax.tracing.MetricsTracerFactory;
 import com.google.api.gax.tracing.OpenTelemetryMetricsRecorder;
+import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
@@ -38,14 +39,17 @@ import io.opentelemetry.api.metrics.Meter;
 import io.opentelemetry.api.metrics.MeterProvider;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A provider for built-in metrics. This class is responsible for storing OpenTelemetry metrics
  * configuration and recording built-in metrics for the Firestore SDK.
  */
 class BuiltinMetricsProvider {
+  private static final Logger logger = Logger.getLogger(BuiltinMetricsProvider.class.getName());
+
   private OpenTelemetry openTelemetry;
-  private Meter meter;
   private DoubleHistogram endToEndRequestLatency;
   private DoubleHistogram firstResponseLatency;
   private DoubleHistogram transactionLatency;
@@ -68,6 +72,17 @@ class BuiltinMetricsProvider {
     }
   }
 
+  private Map<String, String> createStaticAttributes() {
+    Map<String, String> staticAttributes = new HashMap<>();
+    staticAttributes.put(METRIC_ATTRIBUTE_KEY_CLIENT_UID.getKey(), ClientIdentifier.getClientUid());
+    staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_NAME.getKey(), FIRESTORE_LIBRARY_NAME);
+    String pkgVersion = this.getClass().getPackage().getImplementationVersion();
+    if (pkgVersion != null) {
+      staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION.getKey(), pkgVersion);
+    }
+    return staticAttributes;
+  }
+
   /** Creates an ApiTracerFactory to be passed into GAX library and collect RPC layer metrics. */
   private void configureRPCLayerMetrics() {
     OpenTelemetryMetricsRecorder recorder =
@@ -77,7 +92,7 @@ class BuiltinMetricsProvider {
 
   /** Registers metrics to be collected at the Firestore SDK layer */
   private void configureSDKLayerMetrics() {
-    this.meter = openTelemetry.getMeter(FIRESTORE_METER_NAME);
+    Meter meter = openTelemetry.getMeter(FIRESTORE_METER_NAME);
 
     this.endToEndRequestLatency =
         meter
@@ -112,42 +127,51 @@ class BuiltinMetricsProvider {
     return this.apiTracerFactory;
   }
 
-  public void endToEndRequestLatencyRecorder(double latency, Map<String, String> attributes) {
-    recordLatency(endToEndRequestLatency, latency, attributes);
-  }
-
-  public void firstResponseLatencyRecorder(double latency, Map<String, String> attributes) {
-    recordLatency(firstResponseLatency, latency, attributes);
-  }
-
-  public void transactionLatencyRecorder(double latency, Map<String, String> attributes) {
-    recordLatency(transactionLatency, latency, attributes);
-  }
-
-  private void recordLatency(
-      DoubleHistogram latencyHistogram, double latency, Map<String, String> attributes) {
-    if (latencyHistogram != null) {
+  public void latencyRecorder(
+      MetricType metricType, double latency, Map<String, String> attributes) {
+    DoubleHistogram histogram = getHistogram(metricType);
+    if (histogram != null) {
       attributes.putAll(staticAttributes);
-      latencyHistogram.record(latency, toOtelAttributes(attributes));
+      try {
+        histogram.record(latency, toOtelAttributes(attributes));
+      } catch (Exception e) {
+        logger.log(Level.WARNING, "Failed to record latency metric: " + e.getMessage(), e);
+      }
     }
   }
 
-  public void transactionAttemptCountRecorder(long count, Map<String, String> attributes) {
-    if (transactionAttemptCount != null) {
+  public void counterRecorder(MetricType metricType, long count, Map<String, String> attributes) {
+    LongCounter counter = getCounter(metricType);
+    if (counter != null) {
       attributes.putAll(staticAttributes);
-      transactionAttemptCount.add(count, toOtelAttributes(attributes));
+      try {
+        counter.add(count, toOtelAttributes(attributes));
+      } catch (Exception e) {
+        logger.log(
+            Level.WARNING, "Failed to record transaction attempt count: " + e.getMessage(), e);
+      }
     }
   }
 
-  private Map<String, String> createStaticAttributes() {
-    Map<String, String> staticAttributes = new HashMap<>();
-    staticAttributes.put(METRIC_ATTRIBUTE_KEY_CLIENT_UID.getKey(), ClientIdentifier.getClientUid());
-    staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_NAME.getKey(), FIRESTORE_LIBRARY_NAME);
-    String pkgVersion = this.getClass().getPackage().getImplementationVersion();
-    if (pkgVersion != null) {
-      staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION.getKey(), pkgVersion);
+  public DoubleHistogram getHistogram(MetricType metricType) {
+    switch (metricType) {
+      case END_TO_END_LATENCY:
+        return endToEndRequestLatency;
+      case FIRST_RESPONSE_LATENCY:
+        return firstResponseLatency;
+      case TRANSACTION_LATENCY:
+        return transactionLatency;
+      default:
+        throw new IllegalArgumentException("Unknown latency MetricType: " + metricType);
     }
-    return staticAttributes;
+  }
+
+  public LongCounter getCounter(MetricType metricType) {
+    if (metricType == MetricType.TRANSACTION_ATTEMPT) {
+      return transactionAttemptCount;
+    } else {
+      throw new IllegalArgumentException("Unknown counter MetricType: " + metricType);
+    }
   }
 
   private Attributes toOtelAttributes(Map<String, String> attributes) {

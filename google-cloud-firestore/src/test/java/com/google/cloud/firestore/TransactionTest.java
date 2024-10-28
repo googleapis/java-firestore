@@ -483,7 +483,6 @@ public class TransactionTest {
         stubber.verifyAllRequestsSent();
         assertEquals(1, attempts[0]);
       }
-      Thread.sleep(1000);
     }
   }
 

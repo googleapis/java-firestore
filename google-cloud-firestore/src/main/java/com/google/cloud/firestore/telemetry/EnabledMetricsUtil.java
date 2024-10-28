@@ -32,6 +32,7 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.cloud.firestore.FirestoreException;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.opentelemetry.metric.GoogleCloudMetricExporter;
 import com.google.cloud.opentelemetry.metric.MetricConfiguration;
 import com.google.common.base.Stopwatch;
@@ -181,105 +182,76 @@ class EnabledMetricsUtil implements MetricsUtil {
       this.methodName = methodName;
     }
 
-    public <T> void recordEndToEndLatencyAtFuture(ApiFuture<T> futureValue) {
+    public <T> void recordLatencyAtFuture(MetricType metric, ApiFuture<T> futureValue) {
       ApiFutures.addCallback(
           futureValue,
           new ApiFutureCallback<T>() {
             @Override
             public void onFailure(Throwable t) {
-              recordEndToEndLatency(t);
+              recordLatency(metric, t);
             }
 
             @Override
             public void onSuccess(T result) {
-              recordEndToEndLatency();
+              recordLatency(metric);
             }
           },
           MoreExecutors.directExecutor());
     }
 
-    public void recordEndToEndLatency() {
-      recordEndToEndLatency(StatusCode.Code.OK.toString());
+    public void recordLatency(MetricType metric) {
+      recordLatency(metric, StatusCode.Code.OK.toString());
     }
 
-    public void recordEndToEndLatency(Throwable t) {
-      recordEndToEndLatency(extractErrorStatus(t));
+    public void recordLatency(MetricType metric, Throwable t) {
+      recordLatency(metric, extractErrorStatus(t));
     }
 
-    public void recordFirstResponseLatency() {
-      double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-      Map<String, String> attributes = createAttributes(StatusCode.Code.OK.toString(), methodName);
-      defaultMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);
-      customMetricsProvider.firstResponseLatencyRecorder(elapsedTime, attributes);
-    }
-
-    private void recordEndToEndLatency(String status) {
+    private void recordLatency(MetricType metric, String status) {
       double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
       Map<String, String> attributes = createAttributes(status, methodName);
-      defaultMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
-      customMetricsProvider.endToEndRequestLatencyRecorder(elapsedTime, attributes);
+      defaultMetricsProvider.latencyRecorder(metric, elapsedTime, attributes);
+      customMetricsProvider.latencyRecorder(metric, elapsedTime, attributes);
     }
   }
 
-  class TransactionMetricsContext implements MetricsUtil.TransactionMetricsContext {
-    private final Stopwatch stopwatch;
-    private int attemptsMade = 0;
+  class TransactionMetricsContext extends MetricsContext
+      implements MetricsUtil.TransactionMetricsContext {
+    private int attemptsMade;
     private final String METHOD_NAME = "ServerSideTransaction";
 
     public TransactionMetricsContext() {
-      this.stopwatch = Stopwatch.createStarted();
+      super("ServerSideTransaction");
+      this.attemptsMade = 0;
     }
 
     public void incrementAttemptsCount() {
       attemptsMade++;
     }
 
-    public <T> void recordTransactionLatencyAtFuture(ApiFuture<T> futureValue) {
+    public <T> void recordCounterAtFuture(MetricType metric, ApiFuture<T> futureValue) {
       ApiFutures.addCallback(
           futureValue,
           new ApiFutureCallback<T>() {
             @Override
             public void onFailure(Throwable t) {
-              recordTransactionLatency(extractErrorStatus(t));
+              recordCounter(metric, extractErrorStatus(t));
             }
 
             @Override
             public void onSuccess(T result) {
-
-              recordTransactionLatency(StatusCode.Code.OK.toString());
+              recordCounter(metric, StatusCode.Code.OK.toString());
             }
           },
           MoreExecutors.directExecutor());
     }
 
-    private void recordTransactionLatency(String status) {
-      double elapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+    private void recordCounter(MetricType metric, String status) {
       Map<String, String> attributes = createAttributes(status, METHOD_NAME);
-      defaultMetricsProvider.transactionLatencyRecorder(elapsedTime, attributes);
-      customMetricsProvider.transactionLatencyRecorder(elapsedTime, attributes);
-    }
-
-    public <T> void recordTransactionAttemptsAtFuture(ApiFuture<T> futureValue) {
-      ApiFutures.addCallback(
-          futureValue,
-          new ApiFutureCallback<T>() {
-            @Override
-            public void onFailure(Throwable t) {
-              recordTransactionAttempts(extractErrorStatus(t));
-            }
-
-            @Override
-            public void onSuccess(T result) {
-              recordTransactionAttempts(StatusCode.Code.OK.toString());
-            }
-          },
-          MoreExecutors.directExecutor());
-    }
-
-    private void recordTransactionAttempts(String status) {
-      Map<String, String> attributes = createAttributes(status, METHOD_NAME);
-      defaultMetricsProvider.transactionAttemptCountRecorder((long) attemptsMade, attributes);
-      customMetricsProvider.transactionAttemptCountRecorder((long) attemptsMade, attributes);
+      defaultMetricsProvider.counterRecorder(
+          MetricType.TRANSACTION_ATTEMPT, (long) attemptsMade, attributes);
+      customMetricsProvider.counterRecorder(
+          MetricType.TRANSACTION_ATTEMPT, (long) attemptsMade, attributes);
     }
   }
 

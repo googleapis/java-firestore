@@ -114,4 +114,21 @@ public interface TelemetryConstants {
           METRIC_NAME_END_TO_END_LATENCY,
           METRIC_NAME_TRANSACTION_LATENCY,
           METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
+
+  public enum MetricType {
+    END_TO_END_LATENCY("endToEndRequestLatency"),
+    FIRST_RESPONSE_LATENCY("firstResponseLatency"),
+    TRANSACTION_LATENCY("transactionLatency"),
+    TRANSACTION_ATTEMPT("transactionAttemptCount");
+
+    private final String metricName;
+
+    MetricType(String metricName) {
+      this.metricName = metricName;
+    }
+
+    public String getMetricName() {
+      return metricName;
+    }
+  }
 }

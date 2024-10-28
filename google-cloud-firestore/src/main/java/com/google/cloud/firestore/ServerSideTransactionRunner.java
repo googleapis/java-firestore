@@ -28,6 +28,7 @@ import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
 import com.google.cloud.firestore.telemetry.MetricsUtil.TransactionMetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
+import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.telemetry.TraceUtil.Span;
@@ -98,8 +99,8 @@ final class ServerSideTransactionRunner<T> {
 
   ApiFuture<T> run() {
     ApiFuture<T> result = runInternally();
-    metricsContext.recordTransactionLatencyAtFuture(result);
-    metricsContext.recordTransactionAttemptsAtFuture(result);
+    metricsContext.recordLatencyAtFuture(MetricType.TRANSACTION_LATENCY, result);
+    metricsContext.recordCounterAtFuture(MetricType.TRANSACTION_ATTEMPT, result);
     return result;
   }
 

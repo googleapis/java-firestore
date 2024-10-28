@@ -20,6 +20,7 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.InternalApi;
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
@@ -101,35 +102,23 @@ public interface MetricsUtil {
 
   /** A context for recording metrics. */
   interface MetricsContext {
-
     /**
      * If the operation ends in the future, its relevant metrics should be recorded _after_ the
      * future has been completed. This method "appends" the metrics recording code at the completion
      * of the given future.
      */
-    <T> void recordEndToEndLatencyAtFuture(ApiFuture<T> futureValue);
+    <T> void recordLatencyAtFuture(MetricType metric, ApiFuture<T> futureValue);
 
     /** Records end-to-end latency for the current operation. */
-    void recordEndToEndLatency();
+    void recordLatency(MetricType metric);
 
     /** Records end-to-end latency for the current operation, which ended with a throwable. */
-    void recordEndToEndLatency(Throwable t);
-
-    /** Records first response latency for the current operation. */
-    void recordFirstResponseLatency();
+    void recordLatency(MetricType metric, Throwable t);
   }
 
   /** InnerMetricsUtil */
-  public interface TransactionMetricsContext {
-
-    /**
-     * Transaction latency should be recorded _after_ all the operations, including the retires has
-     * been completed. This method "appends" the metrics recording code at the completion of the
-     * given future.
-     */
-    <T> void recordTransactionLatencyAtFuture(ApiFuture<T> futureValue);
-
-    <T> void recordTransactionAttemptsAtFuture(ApiFuture<T> futureValue);
+  interface TransactionMetricsContext extends MetricsContext {
+    <T> void recordCounterAtFuture(MetricType metric, ApiFuture<T> futureValue);
 
     void incrementAttemptsCount();
   }
