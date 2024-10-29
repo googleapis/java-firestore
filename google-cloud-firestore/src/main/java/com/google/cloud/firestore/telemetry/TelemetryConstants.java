@@ -59,6 +59,7 @@ public interface TelemetryConstants {
   String METHOD_NAME_PARTITION_QUERY = "PartitionQuery";
   String METHOD_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
   String METHOD_NAME_RUN_TRANSACTION = "RunTransaction";
+  String METHOD_NAME_SERVER_SIDE_TRANSACTION = "ServerSideTransaction";
 
   // OpenTelemetry built-in metrics constants
   String FIRESTORE_RESOURCE_TYPE = "firestore_client_raw";
@@ -114,4 +115,21 @@ public interface TelemetryConstants {
           METRIC_NAME_END_TO_END_LATENCY,
           METRIC_NAME_TRANSACTION_LATENCY,
           METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
+
+  public enum MetricType {
+    END_TO_END_LATENCY("endToEndRequestLatency"),
+    FIRST_RESPONSE_LATENCY("firstResponseLatency"),
+    TRANSACTION_LATENCY("transactionLatency"),
+    TRANSACTION_ATTEMPT("transactionAttemptCount");
+
+    private final String metricName;
+
+    MetricType(String metricName) {
+      this.metricName = metricName;
+    }
+
+    public String getMetricName() {
+      return metricName;
+    }
+  }
 }
