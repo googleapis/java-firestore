@@ -465,4 +465,9 @@ public abstract class StreamableQuery<SnapshotType> {
     }
     return false;
   }
+
+  @Override
+  public String toString() {
+    return String.format("%s{options=%s}", getClass().getSimpleName(), options);
+  }
 }
