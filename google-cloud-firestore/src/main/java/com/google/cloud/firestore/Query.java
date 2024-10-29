@@ -63,7 +63,6 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.Executor;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -74,6 +73,7 @@ import javax.annotation.Nullable;
  */
 @InternalExtensionOnly
 public class Query extends StreamableQuery<QuerySnapshot> {
+
   static final Comparator<QueryDocumentSnapshot> DOCUMENT_ID_COMPARATOR =
       QueryDocumentSnapshot::compareDocumentId;
   private static final Logger LOGGER = Logger.getLogger(Query.class.getName());
