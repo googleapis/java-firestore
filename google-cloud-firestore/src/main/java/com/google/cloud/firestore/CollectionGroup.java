@@ -187,4 +187,10 @@ public class CollectionGroup extends Query {
     }
     consumer.apply(new QueryPartition(partitionQuery, lastCursor, null));
   }
+
+  @SuppressWarnings("MethodDoesntCallSuperMethod")
+  @Override
+  public String toString() {
+    return String.format("CollectionGroup{partitionQuery=%s, options=%s}", partitionQuery, options);
+  }
 }
