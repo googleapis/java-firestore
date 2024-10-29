@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore;
 
+import com.google.cloud.firestore.encoding.CustomClassMapper;
 import com.google.common.base.Preconditions;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.DocumentTransform.FieldTransform;
@@ -317,6 +318,17 @@ public abstract class FieldValue {
   public static FieldValue arrayRemove(@Nonnull Object... elements) {
     Preconditions.checkArgument(elements.length > 0, "arrayRemove() expects at least 1 element");
     return new ArrayRemoveFieldValue(Arrays.asList(elements));
+  }
+
+  /**
+   * Creates a new {@link VectorValue} constructed with a copy of the given array of doubles.
+   *
+   * @param values Create a {@link VectorValue} instance with a copy of this array of doubles.
+   * @return A new {@link VectorValue} constructed with a copy of the given array of doubles.
+   */
+  @Nonnull
+  public static VectorValue vector(@Nonnull double[] values) {
+    return new VectorValue(values);
   }
 
   /** Whether this FieldTransform should be included in the document mask. */

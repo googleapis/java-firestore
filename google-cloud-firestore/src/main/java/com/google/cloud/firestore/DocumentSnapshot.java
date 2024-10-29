@@ -19,6 +19,7 @@ package com.google.cloud.firestore;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
+import com.google.cloud.firestore.encoding.CustomClassMapper;
 import com.google.common.base.Preconditions;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.Value;
@@ -383,6 +384,18 @@ public class DocumentSnapshot {
   @Nullable
   public GeoPoint getGeoPoint(@Nonnull String field) {
     return (GeoPoint) get(field);
+  }
+
+  /**
+   * Returns the value of the field as a VectorValue.
+   *
+   * @param field The path to the field.
+   * @throws RuntimeException if the value is not a VectorValue.
+   * @return The value of the field.
+   */
+  @Nullable
+  public VectorValue getVectorValue(@Nonnull String field) {
+    return (VectorValue) get(field);
   }
 
   /**

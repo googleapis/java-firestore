@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import static com.google.cloud.firestore.v1.FirestoreAdminClient.ListIndexesPage
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.BetaApi;
+import com.google.api.core.ObsoleteApi;
 import com.google.api.gax.core.GaxProperties;
 import com.google.api.gax.core.GoogleCredentialsProvider;
 import com.google.api.gax.core.InstantiatingExecutorProvider;
@@ -52,16 +53,28 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.firestore.admin.v1.Backup;
+import com.google.firestore.admin.v1.BackupSchedule;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
+import com.google.firestore.admin.v1.DeleteBackupRequest;
+import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
+import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
+import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FieldOperationMetadata;
+import com.google.firestore.admin.v1.GetBackupRequest;
+import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
@@ -69,12 +82,19 @@ import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.IndexOperationMetadata;
+import com.google.firestore.admin.v1.ListBackupSchedulesRequest;
+import com.google.firestore.admin.v1.ListBackupSchedulesResponse;
+import com.google.firestore.admin.v1.ListBackupsRequest;
+import com.google.firestore.admin.v1.ListBackupsResponse;
 import com.google.firestore.admin.v1.ListDatabasesRequest;
 import com.google.firestore.admin.v1.ListDatabasesResponse;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.RestoreDatabaseMetadata;
+import com.google.firestore.admin.v1.RestoreDatabaseRequest;
+import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
@@ -100,7 +120,9 @@ import org.threeten.bp.Duration;
  * <p>The builder of this class is recursive, so contained classes are themselves builders. When
  * build() is called, the tree of builders is called to create the complete settings object.
  *
- * <p>For example, to set the total timeout of getIndex to 30 seconds:
+ * <p>For example, to set the
+ * [RetrySettings](https://cloud.google.com/java/docs/reference/gax/latest/com.google.api.gax.retrying.RetrySettings)
+ * of getIndex:
  *
  * <pre>{@code
  * // This snippet has been automatically generated and should be regarded as a code template only.
@@ -117,9 +139,46 @@ import org.threeten.bp.Duration;
  *             .getIndexSettings()
  *             .getRetrySettings()
  *             .toBuilder()
- *             .setTotalTimeout(Duration.ofSeconds(30))
+ *             .setInitialRetryDelayDuration(Duration.ofSeconds(1))
+ *             .setInitialRpcTimeoutDuration(Duration.ofSeconds(5))
+ *             .setMaxAttempts(5)
+ *             .setMaxRetryDelayDuration(Duration.ofSeconds(30))
+ *             .setMaxRpcTimeoutDuration(Duration.ofSeconds(60))
+ *             .setRetryDelayMultiplier(1.3)
+ *             .setRpcTimeoutMultiplier(1.5)
+ *             .setTotalTimeoutDuration(Duration.ofSeconds(300))
  *             .build());
  * FirestoreAdminStubSettings firestoreAdminSettings = firestoreAdminSettingsBuilder.build();
+ * }</pre>
+ *
+ * Please refer to the [Client Side Retry
+ * Guide](https://github.com/googleapis/google-cloud-java/blob/main/docs/client_retries.md) for
+ * additional support in setting retries.
+ *
+ * <p>To configure the RetrySettings of a Long Running Operation method, create an
+ * OperationTimedPollAlgorithm object and update the RPC's polling algorithm. For example, to
+ * configure the RetrySettings for createIndex:
+ *
+ * <pre>{@code
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+ * FirestoreAdminStubSettings.Builder firestoreAdminSettingsBuilder =
+ *     FirestoreAdminStubSettings.newBuilder();
+ * TimedRetryAlgorithm timedRetryAlgorithm =
+ *     OperationalTimedPollAlgorithm.create(
+ *         RetrySettings.newBuilder()
+ *             .setInitialRetryDelayDuration(Duration.ofMillis(500))
+ *             .setRetryDelayMultiplier(1.5)
+ *             .setMaxRetryDelay(Duration.ofMillis(5000))
+ *             .setTotalTimeoutDuration(Duration.ofHours(24))
+ *             .build());
+ * firestoreAdminSettingsBuilder
+ *     .createClusterOperationSettings()
+ *     .setPollingAlgorithm(timedRetryAlgorithm)
+ *     .build();
  * }</pre>
  */
 @Generated("by gapic-generator-java")
@@ -151,6 +210,11 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
   private final UnaryCallSettings<ImportDocumentsRequest, Operation> importDocumentsSettings;
   private final OperationCallSettings<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
       importDocumentsOperationSettings;
+  private final UnaryCallSettings<BulkDeleteDocumentsRequest, Operation>
+      bulkDeleteDocumentsSettings;
+  private final OperationCallSettings<
+          BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsOperationSettings;
   private final UnaryCallSettings<CreateDatabaseRequest, Operation> createDatabaseSettings;
   private final OperationCallSettings<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
       createDatabaseOperationSettings;
@@ -160,6 +224,24 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
   private final UnaryCallSettings<UpdateDatabaseRequest, Operation> updateDatabaseSettings;
   private final OperationCallSettings<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
       updateDatabaseOperationSettings;
+  private final UnaryCallSettings<DeleteDatabaseRequest, Operation> deleteDatabaseSettings;
+  private final OperationCallSettings<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationSettings;
+  private final UnaryCallSettings<GetBackupRequest, Backup> getBackupSettings;
+  private final UnaryCallSettings<ListBackupsRequest, ListBackupsResponse> listBackupsSettings;
+  private final UnaryCallSettings<DeleteBackupRequest, Empty> deleteBackupSettings;
+  private final UnaryCallSettings<RestoreDatabaseRequest, Operation> restoreDatabaseSettings;
+  private final OperationCallSettings<RestoreDatabaseRequest, Database, RestoreDatabaseMetadata>
+      restoreDatabaseOperationSettings;
+  private final UnaryCallSettings<CreateBackupScheduleRequest, BackupSchedule>
+      createBackupScheduleSettings;
+  private final UnaryCallSettings<GetBackupScheduleRequest, BackupSchedule>
+      getBackupScheduleSettings;
+  private final UnaryCallSettings<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+      listBackupSchedulesSettings;
+  private final UnaryCallSettings<UpdateBackupScheduleRequest, BackupSchedule>
+      updateBackupScheduleSettings;
+  private final UnaryCallSettings<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleSettings;
 
   private static final PagedListDescriptor<ListIndexesRequest, ListIndexesResponse, Index>
       LIST_INDEXES_PAGE_STR_DESC =
@@ -191,9 +273,7 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
             @Override
             public Iterable<Index> extractResources(ListIndexesResponse payload) {
-              return payload.getIndexesList() == null
-                  ? ImmutableList.<Index>of()
-                  : payload.getIndexesList();
+              return payload.getIndexesList();
             }
           };
 
@@ -227,9 +307,7 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
             @Override
             public Iterable<Field> extractResources(ListFieldsResponse payload) {
-              return payload.getFieldsList() == null
-                  ? ImmutableList.<Field>of()
-                  : payload.getFieldsList();
+              return payload.getFieldsList();
             }
           };
 
@@ -339,6 +417,18 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     return importDocumentsOperationSettings;
   }
 
+  /** Returns the object with the settings used for calls to bulkDeleteDocuments. */
+  public UnaryCallSettings<BulkDeleteDocumentsRequest, Operation> bulkDeleteDocumentsSettings() {
+    return bulkDeleteDocumentsSettings;
+  }
+
+  /** Returns the object with the settings used for calls to bulkDeleteDocuments. */
+  public OperationCallSettings<
+          BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+      bulkDeleteDocumentsOperationSettings() {
+    return bulkDeleteDocumentsOperationSettings;
+  }
+
   /** Returns the object with the settings used for calls to createDatabase. */
   public UnaryCallSettings<CreateDatabaseRequest, Operation> createDatabaseSettings() {
     return createDatabaseSettings;
@@ -371,6 +461,71 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     return updateDatabaseOperationSettings;
   }
 
+  /** Returns the object with the settings used for calls to deleteDatabase. */
+  public UnaryCallSettings<DeleteDatabaseRequest, Operation> deleteDatabaseSettings() {
+    return deleteDatabaseSettings;
+  }
+
+  /** Returns the object with the settings used for calls to deleteDatabase. */
+  public OperationCallSettings<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+      deleteDatabaseOperationSettings() {
+    return deleteDatabaseOperationSettings;
+  }
+
+  /** Returns the object with the settings used for calls to getBackup. */
+  public UnaryCallSettings<GetBackupRequest, Backup> getBackupSettings() {
+    return getBackupSettings;
+  }
+
+  /** Returns the object with the settings used for calls to listBackups. */
+  public UnaryCallSettings<ListBackupsRequest, ListBackupsResponse> listBackupsSettings() {
+    return listBackupsSettings;
+  }
+
+  /** Returns the object with the settings used for calls to deleteBackup. */
+  public UnaryCallSettings<DeleteBackupRequest, Empty> deleteBackupSettings() {
+    return deleteBackupSettings;
+  }
+
+  /** Returns the object with the settings used for calls to restoreDatabase. */
+  public UnaryCallSettings<RestoreDatabaseRequest, Operation> restoreDatabaseSettings() {
+    return restoreDatabaseSettings;
+  }
+
+  /** Returns the object with the settings used for calls to restoreDatabase. */
+  public OperationCallSettings<RestoreDatabaseRequest, Database, RestoreDatabaseMetadata>
+      restoreDatabaseOperationSettings() {
+    return restoreDatabaseOperationSettings;
+  }
+
+  /** Returns the object with the settings used for calls to createBackupSchedule. */
+  public UnaryCallSettings<CreateBackupScheduleRequest, BackupSchedule>
+      createBackupScheduleSettings() {
+    return createBackupScheduleSettings;
+  }
+
+  /** Returns the object with the settings used for calls to getBackupSchedule. */
+  public UnaryCallSettings<GetBackupScheduleRequest, BackupSchedule> getBackupScheduleSettings() {
+    return getBackupScheduleSettings;
+  }
+
+  /** Returns the object with the settings used for calls to listBackupSchedules. */
+  public UnaryCallSettings<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+      listBackupSchedulesSettings() {
+    return listBackupSchedulesSettings;
+  }
+
+  /** Returns the object with the settings used for calls to updateBackupSchedule. */
+  public UnaryCallSettings<UpdateBackupScheduleRequest, BackupSchedule>
+      updateBackupScheduleSettings() {
+    return updateBackupScheduleSettings;
+  }
+
+  /** Returns the object with the settings used for calls to deleteBackupSchedule. */
+  public UnaryCallSettings<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleSettings() {
+    return deleteBackupScheduleSettings;
+  }
+
   public FirestoreAdminStub createStub() throws IOException {
     if (getTransportChannelProvider()
         .getTransportName()
@@ -387,12 +542,19 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
             "Transport not supported: %s", getTransportChannelProvider().getTransportName()));
   }
 
+  /** Returns the default service name. */
+  @Override
+  public String getServiceName() {
+    return "firestore";
+  }
+
   /** Returns a builder for the default ExecutorProvider for this service. */
   public static InstantiatingExecutorProvider.Builder defaultExecutorProviderBuilder() {
     return InstantiatingExecutorProvider.newBuilder();
   }
 
   /** Returns the default service endpoint. */
+  @ObsoleteApi("Use getEndpoint() instead")
   public static String getDefaultEndpoint() {
     return "firestore.googleapis.com:443";
   }
@@ -431,7 +593,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     return defaultGrpcTransportProviderBuilder().build();
   }
 
-  @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
   public static ApiClientHeaderProvider.Builder defaultGrpcApiClientHeaderProviderBuilder() {
     return ApiClientHeaderProvider.newBuilder()
         .setGeneratedLibToken(
@@ -440,7 +601,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
             GaxGrpcProperties.getGrpcTokenName(), GaxGrpcProperties.getGrpcVersion());
   }
 
-  @BetaApi("The surface for customizing headers is not stable yet and may change in the future.")
   public static ApiClientHeaderProvider.Builder defaultHttpJsonApiClientHeaderProviderBuilder() {
     return ApiClientHeaderProvider.newBuilder()
         .setGeneratedLibToken(
@@ -490,12 +650,27 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     exportDocumentsOperationSettings = settingsBuilder.exportDocumentsOperationSettings().build();
     importDocumentsSettings = settingsBuilder.importDocumentsSettings().build();
     importDocumentsOperationSettings = settingsBuilder.importDocumentsOperationSettings().build();
+    bulkDeleteDocumentsSettings = settingsBuilder.bulkDeleteDocumentsSettings().build();
+    bulkDeleteDocumentsOperationSettings =
+        settingsBuilder.bulkDeleteDocumentsOperationSettings().build();
     createDatabaseSettings = settingsBuilder.createDatabaseSettings().build();
     createDatabaseOperationSettings = settingsBuilder.createDatabaseOperationSettings().build();
     getDatabaseSettings = settingsBuilder.getDatabaseSettings().build();
     listDatabasesSettings = settingsBuilder.listDatabasesSettings().build();
     updateDatabaseSettings = settingsBuilder.updateDatabaseSettings().build();
     updateDatabaseOperationSettings = settingsBuilder.updateDatabaseOperationSettings().build();
+    deleteDatabaseSettings = settingsBuilder.deleteDatabaseSettings().build();
+    deleteDatabaseOperationSettings = settingsBuilder.deleteDatabaseOperationSettings().build();
+    getBackupSettings = settingsBuilder.getBackupSettings().build();
+    listBackupsSettings = settingsBuilder.listBackupsSettings().build();
+    deleteBackupSettings = settingsBuilder.deleteBackupSettings().build();
+    restoreDatabaseSettings = settingsBuilder.restoreDatabaseSettings().build();
+    restoreDatabaseOperationSettings = settingsBuilder.restoreDatabaseOperationSettings().build();
+    createBackupScheduleSettings = settingsBuilder.createBackupScheduleSettings().build();
+    getBackupScheduleSettings = settingsBuilder.getBackupScheduleSettings().build();
+    listBackupSchedulesSettings = settingsBuilder.listBackupSchedulesSettings().build();
+    updateBackupScheduleSettings = settingsBuilder.updateBackupScheduleSettings().build();
+    deleteBackupScheduleSettings = settingsBuilder.deleteBackupScheduleSettings().build();
   }
 
   /** Builder for FirestoreAdminStubSettings. */
@@ -526,6 +701,11 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     private final OperationCallSettings.Builder<
             ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
         importDocumentsOperationSettings;
+    private final UnaryCallSettings.Builder<BulkDeleteDocumentsRequest, Operation>
+        bulkDeleteDocumentsSettings;
+    private final OperationCallSettings.Builder<
+            BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+        bulkDeleteDocumentsOperationSettings;
     private final UnaryCallSettings.Builder<CreateDatabaseRequest, Operation>
         createDatabaseSettings;
     private final OperationCallSettings.Builder<
@@ -539,6 +719,30 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     private final OperationCallSettings.Builder<
             UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
         updateDatabaseOperationSettings;
+    private final UnaryCallSettings.Builder<DeleteDatabaseRequest, Operation>
+        deleteDatabaseSettings;
+    private final OperationCallSettings.Builder<
+            DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+        deleteDatabaseOperationSettings;
+    private final UnaryCallSettings.Builder<GetBackupRequest, Backup> getBackupSettings;
+    private final UnaryCallSettings.Builder<ListBackupsRequest, ListBackupsResponse>
+        listBackupsSettings;
+    private final UnaryCallSettings.Builder<DeleteBackupRequest, Empty> deleteBackupSettings;
+    private final UnaryCallSettings.Builder<RestoreDatabaseRequest, Operation>
+        restoreDatabaseSettings;
+    private final OperationCallSettings.Builder<
+            RestoreDatabaseRequest, Database, RestoreDatabaseMetadata>
+        restoreDatabaseOperationSettings;
+    private final UnaryCallSettings.Builder<CreateBackupScheduleRequest, BackupSchedule>
+        createBackupScheduleSettings;
+    private final UnaryCallSettings.Builder<GetBackupScheduleRequest, BackupSchedule>
+        getBackupScheduleSettings;
+    private final UnaryCallSettings.Builder<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+        listBackupSchedulesSettings;
+    private final UnaryCallSettings.Builder<UpdateBackupScheduleRequest, BackupSchedule>
+        updateBackupScheduleSettings;
+    private final UnaryCallSettings.Builder<DeleteBackupScheduleRequest, Empty>
+        deleteBackupScheduleSettings;
     private static final ImmutableMap<String, ImmutableSet<StatusCode.Code>>
         RETRYABLE_CODE_DEFINITIONS;
 
@@ -607,12 +811,26 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       exportDocumentsOperationSettings = OperationCallSettings.newBuilder();
       importDocumentsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       importDocumentsOperationSettings = OperationCallSettings.newBuilder();
+      bulkDeleteDocumentsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      bulkDeleteDocumentsOperationSettings = OperationCallSettings.newBuilder();
       createDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       createDatabaseOperationSettings = OperationCallSettings.newBuilder();
       getDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       listDatabasesSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       updateDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       updateDatabaseOperationSettings = OperationCallSettings.newBuilder();
+      deleteDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      deleteDatabaseOperationSettings = OperationCallSettings.newBuilder();
+      getBackupSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      listBackupsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      deleteBackupSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      restoreDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      restoreDatabaseOperationSettings = OperationCallSettings.newBuilder();
+      createBackupScheduleSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      getBackupScheduleSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      listBackupSchedulesSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      updateBackupScheduleSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      deleteBackupScheduleSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
@@ -625,10 +843,21 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               listFieldsSettings,
               exportDocumentsSettings,
               importDocumentsSettings,
+              bulkDeleteDocumentsSettings,
               createDatabaseSettings,
               getDatabaseSettings,
               listDatabasesSettings,
-              updateDatabaseSettings);
+              updateDatabaseSettings,
+              deleteDatabaseSettings,
+              getBackupSettings,
+              listBackupsSettings,
+              deleteBackupSettings,
+              restoreDatabaseSettings,
+              createBackupScheduleSettings,
+              getBackupScheduleSettings,
+              listBackupSchedulesSettings,
+              updateBackupScheduleSettings,
+              deleteBackupScheduleSettings);
       initDefaults(this);
     }
 
@@ -648,12 +877,27 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       exportDocumentsOperationSettings = settings.exportDocumentsOperationSettings.toBuilder();
       importDocumentsSettings = settings.importDocumentsSettings.toBuilder();
       importDocumentsOperationSettings = settings.importDocumentsOperationSettings.toBuilder();
+      bulkDeleteDocumentsSettings = settings.bulkDeleteDocumentsSettings.toBuilder();
+      bulkDeleteDocumentsOperationSettings =
+          settings.bulkDeleteDocumentsOperationSettings.toBuilder();
       createDatabaseSettings = settings.createDatabaseSettings.toBuilder();
       createDatabaseOperationSettings = settings.createDatabaseOperationSettings.toBuilder();
       getDatabaseSettings = settings.getDatabaseSettings.toBuilder();
       listDatabasesSettings = settings.listDatabasesSettings.toBuilder();
       updateDatabaseSettings = settings.updateDatabaseSettings.toBuilder();
       updateDatabaseOperationSettings = settings.updateDatabaseOperationSettings.toBuilder();
+      deleteDatabaseSettings = settings.deleteDatabaseSettings.toBuilder();
+      deleteDatabaseOperationSettings = settings.deleteDatabaseOperationSettings.toBuilder();
+      getBackupSettings = settings.getBackupSettings.toBuilder();
+      listBackupsSettings = settings.listBackupsSettings.toBuilder();
+      deleteBackupSettings = settings.deleteBackupSettings.toBuilder();
+      restoreDatabaseSettings = settings.restoreDatabaseSettings.toBuilder();
+      restoreDatabaseOperationSettings = settings.restoreDatabaseOperationSettings.toBuilder();
+      createBackupScheduleSettings = settings.createBackupScheduleSettings.toBuilder();
+      getBackupScheduleSettings = settings.getBackupScheduleSettings.toBuilder();
+      listBackupSchedulesSettings = settings.listBackupSchedulesSettings.toBuilder();
+      updateBackupScheduleSettings = settings.updateBackupScheduleSettings.toBuilder();
+      deleteBackupScheduleSettings = settings.deleteBackupScheduleSettings.toBuilder();
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
@@ -666,10 +910,21 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               listFieldsSettings,
               exportDocumentsSettings,
               importDocumentsSettings,
+              bulkDeleteDocumentsSettings,
               createDatabaseSettings,
               getDatabaseSettings,
               listDatabasesSettings,
-              updateDatabaseSettings);
+              updateDatabaseSettings,
+              deleteDatabaseSettings,
+              getBackupSettings,
+              listBackupsSettings,
+              deleteBackupSettings,
+              restoreDatabaseSettings,
+              createBackupScheduleSettings,
+              getBackupScheduleSettings,
+              listBackupSchedulesSettings,
+              updateBackupScheduleSettings,
+              deleteBackupScheduleSettings);
     }
 
     private static Builder createDefault() {
@@ -678,7 +933,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       builder.setTransportChannelProvider(defaultTransportChannelProvider());
       builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());
       builder.setInternalHeaderProvider(defaultApiClientHeaderProviderBuilder().build());
-      builder.setEndpoint(getDefaultEndpoint());
       builder.setMtlsEndpoint(getDefaultMtlsEndpoint());
       builder.setSwitchToMtlsEndpointAllowed(true);
 
@@ -691,7 +945,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       builder.setTransportChannelProvider(defaultHttpJsonTransportProviderBuilder().build());
       builder.setCredentialsProvider(defaultCredentialsProviderBuilder().build());
       builder.setInternalHeaderProvider(defaultHttpJsonApiClientHeaderProviderBuilder().build());
-      builder.setEndpoint(getDefaultEndpoint());
       builder.setMtlsEndpoint(getDefaultMtlsEndpoint());
       builder.setSwitchToMtlsEndpointAllowed(true);
 
@@ -745,6 +998,11 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_1_params"));
 
       builder
+          .bulkDeleteDocumentsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_1_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_1_params"));
+
+      builder
           .createDatabaseSettings()
           .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
@@ -761,6 +1019,56 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
       builder
           .updateDatabaseSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .deleteDatabaseSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .getBackupSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .listBackupsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .deleteBackupSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .restoreDatabaseSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .createBackupScheduleSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .getBackupScheduleSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .listBackupSchedulesSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .updateBackupScheduleSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .deleteBackupScheduleSettings()
           .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
 
@@ -859,6 +1167,32 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
                       .build()));
 
       builder
+          .bulkDeleteDocumentsOperationSettings()
+          .setInitialCallSettings(
+              UnaryCallSettings
+                  .<BulkDeleteDocumentsRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_1_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_1_params"))
+                  .build())
+          .setResponseTransformer(
+              ProtoOperationTransformers.ResponseTransformer.create(
+                  BulkDeleteDocumentsResponse.class))
+          .setMetadataTransformer(
+              ProtoOperationTransformers.MetadataTransformer.create(
+                  BulkDeleteDocumentsMetadata.class))
+          .setPollingAlgorithm(
+              OperationTimedPollAlgorithm.create(
+                  RetrySettings.newBuilder()
+                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setRetryDelayMultiplier(1.5)
+                      .setMaxRetryDelay(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setRpcTimeoutMultiplier(1.0)
+                      .setMaxRpcTimeout(Duration.ZERO)
+                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .build()));
+
+      builder
           .createDatabaseOperationSettings()
           .setInitialCallSettings(
               UnaryCallSettings
@@ -906,6 +1240,54 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
                       .setTotalTimeout(Duration.ofMillis(300000L))
                       .build()));
 
+      builder
+          .deleteDatabaseOperationSettings()
+          .setInitialCallSettings(
+              UnaryCallSettings
+                  .<DeleteDatabaseRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"))
+                  .build())
+          .setResponseTransformer(
+              ProtoOperationTransformers.ResponseTransformer.create(Database.class))
+          .setMetadataTransformer(
+              ProtoOperationTransformers.MetadataTransformer.create(DeleteDatabaseMetadata.class))
+          .setPollingAlgorithm(
+              OperationTimedPollAlgorithm.create(
+                  RetrySettings.newBuilder()
+                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setRetryDelayMultiplier(1.5)
+                      .setMaxRetryDelay(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setRpcTimeoutMultiplier(1.0)
+                      .setMaxRpcTimeout(Duration.ZERO)
+                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .build()));
+
+      builder
+          .restoreDatabaseOperationSettings()
+          .setInitialCallSettings(
+              UnaryCallSettings
+                  .<RestoreDatabaseRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"))
+                  .build())
+          .setResponseTransformer(
+              ProtoOperationTransformers.ResponseTransformer.create(Database.class))
+          .setMetadataTransformer(
+              ProtoOperationTransformers.MetadataTransformer.create(RestoreDatabaseMetadata.class))
+          .setPollingAlgorithm(
+              OperationTimedPollAlgorithm.create(
+                  RetrySettings.newBuilder()
+                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setRetryDelayMultiplier(1.5)
+                      .setMaxRetryDelay(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setRpcTimeoutMultiplier(1.0)
+                      .setMaxRpcTimeout(Duration.ZERO)
+                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .build()));
+
       return builder;
     }
 
@@ -930,8 +1312,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to createIndex. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<CreateIndexRequest, Index, IndexOperationMetadata>
         createIndexOperationSettings() {
       return createIndexOperationSettings;
@@ -965,8 +1345,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to updateField. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<UpdateFieldRequest, Field, FieldOperationMetadata>
         updateFieldOperationSettings() {
       return updateFieldOperationSettings;
@@ -984,8 +1362,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to exportDocuments. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<
             ExportDocumentsRequest, ExportDocumentsResponse, ExportDocumentsMetadata>
         exportDocumentsOperationSettings() {
@@ -998,11 +1374,22 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to importDocuments. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<ImportDocumentsRequest, Empty, ImportDocumentsMetadata>
         importDocumentsOperationSettings() {
       return importDocumentsOperationSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to bulkDeleteDocuments. */
+    public UnaryCallSettings.Builder<BulkDeleteDocumentsRequest, Operation>
+        bulkDeleteDocumentsSettings() {
+      return bulkDeleteDocumentsSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to bulkDeleteDocuments. */
+    public OperationCallSettings.Builder<
+            BulkDeleteDocumentsRequest, BulkDeleteDocumentsResponse, BulkDeleteDocumentsMetadata>
+        bulkDeleteDocumentsOperationSettings() {
+      return bulkDeleteDocumentsOperationSettings;
     }
 
     /** Returns the builder for the settings used for calls to createDatabase. */
@@ -1011,8 +1398,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to createDatabase. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<CreateDatabaseRequest, Database, CreateDatabaseMetadata>
         createDatabaseOperationSettings() {
       return createDatabaseOperationSettings;
@@ -1035,11 +1420,77 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     }
 
     /** Returns the builder for the settings used for calls to updateDatabase. */
-    @BetaApi(
-        "The surface for use by generated code is not stable yet and may change in the future.")
     public OperationCallSettings.Builder<UpdateDatabaseRequest, Database, UpdateDatabaseMetadata>
         updateDatabaseOperationSettings() {
       return updateDatabaseOperationSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to deleteDatabase. */
+    public UnaryCallSettings.Builder<DeleteDatabaseRequest, Operation> deleteDatabaseSettings() {
+      return deleteDatabaseSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to deleteDatabase. */
+    public OperationCallSettings.Builder<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
+        deleteDatabaseOperationSettings() {
+      return deleteDatabaseOperationSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to getBackup. */
+    public UnaryCallSettings.Builder<GetBackupRequest, Backup> getBackupSettings() {
+      return getBackupSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to listBackups. */
+    public UnaryCallSettings.Builder<ListBackupsRequest, ListBackupsResponse>
+        listBackupsSettings() {
+      return listBackupsSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to deleteBackup. */
+    public UnaryCallSettings.Builder<DeleteBackupRequest, Empty> deleteBackupSettings() {
+      return deleteBackupSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to restoreDatabase. */
+    public UnaryCallSettings.Builder<RestoreDatabaseRequest, Operation> restoreDatabaseSettings() {
+      return restoreDatabaseSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to restoreDatabase. */
+    public OperationCallSettings.Builder<RestoreDatabaseRequest, Database, RestoreDatabaseMetadata>
+        restoreDatabaseOperationSettings() {
+      return restoreDatabaseOperationSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to createBackupSchedule. */
+    public UnaryCallSettings.Builder<CreateBackupScheduleRequest, BackupSchedule>
+        createBackupScheduleSettings() {
+      return createBackupScheduleSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to getBackupSchedule. */
+    public UnaryCallSettings.Builder<GetBackupScheduleRequest, BackupSchedule>
+        getBackupScheduleSettings() {
+      return getBackupScheduleSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to listBackupSchedules. */
+    public UnaryCallSettings.Builder<ListBackupSchedulesRequest, ListBackupSchedulesResponse>
+        listBackupSchedulesSettings() {
+      return listBackupSchedulesSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to updateBackupSchedule. */
+    public UnaryCallSettings.Builder<UpdateBackupScheduleRequest, BackupSchedule>
+        updateBackupScheduleSettings() {
+      return updateBackupScheduleSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to deleteBackupSchedule. */
+    public UnaryCallSettings.Builder<DeleteBackupScheduleRequest, Empty>
+        deleteBackupScheduleSettings() {
+      return deleteBackupScheduleSettings;
     }
 
     @Override

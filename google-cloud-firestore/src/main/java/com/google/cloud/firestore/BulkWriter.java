@@ -17,15 +17,18 @@
 package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.BulkWriterOperation.DEFAULT_BACKOFF_MAX_DELAY_MS;
+import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_DOC_COUNT;
 
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
-import com.google.api.core.BetaApi;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.StatusCode.Code;
+import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Context;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -46,7 +49,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 
 /** A Firestore BulkWriter that can be used to perform a large number of writes in parallel. */
-@BetaApi
 public final class BulkWriter implements AutoCloseable {
   /**
    * A callback set by `addWriteResultListener()` to be run every time an operation successfully
@@ -221,6 +223,8 @@ public final class BulkWriter implements AutoCloseable {
   @GuardedBy("lock")
   private Executor errorExecutor;
 
+  Context traceContext;
+
   /**
    * Used to track when writes are enqueued. The user handler executors cannot be changed after a
    * write has been enqueued.
@@ -237,6 +241,7 @@ public final class BulkWriter implements AutoCloseable {
     this.successExecutor = MoreExecutors.directExecutor();
     this.errorExecutor = MoreExecutors.directExecutor();
     this.bulkCommitBatch = new BulkCommitBatch(firestore, bulkWriterExecutor, maxBatchSize);
+    this.traceContext = firestore.getOptions().getTraceUtil().currentContext();
 
     if (!options.getThrottlingEnabled()) {
       this.rateLimiter =
@@ -899,24 +904,35 @@ public final class BulkWriter implements AutoCloseable {
 
   /** Sends the provided batch once the rate limiter does not require any delay. */
   private void sendBatchLocked(final BulkCommitBatch batch, final boolean flush) {
-    // Send the batch if it is does not require any delay, or schedule another attempt after the
+    // Send the batch if it does not require any delay, or schedule another attempt after the
     // appropriate timeout.
     boolean underRateLimit = rateLimiter.tryMakeRequest(batch.getMutationsSize());
     if (underRateLimit) {
-      batch
-          .bulkCommit()
-          .addListener(
-              () -> {
-                if (flush) {
-                  synchronized (lock) {
-                    scheduleCurrentBatchLocked(/* flush= */ true);
-                  }
+      TraceUtil.Span span =
+          firestore
+              .getOptions()
+              .getTraceUtil()
+              .startSpan(TraceUtil.SPAN_NAME_BULK_WRITER_COMMIT, traceContext)
+              .setAttribute(ATTRIBUTE_KEY_DOC_COUNT, batch.getMutationsSize());
+      try (Scope ignored = span.makeCurrent()) {
+        ApiFuture<Void> result = batch.bulkCommit();
+        result.addListener(
+            () -> {
+              if (flush) {
+                synchronized (lock) {
+                  scheduleCurrentBatchLocked(/* flush= */ true);
                 }
-              },
-              bulkWriterExecutor);
+              }
+            },
+            bulkWriterExecutor);
+        span.endAtFuture(result);
+      } catch (Exception error) {
+        span.end(error);
+        throw error;
+      }
     } else {
       long delayMs = rateLimiter.getNextRequestDelayMs(batch.getMutationsSize());
-      logger.log(Level.FINE, String.format("Backing off for %d seconds", delayMs / 1000));
+      logger.log(Level.FINE, () -> String.format("Backing off for %d seconds", delayMs / 1000));
       bulkWriterExecutor.schedule(
           () -> {
             synchronized (lock) {

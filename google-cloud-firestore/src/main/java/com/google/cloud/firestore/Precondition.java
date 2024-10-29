@@ -62,8 +62,8 @@ public final class Precondition {
     return exists == null && updateTime == null;
   }
 
-  boolean hasExists() {
-    return exists != null;
+  Boolean getExists() {
+    return exists;
   }
 
   com.google.firestore.v1.Precondition toPb() {

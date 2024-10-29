@@ -17,6 +17,12 @@
 
 <!-- see http://www.mojohaus.org/clirr-maven-plugin/examples/ignored-differences.html -->
 <differences>
+  <!-- ReadTimeTransaction - added abstract modifier to Transaction class-->
+  <difference>
+    <differenceType>3005</differenceType>
+    <className>com/google/cloud/firestore/Transaction</className>
+  </difference>
+
   <!-- Shutdown/Shutdown Now -->
   <difference>
     <differenceType>7012</differenceType>
@@ -286,4 +292,26 @@
     <className>com/google/cloud/firestore/spi/v1/FirestoreRpc</className>
     <method>com.google.api.gax.rpc.ServerStreamingCallable runAggregationQueryCallable()</method>
   </difference>
+
+  <!-- StandardComparator no longer in use -->
+  <difference>
+    <differenceType>8001</differenceType>
+    <className>com/google/cloud/firestore/collection/StandardComparator</className>
+    <to>*</to>
+  </difference>
+
+  <!-- Reverted a change to make CustomClassMapper public -->
+  <difference>
+    <differenceType>8001</differenceType>
+    <className>com/google/cloud/firestore/encoding/CustomClassMapper</className>
+    <to>*</to>
+  </difference>
+
+  <!-- GenericQuerySnapshot -->
+  <difference>
+    <differenceType>7002</differenceType>
+    <className>com/google/cloud/firestore/QuerySnapshot</className>
+    <method>com.google.cloud.firestore.Query getQuery()</method>
+  </difference>
+
 </differences>

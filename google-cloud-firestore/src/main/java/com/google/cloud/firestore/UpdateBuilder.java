@@ -16,26 +16,38 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_DOC_COUNT;
+import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_IS_TRANSACTIONAL;
+import static com.google.common.base.Predicates.not;
+import static java.util.stream.Collectors.toCollection;
+
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
+import com.google.cloud.firestore.encoding.CustomClassMapper;
+import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.Write;
 import com.google.protobuf.ByteString;
-import io.opencensus.trace.AttributeValue;
-import io.opencensus.trace.Tracing;
+import com.google.protobuf.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.SortedSet;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -45,11 +57,11 @@ import javax.annotation.Nullable;
  */
 @InternalExtensionOnly
 public abstract class UpdateBuilder<T> {
-  static class WriteOperation {
-    Write.Builder write;
-    DocumentReference documentReference;
+  static final class WriteOperation {
+    final Write write;
+    final DocumentReference documentReference;
 
-    WriteOperation(DocumentReference documentReference, Write.Builder write) {
+    WriteOperation(DocumentReference documentReference, Write write) {
       this.documentReference = documentReference;
       this.write = write;
     }
@@ -62,13 +74,11 @@ public abstract class UpdateBuilder<T> {
 
   final FirestoreImpl firestore;
 
+  // All reads and writes on `writes` must be done in a block that is synchronized on `writes`;
+  // otherwise, you get undefined behavior.
   private final List<WriteOperation> writes = new ArrayList<>();
 
-  protected boolean committed;
-
-  boolean isCommitted() {
-    return committed;
-  }
+  protected volatile boolean committed;
 
   UpdateBuilder(FirestoreImpl firestore) {
     this.firestore = firestore;
@@ -88,32 +98,35 @@ public abstract class UpdateBuilder<T> {
    * c}}.
    */
   private static Map<String, Object> expandObject(Map<FieldPath, Object> data) {
-    Map<String, Object> result = new HashMap<>();
+    if (data instanceof SortedMap) {
+      return expandObject((SortedMap<FieldPath, Object>) data);
+    } else {
+      return expandObject(new TreeMap<>(data));
+    }
+  }
 
-    SortedSet<FieldPath> sortedFields = new TreeSet<>(data.keySet());
+  private static Map<String, Object> expandObject(SortedMap<FieldPath, Object> data) {
+    Map<String, Object> result = new HashMap<>();
 
     FieldPath lastField = null;
 
-    for (FieldPath field : sortedFields) {
+    for (Entry<FieldPath, Object> entry : data.entrySet()) {
+      FieldPath field = entry.getKey();
       if (lastField != null && lastField.isPrefixOf(field)) {
         throw new IllegalArgumentException(
             String.format("Detected ambiguous definition for field '%s'.", lastField));
       }
 
-      List<String> segments = field.getSegments();
-      Object value = data.get(field);
-      Map<String, Object> currentMap = result;
-
-      for (int i = 0; i < segments.size(); ++i) {
-        if (i == segments.size() - 1) {
-          currentMap.put(segments.get(i), value);
-        } else {
-          if (!currentMap.containsKey(segments.get(i))) {
-            currentMap.put(segments.get(i), new HashMap<>());
-          }
-
-          currentMap = (Map<String, Object>) currentMap.get(segments.get(i));
+      Iterator<String> iterator = field.getSegments().iterator();
+      if (iterator.hasNext()) {
+        String segment = iterator.next();
+        Map<String, Object> currentMap = result;
+        while (iterator.hasNext()) {
+          currentMap =
+              (Map<String, Object>) currentMap.computeIfAbsent(segment, key -> new HashMap<>());
+          segment = iterator.next();
         }
+        currentMap.put(segment, entry.getValue());
       }
 
       lastField = field;
@@ -138,14 +151,11 @@ public abstract class UpdateBuilder<T> {
 
   private T performCreate(
       @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields) {
-    verifyNotCommitted();
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_CREATEDOCUMENT);
     DocumentSnapshot documentSnapshot =
         DocumentSnapshot.fromObject(
             firestore, documentReference, fields, UserDataConverter.NO_DELETES);
     DocumentTransform documentTransform =
-        DocumentTransform.fromFieldPathMap(
-            documentReference, convertToFieldPaths(fields, /* splitOnDots= */ false));
+        DocumentTransform.fromFieldPathMap(convertToFieldPaths(fields));
 
     Write.Builder write = documentSnapshot.toPb();
     write.setCurrentDocument(Precondition.exists(false).toPb());
@@ -154,14 +164,7 @@ public abstract class UpdateBuilder<T> {
       write.addAllUpdateTransforms(documentTransform.toPb());
     }
 
-    writes.add(new WriteOperation(documentReference, write));
-
-    return wrapResult(writes.size() - 1);
-  }
-
-  private void verifyNotCommitted() {
-    Preconditions.checkState(
-        !isCommitted(), "Cannot modify a WriteBatch that has already been committed.");
+    return addWrite(documentReference, write);
   }
 
   /**
@@ -252,26 +255,26 @@ public abstract class UpdateBuilder<T> {
       @Nonnull DocumentReference documentReference,
       @Nonnull Map<String, Object> fields,
       @Nonnull SetOptions options) {
-    verifyNotCommitted();
     Map<FieldPath, Object> documentData;
 
     if (options.getFieldMask() != null) {
       documentData = applyFieldMask(fields, options.getFieldMask());
     } else {
-      documentData = convertToFieldPaths(fields, /* splitOnDots= */ false);
+      documentData = convertToFieldPaths(fields);
     }
 
     DocumentSnapshot documentSnapshot =
         DocumentSnapshot.fromObject(
             firestore, documentReference, expandObject(documentData), options.getEncodingOptions());
     FieldMask documentMask = FieldMask.EMPTY_MASK;
-    DocumentTransform documentTransform =
-        DocumentTransform.fromFieldPathMap(documentReference, documentData);
+    DocumentTransform documentTransform = DocumentTransform.fromFieldPathMap(documentData);
 
     if (options.getFieldMask() != null) {
-      List<FieldPath> fieldMask = new ArrayList<>(options.getFieldMask());
-      fieldMask.removeAll(documentTransform.getFields());
-      documentMask = new FieldMask(fieldMask);
+      TreeSet<FieldPath> fieldPaths =
+          options.getFieldMask().stream()
+              .filter(not(documentTransform.getFields()::contains))
+              .collect(toCollection(TreeSet::new));
+      documentMask = new FieldMask(fieldPaths);
     } else if (options.isMerge()) {
       documentMask = FieldMask.fromObject(fields);
     }
@@ -285,15 +288,30 @@ public abstract class UpdateBuilder<T> {
       write.setUpdateMask(documentMask.toPb());
     }
 
-    writes.add(new WriteOperation(documentReference, write));
+    return addWrite(documentReference, write);
+  }
 
-    return wrapResult(writes.size() - 1);
+  private T addWrite(DocumentReference documentReference, Write.Builder write) {
+    WriteOperation operation = new WriteOperation(documentReference, write.build());
+    int writeIndex;
+    synchronized (writes) {
+      Preconditions.checkState(
+          !committed,
+          String.format("Cannot modify a %s that has already been committed.", className()));
+      writes.add(operation);
+      writeIndex = writes.size() - 1;
+    }
+    return wrapResult(writeIndex);
+  }
+
+  protected String className() {
+    return this.getClass().getSimpleName();
   }
 
   /** Removes all values in 'fields' that are not specified in 'fieldMask'. */
-  private Map<FieldPath, Object> applyFieldMask(
+  private static Map<FieldPath, Object> applyFieldMask(
       Map<String, Object> fields, List<FieldPath> fieldMask) {
-    List<FieldPath> remainingFields = new ArrayList<>(fieldMask);
+    Set<FieldPath> remainingFields = new HashSet<>(fieldMask);
     Map<FieldPath, Object> filteredData =
         applyFieldMask(fields, remainingFields, FieldPath.empty());
 
@@ -301,7 +319,7 @@ public abstract class UpdateBuilder<T> {
       throw new IllegalArgumentException(
           String.format(
               "Field masks contains invalid path. No data exist at field '%s'.",
-              remainingFields.get(0)));
+              remainingFields.iterator().next()));
     }
 
     return filteredData;
@@ -311,8 +329,8 @@ public abstract class UpdateBuilder<T> {
    * Strips all values in 'fields' that are not specified in 'fieldMask'. Modifies 'fieldMask'
    * inline and removes all matched fields.
    */
-  private Map<FieldPath, Object> applyFieldMask(
-      Map<String, Object> fields, List<FieldPath> fieldMask, FieldPath root) {
+  private static Map<FieldPath, Object> applyFieldMask(
+      Map<String, Object> fields, Set<FieldPath> fieldMask, FieldPath root) {
     Map<FieldPath, Object> filteredMap = new HashMap<>();
 
     for (Entry<String, Object> entry : fields.entrySet()) {
@@ -332,18 +350,16 @@ public abstract class UpdateBuilder<T> {
     return filteredMap;
   }
 
-  private Map<FieldPath, Object> convertToFieldPaths(
-      @Nonnull Map<String, Object> fields, boolean splitOnDots) {
+  private static Map<FieldPath, Object> convertToFieldPaths(@Nonnull Map<String, Object> fields) {
     Map<FieldPath, Object> fieldPaths = new HashMap<>();
+    fields.forEach((k, v) -> fieldPaths.put(FieldPath.of(k), v));
+    return fieldPaths;
+  }
 
-    for (Map.Entry<String, Object> entry : fields.entrySet()) {
-      if (splitOnDots) {
-        fieldPaths.put(FieldPath.fromDotSeparatedString(entry.getKey()), entry.getValue());
-      } else {
-        fieldPaths.put(FieldPath.of(entry.getKey()), entry.getValue());
-      }
-    }
-
+  private static SortedMap<FieldPath, Object> convertToSplitOnDotsFieldPaths(
+      @Nonnull Map<String, Object> fields) {
+    SortedMap<FieldPath, Object> fieldPaths = new TreeMap<>();
+    fields.forEach((k, v) -> fieldPaths.put(FieldPath.fromDotSeparatedString(k), v));
     return fieldPaths;
   }
 
@@ -359,9 +375,7 @@ public abstract class UpdateBuilder<T> {
   public T update(
       @Nonnull DocumentReference documentReference, @Nonnull Map<String, Object> fields) {
     return performUpdate(
-        documentReference,
-        convertToFieldPaths(fields, /* splitOnDots= */ true),
-        Precondition.exists(true));
+        documentReference, convertToSplitOnDotsFieldPaths(fields), Precondition.exists(true));
   }
 
   /**
@@ -379,9 +393,9 @@ public abstract class UpdateBuilder<T> {
       @Nonnull Map<String, Object> fields,
       Precondition precondition) {
     Preconditions.checkArgument(
-        !precondition.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
-    return performUpdate(
-        documentReference, convertToFieldPaths(fields, /* splitOnDots= */ true), precondition);
+        !Boolean.FALSE.equals(precondition.getExists()),
+        "Precondition 'exists' cannot have the value 'false' for update() calls.");
+    return performUpdate(documentReference, convertToSplitOnDotsFieldPaths(fields), precondition);
   }
 
   /**
@@ -447,7 +461,8 @@ public abstract class UpdateBuilder<T> {
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     Preconditions.checkArgument(
-        !precondition.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
+        !Boolean.FALSE.equals(precondition.getExists()),
+        "Precondition 'exists' cannot have the value 'false' for update() calls.");
     return performUpdate(
         documentReference,
         precondition,
@@ -475,7 +490,8 @@ public abstract class UpdateBuilder<T> {
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     Preconditions.checkArgument(
-        !precondition.hasExists(), "Precondition 'exists' cannot be specified for update() calls.");
+        !Boolean.FALSE.equals(precondition.getExists()),
+        "Precondition 'exists' cannot have the value 'false' for update() calls.");
     return performUpdate(documentReference, precondition, fieldPath, value, moreFieldsAndValues);
   }
 
@@ -486,7 +502,7 @@ public abstract class UpdateBuilder<T> {
       @Nullable Object value,
       Object[] moreFieldsAndValues) {
     Object data = CustomClassMapper.convertToPlainJavaTypes(value);
-    Map<FieldPath, Object> fields = new HashMap<>();
+    SortedMap<FieldPath, Object> fields = new TreeMap<>();
     fields.put(fieldPath, data);
 
     Preconditions.checkArgument(
@@ -519,11 +535,9 @@ public abstract class UpdateBuilder<T> {
 
   private T performUpdate(
       @Nonnull DocumentReference documentReference,
-      @Nonnull final Map<FieldPath, Object> fields,
+      @Nonnull final SortedMap<FieldPath, Object> fields,
       @Nonnull Precondition precondition) {
-    verifyNotCommitted();
     Preconditions.checkArgument(!fields.isEmpty(), "Data for update() cannot be empty.");
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_UPDATEDOCUMENT);
     Map<String, Object> deconstructedMap = expandObject(fields);
     DocumentSnapshot documentSnapshot =
         DocumentSnapshot.fromObject(
@@ -541,10 +555,11 @@ public abstract class UpdateBuilder<T> {
                 return true;
               }
             });
-    List<FieldPath> fieldPaths = new ArrayList<>(fields.keySet());
-    DocumentTransform documentTransform =
-        DocumentTransform.fromFieldPathMap(documentReference, fields);
-    fieldPaths.removeAll(documentTransform.getFields());
+    DocumentTransform documentTransform = DocumentTransform.fromFieldPathMap(fields);
+    TreeSet<FieldPath> fieldPaths =
+        fields.keySet().stream()
+            .filter(not(documentTransform.getFields()::contains))
+            .collect(toCollection(TreeSet::new));
     FieldMask fieldMask = new FieldMask(fieldPaths);
 
     Write.Builder write = documentSnapshot.toPb();
@@ -554,9 +569,8 @@ public abstract class UpdateBuilder<T> {
     if (!documentTransform.isEmpty()) {
       write.addAllUpdateTransforms(documentTransform.toPb());
     }
-    writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(writes.size() - 1);
+    return addWrite(documentReference, write);
   }
 
   /**
@@ -585,76 +599,107 @@ public abstract class UpdateBuilder<T> {
 
   private T performDelete(
       @Nonnull DocumentReference documentReference, @Nonnull Precondition precondition) {
-    verifyNotCommitted();
-    Tracing.getTracer().getCurrentSpan().addAnnotation(TraceUtil.SPAN_NAME_DELETEDOCUMENT);
     Write.Builder write = Write.newBuilder().setDelete(documentReference.getName());
 
     if (!precondition.isEmpty()) {
       write.setCurrentDocument(precondition.toPb());
     }
-    writes.add(new WriteOperation(documentReference, write));
 
-    return wrapResult(writes.size() - 1);
+    return addWrite(documentReference, write);
   }
 
   /** Commit the current batch. */
   ApiFuture<List<WriteResult>> commit(@Nullable ByteString transactionId) {
-    Tracing.getTracer()
-        .getCurrentSpan()
-        .addAnnotation(
-            TraceUtil.SPAN_NAME_COMMIT,
-            ImmutableMap.of("numDocuments", AttributeValue.longAttributeValue(writes.size())));
+    TraceUtil.Span span =
+        firestore
+            .getOptions()
+            .getTraceUtil()
+            .startSpan(
+                transactionId == null
+                    ? TraceUtil.SPAN_NAME_BATCH_COMMIT
+                    : TraceUtil.SPAN_NAME_TRANSACTION_COMMIT);
+    span.setAttribute(ATTRIBUTE_KEY_DOC_COUNT, writes.size());
+    span.setAttribute(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null);
+    try (Scope ignored = span.makeCurrent()) {
+      // Sequence is thread safe.
+      //
+      // 1. Set committed = true
+      // 2. Build commit request
+      //
+      // Step 1 sets uses volatile property to ensure committed is visible to all
+      // threads immediately.
+      //
+      // Step 2 uses `forEach(..)` that is synchronized, therefore will be blocked
+      // until any writes are complete.
+      //
+      // Writes will verify `committed==false` within synchronized block of code
+      // before appending writes. Since committed is set to true before accessing
+      // writes, we are ensured that no more writes will be appended after commit
+      // accesses writes.
+      committed = true;
+      CommitRequest request = buildCommitRequest(transactionId);
 
-    final CommitRequest.Builder request = CommitRequest.newBuilder();
-    request.setDatabase(firestore.getDatabaseName());
+      ApiFuture<CommitResponse> response =
+          firestore.sendRequest(request, firestore.getClient().commitCallable());
 
-    for (WriteOperation writeOperation : writes) {
-      request.addWrites(writeOperation.write);
+      ApiFuture<List<WriteResult>> returnValue =
+          ApiFutures.transform(
+              response,
+              commitResponse -> {
+                Timestamp commitTime = commitResponse.getCommitTime();
+                return commitResponse.getWriteResultsList().stream()
+                    .map(writeResult -> WriteResult.fromProto(writeResult, commitTime))
+                    .collect(Collectors.toList());
+              },
+              MoreExecutors.directExecutor());
+      span.endAtFuture(returnValue);
+      return returnValue;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
     }
+  }
 
+  private CommitRequest buildCommitRequest(ByteString transactionId) {
+    CommitRequest.Builder builder = CommitRequest.newBuilder();
+    builder.setDatabase(firestore.getDatabaseName());
+    forEachWrite(builder::addWrites);
     if (transactionId != null) {
-      request.setTransaction(transactionId);
+      builder.setTransaction(transactionId);
     }
-
-    committed = true;
-
-    ApiFuture<CommitResponse> response =
-        firestore.sendRequest(request.build(), firestore.getClient().commitCallable());
-
-    return ApiFutures.transform(
-        response,
-        commitResponse -> {
-          List<com.google.firestore.v1.WriteResult> writeResults =
-              commitResponse.getWriteResultsList();
-
-          List<WriteResult> result = new ArrayList<>();
-
-          for (com.google.firestore.v1.WriteResult writeResult : writeResults) {
-            result.add(WriteResult.fromProto(writeResult, commitResponse.getCommitTime()));
-          }
-
-          return result;
-        },
-        MoreExecutors.directExecutor());
+    return builder.build();
   }
 
   /** Checks whether any updates have been queued. */
   boolean isEmpty() {
-    return writes.isEmpty();
+    synchronized (writes) {
+      return writes.isEmpty();
+    }
   }
 
-  List<WriteOperation> getWrites() {
-    return writes;
+  void forEachWrite(Consumer<Write> consumer) {
+    synchronized (writes) {
+      for (WriteOperation writeOperation : writes) {
+        consumer.accept(writeOperation.write);
+      }
+    }
   }
 
   /** Get the number of writes. */
   public int getMutationsSize() {
-    return writes.size();
+    synchronized (writes) {
+      return writes.size();
+    }
   }
 
   @Override
   public String toString() {
+    final String writesAsString;
+    synchronized (writes) {
+      writesAsString = writes.toString();
+    }
+
     return String.format(
-        "%s{writes=%s, committed=%s}", getClass().getSimpleName(), writes, committed);
+        "%s{writes=%s, committed=%s}", getClass().getSimpleName(), writesAsString, committed);
   }
 }

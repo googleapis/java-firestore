@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,36 +28,57 @@ import com.google.api.gax.rpc.ApiClientHeaderProvider;
 import com.google.api.gax.rpc.InvalidArgumentException;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.common.collect.Lists;
+import com.google.firestore.admin.v1.Backup;
+import com.google.firestore.admin.v1.BackupName;
+import com.google.firestore.admin.v1.BackupSchedule;
+import com.google.firestore.admin.v1.BackupScheduleName;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
+import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
 import com.google.firestore.admin.v1.CollectionGroupName;
+import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DatabaseName;
+import com.google.firestore.admin.v1.DeleteBackupRequest;
+import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
+import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FieldName;
+import com.google.firestore.admin.v1.GetBackupRequest;
+import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.IndexName;
+import com.google.firestore.admin.v1.ListBackupSchedulesRequest;
+import com.google.firestore.admin.v1.ListBackupSchedulesResponse;
+import com.google.firestore.admin.v1.ListBackupsRequest;
+import com.google.firestore.admin.v1.ListBackupsResponse;
 import com.google.firestore.admin.v1.ListDatabasesRequest;
 import com.google.firestore.admin.v1.ListDatabasesResponse;
 import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.LocationName;
 import com.google.firestore.admin.v1.ProjectName;
+import com.google.firestore.admin.v1.RestoreDatabaseRequest;
+import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
 import com.google.longrunning.Operation;
 import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.Any;
+import com.google.protobuf.Duration;
 import com.google.protobuf.Empty;
 import com.google.protobuf.FieldMask;
+import com.google.protobuf.Timestamp;
 import io.grpc.StatusRuntimeException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -840,12 +861,107 @@ public class FirestoreAdminClientTest {
   }
 
   @Test
+  public void bulkDeleteDocumentsTest() throws Exception {
+    BulkDeleteDocumentsResponse expectedResponse = BulkDeleteDocumentsResponse.newBuilder().build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("bulkDeleteDocumentsTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockFirestoreAdmin.addResponse(resultOperation);
+
+    DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
+
+    BulkDeleteDocumentsResponse actualResponse = client.bulkDeleteDocumentsAsync(name).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    BulkDeleteDocumentsRequest actualRequest = ((BulkDeleteDocumentsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name.toString(), actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void bulkDeleteDocumentsExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
+      client.bulkDeleteDocumentsAsync(name).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
+  public void bulkDeleteDocumentsTest2() throws Exception {
+    BulkDeleteDocumentsResponse expectedResponse = BulkDeleteDocumentsResponse.newBuilder().build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("bulkDeleteDocumentsTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockFirestoreAdmin.addResponse(resultOperation);
+
+    String name = "name3373707";
+
+    BulkDeleteDocumentsResponse actualResponse = client.bulkDeleteDocumentsAsync(name).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    BulkDeleteDocumentsRequest actualRequest = ((BulkDeleteDocumentsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name, actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void bulkDeleteDocumentsExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String name = "name3373707";
+      client.bulkDeleteDocumentsAsync(name).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
   public void createDatabaseTest() throws Exception {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
             .setEtag("etag3123477")
             .build();
     Operation resultOperation =
@@ -899,8 +1015,17 @@ public class FirestoreAdminClientTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
             .setEtag("etag3123477")
             .build();
     Operation resultOperation =
@@ -954,8 +1079,17 @@ public class FirestoreAdminClientTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
             .setEtag("etag3123477")
             .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
@@ -995,8 +1129,17 @@ public class FirestoreAdminClientTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
             .setEtag("etag3123477")
             .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
@@ -1034,7 +1177,10 @@ public class FirestoreAdminClientTest {
   @Test
   public void listDatabasesTest() throws Exception {
     ListDatabasesResponse expectedResponse =
-        ListDatabasesResponse.newBuilder().addAllDatabases(new ArrayList<Database>()).build();
+        ListDatabasesResponse.newBuilder()
+            .addAllDatabases(new ArrayList<Database>())
+            .addAllUnreachable(new ArrayList<String>())
+            .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
 
     ProjectName parent = ProjectName.of("[PROJECT]");
@@ -1070,7 +1216,10 @@ public class FirestoreAdminClientTest {
   @Test
   public void listDatabasesTest2() throws Exception {
     ListDatabasesResponse expectedResponse =
-        ListDatabasesResponse.newBuilder().addAllDatabases(new ArrayList<Database>()).build();
+        ListDatabasesResponse.newBuilder()
+            .addAllDatabases(new ArrayList<Database>())
+            .addAllUnreachable(new ArrayList<String>())
+            .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
 
     String parent = "parent-995424086";
@@ -1108,8 +1257,17 @@ public class FirestoreAdminClientTest {
     Database expectedResponse =
         Database.newBuilder()
             .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
             .setEtag("etag3123477")
             .build();
     Operation resultOperation =
@@ -1152,6 +1310,797 @@ public class FirestoreAdminClientTest {
       Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
       InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
       Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
+  public void deleteDatabaseTest() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
+            .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .setEtag("etag3123477")
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("deleteDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockFirestoreAdmin.addResponse(resultOperation);
+
+    DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
+
+    Database actualResponse = client.deleteDatabaseAsync(name).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DeleteDatabaseRequest actualRequest = ((DeleteDatabaseRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name.toString(), actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void deleteDatabaseExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      DatabaseName name = DatabaseName.of("[PROJECT]", "[DATABASE]");
+      client.deleteDatabaseAsync(name).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
+  public void deleteDatabaseTest2() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
+            .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .setEtag("etag3123477")
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("deleteDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockFirestoreAdmin.addResponse(resultOperation);
+
+    String name = "name3373707";
+
+    Database actualResponse = client.deleteDatabaseAsync(name).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DeleteDatabaseRequest actualRequest = ((DeleteDatabaseRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name, actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void deleteDatabaseExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String name = "name3373707";
+      client.deleteDatabaseAsync(name).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
+  public void getBackupTest() throws Exception {
+    Backup expectedResponse =
+        Backup.newBuilder()
+            .setName(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+            .setDatabase(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setDatabaseUid("databaseUid816481493")
+            .setSnapshotTime(Timestamp.newBuilder().build())
+            .setExpireTime(Timestamp.newBuilder().build())
+            .setStats(Backup.Stats.newBuilder().build())
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    BackupName name = BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]");
+
+    Backup actualResponse = client.getBackup(name);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    GetBackupRequest actualRequest = ((GetBackupRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name.toString(), actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void getBackupExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      BackupName name = BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]");
+      client.getBackup(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void getBackupTest2() throws Exception {
+    Backup expectedResponse =
+        Backup.newBuilder()
+            .setName(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+            .setDatabase(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setDatabaseUid("databaseUid816481493")
+            .setSnapshotTime(Timestamp.newBuilder().build())
+            .setExpireTime(Timestamp.newBuilder().build())
+            .setStats(Backup.Stats.newBuilder().build())
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String name = "name3373707";
+
+    Backup actualResponse = client.getBackup(name);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    GetBackupRequest actualRequest = ((GetBackupRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name, actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void getBackupExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String name = "name3373707";
+      client.getBackup(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void listBackupsTest() throws Exception {
+    ListBackupsResponse expectedResponse =
+        ListBackupsResponse.newBuilder()
+            .addAllBackups(new ArrayList<Backup>())
+            .addAllUnreachable(new ArrayList<String>())
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    LocationName parent = LocationName.of("[PROJECT]", "[LOCATION]");
+
+    ListBackupsResponse actualResponse = client.listBackups(parent);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    ListBackupsRequest actualRequest = ((ListBackupsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(parent.toString(), actualRequest.getParent());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void listBackupsExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      LocationName parent = LocationName.of("[PROJECT]", "[LOCATION]");
+      client.listBackups(parent);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void listBackupsTest2() throws Exception {
+    ListBackupsResponse expectedResponse =
+        ListBackupsResponse.newBuilder()
+            .addAllBackups(new ArrayList<Backup>())
+            .addAllUnreachable(new ArrayList<String>())
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String parent = "parent-995424086";
+
+    ListBackupsResponse actualResponse = client.listBackups(parent);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    ListBackupsRequest actualRequest = ((ListBackupsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(parent, actualRequest.getParent());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void listBackupsExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String parent = "parent-995424086";
+      client.listBackups(parent);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void deleteBackupTest() throws Exception {
+    Empty expectedResponse = Empty.newBuilder().build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    BackupName name = BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]");
+
+    client.deleteBackup(name);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DeleteBackupRequest actualRequest = ((DeleteBackupRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name.toString(), actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void deleteBackupExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      BackupName name = BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]");
+      client.deleteBackup(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void deleteBackupTest2() throws Exception {
+    Empty expectedResponse = Empty.newBuilder().build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String name = "name3373707";
+
+    client.deleteBackup(name);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DeleteBackupRequest actualRequest = ((DeleteBackupRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name, actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void deleteBackupExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String name = "name3373707";
+      client.deleteBackup(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void restoreDatabaseTest() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
+            .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .setEtag("etag3123477")
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("restoreDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockFirestoreAdmin.addResponse(resultOperation);
+
+    RestoreDatabaseRequest request =
+        RestoreDatabaseRequest.newBuilder()
+            .setParent(ProjectName.of("[PROJECT]").toString())
+            .setDatabaseId("databaseId1688905718")
+            .setBackup(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+            .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+            .build();
+
+    Database actualResponse = client.restoreDatabaseAsync(request).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    RestoreDatabaseRequest actualRequest = ((RestoreDatabaseRequest) actualRequests.get(0));
+
+    Assert.assertEquals(request.getParent(), actualRequest.getParent());
+    Assert.assertEquals(request.getDatabaseId(), actualRequest.getDatabaseId());
+    Assert.assertEquals(request.getBackup(), actualRequest.getBackup());
+    Assert.assertEquals(request.getEncryptionConfig(), actualRequest.getEncryptionConfig());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void restoreDatabaseExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      RestoreDatabaseRequest request =
+          RestoreDatabaseRequest.newBuilder()
+              .setParent(ProjectName.of("[PROJECT]").toString())
+              .setDatabaseId("databaseId1688905718")
+              .setBackup(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+              .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+              .build();
+      client.restoreDatabaseAsync(request).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
+  public void createBackupScheduleTest() throws Exception {
+    BackupSchedule expectedResponse =
+        BackupSchedule.newBuilder()
+            .setName(
+                BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setRetention(Duration.newBuilder().build())
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    DatabaseName parent = DatabaseName.of("[PROJECT]", "[DATABASE]");
+    BackupSchedule backupSchedule = BackupSchedule.newBuilder().build();
+
+    BackupSchedule actualResponse = client.createBackupSchedule(parent, backupSchedule);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    CreateBackupScheduleRequest actualRequest =
+        ((CreateBackupScheduleRequest) actualRequests.get(0));
+
+    Assert.assertEquals(parent.toString(), actualRequest.getParent());
+    Assert.assertEquals(backupSchedule, actualRequest.getBackupSchedule());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void createBackupScheduleExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      DatabaseName parent = DatabaseName.of("[PROJECT]", "[DATABASE]");
+      BackupSchedule backupSchedule = BackupSchedule.newBuilder().build();
+      client.createBackupSchedule(parent, backupSchedule);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void createBackupScheduleTest2() throws Exception {
+    BackupSchedule expectedResponse =
+        BackupSchedule.newBuilder()
+            .setName(
+                BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setRetention(Duration.newBuilder().build())
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String parent = "parent-995424086";
+    BackupSchedule backupSchedule = BackupSchedule.newBuilder().build();
+
+    BackupSchedule actualResponse = client.createBackupSchedule(parent, backupSchedule);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    CreateBackupScheduleRequest actualRequest =
+        ((CreateBackupScheduleRequest) actualRequests.get(0));
+
+    Assert.assertEquals(parent, actualRequest.getParent());
+    Assert.assertEquals(backupSchedule, actualRequest.getBackupSchedule());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void createBackupScheduleExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String parent = "parent-995424086";
+      BackupSchedule backupSchedule = BackupSchedule.newBuilder().build();
+      client.createBackupSchedule(parent, backupSchedule);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void getBackupScheduleTest() throws Exception {
+    BackupSchedule expectedResponse =
+        BackupSchedule.newBuilder()
+            .setName(
+                BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setRetention(Duration.newBuilder().build())
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    BackupScheduleName name = BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]");
+
+    BackupSchedule actualResponse = client.getBackupSchedule(name);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    GetBackupScheduleRequest actualRequest = ((GetBackupScheduleRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name.toString(), actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void getBackupScheduleExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      BackupScheduleName name =
+          BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]");
+      client.getBackupSchedule(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void getBackupScheduleTest2() throws Exception {
+    BackupSchedule expectedResponse =
+        BackupSchedule.newBuilder()
+            .setName(
+                BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setRetention(Duration.newBuilder().build())
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String name = "name3373707";
+
+    BackupSchedule actualResponse = client.getBackupSchedule(name);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    GetBackupScheduleRequest actualRequest = ((GetBackupScheduleRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name, actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void getBackupScheduleExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String name = "name3373707";
+      client.getBackupSchedule(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void listBackupSchedulesTest() throws Exception {
+    ListBackupSchedulesResponse expectedResponse =
+        ListBackupSchedulesResponse.newBuilder()
+            .addAllBackupSchedules(new ArrayList<BackupSchedule>())
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    DatabaseName parent = DatabaseName.of("[PROJECT]", "[DATABASE]");
+
+    ListBackupSchedulesResponse actualResponse = client.listBackupSchedules(parent);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    ListBackupSchedulesRequest actualRequest = ((ListBackupSchedulesRequest) actualRequests.get(0));
+
+    Assert.assertEquals(parent.toString(), actualRequest.getParent());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void listBackupSchedulesExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      DatabaseName parent = DatabaseName.of("[PROJECT]", "[DATABASE]");
+      client.listBackupSchedules(parent);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void listBackupSchedulesTest2() throws Exception {
+    ListBackupSchedulesResponse expectedResponse =
+        ListBackupSchedulesResponse.newBuilder()
+            .addAllBackupSchedules(new ArrayList<BackupSchedule>())
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String parent = "parent-995424086";
+
+    ListBackupSchedulesResponse actualResponse = client.listBackupSchedules(parent);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    ListBackupSchedulesRequest actualRequest = ((ListBackupSchedulesRequest) actualRequests.get(0));
+
+    Assert.assertEquals(parent, actualRequest.getParent());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void listBackupSchedulesExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String parent = "parent-995424086";
+      client.listBackupSchedules(parent);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void updateBackupScheduleTest() throws Exception {
+    BackupSchedule expectedResponse =
+        BackupSchedule.newBuilder()
+            .setName(
+                BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setRetention(Duration.newBuilder().build())
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    BackupSchedule backupSchedule = BackupSchedule.newBuilder().build();
+    FieldMask updateMask = FieldMask.newBuilder().build();
+
+    BackupSchedule actualResponse = client.updateBackupSchedule(backupSchedule, updateMask);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    UpdateBackupScheduleRequest actualRequest =
+        ((UpdateBackupScheduleRequest) actualRequests.get(0));
+
+    Assert.assertEquals(backupSchedule, actualRequest.getBackupSchedule());
+    Assert.assertEquals(updateMask, actualRequest.getUpdateMask());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void updateBackupScheduleExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      BackupSchedule backupSchedule = BackupSchedule.newBuilder().build();
+      FieldMask updateMask = FieldMask.newBuilder().build();
+      client.updateBackupSchedule(backupSchedule, updateMask);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void deleteBackupScheduleTest() throws Exception {
+    Empty expectedResponse = Empty.newBuilder().build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    BackupScheduleName name = BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]");
+
+    client.deleteBackupSchedule(name);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DeleteBackupScheduleRequest actualRequest =
+        ((DeleteBackupScheduleRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name.toString(), actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void deleteBackupScheduleExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      BackupScheduleName name =
+          BackupScheduleName.of("[PROJECT]", "[DATABASE]", "[BACKUP_SCHEDULE]");
+      client.deleteBackupSchedule(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void deleteBackupScheduleTest2() throws Exception {
+    Empty expectedResponse = Empty.newBuilder().build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String name = "name3373707";
+
+    client.deleteBackupSchedule(name);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DeleteBackupScheduleRequest actualRequest =
+        ((DeleteBackupScheduleRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name, actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void deleteBackupScheduleExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String name = "name3373707";
+      client.deleteBackupSchedule(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
     }
   }
 }

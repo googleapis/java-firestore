@@ -73,17 +73,17 @@ public class DocumentChange {
 
   /**
    * The index of the changed document in the result set immediately prior to this DocumentChange
-   * (i.e. supposing that all prior DocumentChange objects have been applied). Returns -1 for
-   * 'added' events.
+   * (specifically, supposing that all prior DocumentChange objects have been applied). Returns -1
+   * for 'added' events.
    */
   public int getOldIndex() {
     return oldIndex;
   }
 
   /**
-   * The index of the changed document in the result set immediately after this DocumentChange (i.e.
-   * supposing that all prior DocumentChange objects and the current DocumentChange object have been
-   * applied). Returns -1 for 'removed' events.
+   * The index of the changed document in the result set immediately after this DocumentChange
+   * (specifically, supposing that all prior DocumentChange objects and the current DocumentChange
+   * object have been applied). Returns -1 for 'removed' events.
    */
   public int getNewIndex() {
     return newIndex;
@@ -113,5 +113,12 @@ public class DocumentChange {
   @Override
   public int hashCode() {
     return Objects.hash(type, document, oldIndex, newIndex);
+  }
+
+  @Override
+  public String toString() {
+    return String.format(
+        "DocumentChange{type=%s, document=%s, oldIndex=%d, newIndex=%d}",
+        type, document, oldIndex, newIndex);
   }
 }

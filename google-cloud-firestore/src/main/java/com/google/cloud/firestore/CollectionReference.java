@@ -22,16 +22,16 @@ import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.UnaryCallable;
+import com.google.cloud.firestore.encoding.CustomClassMapper;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firestore.v1.Document;
 import com.google.firestore.v1.DocumentMask;
 import com.google.firestore.v1.ListDocumentsRequest;
-import io.opencensus.common.Scope;
-import io.opencensus.trace.Span;
-import io.opencensus.trace.Status;
 import java.util.Iterator;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -59,8 +59,8 @@ public class CollectionReference extends Query {
   }
 
   /**
-   * The id of a collection refers to the last component of path pointing to a collection, e.g.
-   * "collection-id" in "projects/project-id/databases/database-id/documents/collection-id".
+   * The id of a collection refers to the last component of path pointing to a collection, for
+   * example "collection-id" in "projects/project-id/databases/database-id/documents/collection-id".
    *
    * @return The ID of the collection.
    */
@@ -113,70 +113,75 @@ public class CollectionReference extends Query {
   public DocumentReference document(@Nonnull String childPath) {
     ResourcePath documentPath = getResourcePath().append(childPath);
     Preconditions.checkArgument(
-        documentPath.isDocument(),
-        String.format("Path should point to a Document Reference: %s", getPath()));
+        documentPath.isDocument(), "Path should point to a Document Reference: %s", getPath());
     return new DocumentReference(rpcContext, documentPath);
   }
 
   /**
    * Retrieves the list of documents in this collection.
    *
-   * <p>The document references returned may include references to "missing documents", i.e.
+   * <p>The document references returned may include references to "missing documents", specifically
    * document locations that have no document present but which contain subcollections with
-   * documents. Attempting to read such a document reference (e.g. via `get()` or `onSnapshot()`)
-   * will return a `DocumentSnapshot` whose `exists()` method returns false.
+   * documents. Attempting to read such a document reference (for example via `get()` or
+   * `onSnapshot()`) will return a `DocumentSnapshot` whose `exists()` method returns false.
    *
    * @return The list of documents in this collection.
    */
   @Nonnull
   public Iterable<DocumentReference> listDocuments() {
-    ListDocumentsRequest.Builder request = ListDocumentsRequest.newBuilder();
-    request.setParent(options.getParentPath().toString());
-    request.setCollectionId(options.getCollectionId());
-    request.setMask(DocumentMask.getDefaultInstance());
-    request.setShowMissing(true);
-
-    final ListDocumentsPagedResponse response;
-    final TraceUtil traceUtil = TraceUtil.getInstance();
-    Span span = traceUtil.startSpan(TraceUtil.SPAN_NAME_LISTDOCUMENTS);
-    try (Scope scope = traceUtil.getTracer().withSpan(span)) {
+    TraceUtil.Span span =
+        rpcContext
+            .getFirestore()
+            .getOptions()
+            .getTraceUtil()
+            .startSpan(TraceUtil.SPAN_NAME_COL_REF_LIST_DOCUMENTS);
+    try (Scope ignored = span.makeCurrent()) {
+      ListDocumentsRequest.Builder request = ListDocumentsRequest.newBuilder();
+      request.setParent(options.getParentPath().toString());
+      request.setCollectionId(options.getCollectionId());
+      request.setMask(DocumentMask.getDefaultInstance());
+      request.setShowMissing(true);
+      final ListDocumentsPagedResponse response;
       FirestoreRpc client = rpcContext.getClient();
       UnaryCallable<ListDocumentsRequest, ListDocumentsPagedResponse> callable =
           client.listDocumentsPagedCallable();
       ListDocumentsRequest build = request.build();
       ApiFuture<ListDocumentsPagedResponse> future = rpcContext.sendRequest(build, callable);
       response = ApiExceptions.callAndTranslateApiException(future);
+      Iterable<DocumentReference> result =
+          new Iterable<DocumentReference>() {
+            @Override
+            @Nonnull
+            public Iterator<DocumentReference> iterator() {
+              final Iterator<Document> iterator = response.iterateAll().iterator();
+              return new Iterator<DocumentReference>() {
+                @Override
+                public boolean hasNext() {
+                  return iterator.hasNext();
+                }
+
+                @Override
+                public DocumentReference next() {
+                  ResourcePath path = ResourcePath.create(iterator.next().getName());
+                  return document(path.getId());
+                }
+
+                @Override
+                public void remove() {
+                  throw new UnsupportedOperationException("remove");
+                }
+              };
+            }
+          };
+      span.end();
+      return result;
     } catch (ApiException exception) {
-      span.setStatus(Status.UNKNOWN.withDescription(exception.getMessage()));
+      span.end(exception);
       throw FirestoreException.forApiException(exception);
-    } finally {
-      span.end(TraceUtil.END_SPAN_OPTIONS);
+    } catch (Throwable throwable) {
+      span.end(throwable);
+      throw throwable;
     }
-
-    return new Iterable<DocumentReference>() {
-      @Override
-      @Nonnull
-      public Iterator<DocumentReference> iterator() {
-        final Iterator<Document> iterator = response.iterateAll().iterator();
-        return new Iterator<DocumentReference>() {
-          @Override
-          public boolean hasNext() {
-            return iterator.hasNext();
-          }
-
-          @Override
-          public DocumentReference next() {
-            ResourcePath path = ResourcePath.create(iterator.next().getName());
-            return document(path.getId());
-          }
-
-          @Override
-          public void remove() {
-            throw new UnsupportedOperationException("remove");
-          }
-        };
-      }
-    };
   }
 
   /**
@@ -190,11 +195,24 @@ public class CollectionReference extends Query {
    */
   @Nonnull
   public ApiFuture<DocumentReference> add(@Nonnull final Map<String, Object> fields) {
-    final DocumentReference documentReference = document();
-    ApiFuture<WriteResult> createFuture = documentReference.create(fields);
-
-    return ApiFutures.transform(
-        createFuture, writeResult -> documentReference, MoreExecutors.directExecutor());
+    TraceUtil.Span span =
+        rpcContext
+            .getFirestore()
+            .getOptions()
+            .getTraceUtil()
+            .startSpan(TraceUtil.SPAN_NAME_COL_REF_ADD);
+    try (Scope ignored = span.makeCurrent()) {
+      final DocumentReference documentReference = document();
+      ApiFuture<WriteResult> createFuture = documentReference.create(fields);
+      ApiFuture<DocumentReference> result =
+          ApiFutures.transform(
+              createFuture, writeResult -> documentReference, MoreExecutors.directExecutor());
+      span.endAtFuture(result);
+      return result;
+    } catch (Exception error) {
+      span.end(error);
+      throw error;
+    }
   }
 
   /**

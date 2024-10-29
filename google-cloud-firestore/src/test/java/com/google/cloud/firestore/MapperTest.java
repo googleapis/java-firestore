@@ -29,6 +29,7 @@ import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.firestore.annotation.Exclude;
 import com.google.cloud.firestore.annotation.PropertyName;
 import com.google.cloud.firestore.annotation.ThrowOnExtraProperties;
+import com.google.cloud.firestore.encoding.CustomClassMapper;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.DatabaseRootName;
@@ -949,11 +950,11 @@ public class MapperTest {
   }
 
   private static <T> T deserialize(String jsonString, Class<T> clazz) {
-    return deserialize(jsonString, clazz, /*docRef=*/ null);
+    return deserialize(jsonString, clazz, /* docRef= */ null);
   }
 
   private static <T> T deserialize(Map<String, Object> json, Class<T> clazz) {
-    return deserialize(json, clazz, /*docRef=*/ null);
+    return deserialize(json, clazz, /* docRef= */ null);
   }
 
   private static <T> T deserialize(String jsonString, Class<T> clazz, DocumentReference docRef) {

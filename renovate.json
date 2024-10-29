@@ -11,6 +11,36 @@
     ":autodetectPinVersions"
   ],
   "ignorePaths": [".kokoro/requirements.txt"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^.kokoro/presubmit/graalvm-native.*.cfg$"
+      ],
+      "matchStrings": ["value: \"gcr.io/cloud-devrel-public-resources/graalvm.*:(?<currentValue>.*?)\""],
+      "depNameTemplate": "com.google.cloud:sdk-platform-java-config",
+      "datasourceTemplate": "maven"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^.github/workflows/unmanaged-dependency-check.yaml$"
+      ],
+      "matchStrings": ["uses: googleapis/sdk-platform-java/java-shared-dependencies/unmanaged-dependency-check@google-cloud-shared-dependencies/v(?<currentValue>.+?)\\n"],
+      "depNameTemplate": "com.google.cloud:sdk-platform-java-config",
+      "datasourceTemplate": "maven"
+    },
+    {
+      "fileMatch": [
+        ".github/workflows/hermetic_library_generation.yaml"
+      ],
+      "matchStrings": [
+        "uses: googleapis/sdk-platform-java/.github/scripts@v(?<currentValue>.+?)\\n"
+      ],
+      "depNameTemplate": "com.google.api:gapic-generator-java",
+      "datasourceTemplate": "maven"
+    }
+  ],
   "packageRules": [
     {
       "packagePatterns": [
@@ -68,6 +98,13 @@
         "^com.fasterxml.jackson.core"
       ],
       "groupName": "jackson dependencies"
+    },
+    {
+      "packagePatterns": [
+        "^com.google.api:gapic-generator-java",
+        "^com.google.cloud:sdk-platform-java-config"
+      ],
+      "groupName": "sdk-platform-java dependencies"
     }
   ],
   "semanticCommits": true,
