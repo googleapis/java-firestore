@@ -30,6 +30,7 @@ import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.api.gax.tracing.MetricsTracerFactory;
 import com.google.api.gax.tracing.OpenTelemetryMetricsRecorder;
 import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
+import com.google.common.annotations.VisibleForTesting;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
@@ -70,6 +71,11 @@ class BuiltinMetricsProvider {
       configureRPCLayerMetrics();
       configureSDKLayerMetrics();
     }
+  }
+
+  @VisibleForTesting
+  public OpenTelemetry getOpenTelemetry() {
+    return openTelemetry;
   }
 
   private Map<String, String> createStaticAttributes() {

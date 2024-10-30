@@ -24,7 +24,7 @@ import org.junit.Test;
 
 public class MetricsUtilTest {
   @Test
-  public void defaultOptionsUseEnabledMetricsUtil() {
+  public void defaultOptionsCreateEnabledMetricsUtil() {
     MetricsUtil util =
         MetricsUtil.getInstance(
             FirestoreOptions.newBuilder()
@@ -36,8 +36,40 @@ public class MetricsUtilTest {
   }
 
   @Test
-  public void testFirestoreWithMetricsEnabled() throws Exception {
-    withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "off")
+  public void createEnabledMetricsUtilWithOnEnv() throws Exception {
+    withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "ON")
+        .execute(
+            () -> {
+              MetricsUtil util =
+                  MetricsUtil.getInstance(
+                      FirestoreOptions.newBuilder()
+                          .setProjectId("test-project")
+                          .setDatabaseId("(default)")
+                          .build());
+
+              assertThat(util instanceof EnabledMetricsUtil).isTrue();
+            });
+  }
+
+  @Test
+  public void createEnabledMetricsUtilWithTrueEnv() throws Exception {
+    withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "True")
+        .execute(
+            () -> {
+              MetricsUtil util =
+                  MetricsUtil.getInstance(
+                      FirestoreOptions.newBuilder()
+                          .setProjectId("test-project")
+                          .setDatabaseId("(default)")
+                          .build());
+
+              assertThat(util instanceof EnabledMetricsUtil).isTrue();
+            });
+  }
+
+  @Test
+  public void createDisabledMetricsUtilWithOffEnv() throws Exception {
+    withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "OFF")
         .execute(
             () -> {
               MetricsUtil util =
@@ -48,6 +80,53 @@ public class MetricsUtilTest {
                           .build());
 
               assertThat(util instanceof DisabledMetricsUtil).isTrue();
+            });
+  }
+
+  @Test
+  public void createDisabledMetricsUtilWithFalseEnv() throws Exception {
+    withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "false")
+        .execute(
+            () -> {
+              MetricsUtil util =
+                  MetricsUtil.getInstance(
+                      FirestoreOptions.newBuilder()
+                          .setProjectId("test-project")
+                          .setDatabaseId("(default)")
+                          .build());
+
+              assertThat(util instanceof DisabledMetricsUtil).isTrue();
+            });
+  }
+
+  @Test
+  public void invalidEnvironmentVariableDefaultsToEnabledMetricsUtil() throws Exception {
+    withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "Invalid")
+        .execute(
+            () -> {
+              MetricsUtil util =
+                  MetricsUtil.getInstance(
+                      FirestoreOptions.newBuilder()
+                          .setProjectId("test-project")
+                          .setDatabaseId("(default)")
+                          .build());
+
+              assertThat(util instanceof EnabledMetricsUtil).isTrue();
+            });
+  }
+
+  @Test
+  public void nullEnvironmentVariableDefaultsToEnabledMetricsUtil() throws Exception {
+    withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", null)
+        .execute(
+            () -> {
+              MetricsUtil util =
+                  MetricsUtil.getInstance(
+                      FirestoreOptions.newBuilder()
+                          .setProjectId("test-project")
+                          .setDatabaseId("(default)")
+                          .build());
+              assertThat(util instanceof EnabledMetricsUtil).isTrue();
             });
   }
 }

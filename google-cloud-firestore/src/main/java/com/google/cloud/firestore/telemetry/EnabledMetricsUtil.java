@@ -35,6 +35,7 @@ import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.opentelemetry.metric.GoogleCloudMetricExporter;
 import com.google.cloud.opentelemetry.metric.MetricConfiguration;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -72,8 +73,8 @@ class EnabledMetricsUtil implements MetricsUtil {
 
   EnabledMetricsUtil(FirestoreOptions firestoreOptions) {
     try {
-      configureDefaultMetricsProvider(firestoreOptions);
-      configureCustomMetricsProvider(firestoreOptions);
+      this.defaultMetricsProvider = configureDefaultMetricsProvider(firestoreOptions);
+      this.customMetricsProvider = configureCustomMetricsProvider(firestoreOptions);
     } catch (IOException e) {
       logger.warning(
           "Unable to create MetricsUtil object for client side metrics, will skip exporting client side metrics"
@@ -81,7 +82,18 @@ class EnabledMetricsUtil implements MetricsUtil {
     }
   }
 
-  private void configureDefaultMetricsProvider(FirestoreOptions firestoreOptions)
+  @VisibleForTesting
+  public BuiltinMetricsProvider getCustomMetricsProvider() {
+    return customMetricsProvider;
+  }
+
+  @VisibleForTesting
+  public BuiltinMetricsProvider getDefaultMetricsProvider() {
+    return defaultMetricsProvider;
+  }
+
+  @VisibleForTesting
+  public BuiltinMetricsProvider configureDefaultMetricsProvider(FirestoreOptions firestoreOptions)
       throws IOException {
     OpenTelemetry defaultOpenTelemetry;
     boolean exportBuiltinMetricsToGoogleCloudMonitoring =
@@ -91,17 +103,17 @@ class EnabledMetricsUtil implements MetricsUtil {
     } else {
       defaultOpenTelemetry = OpenTelemetry.noop();
     }
-    this.defaultMetricsProvider = new BuiltinMetricsProvider(defaultOpenTelemetry);
+    return new BuiltinMetricsProvider(defaultOpenTelemetry);
   }
 
-  private void configureCustomMetricsProvider(FirestoreOptions firestoreOptions)
+  private BuiltinMetricsProvider configureCustomMetricsProvider(FirestoreOptions firestoreOptions)
       throws IOException {
     OpenTelemetry customOpenTelemetry =
         firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
     if (customOpenTelemetry == null) {
       customOpenTelemetry = GlobalOpenTelemetry.get();
     }
-    this.customMetricsProvider = new BuiltinMetricsProvider(customOpenTelemetry);
+    return new BuiltinMetricsProvider(customOpenTelemetry);
   }
 
   @Override
@@ -248,7 +260,8 @@ class EnabledMetricsUtil implements MetricsUtil {
     return attributes;
   }
 
-  private String extractErrorStatus(@Nullable Throwable throwable) {
+  @VisibleForTesting
+  public String extractErrorStatus(@Nullable Throwable throwable) {
     if (!(throwable instanceof FirestoreException)) {
       return StatusCode.Code.UNKNOWN.toString();
     }

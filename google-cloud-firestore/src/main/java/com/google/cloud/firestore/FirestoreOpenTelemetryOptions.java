@@ -117,7 +117,7 @@ public class FirestoreOpenTelemetryOptions {
      *     Monitoring.
      */
     @Nonnull
-    private FirestoreOpenTelemetryOptions.Builder exportBuiltinMetricsToGoogleCloudMonitoring(
+    public FirestoreOpenTelemetryOptions.Builder exportBuiltinMetricsToGoogleCloudMonitoring(
         boolean exportBuiltinMetrics) {
       this.exportBuiltinMetricsToGoogleCloudMonitoring = exportBuiltinMetrics;
       return this;
