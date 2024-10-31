@@ -155,7 +155,7 @@ class BuiltinMetricsProvider {
 
   public DoubleHistogram getHistogram(MetricType metricType) {
     switch (metricType) {
-      case END_TO_END_REQUEST_LATENCY:
+      case END_TO_END_LATENCY:
         return endToEndLatency;
       case FIRST_RESPONSE_LATENCY:
         return firstResponseLatency;
