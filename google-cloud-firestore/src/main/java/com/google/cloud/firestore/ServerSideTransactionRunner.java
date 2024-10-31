@@ -93,7 +93,7 @@ final class ServerSideTransactionRunner<T> {
         firestore
             .getOptions()
             .getMetricsUtil()
-            .createMetricsContext(TelemetryConstants.METHOD_NAME_SERVER_SIDE_TRANSACTION);
+            .createMetricsContext(TelemetryConstants.METHOD_NAME_TRANSACTION_RUN);
   }
 
   @Nonnull
@@ -104,7 +104,7 @@ final class ServerSideTransactionRunner<T> {
   ApiFuture<T> run() {
     ApiFuture<T> result = runInternally();
     metricsContext.recordLatencyAtFuture(MetricType.TRANSACTION_LATENCY, result);
-    metricsContext.recordCounterAtFuture(MetricType.TRANSACTION_ATTEMPT, result);
+    metricsContext.recordCounterAtFuture(MetricType.TRANSACTION_ATTEMPT_COUNT, result);
     return result;
   }
 

@@ -50,7 +50,7 @@ class BuiltinMetricsProvider {
   private static final Logger logger = Logger.getLogger(BuiltinMetricsProvider.class.getName());
 
   private OpenTelemetry openTelemetry;
-  private DoubleHistogram endToEndRequestLatency;
+  private DoubleHistogram endToEndLatency;
   private DoubleHistogram firstResponseLatency;
   private DoubleHistogram transactionLatency;
   private LongCounter transactionAttemptCount;
@@ -94,7 +94,7 @@ class BuiltinMetricsProvider {
   private void configureSDKLayerMetrics() {
     Meter meter = openTelemetry.getMeter(FIRESTORE_METER_NAME);
 
-    this.endToEndRequestLatency =
+    this.endToEndLatency =
         meter
             .histogramBuilder(METRIC_PREFIX + "/" + METRIC_NAME_END_TO_END_LATENCY)
             .setDescription("Firestore operations' end-to-end latency")
@@ -155,8 +155,8 @@ class BuiltinMetricsProvider {
 
   public DoubleHistogram getHistogram(MetricType metricType) {
     switch (metricType) {
-      case END_TO_END_LATENCY:
-        return endToEndRequestLatency;
+      case END_TO_END_REQUEST_LATENCY:
+        return endToEndLatency;
       case FIRST_RESPONSE_LATENCY:
         return firstResponseLatency;
       case TRANSACTION_LATENCY:
@@ -167,7 +167,7 @@ class BuiltinMetricsProvider {
   }
 
   public LongCounter getCounter(MetricType metricType) {
-    if (metricType == MetricType.TRANSACTION_ATTEMPT) {
+    if (metricType == MetricType.TRANSACTION_ATTEMPT_COUNT) {
       return transactionAttemptCount;
     } else {
       throw new IllegalArgumentException("Unknown counter MetricType: " + metricType);
