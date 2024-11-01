@@ -93,6 +93,16 @@ class EnabledMetricsUtil implements MetricsUtil {
   }
 
   @VisibleForTesting
+  public void setDefaultMetricsProvider(BuiltinMetricsProvider provider) {
+    this.defaultMetricsProvider = provider;
+  }
+
+  @VisibleForTesting
+  public void setCustomMetricsProvider(BuiltinMetricsProvider provider) {
+    this.customMetricsProvider = provider;
+  }
+
+  @VisibleForTesting
   public BuiltinMetricsProvider configureDefaultMetricsProvider(FirestoreOptions firestoreOptions)
       throws IOException {
     OpenTelemetry defaultOpenTelemetry;
@@ -263,12 +273,12 @@ class EnabledMetricsUtil implements MetricsUtil {
   @VisibleForTesting
   public String extractErrorStatus(@Nullable Throwable throwable) {
     if (!(throwable instanceof FirestoreException)) {
-      return StatusCode.Code.UNKNOWN.toString();
+      return Status.Code.UNKNOWN.toString();
     }
 
     Status status = ((FirestoreException) throwable).getStatus();
     if (status == null) {
-      return StatusCode.Code.UNKNOWN.toString();
+      return Status.Code.UNKNOWN.toString();
     }
     return status.getCode().name();
   }

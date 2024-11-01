@@ -180,7 +180,8 @@ class BuiltinMetricsProvider {
     }
   }
 
-  private Attributes toOtelAttributes(Map<String, String> attributes) {
+  @VisibleForTesting
+  public Attributes toOtelAttributes(Map<String, String> attributes) {
     AttributesBuilder attributesBuilder = Attributes.builder();
     attributes.forEach(attributesBuilder::put);
     return attributesBuilder.build();
