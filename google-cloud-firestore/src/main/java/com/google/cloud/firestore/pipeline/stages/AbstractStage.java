@@ -21,7 +21,7 @@ import com.google.firestore.v1.Value;
 /**
  * Parent to all stages.
  *
- * This class is package private to prevent public access to these methods. Methods in this class
+ * <p>This class is package private to prevent public access to these methods. Methods in this class
  * support internal polymorphic processing, that would otherwise require conditional processing
  * based on type. This should eliminate `instanceof` usage with respect to `Stage` implementations.
  */
