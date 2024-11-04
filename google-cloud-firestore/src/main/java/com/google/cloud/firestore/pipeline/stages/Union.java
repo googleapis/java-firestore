@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.Pipeline;
@@ -40,8 +39,7 @@ public class Union extends AbstractStage {
   @Override
   Value getProtoArgs() {
     return Value.newBuilder()
-        .setMapValue(MapValue.newBuilder()
-            .putFields("other", other.toProtoValue()))
+        .setMapValue(MapValue.newBuilder().putFields("other", other.toProtoValue()))
         .build();
   }
 }

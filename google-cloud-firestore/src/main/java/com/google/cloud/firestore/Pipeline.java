@@ -739,11 +739,11 @@ public final class Pipeline {
   /**
    * Produces a document for each element in array found in previous stage document.
    *
-   * <p>For each previous stage document, this stage will emit zero or more augmented documents.
-   * The input array found in the previous stage document field specified by the `fieldName`
-   * parameter, will for each input array element produce an augmented document. The input array
-   * element will augment the previous stage document by replacing the field specified by
-   * `fieldName` parameter with the element value.
+   * <p>For each previous stage document, this stage will emit zero or more augmented documents. The
+   * input array found in the previous stage document field specified by the `fieldName` parameter,
+   * will for each input array element produce an augmented document. The input array element will
+   * augment the previous stage document by replacing the field specified by `fieldName` parameter
+   * with the element value.
    *
    * <p>In other words, the field containing the input array will be removed from the augmented
    * document and replaced by the corresponding array element.
@@ -769,7 +769,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline unnest(String fieldName) {
-//    return unnest(Field.of(fieldName));
+    //    return unnest(Field.of(fieldName));
     return append(new Unnest(Field.of(fieldName)));
   }
 
@@ -785,16 +785,20 @@ public final class Pipeline {
   //  *
   //  * <pre>{@code
   //  * // Input:
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tags": [ "comedy", "space", "adventure" ], ... }
+  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tags": [ "comedy", "space",
+  // "adventure" ], ... }
   //  *
   //  * // Emit a book document for each tag of the book.
   //  * firestore.pipeline().collection("books")
   //  *     .unnest(Field.of("tags").as("tag"));
   //  *
   //  * // Output:
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tag": "comedy", "tags": [ "comedy", "space", "adventure" ], ... }
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tag": "space", "tags": [ "comedy", "space", "adventure" ], ... }
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tag": "adventure", "tags": [ "comedy", "space", "adventure" ], ... }
+  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tag": "comedy", "tags": [ "comedy",
+  // "space", "adventure" ], ... }
+  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tag": "space", "tags": [ "comedy",
+  // "space", "adventure" ], ... }
+  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tag": "adventure", "tags": [
+  // "comedy", "space", "adventure" ], ... }
   //  * }</pre>
   //  *
   //  * @param field The expression that evaluates to the input array.
@@ -808,11 +812,11 @@ public final class Pipeline {
   /**
    * Produces a document for each element in array found in previous stage document.
    *
-   * <p>For each previous stage document, this stage will emit zero or more augmented documents.
-   * The input array found in the previous stage document field specified by the `fieldName`
-   * parameter, will for each input array element produce an augmented document. The input array
-   * element will augment the previous stage document by replacing the field specified by
-   * `fieldName` parameter with the element value.
+   * <p>For each previous stage document, this stage will emit zero or more augmented documents. The
+   * input array found in the previous stage document field specified by the `fieldName` parameter,
+   * will for each input array element produce an augmented document. The input array element will
+   * augment the previous stage document by replacing the field specified by `fieldName` parameter
+   * with the element value.
    *
    * <p>In other words, the field containing the input array will be removed from the augmented
    * document and replaced by the corresponding array element.
@@ -839,7 +843,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline unnest(String fieldName, UnnestOptions options) {
-//    return unnest(Field.of(fieldName), options);
+    //    return unnest(Field.of(fieldName), options);
     return append(new Unnest(Field.of(fieldName), options));
   }
 
@@ -855,16 +859,20 @@ public final class Pipeline {
   //  *
   //  * <pre>{@code
   //  * // Input:
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tags": [ "comedy", "space", "adventure" ], ... }
+  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tags": [ "comedy", "space",
+  // "adventure" ], ... }
   //  *
   //  * // Emit a book document for each tag of the book.
   //  * firestore.pipeline().collection("books")
   //  *     .unnest(Field.of("tags").as("tag"), UnnestOptions.indexField("tagIndex"));
   //  *
   //  * // Output:
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 0, "tag": "comedy", "tags": [ "comedy", "space", "adventure" ], ... }
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 1, "tag": "space", "tags": [ "comedy", "space", "adventure" ], ... }
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 2, "tag": "adventure", "tags": [ "comedy", "space", "adventure" ], ... }
+  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 0, "tag": "comedy",
+  // "tags": [ "comedy", "space", "adventure" ], ... }
+  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 1, "tag": "space", "tags":
+  // [ "comedy", "space", "adventure" ], ... }
+  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 2, "tag": "adventure",
+  // "tags": [ "comedy", "space", "adventure" ], ... }
   //  * }</pre>
   //  *
   //  * @param field The expression that evaluates to the input array.
@@ -938,7 +946,7 @@ public final class Pipeline {
    */
   @BetaApi
   public ApiFuture<List<PipelineResult>> execute() {
-    return execute(null, null);
+    return execute((ByteString) null, (com.google.protobuf.Timestamp) null);
   }
 
   /**
@@ -989,6 +997,21 @@ public final class Pipeline {
   @BetaApi
   public void execute(ApiStreamObserver<PipelineResult> observer) {
     executeInternal(null, null, observer);
+  }
+
+  @BetaApi
+  public void execute(ApiStreamObserver<PipelineResult> observer, PipelineOptions options) {
+    throw new RuntimeException("Not Implemented");
+  }
+
+  @BetaApi
+  public ApiFuture<List<PipelineResult>> explain() {
+    throw new RuntimeException("Not Implemented");
+  }
+
+  @BetaApi
+  public void explain(ApiStreamObserver<PipelineResult> observer, PipelineExplainOptions options) {
+    throw new RuntimeException("Not Implemented");
   }
 
   ApiFuture<List<PipelineResult>> execute(
@@ -1066,9 +1089,7 @@ public final class Pipeline {
 
   @InternalApi
   public com.google.firestore.v1.Value toProtoValue() {
-    return Value.newBuilder()
-        .setPipelineValue(toProto())
-        .build();
+    return Value.newBuilder().setPipelineValue(toProto()).build();
   }
 
   private void pipelineInternalStream(

@@ -52,8 +52,6 @@ public class Unnest extends AbstractStage {
     if (options != null) {
       builder.putFields("index_field", encodeValue(options.indexField));
     }
-    return Value.newBuilder()
-        .setMapValue(builder)
-        .build();
+    return Value.newBuilder().setMapValue(builder).build();
   }
 }

@@ -61,8 +61,6 @@ public class Replace extends AbstractStage {
     MapValue.Builder builder = MapValue.newBuilder();
     builder.putFields("map", encodeValue(field));
     builder.putFields("mode", mode.value);
-    return Value.newBuilder()
-        .setMapValue(builder)
-        .build();
+    return Value.newBuilder().setMapValue(builder).build();
   }
 }
