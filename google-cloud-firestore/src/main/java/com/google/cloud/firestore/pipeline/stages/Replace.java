@@ -20,13 +20,13 @@ import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
-import com.google.firestore.v1.MapValue;
+import com.google.firestore.v1.Pipeline;
 import com.google.firestore.v1.Value;
 import javax.annotation.Nonnull;
 
 public class Replace extends AbstractStage {
 
-  private static final String name = "unnest";
+  private static final String name = "replace";
   private final Selectable field;
   private final Mode mode;
 
@@ -57,10 +57,11 @@ public class Replace extends AbstractStage {
   }
 
   @Override
-  Value getProtoArgs() {
-    MapValue.Builder builder = MapValue.newBuilder();
-    builder.putFields("map", encodeValue(field));
-    builder.putFields("mode", mode.value);
-    return Value.newBuilder().setMapValue(builder).build();
+  Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder()
+        .setName(name)
+        .addArgs(encodeValue(field))
+        .addArgs(mode.value)
+        .build();
   }
 }

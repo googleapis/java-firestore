@@ -19,9 +19,10 @@ package com.google.cloud.firestore.pipeline.stages;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.Ordering;
 import com.google.common.collect.Lists;
+import com.google.firestore.v1.Pipeline;
 import java.util.List;
 
-public final class Sort implements Stage {
+public final class Sort extends AbstractStage {
 
   private static final String name = "sort";
   private final List<Ordering> orders;
@@ -39,5 +40,14 @@ public final class Sort implements Stage {
   @InternalApi
   public List<Ordering> getOrders() {
     return orders;
+  }
+
+  @Override
+  Pipeline.Stage toStageProto() {
+    Pipeline.Stage.Builder builder = Pipeline.Stage.newBuilder().setName(name);
+    for (Ordering order : orders) {
+      builder.addArgs(order.toProto());
+    }
+    return builder.build();
   }
 }

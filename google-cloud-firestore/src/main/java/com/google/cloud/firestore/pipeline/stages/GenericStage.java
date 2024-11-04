@@ -16,11 +16,14 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+
 import com.google.api.core.InternalApi;
+import com.google.firestore.v1.Pipeline;
 import java.util.List;
 
 @InternalApi
-public final class GenericStage implements Stage {
+public final class GenericStage extends AbstractStage {
 
   private final String name;
   private List<Object> params;
@@ -40,5 +43,14 @@ public final class GenericStage implements Stage {
   @InternalApi
   public List<Object> getParams() {
     return params;
+  }
+
+  @Override
+  Pipeline.Stage toStageProto() {
+    Pipeline.Stage.Builder builder = Pipeline.Stage.newBuilder().setName(name);
+    for (Object param : params) {
+      builder.addArgs(encodeValue(param));
+    }
+    return builder.build();
   }
 }

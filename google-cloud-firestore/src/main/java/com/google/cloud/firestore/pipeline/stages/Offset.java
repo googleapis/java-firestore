@@ -16,10 +16,13 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+
 import com.google.api.core.InternalApi;
+import com.google.firestore.v1.Pipeline;
 
 @InternalApi
-public final class Offset implements Stage {
+public final class Offset extends AbstractStage {
 
   private static final String name = "offset";
   private final int offset;
@@ -38,5 +41,10 @@ public final class Offset implements Stage {
   @InternalApi
   public String getName() {
     return name;
+  }
+
+  @Override
+  Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder().setName(name).addArgs(encodeValue(offset)).build();
   }
 }

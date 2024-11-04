@@ -16,12 +16,15 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.firestore.v1.Pipeline;
 import java.util.Map;
 
 @InternalApi
-public final class Select implements Stage {
+public final class Select extends AbstractStage {
 
   private static final String name = "select";
   private final Map<String, Expr> projections;
@@ -40,5 +43,10 @@ public final class Select implements Stage {
   @InternalApi
   public String getName() {
     return name;
+  }
+
+  @Override
+  Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder().setName(name).addArgs(encodeValue(projections)).build();
   }
 }

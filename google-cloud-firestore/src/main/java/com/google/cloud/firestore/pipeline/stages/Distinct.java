@@ -16,13 +16,16 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.firestore.v1.Pipeline;
 import java.util.Map;
 
 @BetaApi
-public final class Distinct implements Stage {
+public final class Distinct extends AbstractStage {
 
   private static final String name = "distinct";
   private final Map<String, Expr> groups;
@@ -40,5 +43,10 @@ public final class Distinct implements Stage {
   @Override
   public String getName() {
     return name;
+  }
+
+  @Override
+  Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder().setName(name).addArgs(encodeValue(groups)).build();
   }
 }

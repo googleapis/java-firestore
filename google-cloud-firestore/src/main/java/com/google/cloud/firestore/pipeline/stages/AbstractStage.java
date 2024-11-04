@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-import com.google.firestore.v1.Value;
 
 /**
  * Parent to all stages.
@@ -26,5 +25,5 @@ import com.google.firestore.v1.Value;
  * based on type. This should eliminate `instanceof` usage with respect to `Stage` implementations.
  */
 abstract class AbstractStage implements Stage {
-  abstract Value getProtoArgs();
+  abstract com.google.firestore.v1.Pipeline.Stage toStageProto();
 }

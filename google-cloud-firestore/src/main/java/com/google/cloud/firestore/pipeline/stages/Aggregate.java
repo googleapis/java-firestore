@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.PipelineUtils;
@@ -23,13 +25,14 @@ import com.google.cloud.firestore.pipeline.expressions.Accumulator;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.cloud.firestore.pipeline.expressions.ExprWithAlias;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
+import com.google.firestore.v1.Pipeline;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @BetaApi
-public final class Aggregate implements Stage {
+public final class Aggregate extends AbstractStage {
 
   private static final String name = "aggregate";
   private final Map<String, Expr> groups;
@@ -76,5 +79,14 @@ public final class Aggregate implements Stage {
   @Override
   public String getName() {
     return name;
+  }
+
+  @Override
+  Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder()
+        .setName(name)
+        .addArgs(encodeValue(accumulators))
+        .addArgs(encodeValue(groups))
+        .build();
   }
 }

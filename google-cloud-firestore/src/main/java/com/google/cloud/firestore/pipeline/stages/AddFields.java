@@ -16,12 +16,15 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.firestore.v1.Pipeline;
 import java.util.Map;
 
 @InternalApi
-public final class AddFields implements Stage {
+public final class AddFields extends AbstractStage {
 
   private static final String name = "add_fields";
   private final Map<String, Expr> fields;
@@ -39,5 +42,10 @@ public final class AddFields implements Stage {
   @Override
   public String getName() {
     return name;
+  }
+
+  @Override
+  Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder().setName(name).addArgs(encodeValue(fields)).build();
   }
 }

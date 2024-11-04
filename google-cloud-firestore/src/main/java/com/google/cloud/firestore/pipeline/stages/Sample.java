@@ -17,7 +17,7 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
-import com.google.firestore.v1.Value;
+import com.google.firestore.v1.Pipeline;
 
 public final class Sample extends AbstractStage {
 
@@ -40,7 +40,7 @@ public final class Sample extends AbstractStage {
   }
 
   @Override
-  Value getProtoArgs() {
-    return options.getProtoArgs();
+  Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder().setName(name).addAllArgs(options.getProtoArgs()).build();
   }
 }

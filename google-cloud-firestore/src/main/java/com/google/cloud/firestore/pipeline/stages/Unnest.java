@@ -20,8 +20,7 @@ import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.Field;
-import com.google.firestore.v1.MapValue;
-import com.google.firestore.v1.Value;
+import com.google.firestore.v1.Pipeline;
 import javax.annotation.Nonnull;
 
 public class Unnest extends AbstractStage {
@@ -46,12 +45,12 @@ public class Unnest extends AbstractStage {
   }
 
   @Override
-  Value getProtoArgs() {
-    MapValue.Builder builder = MapValue.newBuilder();
-    builder.putFields("field", encodeValue(field));
+  Pipeline.Stage toStageProto() {
+    Pipeline.Stage.Builder builder =
+        Pipeline.Stage.newBuilder().setName(name).addArgs(encodeValue(field));
     if (options != null) {
-      builder.putFields("index_field", encodeValue(options.indexField));
+      builder.addArgs(encodeValue(options.indexField));
     }
-    return Value.newBuilder().setMapValue(builder).build();
+    return builder.build();
   }
 }
