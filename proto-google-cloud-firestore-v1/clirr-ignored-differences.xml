@@ -161,4 +161,49 @@
     <className>com/google/firestore/v1/StructuredQuery$FindNearestOrBuilder</className>
     <method>boolean hasDistanceThreshold()</method>
   </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/ValueOrBuilder</className>
+    <method>java.lang.String getFieldReferenceValue()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/ValueOrBuilder</className>
+    <method>com.google.protobuf.ByteString getFieldReferenceValueBytes()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/ValueOrBuilder</className>
+    <method>com.google.firestore.v1.Function getFunctionValue()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/ValueOrBuilder</className>
+    <method>com.google.firestore.v1.FunctionOrBuilder getFunctionValueOrBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/ValueOrBuilder</className>
+    <method>com.google.firestore.v1.Pipeline getPipelineValue()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/ValueOrBuilder</className>
+    <method>com.google.firestore.v1.PipelineOrBuilder getPipelineValueOrBuilder()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/ValueOrBuilder</className>
+    <method>boolean hasFieldReferenceValue()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/ValueOrBuilder</className>
+    <method>boolean hasFunctionValue()</method>
+  </difference>
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/firestore/v1/ValueOrBuilder</className>
+    <method>boolean hasPipelineValue()</method>
+  </difference>
 </differences>

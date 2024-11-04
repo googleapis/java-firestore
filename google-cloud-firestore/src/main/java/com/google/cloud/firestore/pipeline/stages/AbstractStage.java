@@ -14,34 +14,17 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore.pipeline.expressions;
+package com.google.cloud.firestore.pipeline.stages;
 
-import com.google.api.core.InternalApi;
+import com.google.firestore.v1.Value;
 
-@InternalApi
-public final class ExprWithAlias<T extends Expr> implements Expr, Selectable {
-
-  private final String alias;
-  private final T expr;
-
-  @InternalApi
-  ExprWithAlias(T expr, String alias) {
-    this.expr = expr;
-    this.alias = alias;
-  }
-
-  @InternalApi
-  public String getAlias() {
-    return alias;
-  }
-
-  @InternalApi
-  public T getExpr() {
-    return expr;
-  }
-
-  @Override
-  public Selectable as(String alias) {
-    return new ExprWithAlias<>(this.expr, alias);
-  }
+/**
+ * Parent to all stages.
+ *
+ * <p>This class is package private to prevent public access to these methods. Methods in this class
+ * support internal polymorphic processing, that would otherwise require conditional processing
+ * based on type. This should eliminate `instanceof` usage with respect to `Stage` implementations.
+ */
+abstract class AbstractStage implements Stage {
+  abstract Value getProtoArgs();
 }

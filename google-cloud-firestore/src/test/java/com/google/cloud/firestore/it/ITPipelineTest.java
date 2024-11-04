@@ -49,7 +49,12 @@ import com.google.cloud.firestore.pipeline.expressions.Constant;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Function;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
+import com.google.cloud.firestore.pipeline.stages.SampleOptions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -64,6 +69,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ITPipelineTest extends ITBaseTest {
   private CollectionReference collection;
+  private Map<String, Map<String, Object>> bookDocs;
 
   public CollectionReference testCollectionWithDocs(Map<String, Map<String, Object>> docs)
       throws ExecutionException, InterruptedException, TimeoutException {
@@ -84,10 +90,10 @@ public class ITPipelineTest extends ITBaseTest {
       return;
     }
 
-    Map<String, Map<String, Object>> bookDocs =
-        map(
+    bookDocs =
+        ImmutableMap.of(
             "book1",
-                map(
+                ImmutableMap.of(
                     "title",
                     "The Hitchhiker's Guide to the Galaxy",
                     "author",
@@ -99,11 +105,11 @@ public class ITPipelineTest extends ITBaseTest {
                     "rating",
                     4.2,
                     "tags",
-                    Lists.newArrayList("comedy", "space", "adventure"),
+                    ImmutableList.of("comedy", "space", "adventure"),
                     "awards",
-                    map("hugo", true, "nebula", false)),
+                    ImmutableMap.of("hugo", true, "nebula", false)),
             "book2",
-                map(
+                ImmutableMap.of(
                     "title",
                     "Pride and Prejudice",
                     "author",
@@ -115,11 +121,11 @@ public class ITPipelineTest extends ITBaseTest {
                     "rating",
                     4.5,
                     "tags",
-                    Lists.newArrayList("classic", "social commentary", "love"),
+                    ImmutableList.of("classic", "social commentary", "love"),
                     "awards",
-                    map("none", true)),
+                    ImmutableMap.of("none", true)),
             "book3",
-                map(
+                ImmutableMap.of(
                     "title",
                     "One Hundred Years of Solitude",
                     "author",
@@ -131,11 +137,11 @@ public class ITPipelineTest extends ITBaseTest {
                     "rating",
                     4.3,
                     "tags",
-                    Lists.newArrayList("family", "history", "fantasy"),
+                    ImmutableList.of("family", "history", "fantasy"),
                     "awards",
-                    map("nobel", true, "nebula", false)),
+                    ImmutableMap.of("nobel", true, "nebula", false)),
             "book4",
-                map(
+                ImmutableMap.of(
                     "title",
                     "The Lord of the Rings",
                     "author",
@@ -147,11 +153,11 @@ public class ITPipelineTest extends ITBaseTest {
                     "rating",
                     4.7,
                     "tags",
-                    Lists.newArrayList("adventure", "magic", "epic"),
+                    ImmutableList.of("adventure", "magic", "epic"),
                     "awards",
-                    map("hugo", false, "nebula", false)),
+                    ImmutableMap.of("hugo", false, "nebula", false)),
             "book5",
-                map(
+                ImmutableMap.of(
                     "title",
                     "The Handmaid's Tale",
                     "author",
@@ -163,11 +169,11 @@ public class ITPipelineTest extends ITBaseTest {
                     "rating",
                     4.1,
                     "tags",
-                    Lists.newArrayList("feminism", "totalitarianism", "resistance"),
+                    ImmutableList.of("feminism", "totalitarianism", "resistance"),
                     "awards",
-                    map("arthur c. clarke", true, "booker prize", false)),
+                    ImmutableMap.of("arthur c. clarke", true, "booker prize", false)),
             "book6",
-                map(
+                ImmutableMap.of(
                     "title",
                     "Crime and Punishment",
                     "author",
@@ -179,11 +185,11 @@ public class ITPipelineTest extends ITBaseTest {
                     "rating",
                     4.3,
                     "tags",
-                    Lists.newArrayList("philosophy", "crime", "redemption"),
+                    ImmutableList.of("philosophy", "crime", "redemption"),
                     "awards",
-                    map("none", true)),
+                    ImmutableMap.of("none", true)),
             "book7",
-                map(
+                ImmutableMap.of(
                     "title",
                     "To Kill a Mockingbird",
                     "author",
@@ -195,11 +201,11 @@ public class ITPipelineTest extends ITBaseTest {
                     "rating",
                     4.2,
                     "tags",
-                    Lists.newArrayList("racism", "injustice", "coming-of-age"),
+                    ImmutableList.of("racism", "injustice", "coming-of-age"),
                     "awards",
-                    map("pulitzer", true)),
+                    ImmutableMap.of("pulitzer", true)),
             "book8",
-                map(
+                ImmutableMap.of(
                     "title",
                     "1984",
                     "author",
@@ -211,11 +217,11 @@ public class ITPipelineTest extends ITBaseTest {
                     "rating",
                     4.2,
                     "tags",
-                    Lists.newArrayList("surveillance", "totalitarianism", "propaganda"),
+                    ImmutableList.of("surveillance", "totalitarianism", "propaganda"),
                     "awards",
-                    map("prometheus", true)),
+                    ImmutableMap.of("prometheus", true)),
             "book9",
-                map(
+                ImmutableMap.of(
                     "title",
                     "The Great Gatsby",
                     "author",
@@ -227,11 +233,11 @@ public class ITPipelineTest extends ITBaseTest {
                     "rating",
                     4.0,
                     "tags",
-                    Lists.newArrayList("wealth", "american dream", "love"),
+                    ImmutableList.of("wealth", "american dream", "love"),
                     "awards",
-                    map("none", true)),
+                    ImmutableMap.of("none", true)),
             "book10",
-                map(
+                ImmutableMap.of(
                     "title",
                     "Dune",
                     "author",
@@ -243,9 +249,9 @@ public class ITPipelineTest extends ITBaseTest {
                     "rating",
                     4.6,
                     "tags",
-                    Lists.newArrayList("politics", "desert", "ecology"),
+                    ImmutableList.of("politics", "desert", "ecology"),
                     "awards",
-                    map("hugo", true, "nebula", true)));
+                    ImmutableMap.of("hugo", true, "nebula", true)));
     collection = testCollectionWithDocs(bookDocs);
   }
 
@@ -1098,5 +1104,62 @@ public class ITPipelineTest extends ITBaseTest {
         collection.pipeline().where(eq("foo", "bar")).select("title").execute().get();
     assertThat(data(result))
         .isEqualTo(Lists.newArrayList(map("title", "The Hitchhiker's Guide to the Galaxy")));
+  }
+
+  @Test
+  public void testReplace() throws Exception {
+    List<PipelineResult> results = collection.pipeline().replace("awards").execute().get();
+
+    List<HashMap<String, Object>> list =
+        bookDocs.values().stream()
+            .map(
+                book -> {
+                  HashMap<String, Object> awards = (HashMap<String, Object>) book.get("awards");
+                  HashMap<String, Object> map = Maps.newHashMap(book);
+                  // Remove "awards" field.
+                  map.remove("awards");
+                  // Life nested "awards".
+                  map.putAll(awards);
+                  return map;
+                })
+            .collect(Collectors.toList());
+
+    assertThat(data(results)).containsExactly(list);
+  }
+
+  @Test
+  public void testSampleLimit() throws Exception {
+    List<PipelineResult> results = collection.pipeline().sample(3).execute().get();
+
+    assertThat(results).hasSize(3);
+  }
+
+  @Test
+  public void testSamplePercentage() throws Exception {
+    List<PipelineResult> results =
+        collection.pipeline().sample(SampleOptions.percentage(0.6)).execute().get();
+
+    assertThat(results).hasSize(6);
+  }
+
+  @Test
+  public void testUnion() throws Exception {
+    List<PipelineResult> results =
+        collection.pipeline().union(collection.pipeline()).execute().get();
+
+    assertThat(results).hasSize(20);
+  }
+
+  @Test
+  public void testUnnest() throws Exception {
+    List<PipelineResult> results =
+        collection
+            .pipeline()
+            .where(eq(Field.of("title"), "The Hitchhiker's Guide to the Galaxy"))
+            .unnest("tags")
+            .execute()
+            .get();
+
+    assertThat(results).hasSize(3);
   }
 }

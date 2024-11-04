@@ -29,7 +29,13 @@ public final class StageUtils {
   @InternalApi
   public static com.google.firestore.v1.Pipeline.Stage toStageProto(Stage stage) {
 
-    if (stage instanceof Collection) {
+    if (stage instanceof AbstractStage) {
+      AbstractStage abstractStage = (AbstractStage) stage;
+      return com.google.firestore.v1.Pipeline.Stage.newBuilder()
+          .setName(abstractStage.getName())
+          .addArgs(abstractStage.getProtoArgs())
+          .build();
+    } else if (stage instanceof Collection) {
       Collection collectionStage = (Collection) stage;
       return com.google.firestore.v1.Pipeline.Stage.newBuilder()
           .setName(collectionStage.getName())

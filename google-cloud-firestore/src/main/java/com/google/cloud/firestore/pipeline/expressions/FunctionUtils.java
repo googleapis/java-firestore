@@ -29,6 +29,8 @@ public final class FunctionUtils {
   public static Value exprToValue(Expr expr) {
     if (expr == null) {
       return Constant.of((String) null).toProto();
+    } else if (expr instanceof ExprWithAlias<?>) {
+      return exprToValue(((ExprWithAlias<?>) expr).getExpr());
     } else if (expr instanceof Constant) {
       return ((Constant) expr).toProto();
     } else if (expr instanceof Field) {

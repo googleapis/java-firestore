@@ -14,34 +14,33 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore.pipeline.expressions;
+package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
+import com.google.firestore.v1.Value;
 
-@InternalApi
-public final class ExprWithAlias<T extends Expr> implements Expr, Selectable {
+public final class Sample extends AbstractStage {
 
-  private final String alias;
-  private final T expr;
+  private static final String name = "sample";
+  private final SampleOptions options;
 
   @InternalApi
-  ExprWithAlias(T expr, String alias) {
-    this.expr = expr;
-    this.alias = alias;
+  public Sample(SampleOptions options) {
+    this.options = options;
   }
 
   @InternalApi
-  public String getAlias() {
-    return alias;
+  public String getName() {
+    return name;
   }
 
   @InternalApi
-  public T getExpr() {
-    return expr;
+  public SampleOptions getOptions() {
+    return options;
   }
 
   @Override
-  public Selectable as(String alias) {
-    return new ExprWithAlias<>(this.expr, alias);
+  Value getProtoArgs() {
+    return options.getProtoArgs();
   }
 }

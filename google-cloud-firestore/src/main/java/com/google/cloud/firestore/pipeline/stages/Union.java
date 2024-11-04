@@ -14,34 +14,31 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore.pipeline.expressions;
+package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
+import com.google.cloud.firestore.Pipeline;
+import com.google.firestore.v1.MapValue;
+import com.google.firestore.v1.Value;
 
-@InternalApi
-public final class ExprWithAlias<T extends Expr> implements Expr, Selectable {
+public class Union extends AbstractStage {
 
-  private final String alias;
-  private final T expr;
+  private static final String name = "union";
+  private final Pipeline other;
 
-  @InternalApi
-  ExprWithAlias(T expr, String alias) {
-    this.expr = expr;
-    this.alias = alias;
+  public Union(Pipeline other) {
+    this.other = other;
   }
 
   @InternalApi
-  public String getAlias() {
-    return alias;
-  }
-
-  @InternalApi
-  public T getExpr() {
-    return expr;
+  public String getName() {
+    return name;
   }
 
   @Override
-  public Selectable as(String alias) {
-    return new ExprWithAlias<>(this.expr, alias);
+  Value getProtoArgs() {
+    return Value.newBuilder()
+        .setMapValue(MapValue.newBuilder().putFields("other", other.toProtoValue()))
+        .build();
   }
 }
