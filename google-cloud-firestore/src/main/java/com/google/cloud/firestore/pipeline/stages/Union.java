@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.Pipeline;
 import com.google.firestore.v1.MapValue;

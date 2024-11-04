@@ -1010,7 +1010,8 @@ public final class Pipeline {
   // }
   //
   // @BetaApi
-  // public void explain(ApiStreamObserver<PipelineResult> observer, PipelineExplainOptions options) {
+  // public void explain(ApiStreamObserver<PipelineResult> observer, PipelineExplainOptions options)
+  // {
   //   throw new RuntimeException("Not Implemented");
   // }
 
