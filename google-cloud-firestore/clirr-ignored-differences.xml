@@ -326,5 +326,4 @@
     <className>com/google/cloud/firestore/telemetry/TraceUtil</className>
     <field>SPAN_NAME_*</field>
   </difference>
-
 </differences>
