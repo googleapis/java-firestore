@@ -85,7 +85,7 @@ public abstract class StreamableQuery<SnapshotType> {
     return rpcContext.getFirestore();
   }
 
-  protected MetricsContext createMetricsContext(String methodName) {
+  MetricsContext createMetricsContext(String methodName) {
     return getFirestore().getOptions().getMetricsUtil().createMetricsContext(methodName);
   }
   /**
