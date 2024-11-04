@@ -999,20 +999,20 @@ public final class Pipeline {
     executeInternal(null, null, observer);
   }
 
-  @BetaApi
-  public void execute(ApiStreamObserver<PipelineResult> observer, PipelineOptions options) {
-    throw new RuntimeException("Not Implemented");
-  }
-
-  @BetaApi
-  public ApiFuture<List<PipelineResult>> explain() {
-    throw new RuntimeException("Not Implemented");
-  }
-
-  @BetaApi
-  public void explain(ApiStreamObserver<PipelineResult> observer, PipelineExplainOptions options) {
-    throw new RuntimeException("Not Implemented");
-  }
+  // @BetaApi
+  // public void execute(ApiStreamObserver<PipelineResult> observer, PipelineOptions options) {
+  //   throw new RuntimeException("Not Implemented");
+  // }
+  //
+  // @BetaApi
+  // public ApiFuture<List<PipelineResult>> explain() {
+  //   throw new RuntimeException("Not Implemented");
+  // }
+  //
+  // @BetaApi
+  // public void explain(ApiStreamObserver<PipelineResult> observer, PipelineExplainOptions options) {
+  //   throw new RuntimeException("Not Implemented");
+  // }
 
   ApiFuture<List<PipelineResult>> execute(
       @Nullable final ByteString transactionId, @Nullable com.google.protobuf.Timestamp readTime) {
