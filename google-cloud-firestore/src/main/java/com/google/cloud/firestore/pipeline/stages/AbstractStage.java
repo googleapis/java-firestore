@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-
 /**
  * Parent to all stages.
  *
