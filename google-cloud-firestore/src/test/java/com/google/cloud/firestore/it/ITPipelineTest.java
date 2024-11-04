@@ -1123,7 +1123,7 @@ public class ITPipelineTest extends ITBaseTest {
           map.putAll(awards);
           return map;
         })
-        .toList();
+        .collect(Collectors.toList());
 
     assertThat(data(results))
         .containsExactly(list);
