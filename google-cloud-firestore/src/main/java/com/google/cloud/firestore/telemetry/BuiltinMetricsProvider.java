@@ -147,8 +147,7 @@ class BuiltinMetricsProvider {
       try {
         counter.add(count, toOtelAttributes(attributes));
       } catch (Exception e) {
-        logger.log(
-            Level.WARNING, "Failed to record counter metric:" + e.getMessage(), e);
+        logger.log(Level.WARNING, "Failed to record counter metric:" + e.getMessage(), e);
       }
     }
   }
