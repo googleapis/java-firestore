@@ -21,6 +21,9 @@ import com.google.api.core.ApiFutures;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.ApiStreamObserver;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
+import com.google.cloud.firestore.telemetry.TelemetryConstants;
+import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
@@ -109,7 +112,15 @@ public class CollectionGroup extends Query {
               .getFirestore()
               .getOptions()
               .getTraceUtil()
-              .startSpan(TraceUtil.SPAN_NAME_PARTITION_QUERY);
+              .startSpan(TelemetryConstants.METHOD_NAME_PARTITION_QUERY);
+
+      MetricsContext metricsContext =
+          rpcContext
+              .getFirestore()
+              .getOptions()
+              .getMetricsUtil()
+              .createMetricsContext(TelemetryConstants.METHOD_NAME_PARTITION_QUERY);
+
       try (Scope ignored = span.makeCurrent()) {
         ApiFuture<List<QueryPartition>> result =
             ApiFutures.transform(
@@ -127,12 +138,15 @@ public class CollectionGroup extends Query {
                 },
                 MoreExecutors.directExecutor());
         span.endAtFuture(result);
+        metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
         return result;
       } catch (ApiException exception) {
         span.end(exception);
+        metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, exception);
         throw FirestoreException.forApiException(exception);
       } catch (Throwable throwable) {
         span.end(throwable);
+        metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, throwable);
         throw throwable;
       }
     }
@@ -173,5 +187,11 @@ public class CollectionGroup extends Query {
       lastCursor = decodedCursorValue;
     }
     consumer.apply(new QueryPartition(partitionQuery, lastCursor, null));
+  }
+
+  @SuppressWarnings("MethodDoesntCallSuperMethod")
+  @Override
+  public String toString() {
+    return String.format("CollectionGroup{partitionQuery=%s, options=%s}", partitionQuery, options);
   }
 }

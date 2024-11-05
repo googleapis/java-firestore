@@ -27,10 +27,17 @@ import javax.annotation.Nullable;
  */
 @BetaApi
 public class FirestoreOpenTelemetryOptions {
+  private final boolean exportBuiltinMetricsToGoogleCloudMonitoring;
   private final @Nullable OpenTelemetry openTelemetry;
 
   FirestoreOpenTelemetryOptions(Builder builder) {
+    this.exportBuiltinMetricsToGoogleCloudMonitoring =
+        builder.exportBuiltinMetricsToGoogleCloudMonitoring;
     this.openTelemetry = builder.openTelemetry;
+  }
+
+  public boolean exportBuiltinMetricsToGoogleCloudMonitoring() {
+    return exportBuiltinMetricsToGoogleCloudMonitoring;
   }
 
   public OpenTelemetry getOpenTelemetry() {
@@ -48,19 +55,38 @@ public class FirestoreOpenTelemetryOptions {
   }
 
   public static class Builder {
+    private boolean exportBuiltinMetricsToGoogleCloudMonitoring;
     @Nullable private OpenTelemetry openTelemetry;
 
     private Builder() {
+      // TODO(metrics): default this to true when feature is ready
+      exportBuiltinMetricsToGoogleCloudMonitoring = false;
       openTelemetry = null;
     }
 
     private Builder(FirestoreOpenTelemetryOptions options) {
+      this.exportBuiltinMetricsToGoogleCloudMonitoring =
+          options.exportBuiltinMetricsToGoogleCloudMonitoring;
       this.openTelemetry = options.openTelemetry;
     }
 
     @Nonnull
     public FirestoreOpenTelemetryOptions build() {
       return new FirestoreOpenTelemetryOptions(this);
+    }
+
+    // TODO(metrics): make this public when feature is ready.
+    /**
+     * Sets whether built-in metrics should be exported to Google Cloud Monitoring
+     *
+     * @param exportBuiltinMetrics Whether built-in metrics should be exported to Google Cloud
+     *     Monitoring.
+     */
+    @Nonnull
+    private FirestoreOpenTelemetryOptions.Builder exportBuiltinMetricsToGoogleCloudMonitoring(
+        boolean exportBuiltinMetrics) {
+      this.exportBuiltinMetricsToGoogleCloudMonitoring = exportBuiltinMetrics;
+      return this;
     }
 
     /**

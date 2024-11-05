@@ -326,4 +326,25 @@
     <method>com.google.cloud.firestore.FirestoreOpenTelemetryOptions$Builder setTracingEnabled(boolean)</method>
   </difference>
 
+  <difference>
+    <className>com/google/cloud/firestore/StreamableQuery</className>
+    <differenceType>7009</differenceType>
+    <method>void internalStream(*)</method>
+  </difference>
+  
+  <!-- Relocate constants in TraceUtil -->
+  <difference>
+    <differenceType>6011</differenceType>
+    <className>com/google/cloud/firestore/telemetry/TraceUtil</className>
+    <field>SPAN_NAME_*</field>
+  </difference>
+
+  <!-- Change the parameter type of internalStream function -->
+  <difference>
+    <differenceType>7005</differenceType>
+    <className>com/google/cloud/firestore/StreamableQuery</className>
+    <method>void internalStream(*)</method>
+    <to>*</to>
+  </difference>
+>>>>>>> origin/main
 </differences>

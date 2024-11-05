@@ -20,13 +20,18 @@ import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 import static com.google.common.collect.Lists.reverse;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.InternalApi;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
+import com.google.cloud.firestore.telemetry.TelemetryConstants;
+import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.Document;
@@ -49,6 +54,7 @@ import org.threeten.bp.Duration;
  * `isRetryableWithCursor`. Retrying with a cursor means that the StreamableQuery can be resumed
  * where it failed by first calling `startAfter(lastDocumentReceived)`.
  */
+@InternalApi
 public abstract class StreamableQuery<SnapshotType> {
   final Query.QueryOptions options;
   final FirestoreRpcContext<?> rpcContext;
@@ -79,6 +85,10 @@ public abstract class StreamableQuery<SnapshotType> {
   public Firestore getFirestore() {
     return rpcContext.getFirestore();
   }
+
+  MetricsContext createMetricsContext(String methodName) {
+    return getFirestore().getOptions().getMetricsUtil().createMetricsContext(methodName);
+  }
   /**
    * Executes the query and returns the results as QuerySnapshot.
    *
@@ -100,11 +110,19 @@ public abstract class StreamableQuery<SnapshotType> {
             .getTraceUtil()
             .startSpan(
                 transactionId == null
-                    ? TraceUtil.SPAN_NAME_QUERY_GET
-                    : TraceUtil.SPAN_NAME_TRANSACTION_GET_QUERY);
+                    ? TelemetryConstants.METHOD_NAME_QUERY_GET
+                    : TelemetryConstants.METHOD_NAME_TRANSACTION_GET_QUERY);
+
+    MetricsContext metricsContext =
+        createMetricsContext(
+            transactionId != null
+                ? TelemetryConstants.METHOD_NAME_RUN_QUERY_TRANSACTIONAL
+                : TelemetryConstants.METHOD_NAME_RUN_QUERY_GET);
+
     try (Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<SnapshotType> result = SettableApiFuture.create();
-      internalStream(
+
+      ApiStreamObserver<RunQueryResponse> observer =
           new ApiStreamObserver<RunQueryResponse>() {
             final List<QueryDocumentSnapshot> documentSnapshots = new ArrayList<>();
             Timestamp responseReadTime;
@@ -139,7 +157,10 @@ public abstract class StreamableQuery<SnapshotType> {
               SnapshotType querySnapshot = createSnaphot(responseReadTime, resultView);
               result.set(querySnapshot);
             }
-          },
+          };
+
+      internalStream(
+          new MonitoredStreamResponseObserver(observer, metricsContext),
           /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
           transactionId,
           /* readTime= */ requestReadTime,
@@ -150,6 +171,7 @@ public abstract class StreamableQuery<SnapshotType> {
       return result;
     } catch (Exception error) {
       span.end(error);
+      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -165,11 +187,18 @@ public abstract class StreamableQuery<SnapshotType> {
   @Nonnull
   public ApiFuture<ExplainResults<SnapshotType>> explain(ExplainOptions options) {
     TraceUtil.Span span =
-        getFirestore().getOptions().getTraceUtil().startSpan(TraceUtil.SPAN_NAME_QUERY_GET);
+        getFirestore()
+            .getOptions()
+            .getTraceUtil()
+            .startSpan(TelemetryConstants.METHOD_NAME_QUERY_GET);
+
+    MetricsContext metricsContext =
+        createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_QUERY_EXPLAIN);
 
     try (Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<ExplainResults<SnapshotType>> result = SettableApiFuture.create();
-      internalStream(
+
+      ApiStreamObserver<RunQueryResponse> observer =
           new ApiStreamObserver<RunQueryResponse>() {
             @Nullable List<QueryDocumentSnapshot> documentSnapshots = null;
             Timestamp readTime;
@@ -222,7 +251,10 @@ public abstract class StreamableQuery<SnapshotType> {
               }
               result.set(new ExplainResults<>(metrics, snapshot));
             }
-          },
+          };
+
+      internalStream(
+          new MonitoredStreamResponseObserver(observer, metricsContext),
           /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
           /* transactionId= */ null,
           /* readTime= */ null,
@@ -233,25 +265,61 @@ public abstract class StreamableQuery<SnapshotType> {
       return result;
     } catch (Exception error) {
       span.end(error);
+      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
 
-  protected void internalStream(
-      final ApiStreamObserver<RunQueryResponse> runQueryResponseObserver,
+  class MonitoredStreamResponseObserver implements ApiStreamObserver<RunQueryResponse> {
+    private final ApiStreamObserver<RunQueryResponse> observer;
+    private final MetricsContext metricsContext;
+    private boolean receivedFirstResponse = false;
+
+    // Constructor to initialize with the delegate and MetricsContext
+    public MonitoredStreamResponseObserver(
+        ApiStreamObserver<RunQueryResponse> observer, MetricsContext metricsContext) {
+      this.observer = observer;
+      this.metricsContext = metricsContext;
+    }
+
+    @Override
+    public void onNext(RunQueryResponse value) {
+      if (!receivedFirstResponse) {
+        receivedFirstResponse = true;
+        metricsContext.recordLatency(MetricType.FIRST_RESPONSE_LATENCY);
+      }
+      observer.onNext(value);
+    }
+
+    @Override
+    public void onError(Throwable t) {
+      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, t);
+      observer.onError(t);
+    }
+
+    @Override
+    public void onCompleted() {
+      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY);
+      observer.onCompleted();
+    }
+  }
+
+  void internalStream(
+      final MonitoredStreamResponseObserver streamResponseObserver,
       final long startTimeNanos,
       @Nullable final ByteString transactionId,
       @Nullable final Timestamp readTime,
       @Nullable final ExplainOptions explainOptions,
       final boolean isRetryRequestWithCursor) {
     TraceUtil traceUtil = getFirestore().getOptions().getTraceUtil();
+
     // To reduce the size of traces, we only register one event for every 100 responses
     // that we receive from the server.
     final int NUM_RESPONSES_PER_TRACE_EVENT = 100;
 
     TraceUtil.Span currentSpan = traceUtil.currentSpan();
     currentSpan.addEvent(
-        TraceUtil.SPAN_NAME_RUN_QUERY,
+        TelemetryConstants.METHOD_NAME_RUN_QUERY,
         new ImmutableMap.Builder<String, Object>()
             .put(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null)
             .put(ATTRIBUTE_KEY_IS_RETRY_WITH_CURSOR, isRetryRequestWithCursor)
@@ -276,16 +344,19 @@ public abstract class StreamableQuery<SnapshotType> {
           public void onResponse(RunQueryResponse response) {
             if (!firstResponse) {
               firstResponse = true;
-              currentSpan.addEvent(TraceUtil.SPAN_NAME_RUN_QUERY + ": First Response");
+              currentSpan.addEvent(TelemetryConstants.METHOD_NAME_RUN_QUERY + ": First Response");
             }
 
-            runQueryResponseObserver.onNext(response);
+            streamResponseObserver.onNext(response);
 
             if (response.hasDocument()) {
               numDocuments++;
               if (numDocuments % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
                 currentSpan.addEvent(
-                    TraceUtil.SPAN_NAME_RUN_QUERY + ": Received " + numDocuments + " documents");
+                    TelemetryConstants.METHOD_NAME_RUN_QUERY
+                        + ": Received "
+                        + numDocuments
+                        + " documents");
               }
               Document document = response.getDocument();
               QueryDocumentSnapshot documentSnapshot =
@@ -296,7 +367,7 @@ public abstract class StreamableQuery<SnapshotType> {
 
             if (response.getDone()) {
               currentSpan.addEvent(
-                  TraceUtil.SPAN_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
+                  TelemetryConstants.METHOD_NAME_RUN_QUERY + ": Received RunQueryResponse.Done");
               onComplete();
             }
           }
@@ -306,12 +377,12 @@ public abstract class StreamableQuery<SnapshotType> {
             QueryDocumentSnapshot cursor = lastReceivedDocument.get();
             if (isRetryableWithCursor() && shouldRetry(cursor, throwable)) {
               currentSpan.addEvent(
-                  TraceUtil.SPAN_NAME_RUN_QUERY + ": Retryable Error",
+                  TelemetryConstants.METHOD_NAME_RUN_QUERY + ": Retryable Error",
                   Collections.singletonMap("error.message", throwable.toString()));
 
               startAfter(cursor)
                   .internalStream(
-                      runQueryResponseObserver,
+                      streamResponseObserver,
                       startTimeNanos,
                       /* transactionId= */ null,
                       options.getRequireConsistency() ? cursor.getReadTime() : null,
@@ -319,9 +390,9 @@ public abstract class StreamableQuery<SnapshotType> {
                       /* isRetryRequestWithCursor= */ true);
             } else {
               currentSpan.addEvent(
-                  TraceUtil.SPAN_NAME_RUN_QUERY + ": Error",
+                  TelemetryConstants.METHOD_NAME_RUN_QUERY + ": Error",
                   Collections.singletonMap("error.message", throwable.toString()));
-              runQueryResponseObserver.onError(throwable);
+              streamResponseObserver.onError(throwable);
             }
           }
 
@@ -330,9 +401,9 @@ public abstract class StreamableQuery<SnapshotType> {
             if (hasCompleted) return;
             hasCompleted = true;
             currentSpan.addEvent(
-                TraceUtil.SPAN_NAME_RUN_QUERY + ": Completed",
+                TelemetryConstants.METHOD_NAME_RUN_QUERY + ": Completed",
                 Collections.singletonMap(ATTRIBUTE_KEY_DOC_COUNT, numDocuments));
-            runQueryResponseObserver.onCompleted();
+            streamResponseObserver.onCompleted();
           }
 
           boolean shouldRetry(DocumentSnapshot lastDocument, Throwable t) {
@@ -396,5 +467,10 @@ public abstract class StreamableQuery<SnapshotType> {
       }
     }
     return false;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%s{options=%s}", getClass().getSimpleName(), options);
   }
 }
