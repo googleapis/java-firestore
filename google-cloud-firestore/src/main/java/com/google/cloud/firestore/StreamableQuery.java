@@ -304,7 +304,7 @@ public abstract class StreamableQuery<SnapshotType> {
     }
   }
 
-  protected void internalStream(
+  void internalStream(
       final MonitoredStreamResponseObserver streamResponseObserver,
       final long startTimeNanos,
       @Nullable final ByteString transactionId,
