@@ -314,7 +314,13 @@
     <method>com.google.cloud.firestore.Query getQuery()</method>
   </difference>
 
-    <!-- Relocate constants in TraceUtil -->
+  <difference>
+    <className>com/google/cloud/firestore/StreamableQuery</className>
+    <differenceType>7009</differenceType>
+    <method>void internalStream(*)</method>
+  </difference>
+  
+  <!-- Relocate constants in TraceUtil -->
   <difference>
     <differenceType>6011</differenceType>
     <className>com/google/cloud/firestore/telemetry/TraceUtil</className>
@@ -325,8 +331,7 @@
   <difference>
     <differenceType>7005</differenceType>
     <className>com/google/cloud/firestore/StreamableQuery</className>
-    <method>* internalStream(com.google.api.gax.rpc.ApiStreamObserver, long, com.google.protobuf.ByteString, com.google.cloud.Timestamp, com.google.cloud.firestore.ExplainOptions, boolean)</method>
+    <method>void internalStream(*)</method>
     <to>*</to>
   </difference>
-
 </differences>

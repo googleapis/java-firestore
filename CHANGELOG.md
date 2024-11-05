@@ -1,5 +1,34 @@
 # Changelog
 
+## [3.28.0](https://github.com/googleapis/java-firestore/compare/v3.27.4...v3.28.0) (2024-10-29)
+
+
+### Features
+
+* Improve Logging ([#1892](https://github.com/googleapis/java-firestore/issues/1892)) ([e74457a](https://github.com/googleapis/java-firestore/commit/e74457a1448189978e791fb3efe76d5fe8370ff7))
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.53.0 ([#1913](https://github.com/googleapis/java-firestore/issues/1913)) ([cbaa7a7](https://github.com/googleapis/java-firestore/commit/cbaa7a7c44c82a173194e3c36289bc6b867b93b7))
+* Update dependency com.google.cloud:google-cloud-trace to v2.53.0 ([#1914](https://github.com/googleapis/java-firestore/issues/1914)) ([d3834e1](https://github.com/googleapis/java-firestore/commit/d3834e10b509b3d5c0e1a55318001f9eb80e7f45))
+
+## [3.27.4](https://github.com/googleapis/java-firestore/compare/v3.27.3...v3.27.4) (2024-10-28)
+
+
+### Bug Fixes
+
+* Add the deprecation notice for tracing enable/disable option. ([#1866](https://github.com/googleapis/java-firestore/issues/1866)) ([d213245](https://github.com/googleapis/java-firestore/commit/d213245a77b42eca110ef579a0c9fa7108357717))
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.49.0 ([0bd75f1](https://github.com/googleapis/java-firestore/commit/0bd75f11587a55eb380b094f2900f2f847a7a103))
+
+
+### Dependencies
+
+* Update beam.version to v2.60.0 ([#1894](https://github.com/googleapis/java-firestore/issues/1894)) ([434e6e0](https://github.com/googleapis/java-firestore/commit/434e6e0b9a738f9ac08788dbf5dd94a0678733aa))
+* Update googleapis/sdk-platform-java action to v2.48.0 ([#1899](https://github.com/googleapis/java-firestore/issues/1899)) ([eaf3c0c](https://github.com/googleapis/java-firestore/commit/eaf3c0cfe3dd4dce8afeb9fbb8e2455492c31443))
+* Update sdk-platform-java dependencies ([#1901](https://github.com/googleapis/java-firestore/issues/1901)) ([a698223](https://github.com/googleapis/java-firestore/commit/a698223668a5886c65f00760051b8e022d18559c))
+* Update sdk-platform-java dependencies ([#1906](https://github.com/googleapis/java-firestore/issues/1906)) ([d70f77a](https://github.com/googleapis/java-firestore/commit/d70f77a85c2e17930626674ff292713a276d71ce))
+
 ## [3.27.3](https://github.com/googleapis/java-firestore/compare/v3.27.2...v3.27.3) (2024-10-16)
 
 
