@@ -20,16 +20,11 @@ import com.google.api.core.InternalApi;
 import com.google.firestore.v1.Pipeline;
 
 @InternalApi
-public final class Database extends AbstractStage {
+public final class Database extends Stage {
   private static final String name = "database";
 
   @InternalApi
   public Database() {}
-
-  @Override
-  public String getName() {
-    return name;
-  }
 
   @Override
   Pipeline.Stage toStageProto() {

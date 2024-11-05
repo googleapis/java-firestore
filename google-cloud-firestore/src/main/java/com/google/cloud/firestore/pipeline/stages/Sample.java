@@ -19,7 +19,7 @@ package com.google.cloud.firestore.pipeline.stages;
 import com.google.api.core.InternalApi;
 import com.google.firestore.v1.Pipeline;
 
-public final class Sample extends AbstractStage {
+public final class Sample extends Stage {
 
   private static final String name = "sample";
   private final SampleOptions options;
@@ -27,16 +27,6 @@ public final class Sample extends AbstractStage {
   @InternalApi
   public Sample(SampleOptions options) {
     this.options = options;
-  }
-
-  @InternalApi
-  public String getName() {
-    return name;
-  }
-
-  @InternalApi
-  public SampleOptions getOptions() {
-    return options;
   }
 
   @Override

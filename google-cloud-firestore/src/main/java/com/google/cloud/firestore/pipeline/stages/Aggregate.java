@@ -19,7 +19,6 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.BetaApi;
-import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.PipelineUtils;
 import com.google.cloud.firestore.pipeline.expressions.Accumulator;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
@@ -32,7 +31,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @BetaApi
-public final class Aggregate extends AbstractStage {
+public final class Aggregate extends Stage {
 
   private static final String name = "aggregate";
   private final Map<String, Expr> groups;
@@ -64,21 +63,6 @@ public final class Aggregate extends AbstractStage {
   private Aggregate(Map<String, Expr> groups, Map<String, Accumulator> accumulators) {
     this.groups = groups;
     this.accumulators = accumulators;
-  }
-
-  @InternalApi
-  Map<String, Expr> getGroups() {
-    return groups;
-  }
-
-  @InternalApi
-  Map<String, Accumulator> getAccumulators() {
-    return accumulators;
-  }
-
-  @Override
-  public String getName() {
-    return name;
   }
 
   @Override

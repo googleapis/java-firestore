@@ -23,7 +23,7 @@ import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
 import com.google.firestore.v1.Pipeline;
 
 @InternalApi
-public final class Where extends AbstractStage {
+public final class Where extends Stage {
 
   private static final String name = "where";
   private final FilterCondition condition;
@@ -31,16 +31,6 @@ public final class Where extends AbstractStage {
   @InternalApi
   public Where(FilterCondition condition) {
     this.condition = condition;
-  }
-
-  @InternalApi
-  public FilterCondition getCondition() {
-    return condition;
-  }
-
-  @Override
-  public String getName() {
-    return name;
   }
 
   @Override

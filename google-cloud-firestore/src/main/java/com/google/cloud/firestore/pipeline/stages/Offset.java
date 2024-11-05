@@ -22,7 +22,7 @@ import com.google.api.core.InternalApi;
 import com.google.firestore.v1.Pipeline;
 
 @InternalApi
-public final class Offset extends AbstractStage {
+public final class Offset extends Stage {
 
   private static final String name = "offset";
   private final int offset;
@@ -30,17 +30,6 @@ public final class Offset extends AbstractStage {
   @InternalApi
   public Offset(int offset) {
     this.offset = offset;
-  }
-
-  @InternalApi
-  public int getOffset() {
-    return offset;
-  }
-
-  @Override
-  @InternalApi
-  public String getName() {
-    return name;
   }
 
   @Override

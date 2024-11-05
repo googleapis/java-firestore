@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Pipeline;
 
 @InternalApi
-public final class RemoveFields extends AbstractStage {
+public final class RemoveFields extends Stage {
 
   private static final String name = "remove_fields";
   private final ImmutableList<Field> fields;
@@ -31,16 +31,6 @@ public final class RemoveFields extends AbstractStage {
   @InternalApi
   public RemoveFields(ImmutableList<Field> fields) {
     this.fields = fields;
-  }
-
-  @InternalApi
-  public ImmutableList<Field> getFields() {
-    return fields;
-  }
-
-  @Override
-  public String getName() {
-    return name;
   }
 
   @Override

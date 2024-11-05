@@ -23,7 +23,7 @@ import com.google.firestore.v1.Pipeline;
 import java.util.List;
 
 @InternalApi
-public final class GenericStage extends AbstractStage {
+public final class GenericStage extends Stage {
 
   private final String name;
   private List<Object> params;
@@ -32,17 +32,6 @@ public final class GenericStage extends AbstractStage {
   public GenericStage(String name, List<Object> params) {
     this.name = name;
     this.params = params;
-  }
-
-  @Override
-  @InternalApi
-  public String getName() {
-    return name;
-  }
-
-  @InternalApi
-  public List<Object> getParams() {
-    return params;
   }
 
   @Override

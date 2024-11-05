@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @InternalApi
-public final class Documents extends AbstractStage {
+public final class Documents extends Stage {
 
   private static final String name = "documents";
   private List<String> documents;
@@ -38,16 +38,6 @@ public final class Documents extends AbstractStage {
   public static Documents of(DocumentReference... documents) {
     return new Documents(
         Arrays.stream(documents).map(doc -> "/" + doc.getPath()).collect(Collectors.toList()));
-  }
-
-  @InternalApi
-  public List<String> getDocuments() {
-    return documents;
-  }
-
-  @Override
-  public String getName() {
-    return name;
   }
 
   @Override

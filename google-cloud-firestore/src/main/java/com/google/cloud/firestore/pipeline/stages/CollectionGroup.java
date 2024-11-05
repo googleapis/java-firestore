@@ -23,7 +23,7 @@ import com.google.firestore.v1.Pipeline;
 import com.google.firestore.v1.Value;
 
 @InternalApi
-public final class CollectionGroup extends AbstractStage {
+public final class CollectionGroup extends Stage {
 
   private static final String name = "collection_group";
   private final String collectionId;
@@ -31,16 +31,6 @@ public final class CollectionGroup extends AbstractStage {
   @InternalApi
   public CollectionGroup(String collectionId) {
     this.collectionId = collectionId;
-  }
-
-  @InternalApi
-  public String getCollectionId() {
-    return collectionId;
-  }
-
-  @Override
-  public String getName() {
-    return name;
   }
 
   @Override

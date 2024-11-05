@@ -24,7 +24,7 @@ import com.google.firestore.v1.Pipeline;
 import java.util.Map;
 
 @InternalApi
-public final class Select extends AbstractStage {
+public final class Select extends Stage {
 
   private static final String name = "select";
   private final Map<String, Expr> projections;
@@ -32,17 +32,6 @@ public final class Select extends AbstractStage {
   @InternalApi
   public Select(Map<String, Expr> projections) {
     this.projections = projections;
-  }
-
-  @InternalApi
-  public Map<String, Expr> getProjections() {
-    return projections;
-  }
-
-  @Override
-  @InternalApi
-  public String getName() {
-    return name;
   }
 
   @Override

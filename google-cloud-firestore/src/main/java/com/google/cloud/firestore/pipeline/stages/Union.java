@@ -16,11 +16,9 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.Pipeline;
-import com.google.firestore.v1.Pipeline.Stage;
 
-public class Union extends AbstractStage {
+public class Union extends Stage {
 
   private static final String name = "union";
   private final Pipeline other;
@@ -29,14 +27,10 @@ public class Union extends AbstractStage {
     this.other = other;
   }
 
-  @InternalApi
-  public String getName() {
-    return name;
-  }
-
   @Override
-  Stage toStageProto() {
-    Stage.Builder builder = com.google.firestore.v1.Pipeline.Stage.newBuilder().setName(name);
+  com.google.firestore.v1.Pipeline.Stage toStageProto() {
+    com.google.firestore.v1.Pipeline.Stage.Builder builder =
+        com.google.firestore.v1.Pipeline.Stage.newBuilder().setName(name);
     return builder.addArgs(other.toProtoValue()).build();
   }
 }

@@ -22,7 +22,7 @@ import com.google.common.collect.Lists;
 import com.google.firestore.v1.Pipeline;
 import java.util.List;
 
-public final class Sort extends AbstractStage {
+public final class Sort extends Stage {
 
   private static final String name = "sort";
   private final List<Ordering> orders;
@@ -30,16 +30,6 @@ public final class Sort extends AbstractStage {
   @InternalApi
   public Sort(Ordering... orders) {
     this.orders = Lists.newArrayList(orders);
-  }
-
-  @InternalApi
-  public String getName() {
-    return name;
-  }
-
-  @InternalApi
-  public List<Ordering> getOrders() {
-    return orders;
   }
 
   @Override

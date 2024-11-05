@@ -24,7 +24,7 @@ import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.firestore.v1.Pipeline;
 
 @BetaApi
-public final class FindNearest extends AbstractStage {
+public final class FindNearest extends Stage {
 
   public interface DistanceMeasure {
 
@@ -109,32 +109,6 @@ public final class FindNearest extends AbstractStage {
     this.vector = vector;
     this.distanceMeasure = distanceMeasure;
     this.options = options;
-  }
-
-  @Override
-  @InternalApi
-  public String getName() {
-    return name;
-  }
-
-  @InternalApi
-  public Expr getProperty() {
-    return property;
-  }
-
-  @InternalApi
-  public double[] getVector() {
-    return vector;
-  }
-
-  @InternalApi
-  public DistanceMeasure getDistanceMeasure() {
-    return distanceMeasure;
-  }
-
-  @InternalApi
-  public FindNearestOptions getOptions() {
-    return options;
   }
 
   @Override

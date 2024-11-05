@@ -25,7 +25,7 @@ import com.google.firestore.v1.Pipeline;
 import java.util.Map;
 
 @BetaApi
-public final class Distinct extends AbstractStage {
+public final class Distinct extends Stage {
 
   private static final String name = "distinct";
   private final Map<String, Expr> groups;
@@ -33,16 +33,6 @@ public final class Distinct extends AbstractStage {
   @InternalApi
   public Distinct(Map<String, Expr> groups) {
     this.groups = groups;
-  }
-
-  @InternalApi
-  Map<String, Expr> getGroups() {
-    return groups;
-  }
-
-  @Override
-  public String getName() {
-    return name;
   }
 
   @Override

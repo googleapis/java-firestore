@@ -22,11 +22,6 @@ import com.google.api.core.InternalApi;
 public final class StageUtils {
   @InternalApi
   public static com.google.firestore.v1.Pipeline.Stage toStageProto(Stage stage) {
-    if (stage instanceof AbstractStage) {
-      return ((AbstractStage) stage).toStageProto();
-    } else {
-      // Handle the else case appropriately (e.g., throw an exception)
-      throw new IllegalArgumentException("Unknown stage type: " + stage.getClass());
-    }
+    return stage.toStageProto();
   }
 }

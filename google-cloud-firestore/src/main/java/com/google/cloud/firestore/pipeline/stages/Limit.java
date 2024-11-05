@@ -22,7 +22,7 @@ import com.google.api.core.InternalApi;
 import com.google.firestore.v1.Pipeline;
 
 @InternalApi
-public final class Limit extends AbstractStage {
+public final class Limit extends Stage {
 
   private static final String name = "limit";
   private final int limit;
@@ -30,17 +30,6 @@ public final class Limit extends AbstractStage {
   @InternalApi
   public Limit(int limit) {
     this.limit = limit;
-  }
-
-  @InternalApi
-  public int getLimit() {
-    return limit;
-  }
-
-  @Override
-  @InternalApi
-  public String getName() {
-    return name;
   }
 
   @Override

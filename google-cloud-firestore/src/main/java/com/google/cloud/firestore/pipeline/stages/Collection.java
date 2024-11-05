@@ -22,7 +22,7 @@ import com.google.firestore.v1.Value;
 import javax.annotation.Nonnull;
 
 @InternalApi
-public final class Collection extends AbstractStage {
+public final class Collection extends Stage {
 
   private static final String name = "collection";
   @Nonnull private final String path;
@@ -34,16 +34,6 @@ public final class Collection extends AbstractStage {
     } else {
       this.path = path;
     }
-  }
-
-  @InternalApi
-  public String getPath() {
-    return path;
-  }
-
-  @Override
-  public String getName() {
-    return name;
   }
 
   @Override

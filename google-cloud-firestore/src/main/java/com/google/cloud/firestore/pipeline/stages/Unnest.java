@@ -18,12 +18,11 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
-import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.firestore.v1.Pipeline;
 import javax.annotation.Nonnull;
 
-public class Unnest extends AbstractStage {
+public class Unnest extends Stage {
 
   private static final String name = "unnest";
   private final Field field;
@@ -37,11 +36,6 @@ public class Unnest extends AbstractStage {
   public Unnest(@Nonnull Field field, @Nonnull UnnestOptions options) {
     this.field = field;
     this.options = options;
-  }
-
-  @InternalApi
-  public String getName() {
-    return name;
   }
 
   @Override
