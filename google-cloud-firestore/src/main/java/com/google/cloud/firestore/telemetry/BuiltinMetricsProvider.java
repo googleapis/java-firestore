@@ -148,7 +148,7 @@ class BuiltinMetricsProvider {
         counter.add(count, toOtelAttributes(attributes));
       } catch (Exception e) {
         logger.log(
-            Level.WARNING, "Failed to record transaction attempt count: " + e.getMessage(), e);
+            Level.WARNING, "Failed to record counter metric:" + e.getMessage(), e);
       }
     }
   }
