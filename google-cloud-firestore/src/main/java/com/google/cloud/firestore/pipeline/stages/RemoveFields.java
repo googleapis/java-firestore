@@ -17,11 +17,13 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
+import com.google.cloud.firestore.PipelineUtils;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.common.collect.ImmutableList;
+import com.google.firestore.v1.Pipeline;
 
 @InternalApi
-public final class RemoveFields implements Stage {
+public final class RemoveFields extends Stage {
 
   private static final String name = "remove_fields";
   private final ImmutableList<Field> fields;
@@ -31,13 +33,12 @@ public final class RemoveFields implements Stage {
     this.fields = fields;
   }
 
-  @InternalApi
-  public ImmutableList<Field> getFields() {
-    return fields;
-  }
-
   @Override
-  public String getName() {
-    return name;
+  Pipeline.Stage toStageProto() {
+    Pipeline.Stage.Builder builder = Pipeline.Stage.newBuilder().setName(name);
+    for (Field field : fields) {
+      builder.addArgs(PipelineUtils.encodeValue(field));
+    }
+    return builder.build();
   }
 }

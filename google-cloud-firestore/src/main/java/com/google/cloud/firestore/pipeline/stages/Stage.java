@@ -16,6 +16,11 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-public interface Stage {
-  String getName();
+/** Parent to all stages. */
+public abstract class Stage {
+
+  /** Constructor is package-private to prevent extension. */
+  Stage() {}
+
+  abstract com.google.firestore.v1.Pipeline.Stage toStageProto();
 }

@@ -18,7 +18,7 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
-import com.google.firestore.v1.MapValue;
+import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Value;
 
 public class SampleOptions {
@@ -50,13 +50,7 @@ public class SampleOptions {
     return new SampleOptions(limit, Mode.DOCUMENTS);
   }
 
-  Value getProtoArgs() {
-    return Value.newBuilder()
-        .setMapValue(
-            MapValue.newBuilder()
-                .putFields("n", encodeValue(n))
-                .putFields("mode", mode.value)
-                .build())
-        .build();
+  Iterable<Value> getProtoArgs() {
+    return ImmutableList.of(encodeValue(n), mode.value);
   }
 }

@@ -17,16 +17,17 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
+import com.google.firestore.v1.Pipeline;
 
 @InternalApi
-public final class Database implements Stage {
+public final class Database extends Stage {
   private static final String name = "database";
 
   @InternalApi
   public Database() {}
 
   @Override
-  public String getName() {
-    return name;
+  Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder().setName(name).build();
   }
 }

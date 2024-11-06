@@ -16,11 +16,14 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
+import com.google.firestore.v1.Pipeline;
 
 @InternalApi
-public final class Where implements Stage {
+public final class Where extends Stage {
 
   private static final String name = "where";
   private final FilterCondition condition;
@@ -30,13 +33,8 @@ public final class Where implements Stage {
     this.condition = condition;
   }
 
-  @InternalApi
-  public FilterCondition getCondition() {
-    return condition;
-  }
-
   @Override
-  public String getName() {
-    return name;
+  Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder().setName(name).addArgs(encodeValue(condition)).build();
   }
 }

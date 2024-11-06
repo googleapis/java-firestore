@@ -16,27 +16,24 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+
 import com.google.api.core.InternalApi;
+import com.google.firestore.v1.Pipeline;
 
 @InternalApi
-public final class Limit implements Stage {
+public final class Limit extends Stage {
 
   private static final String name = "limit";
-  private int limit;
+  private final int limit;
 
   @InternalApi
   public Limit(int limit) {
     this.limit = limit;
   }
 
-  @InternalApi
-  public int getLimit() {
-    return limit;
-  }
-
   @Override
-  @InternalApi
-  public String getName() {
-    return name;
+  Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder().setName(name).addArgs(encodeValue(limit)).build();
   }
 }

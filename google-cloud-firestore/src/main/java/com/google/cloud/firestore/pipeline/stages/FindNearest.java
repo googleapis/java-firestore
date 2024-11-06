@@ -16,12 +16,15 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.firestore.v1.Pipeline;
 
 @BetaApi
-public final class FindNearest implements Stage {
+public final class FindNearest extends Stage {
 
   public interface DistanceMeasure {
 
@@ -109,28 +112,14 @@ public final class FindNearest implements Stage {
   }
 
   @Override
-  @InternalApi
-  public String getName() {
-    return name;
-  }
-
-  @InternalApi
-  public Expr getProperty() {
-    return property;
-  }
-
-  @InternalApi
-  public double[] getVector() {
-    return vector;
-  }
-
-  @InternalApi
-  public DistanceMeasure getDistanceMeasure() {
-    return distanceMeasure;
-  }
-
-  @InternalApi
-  public FindNearestOptions getOptions() {
-    return options;
+  Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder()
+        .setName(name)
+        .addArgs(encodeValue(property))
+        .addArgs(encodeValue(vector))
+        .addArgs(encodeValue(distanceMeasure.toProtoString()))
+        .putOptions("limit", encodeValue(options.getLimit()))
+        .putOptions("distance_field", encodeValue(options.getDistanceField()))
+        .build();
   }
 }

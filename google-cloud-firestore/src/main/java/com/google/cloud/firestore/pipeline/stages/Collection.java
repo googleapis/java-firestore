@@ -17,10 +17,12 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
+import com.google.firestore.v1.Pipeline;
+import com.google.firestore.v1.Value;
 import javax.annotation.Nonnull;
 
 @InternalApi
-public final class Collection implements Stage {
+public final class Collection extends Stage {
 
   private static final String name = "collection";
   @Nonnull private final String path;
@@ -34,13 +36,11 @@ public final class Collection implements Stage {
     }
   }
 
-  @InternalApi
-  public String getPath() {
-    return path;
-  }
-
   @Override
-  public String getName() {
-    return name;
+  Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder()
+        .setName(name)
+        .addArgs(Value.newBuilder().setReferenceValue(path).build())
+        .build();
   }
 }
