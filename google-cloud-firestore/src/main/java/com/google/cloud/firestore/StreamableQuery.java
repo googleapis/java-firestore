@@ -20,6 +20,7 @@ import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 import static com.google.common.collect.Lists.reverse;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.InternalApi;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ResponseObserver;
@@ -53,6 +54,7 @@ import org.threeten.bp.Duration;
  * `isRetryableWithCursor`. Retrying with a cursor means that the StreamableQuery can be resumed
  * where it failed by first calling `startAfter(lastDocumentReceived)`.
  */
+@InternalApi
 public abstract class StreamableQuery<SnapshotType> {
   final Query.QueryOptions options;
   final FirestoreRpcContext<?> rpcContext;
@@ -84,7 +86,7 @@ public abstract class StreamableQuery<SnapshotType> {
     return rpcContext.getFirestore();
   }
 
-  protected MetricsContext createMetricsContext(String methodName) {
+  MetricsContext createMetricsContext(String methodName) {
     return getFirestore().getOptions().getMetricsUtil().createMetricsContext(methodName);
   }
   /**
@@ -302,7 +304,7 @@ public abstract class StreamableQuery<SnapshotType> {
     }
   }
 
-  protected void internalStream(
+  void internalStream(
       final MonitoredStreamResponseObserver streamResponseObserver,
       final long startTimeNanos,
       @Nullable final ByteString transactionId,

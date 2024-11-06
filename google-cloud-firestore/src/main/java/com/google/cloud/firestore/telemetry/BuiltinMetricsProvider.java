@@ -31,6 +31,7 @@ import com.google.api.gax.tracing.MetricsTracerFactory;
 import com.google.api.gax.tracing.OpenTelemetryMetricsRecorder;
 import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.common.annotations.VisibleForTesting;
+
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
@@ -51,7 +52,7 @@ class BuiltinMetricsProvider {
   private static final Logger logger = Logger.getLogger(BuiltinMetricsProvider.class.getName());
 
   private OpenTelemetry openTelemetry;
-  private DoubleHistogram endToEndRequestLatency;
+  private DoubleHistogram endToEndLatency;
   private DoubleHistogram firstResponseLatency;
   private DoubleHistogram transactionLatency;
   private LongCounter transactionAttemptCount;
@@ -100,7 +101,7 @@ class BuiltinMetricsProvider {
   private void configureSDKLayerMetrics() {
     Meter meter = openTelemetry.getMeter(FIRESTORE_METER_NAME);
 
-    this.endToEndRequestLatency =
+    this.endToEndLatency =
         meter
             .histogramBuilder(METRIC_PREFIX + "/" + METRIC_NAME_END_TO_END_LATENCY)
             .setDescription("Firestore operations' end-to-end latency")
@@ -153,8 +154,7 @@ class BuiltinMetricsProvider {
       try {
         counter.add(count, toOtelAttributes(attributes));
       } catch (Exception e) {
-        logger.log(
-            Level.WARNING, "Failed to record transaction attempt count: " + e.getMessage(), e);
+        logger.log(Level.WARNING, "Failed to record counter metric:" + e.getMessage(), e);
       }
     }
   }
@@ -162,7 +162,7 @@ class BuiltinMetricsProvider {
   public DoubleHistogram getHistogram(MetricType metricType) {
     switch (metricType) {
       case END_TO_END_LATENCY:
-        return endToEndRequestLatency;
+        return endToEndLatency;
       case FIRST_RESPONSE_LATENCY:
         return firstResponseLatency;
       case TRANSACTION_LATENCY:
@@ -173,15 +173,14 @@ class BuiltinMetricsProvider {
   }
 
   public LongCounter getCounter(MetricType metricType) {
-    if (metricType == MetricType.TRANSACTION_ATTEMPT) {
+    if (metricType == MetricType.TRANSACTION_ATTEMPT_COUNT) {
       return transactionAttemptCount;
     } else {
       throw new IllegalArgumentException("Unknown counter MetricType: " + metricType);
     }
   }
 
-  @VisibleForTesting
-  public Attributes toOtelAttributes(Map<String, String> attributes) {
+  private Attributes toOtelAttributes(Map<String, String> attributes) {
     AttributesBuilder attributesBuilder = Attributes.builder();
     attributes.forEach(attributesBuilder::put);
     return attributesBuilder.build();
