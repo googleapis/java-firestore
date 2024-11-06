@@ -83,27 +83,16 @@ class EnabledMetricsUtil implements MetricsUtil {
   }
 
   @VisibleForTesting
-  public BuiltinMetricsProvider getCustomMetricsProvider() {
+  BuiltinMetricsProvider getCustomMetricsProvider() {
     return customMetricsProvider;
   }
 
   @VisibleForTesting
-  public BuiltinMetricsProvider getDefaultMetricsProvider() {
+  BuiltinMetricsProvider getDefaultMetricsProvider() {
     return defaultMetricsProvider;
   }
 
-  @VisibleForTesting
-  public void setDefaultMetricsProvider(BuiltinMetricsProvider provider) {
-    this.defaultMetricsProvider = provider;
-  }
-
-  @VisibleForTesting
-  public void setCustomMetricsProvider(BuiltinMetricsProvider provider) {
-    this.customMetricsProvider = provider;
-  }
-
-  @VisibleForTesting
-  public BuiltinMetricsProvider configureDefaultMetricsProvider(FirestoreOptions firestoreOptions)
+  private BuiltinMetricsProvider configureDefaultMetricsProvider(FirestoreOptions firestoreOptions)
       throws IOException {
     OpenTelemetry defaultOpenTelemetry;
     boolean exportBuiltinMetricsToGoogleCloudMonitoring =
@@ -271,7 +260,7 @@ class EnabledMetricsUtil implements MetricsUtil {
   }
 
   @VisibleForTesting
-  public String extractErrorStatus(@Nullable Throwable throwable) {
+  String extractErrorStatus(@Nullable Throwable throwable) {
     if (!(throwable instanceof FirestoreException)) {
       return Status.Code.UNKNOWN.toString();
     }

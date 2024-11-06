@@ -16,6 +16,9 @@
 package com.google.cloud.firestore.telemetry;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
@@ -33,16 +36,40 @@ import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.metrics.MeterProvider;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class EnabledMetricsUtilTest {
+
+  private BuiltinMetricsProvider defaultProvider;
+  private BuiltinMetricsProvider customProvider;
+
   @Before
   public void setUp() {
     GlobalOpenTelemetry.resetForTest();
+    defaultProvider = Mockito.mock(BuiltinMetricsProvider.class);
+    customProvider = Mockito.mock(BuiltinMetricsProvider.class);
+  }
+
+  // Use reflection to inject mock metrics provider to the util class
+  private void injectMockProviders(EnabledMetricsUtil metricsUtil) throws Exception {
+    injectMockProvider(metricsUtil, "defaultMetricsProvider", defaultProvider);
+    injectMockProvider(metricsUtil, "customMetricsProvider", customProvider);
+  }
+
+  private void injectMockProvider(
+      EnabledMetricsUtil metricsUtil, String fieldName, BuiltinMetricsProvider provider)
+      throws Exception {
+    Field field = EnabledMetricsUtil.class.getDeclaredField(fieldName);
+    field.setAccessible(true);
+    field.set(metricsUtil, provider);
   }
 
   FirestoreOptions.Builder getBaseOptions() {
@@ -55,8 +82,7 @@ public class EnabledMetricsUtilTest {
 
   @Test
   public void createsDefaultBuiltinMetricsProviderWithBuiltinOpenTelemetryInstance() {
-    FirestoreOptions firestoreOptions = getBaseOptions().build();
-    EnabledMetricsUtil metricsUtil = new EnabledMetricsUtil(firestoreOptions);
+    EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
     BuiltinMetricsProvider metricsProvider = metricsUtil.getDefaultMetricsProvider();
     assertThat(metricsProvider).isNotNull();
     assertThat(metricsProvider.getOpenTelemetry()).isNotNull();
@@ -114,8 +140,7 @@ public class EnabledMetricsUtilTest {
 
   @Test
   public void globalOpenTelemetryDefaultsToNoopIfNotRegistered() {
-    FirestoreOptions firestoreOptions = getBaseOptions().build();
-    EnabledMetricsUtil metricsUtil = new EnabledMetricsUtil(firestoreOptions);
+    EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
 
     BuiltinMetricsProvider customMetricsProvider = metricsUtil.getCustomMetricsProvider();
     assertThat(customMetricsProvider).isNotNull();
@@ -204,13 +229,11 @@ public class EnabledMetricsUtilTest {
   @Test
   public void extractErrorStatusShouldNotThrowOnNonFirestoreException() {
     EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
-
     ApiException apiException =
         new ApiException(
             new IllegalStateException("Mock batchWrite failed in test"),
             GrpcStatusCode.of(Status.Code.INVALID_ARGUMENT),
             false);
-
     String errorStatus = metricsUtil.extractErrorStatus(apiException);
     assertThat(errorStatus).isEqualTo(StatusCode.Code.UNKNOWN.toString());
   }
@@ -218,48 +241,39 @@ public class EnabledMetricsUtilTest {
   @Test
   public void testExtractErrorStatus_firestoreExceptionWithStatus() {
     EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
-
     FirestoreException firestoreException =
         FirestoreException.forApiException(
             new ApiException(
                 new IllegalStateException("Mock batchWrite failed in test"),
                 GrpcStatusCode.of(Status.Code.INVALID_ARGUMENT),
                 false));
-
     String errorStatus = metricsUtil.extractErrorStatus(firestoreException);
     // TODO(b/305998085):Change this to correct status code
     assertThat(errorStatus).isEqualTo(StatusCode.Code.UNKNOWN.toString());
   }
 
   @Test
-  public void recordLatencyCalledWhenFutureIsCompletedWithSuccess() {
-    EnabledMetricsUtil enabledMetricsUtil = newEnabledMetricsUtil();
-    BuiltinMetricsProvider mockDefaultProvider = Mockito.mock(BuiltinMetricsProvider.class);
-    BuiltinMetricsProvider mockCustomProvider = Mockito.mock(BuiltinMetricsProvider.class);
-    enabledMetricsUtil.setDefaultMetricsProvider(mockDefaultProvider);
-    enabledMetricsUtil.setCustomMetricsProvider(mockCustomProvider);
+  public void recordLatencyCalledWhenFutureIsCompletedWithSuccess() throws Exception {
+    EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
+    injectMockProviders(metricsUtil);
 
-    MetricsContext context = enabledMetricsUtil.createMetricsContext("testMethod");
+    MetricsContext context = metricsUtil.createMetricsContext("testMethod");
     ApiFuture<String> future = ApiFutures.immediateFuture("success");
 
     context.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, future);
-    Mockito.verify(mockDefaultProvider)
-        .latencyRecorder(
-            Mockito.eq(MetricType.END_TO_END_LATENCY), Mockito.anyDouble(), Mockito.anyMap());
-    Mockito.verify(mockCustomProvider)
-        .latencyRecorder(
-            Mockito.eq(MetricType.END_TO_END_LATENCY), Mockito.anyDouble(), Mockito.anyMap());
+
+    verify(defaultProvider)
+        .latencyRecorder(eq(MetricType.END_TO_END_LATENCY), anyDouble(), Mockito.anyMap());
+    verify(customProvider)
+        .latencyRecorder(eq(MetricType.END_TO_END_LATENCY), anyDouble(), Mockito.anyMap());
   }
 
   @Test
-  public void recordLatencyCalledWhenFutureIsCompletedWithError() {
-    EnabledMetricsUtil enabledMetricsUtil = newEnabledMetricsUtil();
-    BuiltinMetricsProvider mockDefaultProvider = Mockito.mock(BuiltinMetricsProvider.class);
-    BuiltinMetricsProvider mockCustomProvider = Mockito.mock(BuiltinMetricsProvider.class);
-    enabledMetricsUtil.setDefaultMetricsProvider(mockDefaultProvider);
-    enabledMetricsUtil.setCustomMetricsProvider(mockCustomProvider);
+  public void recordLatencyCalledWhenFutureIsCompletedWithError() throws Exception {
+    EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
+    injectMockProviders(metricsUtil);
 
-    MetricsContext context = enabledMetricsUtil.createMetricsContext("testMethod");
+    MetricsContext context = metricsUtil.createMetricsContext("testMethod");
     FirestoreException firestoreException =
         FirestoreException.forApiException(
             new ApiException(
@@ -268,8 +282,9 @@ public class EnabledMetricsUtilTest {
                 false));
     ApiFuture<String> future = ApiFutures.immediateFailedFuture(firestoreException);
     context.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, future);
+
     // TODO(b/305998085):Change this to correct status code
-    Mockito.verify(mockDefaultProvider)
+    Mockito.verify(defaultProvider)
         .latencyRecorder(
             Mockito.eq(MetricType.END_TO_END_LATENCY),
             Mockito.anyDouble(),
@@ -278,7 +293,7 @@ public class EnabledMetricsUtilTest {
                     attributes
                         .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS.getKey())
                         .equals(Status.Code.UNKNOWN.toString())));
-    Mockito.verify(mockCustomProvider)
+    Mockito.verify(customProvider)
         .latencyRecorder(
             Mockito.eq(MetricType.END_TO_END_LATENCY),
             Mockito.anyDouble(),
@@ -290,35 +305,28 @@ public class EnabledMetricsUtilTest {
   }
 
   @Test
-  public void recordCounterCalledWhenFutureIsCompletedWithSuccess() {
-    EnabledMetricsUtil enabledMetricsUtil = newEnabledMetricsUtil();
-    BuiltinMetricsProvider mockDefaultProvider = Mockito.mock(BuiltinMetricsProvider.class);
-    BuiltinMetricsProvider mockCustomProvider = Mockito.mock(BuiltinMetricsProvider.class);
-    enabledMetricsUtil.setDefaultMetricsProvider(mockDefaultProvider);
-    enabledMetricsUtil.setCustomMetricsProvider(mockCustomProvider);
+  public void recordCounterCalledWhenFutureIsCompletedWithSuccess() throws Exception {
+    EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
+    injectMockProviders(metricsUtil);
 
-    MetricsContext context = enabledMetricsUtil.createMetricsContext("testMethod");
+    MetricsContext context = metricsUtil.createMetricsContext("testMethod");
     ApiFuture<String> future = ApiFutures.immediateFuture("success");
+    context.recordCounterAtFuture(MetricType.TRANSACTION_ATTEMPT_COUNT, future);
 
-    context.recordCounterAtFuture(MetricType.TRANSACTION_ATTEMPT, future);
-
-    Mockito.verify(mockDefaultProvider)
+    Mockito.verify(defaultProvider)
         .counterRecorder(
-            Mockito.eq(MetricType.TRANSACTION_ATTEMPT), Mockito.anyLong(), Mockito.anyMap());
-    Mockito.verify(mockCustomProvider)
+            Mockito.eq(MetricType.TRANSACTION_ATTEMPT_COUNT), Mockito.anyLong(), Mockito.anyMap());
+    Mockito.verify(customProvider)
         .counterRecorder(
-            Mockito.eq(MetricType.TRANSACTION_ATTEMPT), Mockito.anyLong(), Mockito.anyMap());
+            Mockito.eq(MetricType.TRANSACTION_ATTEMPT_COUNT), Mockito.anyLong(), Mockito.anyMap());
   }
 
   @Test
-  public void recordCounterCalledWhenFutureIsCompletedWithError() {
-    EnabledMetricsUtil enabledMetricsUtil = newEnabledMetricsUtil();
-    BuiltinMetricsProvider mockDefaultProvider = Mockito.mock(BuiltinMetricsProvider.class);
-    BuiltinMetricsProvider mockCustomProvider = Mockito.mock(BuiltinMetricsProvider.class);
-    enabledMetricsUtil.setDefaultMetricsProvider(mockDefaultProvider);
-    enabledMetricsUtil.setCustomMetricsProvider(mockCustomProvider);
+  public void recordCounterCalledWhenFutureIsCompletedWithError() throws Exception {
+    EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
+    injectMockProviders(metricsUtil);
 
-    MetricsContext context = enabledMetricsUtil.createMetricsContext("testMethod");
+    MetricsContext context = metricsUtil.createMetricsContext("testMethod");
     FirestoreException firestoreException =
         FirestoreException.forApiException(
             new ApiException(
@@ -326,21 +334,21 @@ public class EnabledMetricsUtilTest {
                 GrpcStatusCode.of(Status.Code.INVALID_ARGUMENT),
                 false));
     ApiFuture<String> future = ApiFutures.immediateFailedFuture(firestoreException);
-    context.recordCounterAtFuture(MetricType.TRANSACTION_ATTEMPT, future);
+    context.recordCounterAtFuture(MetricType.TRANSACTION_ATTEMPT_COUNT, future);
 
     // TODO(b/305998085):Change this to correct status code
-    Mockito.verify(mockDefaultProvider)
+    Mockito.verify(defaultProvider)
         .counterRecorder(
-            Mockito.eq(MetricType.TRANSACTION_ATTEMPT),
+            Mockito.eq(MetricType.TRANSACTION_ATTEMPT_COUNT),
             Mockito.anyLong(),
             Mockito.argThat(
                 attributes ->
                     attributes
                         .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS.getKey())
                         .equals(Status.Code.UNKNOWN.toString())));
-    Mockito.verify(mockCustomProvider)
+    Mockito.verify(customProvider)
         .counterRecorder(
-            Mockito.eq(MetricType.TRANSACTION_ATTEMPT),
+            Mockito.eq(MetricType.TRANSACTION_ATTEMPT_COUNT),
             Mockito.anyLong(),
             Mockito.argThat(
                 attributes ->

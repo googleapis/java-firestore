@@ -31,7 +31,6 @@ import com.google.api.gax.tracing.MetricsTracerFactory;
 import com.google.api.gax.tracing.OpenTelemetryMetricsRecorder;
 import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.common.annotations.VisibleForTesting;
-
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
@@ -69,13 +68,13 @@ class BuiltinMetricsProvider {
     this.staticAttributes = createStaticAttributes();
 
     if (openTelemetry.getMeterProvider() != MeterProvider.noop()) {
-      configureRPCLayerMetrics();
       configureSDKLayerMetrics();
+      configureRPCLayerMetrics();
     }
   }
 
   @VisibleForTesting
-  public OpenTelemetry getOpenTelemetry() {
+  OpenTelemetry getOpenTelemetry() {
     return openTelemetry;
   }
 
@@ -180,7 +179,8 @@ class BuiltinMetricsProvider {
     }
   }
 
-  private Attributes toOtelAttributes(Map<String, String> attributes) {
+  @VisibleForTesting
+  Attributes toOtelAttributes(Map<String, String> attributes) {
     AttributesBuilder attributesBuilder = Attributes.builder();
     attributes.forEach(attributesBuilder::put);
     return attributesBuilder.build();
