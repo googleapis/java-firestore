@@ -82,16 +82,6 @@ class EnabledMetricsUtil implements MetricsUtil {
     }
   }
 
-  @VisibleForTesting
-  BuiltinMetricsProvider getCustomMetricsProvider() {
-    return customMetricsProvider;
-  }
-
-  @VisibleForTesting
-  BuiltinMetricsProvider getDefaultMetricsProvider() {
-    return defaultMetricsProvider;
-  }
-
   private BuiltinMetricsProvider configureDefaultMetricsProvider(
       FirestoreOptions firestoreOptions) {
     OpenTelemetry defaultOpenTelemetry = OpenTelemetry.noop();
@@ -133,14 +123,21 @@ class EnabledMetricsUtil implements MetricsUtil {
     addTracerFactory(apiTracerFactories, customMetricsProvider);
   }
 
+  @VisibleForTesting
+  BuiltinMetricsProvider getCustomMetricsProvider() {
+    return customMetricsProvider;
+  }
+
+  @VisibleForTesting
+  BuiltinMetricsProvider getDefaultMetricsProvider() {
+    return defaultMetricsProvider;
+  }
+
   /**
    * Creates a default {@link OpenTelemetry} instance to collect and export built-in client side
    * metrics to Google Cloud Monitoring.
    */
   private OpenTelemetry getDefaultOpenTelemetryInstance(String projectId) throws IOException {
-    if (projectId == null) {
-      throw new IllegalArgumentException("Project ID is null.");
-    }
     SdkMeterProviderBuilder sdkMeterProviderBuilder = SdkMeterProvider.builder();
 
     // Filter out attributes that are not defined
