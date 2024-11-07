@@ -24,12 +24,7 @@ import org.junit.Test;
 public class TraceUtilTest {
   @Test
   public void defaultOptionsUseNoopTracer() {
-    TraceUtil traceUtil =
-        TraceUtil.getInstance(
-            FirestoreOptions.newBuilder()
-                .setProjectId("test-project")
-                .setDatabaseId("(default)")
-                .build());
+    TraceUtil traceUtil = TraceUtil.getInstance(FirestoreOptions.getDefaultInstance());
     assertThat(traceUtil instanceof EnabledTraceUtil).isTrue();
     EnabledTraceUtil enabledTraceUtil = (EnabledTraceUtil) traceUtil;
     assertThat(

@@ -33,7 +33,7 @@ public class EnabledTraceUtilTest {
   }
 
   EnabledTraceUtil defaultEnabledTraceUtil() {
-    return new EnabledTraceUtil(getBaseOptions().build());
+    return new EnabledTraceUtil(FirestoreOptions.getDefaultInstance());
   }
 
   FirestoreOptions.Builder getBaseOptions() {
