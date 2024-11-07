@@ -75,7 +75,7 @@ class EnabledMetricsUtil implements MetricsUtil {
     try {
       this.defaultMetricsProvider = configureDefaultMetricsProvider(firestoreOptions);
       this.customMetricsProvider = configureCustomMetricsProvider(firestoreOptions);
-    } catch (IOException e) {
+    } catch (Exception e) {
       logger.warning(
           "Unable to create MetricsUtil object for client side metrics, will skip exporting client side metrics"
               + e);
@@ -92,15 +92,22 @@ class EnabledMetricsUtil implements MetricsUtil {
     return defaultMetricsProvider;
   }
 
-  private BuiltinMetricsProvider configureDefaultMetricsProvider(FirestoreOptions firestoreOptions)
-      throws IOException {
-    OpenTelemetry defaultOpenTelemetry;
-    boolean exportBuiltinMetricsToGoogleCloudMonitoring =
-        firestoreOptions.getOpenTelemetryOptions().exportBuiltinMetricsToGoogleCloudMonitoring();
-    if (exportBuiltinMetricsToGoogleCloudMonitoring) {
-      defaultOpenTelemetry = getDefaultOpenTelemetryInstance(firestoreOptions.getProjectId());
-    } else {
-      defaultOpenTelemetry = OpenTelemetry.noop();
+  private BuiltinMetricsProvider configureDefaultMetricsProvider(
+      FirestoreOptions firestoreOptions) {
+    OpenTelemetry defaultOpenTelemetry = OpenTelemetry.noop();
+    if (firestoreOptions.getOpenTelemetryOptions().exportBuiltinMetricsToGoogleCloudMonitoring()) {
+      String projectId = firestoreOptions.getProjectId();
+      if (projectId == null) {
+        logger.warning(
+            "Project ID is null, skipping client side metrics export to Cloud Monitoring.");
+      }
+      try {
+        defaultOpenTelemetry = getDefaultOpenTelemetryInstance(projectId);
+      } catch (IOException e) {
+        logger.warning(
+            "Unable to create default OpenTelemetry instance for client side metrics, will skip exporting client side metrics to Cloud Monitoring: "
+                + e);
+      }
     }
     return new BuiltinMetricsProvider(defaultOpenTelemetry);
   }
