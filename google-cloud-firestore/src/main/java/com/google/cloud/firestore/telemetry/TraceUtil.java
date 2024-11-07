@@ -72,7 +72,9 @@ public interface TraceUtil {
     }
 
     if (createEnabledInstance) {
-      logger.info("client side tracing is enabled");
+      logger.info(
+          "client side tracing is enabled. Is projectId null: "
+              + (firestoreOptions.getProjectId() == null));
       return new EnabledTraceUtil(firestoreOptions);
     } else {
       return new DisabledTraceUtil();

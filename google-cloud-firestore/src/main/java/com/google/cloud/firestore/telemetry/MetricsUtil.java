@@ -46,7 +46,9 @@ public interface MetricsUtil {
    */
   static MetricsUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
     if (shouldCreateEnabledInstance()) {
-      logger.info("client side metrics is enabled");
+      logger.info(
+          "client side metrics is enabled. Is projectId null: "
+              + (firestoreOptions.getProjectId() == null));
       return new EnabledMetricsUtil(firestoreOptions);
     } else {
       return new DisabledMetricsUtil();
