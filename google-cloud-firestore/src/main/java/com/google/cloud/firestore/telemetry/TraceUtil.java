@@ -22,7 +22,6 @@ import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.FirestoreOptions;
 import io.grpc.ManagedChannelBuilder;
 import java.util.Map;
-import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -44,8 +43,6 @@ public interface TraceUtil {
 
   String ENABLE_TRACING_ENV_VAR = "FIRESTORE_ENABLE_TRACING";
   String LIBRARY_NAME = "com.google.cloud.firestore";
-
-  final Logger logger = Logger.getLogger(TraceUtil.class.getName());
 
   /**
    * Creates and returns an instance of the TraceUtil class.
@@ -72,9 +69,6 @@ public interface TraceUtil {
     }
 
     if (createEnabledInstance) {
-      logger.info(
-          "client side tracing is enabled. Is projectId null: "
-              + (firestoreOptions.getProjectId() == null));
       return new EnabledTraceUtil(firestoreOptions);
     } else {
       return new DisabledTraceUtil();

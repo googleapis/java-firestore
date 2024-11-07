@@ -131,6 +131,9 @@ class EnabledMetricsUtil implements MetricsUtil {
    * metrics to Google Cloud Monitoring.
    */
   private OpenTelemetry getDefaultOpenTelemetryInstance(String projectId) throws IOException {
+    if (projectId == null) {
+      throw new IllegalArgumentException("Project ID is null.");
+    }
     SdkMeterProviderBuilder sdkMeterProviderBuilder = SdkMeterProvider.builder();
 
     // Filter out attributes that are not defined

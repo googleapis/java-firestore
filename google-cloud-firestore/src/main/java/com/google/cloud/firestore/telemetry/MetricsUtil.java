@@ -46,9 +46,6 @@ public interface MetricsUtil {
    */
   static MetricsUtil getInstance(@Nonnull FirestoreOptions firestoreOptions) {
     if (shouldCreateEnabledInstance()) {
-      logger.info(
-          "client side metrics is enabled. Is projectId null: "
-              + (firestoreOptions.getProjectId() == null));
       return new EnabledMetricsUtil(firestoreOptions);
     } else {
       return new DisabledMetricsUtil();
@@ -58,7 +55,6 @@ public interface MetricsUtil {
   static boolean shouldCreateEnabledInstance() {
     // Client side metrics feature is default on unless it is manually turned off by
     // environment variables
-    // TODO(metrics): The feature is disabled before it is ready for general release.
     boolean shouldCreateEnabledInstance = true;
 
     String enableMetricsEnvVar = System.getenv(ENABLE_METRICS_ENV_VAR);
