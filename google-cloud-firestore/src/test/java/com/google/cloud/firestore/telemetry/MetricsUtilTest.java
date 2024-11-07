@@ -24,7 +24,7 @@ import org.junit.Test;
 
 public class MetricsUtilTest {
   @Test
-  public void defaultOptionsCreateEnabledMetricsUtil() {
+  public void defaultFirestoreOptionsCreatesEnabledMetricsUtil() {
     MetricsUtil util =
         MetricsUtil.getInstance(
             FirestoreOptions.newBuilder()
@@ -36,7 +36,7 @@ public class MetricsUtilTest {
   }
 
   @Test
-  public void createEnabledMetricsUtilWithOnEnv() throws Exception {
+  public void createEnabledMetricsUtilWithEnvOn() throws Exception {
     withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "ON")
         .execute(
             () -> {
@@ -52,7 +52,7 @@ public class MetricsUtilTest {
   }
 
   @Test
-  public void createEnabledMetricsUtilWithTrueEnv() throws Exception {
+  public void createEnabledMetricsUtilWithEnvTrue() throws Exception {
     withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "True")
         .execute(
             () -> {
@@ -68,7 +68,7 @@ public class MetricsUtilTest {
   }
 
   @Test
-  public void createDisabledMetricsUtilWithOffEnv() throws Exception {
+  public void createDisabledMetricsUtilWithEnvOff() throws Exception {
     withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "OFF")
         .execute(
             () -> {
@@ -84,7 +84,7 @@ public class MetricsUtilTest {
   }
 
   @Test
-  public void createDisabledMetricsUtilWithFalseEnv() throws Exception {
+  public void createDisabledMetricsUtilWithEnvFalse() throws Exception {
     withEnvironmentVariable("FIRESTORE_ENABLE_METRICS", "false")
         .execute(
             () -> {

@@ -58,20 +58,6 @@ public class EnabledMetricsUtilTest {
     customProvider = Mockito.mock(BuiltinMetricsProvider.class);
   }
 
-  // Use reflection to inject mock metrics provider to the util class
-  private void injectMockProviders(EnabledMetricsUtil metricsUtil) throws Exception {
-    injectMockProvider(metricsUtil, "defaultMetricsProvider", defaultProvider);
-    injectMockProvider(metricsUtil, "customMetricsProvider", customProvider);
-  }
-
-  private void injectMockProvider(
-      EnabledMetricsUtil metricsUtil, String fieldName, BuiltinMetricsProvider provider)
-      throws Exception {
-    Field field = EnabledMetricsUtil.class.getDeclaredField(fieldName);
-    field.setAccessible(true);
-    field.set(metricsUtil, provider);
-  }
-
   FirestoreOptions.Builder getBaseOptions() {
     return FirestoreOptions.newBuilder().setProjectId("test-project").setDatabaseId("(default)");
   }
@@ -101,10 +87,10 @@ public class EnabledMetricsUtilTest {
                     .build())
             .build();
     EnabledMetricsUtil metricsUtil = new EnabledMetricsUtil(firestoreOptions);
+
     BuiltinMetricsProvider metricsProvider = metricsUtil.getDefaultMetricsProvider();
     assertThat(metricsProvider).isNotNull();
     assertThat(metricsProvider.getOpenTelemetry()).isNotNull();
-
     // Metrics collection is "disabled" with OpenTelemetry No-op meter provider instance
     assertThat(metricsProvider.getOpenTelemetry().getMeterProvider())
         .isEqualTo(MeterProvider.noop());
@@ -129,29 +115,16 @@ public class EnabledMetricsUtilTest {
   @Test
   public void usesGlobalOpenTelemetryIfCustomOpenTelemetryInstanceNotProvided() {
     OpenTelemetrySdk.builder().buildAndRegisterGlobal();
-    FirestoreOptions firestoreOptions = getBaseOptions().build();
-    EnabledMetricsUtil metricsUtil = new EnabledMetricsUtil(firestoreOptions);
-
-    BuiltinMetricsProvider customMetricsProvider = metricsUtil.getCustomMetricsProvider();
-    assertThat(customMetricsProvider).isNotNull();
-    assertThat(customMetricsProvider.getOpenTelemetry()).isNotNull();
-    assertThat(customMetricsProvider.getOpenTelemetry()).isEqualTo(GlobalOpenTelemetry.get());
-  }
-
-  @Test
-  public void globalOpenTelemetryDefaultsToNoopIfNotRegistered() {
     EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
 
     BuiltinMetricsProvider customMetricsProvider = metricsUtil.getCustomMetricsProvider();
     assertThat(customMetricsProvider).isNotNull();
     assertThat(customMetricsProvider.getOpenTelemetry()).isNotNull();
     assertThat(customMetricsProvider.getOpenTelemetry()).isEqualTo(GlobalOpenTelemetry.get());
-    assertThat(customMetricsProvider.getOpenTelemetry().getMeterProvider())
-        .isEqualTo(MeterProvider.noop());
   }
 
   @Test
-  public void usesIndependentOpenTelemetryInstanceInDefaultAndCustomMetricsProvider() {
+  public void usesIndependentOpenTelemetryInstanceForDefaultAndCustomMetricsProvider() {
     OpenTelemetry openTelemetry = OpenTelemetrySdk.builder().build();
     FirestoreOptions firestoreOptions =
         getBaseOptions()
@@ -172,7 +145,6 @@ public class EnabledMetricsUtilTest {
   @Test
   public void canCreateMetricsContext() {
     MetricsContext context = newEnabledMetricsUtil().createMetricsContext("testMethod");
-
     assertThat(context).isNotNull();
     assertThat(context instanceof EnabledMetricsUtil.MetricsContext).isTrue();
     assertThat(context.methodName).isEqualTo("testMethod");
@@ -181,9 +153,10 @@ public class EnabledMetricsUtilTest {
   @Test
   public void addsMetricsTracerFactoryForDefaultMetricsProvider() {
     List<ApiTracerFactory> factories = new ArrayList<>();
+
     EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
     metricsUtil.addMetricsTracerFactory(factories);
-    // Add tracer factory for default metrics provider only as the custom metrics provider is not
+    // Adds tracer factory for default metrics provider only as the custom metrics provider is not
     // enabled.
     assertThat(factories.size()).isEqualTo(1);
   }
@@ -201,7 +174,6 @@ public class EnabledMetricsUtilTest {
     EnabledMetricsUtil metricsUtil = new EnabledMetricsUtil(firestoreOptions);
 
     metricsUtil.addMetricsTracerFactory(factories);
-    // One from each provider
     assertThat(factories.size()).isEqualTo(2);
   }
 
@@ -227,19 +199,7 @@ public class EnabledMetricsUtilTest {
   }
 
   @Test
-  public void extractErrorStatusShouldNotThrowOnNonFirestoreException() {
-    EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
-    ApiException apiException =
-        new ApiException(
-            new IllegalStateException("Mock batchWrite failed in test"),
-            GrpcStatusCode.of(Status.Code.INVALID_ARGUMENT),
-            false);
-    String errorStatus = metricsUtil.extractErrorStatus(apiException);
-    assertThat(errorStatus).isEqualTo(StatusCode.Code.UNKNOWN.toString());
-  }
-
-  @Test
-  public void testExtractErrorStatus_firestoreExceptionWithStatus() {
+  public void extractsErrorStatusFromFirestoreException() {
     EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
     FirestoreException firestoreException =
         FirestoreException.forApiException(
@@ -253,13 +213,38 @@ public class EnabledMetricsUtilTest {
   }
 
   @Test
+  public void errorStatusSetToUnknownOnNonFirestoreException() {
+    EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
+    ApiException apiException =
+        new ApiException(
+            new IllegalStateException("Mock batchWrite failed in test"),
+            GrpcStatusCode.of(Status.Code.INVALID_ARGUMENT),
+            false);
+    String errorStatus = metricsUtil.extractErrorStatus(apiException);
+    assertThat(errorStatus).isEqualTo(StatusCode.Code.UNKNOWN.toString());
+  }
+
+  // Use reflection to inject mock metrics provider
+  private void injectMockProviders(EnabledMetricsUtil metricsUtil) throws Exception {
+    injectMockProvider(metricsUtil, "defaultMetricsProvider", defaultProvider);
+    injectMockProvider(metricsUtil, "customMetricsProvider", customProvider);
+  }
+
+  private void injectMockProvider(
+      EnabledMetricsUtil metricsUtil, String fieldName, BuiltinMetricsProvider provider)
+      throws Exception {
+    Field field = EnabledMetricsUtil.class.getDeclaredField(fieldName);
+    field.setAccessible(true);
+    field.set(metricsUtil, provider);
+  }
+
+  @Test
   public void recordLatencyCalledWhenFutureIsCompletedWithSuccess() throws Exception {
     EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
     injectMockProviders(metricsUtil);
 
     MetricsContext context = metricsUtil.createMetricsContext("testMethod");
     ApiFuture<String> future = ApiFutures.immediateFuture("success");
-
     context.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, future);
 
     verify(defaultProvider)

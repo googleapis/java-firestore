@@ -52,7 +52,7 @@ public class DisabledMetricsUtilTest {
   }
 
   @Test
-  public void metricsContextShouldNotThrow() {
+  public void shouldNotThrowOnMetricsCollection() {
     MetricsContext context = disabledMetricsUtil.createMetricsContext("testMethod");
 
     // Ensure no exceptions are thrown by no-op methods
