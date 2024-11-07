@@ -338,6 +338,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   @InternalApi("This class should only be extended within google-cloud-java")
   protected FirestoreOptions(Builder builder) {
     super(FirestoreFactory.class, FirestoreRpcFactory.class, builder, new FirestoreDefaults());
+    System.out.println("The projectId is not set: " + this.getProjectId() == null);
 
     // FirestoreOptions must contain non-null open-telemetry options.
     // If the builder doesn't have any open-telemetry options, use a default (disabled) one.
