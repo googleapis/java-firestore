@@ -60,7 +60,7 @@ public class FirestoreOpenTelemetryOptions {
 
     private Builder() {
       // TODO(metrics): default this to true when feature is ready
-      exportBuiltinMetricsToGoogleCloudMonitoring = false;
+      exportBuiltinMetricsToGoogleCloudMonitoring = true;
       openTelemetry = null;
     }
 
