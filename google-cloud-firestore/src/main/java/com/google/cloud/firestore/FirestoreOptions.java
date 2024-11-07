@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -69,6 +70,8 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final transient @Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions;
   private final transient @Nonnull com.google.cloud.firestore.telemetry.TraceUtil traceUtil;
   private final transient @Nonnull com.google.cloud.firestore.telemetry.MetricsUtil metricsUtil;
+
+  final Logger logger = Logger.getLogger(FirestoreOptions.class.getName());
 
   public static class DefaultFirestoreFactory implements FirestoreFactory {
 
@@ -338,7 +341,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   @InternalApi("This class should only be extended within google-cloud-java")
   protected FirestoreOptions(Builder builder) {
     super(FirestoreFactory.class, FirestoreRpcFactory.class, builder, new FirestoreDefaults());
-    System.out.println("The projectId is not set: " + this.getProjectId() == null);
+    logger.info("The projectId is not set: : " + (this.getProjectId() == null));
 
     // FirestoreOptions must contain non-null open-telemetry options.
     // If the builder doesn't have any open-telemetry options, use a default (disabled) one.
