@@ -66,6 +66,7 @@ public interface TelemetryConstants {
   String METRIC_PREFIX = "custom.googleapis.com/internal/client";
   String FIRESTORE_METER_NAME = "java_firestore";
   String GAX_METER_NAME = OpenTelemetryMetricsRecorder.GAX_METER_NAME;
+  String FIRESTORE_LIBRARY_NAME = "com.google.cloud.firestore";
 
   // Monitored resource keys for labels
   String RESOURCE_KEY_RESOURCE_CONTAINER = "resource_container";

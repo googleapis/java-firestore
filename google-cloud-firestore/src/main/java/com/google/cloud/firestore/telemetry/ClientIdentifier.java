@@ -22,7 +22,8 @@ import java.net.InetAddress;
 import java.util.UUID;
 
 /** A utility class for retrieving a unique client identifier (CLIENT_UID) */
-final class ClientIdentifier {
+@InternalApi
+public final class ClientIdentifier {
 
   private ClientIdentifier() {}
 

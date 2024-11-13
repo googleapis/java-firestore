@@ -36,6 +36,8 @@ import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.metrics.MeterProvider;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.metrics.SdkMeterProvider;
+import io.opentelemetry.sdk.testing.exporter.InMemoryMetricReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +100,11 @@ public class EnabledMetricsUtilTest {
 
   @Test
   public void usesCustomOpenTelemetryFromOptions() {
-    OpenTelemetry openTelemetry = OpenTelemetrySdk.builder().build();
+    InMemoryMetricReader inMemoryMetricReader = InMemoryMetricReader.create();
+    SdkMeterProvider sdkMeterProvider =
+        SdkMeterProvider.builder().registerMetricReader(inMemoryMetricReader).build();
+    OpenTelemetry openTelemetry =
+        OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProvider).build();
     FirestoreOptions firestoreOptions =
         getBaseOptions()
             .setOpenTelemetryOptions(
@@ -114,18 +120,28 @@ public class EnabledMetricsUtilTest {
 
   @Test
   public void usesGlobalOpenTelemetryIfCustomOpenTelemetryInstanceNotProvided() {
-    OpenTelemetrySdk.builder().buildAndRegisterGlobal();
+    InMemoryMetricReader inMemoryMetricReader = InMemoryMetricReader.create();
+    SdkMeterProvider sdkMeterProvider =
+        SdkMeterProvider.builder().registerMetricReader(inMemoryMetricReader).build();
+    OpenTelemetry openTelemetry =
+        OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProvider).buildAndRegisterGlobal();
     EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
 
     BuiltinMetricsProvider customMetricsProvider = metricsUtil.getCustomMetricsProvider();
     assertThat(customMetricsProvider).isNotNull();
     assertThat(customMetricsProvider.getOpenTelemetry()).isNotNull();
     assertThat(customMetricsProvider.getOpenTelemetry()).isEqualTo(GlobalOpenTelemetry.get());
+    assertThat(customMetricsProvider.getOpenTelemetry().getMeterProvider())
+        .isEqualTo(openTelemetry.getMeterProvider());
   }
 
   @Test
   public void usesIndependentOpenTelemetryInstanceForDefaultAndCustomMetricsProvider() {
-    OpenTelemetry openTelemetry = OpenTelemetrySdk.builder().build();
+    InMemoryMetricReader inMemoryMetricReader = InMemoryMetricReader.create();
+    SdkMeterProvider sdkMeterProvider =
+        SdkMeterProvider.builder().registerMetricReader(inMemoryMetricReader).build();
+    OpenTelemetry openTelemetry =
+        OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProvider).build();
     FirestoreOptions firestoreOptions =
         getBaseOptions()
             .setOpenTelemetryOptions(

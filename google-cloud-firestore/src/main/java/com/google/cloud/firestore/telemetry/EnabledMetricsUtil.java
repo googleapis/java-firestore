@@ -252,10 +252,8 @@ class EnabledMetricsUtil implements MetricsUtil {
 
     private void recordCounter(MetricType metric, String status) {
       Map<String, String> attributes = createAttributes(status, methodName);
-      defaultMetricsProvider.counterRecorder(
-          MetricType.TRANSACTION_ATTEMPT_COUNT, (long) counter, attributes);
-      customMetricsProvider.counterRecorder(
-          MetricType.TRANSACTION_ATTEMPT_COUNT, (long) counter, attributes);
+      defaultMetricsProvider.counterRecorder(metric, (long) counter, attributes);
+      customMetricsProvider.counterRecorder(metric, (long) counter, attributes);
     }
   }
 

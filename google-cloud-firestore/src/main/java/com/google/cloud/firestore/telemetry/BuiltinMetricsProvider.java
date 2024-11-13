@@ -61,7 +61,6 @@ class BuiltinMetricsProvider {
 
   private static final String MILLISECOND_UNIT = "ms";
   private static final String INTEGER_UNIT = "1";
-  private static final String FIRESTORE_LIBRARY_NAME = "com.google.cloud.firestore";
 
   public BuiltinMetricsProvider(OpenTelemetry openTelemetry) {
     this.openTelemetry = openTelemetry;
@@ -81,7 +80,8 @@ class BuiltinMetricsProvider {
   private Map<String, String> createStaticAttributes() {
     Map<String, String> staticAttributes = new HashMap<>();
     staticAttributes.put(METRIC_ATTRIBUTE_KEY_CLIENT_UID.getKey(), ClientIdentifier.getClientUid());
-    staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_NAME.getKey(), FIRESTORE_LIBRARY_NAME);
+    staticAttributes.put(
+        METRIC_ATTRIBUTE_KEY_LIBRARY_NAME.getKey(), TelemetryConstants.FIRESTORE_LIBRARY_NAME);
     String pkgVersion = this.getClass().getPackage().getImplementationVersion();
     if (pkgVersion != null) {
       staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION.getKey(), pkgVersion);
