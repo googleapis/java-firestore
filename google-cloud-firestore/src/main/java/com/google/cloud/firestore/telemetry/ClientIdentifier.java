@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import com.google.api.core.InternalApi;
+
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
