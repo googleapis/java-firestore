@@ -20,13 +20,18 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.map;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import com.google.api.gax.retrying.RetrySettings;
+import com.google.api.core.ApiFuture;
+import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.BulkWriterOptions;
 import com.google.cloud.firestore.CollectionGroup;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.ExplainMetrics;
+import com.google.cloud.firestore.ExplainOptions;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
 import com.google.cloud.firestore.FirestoreOptions;
@@ -62,8 +67,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
-import org.mockito.Spy;
-import org.threeten.bp.Duration;
 
 public class ITMetricsTest {
 
@@ -75,22 +78,6 @@ public class ITMetricsTest {
   protected InMemoryMetricReader metricReader;
 
   protected Firestore firestore;
-
-  @Spy
-  private final Firestore firestoreMock =
-      FirestoreOptions.newBuilder()
-          .setProjectId("test-project")
-          .setRetrySettings(
-              RetrySettings.newBuilder()
-                  .setInitialRetryDelay(Duration.ZERO)
-                  .setMaxRetryDelay(Duration.ZERO)
-                  .setRetryDelayMultiplier(1)
-                  .setJittered(false)
-                  .build())
-          .setOpenTelemetryOptions(
-              FirestoreOpenTelemetryOptions.newBuilder().setOpenTelemetry(openTelemetrySdk).build())
-          .build()
-          .getService();
 
   private static Attributes expectedBaseAttributes;
 
@@ -169,6 +156,64 @@ public class ITMetricsTest {
             .toBuilder()
             .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
             .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "RunQuery.Get")
+            .build();
+    dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY);
+    validateMetricData(dataFromReader, attributes);
+
+    dataFromReader =
+        getMetricData(metricReader, TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
+    validateMetricData(dataFromReader, attributes);
+  }
+
+  @Test
+  public void queryExplain() throws Exception {
+    Query query = firestore.collection("col");
+    ApiFuture<ExplainMetrics> metricsFuture =
+        query.explainStream(
+            ExplainOptions.builder().setAnalyze(false).build(),
+            new ApiStreamObserver<DocumentSnapshot>() {
+              @Override
+              public void onNext(DocumentSnapshot documentSnapshot) {
+                fail("No DocumentSnapshot should be received because analyze option was disabled.");
+              }
+
+              @Override
+              public void onError(Throwable throwable) {
+                fail(throwable.getMessage());
+              }
+
+              @Override
+              public void onCompleted() {}
+            });
+
+    ExplainMetrics metrics = metricsFuture.get();
+    assertThat(metrics.getPlanSummary().getIndexesUsed().size()).isGreaterThan(0);
+    assertThat(metrics.getExecutionStats()).isNull();
+
+    Attributes attributes =
+        expectedBaseAttributes
+            .toBuilder()
+            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
+            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "Firestore.RunQuery")
+            .build();
+
+    // Validate GAX layer metrics
+    MetricData dataFromReader =
+        getMetricData(metricReader, TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY);
+    validateMetricData(dataFromReader, attributes);
+    dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT);
+    validateMetricData(dataFromReader, attributes);
+    dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_OPERATION_COUNT);
+    validateMetricData(dataFromReader, attributes);
+    dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_OPERATION_LATENCY);
+    validateMetricData(dataFromReader, attributes);
+
+    // Validate SDK layer metric
+    attributes =
+        expectedBaseAttributes
+            .toBuilder()
+            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
+            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "RunQuery.Explain")
             .build();
     dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY);
     validateMetricData(dataFromReader, attributes);
@@ -334,6 +379,46 @@ public class ITMetricsTest {
   }
 
   @Test
+  public void listCollection() throws Exception {
+    firestore.collection("col").document("doc0").listCollections();
+
+    Attributes attributes =
+        expectedBaseAttributes
+            .toBuilder()
+            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
+            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "Firestore.BatchWrite")
+            .build();
+
+    // Why it doesn't have GAX metrics???
+    // Validate GAX layer metrics
+    //     MetricData dataFromReader = getMetricData(metricReader,
+    //     TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY);
+    //     validateMetricData(dataFromReader, attributes);
+    //     dataFromReader = getMetricData(metricReader,
+    // TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT);
+    //     validateMetricData(dataFromReader, attributes);
+    //     dataFromReader = getMetricData(metricReader,
+    // TelemetryConstants.METRIC_NAME_OPERATION_COUNT);
+    //     validateMetricData(dataFromReader, attributes);
+    //     dataFromReader = getMetricData(metricReader,
+    //     TelemetryConstants.METRIC_NAME_OPERATION_LATENCY);
+    //     validateMetricData(dataFromReader, attributes);
+
+    // Validate SDK layer metric
+    attributes =
+        expectedBaseAttributes
+            .toBuilder()
+            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
+            .put(
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "DocumentReference.ListCollections")
+            .build();
+
+    MetricData dataFromReader =
+        getMetricData(metricReader, TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY);
+    validateMetricData(dataFromReader, attributes);
+  }
+
+  @Test
   public void collectionListDocuments() throws Exception {
     firestore.collection("col").listDocuments();
 
@@ -345,16 +430,18 @@ public class ITMetricsTest {
             .build();
 
     // Validate GAX layer metrics
-    // MetricData dataFromReader = getMetricData(metricReader,
-    // TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY);
-    // validateMetricData(dataFromReader, attributes);
-    // dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT);
-    // validateMetricData(dataFromReader, attributes);
-    // dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_OPERATION_COUNT);
-    // validateMetricData(dataFromReader, attributes);
-    // dataFromReader = getMetricData(metricReader,
-    // TelemetryConstants.METRIC_NAME_OPERATION_LATENCY);
-    // validateMetricData(dataFromReader, attributes);
+    //    MetricData dataFromReader = getMetricData(metricReader,
+    //    TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY);
+    //    validateMetricData(dataFromReader, attributes);
+    //    dataFromReader = getMetricData(metricReader,
+    // TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT);
+    //    validateMetricData(dataFromReader, attributes);
+    //    dataFromReader = getMetricData(metricReader,
+    // TelemetryConstants.METRIC_NAME_OPERATION_COUNT);
+    //    validateMetricData(dataFromReader, attributes);
+    //    dataFromReader = getMetricData(metricReader,
+    //    TelemetryConstants.METRIC_NAME_OPERATION_LATENCY);
+    //    validateMetricData(dataFromReader, attributes);
 
     // Validate SDK layer metric
     attributes =
@@ -633,7 +720,7 @@ public class ITMetricsTest {
     col.get().get();
     col.count().get().get();
     DocumentReference ref = col.document("doc1");
-    ref.create(Collections.singletonMap("foo", "bar")).get();
+    ref.set(Collections.singletonMap("foo", "bar")).get();
     ref.update(map("foo", "newBar")).get();
     ref.delete().get();
 
@@ -667,7 +754,7 @@ public class ITMetricsTest {
     String[] methods2 = {
       "RunQuery.Get",
       "RunAggregationQuery.Get",
-      "DocumentReference.Create",
+      "DocumentReference.Set",
       "DocumentReference.Update",
       "DocumentReference.Delete",
       "Batch.Commit",
