@@ -155,7 +155,9 @@ public class ITMetricsTest {
         expectedBaseAttributes
             .toBuilder()
             .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "RunQuery.Get")
+            .put(
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD,
+                TelemetryConstants.METHOD_NAME_QUERY_GET)
             .build();
     dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY);
     validateMetricData(dataFromReader, attributes);
@@ -213,7 +215,9 @@ public class ITMetricsTest {
         expectedBaseAttributes
             .toBuilder()
             .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "RunQuery.Explain")
+            .put(
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD,
+                TelemetryConstants.METHOD_NAME_QUERY_EXPLAIN)
             .build();
     dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY);
     validateMetricData(dataFromReader, attributes);
@@ -250,7 +254,9 @@ public class ITMetricsTest {
         expectedBaseAttributes
             .toBuilder()
             .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "RunAggregationQuery.Get")
+            .put(
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD,
+                TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET)
             .build();
     dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY);
     validateMetricData(dataFromReader, attributes);
@@ -292,7 +298,9 @@ public class ITMetricsTest {
         expectedBaseAttributes
             .toBuilder()
             .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "Batch.Commit")
+            .put(
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD,
+                TelemetryConstants.METHOD_NAME_BATCH_COMMIT)
             .build();
 
     dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY);
@@ -333,7 +341,9 @@ public class ITMetricsTest {
         expectedBaseAttributes
             .toBuilder()
             .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "BulkWriter.Commit")
+            .put(
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD,
+                TelemetryConstants.METHOD_NAME_BULK_WRITER_COMMIT)
             .build();
 
     dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY);
@@ -344,33 +354,16 @@ public class ITMetricsTest {
   public void partitionQuery() throws Exception {
     CollectionGroup collectionGroup = firestore.collectionGroup("col");
     collectionGroup.getPartitions(3).get();
+    // TODO(Metrics): pagedCalled reqeusts are not traced at GAX layer
 
+    // Validate SDK layer metric
     Attributes attributes =
         expectedBaseAttributes
             .toBuilder()
             .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "Firestore.BatchWrite")
-            .build();
-
-    // Why it doesn't have GAX metrics???
-    // Validate GAX layer metrics
-    // MetricData dataFromReader = getMetricData(metricReader,
-    // TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY);
-    // validateMetricData(dataFromReader, attributes);
-    // dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT);
-    // validateMetricData(dataFromReader, attributes);
-    // dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_OPERATION_COUNT);
-    // validateMetricData(dataFromReader, attributes);
-    // dataFromReader = getMetricData(metricReader,
-    // TelemetryConstants.METRIC_NAME_OPERATION_LATENCY);
-    // validateMetricData(dataFromReader, attributes);
-
-    // Validate SDK layer metric
-    attributes =
-        expectedBaseAttributes
-            .toBuilder()
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "PartitionQuery")
+            .put(
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD,
+                TelemetryConstants.METHOD_NAME_PARTITION_QUERY)
             .build();
 
     MetricData dataFromReader =
@@ -381,36 +374,16 @@ public class ITMetricsTest {
   @Test
   public void listCollection() throws Exception {
     firestore.collection("col").document("doc0").listCollections();
+    // TODO(Metrics): pagedCalled reqeusts are not traced at GAX layer
 
+    // Validate SDK layer metric
     Attributes attributes =
         expectedBaseAttributes
             .toBuilder()
             .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "Firestore.BatchWrite")
-            .build();
-
-    // Why it doesn't have GAX metrics???
-    // Validate GAX layer metrics
-    //     MetricData dataFromReader = getMetricData(metricReader,
-    //     TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY);
-    //     validateMetricData(dataFromReader, attributes);
-    //     dataFromReader = getMetricData(metricReader,
-    // TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT);
-    //     validateMetricData(dataFromReader, attributes);
-    //     dataFromReader = getMetricData(metricReader,
-    // TelemetryConstants.METRIC_NAME_OPERATION_COUNT);
-    //     validateMetricData(dataFromReader, attributes);
-    //     dataFromReader = getMetricData(metricReader,
-    //     TelemetryConstants.METRIC_NAME_OPERATION_LATENCY);
-    //     validateMetricData(dataFromReader, attributes);
-
-    // Validate SDK layer metric
-    attributes =
-        expectedBaseAttributes
-            .toBuilder()
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
             .put(
-                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "DocumentReference.ListCollections")
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD,
+                TelemetryConstants.METHOD_NAME_DOC_REF_LIST_COLLECTIONS)
             .build();
 
     MetricData dataFromReader =
@@ -421,35 +394,16 @@ public class ITMetricsTest {
   @Test
   public void collectionListDocuments() throws Exception {
     firestore.collection("col").listDocuments();
+    // TODO(Metrics): pagedCalled reqeusts are not traced at GAX layer
 
+    // Validate SDK layer metric
     Attributes attributes =
         expectedBaseAttributes
             .toBuilder()
             .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "Firestore.BatchWrite")
-            .build();
-
-    // Validate GAX layer metrics
-    //    MetricData dataFromReader = getMetricData(metricReader,
-    //    TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY);
-    //    validateMetricData(dataFromReader, attributes);
-    //    dataFromReader = getMetricData(metricReader,
-    // TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT);
-    //    validateMetricData(dataFromReader, attributes);
-    //    dataFromReader = getMetricData(metricReader,
-    // TelemetryConstants.METRIC_NAME_OPERATION_COUNT);
-    //    validateMetricData(dataFromReader, attributes);
-    //    dataFromReader = getMetricData(metricReader,
-    //    TelemetryConstants.METRIC_NAME_OPERATION_LATENCY);
-    //    validateMetricData(dataFromReader, attributes);
-
-    // Validate SDK layer metric
-    attributes =
-        expectedBaseAttributes
-            .toBuilder()
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
             .put(
-                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "CollectionReference.ListDocuments")
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD,
+                TelemetryConstants.METHOD_NAME_COL_REF_LIST_DOCUMENTS)
             .build();
 
     MetricData dataFromReader =
@@ -486,7 +440,9 @@ public class ITMetricsTest {
     // Validate SDK layer metric
 
     List<Attributes> attributesList = new ArrayList<>();
-    String[] methods = {"Batch.Commit", "DocumentReference.Set"};
+    String[] methods = {
+      TelemetryConstants.METHOD_NAME_BATCH_COMMIT, TelemetryConstants.METHOD_NAME_DOC_REF_SET
+    };
 
     for (String method : methods) {
       attributes =
@@ -532,7 +488,9 @@ public class ITMetricsTest {
         expectedBaseAttributes
             .toBuilder()
             .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "BatchGetDocuments.GetAll")
+            .put(
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD,
+                TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS)
             .build();
 
     dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY);
@@ -601,7 +559,9 @@ public class ITMetricsTest {
     attributesList = new ArrayList<>();
 
     String[] methods2 = {
-      "RunTransaction", "RunQuery.Transactional", "RunAggregationQuery.Transactional",
+      TelemetryConstants.METHOD_NAME_RUN_TRANSACTION,
+      TelemetryConstants.METHOD_NAME_TRANSACTION_GET_QUERY,
+      TelemetryConstants.METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
     };
 
     for (String method : methods2) {
@@ -624,7 +584,9 @@ public class ITMetricsTest {
         expectedBaseAttributes
             .toBuilder()
             .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, "OK")
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "RunTransaction")
+            .put(
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD,
+                TelemetryConstants.METHOD_NAME_RUN_TRANSACTION)
             .build();
 
     dataFromReader =
@@ -686,7 +648,9 @@ public class ITMetricsTest {
             .put(
                 TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS,
                 "OK") // Transaction began successfully.
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "RunTransaction")
+            .put(
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD,
+                TelemetryConstants.METHOD_NAME_RUN_TRANSACTION)
             .build();
 
     dataFromReader =
@@ -699,7 +663,9 @@ public class ITMetricsTest {
             .put(
                 TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS,
                 "UNKNOWN") // Transaction ended with exception
-            .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, "RunTransaction")
+            .put(
+                TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD,
+                TelemetryConstants.METHOD_NAME_RUN_TRANSACTION)
             .build();
 
     dataFromReader = getMetricData(metricReader, TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY);
@@ -752,12 +718,12 @@ public class ITMetricsTest {
     attributesList = new ArrayList<>();
 
     String[] methods2 = {
-      "RunQuery.Get",
-      "RunAggregationQuery.Get",
-      "DocumentReference.Set",
-      "DocumentReference.Update",
-      "DocumentReference.Delete",
-      "Batch.Commit",
+      TelemetryConstants.METHOD_NAME_QUERY_GET,
+      TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET,
+      TelemetryConstants.METHOD_NAME_DOC_REF_SET,
+      TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE,
+      TelemetryConstants.METHOD_NAME_DOC_REF_DELETE,
+      TelemetryConstants.METHOD_NAME_BATCH_COMMIT,
     };
 
     for (String method : methods2) {

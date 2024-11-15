@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY;
 import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_ATTEMPT;
 
 import com.google.api.core.ApiFuture;
@@ -108,7 +107,7 @@ public class AggregateQuery {
         getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET);
 
     MetricsContext metricsContext =
-        createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_EXPLAIN);
+        createMetricsContext(TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_EXPLAIN);
 
     try (Scope ignored = span.makeCurrent()) {
       AggregateQueryExplainResponseDeliverer responseDeliverer =
@@ -141,8 +140,8 @@ public class AggregateQuery {
     MetricsContext metricsContext =
         createMetricsContext(
             transactionId == null
-                ? TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_GET
-                : TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY_TRANSACTIONAL);
+                ? TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET
+                : TelemetryConstants.METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY);
 
     try (Scope ignored = span.makeCurrent()) {
       AggregateQueryResponseDeliverer responseDeliverer =
@@ -341,7 +340,9 @@ public class AggregateQuery {
     public void onStart(StreamController streamController) {
       getTraceUtil()
           .currentSpan()
-          .addEvent(METHOD_NAME_RUN_AGGREGATION_QUERY + " Stream started.", getAttemptAttributes());
+          .addEvent(
+              TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY + " Stream started.",
+              getAttemptAttributes());
     }
 
     @Override
@@ -354,7 +355,8 @@ public class AggregateQuery {
       getTraceUtil()
           .currentSpan()
           .addEvent(
-              METHOD_NAME_RUN_AGGREGATION_QUERY + " Response Received.", getAttemptAttributes());
+              TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY + " Response Received.",
+              getAttemptAttributes());
       if (response.hasReadTime()) {
         readTime = Timestamp.fromProto(response.getReadTime());
       }
@@ -383,7 +385,7 @@ public class AggregateQuery {
         getTraceUtil()
             .currentSpan()
             .addEvent(
-                METHOD_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
+                TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY + ": Retryable Error",
                 Collections.singletonMap("error.message", throwable.toString()));
 
         runQuery(responseDeliverer, attempt + 1);
@@ -391,7 +393,7 @@ public class AggregateQuery {
         getTraceUtil()
             .currentSpan()
             .addEvent(
-                METHOD_NAME_RUN_AGGREGATION_QUERY + ": Error",
+                TelemetryConstants.METHOD_NAME_RUN_AGGREGATION_QUERY + ": Error",
                 Collections.singletonMap("error.message", throwable.toString()));
         responseDeliverer.deliverError(throwable);
       }

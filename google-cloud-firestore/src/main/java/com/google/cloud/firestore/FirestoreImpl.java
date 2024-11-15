@@ -235,8 +235,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             .getMetricsUtil()
             .createMetricsContext(
                 transactionId == null
-                    ? TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS_GET_ALL
-                    : TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS_TRANSACTIONAL);
+                    ? TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS
+                    : TelemetryConstants.METHOD_NAME_TRANSACTION_BATCH_GET_DOCUMENTS);
 
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
         new ResponseObserver<BatchGetDocumentsResponse>() {
