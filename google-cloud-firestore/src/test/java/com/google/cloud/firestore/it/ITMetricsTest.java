@@ -354,8 +354,8 @@ public class ITMetricsTest {
   public void partitionQuery() throws Exception {
     CollectionGroup collectionGroup = firestore.collectionGroup("col");
     collectionGroup.getPartitions(3).get();
-    // TODO(Metrics): pagedCalled reqeusts are not traced at GAX layer
 
+    // Note: pagedCallable requests are not traced at GAX layer
     // Validate SDK layer metric
     Attributes attributes =
         expectedBaseAttributes
@@ -374,8 +374,8 @@ public class ITMetricsTest {
   @Test
   public void listCollection() throws Exception {
     firestore.collection("col").document("doc0").listCollections();
-    // TODO(Metrics): pagedCalled reqeusts are not traced at GAX layer
 
+    // Note: pagedCallable requests are not traced at GAX layer
     // Validate SDK layer metric
     Attributes attributes =
         expectedBaseAttributes
@@ -394,8 +394,8 @@ public class ITMetricsTest {
   @Test
   public void collectionListDocuments() throws Exception {
     firestore.collection("col").listDocuments();
-    // TODO(Metrics): pagedCalled reqeusts are not traced at GAX layer
 
+    // Note: pagedCallable requests are not traced at GAX layer
     // Validate SDK layer metric
     Attributes attributes =
         expectedBaseAttributes
