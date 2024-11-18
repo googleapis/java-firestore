@@ -346,4 +346,11 @@
     <method>void internalStream(*)</method>
     <to>*</to>
   </difference>
+
+    <!-- Remove unused constants in TelemetryConstants -->
+  <difference>
+    <differenceType>6011</differenceType>
+    <className>com/google/cloud/firestore/telemetry/TelemetryConstants</className>
+    <field>METHOD_NAME_*</field>
+  </difference>
 </differences>
