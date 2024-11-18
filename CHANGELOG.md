@@ -1,5 +1,32 @@
 # Changelog
 
+## [3.29.1](https://github.com/googleapis/java-firestore/compare/v3.29.0...v3.29.1) (2024-11-18)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.50.0 ([aef5ec5](https://github.com/googleapis/java-firestore/commit/aef5ec5c0da68a4bb438100faf9884e000e8a1d1))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.40.0 ([#1928](https://github.com/googleapis/java-firestore/issues/1928)) ([8b6bc9a](https://github.com/googleapis/java-firestore/commit/8b6bc9afba31d3938fbdcda0e5c9616dfd7daa2a))
+* Update googleapis/sdk-platform-java action to v2.50.0 ([#1927](https://github.com/googleapis/java-firestore/issues/1927)) ([700ed0a](https://github.com/googleapis/java-firestore/commit/700ed0ac7ceae1b9c40c919ad9e7342f3bdb85a3))
+
+## [3.29.0](https://github.com/googleapis/java-firestore/compare/v3.28.0...v3.29.0) (2024-11-13)
+
+
+### Bug Fixes
+
+* Drop the setTracingEnabled flag from Options (@BetaApi change)  ([#1869](https://github.com/googleapis/java-firestore/issues/1869)) ([712d57e](https://github.com/googleapis/java-firestore/commit/712d57e05da8de41850d94fa19eb253cf3020c0f))
+* Improve error messages in tests ([#1855](https://github.com/googleapis/java-firestore/issues/1855)) ([cb5f9d6](https://github.com/googleapis/java-firestore/commit/cb5f9d6f481c9c839a387579bf60742b7c2c0508))
+* Make StreamableQuery#internalStream package-private to avoid documentation and prevent clirr errors ([593acc3](https://github.com/googleapis/java-firestore/commit/593acc3614f86bdf42387eac5ef8d7ce14dbbec8))
+
+
+### Dependencies
+
+* Update opentelemetry.version to v1.44.1 ([#1924](https://github.com/googleapis/java-firestore/issues/1924)) ([68deeac](https://github.com/googleapis/java-firestore/commit/68deeac02eabb927ba8b91c77f3be8471ba66718))
+
 ## [3.28.0](https://github.com/googleapis/java-firestore/compare/v3.27.4...v3.28.0) (2024-10-29)
 
 
