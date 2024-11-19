@@ -230,7 +230,7 @@ public class QueryCountTest {
   public void
       shouldRetryIfExceptionIsFirestoreExceptionWithRetryableStatusWithInfiniteTimeoutWindow()
           throws Exception {
-    doReturn(Duration.ZERO).when(firestoreMock).getTotalRequestTimeout();
+    doReturn(Duration.ZERO).when(firestoreMock).getTotalRequestTimeoutDuration();
     doAnswer(countQueryResponse(new FirestoreException("reason", Status.INTERNAL)))
         .doAnswer(countQueryResponse(42))
         .when(firestoreMock)
@@ -245,7 +245,7 @@ public class QueryCountTest {
   @Test
   public void shouldRetryIfExceptionIsFirestoreExceptionWithRetryableStatusWithinTimeoutWindow()
       throws Exception {
-    doReturn(Duration.ofDays(999)).when(firestoreMock).getTotalRequestTimeout();
+    doReturn(Duration.ofDays(999)).when(firestoreMock).getTotalRequestTimeoutDuration();
     doAnswer(countQueryResponse(new FirestoreException("reason", Status.INTERNAL)))
         .doAnswer(countQueryResponse(42))
         .when(firestoreMock)
@@ -267,7 +267,7 @@ public class QueryCountTest {
         .doReturn(TimeUnit.SECONDS.toNanos(30))
         .when(clockMock)
         .nanoTime();
-    doReturn(Duration.ofSeconds(5)).when(firestoreMock).getTotalRequestTimeout();
+    doReturn(Duration.ofSeconds(5)).when(firestoreMock).getTotalRequestTimeoutDuration();
     doAnswer(countQueryResponse(new FirestoreException("reason", Status.INTERNAL)))
         .doAnswer(countQueryResponse(42))
         .when(firestoreMock)
