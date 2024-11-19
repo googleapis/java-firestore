@@ -41,6 +41,7 @@ import com.google.firestore.v1.RunAggregationQueryRequest;
 import com.google.firestore.v1.RunAggregationQueryResponse;
 import com.google.firestore.v1.StructuredQuery;
 import io.grpc.Status;
+import java.time.Duration;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import org.junit.Before;
@@ -50,7 +51,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.threeten.bp.Duration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QueryCountTest {
@@ -70,7 +70,7 @@ public class QueryCountTest {
 
   @Before
   public void before() {
-    doReturn(Duration.ZERO).when(firestoreMock).getTotalRequestTimeout();
+    doReturn(Duration.ZERO).when(firestoreMock).getTotalRequestTimeoutDuration();
     query = firestoreMock.collection(COLLECTION_ID);
   }
 

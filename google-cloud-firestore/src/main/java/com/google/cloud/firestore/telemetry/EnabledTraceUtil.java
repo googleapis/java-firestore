@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore.telemetry;
 
+import static com.google.api.gax.util.TimeConversionUtils.toJavaTimeDuration;
+
 import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
@@ -94,12 +96,16 @@ public class EnabledTraceUtil implements TraceUtil {
     return new OpenTelemetryGrpcChannelConfigurator();
   }
 
+  String durationString(org.threeten.bp.Duration duration) {
+    return durationStringDuration(toJavaTimeDuration(duration));
+  }
+
   // Returns a JSON String representation of the given duration. The JSON representation for a
   // Duration is a String that
   // ends in `s` to indicate seconds and is preceded by the number of seconds, with nanoseconds
   // expressed as fractional
   // seconds.
-  String durationString(org.threeten.bp.Duration duration) {
+  String durationStringDuration(java.time.Duration duration) {
     int nanos = duration.getNano();
     long seconds = duration.getSeconds();
     int numLeadingZeros = 9;

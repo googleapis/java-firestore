@@ -22,9 +22,9 @@ import com.google.cloud.firestore.FirestoreOptions;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.trace.TracerProvider;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
+import java.time.Duration;
 import org.junit.Before;
 import org.junit.Test;
-import org.threeten.bp.Duration;
 
 public class EnabledTraceUtilTest {
   @Before
@@ -138,63 +138,63 @@ public class EnabledTraceUtilTest {
   public void durationString() {
     EnabledTraceUtil traceUtil = defaultEnabledTraceUtil();
     Duration duration = Duration.ofSeconds(2, 9);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("2.000000009s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("2.000000009s");
 
     duration = Duration.ofSeconds(3, 98);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("3.000000098s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("3.000000098s");
 
     duration = Duration.ofSeconds(4, 987);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("4.000000987s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("4.000000987s");
 
     duration = Duration.ofSeconds(5, 9876);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("5.000009876s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("5.000009876s");
 
     duration = Duration.ofSeconds(6, 98765);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("6.000098765s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("6.000098765s");
 
     duration = Duration.ofSeconds(7, 987654);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("7.000987654s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("7.000987654s");
 
     duration = Duration.ofSeconds(8, 9876543);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("8.009876543s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("8.009876543s");
 
     duration = Duration.ofSeconds(9, 98765432);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("9.098765432s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("9.098765432s");
 
     duration = Duration.ofSeconds(10, 987654321);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("10.987654321s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("10.987654321s");
 
     duration = Duration.ofSeconds(1, 0);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("1.0s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("1.0s");
 
     duration = Duration.ofSeconds(1, 1);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("1.000000001s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("1.000000001s");
 
     duration = Duration.ofSeconds(1, 10);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("1.00000001s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("1.00000001s");
 
     duration = Duration.ofSeconds(1, 100);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("1.0000001s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("1.0000001s");
 
     duration = Duration.ofSeconds(1, 1_000);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("1.000001s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("1.000001s");
 
     duration = Duration.ofSeconds(1, 10_000);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("1.00001s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("1.00001s");
 
     duration = Duration.ofSeconds(1, 100_000);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("1.0001s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("1.0001s");
 
     duration = Duration.ofSeconds(1, 1_000_000);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("1.001s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("1.001s");
 
     duration = Duration.ofSeconds(1, 10_000_000);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("1.01s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("1.01s");
 
     duration = Duration.ofSeconds(1, 100_000_000);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("1.1s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("1.1s");
 
     duration = Duration.ofSeconds(1, 100_000_001);
-    assertThat(traceUtil.durationString(duration)).isEqualTo("1.100000001s");
+    assertThat(traceUtil.durationStringDuration(duration)).isEqualTo("1.100000001s");
   }
 }
