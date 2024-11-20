@@ -626,15 +626,14 @@ public abstract class UpdateBuilder<T> {
 
     MetricsContext metricsContext = null;
 
-    // End to end latency for transactions recorded under RunTransaction, including the
-    // Transaction.Commit operation.
-    if (transactionId == null) {
-      metricsContext =
-          firestore
-              .getOptions()
-              .getMetricsUtil()
-              .createMetricsContext(TelemetryConstants.METHOD_NAME_BATCH_COMMIT);
-    }
+    metricsContext =
+        firestore
+            .getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(
+                transactionId == null
+                    ? TelemetryConstants.METHOD_NAME_BATCH_COMMIT
+                    : TelemetryConstants.METHOD_NAME_TRANSACTION_COMMIT);
 
     try (Scope ignored = span.makeCurrent()) {
       // Sequence is thread safe.
@@ -669,15 +668,13 @@ public abstract class UpdateBuilder<T> {
               },
               MoreExecutors.directExecutor());
       span.endAtFuture(returnValue);
-      if (metricsContext != null) {
-        metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, returnValue);
-      }
+      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, returnValue);
+
       return returnValue;
     } catch (Exception error) {
       span.end(error);
-      if (metricsContext != null) {
-        metricsContext.recordLatency(MetricType.END_TO_END_LATENCY);
-      }
+      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY);
+
       throw error;
     }
   }

@@ -150,7 +150,12 @@ final class ServerSideTransactionRunner<T> {
                 serverSideTransaction.setTransactionTraceContext(runTransactionContext);
                 return serverSideTransaction;
               });
-      metricsContext.recordLatencyAtFuture(MetricType.FIRST_RESPONSE_LATENCY, result);
+
+      // Record the first time latency for the first BeginTransaction call only
+      Boolean isFirstAttempt = (transactionOptions.getNumberOfAttempts() - attemptsRemaining) == 1;
+      if (isFirstAttempt) {
+        metricsContext.recordLatencyAtFuture(MetricType.FIRST_RESPONSE_LATENCY, result);
+      }
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
