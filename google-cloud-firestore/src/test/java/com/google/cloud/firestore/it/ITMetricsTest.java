@@ -134,10 +134,10 @@ public class ITMetricsTest {
   class MetricsExpectationBuilder {
     private final Map<String, MetricInfo> expectedMetrics = new HashMap<>();
 
-    public MetricsExpectationBuilder expectMetric(
-        String metricName, String expectedStatus, int expectedCount) {
-      Attributes attributes = buildAttributes(metricName, expectedStatus);
-      expectedMetrics.put(metricName, new MetricInfo(expectedCount, attributes));
+    public MetricsExpectationBuilder expectMetricData(
+        String method, String expectedStatus, int expectedCount) {
+      Attributes attributes = buildAttributes(method, expectedStatus);
+      expectedMetrics.put(method, new MetricInfo(expectedCount, attributes));
       return this;
     }
 
@@ -153,14 +153,14 @@ public class ITMetricsTest {
     // Validate GAX layer metrics
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric("Firestore.RunQuery", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.RunQuery", Status.OK.getCode().toString(), 1)
             .build();
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_QUERY_GET, Status.OK.getCode().toString(), 1)
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY, expectedMetrics);
@@ -197,14 +197,14 @@ public class ITMetricsTest {
     // Validate GAX layer metrics
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric("Firestore.RunQuery", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.RunQuery", Status.OK.getCode().toString(), 1)
             .build();
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_QUERY_EXPLAIN, Status.OK.getCode().toString(), 1)
             .build();
 
@@ -221,14 +221,14 @@ public class ITMetricsTest {
     // Validate GAX layer metrics
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric("Firestore.RunAggregationQuery", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.RunAggregationQuery", Status.OK.getCode().toString(), 1)
             .build();
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET,
                 Status.OK.getCode().toString(),
                 1)
@@ -252,14 +252,14 @@ public class ITMetricsTest {
     // Validate GAX layer metrics
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric("Firestore.Commit", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.Commit", Status.OK.getCode().toString(), 1)
             .build();
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_BATCH_COMMIT, Status.OK.getCode().toString(), 1)
             .build();
 
@@ -283,14 +283,14 @@ public class ITMetricsTest {
     // Validate GAX layer metrics
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric("Firestore.BatchWrite", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.BatchWrite", Status.OK.getCode().toString(), 1)
             .build();
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_BULK_WRITER_COMMIT,
                 Status.OK.getCode().toString(),
                 1)
@@ -311,7 +311,7 @@ public class ITMetricsTest {
     // Validate SDK layer metric
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_PARTITION_QUERY, Status.OK.getCode().toString(), 1)
             .build();
 
@@ -329,7 +329,7 @@ public class ITMetricsTest {
     // Validate SDK layer metric
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_DOC_REF_LIST_COLLECTIONS,
                 Status.OK.getCode().toString(),
                 1)
@@ -349,7 +349,7 @@ public class ITMetricsTest {
     // Validate SDK layer metric
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_COL_REF_LIST_DOCUMENTS,
                 Status.OK.getCode().toString(),
                 1)
@@ -372,16 +372,16 @@ public class ITMetricsTest {
     // Validate GAX layer metrics
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric("Firestore.Commit", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.Commit", Status.OK.getCode().toString(), 1)
             .build();
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_BATCH_COMMIT, Status.OK.getCode().toString(), 1)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_DOC_REF_SET, Status.OK.getCode().toString(), 1)
             .build();
 
@@ -401,14 +401,14 @@ public class ITMetricsTest {
     // Validate GAX layer metrics
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric("Firestore.BatchGetDocuments", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.BatchGetDocuments", Status.OK.getCode().toString(), 1)
             .build();
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS,
                 Status.OK.getCode().toString(),
                 1)
@@ -448,10 +448,10 @@ public class ITMetricsTest {
     // Validate GAX layer metrics
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric("Firestore.BeginTransaction", Status.OK.getCode().toString(), 1)
-            .expectMetric("Firestore.RunQuery", Status.OK.getCode().toString(), 1)
-            .expectMetric("Firestore.RunAggregationQuery", Status.OK.getCode().toString(), 1)
-            .expectMetric("Firestore.Commit", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.BeginTransaction", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.RunQuery", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.RunAggregationQuery", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.Commit", Status.OK.getCode().toString(), 1)
             .build();
 
     validateGaxMetrics(expectedMetrics);
@@ -459,13 +459,13 @@ public class ITMetricsTest {
     // Validate SDK layer metric
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_TRANSACTION_GET_QUERY,
                 Status.OK.getCode().toString(),
                 1)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
                 Status.OK.getCode().toString(),
                 1)
@@ -474,17 +474,17 @@ public class ITMetricsTest {
 
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_TRANSACTION_GET_QUERY,
                 Status.OK.getCode().toString(),
                 1)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
                 Status.OK.getCode().toString(),
                 1)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_TRANSACTION_COMMIT,
                 Status.OK.getCode().toString(),
                 1)
@@ -493,7 +493,7 @@ public class ITMetricsTest {
 
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY, expectedMetrics);
@@ -522,22 +522,22 @@ public class ITMetricsTest {
     // Validate GAX layer metrics
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric("Firestore.BeginTransaction", Status.OK.getCode().toString(), 1)
-            .expectMetric("Firestore.Rollback", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.BeginTransaction", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.Rollback", Status.OK.getCode().toString(), 1)
             .build();
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY, expectedMetrics);
 
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_RUN_TRANSACTION,
                 Status.UNKNOWN.getCode().toString(),
                 1)
@@ -574,14 +574,15 @@ public class ITMetricsTest {
     // Validate GAX layer metrics
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric("Firestore.BeginTransaction", Status.NOT_FOUND.getCode().toString(), 1)
+            .expectMetricData(
+                "Firestore.BeginTransaction", Status.NOT_FOUND.getCode().toString(), 1)
             .build();
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_RUN_TRANSACTION,
                 Status.UNKNOWN
                     .getCode()
@@ -625,25 +626,25 @@ public class ITMetricsTest {
     // Validate GAX layer metrics
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric("Firestore.BeginTransaction", Status.OK.getCode().toString(), 3)
-            .expectMetric("Firestore.Rollback", Status.OK.getCode().toString(), 2)
-            .expectMetric("Firestore.Commit", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.BeginTransaction", Status.OK.getCode().toString(), 3)
+            .expectMetricData("Firestore.Rollback", Status.OK.getCode().toString(), 2)
+            .expectMetricData("Firestore.Commit", Status.OK.getCode().toString(), 1)
             .build();
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY, expectedMetrics);
 
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_TRANSACTION_COMMIT,
                 Status.OK.getCode().toString(),
                 1)
@@ -652,14 +653,14 @@ public class ITMetricsTest {
 
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY, expectedMetrics);
 
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 3)
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT, expectedMetrics);
@@ -681,18 +682,18 @@ public class ITMetricsTest {
     // Validate GAX layer metrics
     Map<String, MetricInfo> expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric("Firestore.RunQuery", Status.OK.getCode().toString(), 2)
-            .expectMetric("Firestore.RunAggregationQuery", Status.OK.getCode().toString(), 1)
-            .expectMetric("Firestore.Commit", Status.OK.getCode().toString(), 3)
+            .expectMetricData("Firestore.RunQuery", Status.OK.getCode().toString(), 2)
+            .expectMetricData("Firestore.RunAggregationQuery", Status.OK.getCode().toString(), 1)
+            .expectMetricData("Firestore.Commit", Status.OK.getCode().toString(), 3)
             .build();
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_QUERY_GET, Status.OK.getCode().toString(), 2)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET,
                 Status.OK.getCode().toString(),
                 1)
@@ -701,19 +702,19 @@ public class ITMetricsTest {
 
     expectedMetrics =
         new MetricsExpectationBuilder()
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_QUERY_GET, Status.OK.getCode().toString(), 2)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET,
                 Status.OK.getCode().toString(),
                 1)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_DOC_REF_SET, Status.OK.getCode().toString(), 1)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE, Status.OK.getCode().toString(), 1)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_DOC_REF_DELETE, Status.OK.getCode().toString(), 1)
-            .expectMetric(
+            .expectMetricData(
                 TelemetryConstants.METHOD_NAME_BATCH_COMMIT, Status.OK.getCode().toString(), 3)
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
