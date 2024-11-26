@@ -49,28 +49,6 @@ import org.junit.runners.JUnit4;
 import org.threeten.bp.Duration;
 import org.threeten.bp.Instant;
 
-// This End-to-End test verifies Client-side Tracing Functionality instrumented using the
-// OpenTelemetry API.
-// The test depends on the following external APIs/Services:
-// 1. Java OpenTelemetry SDK
-// 2. Cloud Trace Exporter
-// 3. TraceServiceClient from Cloud Trace API v1.
-//
-// Permissions required to run this test (https://cloud.google.com/trace/docs/iam#trace-roles):
-// 1. gcloud auth application-default login must be run with the test user.
-// 2. To write traces, test user must have one of roles/cloudtrace.[admin|agent|user] roles.
-// 3. To read traces, test user must have one of roles/cloudtrace.[admin|user] roles.
-//
-// Each test-case has the following workflow:
-// 1. OpenTelemetry SDK is initialized with Cloud Trace Exporter and 100% Trace Sampling
-// 2. On initialization, Firestore client is provided the OpenTelemetry SDK object from (1)
-// 3. A custom TraceID is generated and injected using a custom SpanContext
-// 4. Firestore operations are run inside a root TraceSpan created using the custom SpanContext from
-// (3).
-// 5. Traces are read-back using TraceServiceClient and verified against expected Call Stacks.
-// TODO In the future it would be great to have a single test-driver for this test and
-// ITTracingTest.
-
 @RunWith(JUnit4.class)
 public class ITE2EMetricsTest extends ITBaseTest {
 
