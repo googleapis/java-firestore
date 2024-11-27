@@ -50,6 +50,7 @@ import io.opentelemetry.sdk.metrics.SdkMeterProvider;
 import io.opentelemetry.sdk.metrics.SdkMeterProviderBuilder;
 import io.opentelemetry.sdk.metrics.View;
 import io.opentelemetry.sdk.metrics.export.MetricExporter;
+import io.opentelemetry.sdk.metrics.export.MetricReader;
 import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -68,8 +69,7 @@ import javax.annotation.Nullable;
 class EnabledMetricsUtil implements MetricsUtil {
   private BuiltinMetricsProvider defaultMetricsProvider;
   private BuiltinMetricsProvider customMetricsProvider;
-
-  private MetricExporter metricExporter;
+  private MetricReader metricReader;
 
   private static final Logger logger = Logger.getLogger(EnabledMetricsUtil.class.getName());
 
@@ -147,16 +147,18 @@ class EnabledMetricsUtil implements MetricsUtil {
       sdkMeterProviderBuilder.registerView(entry.getKey(), entry.getValue());
     }
 
-    metricExporter =
+    MetricExporter metricExporter =
         GoogleCloudMetricExporter.createWithConfiguration(
             MetricConfiguration.builder()
                 .setProjectId(projectId)
                 // Ignore library info as it is collected by the metric attributes as well
                 .setInstrumentationLibraryLabelsEnabled(false)
                 .build());
-    sdkMeterProviderBuilder.registerMetricReader(PeriodicMetricReader.create(metricExporter));
+    metricReader = PeriodicMetricReader.create(metricExporter);
 
-    return OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProviderBuilder.build()).build();
+    return OpenTelemetrySdk.builder()
+        .setMeterProvider(sdkMeterProviderBuilder.registerMetricReader(metricReader).build())
+        .build();
   }
 
   private static Map<InstrumentSelector, View> getAllViews() {
@@ -186,6 +188,12 @@ class EnabledMetricsUtil implements MetricsUtil {
     if (tracerFactory != null) {
       apiTracerFactories.add(tracerFactory);
     }
+  }
+
+  @Override
+  public void shutdown() {
+    // Gracefully shutdown the metric reader registered to the default OTEL instance inside the sdk.
+    metricReader.shutdown();
   }
 
   class MetricsContext implements MetricsUtil.MetricsContext {

@@ -131,6 +131,11 @@
       <groupId>com.google.cloud.opentelemetry</groupId>
       <artifactId>exporter-metrics</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk-common</artifactId>
+      <version>${opentelemetry.version}</version>
+    </dependency>
     <!-- END OpenTelemetry -->
 
     <!-- Test dependencies -->
@@ -214,12 +219,6 @@
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk-trace</artifactId>
-      <version>${opentelemetry.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-sdk-common</artifactId>
       <version>${opentelemetry.version}</version>
       <scope>test</scope>
     </dependency>

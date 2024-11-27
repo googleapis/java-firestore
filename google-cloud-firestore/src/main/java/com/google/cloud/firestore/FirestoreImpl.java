@@ -550,18 +550,21 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Override
   public void close() throws Exception {
     firestoreClient.close();
+    firestoreOptions.getMetricsUtil().shutdown();
     closed = true;
   }
 
   @Override
   public void shutdown() {
     firestoreClient.shutdown();
+    firestoreOptions.getMetricsUtil().shutdown();
     closed = true;
   }
 
   @Override
   public void shutdownNow() {
     firestoreClient.shutdownNow();
+    firestoreOptions.getMetricsUtil().shutdown();
     closed = true;
   }
 

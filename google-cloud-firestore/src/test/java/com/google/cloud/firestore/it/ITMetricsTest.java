@@ -114,7 +114,7 @@ public class ITMetricsTest {
   @After
   public void tearDown() {
     try {
-      metricReader.shutdown();
+      openTelemetrySdk.getSdkMeterProvider().shutdown();
     } finally {
       firestore.shutdown();
     }

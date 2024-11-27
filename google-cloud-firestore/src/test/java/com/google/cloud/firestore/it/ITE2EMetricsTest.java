@@ -72,7 +72,7 @@ public class ITE2EMetricsTest extends ITBaseTest {
   @Before
   public void before() throws Exception {
     // We only perform end-to-end tracing tests on a nightly basis.
-    //    assumeTrue(isNightlyTesting);
+    //        assumeTrue(isNightlyTesting);
 
     metricClient = MetricServiceClient.create();
 
@@ -95,9 +95,11 @@ public class ITE2EMetricsTest extends ITBaseTest {
 
   @After
   public void after() throws Exception {
+    // Wait for 30 seconds to avoid duplicate time series error triggered by metric exporter's
+    // shutdown.
+    Thread.sleep(Duration.ofSeconds(30).toMillis());
     firestore.shutdown();
     metricClient.shutdown();
-    Thread.sleep(Duration.ofSeconds(30).toMillis());
   }
 
   @Test
@@ -239,6 +241,7 @@ public class ITE2EMetricsTest extends ITBaseTest {
     ListTimeSeriesResponse response = metricClient.listTimeSeriesCallable().call(request);
     int attemptsMade = 0;
     while (response.getTimeSeriesCount() == 0 && attemptsMade < 3) {
+      System.out.println("*** fetch response");
       // Call listTimeSeries every minute
       Thread.sleep(Duration.ofMinutes(1).toMillis());
       response = metricClient.listTimeSeriesCallable().call(request);
@@ -256,6 +259,8 @@ public class ITE2EMetricsTest extends ITBaseTest {
                     ts.getPoints(0).getInterval().getStartTime().getSeconds()
                         >= interval.getStartTime().getSeconds())
             .collect(Collectors.toList());
+
+    System.out.println(filteredData.size());
 
     assertWithMessage("Metric " + metric + " didn't return any data.")
         .that(filteredData.size())
