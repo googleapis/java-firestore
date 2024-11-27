@@ -57,6 +57,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+import org.threeten.bp.Duration;
 
 public class ITMetricsTest {
   private static OpenTelemetrySdk openTelemetrySdk;
@@ -77,6 +78,9 @@ public class ITMetricsTest {
     metricReader = InMemoryMetricReader.create();
     openTelemetrySdk = setupOpenTelemetrySdk();
     firestore = setupFirestoreService();
+    Preconditions.checkNotNull(
+        firestore,
+        "Error instantiating Firestore. Check that the service account credentials were properly set.");
     expectedBaseAttributes = buildExpectedAttributes();
   }
 
@@ -109,9 +113,6 @@ public class ITMetricsTest {
 
   @After
   public void tearDown() {
-    Preconditions.checkNotNull(
-        firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
     try {
       metricReader.shutdown();
     } finally {
@@ -774,7 +775,7 @@ public class ITMetricsTest {
   private MetricData getMetricData(String metricName) {
     String fullMetricName = TelemetryConstants.METRIC_PREFIX + "/" + metricName;
     // Fetch the MetricData with retries
-    for (int attemptsLeft = 1000; attemptsLeft > 0; attemptsLeft--) {
+    for (int attemptsLeft = 10; attemptsLeft > 0; attemptsLeft--) {
       List<MetricData> matchingMetadata =
           metricReader.collectAllMetrics().stream()
               .filter(md -> md.getName().equals(fullMetricName))
@@ -791,7 +792,7 @@ public class ITMetricsTest {
       }
 
       try {
-        Thread.sleep(1);
+        Thread.sleep(Duration.ofSeconds(1).toMillis());
       } catch (InterruptedException interruptedException) {
         Thread.currentThread().interrupt();
         throw new RuntimeException(interruptedException);

@@ -16,27 +16,24 @@
 
 package com.google.cloud.firestore.it;
 
-import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
-import com.google.api.MetricDescriptor;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
 import com.google.cloud.firestore.FirestoreOptions;
-import com.google.cloud.firestore.telemetry.ClientIdentifier;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.monitoring.v3.MetricServiceClient;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableSet;
 import com.google.monitoring.v3.*;
 import com.google.protobuf.util.Timestamps;
-import io.grpc.Status;
-import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.common.AttributesBuilder;
-import io.opentelemetry.sdk.metrics.data.*;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.metrics.SdkMeterProvider;
+import io.opentelemetry.sdk.metrics.SdkMeterProviderBuilder;
+import io.opentelemetry.sdk.metrics.data.MetricData;
+import io.opentelemetry.sdk.testing.exporter.InMemoryMetricReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -61,19 +58,7 @@ public class ITE2EMetricsTest extends ITBaseTest {
 
   private static Firestore firestore;
 
-  private static Attributes expectedBaseAttributes;
-
-  private final String ClientUid = ClientIdentifier.getClientUid();
-  private final String libraryVersion = this.getClass().getPackage().getImplementationVersion();
-
   private FirestoreOptions.Builder optionsBuilder;
-
-  private static final Set<String> GAX_METRICS =
-      ImmutableSet.of(
-          TelemetryConstants.METRIC_NAME_OPERATION_LATENCY,
-          TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY,
-          TelemetryConstants.METRIC_NAME_OPERATION_COUNT,
-          TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT);
 
   @BeforeClass
   public static void setup() throws IOException {
@@ -106,278 +91,224 @@ public class ITE2EMetricsTest extends ITBaseTest {
         firestore,
         "Error instantiating Firestore. Check that the service account credentials "
             + "were properly set.");
-
-    expectedBaseAttributes = buildExpectedAttributes();
   }
 
   @After
   public void after() throws Exception {
     firestore.shutdown();
-    metricClient.close();
-    //    metricClient.shutdown()
-    //    metricClient.awaitTermination(2,TimeUnit.SECONDS);
-  }
-
-  private Attributes buildExpectedAttributes() {
-    AttributesBuilder attributesBuilder = Attributes.builder();
-    attributesBuilder.put(
-        TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_NAME.getKey(),
-        TelemetryConstants.FIRESTORE_LIBRARY_NAME);
-    attributesBuilder.put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_CLIENT_UID.getKey(), ClientUid);
-    if (libraryVersion != null) {
-      attributesBuilder.put(
-          TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION.getKey(), libraryVersion);
-    }
-    return attributesBuilder.build();
+    metricClient.shutdown();
+    Thread.sleep(Duration.ofSeconds(30).toMillis());
   }
 
   @Test
-  public void testBuiltinMetricsWithDefaultOTEL() throws Exception {
-    // This stopwatch is used for to limit fetching of metric data in verifyMetrics
-    Stopwatch metricsPollingStopwatch = Stopwatch.createStarted();
+  public void builtinMetricsWithDefaultOTEL() throws Exception {
     TimeInterval interval = createTimeInterval();
 
     firestore.collection("col").get().get();
-    firestore.collection("col").whereGreaterThan("bla", "").get().get();
 
-    Map<String, MetricInfo> expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData("Firestore.RunQuery", Status.OK.getCode().toString(), 2)
-            .build();
-
-    for (String METRIC : GAX_METRICS) {
-      verifyPublishedMetrics(METRIC, interval, metricsPollingStopwatch, expectedMetrics);
-    }
-
-    Set<String> SDK_METRICS =
+    Set<String> METRICS =
         ImmutableSet.of(
+            TelemetryConstants.METRIC_NAME_OPERATION_LATENCY,
+            TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY,
+            TelemetryConstants.METRIC_NAME_OPERATION_COUNT,
+            TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT,
             TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY,
             TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
 
-    expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_QUERY_GET, Status.OK.getCode().toString(), 2)
-            .build();
-
-    for (String METRIC : SDK_METRICS) {
-      verifyPublishedMetrics(METRIC, interval, metricsPollingStopwatch, expectedMetrics);
+    for (String METRIC : METRICS) {
+      assertMetricsArePublished(METRIC, interval);
     }
   }
 
   @Test
-  public void testBuiltinMetricsWithTransaction() throws Exception {
-    // This stopwatch is used for to limit fetching of metric data in verifyMetrics
-    Stopwatch metricsPollingStopwatch = Stopwatch.createStarted();
+  public void builtinMetricsWithDefaultAndCustomOTEL() throws Exception {
+    firestore.shutdown();
+
+    InMemoryMetricReader metricReader = InMemoryMetricReader.create();
+    SdkMeterProviderBuilder meterProvider =
+        SdkMeterProvider.builder().registerMetricReader(metricReader);
+    OpenTelemetrySdk customOpenTelemetrySdk =
+        OpenTelemetrySdk.builder().setMeterProvider(meterProvider.build()).build();
+
+    firestore =
+        optionsBuilder
+            .setOpenTelemetryOptions(
+                FirestoreOpenTelemetryOptions.newBuilder()
+                    .setOpenTelemetry(customOpenTelemetrySdk)
+                    .build())
+            .build()
+            .getService();
+
     TimeInterval interval = createTimeInterval();
 
-    firestore
-        .runTransaction( // Has end-to-end, first response latency and transaction metrics.
-            transaction -> {
-              // Document Query. Has end-to-end and first response latency which is marked
-              // transactional
-              transaction.get(firestore.collection("col")).get();
-              transaction.get(firestore.collection("col").whereGreaterThan("bla", "")).get();
+    firestore.collection("col").count().get().get();
 
-              // Commit 2 documents. Has end-to-end latency.
-              transaction.set(
-                  firestore.collection("foo").document("bar"),
-                  Collections.singletonMap("foo", "bar"));
-              transaction.set(
-                  firestore.collection("foo").document("bar2"),
-                  Collections.singletonMap("foo2", "bar2"));
-              return 0;
-            })
-        .get();
+    // Verify metric data are published to Cloud Monitoring
+    Set<String> METRICS =
+        ImmutableSet.of(
+            TelemetryConstants.METRIC_NAME_OPERATION_LATENCY,
+            TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY,
+            TelemetryConstants.METRIC_NAME_OPERATION_COUNT,
+            TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT,
+            TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY,
+            TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
 
-    Map<String, MetricInfo> expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData("Firestore.BeginTransaction", Status.OK.getCode().toString(), 1)
-            .expectMetricData("Firestore.RunQuery", Status.OK.getCode().toString(), 2)
-            .expectMetricData("Firestore.Commit", Status.OK.getCode().toString(), 1)
-            .build();
-
-    for (String METRIC : GAX_METRICS) {
-      verifyPublishedMetrics(METRIC, interval, metricsPollingStopwatch, expectedMetrics);
+    for (String METRIC : METRICS) {
+      assertMetricsArePublished(METRIC, interval);
     }
 
-    expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_TRANSACTION_GET_QUERY,
-                Status.OK.getCode().toString(),
-                2)
-            .build();
+    // Verify metric data are collected to 3rd party backend (InMemoryMetricReader)
+    METRICS =
+        ImmutableSet.of(
+            TelemetryConstants.METRIC_NAME_OPERATION_LATENCY,
+            TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY,
+            TelemetryConstants.METRIC_NAME_OPERATION_COUNT,
+            TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT,
+            TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY,
+            TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
+    for (String METRIC : METRICS) {
+      assertMetricsAreCollected(metricReader, METRIC);
+    }
 
-    verifyPublishedMetrics(
-        TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY,
-        interval,
-        metricsPollingStopwatch,
-        expectedMetrics);
-
-    expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_TRANSACTION_GET_QUERY,
-                Status.OK.getCode().toString(),
-                2)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_TRANSACTION_COMMIT,
-                Status.OK.getCode().toString(),
-                1)
-            .build();
-
-    verifyPublishedMetrics(
-        TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY,
-        interval,
-        metricsPollingStopwatch,
-        expectedMetrics);
-
-    expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
-            .build();
-
-    Set<String> SDK_METRICS =
+    // Verify no transaction related metric data are collected
+    METRICS =
         ImmutableSet.of(
             TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY,
             TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
 
-    for (String METRIC : SDK_METRICS) {
-      verifyPublishedMetrics(METRIC, interval, metricsPollingStopwatch, expectedMetrics);
+    for (String METRIC : METRICS) {
+      assertMetricsAreAbsent(metricReader, METRIC);
+    }
+    metricReader.forceFlush();
+    metricReader.shutdown();
+  }
+
+  @Test
+  public void builtinMetricsCreatedByTransaction() throws Exception {
+    TimeInterval interval = createTimeInterval();
+
+    firestore
+        .runTransaction(
+            transaction -> {
+              transaction.get(firestore.collection("col")).get();
+              transaction.set(
+                  firestore.collection("foo").document("bar"),
+                  Collections.singletonMap("foo", "bar"));
+              return 0;
+            })
+        .get();
+
+    Set<String> METRICS =
+        ImmutableSet.of(
+            TelemetryConstants.METRIC_NAME_OPERATION_LATENCY,
+            TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY,
+            TelemetryConstants.METRIC_NAME_OPERATION_COUNT,
+            TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT,
+            TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY,
+            TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY,
+            TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY,
+            TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
+
+    for (String METRIC : METRICS) {
+      assertMetricsArePublished(METRIC, interval);
     }
   }
 
   private TimeInterval createTimeInterval() {
     Instant startTime = Instant.now();
     Instant endTime = Instant.now().plus(Duration.ofMinutes(1));
-    System.out.println(
-        "Test Start Time: " + startTime.toString() + " - Nanos: " + startTime.getNano());
-    System.out.println("Test End Time: " + endTime.toString() + " - Nanos: " + endTime.getNano());
-
     return TimeInterval.newBuilder()
         .setStartTime(Timestamps.fromMillis(startTime.toEpochMilli()))
         .setEndTime(Timestamps.fromMillis(endTime.toEpochMilli()))
         .build();
   }
 
-  private ListTimeSeriesResponse verifyPublishedMetrics(
-      String metric,
-      TimeInterval interval,
-      Stopwatch metricsPollingStopwatch,
-      Map<String, MetricInfo> expectedMetrics)
+  private ListTimeSeriesResponse assertMetricsArePublished(String metric, TimeInterval interval)
       throws Exception {
 
     String metricFilter =
         String.format("metric.type=\"%s/%s\"", TelemetryConstants.METRIC_PREFIX, metric);
-
-    // 2. Calculate alignment period dynamically based on your interval
-    //    long alignmentSeconds =
-    //            Timestamps.toMillis(interval.getEndTime())
-    //                    - Timestamps.toMillis(interval.getStartTime());
-    //    Duration alignmentPeriod = Duration.ofMillis(alignmentSeconds);
-    //
-    //    // Convert Duration to com.google.protobuf.Duration
-    //    com.google.protobuf.Duration protoAlignmentPeriod =
-    //            com.google.protobuf.Duration.newBuilder()
-    //                    .setSeconds(alignmentPeriod.getSeconds())
-    //                    .setNanos(alignmentPeriod.getNano())
-    //                    .build();
 
     ListTimeSeriesRequest request =
         ListTimeSeriesRequest.newBuilder()
             .setName("projects/" + projectId)
             .setFilter(metricFilter)
             .setInterval(interval)
-            //            .setView(ListTimeSeriesRequest.TimeSeriesView.FULL)
-            //                .setAggregation(
-            //                        Aggregation.newBuilder()
-            //                                .setAlignmentPeriod(protoAlignmentPeriod) // Dynamic
-            // alignment period
-            //                                .setPerSeriesAligner(Aggregation.Aligner.ALIGN_DELTA)
-            // // Use ALIGN_DELTA
-            //                )
             .build();
 
-    System.out.println("ListTimeSeriesRequest: " + request); // Log the request
-
     ListTimeSeriesResponse response = metricClient.listTimeSeriesCallable().call(request);
-    while (response.getTimeSeriesCount() == 0
-        && metricsPollingStopwatch.elapsed(TimeUnit.MINUTES) < 3) {
+    int attemptsMade = 0;
+    while (response.getTimeSeriesCount() == 0 && attemptsMade < 3) {
       // Call listTimeSeries every minute
       Thread.sleep(Duration.ofMinutes(1).toMillis());
       response = metricClient.listTimeSeriesCallable().call(request);
+      attemptsMade++;
     }
 
-    System.out.println("ListTimeSeriesResponse: " + response); // Log the response
+    // When querying from Cloud Monitoring database, we cannot reset the state for each individual
+    // test cases, and the response fetched could include time series data from previous test cases.
+    // So filter the response based on the time interval used by each single test case to make sure
+    // each test case has published expected metric data.
+    List<TimeSeries> filteredData =
+        response.getTimeSeriesList().stream()
+            .filter(
+                ts ->
+                    ts.getPoints(0).getInterval().getStartTime().getSeconds()
+                        >= interval.getStartTime().getSeconds())
+            .collect(Collectors.toList());
 
     assertWithMessage("Metric " + metric + " didn't return any data.")
-        .that(response.getTimeSeriesCount())
+        .that(filteredData.size())
         .isGreaterThan(0);
-
-    assertThat(response.getTimeSeriesCount()).isEqualTo(expectedMetrics.size());
-
-    for (TimeSeries timeSeries : response.getTimeSeriesList()) {
-      boolean isDistribution = timeSeries.getValueType() == MetricDescriptor.ValueType.DISTRIBUTION;
-
-      Map<String, String> metricLabels = timeSeries.getMetric().getLabelsMap();
-      MetricInfo expectedMetricInfo = expectedMetrics.get(metricLabels.get("method"));
-
-      if (isDistribution) {
-        assertThat(expectedMetricInfo.count)
-            .isEqualTo(timeSeries.getPoints(0).getValue().getDistributionValue().getCount());
-      } else {
-        assertThat(expectedMetricInfo.count)
-            .isEqualTo((int) timeSeries.getPoints(0).getValue().getInt64Value());
-      }
-
-      assertThat(metricLabels)
-          .containsAtLeastEntriesIn(
-              expectedMetricInfo.attributes.asMap().entrySet().stream()
-                  .collect(
-                      Collectors.toMap(entry -> entry.getKey().getKey(), Map.Entry::getValue)));
-    }
 
     return response;
   }
 
-  class MetricInfo {
-    // The expected number of measurements is called
-    public int count;
-    // Attributes expected to be recorded in the measurements
-    public Attributes attributes;
+  private void assertMetricsAreCollected(InMemoryMetricReader metricReader, String metricName) {
+    String fullMetricName = TelemetryConstants.METRIC_PREFIX + "/" + metricName;
 
-    public MetricInfo(int expectedCount, Attributes expectedAttributes) {
-      this.count = expectedCount;
-      this.attributes = expectedAttributes;
+    List<MetricData> matchingMetadata =
+        metricReader.collectAllMetrics().stream()
+            .filter(md -> md.getName().equals(fullMetricName))
+            .collect(Collectors.toList());
+    // Fetch the MetricData with retries
+    int attemptsMade = 0;
+    while (matchingMetadata.size() == 0 && attemptsMade < 10) {
+      // Fetch metric data every seconds
+      try {
+        Thread.sleep(Duration.ofSeconds(1).toMillis());
+      } catch (InterruptedException interruptedException) {
+        Thread.currentThread().interrupt();
+        throw new RuntimeException(interruptedException);
+      }
+      matchingMetadata =
+          metricReader.collectAllMetrics().stream()
+              .filter(md -> md.getName().equals(fullMetricName))
+              .collect(Collectors.toList());
+      attemptsMade++;
     }
+
+    assertWithMessage(
+            "Found unexpected MetricData with the same name: %s, in: %s",
+            fullMetricName, matchingMetadata)
+        .that(matchingMetadata.size())
+        .isAtMost(1);
+
+    assertWithMessage("MetricData is missing for metric %s", fullMetricName)
+        .that(matchingMetadata.size())
+        .isEqualTo(1);
   }
 
-  class MetricsExpectationBuilder {
-    private final Map<String, MetricInfo> expectedMetrics = new HashMap<>();
-
-    public MetricsExpectationBuilder expectMetricData(
-        String method, String expectedStatus, int expectedCount) {
-      Attributes attributes = buildAttributes(method, expectedStatus);
-      expectedMetrics.put(method, new MetricInfo(expectedCount, attributes));
-      return this;
-    }
-
-    public Map<String, MetricInfo> build() {
-      return expectedMetrics;
-    }
-  }
-
-  private Attributes buildAttributes(String method, String status) {
-    return expectedBaseAttributes
-        .toBuilder()
-        .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, status)
-        .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, method)
-        .build();
+  private void assertMetricsAreAbsent(InMemoryMetricReader metricReader, String metricName) {
+    String fullMetricName = TelemetryConstants.METRIC_PREFIX + "/" + metricName;
+    List<MetricData> matchingMetadata =
+        metricReader.collectAllMetrics().stream()
+            .filter(md -> md.getName().equals(fullMetricName))
+            .collect(Collectors.toList());
+    assertWithMessage(
+            "Found unexpected MetricData with the same name: %s, in: %s",
+            fullMetricName, matchingMetadata)
+        .that(matchingMetadata.size())
+        .isEqualTo(0);
   }
 }

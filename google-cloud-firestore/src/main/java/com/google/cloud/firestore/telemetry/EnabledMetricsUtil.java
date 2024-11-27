@@ -69,6 +69,8 @@ class EnabledMetricsUtil implements MetricsUtil {
   private BuiltinMetricsProvider defaultMetricsProvider;
   private BuiltinMetricsProvider customMetricsProvider;
 
+  private MetricExporter metricExporter;
+
   private static final Logger logger = Logger.getLogger(EnabledMetricsUtil.class.getName());
 
   EnabledMetricsUtil(FirestoreOptions firestoreOptions) {
@@ -145,7 +147,7 @@ class EnabledMetricsUtil implements MetricsUtil {
       sdkMeterProviderBuilder.registerView(entry.getKey(), entry.getValue());
     }
 
-    MetricExporter metricExporter =
+    metricExporter =
         GoogleCloudMetricExporter.createWithConfiguration(
             MetricConfiguration.builder()
                 .setProjectId(projectId)
@@ -184,6 +186,11 @@ class EnabledMetricsUtil implements MetricsUtil {
     if (tracerFactory != null) {
       apiTracerFactories.add(tracerFactory);
     }
+  }
+
+  @Override
+  public void shutdown() {
+    metricExporter.close();
   }
 
   class MetricsContext implements MetricsUtil.MetricsContext {
