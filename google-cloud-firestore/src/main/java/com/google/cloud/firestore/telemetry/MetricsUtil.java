@@ -52,8 +52,6 @@ public interface MetricsUtil {
     }
   }
 
-  abstract void shutdown();
-
   static boolean shouldCreateEnabledInstance() {
     // Client side metrics feature is default on unless it is manually turned off by
     // environment variables

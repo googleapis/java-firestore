@@ -188,11 +188,6 @@ class EnabledMetricsUtil implements MetricsUtil {
     }
   }
 
-  @Override
-  public void shutdown() {
-    metricExporter.close();
-  }
-
   class MetricsContext implements MetricsUtil.MetricsContext {
     private final Stopwatch stopwatch;
     private int counter;

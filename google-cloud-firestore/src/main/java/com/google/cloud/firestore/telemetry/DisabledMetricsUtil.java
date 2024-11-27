@@ -46,9 +46,6 @@ class DisabledMetricsUtil implements MetricsUtil {
   }
 
   @Override
-  public void shutdown() {}
-
-  @Override
   public MetricsContext createMetricsContext(String methodName) {
     return new MetricsContext();
   }

@@ -556,7 +556,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Override
   public void shutdown() {
     firestoreClient.shutdown();
-    firestoreOptions.getMetricsUtil().shutdown();
     closed = true;
   }
 
