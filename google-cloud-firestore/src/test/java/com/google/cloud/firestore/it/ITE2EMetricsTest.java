@@ -17,13 +17,13 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.common.truth.Truth.assertWithMessage;
+import static org.junit.Assume.assumeTrue;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.monitoring.v3.MetricServiceClient;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.monitoring.v3.ListTimeSeriesRequest;
 import com.google.monitoring.v3.ListTimeSeriesResponse;
@@ -76,9 +76,6 @@ public class ITE2EMetricsTest extends ITBaseTest {
 
   @Before
   public void before() throws Exception {
-    // We only perform end-to-end tracing tests on a nightly basis.
-    //        assumeTrue(isNightlyTesting);
-
     metricClient = MetricServiceClient.create();
 
     optionsBuilder = FirestoreOptions.newBuilder();
@@ -90,15 +87,16 @@ public class ITE2EMetricsTest extends ITBaseTest {
     } else {
       logger.log(Level.INFO, "Integration test using default database.");
     }
+
+    // We only perform end-to-end metrics tests on a nightly basis.
+    assumeTrue(isNightlyTesting);
   }
 
   @After
   public void after() throws Exception {
-    Preconditions.checkNotNull(
-        firestore,
-        "Error instantiating Firestore. Check that the service account credentials "
-            + "were properly set.");
-    firestore.shutdown();
+    if (firestore != null) {
+      firestore.shutdown();
+    }
     metricClient.shutdown();
   }
 

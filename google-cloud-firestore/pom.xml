@@ -134,7 +134,6 @@
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk-common</artifactId>
-      <version>${opentelemetry.version}</version>
     </dependency>
     <!-- END OpenTelemetry -->
 
