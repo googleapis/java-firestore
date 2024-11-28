@@ -25,7 +25,10 @@ import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.monitoring.v3.MetricServiceClient;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
-import com.google.monitoring.v3.*;
+import com.google.monitoring.v3.ListTimeSeriesRequest;
+import com.google.monitoring.v3.ListTimeSeriesResponse;
+import com.google.monitoring.v3.TimeInterval;
+import com.google.monitoring.v3.TimeSeries;
 import com.google.protobuf.util.Timestamps;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.metrics.SdkMeterProvider;
@@ -33,7 +36,9 @@ import io.opentelemetry.sdk.metrics.SdkMeterProviderBuilder;
 import io.opentelemetry.sdk.metrics.data.MetricData;
 import io.opentelemetry.sdk.testing.exporter.InMemoryMetricReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -85,25 +90,22 @@ public class ITE2EMetricsTest extends ITBaseTest {
     } else {
       logger.log(Level.INFO, "Integration test using default database.");
     }
-
-    firestore = optionsBuilder.build().getService();
-    Preconditions.checkNotNull(
-        firestore,
-        "Error instantiating Firestore. Check that the service account credentials "
-            + "were properly set.");
   }
 
   @After
   public void after() throws Exception {
-    // Wait for 30 seconds to avoid duplicate time series error triggered by metric exporter's
-    // shutdown.
-    Thread.sleep(Duration.ofSeconds(30).toMillis());
+    Preconditions.checkNotNull(
+        firestore,
+        "Error instantiating Firestore. Check that the service account credentials "
+            + "were properly set.");
     firestore.shutdown();
     metricClient.shutdown();
   }
 
   @Test
   public void builtinMetricsWithDefaultOTEL() throws Exception {
+    firestore = optionsBuilder.build().getService();
+
     TimeInterval interval = createTimeInterval();
 
     firestore.collection("col").get().get();
@@ -124,8 +126,6 @@ public class ITE2EMetricsTest extends ITBaseTest {
 
   @Test
   public void builtinMetricsWithDefaultAndCustomOTEL() throws Exception {
-    firestore.shutdown();
-
     InMemoryMetricReader metricReader = InMemoryMetricReader.create();
     SdkMeterProviderBuilder meterProvider =
         SdkMeterProvider.builder().registerMetricReader(metricReader);
@@ -142,7 +142,6 @@ public class ITE2EMetricsTest extends ITBaseTest {
             .getService();
 
     TimeInterval interval = createTimeInterval();
-
     firestore.collection("col").count().get().get();
 
     // Verify metric data are published to Cloud Monitoring
@@ -181,12 +180,12 @@ public class ITE2EMetricsTest extends ITBaseTest {
     for (String METRIC : METRICS) {
       assertMetricsAreAbsent(metricReader, METRIC);
     }
-    metricReader.forceFlush();
     metricReader.shutdown();
   }
 
   @Test
   public void builtinMetricsCreatedByTransaction() throws Exception {
+    firestore = optionsBuilder.build().getService();
     TimeInterval interval = createTimeInterval();
 
     firestore

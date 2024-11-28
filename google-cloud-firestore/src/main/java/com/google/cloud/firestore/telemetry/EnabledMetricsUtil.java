@@ -92,13 +92,14 @@ class EnabledMetricsUtil implements MetricsUtil {
       if (projectId == null) {
         logger.warning(
             "Project ID is null, skipping client side metrics export to Cloud Monitoring.");
-      }
-      try {
-        defaultOpenTelemetry = getDefaultOpenTelemetryInstance(projectId);
-      } catch (IOException e) {
-        logger.warning(
-            "Unable to create default OpenTelemetry instance for client side metrics, will skip exporting client side metrics to Cloud Monitoring: "
-                + e);
+      } else {
+        try {
+          defaultOpenTelemetry = getDefaultOpenTelemetryInstance(projectId);
+        } catch (Exception e) {
+          logger.warning(
+              "Unable to create default OpenTelemetry instance for client side metrics, will skip exporting client side metrics to Cloud Monitoring: "
+                  + e);
+        }
       }
     }
     return new BuiltinMetricsProvider(defaultOpenTelemetry);
@@ -193,7 +194,14 @@ class EnabledMetricsUtil implements MetricsUtil {
   @Override
   public void shutdown() {
     // Gracefully shutdown the metric reader registered to the default OTEL instance inside the sdk.
-    metricReader.shutdown();
+    if (metricReader != null) {
+      try {
+        metricReader.shutdown();
+      } catch (Exception e) {
+        // Handle the exception or retry with exponential backoff
+        logger.warning("Error shutting down MetricReader: " + e.getMessage());
+      }
+    }
   }
 
   class MetricsContext implements MetricsUtil.MetricsContext {

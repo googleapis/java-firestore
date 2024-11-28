@@ -22,6 +22,7 @@ import static com.google.cloud.firestore.it.ITQueryTest.map;
 import com.google.api.gax.rpc.TransportChannelProvider;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.FirestoreSpy;
 import com.google.cloud.firestore.ListenerRegistration;
@@ -54,6 +55,12 @@ public abstract class ITBaseTest {
   @Before
   public void before() throws Exception {
     FirestoreOptions.Builder optionsBuilder = FirestoreOptions.newBuilder();
+
+    // disable the OpenTelemetry monitoring data for tests
+    optionsBuilder.setOpenTelemetryOptions(
+        FirestoreOpenTelemetryOptions.newBuilder()
+            .exportBuiltinMetricsToGoogleCloudMonitoring(false)
+            .build());
 
     String dbPropertyName = "FIRESTORE_NAMED_DATABASE";
     String namedDb = System.getProperty(dbPropertyName);
