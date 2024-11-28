@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore.telemetry;
 
-
 import com.google.api.gax.tracing.ApiTracer;
 import com.google.api.gax.tracing.BaseApiTracer;
 import com.google.common.collect.ImmutableList;
