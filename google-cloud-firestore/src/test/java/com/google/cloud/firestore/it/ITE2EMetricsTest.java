@@ -17,7 +17,6 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.common.truth.Truth.assertWithMessage;
-import static org.junit.Assume.assumeTrue;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
@@ -89,7 +88,7 @@ public class ITE2EMetricsTest extends ITBaseTest {
     }
 
     // We only perform end-to-end metrics tests on a nightly basis.
-    assumeTrue(isNightlyTesting);
+    // assumeTrue(isNightlyTesting);
   }
 
   @After
