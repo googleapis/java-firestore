@@ -22,7 +22,6 @@ import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.threeten.bp.Duration;
 
 /** Combines multiple {@link ApiTracer}s into a single {@link ApiTracer}. */
 class CompositeApiTracer extends BaseApiTracer {
@@ -82,10 +81,8 @@ class CompositeApiTracer extends BaseApiTracer {
     children.forEach(ApiTracer::attemptCancelled);
   }
 
-  @Override
-  public void attemptFailed(Throwable error, Duration delay) {
-    children.forEach(child -> child.attemptFailed(error, delay));
-  }
+  // Note: attemptFailed is obsolete and replaced by attemptFailedDuration. Override function not
+  // required
 
   @Override
   public void attemptFailedDuration(Throwable error, java.time.Duration delay) {

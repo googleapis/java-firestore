@@ -129,16 +129,6 @@ public class CompositeApiTracerTest {
   }
 
   @Test
-  public void attemptFailed_callsAttemptFailedOnChildren() {
-    Exception error = new Exception("Test error");
-    Duration delay = Duration.ofSeconds(1);
-    compositeApiTracer.attemptFailed(error, delay);
-
-    verify(child1, times(1)).attemptFailed(error, delay);
-    verify(child2, times(1)).attemptFailed(error, delay);
-  }
-
-  @Test
   public void attemptFailedDuration_callsAttemptFailedDurationOnChildren() {
     Exception error = new Exception("Test error");
     java.time.Duration delay = java.time.Duration.ofSeconds(1);
