@@ -24,6 +24,8 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentChange;
@@ -35,6 +37,7 @@ import com.google.cloud.firestore.FirestoreException;
 import com.google.cloud.firestore.ListenerRegistration;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.Query.Direction;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.it.ITQueryWatchTest.QuerySnapshotEventListener.ListenerAssertions;
@@ -50,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -642,6 +646,47 @@ public final class ITQueryWatchTest extends ITBaseTest {
 
     ListenerAssertions listenerAssertions = listener.assertions();
     listenerAssertions.hasError();
+  }
+
+  @Test
+  public void bugFix() throws Exception {
+    CollectionReference col = randomColl;
+
+    firestore
+        .batch()
+        .set(col.document("711"), Collections.singletonMap("a", 1))
+        .set(col.document("__id711__"), Collections.singletonMap("a", 1))
+        .commit()
+        .get();
+
+    Query query = col.orderBy("__name__", Direction.ASCENDING);
+    List<String> expectedOrder = Arrays.asList( "__id711__", "711"); 
+
+
+    QuerySnapshot snapshot = query.get().get();
+    List<String> queryOrder = snapshot.getDocuments().stream()
+                                            .map(doc -> doc.getId())
+                                            .collect(Collectors.toList());
+    assertEquals(expectedOrder, queryOrder); // Assert order from backend
+
+
+    CountDownLatch latch = new CountDownLatch(1);
+    List<String> listenerOrder = new ArrayList<>(); 
+
+    ListenerRegistration registration =
+        query.addSnapshotListener(
+            (value, error) -> {
+              listenerOrder.addAll(value.getDocuments().stream()
+              .map(doc -> doc.getId())
+                  .collect(Collectors.toList()));
+          
+              latch.countDown();
+            });
+
+    latch.await();
+    registration.remove();
+
+    // assertEquals(expectedOrder, listenerOrder); // Assert order in the SDK
   }
 
   /**

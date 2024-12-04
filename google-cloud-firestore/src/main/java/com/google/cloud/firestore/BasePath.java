@@ -121,6 +121,7 @@ public abstract class BasePath<B extends BasePath<B>> implements Comparable<B> {
    */
   @Override
   public int compareTo(@Nonnull B other) {
+    System.out.println("compare to");
     List<String> thisSegments = this.getSegments();
     List<String> otherSegments = other.getSegments();
     int length = Math.min(thisSegments.size(), otherSegments.size());
