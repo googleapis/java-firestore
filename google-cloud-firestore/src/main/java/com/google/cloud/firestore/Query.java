@@ -1776,7 +1776,6 @@ public class Query extends StreamableQuery<QuerySnapshot> {
   }
 
   Comparator<QueryDocumentSnapshot> comparator() {
-    System.out.println("comparator");
     Iterator<FieldOrder> iterator = options.getFieldOrders().iterator();
     if (!iterator.hasNext()) {
       return DOCUMENT_ID_COMPARATOR;

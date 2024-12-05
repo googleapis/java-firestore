@@ -130,7 +130,6 @@ abstract class ResourcePath extends BasePath<ResourcePath> {
    */
   @Override
   public int compareTo(@Nonnull ResourcePath other) {
-    System.out.println("compareTo");
     DatabaseRootName thisDatabaseName = this.getDatabaseName();
     DatabaseRootName otherDatabaseName = other.getDatabaseName();
 

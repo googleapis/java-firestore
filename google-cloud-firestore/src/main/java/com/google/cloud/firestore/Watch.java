@@ -471,7 +471,6 @@ final class Watch implements BidiStreamObserver<ListenRequest, ListenResponse> {
    */
   private void pushSnapshot(final Timestamp readTime, ByteString nextResumeToken) {
     final List<DocumentChange> changes = computeSnapshot(readTime);
-    System.out.print(changes);
     if (!hasPushed || !changes.isEmpty()) {
       final QuerySnapshot querySnapshot =
           QuerySnapshot.withChanges(query, readTime, documentSet, changes);
