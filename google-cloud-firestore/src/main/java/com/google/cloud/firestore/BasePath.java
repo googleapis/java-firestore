@@ -138,21 +138,19 @@ public abstract class BasePath<B extends BasePath<B>> implements Comparable<B> {
     return Integer.compare(thisSegments.size(), otherSegments.size());
   }
 
-  private int compareSegments(String segment1, String segment2) {
-    // 1. Check if one segment is numeric and the other is not
-    if (isNumericId(segment1) && !isNumericId(segment2)) {
+  private int compareSegments(String lhs, String rhs) {
+    boolean isLhsNumeric = isNumericId(lhs);
+    boolean isRhsNumeric = isNumericId(rhs);
+
+    if (isLhsNumeric && !isRhsNumeric) { // Only lhs is numeric
       return -1;
-    } else if (!isNumericId(segment1) && isNumericId(segment2)) {
+    } else if (!isLhsNumeric && isRhsNumeric) { // Only rhs is numeric
       return 1;
+    } else if (isLhsNumeric && isRhsNumeric) { // both numeric
+      return Long.compare(extractNumericId(lhs), extractNumericId(rhs));
+    } else { // both non-numeric
+      return lhs.compareTo(rhs);
     }
-
-    // 2. If both are numeric, compare numerically
-    if (isNumericId(segment1) && isNumericId(segment2)) {
-      return Long.compare(extractNumericId(segment1), extractNumericId(segment2));
-    }
-
-    // 3. If both are strings, compare lexicographically
-    return segment1.compareTo(segment2);
   }
 
   // Checks if a segment is a numeric ID (starts with "__id" and ends with "__").
