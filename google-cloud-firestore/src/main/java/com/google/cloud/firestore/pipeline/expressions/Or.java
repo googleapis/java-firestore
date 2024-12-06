@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 
 @BetaApi
-public final class Or extends Function implements FilterCondition {
+public final class Or extends FilterCondition {
   @InternalApi
   Or(List<FilterCondition> conditions) {
     super("or", ImmutableList.copyOf(conditions));

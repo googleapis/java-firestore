@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class RegexContains extends Function implements FilterCondition {
+public final class RegexContains extends FilterCondition {
   @InternalApi
   RegexContains(Expr expr, Expr regex) {
     super("regex_contains", ImmutableList.of(expr, regex));

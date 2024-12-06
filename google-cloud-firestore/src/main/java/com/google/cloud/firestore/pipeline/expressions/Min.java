@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class Min extends Function implements Accumulator {
+public final class Min extends Accumulator {
   @InternalApi
   Min(Expr value, boolean distinct) {
     super("min", ImmutableList.of(value));

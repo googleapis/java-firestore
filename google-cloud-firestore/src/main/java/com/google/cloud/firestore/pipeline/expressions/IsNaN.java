@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class IsNaN extends Function implements FilterCondition {
+public final class IsNaN extends FilterCondition {
   @InternalApi
   IsNaN(Expr value) {
     super("is_nan", ImmutableList.of(value));

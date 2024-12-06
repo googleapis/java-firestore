@@ -22,6 +22,7 @@ import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.Pipeline;
 import com.google.common.base.Objects;
 import com.google.firestore.v1.Value;
+import java.util.Map;
 import javax.annotation.Nullable;
 
 /**
@@ -41,7 +42,7 @@ import javax.annotation.Nullable;
  * }</pre>
  */
 @BetaApi
-public final class Field implements Expr, Selectable {
+public final class Field extends Expr implements Selectable {
   public static final String DOCUMENT_ID = "__name__";
   private final FieldPath path;
   @Nullable private Pipeline pipeline; // Nullable
@@ -49,7 +50,6 @@ public final class Field implements Expr, Selectable {
   private Field(FieldPath path) {
     this.path = path;
   }
-
   /**
    * Creates a {@code Field} instance representing the field at the given path.
    *

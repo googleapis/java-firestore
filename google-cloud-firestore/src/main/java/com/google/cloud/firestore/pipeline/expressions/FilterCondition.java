@@ -17,6 +17,12 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.BetaApi;
+import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public interface FilterCondition extends Expr {}
+public abstract class FilterCondition extends Function {
+
+  FilterCondition(String name, ImmutableList<? extends Expr> params) {
+    super(name, params);
+  }
+}

@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 
 @BetaApi
-public final class Xor extends Function implements FilterCondition {
+public final class Xor extends FilterCondition {
   @InternalApi
   Xor(List<FilterCondition> conditions) {
     super("xor", ImmutableList.copyOf(conditions));

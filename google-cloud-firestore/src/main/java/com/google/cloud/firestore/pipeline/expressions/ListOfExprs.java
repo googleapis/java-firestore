@@ -18,10 +18,13 @@ package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
+import com.google.firestore.v1.ArrayValue;
+import com.google.firestore.v1.Value;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @InternalApi
-public final class ListOfExprs implements Expr {
+public final class ListOfExprs extends Expr {
   private final ImmutableList<Expr> conditions;
 
   @InternalApi
@@ -32,5 +35,15 @@ public final class ListOfExprs implements Expr {
   @InternalApi
   public List<Expr> getConditions() {
     return conditions;
+  }
+
+  @Override
+  Value toProto() {
+    Value.Builder builder = Value.newBuilder();
+    ArrayValue.Builder arrayBuilder = builder.getArrayValueBuilder();
+    for (Expr condition : conditions) {
+      arrayBuilder.addValues(condition.toProto());
+    }
+    return builder.build();
   }
 }

@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 
 @BetaApi
-public final class ArrayContainsAll extends Function implements FilterCondition {
+public final class ArrayContainsAll extends FilterCondition {
   @InternalApi
   ArrayContainsAll(Expr array, List<Expr> elements) {
     super("array_contains_all", ImmutableList.of(array, new ListOfExprs(elements)));

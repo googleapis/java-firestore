@@ -44,16 +44,17 @@ import java.util.stream.Collectors;
  * <p>You can chain together these static functions to create more complex expressions.
  */
 @BetaApi
-public class Function implements Expr {
+public class Function extends Expr {
   private final String name;
   private final List<Expr> params;
 
-  protected Function(String name, ImmutableList<? extends Expr> params) {
+  Function(String name, ImmutableList<? extends Expr> params) {
     this.name = name;
     this.params = Collections.unmodifiableList(params);
   }
 
   @InternalApi
+  @Override
   Value toProto() {
     return Value.newBuilder()
         .setFunctionValue(

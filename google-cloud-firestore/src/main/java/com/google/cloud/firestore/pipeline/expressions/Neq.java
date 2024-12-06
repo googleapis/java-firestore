@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class Neq extends Function implements FilterCondition {
+public final class Neq extends FilterCondition {
   @InternalApi
   Neq(Expr left, Expr right) {
     super("neq", ImmutableList.of(left, right == null ? Constant.nullValue() : right));

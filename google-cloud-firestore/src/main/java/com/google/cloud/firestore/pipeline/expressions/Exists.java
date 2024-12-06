@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class Exists extends Function implements FilterCondition {
+public final class Exists extends FilterCondition {
   @InternalApi
   Exists(Expr expr) {
     super("exists", ImmutableList.of(expr));

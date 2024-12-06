@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 
 @BetaApi
-public final class And extends Function implements FilterCondition {
+public final class And extends FilterCondition {
   @InternalApi
   And(List<FilterCondition> conditions) {
     super("and", ImmutableList.copyOf(conditions));
