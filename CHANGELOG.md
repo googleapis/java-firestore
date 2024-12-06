@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.30.1](https://github.com/googleapis/java-firestore/compare/v3.30.0...v3.30.1) (2024-12-06)
+
+
+### Bug Fixes
+
+* BulkWriter flush logic ([#1778](https://github.com/googleapis/java-firestore/issues/1778)) ([627619d](https://github.com/googleapis/java-firestore/commit/627619d33a051f6709a563b7375ebe39956f9ebf))
+
 ## [3.30.0](https://github.com/googleapis/java-firestore/compare/v3.29.1...v3.30.0) (2024-11-26)
 
 
