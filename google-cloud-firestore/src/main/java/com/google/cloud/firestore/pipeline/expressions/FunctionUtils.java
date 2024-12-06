@@ -17,7 +17,6 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.InternalApi;
-import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.Value;
 import java.util.Arrays;
 import java.util.List;
@@ -27,11 +26,7 @@ import java.util.stream.Collectors;
 public final class FunctionUtils {
   @InternalApi
   public static Value exprToValue(Expr expr) {
-    if (expr == null) {
-      return Constant.of((String) null).toProto();
-    } else {
-      return expr.toProto();
-    }
+    return (expr == null ? Constant.NULL : expr).toProto();
   }
 
   @InternalApi

@@ -48,6 +48,10 @@ public abstract class Expr {
   Expr() {
   }
 
+  private static Expr castToExprOrConvertToConstant(Object o) {
+    return o instanceof Expr ? (Expr) o : Constant.of(o);
+  }
+
   // Arithmetic Operators
 
   /**
@@ -83,7 +87,7 @@ public abstract class Expr {
    */
   @BetaApi
   public final Add add(Object other) {
-    return new Add(this, Constant.of(other));
+    return new Add(this, castToExprOrConvertToConstant(other));
   }
 
   /**
@@ -119,7 +123,7 @@ public abstract class Expr {
    */
   @BetaApi
   public final Subtract subtract(Object other) {
-    return new Subtract(this, Constant.of(other));
+    return new Subtract(this, castToExprOrConvertToConstant(other));
   }
 
   /**
@@ -155,7 +159,7 @@ public abstract class Expr {
    */
   @BetaApi
   public final Multiply multiply(Object other) {
-    return new Multiply(this, Constant.of(other));
+    return new Multiply(this, castToExprOrConvertToConstant(other));
   }
 
   /**
@@ -191,7 +195,7 @@ public abstract class Expr {
    */
   @BetaApi
   public final Divide divide(Object other) {
-    return new Divide(this, Constant.of(other));
+    return new Divide(this, castToExprOrConvertToConstant(other));
   }
 
   /**
@@ -227,7 +231,7 @@ public abstract class Expr {
    */
   @BetaApi
   public final Mod mod(Object other) {
-    return new Mod(this, Constant.of(other));
+    return new Mod(this, castToExprOrConvertToConstant(other));
   }
 
   // /**
@@ -263,7 +267,7 @@ public abstract class Expr {
   //  */
   // @BetaApi
   // default BitAnd bitAnd(Object other) {
-  //   return new BitAnd(this, Constant.of(other));
+  //   return new BitAnd(this, of(other));
   // }
   //
   // /**
@@ -299,7 +303,7 @@ public abstract class Expr {
   //  */
   // @BetaApi
   // default BitOr bitOr(Object other) {
-  //   return new BitOr(this, Constant.of(other));
+  //   return new BitOr(this, of(other));
   // }
   //
   // /**
@@ -335,7 +339,7 @@ public abstract class Expr {
   //  */
   // @BetaApi
   // default BitXor bitXor(Object other) {
-  //   return new BitXor(this, Constant.of(other));
+  //   return new BitXor(this, of(other));
   // }
   //
   // /**
@@ -388,7 +392,7 @@ public abstract class Expr {
   //  */
   // @BetaApi
   // default BitLeftShift bitLeftShift(Object other) {
-  //   return new BitLeftShift(this, Constant.of(other));
+  //   return new BitLeftShift(this, of(other));
   // }
   //
   // /**
@@ -424,7 +428,7 @@ public abstract class Expr {
   //  */
   // @BetaApi
   // default BitRightShift bitRightShift(Object other) {
-  //   return new BitRightShift(this, Constant.of(other));
+  //   return new BitRightShift(this, of(other));
   // }
 
   // Logical Functions
@@ -468,7 +472,7 @@ public abstract class Expr {
    * @return A new {@code Expr} representing the logical max operation.
    */
   public final LogicalMax logicalMax(Object other) {
-    return new LogicalMax(this, Constant.of(other));
+    return new LogicalMax(this, castToExprOrConvertToConstant(other));
   }
 
   /**
@@ -510,7 +514,7 @@ public abstract class Expr {
    * @return A new {@code Expr} representing the logical min operation.
    */
   public final LogicalMin logicalMin(Object other) {
-    return new LogicalMin(this, Constant.of(other));
+    return new LogicalMin(this, castToExprOrConvertToConstant(other));
   }
 
   // Comparison Operators
@@ -548,7 +552,7 @@ public abstract class Expr {
    */
   @BetaApi
   public final Eq eq(Object other) {
-    return new Eq(this, Constant.of(other));
+    return new Eq(this, castToExprOrConvertToConstant(other));
   }
 
   /**
@@ -584,7 +588,7 @@ public abstract class Expr {
    */
   @BetaApi
   public final Neq neq(Object other) {
-    return new Neq(this, Constant.of(other));
+    return new Neq(this, castToExprOrConvertToConstant(other));
   }
 
   /**
@@ -620,7 +624,7 @@ public abstract class Expr {
    */
   @BetaApi
   public final Gt gt(Object other) {
-    return new Gt(this, Constant.of(other));
+    return new Gt(this, castToExprOrConvertToConstant(other));
   }
 
   /**
@@ -658,7 +662,7 @@ public abstract class Expr {
    */
   @BetaApi
   public final Gte gte(Object other) {
-    return new Gte(this, Constant.of(other));
+    return new Gte(this, castToExprOrConvertToConstant(other));
   }
 
   /**
@@ -694,7 +698,7 @@ public abstract class Expr {
    */
   @BetaApi
   public final Lt lt(Object other) {
-    return new Lt(this, Constant.of(other));
+    return new Lt(this, castToExprOrConvertToConstant(other));
   }
 
   /**
@@ -731,7 +735,7 @@ public abstract class Expr {
    */
   @BetaApi
   public final Lte lte(Object other) {
-    return new Lte(this, Constant.of(other));
+    return new Lte(this, castToExprOrConvertToConstant(other));
   }
 
   // IN operator
@@ -826,7 +830,7 @@ public abstract class Expr {
    */
   @BetaApi
   public final ArrayContains arrayContains(Object element) {
-    return new ArrayContains(this, Constant.of(element));
+    return new ArrayContains(this, castToExprOrConvertToConstant(element));
   }
 
   /**
