@@ -46,8 +46,8 @@ public class SampleOptions {
     return new SampleOptions(percentage, Mode.PERCENT);
   }
 
-  public static SampleOptions docLimit(int limit) {
-    return new SampleOptions(limit, Mode.DOCUMENTS);
+  public static SampleOptions docLimit(int documents) {
+    return new SampleOptions(documents, Mode.DOCUMENTS);
   }
 
   Iterable<Value> getProtoArgs() {
