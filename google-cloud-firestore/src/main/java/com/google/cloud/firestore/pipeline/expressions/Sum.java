@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class Sum extends Function implements Accumulator {
+public final class Sum extends Accumulator {
   @InternalApi
   Sum(Expr value, boolean distinct) {
     super("sum", ImmutableList.of(value));

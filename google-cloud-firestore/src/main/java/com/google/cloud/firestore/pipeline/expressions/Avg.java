@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class Avg extends Function implements Accumulator {
+public final class Avg extends Accumulator {
   @InternalApi
   Avg(Expr value, boolean distinct) {
     super("avg", ImmutableList.of(value));

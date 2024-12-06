@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class Max extends Function implements Accumulator {
+public final class Max extends Accumulator {
   @InternalApi
   Max(Expr value, boolean distinct) {
     super("max", ImmutableList.of(value));

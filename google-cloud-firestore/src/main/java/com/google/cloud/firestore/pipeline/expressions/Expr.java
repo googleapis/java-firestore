@@ -19,6 +19,8 @@ package com.google.cloud.firestore.pipeline.expressions;
 import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.toExprList;
 
 import com.google.api.core.BetaApi;
+import com.google.api.core.InternalApi;
+import com.google.firestore.v1.Value;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,7 +42,11 @@ import java.util.List;
  * method calls to create complex expressions.
  */
 @BetaApi
-public interface Expr {
+public abstract class Expr {
+
+  /** Constructor is package-private to prevent extension. */
+  Expr() {
+  }
 
   // Arithmetic Operators
 
@@ -58,7 +64,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the addition operation.
    */
   @BetaApi
-  default Add add(Expr other) {
+  public final Add add(Expr other) {
     return new Add(this, other);
   }
 
@@ -76,7 +82,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the addition operation.
    */
   @BetaApi
-  default Add add(Object other) {
+  public final Add add(Object other) {
     return new Add(this, Constant.of(other));
   }
 
@@ -94,7 +100,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the subtraction operation.
    */
   @BetaApi
-  default Subtract subtract(Expr other) {
+  public final Subtract subtract(Expr other) {
     return new Subtract(this, other);
   }
 
@@ -112,7 +118,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the subtraction operation.
    */
   @BetaApi
-  default Subtract subtract(Object other) {
+  public final Subtract subtract(Object other) {
     return new Subtract(this, Constant.of(other));
   }
 
@@ -130,7 +136,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the multiplication operation.
    */
   @BetaApi
-  default Multiply multiply(Expr other) {
+  public final Multiply multiply(Expr other) {
     return new Multiply(this, other);
   }
 
@@ -148,7 +154,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the multiplication operation.
    */
   @BetaApi
-  default Multiply multiply(Object other) {
+  public final Multiply multiply(Object other) {
     return new Multiply(this, Constant.of(other));
   }
 
@@ -166,7 +172,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the division operation.
    */
   @BetaApi
-  default Divide divide(Expr other) {
+  public final Divide divide(Expr other) {
     return new Divide(this, other);
   }
 
@@ -184,7 +190,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the division operation.
    */
   @BetaApi
-  default Divide divide(Object other) {
+  public final Divide divide(Object other) {
     return new Divide(this, Constant.of(other));
   }
 
@@ -202,7 +208,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the modulo operation.
    */
   @BetaApi
-  default Mod mod(Expr other) {
+  public final Mod mod(Expr other) {
     return new Mod(this, other);
   }
 
@@ -220,7 +226,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the modulo operation.
    */
   @BetaApi
-  default Mod mod(Object other) {
+  public final Mod mod(Object other) {
     return new Mod(this, Constant.of(other));
   }
 
@@ -440,7 +446,7 @@ public interface Expr {
    * @param other The other expression to compare with.
    * @return A new {@code Expr} representing the logical max operation.
    */
-  default LogicalMax logicalMax(Expr other) {
+  public final LogicalMax logicalMax(Expr other) {
     return new LogicalMax(this, other);
   }
 
@@ -461,7 +467,7 @@ public interface Expr {
    * @param other The constant value to compare with.
    * @return A new {@code Expr} representing the logical max operation.
    */
-  default LogicalMax logicalMax(Object other) {
+  public final LogicalMax logicalMax(Object other) {
     return new LogicalMax(this, Constant.of(other));
   }
 
@@ -482,7 +488,7 @@ public interface Expr {
    * @param other The other expression to compare with.
    * @return A new {@code Expr} representing the logical min operation.
    */
-  default LogicalMin logicalMin(Expr other) {
+  public final LogicalMin logicalMin(Expr other) {
     return new LogicalMin(this, other);
   }
 
@@ -503,7 +509,7 @@ public interface Expr {
    * @param other The constant value to compare with.
    * @return A new {@code Expr} representing the logical min operation.
    */
-  default LogicalMin logicalMin(Object other) {
+  public final LogicalMin logicalMin(Object other) {
     return new LogicalMin(this, Constant.of(other));
   }
 
@@ -523,7 +529,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the equality comparison.
    */
   @BetaApi
-  default Eq eq(Expr other) {
+  public final Eq eq(Expr other) {
     return new Eq(this, other);
   }
 
@@ -541,7 +547,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the equality comparison.
    */
   @BetaApi
-  default Eq eq(Object other) {
+  public final Eq eq(Object other) {
     return new Eq(this, Constant.of(other));
   }
 
@@ -559,7 +565,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the inequality comparison.
    */
   @BetaApi
-  default Neq neq(Expr other) {
+  public final Neq neq(Expr other) {
     return new Neq(this, other);
   }
 
@@ -577,7 +583,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the inequality comparison.
    */
   @BetaApi
-  default Neq neq(Object other) {
+  public final Neq neq(Object other) {
     return new Neq(this, Constant.of(other));
   }
 
@@ -595,7 +601,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the greater than comparison.
    */
   @BetaApi
-  default Gt gt(Expr other) {
+  public final Gt gt(Expr other) {
     return new Gt(this, other);
   }
 
@@ -613,7 +619,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the greater than comparison.
    */
   @BetaApi
-  default Gt gt(Object other) {
+  public final Gt gt(Object other) {
     return new Gt(this, Constant.of(other));
   }
 
@@ -632,7 +638,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the greater than or equal to comparison.
    */
   @BetaApi
-  default Gte gte(Expr other) {
+  public final Gte gte(Expr other) {
     return new Gte(this, other);
   }
 
@@ -651,7 +657,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the greater than or equal to comparison.
    */
   @BetaApi
-  default Gte gte(Object other) {
+  public final Gte gte(Object other) {
     return new Gte(this, Constant.of(other));
   }
 
@@ -669,7 +675,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the less than comparison.
    */
   @BetaApi
-  default Lt lt(Expr other) {
+  public final Lt lt(Expr other) {
     return new Lt(this, other);
   }
 
@@ -687,7 +693,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the less than comparison.
    */
   @BetaApi
-  default Lt lt(Object other) {
+  public final Lt lt(Object other) {
     return new Lt(this, Constant.of(other));
   }
 
@@ -706,7 +712,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the less than or equal to comparison.
    */
   @BetaApi
-  default Lte lte(Expr other) {
+  public final Lte lte(Expr other) {
     return new Lte(this, other);
   }
 
@@ -724,7 +730,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the less than or equal to comparison.
    */
   @BetaApi
-  default Lte lte(Object other) {
+  public final Lte lte(Object other) {
     return new Lte(this, Constant.of(other));
   }
 
@@ -744,7 +750,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'IN' comparison.
    */
   @BetaApi
-  default In inAny(Object... other) {
+  public final In inAny(Object... other) {
     return new In(this, toExprList(other));
   }
 
@@ -763,7 +769,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'NOT IN' comparison.
    */
   @BetaApi
-  default Not notInAny(Object... other) {
+  public final Not notInAny(Object... other) {
     return new Not(inAny(other));
   }
 
@@ -783,7 +789,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the concatenated array.
    */
   @BetaApi
-  default ArrayConcat arrayConcat(List<Object> array) {
+  public final ArrayConcat arrayConcat(List<Object> array) {
     return new ArrayConcat(this, toExprList(array.toArray()));
   }
 
@@ -801,7 +807,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'array_contains' comparison.
    */
   @BetaApi
-  default ArrayContains arrayContains(Expr element) {
+  public final ArrayContains arrayContains(Expr element) {
     return new ArrayContains(this, element);
   }
 
@@ -819,7 +825,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'array_contains' comparison.
    */
   @BetaApi
-  default ArrayContains arrayContains(Object element) {
+  public final ArrayContains arrayContains(Object element) {
     return new ArrayContains(this, Constant.of(element));
   }
 
@@ -837,7 +843,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'array_contains_all' comparison.
    */
   @BetaApi
-  default ArrayContainsAll arrayContainsAll(Expr... elements) {
+  public final ArrayContainsAll arrayContainsAll(Expr... elements) {
     return new ArrayContainsAll(this, Arrays.asList(elements));
   }
 
@@ -855,7 +861,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'array_contains_all' comparison.
    */
   @BetaApi
-  default ArrayContainsAll arrayContainsAll(Object... elements) {
+  public final ArrayContainsAll arrayContainsAll(Object... elements) {
     return new ArrayContainsAll(this, toExprList(elements));
   }
 
@@ -873,7 +879,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'array_contains_any' comparison.
    */
   @BetaApi
-  default ArrayContainsAny arrayContainsAny(Expr... elements) {
+  public final ArrayContainsAny arrayContainsAny(Expr... elements) {
     return new ArrayContainsAny(this, Arrays.asList(elements));
   }
 
@@ -892,7 +898,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'array_contains_any' comparison.
    */
   @BetaApi
-  default ArrayContainsAny arrayContainsAny(Object... elements) {
+  public final ArrayContainsAny arrayContainsAny(Object... elements) {
     return new ArrayContainsAny(this, toExprList(elements));
   }
 
@@ -909,7 +915,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the length of the array.
    */
   @BetaApi
-  default ArrayLength arrayLength() {
+  public final ArrayLength arrayLength() {
     return new ArrayLength(this);
   }
 
@@ -926,7 +932,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the length of the array.
    */
   @BetaApi
-  default ArrayReverse arrayReverse() {
+  public final ArrayReverse arrayReverse() {
     return new ArrayReverse(this);
   }
 
@@ -945,7 +951,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'isNaN' check.
    */
   @BetaApi
-  default IsNaN isNaN() {
+  public final IsNaN isNaN() {
     return new IsNaN(this);
   }
 
@@ -962,7 +968,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'exists' check.
    */
   @BetaApi
-  default Exists exists() {
+  public final Exists exists() {
     return new Exists(this);
   }
 
@@ -981,7 +987,7 @@ public interface Expr {
    * @return A new {@code Accumulator} representing the 'sum' aggregation.
    */
   @BetaApi
-  default Sum sum() {
+  public final Sum sum() {
     return new Sum(this, false);
   }
 
@@ -999,7 +1005,7 @@ public interface Expr {
    * @return A new {@code Accumulator} representing the 'avg' aggregation.
    */
   @BetaApi
-  default Avg avg() {
+  public final Avg avg() {
     return new Avg(this, false);
   }
 
@@ -1017,7 +1023,7 @@ public interface Expr {
    * @return A new {@code Accumulator} representing the 'count' aggregation.
    */
   @BetaApi
-  default Count count() {
+  public final Count count() {
     return new Count(this);
   }
 
@@ -1034,7 +1040,7 @@ public interface Expr {
    * @return A new {@code Accumulator} representing the 'min' aggregation.
    */
   @BetaApi
-  default Min min() {
+  public final Min min() {
     return new Min(this, false);
   }
 
@@ -1051,7 +1057,7 @@ public interface Expr {
    * @return A new {@code Accumulator} representing the 'max' aggregation.
    */
   @BetaApi
-  default Max max() {
+  public final Max max() {
     return new Max(this, false);
   }
 
@@ -1070,7 +1076,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the length of the string.
    */
   @BetaApi
-  default CharLength charLength() {
+  public final CharLength charLength() {
     return new CharLength(this);
   }
 
@@ -1087,7 +1093,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the byte length of the string.
    */
   @BetaApi
-  default ByteLength byteLength() {
+  public final ByteLength byteLength() {
     return new ByteLength(this);
   }
 
@@ -1105,7 +1111,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'like' comparison.
    */
   @BetaApi
-  default Like like(String pattern) {
+  public final Like like(String pattern) {
     return new Like(this, Constant.of(pattern));
   }
 
@@ -1123,7 +1129,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'like' comparison.
    */
   @BetaApi
-  default Like like(Expr pattern) {
+  public final Like like(Expr pattern) {
     return new Like(this, pattern);
   }
 
@@ -1142,7 +1148,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'contains' comparison.
    */
   @BetaApi
-  default RegexContains regexContains(String regex) {
+  public final RegexContains regexContains(String regex) {
     return new RegexContains(this, Constant.of(regex));
   }
 
@@ -1161,7 +1167,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'contains' comparison.
    */
   @BetaApi
-  default RegexContains regexContains(Expr regex) {
+  public final RegexContains regexContains(Expr regex) {
     return new RegexContains(this, regex);
   }
 
@@ -1179,7 +1185,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the regular expression match.
    */
   @BetaApi
-  default RegexMatch regexMatches(String regex) {
+  public final RegexMatch regexMatches(String regex) {
     return new RegexMatch(this, Constant.of(regex));
   }
 
@@ -1197,7 +1203,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the regular expression match.
    */
   @BetaApi
-  default RegexMatch regexMatches(Expr regex) {
+  public final RegexMatch regexMatches(Expr regex) {
     return new RegexMatch(this, regex);
   }
 
@@ -1215,7 +1221,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'contains' comparison.
    */
   @BetaApi
-  default StrContains strContains(String substring) {
+  public final StrContains strContains(String substring) {
     return new StrContains(this, Constant.of(substring));
   }
 
@@ -1234,7 +1240,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'contains' comparison.
    */
   @BetaApi
-  default StrContains strContains(Expr expr) {
+  public final StrContains strContains(Expr expr) {
     return new StrContains(this, expr);
   }
 
@@ -1252,7 +1258,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'starts with' comparison.
    */
   @BetaApi
-  default StartsWith startsWith(String prefix) {
+  public final StartsWith startsWith(String prefix) {
     return new StartsWith(this, Constant.of(prefix));
   }
 
@@ -1271,7 +1277,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'starts with' comparison.
    */
   @BetaApi
-  default StartsWith startsWith(Expr prefix) {
+  public final StartsWith startsWith(Expr prefix) {
     return new StartsWith(this, prefix);
   }
 
@@ -1289,7 +1295,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'ends with' comparison.
    */
   @BetaApi
-  default EndsWith endsWith(String postfix) {
+  public final EndsWith endsWith(String postfix) {
     return new EndsWith(this, Constant.of(postfix));
   }
 
@@ -1308,7 +1314,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the 'ends with' comparison.
    */
   @BetaApi
-  default EndsWith endsWith(Expr postfix) {
+  public final EndsWith endsWith(Expr postfix) {
     return new EndsWith(this, postfix);
   }
 
@@ -1326,7 +1332,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the concatenated string.
    */
   @BetaApi
-  default StrConcat strConcat(Expr... elements) {
+  public final StrConcat strConcat(Expr... elements) {
     return new StrConcat(this, Arrays.asList(elements));
   }
 
@@ -1344,7 +1350,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the concatenated string.
    */
   @BetaApi
-  default StrConcat strConcat(Object... elements) {
+  public final StrConcat strConcat(Object... elements) {
     return new StrConcat(this, toExprList(elements));
   }
 
@@ -1361,7 +1367,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the lowercase string.
    */
   @BetaApi
-  default ToLower toLower() {
+  public final ToLower toLower() {
     return new ToLower(this);
   }
 
@@ -1378,7 +1384,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the uppercase string.
    */
   @BetaApi
-  default ToUpper toUpper() {
+  public final ToUpper toUpper() {
     return new ToUpper(this);
   }
 
@@ -1395,7 +1401,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the trimmed string.
    */
   @BetaApi
-  default Trim trim() {
+  public final Trim trim() {
     return new Trim(this);
   }
 
@@ -1412,7 +1418,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the reversed string.
    */
   @BetaApi
-  default Reverse reverse() {
+  public final Reverse reverse() {
     return new Reverse(this);
   }
 
@@ -1432,7 +1438,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the string with the first occurrence replaced.
    */
   @BetaApi
-  default ReplaceFirst replaceFirst(String find, String replace) {
+  public final ReplaceFirst replaceFirst(String find, String replace) {
     return new ReplaceFirst(this, Constant.of(find), Constant.of(replace));
   }
 
@@ -1454,7 +1460,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the string with the first occurrence replaced.
    */
   @BetaApi
-  default ReplaceFirst replaceFirst(Expr find, Expr replace) {
+  public final ReplaceFirst replaceFirst(Expr find, Expr replace) {
     return new ReplaceFirst(this, find, replace);
   }
 
@@ -1474,7 +1480,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the string with all occurrences replaced.
    */
   @BetaApi
-  default ReplaceAll replaceAll(String find, String replace) {
+  public final ReplaceAll replaceAll(String find, String replace) {
     return new ReplaceAll(this, Constant.of(find), Constant.of(replace));
   }
 
@@ -1496,7 +1502,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the string with all occurrences replaced.
    */
   @BetaApi
-  default ReplaceAll replaceAll(Expr find, Expr replace) {
+  public final ReplaceAll replaceAll(Expr find, Expr replace) {
     return new ReplaceAll(this, find, replace);
   }
 
@@ -1517,7 +1523,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the value associated with the given key in the map.
    */
   @BetaApi
-  default MapGet mapGet(String key) {
+  public final MapGet mapGet(String key) {
     return new MapGet(this, key);
   }
 
@@ -1535,7 +1541,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the cosine distance between the two vectors.
    */
   @BetaApi
-  default CosineDistance cosineDistance(Expr other) {
+  public final CosineDistance cosineDistance(Expr other) {
     return new CosineDistance(this, other);
   }
 
@@ -1553,7 +1559,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the Cosine distance between the two vectors.
    */
   @BetaApi
-  default CosineDistance cosineDistance(double[] other) {
+  public final CosineDistance cosineDistance(double[] other) {
     return new CosineDistance(this, Constant.vector(other));
   }
 
@@ -1571,7 +1577,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the Euclidean distance between the two vectors.
    */
   @BetaApi
-  default EuclideanDistance euclideanDistance(double[] other) {
+  public final EuclideanDistance euclideanDistance(double[] other) {
     return new EuclideanDistance(this, Constant.vector(other));
   }
 
@@ -1589,7 +1595,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the Euclidean distance between the two vectors.
    */
   @BetaApi
-  default EuclideanDistance euclideanDistance(Expr other) {
+  public final EuclideanDistance euclideanDistance(Expr other) {
     return new EuclideanDistance(this, other);
   }
 
@@ -1607,7 +1613,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the dot product between the two vectors.
    */
   @BetaApi
-  default DotProduct dotProduct(double[] other) {
+  public final DotProduct dotProduct(double[] other) {
     return new DotProduct(this, Constant.vector(other));
   }
 
@@ -1625,7 +1631,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the dot product between the two vectors.
    */
   @BetaApi
-  default DotProduct dotProduct(Expr other) {
+  public final DotProduct dotProduct(Expr other) {
     return new DotProduct(this, other);
   }
 
@@ -1642,7 +1648,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the length of the array.
    */
   @BetaApi
-  default VectorLength vectorLength() {
+  public final VectorLength vectorLength() {
     return new VectorLength(this);
   }
 
@@ -1664,7 +1670,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the number of microseconds since the epoch.
    */
   @BetaApi
-  default TimestampToUnixMicros timestampToUnixMicros() {
+  public final TimestampToUnixMicros timestampToUnixMicros() {
     return new TimestampToUnixMicros(this);
   }
 
@@ -1682,7 +1688,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the timestamp.
    */
   @BetaApi
-  default UnixMicrosToTimestamp unixMicrosToTimestamp() {
+  public final UnixMicrosToTimestamp unixMicrosToTimestamp() {
     return new UnixMicrosToTimestamp(this);
   }
 
@@ -1702,7 +1708,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the number of milliseconds since the epoch.
    */
   @BetaApi
-  default TimestampToUnixMillis timestampToUnixMillis() {
+  public final TimestampToUnixMillis timestampToUnixMillis() {
     return new TimestampToUnixMillis(this);
   }
 
@@ -1720,7 +1726,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the timestamp.
    */
   @BetaApi
-  default UnixMillisToTimestamp unixMillisToTimestamp() {
+  public final UnixMillisToTimestamp unixMillisToTimestamp() {
     return new UnixMillisToTimestamp(this);
   }
 
@@ -1740,7 +1746,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the number of seconds since the epoch.
    */
   @BetaApi
-  default TimestampToUnixSeconds timestampToUnixSeconds() {
+  public final TimestampToUnixSeconds timestampToUnixSeconds() {
     return new TimestampToUnixSeconds(this);
   }
 
@@ -1758,7 +1764,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the timestamp.
    */
   @BetaApi
-  default UnixSecondsToTimestamp unixSecondsToTimestamp() {
+  public final UnixSecondsToTimestamp unixSecondsToTimestamp() {
     return new UnixSecondsToTimestamp(this);
   }
 
@@ -1778,7 +1784,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the resulting timestamp.
    */
   @BetaApi
-  default TimestampAdd timestampAdd(Expr unit, Expr amount) {
+  public final TimestampAdd timestampAdd(Expr unit, Expr amount) {
     return new TimestampAdd(this, unit, amount);
   }
 
@@ -1798,7 +1804,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the resulting timestamp.
    */
   @BetaApi
-  default TimestampAdd timestampAdd(String unit, Double amount) {
+  public final TimestampAdd timestampAdd(String unit, Double amount) {
     return new TimestampAdd(this, Constant.of(unit), Constant.of(amount));
   }
 
@@ -1818,7 +1824,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the resulting timestamp.
    */
   @BetaApi
-  default TimestampSub timestampSub(Expr unit, Expr amount) {
+  public final TimestampSub timestampSub(Expr unit, Expr amount) {
     return new TimestampSub(this, unit, amount);
   }
 
@@ -1838,7 +1844,7 @@ public interface Expr {
    * @return A new {@code Expr} representing the resulting timestamp.
    */
   @BetaApi
-  default TimestampSub timestampSub(String unit, Double amount) {
+  public final TimestampSub timestampSub(String unit, Double amount) {
     return new TimestampSub(this, Constant.of(unit), Constant.of(amount));
   }
 
@@ -1858,7 +1864,7 @@ public interface Expr {
    * @return A new {@code Ordering} for ascending sorting.
    */
   @BetaApi
-  default Ordering ascending() {
+  public final Ordering ascending() {
     return Ordering.ascending(this);
   }
 
@@ -1876,7 +1882,7 @@ public interface Expr {
    * @return A new {@code Ordering} for descending sorting.
    */
   @BetaApi
-  default Ordering descending() {
+  public final Ordering descending() {
     return Ordering.descending(this);
   }
 
@@ -1901,7 +1907,10 @@ public interface Expr {
    *     expression and associates it with the provided alias.
    */
   @BetaApi
-  default Selectable as(String alias) {
+  public Selectable as(String alias) {
     return new ExprWithAlias<>(this, alias);
   }
+
+  @InternalApi
+  abstract Value toProto();
 }

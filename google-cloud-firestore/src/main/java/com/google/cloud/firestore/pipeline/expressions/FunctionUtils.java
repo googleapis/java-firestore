@@ -29,26 +29,8 @@ public final class FunctionUtils {
   public static Value exprToValue(Expr expr) {
     if (expr == null) {
       return Constant.of((String) null).toProto();
-    } else if (expr instanceof ExprWithAlias<?>) {
-      return exprToValue(((ExprWithAlias<?>) expr).getExpr());
-    } else if (expr instanceof Constant) {
-      return ((Constant) expr).toProto();
-    } else if (expr instanceof Field) {
-      return ((Field) expr).toProto();
-    } else if (expr instanceof Function) {
-      return ((Function) expr).toProto();
-    } else if (expr instanceof ListOfExprs) {
-      ListOfExprs listOfExprs = (ListOfExprs) expr;
-      return Value.newBuilder()
-          .setArrayValue(
-              ArrayValue.newBuilder()
-                  .addAllValues(
-                      listOfExprs.getConditions().stream()
-                          .map(FunctionUtils::exprToValue)
-                          .collect(Collectors.toList())))
-          .build();
     } else {
-      throw new IllegalArgumentException("Unsupported expression type: " + expr.getClass());
+      return expr.toProto();
     }
   }
 

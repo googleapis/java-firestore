@@ -25,13 +25,14 @@ import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.GeoPoint;
+import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.Value;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
 @BetaApi
-public final class Constant implements Expr {
+public final class Constant extends Expr {
   private final Object value;
 
   Constant(Object value) {
@@ -137,8 +138,8 @@ public final class Constant implements Expr {
     return new Constant(FieldValue.vector(value));
   }
 
-  @InternalApi
-  public Value toProto() {
+  @Override
+  Value toProto() {
     return encodeValue(value);
   }
 }

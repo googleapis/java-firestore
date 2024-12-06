@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class Gte extends Function implements FilterCondition {
+public final class Gte extends FilterCondition {
   @InternalApi
   Gte(Expr left, Expr right) {
     super("gte", ImmutableList.of(left, right == null ? Constant.nullValue() : right));
