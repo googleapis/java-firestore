@@ -117,8 +117,8 @@ public abstract class BasePath<B extends BasePath<B>> implements Comparable<B> {
    * Compare the current path against another Path object.
    *
    * <p>Compare the current path against another Path object. Paths are compared segment by segment,
-   * prioritizing numeric IDs (e.g., "__id123__") in ascending order, followed by string segments in
-   * lexicographical order.
+   * prioritizing numeric IDs (e.g., "__id123__") in numeric ascending order, followed by string
+   * segments in lexicographical order.
    *
    * @param other The path to compare to.
    * @return -1 if current is less than other, 1 if current greater than other, 0 if equal
