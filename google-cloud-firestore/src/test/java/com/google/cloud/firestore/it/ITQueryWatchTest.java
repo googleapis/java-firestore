@@ -660,6 +660,7 @@ public final class ITQueryWatchTest extends ITBaseTest {
         .set(col.document("12"), Collections.singletonMap("a", 1))
         .set(col.document("__id7__"), Collections.singletonMap("a", 1))
         .set(col.document("__id12__"), Collections.singletonMap("a", 1))
+        .set(col.document("__id-2__"), Collections.singletonMap("a", 1))
         .set(col.document("_id1__"), Collections.singletonMap("a", 1))
         .set(col.document("__id1_"), Collections.singletonMap("a", 1))
         .commit()
@@ -667,7 +668,8 @@ public final class ITQueryWatchTest extends ITBaseTest {
 
     Query query = col.orderBy("__name__", Direction.ASCENDING);
     List<String> expectedOrder =
-        Arrays.asList("__id7__", "__id12__", "12", "7", "A", "Aa", "__id1_", "_id1__", "a");
+        Arrays.asList(
+            "__id-2__", "__id7__", "__id12__", "12", "7", "A", "Aa", "__id1_", "_id1__", "a");
 
     QuerySnapshot snapshot = query.get().get();
     List<String> queryOrder =
@@ -708,6 +710,7 @@ public final class ITQueryWatchTest extends ITBaseTest {
         .set(col.document("12"), Collections.singletonMap("a", 1))
         .set(col.document("__id7__"), Collections.singletonMap("a", 1))
         .set(col.document("__id12__"), Collections.singletonMap("a", 1))
+        .set(col.document("__id-2__"), Collections.singletonMap("a", 1))
         .set(col.document("_id1__"), Collections.singletonMap("a", 1))
         .set(col.document("__id1_"), Collections.singletonMap("a", 1))
         .commit()
