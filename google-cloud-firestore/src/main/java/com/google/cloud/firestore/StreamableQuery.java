@@ -115,9 +115,9 @@ public abstract class StreamableQuery<SnapshotType> {
 
     MetricsContext metricsContext =
         createMetricsContext(
-            transactionId != null
-                ? TelemetryConstants.METHOD_NAME_RUN_QUERY_TRANSACTIONAL
-                : TelemetryConstants.METHOD_NAME_RUN_QUERY_GET);
+            transactionId == null
+                ? TelemetryConstants.METHOD_NAME_QUERY_GET
+                : TelemetryConstants.METHOD_NAME_TRANSACTION_GET_QUERY);
 
     try (Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<SnapshotType> result = SettableApiFuture.create();
@@ -193,7 +193,7 @@ public abstract class StreamableQuery<SnapshotType> {
             .startSpan(TelemetryConstants.METHOD_NAME_QUERY_GET);
 
     MetricsContext metricsContext =
-        createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_QUERY_EXPLAIN);
+        createMetricsContext(TelemetryConstants.METHOD_NAME_QUERY_EXPLAIN);
 
     try (Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<ExplainResults<SnapshotType>> result = SettableApiFuture.create();
