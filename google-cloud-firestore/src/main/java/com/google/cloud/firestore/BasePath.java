@@ -148,17 +148,16 @@ public abstract class BasePath<B extends BasePath<B>> implements Comparable<B> {
       return 1;
     } else if (isLhsNumeric && isRhsNumeric) { // both numeric
       return Long.compare(extractNumericId(lhs), extractNumericId(rhs));
-    } else { // both non-numeric
+    } else { // both string
       return lhs.compareTo(rhs);
     }
   }
 
-  // Checks if a segment is a numeric ID (starts with "__id" and ends with "__").
+  /** Checks if a segment is a numeric ID (starts with "__id" and ends with "__"). */
   private boolean isNumericId(String segment) {
     return segment.startsWith("__id") && segment.endsWith("__");
   }
 
-  //  Extracts the numeric value from a numeric ID segment.
   private long extractNumericId(String segment) {
     return Long.parseLong(segment.substring(4, segment.length() - 2));
   }
