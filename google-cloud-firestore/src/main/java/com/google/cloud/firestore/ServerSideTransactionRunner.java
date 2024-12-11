@@ -93,7 +93,7 @@ final class ServerSideTransactionRunner<T> {
         firestore
             .getOptions()
             .getMetricsUtil()
-            .createMetricsContext(TelemetryConstants.METHOD_NAME_TRANSACTION_RUN);
+            .createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_TRANSACTION);
   }
 
   @Nonnull
@@ -150,6 +150,12 @@ final class ServerSideTransactionRunner<T> {
                 serverSideTransaction.setTransactionTraceContext(runTransactionContext);
                 return serverSideTransaction;
               });
+
+      // Record the first time latency for the first BeginTransaction call only
+      Boolean isFirstAttempt = (transactionOptions.getNumberOfAttempts() - attemptsRemaining) == 1;
+      if (isFirstAttempt) {
+        metricsContext.recordLatencyAtFuture(MetricType.FIRST_RESPONSE_LATENCY, result);
+      }
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
