@@ -20,7 +20,7 @@ import com.google.api.core.BetaApi;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 
 @BetaApi
-public class FindNearestOptions extends AbstractOptions<FindNearestOptions> {
+public final class FindNearestOptions extends AbstractOptions<FindNearestOptions> {
 
   public static FindNearestOptions DEFAULT = new FindNearestOptions(InternalOptions.EMPTY);
 

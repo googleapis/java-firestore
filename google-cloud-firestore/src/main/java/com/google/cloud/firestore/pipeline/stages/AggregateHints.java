@@ -16,16 +16,20 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-public class ExecuteOptions extends AbstractOptions<ExecuteOptions> {
+public final class AggregateHints extends AbstractOptions<AggregateHints> {
 
-  public static ExecuteOptions DEFAULT = new ExecuteOptions(InternalOptions.EMPTY);
+  public static AggregateHints DEFAULT = new AggregateHints(InternalOptions.EMPTY);
 
-  ExecuteOptions(InternalOptions options) {
+  public AggregateHints(InternalOptions options) {
     super(options);
   }
 
   @Override
-  ExecuteOptions self(InternalOptions options) {
-    return new ExecuteOptions(options);
+  AggregateHints self(InternalOptions options) {
+    return new AggregateHints(options);
+  }
+
+  public AggregateHints withForceStreamableEnabled() {
+    return with("force_streamable", true);
   }
 }

@@ -20,7 +20,7 @@ import com.google.cloud.firestore.Pipeline;
 import com.google.firestore.v1.Value;
 import java.util.Collections;
 
-public class Union extends Stage {
+public final class Union extends Stage {
 
   private final Pipeline other;
 

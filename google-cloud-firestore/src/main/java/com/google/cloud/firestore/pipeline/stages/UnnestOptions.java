@@ -18,7 +18,7 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import javax.annotation.Nonnull;
 
-public class UnnestOptions extends AbstractOptions<UnnestOptions> {
+public final class UnnestOptions extends AbstractOptions<UnnestOptions> {
 
   public static UnnestOptions DEFAULT = new UnnestOptions(InternalOptions.EMPTY);
 

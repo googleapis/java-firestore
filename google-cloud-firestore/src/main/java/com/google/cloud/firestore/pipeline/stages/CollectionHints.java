@@ -16,20 +16,24 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-public final class CollectionGroupOptions extends AbstractOptions<CollectionGroupOptions> {
+public final class CollectionHints extends AbstractOptions<CollectionHints> {
 
-  public static final CollectionGroupOptions DEFAULT = new CollectionGroupOptions(InternalOptions.EMPTY);
+  public static CollectionHints DEFAULT = new CollectionHints(InternalOptions.EMPTY);
 
-  CollectionGroupOptions(InternalOptions options) {
+  CollectionHints(InternalOptions options) {
     super(options);
   }
 
   @Override
-  CollectionGroupOptions self(InternalOptions options) {
-    return new CollectionGroupOptions(options);
+  CollectionHints self(InternalOptions options) {
+    return new CollectionHints(options);
   }
 
-  public CollectionGroupOptions withHints(CollectionHints hints) {
-    return with("hints", hints);
+  public CollectionHints withForceIndex(String value) {
+    return with("forceIndex", value);
+  }
+
+  public CollectionHints withIgnoreIndexFields(String... values) {
+    return with("ignore_index_fields", values);
   }
 }

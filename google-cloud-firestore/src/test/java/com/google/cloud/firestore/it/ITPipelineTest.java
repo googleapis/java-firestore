@@ -41,6 +41,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Function.subtract;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Pipeline;
@@ -49,7 +50,12 @@ import com.google.cloud.firestore.pipeline.expressions.Constant;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Function;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
+import com.google.cloud.firestore.pipeline.stages.AggregateHints;
 import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
+import com.google.cloud.firestore.pipeline.stages.CollectionHints;
+import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
+import com.google.cloud.firestore.pipeline.stages.PipelineOptions;
+import com.google.cloud.firestore.pipeline.stages.PipelineOptions.ExecutionMode;
 import com.google.cloud.firestore.pipeline.stages.Sample;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -1162,5 +1168,30 @@ public class ITPipelineTest extends ITBaseTest {
             .get();
 
     assertThat(results).hasSize(3);
+  }
+
+  @Test
+  public void testOptions() {
+    // This is just example of execute and stage options.
+    // Nothing is executed against firestore.
+
+    PipelineOptions opts = PipelineOptions.DEFAULT
+        .withIndexRecommendationEnabled()
+        .withExplainExecutionMode();
+
+    Pipeline pipeline = firestore.pipeline()
+        .collection(
+            "/k",
+            CollectionHints.DEFAULT.withForceIndex("abcdef")
+        )
+        .aggregate(
+            Aggregate
+                .withAccumulators(avg("rating").as("avg_rating"))
+                .withGroups("genre")
+                .withOptions(AggregateOptions.DEFAULT
+                    .withHints(AggregateHints.DEFAULT.withForceStreamableEnabled()))
+        );
+
+    pipeline.execute(opts);
   }
 }

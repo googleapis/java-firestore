@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Value;
 import javax.annotation.Nonnull;
 
-public class Unnest extends Stage {
+public final class Unnest extends Stage {
 
   private final Field field;
   private final String alias;

@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-public class AggregateOptions extends AbstractOptions<AggregateOptions> {
+public final class AggregateOptions extends AbstractOptions<AggregateOptions> {
 
   public static AggregateOptions DEFAULT = new AggregateOptions(InternalOptions.EMPTY);
 
@@ -27,5 +27,9 @@ public class AggregateOptions extends AbstractOptions<AggregateOptions> {
   @Override
   AggregateOptions self(InternalOptions options) {
     return new AggregateOptions(options);
+  }
+
+  public AggregateOptions withHints(AggregateHints hints) {
+    return with("hints", hints);
   }
 }

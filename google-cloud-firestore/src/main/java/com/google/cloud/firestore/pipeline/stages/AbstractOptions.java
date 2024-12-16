@@ -18,13 +18,14 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
-import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.PipelineUtils;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.FunctionUtils;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.firestore.v1.Value;
+import java.util.Arrays;
 import java.util.List;
 
 abstract class AbstractOptions<T> {
@@ -37,39 +38,47 @@ abstract class AbstractOptions<T> {
 
   abstract T self(InternalOptions options);
 
-  public T with(String key, String value) {
-    return self(options.with(key, encodeValue(value)));
+  public final T with(String key, String value) {
+    return with(key, encodeValue(value));
   }
 
-  public T with(String key, boolean value) {
-    return self(options.with(key, encodeValue(value)));
+  public final T with(String key, boolean value) {
+    return with(key, encodeValue(value));
   }
 
-  public T with(String key, long value) {
-    return self(options.with(key, encodeValue(value)));
+  public final T with(String key, long value) {
+    return with(key, encodeValue(value));
   }
 
-  public T with(String key, double value) {
-    return self(options.with(key, encodeValue(value)));
+  public final T with(String key, double value) {
+    return with(key, encodeValue(value));
   }
 
-  public T with(String key, Field value) {
-    return self(options.with(key, value.toProto()));
+  public final T with(String key, Field value) {
+    return with(key, value.toProto());
   }
 
-  protected T with(String key, List<? extends Expr> expressions) {
+  protected final T with(String key, Value value) {
+    return self(options.with(key, value));
+  }
+
+  protected final T with(String key, String[] values) {
+    return self(options.with(key, Arrays.stream(values).map(PipelineUtils::encodeValue)::iterator));
+  }
+
+  protected final T with(String key, List<? extends Expr> expressions) {
     return self(options.with(key, Lists.transform(expressions, FunctionUtils::exprToValue)));
   }
 
-  protected T with(String key, AbstractOptions<?> subSection) {
+  protected final T with(String key, AbstractOptions<?> subSection) {
     return self(options.with(key, subSection.options));
   }
 
-  public T withSection(String key, GenericOptions subSection) {
+  public final T withSection(String key, GenericOptions subSection) {
     return with(key, subSection);
   }
 
-  ImmutableMap<String, Value> toMap() {
+  final ImmutableMap<String, Value> toMap() {
     return options.options;
   }
 }

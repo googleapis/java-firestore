@@ -16,10 +16,7 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-import com.google.cloud.firestore.pipeline.expressions.Field;
-import java.util.Arrays;
-
-public class CollectionOptions extends AbstractOptions<CollectionOptions> {
+public final class CollectionOptions extends AbstractOptions<CollectionOptions> {
 
   public static final CollectionOptions DEFAULT = new CollectionOptions(InternalOptions.EMPTY);
 
@@ -32,25 +29,8 @@ public class CollectionOptions extends AbstractOptions<CollectionOptions> {
     return new CollectionOptions(options);
   }
 
-  public CollectionOptions withHints(Hints hints) {
+  public CollectionOptions withHints(CollectionHints hints) {
     return with("hints", hints);
   }
 
-  public static class Hints extends AbstractOptions<Hints> {
-
-    public static Hints DEFAULT = new Hints(InternalOptions.EMPTY);
-
-    Hints(InternalOptions options) {
-      super(options);
-    }
-
-    @Override
-    Hints self(InternalOptions options) {
-      return new Hints(options);
-    }
-
-    public Hints withIgnoreIndexFields(Field... fields) {
-      return with("ignore_index_fields", Arrays.asList(fields));
-    }
-  }
 }

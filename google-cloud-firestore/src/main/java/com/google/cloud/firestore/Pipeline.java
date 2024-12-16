@@ -26,10 +26,7 @@ import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
-import com.google.cloud.firestore.pipeline.stages.Collection;
-import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
-import com.google.cloud.firestore.pipeline.stages.ExecuteOptions;
-import com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure;
+import com.google.cloud.firestore.pipeline.stages.PipelineOptions;
 import com.google.cloud.firestore.pipeline.stages.GenericOptions;
 import com.google.cloud.firestore.pipeline.expressions.Accumulator;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
@@ -50,7 +47,6 @@ import com.google.cloud.firestore.pipeline.stages.Offset;
 import com.google.cloud.firestore.pipeline.stages.RemoveFields;
 import com.google.cloud.firestore.pipeline.stages.Replace;
 import com.google.cloud.firestore.pipeline.stages.Sample;
-import com.google.cloud.firestore.pipeline.stages.SampleOptions;
 import com.google.cloud.firestore.pipeline.stages.Select;
 import com.google.cloud.firestore.pipeline.stages.Sort;
 import com.google.cloud.firestore.pipeline.stages.Stage;
@@ -982,11 +978,11 @@ public final class Pipeline {
    */
   @BetaApi
   public ApiFuture<List<PipelineResult>> execute() {
-    return execute(ExecuteOptions.DEFAULT, (ByteString) null, (com.google.protobuf.Timestamp) null);
+    return execute(PipelineOptions.DEFAULT, (ByteString) null, (com.google.protobuf.Timestamp) null);
   }
 
   @BetaApi
-  public ApiFuture<List<PipelineResult>> execute(ExecuteOptions options) {
+  public ApiFuture<List<PipelineResult>> execute(PipelineOptions options) {
     return execute(options, (ByteString) null, (com.google.protobuf.Timestamp) null);
   }
 
@@ -1037,7 +1033,7 @@ public final class Pipeline {
    */
   @BetaApi
   public void execute(ApiStreamObserver<PipelineResult> observer) {
-    executeInternal(ExecuteOptions.DEFAULT, null, null, observer);
+    executeInternal(PipelineOptions.DEFAULT, null, null, observer);
   }
 
   // @BetaApi
@@ -1057,7 +1053,7 @@ public final class Pipeline {
   // }
 
   ApiFuture<List<PipelineResult>> execute(
-      @Nonnull ExecuteOptions options,
+      @Nonnull PipelineOptions options,
       @Nullable final ByteString transactionId,
       @Nullable com.google.protobuf.Timestamp readTime) {
     SettableApiFuture<List<PipelineResult>> futureResult = SettableApiFuture.create();
@@ -1089,7 +1085,7 @@ public final class Pipeline {
   }
 
   void executeInternal(
-      @Nonnull ExecuteOptions options,
+      @Nonnull PipelineOptions options,
       @Nullable final ByteString transactionId,
       @Nullable com.google.protobuf.Timestamp readTime,
       ApiStreamObserver<PipelineResult> observer) {

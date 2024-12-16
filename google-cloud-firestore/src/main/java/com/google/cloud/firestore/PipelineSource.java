@@ -21,6 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.stages.Collection;
 import com.google.cloud.firestore.pipeline.stages.CollectionGroup;
 import com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions;
+import com.google.cloud.firestore.pipeline.stages.CollectionHints;
 import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
 import com.google.cloud.firestore.pipeline.stages.Database;
 import com.google.cloud.firestore.pipeline.stages.Documents;
@@ -71,6 +72,12 @@ public final class PipelineSource {
   @BetaApi
   public Pipeline collection(@Nonnull String path, CollectionOptions options) {
     return new Pipeline(this.rpcContext, new Collection(path, options));
+  }
+
+  @Nonnull
+  @BetaApi
+  public Pipeline collection(@Nonnull String path, CollectionHints hints) {
+    return new Pipeline(this.rpcContext, new Collection(path, CollectionOptions.DEFAULT.withHints(hints)));
   }
 
   /**

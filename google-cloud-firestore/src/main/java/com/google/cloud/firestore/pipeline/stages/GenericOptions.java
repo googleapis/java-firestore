@@ -18,7 +18,6 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 
 public final class GenericOptions extends AbstractOptions<GenericOptions> {

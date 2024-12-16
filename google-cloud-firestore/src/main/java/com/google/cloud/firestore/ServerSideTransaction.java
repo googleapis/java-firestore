@@ -19,7 +19,7 @@ package com.google.cloud.firestore;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.TransactionOptions.TransactionOptionsType;
-import com.google.cloud.firestore.pipeline.stages.ExecuteOptions;
+import com.google.cloud.firestore.pipeline.stages.PipelineOptions;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -266,7 +266,7 @@ final class ServerSideTransaction extends Transaction {
   @Override
   public ApiFuture<List<PipelineResult>> execute(@Nonnull Pipeline pipeline) {
     try (TraceUtil.Scope ignored = transactionTraceContext.makeCurrent()) {
-      return pipeline.execute(ExecuteOptions.DEFAULT, transactionId, null);
+      return pipeline.execute(PipelineOptions.DEFAULT, transactionId, null);
     }
   }
 }
