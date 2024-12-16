@@ -663,13 +663,24 @@ public final class ITQueryWatchTest extends ITBaseTest {
         .set(col.document("__id-2__"), Collections.singletonMap("a", 1))
         .set(col.document("_id1__"), Collections.singletonMap("a", 1))
         .set(col.document("__id1_"), Collections.singletonMap("a", 1))
+        .set(col.document("__id"), Collections.singletonMap("a", 1))
         .commit()
         .get();
 
     Query query = col.orderBy("__name__", Direction.ASCENDING);
     List<String> expectedOrder =
         Arrays.asList(
-            "__id-2__", "__id7__", "__id12__", "12", "7", "A", "Aa", "__id1_", "_id1__", "a");
+            "__id-2__",
+            "__id7__",
+            "__id12__",
+            "12",
+            "7",
+            "A",
+            "Aa",
+            "__id",
+            "__id1_",
+            "_id1__",
+            "a");
 
     QuerySnapshot snapshot = query.get().get();
     List<String> queryOrder =
@@ -713,6 +724,7 @@ public final class ITQueryWatchTest extends ITBaseTest {
         .set(col.document("__id-2__"), Collections.singletonMap("a", 1))
         .set(col.document("_id1__"), Collections.singletonMap("a", 1))
         .set(col.document("__id1_"), Collections.singletonMap("a", 1))
+        .set(col.document("__id"), Collections.singletonMap("a", 1))
         .commit()
         .get();
 
