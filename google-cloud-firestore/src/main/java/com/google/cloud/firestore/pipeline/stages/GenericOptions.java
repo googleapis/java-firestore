@@ -19,30 +19,29 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.cloud.firestore.pipeline.expressions.Field;
-import com.google.common.collect.ImmutableList;
-import com.google.firestore.v1.Value;
-import javax.annotation.Nonnull;
 
-public class Unnest extends Stage {
+public final class GenericOptions extends AbstractOptions<GenericOptions> {
 
-  private final Field field;
-  private final String alias;
+  public static GenericOptions DEFAULT = new GenericOptions(InternalOptions.EMPTY);
 
-  public Unnest(@Nonnull Field field, @Nonnull String alias) {
-    super("unnest", InternalOptions.EMPTY);
-    this.field = field;
-    this.alias = alias;
+  public static GenericOptions of(String key, String value) {
+    return new GenericOptions(InternalOptions.of(key, encodeValue(value)));
   }
 
-  public Unnest(@Nonnull Field field, @Nonnull String alias, @Nonnull UnnestOptions options) {
-    super("unnest", options.options);
-    this.field = field;
-    this.alias = alias;
+  public static GenericOptions of(String key, long value) {
+    return new GenericOptions(InternalOptions.of(key, encodeValue(value)));
+  }
+
+  public static GenericOptions of(String key, Field value) {
+    return new GenericOptions(InternalOptions.of(key, value.toProto()));
+  }
+
+  GenericOptions(InternalOptions options) {
+    super(options);
   }
 
   @Override
-  Iterable<Value> toStageArgs() {
-    return ImmutableList.of(encodeValue(field), encodeValue(alias));
+  protected GenericOptions self(InternalOptions options) {
+    return new GenericOptions(options);
   }
-
 }

@@ -18,15 +18,20 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import javax.annotation.Nonnull;
 
-public class UnnestOptions {
+public class UnnestOptions extends AbstractOptions<UnnestOptions> {
 
-  final String indexField;
+  public static UnnestOptions DEFAULT = new UnnestOptions(InternalOptions.EMPTY);
 
-  public static UnnestOptions indexField(@Nonnull String indexField) {
-    return new UnnestOptions(indexField);
+  public UnnestOptions withIndexField(@Nonnull String indexField) {
+    return with("index_field", indexField);
   }
 
-  private UnnestOptions(String indexField) {
-    this.indexField = indexField;
+  @Override
+  UnnestOptions self(InternalOptions options) {
+    return new UnnestOptions(options);
+  }
+
+  private UnnestOptions(InternalOptions options) {
+    super(options);
   }
 }

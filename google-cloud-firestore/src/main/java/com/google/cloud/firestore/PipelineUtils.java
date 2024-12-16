@@ -22,6 +22,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Function.countAll;
 import static com.google.cloud.firestore.pipeline.expressions.Function.inAny;
 import static com.google.cloud.firestore.pipeline.expressions.Function.not;
 import static com.google.cloud.firestore.pipeline.expressions.Function.or;
+import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.exprToValue;
 
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.Query.ComparisonFilterInternal;
@@ -38,6 +39,7 @@ import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.common.collect.Lists;
 import com.google.firestore.v1.Cursor;
+import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +51,26 @@ public class PipelineUtils {
   @InternalApi
   public static Value encodeValue(Object value) {
     return UserDataConverter.encodeValue(FieldPath.empty(), value, UserDataConverter.ARGUMENT);
+  }
+
+  @InternalApi
+  public static Value encodeValue(Expr value) {
+    return exprToValue(value);
+  }
+
+  @InternalApi
+  public static Value encodeValue(String value) {
+    return Value.newBuilder().setStringValue(value).build();
+  }
+
+  @InternalApi
+  public static Value encodeValue(long value) {
+    return Value.newBuilder().setIntegerValue(value).build();
+  }
+
+  @InternalApi
+  public static Value encodeValue(Map<String, Value> options) {
+    return Value.newBuilder().setMapValue(MapValue.newBuilder().putAllFields(options).build()).build();
   }
 
   @InternalApi

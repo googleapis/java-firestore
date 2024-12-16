@@ -19,13 +19,12 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
-import com.google.firestore.v1.Pipeline;
+import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Value;
 import javax.annotation.Nonnull;
 
 public class Replace extends Stage {
 
-  private static final String name = "replace";
   private final Selectable field;
   private final Mode mode;
 
@@ -46,16 +45,13 @@ public class Replace extends Stage {
   }
 
   public Replace(@Nonnull Selectable field, @Nonnull Mode mode) {
+    super("replace", InternalOptions.EMPTY);
     this.field = field;
     this.mode = mode;
   }
 
   @Override
-  Pipeline.Stage toStageProto() {
-    return Pipeline.Stage.newBuilder()
-        .setName(name)
-        .addArgs(encodeValue(field))
-        .addArgs(mode.value)
-        .build();
+  Iterable<Value> toStageArgs() {
+    return ImmutableList.of(encodeValue(field), mode.value);
   }
 }

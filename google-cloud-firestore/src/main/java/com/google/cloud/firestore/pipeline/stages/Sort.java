@@ -18,8 +18,9 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.Ordering;
-import com.google.common.collect.Lists;
-import com.google.firestore.v1.Pipeline;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.firestore.v1.Value;
 import java.util.List;
 
 public final class Sort extends Stage {
@@ -28,16 +29,13 @@ public final class Sort extends Stage {
   private final List<Ordering> orders;
 
   @InternalApi
-  public Sort(Ordering... orders) {
-    this.orders = Lists.newArrayList(orders);
+  public Sort(ImmutableList<Ordering> orders) {
+    super("sort", InternalOptions.EMPTY);
+    this.orders = orders;
   }
 
   @Override
-  Pipeline.Stage toStageProto() {
-    Pipeline.Stage.Builder builder = Pipeline.Stage.newBuilder().setName(name);
-    for (Ordering order : orders) {
-      builder.addArgs(order.toProto());
-    }
-    return builder.build();
+  Iterable<Value> toStageArgs() {
+    return Iterables.transform(orders, Ordering::toProto);
   }
 }

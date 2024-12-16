@@ -49,7 +49,8 @@ import com.google.cloud.firestore.pipeline.expressions.Constant;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Function;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
-import com.google.cloud.firestore.pipeline.stages.SampleOptions;
+import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
+import com.google.cloud.firestore.pipeline.stages.Sample;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -261,7 +262,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .collection(collection.getPath())
-            .aggregate(countAll().as("count"))
+            .aggregate(AggregateOptions.DEFAULT, countAll().as("count"))
             .execute()
             .get();
     assertThat(data(results)).isEqualTo(Lists.newArrayList(map("count", 10L)));
@@ -1137,7 +1138,7 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void testSamplePercentage() throws Exception {
     List<PipelineResult> results =
-        collection.pipeline().sample(SampleOptions.percentage(0.6)).execute().get();
+        collection.pipeline().sample(Sample.withPercentage(0.6)).execute().get();
 
     assertThat(results).hasSize(6);
   }
@@ -1156,7 +1157,7 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .where(eq(Field.of("title"), "The Hitchhiker's Guide to the Galaxy"))
-            .unnest("tags")
+            .unnest("tags", "tag")
             .execute()
             .get();
 

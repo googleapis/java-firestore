@@ -20,6 +20,8 @@ import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.stages.Collection;
 import com.google.cloud.firestore.pipeline.stages.CollectionGroup;
+import com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions;
+import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
 import com.google.cloud.firestore.pipeline.stages.Database;
 import com.google.cloud.firestore.pipeline.stages.Documents;
 import com.google.common.base.Preconditions;
@@ -45,7 +47,7 @@ import javax.annotation.Nonnull;
  * }</pre>
  */
 @BetaApi
-public class PipelineSource {
+public final class PipelineSource {
   private final FirestoreRpcContext<?> rpcContext;
 
   @InternalApi
@@ -62,7 +64,13 @@ public class PipelineSource {
   @Nonnull
   @BetaApi
   public Pipeline collection(@Nonnull String path) {
-    return new Pipeline(this.rpcContext, new Collection(path));
+    return collection(path, CollectionOptions.DEFAULT);
+  }
+
+  @Nonnull
+  @BetaApi
+  public Pipeline collection(@Nonnull String path, CollectionOptions options) {
+    return new Pipeline(this.rpcContext, new Collection(path, options));
   }
 
   /**
@@ -78,11 +86,17 @@ public class PipelineSource {
   @Nonnull
   @BetaApi
   public Pipeline collectionGroup(@Nonnull String collectionId) {
+    return collectionGroup(collectionId, CollectionGroupOptions.DEFAULT);
+  }
+
+  @Nonnull
+  @BetaApi
+  public Pipeline collectionGroup(@Nonnull String collectionId, CollectionGroupOptions options) {
     Preconditions.checkArgument(
         !collectionId.contains("/"),
         "Invalid collectionId '%s'. Collection IDs must not contain '/'.",
         collectionId);
-    return new Pipeline(this.rpcContext, new CollectionGroup(collectionId));
+    return new Pipeline(this.rpcContext, new CollectionGroup(collectionId, options));
   }
 
   /**

@@ -16,26 +16,16 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+public class ExecuteOptions extends AbstractOptions<ExecuteOptions> {
 
-import com.google.api.core.InternalApi;
-import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
-import com.google.firestore.v1.Value;
-import java.util.Collections;
+  public static ExecuteOptions DEFAULT = new ExecuteOptions(InternalOptions.EMPTY);
 
-@InternalApi
-public final class Where extends Stage {
-
-  private final FilterCondition condition;
-
-  @InternalApi
-  public Where(FilterCondition condition) {
-    super("where", InternalOptions.EMPTY);
-    this.condition = condition;
+  ExecuteOptions(InternalOptions options) {
+    super(options);
   }
 
   @Override
-  Iterable<Value> toStageArgs() {
-    return Collections.singletonList(encodeValue(condition));
+  ExecuteOptions self(InternalOptions options) {
+    return new ExecuteOptions(options);
   }
 }

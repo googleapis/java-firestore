@@ -17,20 +17,20 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.cloud.firestore.Pipeline;
+import com.google.firestore.v1.Value;
+import java.util.Collections;
 
 public class Union extends Stage {
 
-  private static final String name = "union";
   private final Pipeline other;
 
   public Union(Pipeline other) {
+    super("union", InternalOptions.EMPTY);
     this.other = other;
   }
 
   @Override
-  com.google.firestore.v1.Pipeline.Stage toStageProto() {
-    com.google.firestore.v1.Pipeline.Stage.Builder builder =
-        com.google.firestore.v1.Pipeline.Stage.newBuilder().setName(name);
-    return builder.addArgs(other.toProtoValue()).build();
+  Iterable<Value> toStageArgs() {
+    return Collections.singletonList(other.toProtoValue());
   }
 }

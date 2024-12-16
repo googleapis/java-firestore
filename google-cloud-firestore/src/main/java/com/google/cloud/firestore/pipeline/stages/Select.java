@@ -20,22 +20,23 @@ import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
-import com.google.firestore.v1.Pipeline;
+import com.google.firestore.v1.Value;
+import java.util.Collections;
 import java.util.Map;
 
 @InternalApi
 public final class Select extends Stage {
 
-  private static final String name = "select";
   private final Map<String, Expr> projections;
 
   @InternalApi
   public Select(Map<String, Expr> projections) {
+    super("select", InternalOptions.EMPTY);
     this.projections = projections;
   }
 
   @Override
-  Pipeline.Stage toStageProto() {
-    return Pipeline.Stage.newBuilder().setName(name).addArgs(encodeValue(projections)).build();
+  Iterable<Value> toStageArgs() {
+    return Collections.singletonList(encodeValue(projections));
   }
 }

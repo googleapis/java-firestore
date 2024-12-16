@@ -18,50 +18,26 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.BetaApi;
 import com.google.cloud.firestore.pipeline.expressions.Field;
-import javax.annotation.Nullable;
 
 @BetaApi
-public class FindNearestOptions {
+public class FindNearestOptions extends AbstractOptions<FindNearestOptions> {
 
-  @Nullable private final Long limit;
+  public static FindNearestOptions DEFAULT = new FindNearestOptions(InternalOptions.EMPTY);
 
-  @Nullable private final Field distanceField;
-
-  private FindNearestOptions(Long limit, Field distanceField) {
-    this.limit = limit;
-    this.distanceField = distanceField;
+  private FindNearestOptions(InternalOptions options) {
+    super(options);
   }
 
-  public static Builder builder() {
-    return new Builder();
+  @Override
+  FindNearestOptions self(InternalOptions options) {
+    return new FindNearestOptions(options);
   }
 
-  @Nullable
-  public Long getLimit() {
-    return limit;
+  public FindNearestOptions withLimit(long limit) {
+    return with("limit", limit);
   }
 
-  @Nullable
-  public Field getDistanceField() {
-    return distanceField;
-  }
-
-  public static class Builder {
-    @Nullable private Long limit;
-    @Nullable private Field distanceField;
-
-    public Builder limit(Long limit) {
-      this.limit = limit;
-      return this;
-    }
-
-    public Builder distanceField(Field distanceField) {
-      this.distanceField = distanceField;
-      return this;
-    }
-
-    public FindNearestOptions build() {
-      return new FindNearestOptions(limit, distanceField);
-    }
+  public FindNearestOptions withDistanceField(Field distanceField) {
+    return with("distance_field", distanceField);
   }
 }
