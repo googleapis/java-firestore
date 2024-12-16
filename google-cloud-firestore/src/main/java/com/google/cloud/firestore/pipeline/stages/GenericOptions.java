@@ -18,6 +18,7 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 
 public final class GenericOptions extends AbstractOptions<GenericOptions> {
@@ -28,7 +29,15 @@ public final class GenericOptions extends AbstractOptions<GenericOptions> {
     return new GenericOptions(InternalOptions.of(key, encodeValue(value)));
   }
 
+  public static GenericOptions of(String key, boolean value) {
+    return new GenericOptions(InternalOptions.of(key, encodeValue(value)));
+  }
+
   public static GenericOptions of(String key, long value) {
+    return new GenericOptions(InternalOptions.of(key, encodeValue(value)));
+  }
+
+  public static GenericOptions of(String key, double value) {
     return new GenericOptions(InternalOptions.of(key, encodeValue(value)));
   }
 

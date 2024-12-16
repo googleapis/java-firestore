@@ -41,7 +41,11 @@ import javax.annotation.Nullable;
 
 /** Converts user input into the Firestore Value representation. */
 class UserDataConverter {
+
   private static final Logger LOGGER = Logger.getLogger(UserDataConverter.class.getName());
+
+  private static final Value VALUE_OF_NULL = Value.newBuilder().setNullValue(NullValue.NULL_VALUE)
+      .build();
 
   /** Controls the behavior for field deletes. */
   interface EncodingOptions {
@@ -121,7 +125,7 @@ class UserDataConverter {
           path);
       return null;
     } else if (sanitizedObject == null) {
-      return Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build();
+      return VALUE_OF_NULL;
     } else if (sanitizedObject instanceof String) {
       return Value.newBuilder().setStringValue((String) sanitizedObject).build();
     } else if (sanitizedObject instanceof Integer) {

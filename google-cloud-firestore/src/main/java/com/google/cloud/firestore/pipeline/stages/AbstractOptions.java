@@ -18,6 +18,7 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.FunctionUtils;
@@ -40,7 +41,15 @@ abstract class AbstractOptions<T> {
     return self(options.with(key, encodeValue(value)));
   }
 
+  public T with(String key, boolean value) {
+    return self(options.with(key, encodeValue(value)));
+  }
+
   public T with(String key, long value) {
+    return self(options.with(key, encodeValue(value)));
+  }
+
+  public T with(String key, double value) {
     return self(options.with(key, encodeValue(value)));
   }
 

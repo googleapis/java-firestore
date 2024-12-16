@@ -25,6 +25,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Function.or;
 import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.exprToValue;
 
 import com.google.api.core.InternalApi;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.ComparisonFilterInternal;
 import com.google.cloud.firestore.Query.CompositeFilterInternal;
 import com.google.cloud.firestore.Query.FilterInternal;
@@ -41,6 +42,7 @@ import com.google.common.collect.Lists;
 import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
+import com.google.protobuf.NullValue;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,8 +66,18 @@ public class PipelineUtils {
   }
 
   @InternalApi
+  public static Value encodeValue(boolean value) {
+    return Value.newBuilder().setBooleanValue(value).build();
+  }
+
+  @InternalApi
   public static Value encodeValue(long value) {
     return Value.newBuilder().setIntegerValue(value).build();
+  }
+
+  @InternalApi
+  public static Value encodeValue(double value) {
+    return Value.newBuilder().setDoubleValue(value).build();
   }
 
   @InternalApi
