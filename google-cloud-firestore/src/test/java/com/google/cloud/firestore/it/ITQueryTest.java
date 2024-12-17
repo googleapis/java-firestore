@@ -1113,15 +1113,15 @@ public class ITQueryTest extends ITBaseTest {
   @Test
   public void snapshotListenerSortsNumbersSameWayAsServer() throws Exception {
     CollectionReference col = createEmptyCollection();
-
     firestore
         .batch()
-        .set(col.document("longMin"), map("value", Long.MIN_VALUE))
-        .set(col.document("longMinToDouble"), map("value", (double) Long.MIN_VALUE - 100))
-        .set(col.document("longMax"), map("value", Long.MAX_VALUE))
-        .set(col.document("longMaxToDouble"), map("value", (double) Long.MAX_VALUE + 100))
+        .set(col.document("intMin"), map("value", Long.MIN_VALUE))
+        .set(col.document("doubleMin"), map("value", ((double) Long.MIN_VALUE) - 100))
+        .set(col.document("intMax"), map("value", Long.MAX_VALUE))
+        .set(col.document("doubleMax"), map("value", ((double) Long.MAX_VALUE) + 100))
         .set(col.document("NAN"), map("value", Double.NaN))
-        .set(col.document("integer"), map("value", (long) Integer.MIN_VALUE))
+        .set(col.document("integerMax"), map("value", (long) Integer.MAX_VALUE))
+        .set(col.document("integerMin"), map("value", (long) Integer.MIN_VALUE))
         .set(col.document("negativeInfinity"), map("value", Double.NEGATIVE_INFINITY))
         .set(col.document("positiveInfinity"), map("value", Double.POSITIVE_INFINITY))
         .commit()
