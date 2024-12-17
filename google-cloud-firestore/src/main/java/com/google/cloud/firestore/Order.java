@@ -272,7 +272,6 @@ class Order implements Comparator<Value> {
     }
   }
 
-  /** Returns whether a given {@link Value} is NaN. */
   private boolean isNaN(Value value) {
     return value.hasDoubleValue() && Double.isNaN(value.getDoubleValue());
   }
@@ -287,10 +286,10 @@ class Order implements Comparator<Value> {
    * precision. This is 2^53 because double-precision floating point numbers have 53 bits
    * significand precision (52 explicit bit + 1 hidden bit).
    */
-  private static final long MAX_INTEGER_DOUBLE_PRECISION = 1L << 53;
+  private static final long MAX_INTEGER_TO_DOUBLE_PRECISION = 1L << 53;
 
   private int compareDoubleAndLong(double doubleValue, long longValue) {
-    if (Math.abs(longValue) <= MAX_INTEGER_DOUBLE_PRECISION) {
+    if (Math.abs(longValue) <= MAX_INTEGER_TO_DOUBLE_PRECISION) {
       // Enough precision to compare as double, the cast will not be lossy.
       return compareDoubles(doubleValue, (double) longValue);
     } else if (doubleValue < ((double) Long.MAX_VALUE)
@@ -303,8 +302,7 @@ class Order implements Comparator<Value> {
       return Long.compare((long) doubleValue, longValue);
     } else {
       // doubleValue is outside the representable range for longs, so always smaller if negative,
-      // and
-      // always greater otherwise.
+      // and always greater otherwise.
       return doubleValue < 0 ? -1 : 1;
     }
   }
