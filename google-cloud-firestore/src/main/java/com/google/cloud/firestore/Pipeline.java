@@ -439,34 +439,6 @@ public final class Pipeline {
     return append(aggregate);
   }
 
-
-  /**
-   * Performs aggregation operations on the documents from previous stages.
-   *
-   * <p>This stage allows you to calculate aggregate values over a set of documents. You define the
-   * aggregations to perform using {@link ExprWithAlias} expressions which are typically results of
-   * calling {@link Expr#as(String)} on {@link Accumulator} instances.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * // Calculate the average rating and the total number of books
-   * firestore.pipeline().collection("books")
-   *     .aggregate(
-   *         Field.of("rating").avg().as("averageRating"),
-   *         countAll().as("totalBooks")
-   *     );
-   * }</pre>
-   *
-   * @param accumulators The {@link ExprWithAlias} expressions, each wrapping an {@link Accumulator}
-   *     and provide a name for the accumulated results.
-   * @return A new Pipeline object with this stage appended to the stage list.
-   */
-  @BetaApi
-  public Pipeline aggregate(AggregateOptions options, ExprWithAlias<Accumulator>... accumulators) {
-    return append(Aggregate.withAccumulators(accumulators).withOptions(options));
-  }
-
   /**
    * Returns a set of distinct field values from the inputs to this stage.
    *

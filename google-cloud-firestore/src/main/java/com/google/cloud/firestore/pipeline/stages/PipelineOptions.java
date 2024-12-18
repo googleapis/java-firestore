@@ -16,10 +16,23 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-public class PipelineOptions extends AbstractOptions<PipelineOptions> {
+import com.google.cloud.firestore.PipelineUtils;
+import com.google.firestore.v1.Value;
 
-  public static PipelineOptions DEFAULT = new PipelineOptions(InternalOptions.EMPTY)
-      .withExecutionMode("execute");
+public final class PipelineOptions extends AbstractOptions<PipelineOptions> {
+
+  public static PipelineOptions DEFAULT = new PipelineOptions(InternalOptions.EMPTY);
+
+  public enum ExecutionMode {
+    EXECUTE("execute"),
+    EXPLAIN("explain"),
+    PROFILE("profile");
+
+    private final Value value;
+    ExecutionMode(String profile) {
+      value = PipelineUtils.encodeValue(profile);
+    }
+  }
 
   PipelineOptions(InternalOptions options) {
     super(options);
@@ -30,16 +43,8 @@ public class PipelineOptions extends AbstractOptions<PipelineOptions> {
     return new PipelineOptions(options);
   }
 
-  public final PipelineOptions withExplainExecutionMode() {
-    return withExecutionMode("explain");
-  }
-
-  public PipelineOptions withProfileExecutionMode() {
-    return withExecutionMode("profile");
-  }
-
-  private PipelineOptions withExecutionMode(String mode) {
-    return with("execution_mode", mode);
+  public PipelineOptions withExecutionMode(ExecutionMode mode) {
+    return with("execution_mode", mode.value);
   }
 
   public PipelineOptions withIndexRecommendationEnabled() {

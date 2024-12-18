@@ -74,12 +74,6 @@ public final class PipelineSource {
     return new Pipeline(this.rpcContext, new Collection(path, options));
   }
 
-  @Nonnull
-  @BetaApi
-  public Pipeline collection(@Nonnull String path, CollectionHints hints) {
-    return new Pipeline(this.rpcContext, new Collection(path, CollectionOptions.DEFAULT.withHints(hints)));
-  }
-
   /**
    * Creates a new {@link Pipeline} that operates on all documents in a collection group.
    *

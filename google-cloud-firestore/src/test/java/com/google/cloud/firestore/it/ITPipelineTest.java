@@ -1177,12 +1177,13 @@ public class ITPipelineTest extends ITBaseTest {
 
     PipelineOptions opts = PipelineOptions.DEFAULT
         .withIndexRecommendationEnabled()
-        .withExplainExecutionMode();
+        .withExecutionMode(ExecutionMode.PROFILE);
 
     Pipeline pipeline = firestore.pipeline()
         .collection(
             "/k",
-            CollectionHints.DEFAULT.withForceIndex("abcdef")
+            // Remove Hints overload - can be added later.
+            CollectionOptions.DEFAULT.withHints(CollectionHints.DEFAULT.withForceIndex("abcdef"))
         )
         .aggregate(
             Aggregate
