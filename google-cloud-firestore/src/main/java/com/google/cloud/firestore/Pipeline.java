@@ -505,12 +505,10 @@ public final class Pipeline {
    * <pre>{@code
    * // Find books with similar "topicVectors" to the given targetVector
    * firestore.pipeline().collection("books")
-   *     .findNearest("topicVectors", targetVector, FindNearest.DistanceMeasure.cosine(),
-   *        FindNearestOptions
-   *          .builder()
-   *          .limit(10)
-   *          .distanceField("distance")
-   *          .build());
+   *     .findNearest("topicVectors", targetVector, FindNearest.DistanceMeasure.COSINE,
+   *        FindNearestOptions.DEFAULT
+   *          .withLimit(10)
+   *          .withDistanceField("distance"));
    * }</pre>
    *
    * @param fieldName The name of the field containing the vector data. This field should store
@@ -544,12 +542,10 @@ public final class Pipeline {
    * // Find books with similar "topicVectors" to the given targetVector
    * firestore.pipeline().collection("books")
    *     .findNearest(
-   *        FindNearest.of(Field.of("topicVectors"), targetVector, FindNearest.DistanceMeasure.cosine()),
-   *        FindNearest
-   *          .builder()
-   *          .limit(10)
-   *          .distanceField("distance")
-   *          .build());
+   *        FindNearest.of(Field.of("topicVectors"), targetVector, FindNearest.DistanceMeasure.COSINE),
+   *        FindNearestOptions.DEFAULT
+   *          .withLimit(10)
+   *          .withDistanceField("distance"));
    * }</pre>
    *
    * @param property The expression that evaluates to a vector value using the stage inputs.

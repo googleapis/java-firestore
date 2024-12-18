@@ -54,6 +54,8 @@ import com.google.cloud.firestore.pipeline.stages.AggregateHints;
 import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
 import com.google.cloud.firestore.pipeline.stages.CollectionHints;
 import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
+import com.google.cloud.firestore.pipeline.stages.FindNearest;
+import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
 import com.google.cloud.firestore.pipeline.stages.PipelineOptions;
 import com.google.cloud.firestore.pipeline.stages.PipelineOptions.ExecutionMode;
 import com.google.cloud.firestore.pipeline.stages.Sample;
@@ -1173,24 +1175,36 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void testOptions() {
     // This is just example of execute and stage options.
-    // Nothing is executed against firestore.
-
     PipelineOptions opts = PipelineOptions.DEFAULT
         .withIndexRecommendationEnabled()
         .withExecutionMode(ExecutionMode.PROFILE);
+
+    double[] vector = {1.0, 2.0, 3.0};
 
     Pipeline pipeline = firestore.pipeline()
         .collection(
             "/k",
             // Remove Hints overload - can be added later.
-            CollectionOptions.DEFAULT.withHints(CollectionHints.DEFAULT.withForceIndex("abcdef"))
+            CollectionOptions.DEFAULT
+                .withHints(CollectionHints.DEFAULT
+                    .withForceIndex("abcdef")
+                    .with("foo", "bar"))
+                .with("foo", "bar")
         )
+       .findNearest("topicVectors", vector, FindNearest.DistanceMeasure.COSINE,
+           FindNearestOptions.DEFAULT
+              .withLimit(10)
+              .withDistanceField("distance")
+              .with("foo", "bar"))
         .aggregate(
             Aggregate
                 .withAccumulators(avg("rating").as("avg_rating"))
                 .withGroups("genre")
                 .withOptions(AggregateOptions.DEFAULT
-                    .withHints(AggregateHints.DEFAULT.withForceStreamableEnabled()))
+                    .withHints(AggregateHints.DEFAULT
+                        .withForceStreamableEnabled()
+                        .with("foo", "bar"))
+                    .with("foo", "bar"))
         );
 
     pipeline.execute(opts);

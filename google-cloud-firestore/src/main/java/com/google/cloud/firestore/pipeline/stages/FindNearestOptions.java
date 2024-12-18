@@ -40,4 +40,8 @@ public final class FindNearestOptions extends AbstractOptions<FindNearestOptions
   public FindNearestOptions withDistanceField(Field distanceField) {
     return with("distance_field", distanceField);
   }
+
+  public FindNearestOptions withDistanceField(String distanceField) {
+    return withDistanceField(Field.of(distanceField));
+  }
 }
