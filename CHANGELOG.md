@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.30.3](https://github.com/googleapis/java-firestore/compare/v3.30.2...v3.30.3) (2024-12-18)
+
+
+### Bug Fixes
+
+* Sort document reference by long type id ([#1945](https://github.com/googleapis/java-firestore/issues/1945)) ([c38e3ad](https://github.com/googleapis/java-firestore/commit/c38e3adc08e50a7946523aa0ba4ef46943cf2b85))
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.55.0 ([#1961](https://github.com/googleapis/java-firestore/issues/1961)) ([5c62282](https://github.com/googleapis/java-firestore/commit/5c6228215e1c40de420c765e6aecb81a312e7954))
+* Update dependency com.google.cloud:google-cloud-trace to v2.55.0 ([#1962](https://github.com/googleapis/java-firestore/issues/1962)) ([d8144b5](https://github.com/googleapis/java-firestore/commit/d8144b55ba68b79fafd4f5a3a6a640d959caf2be))
+
 ## [3.30.2](https://github.com/googleapis/java-firestore/compare/v3.30.1...v3.30.2) (2024-12-13)
 
 
