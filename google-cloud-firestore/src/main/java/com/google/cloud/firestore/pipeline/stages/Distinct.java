@@ -21,22 +21,23 @@ import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
-import com.google.firestore.v1.Pipeline;
+import com.google.firestore.v1.Value;
+import java.util.Collections;
 import java.util.Map;
 
 @BetaApi
 public final class Distinct extends Stage {
 
-  private static final String name = "distinct";
   private final Map<String, Expr> groups;
 
   @InternalApi
   public Distinct(Map<String, Expr> groups) {
+    super("distinct", InternalOptions.EMPTY);
     this.groups = groups;
   }
 
   @Override
-  Pipeline.Stage toStageProto() {
-    return Pipeline.Stage.newBuilder().setName(name).addArgs(encodeValue(groups)).build();
+  Iterable<Value> toStageArgs() {
+    return Collections.singletonList(encodeValue(groups));
   }
 }

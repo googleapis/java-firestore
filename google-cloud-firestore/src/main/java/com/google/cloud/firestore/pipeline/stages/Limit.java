@@ -19,21 +19,22 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
-import com.google.firestore.v1.Pipeline;
+import com.google.firestore.v1.Value;
+import java.util.Collections;
 
 @InternalApi
 public final class Limit extends Stage {
 
-  private static final String name = "limit";
   private final int limit;
 
   @InternalApi
   public Limit(int limit) {
+    super("limit", InternalOptions.EMPTY);
     this.limit = limit;
   }
 
   @Override
-  Pipeline.Stage toStageProto() {
-    return Pipeline.Stage.newBuilder().setName(name).addArgs(encodeValue(limit)).build();
+  Iterable<Value> toStageArgs() {
+    return Collections.singletonList(encodeValue(limit));
   }
 }

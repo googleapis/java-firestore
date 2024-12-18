@@ -17,17 +17,19 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
-import com.google.firestore.v1.Pipeline;
+import com.google.firestore.v1.Value;
+import java.util.Collections;
 
 @InternalApi
 public final class Database extends Stage {
-  private static final String name = "database";
 
   @InternalApi
-  public Database() {}
+  public Database() {
+    super("database", InternalOptions.EMPTY);
+  }
 
   @Override
-  Pipeline.Stage toStageProto() {
-    return Pipeline.Stage.newBuilder().setName(name).build();
+  Iterable<Value> toStageArgs() {
+    return Collections.emptyList();
   }
 }

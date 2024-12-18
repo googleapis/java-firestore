@@ -17,18 +17,17 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
-import com.google.firestore.v1.Pipeline;
 import com.google.firestore.v1.Value;
+import java.util.Collections;
 import javax.annotation.Nonnull;
 
 @InternalApi
 public final class Collection extends Stage {
 
-  private static final String name = "collection";
   @Nonnull private final String path;
 
-  @InternalApi
-  public Collection(@Nonnull String path) {
+  public Collection(@Nonnull String path, CollectionOptions options) {
+    super("collection", options.options);
     if (!path.startsWith("/")) {
       this.path = "/" + path;
     } else {
@@ -36,11 +35,12 @@ public final class Collection extends Stage {
     }
   }
 
+  public Collection withOptions(CollectionOptions options) {
+    return new Collection(path, options);
+  }
+
   @Override
-  Pipeline.Stage toStageProto() {
-    return Pipeline.Stage.newBuilder()
-        .setName(name)
-        .addArgs(Value.newBuilder().setReferenceValue(path).build())
-        .build();
+  Iterable<Value> toStageArgs() {
+    return Collections.singleton(Value.newBuilder().setReferenceValue(path).build());
   }
 }

@@ -17,11 +17,19 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
+import com.google.common.collect.ImmutableMap;
+import com.google.firestore.v1.Value;
 
 @InternalApi
 public final class StageUtils {
   @InternalApi
   public static com.google.firestore.v1.Pipeline.Stage toStageProto(Stage stage) {
     return stage.toStageProto();
+  }
+
+  @SuppressWarnings("ClassEscapesDefinedScope")
+  @InternalApi
+  public static ImmutableMap<String, Value> toMap(AbstractOptions<?> options) {
+    return options.options.options;
   }
 }
