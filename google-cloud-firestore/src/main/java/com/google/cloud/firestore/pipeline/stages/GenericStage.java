@@ -19,27 +19,24 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
-import com.google.firestore.v1.Pipeline;
+import com.google.cloud.firestore.PipelineUtils;
+import com.google.common.collect.Iterables;
+import com.google.firestore.v1.Value;
 import java.util.List;
 
 @InternalApi
 public final class GenericStage extends Stage {
 
-  private final String name;
   private List<Object> params;
 
   @InternalApi
-  public GenericStage(String name, List<Object> params) {
-    this.name = name;
+  public GenericStage(String name, List<Object> params, GenericOptions optionalParams) {
+    super(name, optionalParams.options);
     this.params = params;
   }
 
   @Override
-  Pipeline.Stage toStageProto() {
-    Pipeline.Stage.Builder builder = Pipeline.Stage.newBuilder().setName(name);
-    for (Object param : params) {
-      builder.addArgs(encodeValue(param));
-    }
-    return builder.build();
+  Iterable<Value> toStageArgs() {
+    return Iterables.transform(params, PipelineUtils::encodeValue);
   }
 }

@@ -16,26 +16,20 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+public final class CollectionGroupOptions extends AbstractOptions<CollectionGroupOptions> {
 
-import com.google.api.core.InternalApi;
-import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
-import com.google.firestore.v1.Value;
-import java.util.Collections;
+  public static final CollectionGroupOptions DEFAULT = new CollectionGroupOptions(InternalOptions.EMPTY);
 
-@InternalApi
-public final class Where extends Stage {
-
-  private final FilterCondition condition;
-
-  @InternalApi
-  public Where(FilterCondition condition) {
-    super("where", InternalOptions.EMPTY);
-    this.condition = condition;
+  CollectionGroupOptions(InternalOptions options) {
+    super(options);
   }
 
   @Override
-  Iterable<Value> toStageArgs() {
-    return Collections.singletonList(encodeValue(condition));
+  CollectionGroupOptions self(InternalOptions options) {
+    return new CollectionGroupOptions(options);
+  }
+
+  public CollectionGroupOptions withHints(CollectionHints hints) {
+    return with("hints", hints);
   }
 }

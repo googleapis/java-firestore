@@ -16,41 +16,16 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+public final class SampleOptions extends AbstractOptions<SampleOptions> {
 
-import com.google.common.collect.ImmutableList;
-import com.google.firestore.v1.Value;
+  public static SampleOptions DEFAULT = new SampleOptions(InternalOptions.EMPTY);
 
-public class SampleOptions {
-
-  private final Number n;
-  private final Mode mode;
-
-  private SampleOptions(Number n, Mode mode) {
-    this.n = n;
-    this.mode = mode;
+  public SampleOptions(InternalOptions options) {
+    super(options);
   }
 
-  public enum Mode {
-    DOCUMENTS(Value.newBuilder().setStringValue("documents").build()),
-    PERCENT(Value.newBuilder().setStringValue("percent").build());
-
-    public final Value value;
-
-    Mode(Value value) {
-      this.value = value;
-    }
-  }
-
-  public static SampleOptions percentage(double percentage) {
-    return new SampleOptions(percentage, Mode.PERCENT);
-  }
-
-  public static SampleOptions docLimit(int documents) {
-    return new SampleOptions(documents, Mode.DOCUMENTS);
-  }
-
-  Iterable<Value> getProtoArgs() {
-    return ImmutableList.of(encodeValue(n), mode.value);
+  @Override
+  SampleOptions self(InternalOptions options) {
+    return new SampleOptions(options);
   }
 }

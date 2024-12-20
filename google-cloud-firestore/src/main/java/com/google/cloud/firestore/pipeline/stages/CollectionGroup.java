@@ -19,26 +19,28 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
-import com.google.firestore.v1.Pipeline;
+import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Value;
 
 @InternalApi
 public final class CollectionGroup extends Stage {
 
-  private static final String name = "collection_group";
   private final String collectionId;
 
   @InternalApi
-  public CollectionGroup(String collectionId) {
+  public CollectionGroup(String collectionId, CollectionGroupOptions options) {
+    super("collection_group", options.options);
     this.collectionId = collectionId;
   }
 
+  public CollectionGroup withOptions(CollectionGroupOptions options) {
+    return new CollectionGroup(collectionId, options);
+  }
+
   @Override
-  Pipeline.Stage toStageProto() {
-    return Pipeline.Stage.newBuilder()
-        .setName(name)
-        .addArgs(Value.newBuilder().setReferenceValue("").build())
-        .addArgs(encodeValue(collectionId))
-        .build();
+  Iterable<Value> toStageArgs() {
+    return ImmutableList.of(
+        Value.newBuilder().setReferenceValue("").build(),
+        encodeValue(collectionId));
   }
 }

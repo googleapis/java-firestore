@@ -41,6 +41,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Function.subtract;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Pipeline;
@@ -49,7 +50,15 @@ import com.google.cloud.firestore.pipeline.expressions.Constant;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Function;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
-import com.google.cloud.firestore.pipeline.stages.SampleOptions;
+import com.google.cloud.firestore.pipeline.stages.AggregateHints;
+import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
+import com.google.cloud.firestore.pipeline.stages.CollectionHints;
+import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
+import com.google.cloud.firestore.pipeline.stages.FindNearest;
+import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
+import com.google.cloud.firestore.pipeline.stages.PipelineOptions;
+import com.google.cloud.firestore.pipeline.stages.PipelineOptions.ExecutionMode;
+import com.google.cloud.firestore.pipeline.stages.Sample;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -261,7 +270,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .collection(collection.getPath())
-            .aggregate(countAll().as("count"))
+            .aggregate(AggregateOptions.DEFAULT, countAll().as("count"))
             .execute()
             .get();
     assertThat(data(results)).isEqualTo(Lists.newArrayList(map("count", 10L)));
@@ -1137,7 +1146,7 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void testSamplePercentage() throws Exception {
     List<PipelineResult> results =
-        collection.pipeline().sample(SampleOptions.percentage(0.6)).execute().get();
+        collection.pipeline().sample(Sample.withPercentage(0.6)).execute().get();
 
     assertThat(results).hasSize(6);
   }
@@ -1156,10 +1165,48 @@ public class ITPipelineTest extends ITBaseTest {
         collection
             .pipeline()
             .where(eq(Field.of("title"), "The Hitchhiker's Guide to the Galaxy"))
-            .unnest("tags")
+            .unnest("tags", "tag")
             .execute()
             .get();
 
     assertThat(results).hasSize(3);
+  }
+
+  @Test
+  public void testOptions() {
+    // This is just example of execute and stage options.
+    PipelineOptions opts = PipelineOptions.DEFAULT
+        .withIndexRecommendationEnabled()
+        .withExecutionMode(ExecutionMode.PROFILE);
+
+    double[] vector = {1.0, 2.0, 3.0};
+
+    Pipeline pipeline = firestore.pipeline()
+        .collection(
+            "/k",
+            // Remove Hints overload - can be added later.
+            CollectionOptions.DEFAULT
+                .withHints(CollectionHints.DEFAULT
+                    .withForceIndex("abcdef")
+                    .with("foo", "bar"))
+                .with("foo", "bar")
+        )
+       .findNearest("topicVectors", vector, FindNearest.DistanceMeasure.COSINE,
+           FindNearestOptions.DEFAULT
+              .withLimit(10)
+              .withDistanceField("distance")
+              .with("foo", "bar"))
+        .aggregate(
+            Aggregate
+                .withAccumulators(avg("rating").as("avg_rating"))
+                .withGroups("genre")
+                .withOptions(AggregateOptions.DEFAULT
+                    .withHints(AggregateHints.DEFAULT
+                        .withForceStreamableEnabled()
+                        .with("foo", "bar"))
+                    .with("foo", "bar"))
+        );
+
+    pipeline.execute(opts);
   }
 }

@@ -19,21 +19,22 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
-import com.google.firestore.v1.Pipeline;
+import com.google.firestore.v1.Value;
+import java.util.Collections;
 
 @InternalApi
 public final class Offset extends Stage {
 
-  private static final String name = "offset";
   private final int offset;
 
   @InternalApi
   public Offset(int offset) {
+    super("offset", InternalOptions.EMPTY);
     this.offset = offset;
   }
 
   @Override
-  Pipeline.Stage toStageProto() {
-    return Pipeline.Stage.newBuilder().setName(name).addArgs(encodeValue(offset)).build();
+  Iterable<Value> toStageArgs() {
+    return Collections.singletonList(encodeValue(offset));
   }
 }

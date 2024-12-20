@@ -19,32 +19,30 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.cloud.firestore.pipeline.expressions.Field;
-import com.google.firestore.v1.Pipeline;
+import com.google.common.collect.ImmutableList;
+import com.google.firestore.v1.Value;
 import javax.annotation.Nonnull;
 
-public class Unnest extends Stage {
+public final class Unnest extends Stage {
 
-  private static final String name = "unnest";
   private final Field field;
-  private final UnnestOptions options;
+  private final String alias;
 
-  public Unnest(Field field) {
+  public Unnest(@Nonnull Field field, @Nonnull String alias) {
+    super("unnest", InternalOptions.EMPTY);
     this.field = field;
-    this.options = null;
+    this.alias = alias;
   }
 
-  public Unnest(@Nonnull Field field, @Nonnull UnnestOptions options) {
+  public Unnest(@Nonnull Field field, @Nonnull String alias, @Nonnull UnnestOptions options) {
+    super("unnest", options.options);
     this.field = field;
-    this.options = options;
+    this.alias = alias;
   }
 
   @Override
-  Pipeline.Stage toStageProto() {
-    Pipeline.Stage.Builder builder =
-        Pipeline.Stage.newBuilder().setName(name).addArgs(encodeValue(field));
-    if (options != null) {
-      builder.addArgs(encodeValue(options.indexField));
-    }
-    return builder.build();
+  Iterable<Value> toStageArgs() {
+    return ImmutableList.of(encodeValue(field), encodeValue(alias));
   }
+
 }
