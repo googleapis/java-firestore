@@ -21,6 +21,14 @@ import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 
+/**
+ * Wither style Key/Value options object.
+ *
+ * Basic `wither` functionality built upon `ImmutableMap<String, Value>`. Exposes methods to
+ * construct, augment, and encode Kay/Value pairs. The wrapped collection
+ * `ImmutableMap<String, Value>` is an implementation detail, not to be exposed, since more
+ * efficient implementations are possible.
+ */
 final class InternalOptions {
 
   public static final InternalOptions EMPTY = new InternalOptions(ImmutableMap.of());
