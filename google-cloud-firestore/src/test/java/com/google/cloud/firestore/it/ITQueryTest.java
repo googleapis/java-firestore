@@ -28,7 +28,13 @@ import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.firestore.*;
 import com.google.cloud.firestore.Query.Direction;
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -1119,7 +1125,7 @@ public class ITQueryTest extends ITBaseTest {
         .set(col.document("doubleMin"), map("value", ((double) Long.MIN_VALUE) - 100))
         .set(col.document("intMax"), map("value", Long.MAX_VALUE))
         .set(col.document("doubleMax"), map("value", ((double) Long.MAX_VALUE) + 100))
-        .set(col.document("NAN"), map("value", Double.NaN))
+        .set(col.document("NaN"), map("value", Double.NaN))
         .set(col.document("integerMax"), map("value", (long) Integer.MAX_VALUE))
         .set(col.document("integerMin"), map("value", (long) Integer.MIN_VALUE))
         .set(col.document("negativeInfinity"), map("value", Double.NEGATIVE_INFINITY))

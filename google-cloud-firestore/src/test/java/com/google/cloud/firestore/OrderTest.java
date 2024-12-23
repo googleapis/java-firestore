@@ -126,7 +126,6 @@ public class OrderTest {
       for (int right = 0; right < groups.length; right++) {
         for (int i = 0; i < groups[left].length; i++) {
           for (int j = 0; j < groups[right].length; j++) {
-            System.out.println(groups[left][i] + "    " + groups[right][j]);
             assertEquals(
                 String.format(
                     "Order does not match for: groups[%d][%d] and groups[%d][%d]",
