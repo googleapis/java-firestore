@@ -28,6 +28,7 @@ import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.firestore.*;
 import com.google.cloud.firestore.Query.Direction;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -35,7 +36,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import  java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -1121,35 +1121,34 @@ public class ITQueryTest extends ITBaseTest {
     CollectionReference col = createEmptyCollection();
 
     firestore
-            .batch()
-            .set(col.document("a"), map("value", "Łukasiewicz"))
-            .set(col.document("b"), map("value", "Sierpiński"))
-            .set(col.document("c"), map("value", "岩澤"))
-            .set(col.document("d"), map("value", "🄟"))
-            .set(col.document("e"), map("value", "Ｐ"))
-            .set(col.document("f"), map("value", "︒"))
-            .set(col.document("g"), map("value", "🐵"))
-
-            .commit()
-            .get();
+        .batch()
+        .set(col.document("a"), map("value", "Łukasiewicz"))
+        .set(col.document("b"), map("value", "Sierpiński"))
+        .set(col.document("c"), map("value", "岩澤"))
+        .set(col.document("d"), map("value", "🄟"))
+        .set(col.document("e"), map("value", "Ｐ"))
+        .set(col.document("f"), map("value", "︒"))
+        .set(col.document("g"), map("value", "🐵"))
+        .commit()
+        .get();
 
     Query query = col.orderBy("value", Direction.ASCENDING);
 
     QuerySnapshot snapshot = query.get().get();
     List<String> queryOrder =
-            snapshot.getDocuments().stream().map(doc -> doc.getId()).collect(Collectors.toList());
+        snapshot.getDocuments().stream().map(doc -> doc.getId()).collect(Collectors.toList());
 
     CountDownLatch latch = new CountDownLatch(1);
     List<String> listenerOrder = new ArrayList<>();
     ListenerRegistration registration =
-            query.addSnapshotListener(
-                    (value, error) -> {
-                      listenerOrder.addAll(
-                              value.getDocuments().stream()
-                                      .map(doc -> doc.getId())
-                                      .collect(Collectors.toList()));
-                      latch.countDown();
-                    });
+        query.addSnapshotListener(
+            (value, error) -> {
+              listenerOrder.addAll(
+                  value.getDocuments().stream()
+                      .map(doc -> doc.getId())
+                      .collect(Collectors.toList()));
+              latch.countDown();
+            });
     latch.await();
     registration.remove();
 
