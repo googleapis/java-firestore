@@ -135,13 +135,19 @@ class Order implements Comparator<Value> {
   }
 
   private int compareStrings(Value left, Value right) {
-    return left.getStringValue().compareTo(right.getStringValue());
+    ByteString leftBytes = ByteString.copyFromUtf8(left.getStringValue());
+    ByteString rightBytes = ByteString.copyFromUtf8(right.getStringValue());
+//    return left.getStringValue().compareTo(right.getStringValue());
+    return compareBytes(leftBytes, rightBytes);
   }
 
   private int compareBlobs(Value left, Value right) {
     ByteString leftBytes = left.getBytesValue();
     ByteString rightBytes = right.getBytesValue();
+    return compareBytes(leftBytes, rightBytes);
+  }
 
+  private int compareBytes(ByteString leftBytes, ByteString rightBytes){
     int size = Math.min(leftBytes.size(), rightBytes.size());
     for (int i = 0; i < size; i++) {
       // Make sure the bytes are unsigned
