@@ -115,7 +115,7 @@ class Order implements Comparator<Value> {
       case TIMESTAMP:
         return compareTimestamps(left, right);
       case STRING:
-        return compareStrings(left, right);
+        return compareUtf8Strings(left.getStringValue(), right.getStringValue());
       case BLOB:
         return compareBlobs(left, right);
       case REF:
@@ -134,10 +134,9 @@ class Order implements Comparator<Value> {
     }
   }
 
-  private int compareStrings(Value left, Value right) {
-    ByteString leftBytes = ByteString.copyFromUtf8(left.getStringValue());
-    ByteString rightBytes = ByteString.copyFromUtf8(right.getStringValue());
-    //    return left.getStringValue().compareTo(right.getStringValue());
+  public int compareUtf8Strings(String left, String right) {
+    ByteString leftBytes = ByteString.copyFromUtf8(left);
+    ByteString rightBytes = ByteString.copyFromUtf8(right);
     return compareBytes(leftBytes, rightBytes);
   }
 
@@ -217,7 +216,8 @@ class Order implements Comparator<Value> {
     while (leftIterator.hasNext() && rightIterator.hasNext()) {
       Entry<String, Value> leftEntry = leftIterator.next();
       Entry<String, Value> rightEntry = rightIterator.next();
-      int keyCompare = leftEntry.getKey().compareTo(rightEntry.getKey());
+      //      int keyCompare = leftEntry.getKey().compareTo(rightEntry.getKey());
+      int keyCompare = compareUtf8Strings(leftEntry.getKey(), rightEntry.getKey());
       if (keyCompare != 0) {
         return keyCompare;
       }
