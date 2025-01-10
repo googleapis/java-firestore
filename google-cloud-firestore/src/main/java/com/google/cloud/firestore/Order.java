@@ -134,7 +134,8 @@ class Order implements Comparator<Value> {
     }
   }
 
-  public int compareUtf8Strings(String left, String right) {
+  /** Compare strings in UTF-8 encoded byte order */
+  public static int compareUtf8Strings(String left, String right) {
     ByteString leftBytes = ByteString.copyFromUtf8(left);
     ByteString rightBytes = ByteString.copyFromUtf8(right);
     return compareBytes(leftBytes, rightBytes);
@@ -146,7 +147,7 @@ class Order implements Comparator<Value> {
     return compareBytes(leftBytes, rightBytes);
   }
 
-  private int compareBytes(ByteString leftBytes, ByteString rightBytes) {
+  private static int compareBytes(ByteString leftBytes, ByteString rightBytes) {
     int size = Math.min(leftBytes.size(), rightBytes.size());
     for (int i = 0; i < size; i++) {
       // Make sure the bytes are unsigned

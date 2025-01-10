@@ -1117,7 +1117,7 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
-  public void snapshotListenerSortsUnicodeSameWayAsServer() throws Exception {
+  public void snapshotListenerSortsUnicodeStringsSameWayAsServer() throws Exception {
     CollectionReference col = createEmptyCollection();
 
     firestore
@@ -1157,7 +1157,7 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
-  public void snapshotListenerSortsUnicodeInArraySameWayAsServer() throws Exception {
+  public void snapshotListenerSortsUnicodeStringsInArraySameWayAsServer() throws Exception {
     CollectionReference col = createEmptyCollection();
 
     firestore
@@ -1197,7 +1197,7 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
-  public void snapshotListenerSortsUnicodeInMapSameWayAsServer() throws Exception {
+  public void snapshotListenerSortsUnicodeStringsInMapSameWayAsServer() throws Exception {
     CollectionReference col = createEmptyCollection();
 
     firestore
@@ -1237,7 +1237,7 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
-  public void snapshotListenerSortsUnicodeInMapKeySameWayAsServer() throws Exception {
+  public void snapshotListenerSortsUnicodeStringsInMapKeySameWayAsServer() throws Exception {
     CollectionReference col = createEmptyCollection();
 
     firestore
@@ -1277,7 +1277,7 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
-  public void snapshotListenerSortsUnicodeInDocumentKeySameWayAsServer() throws Exception {
+  public void snapshotListenerSortsUnicodeStringsInDocumentKeySameWayAsServer() throws Exception {
     CollectionReference col = createEmptyCollection();
 
     firestore
