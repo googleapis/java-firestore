@@ -1153,7 +1153,7 @@ public class ITQueryTest extends ITBaseTest {
     registration.remove();
 
     assertEquals(queryOrder, Arrays.asList("b", "a", "c", "f", "e", "d", "g"));
-    assertEquals(queryOrder, listenerOrder); // Assert order in the SDK
+    assertEquals(queryOrder, listenerOrder);
   }
 
   @Test
@@ -1193,7 +1193,7 @@ public class ITQueryTest extends ITBaseTest {
     registration.remove();
 
     assertEquals(queryOrder, Arrays.asList("b", "a", "c", "f", "e", "d", "g"));
-    assertEquals(queryOrder, listenerOrder); // Assert order in the SDK
+    assertEquals(queryOrder, listenerOrder);
   }
 
   @Test
@@ -1233,7 +1233,7 @@ public class ITQueryTest extends ITBaseTest {
     registration.remove();
 
     assertEquals(queryOrder, Arrays.asList("b", "a", "c", "f", "e", "d", "g"));
-    assertEquals(queryOrder, listenerOrder); // Assert order in the SDK
+    assertEquals(queryOrder, listenerOrder);
   }
 
   @Test
@@ -1273,7 +1273,7 @@ public class ITQueryTest extends ITBaseTest {
     registration.remove();
 
     assertEquals(queryOrder, Arrays.asList("b", "a", "c", "f", "e", "d", "g"));
-    assertEquals(queryOrder, listenerOrder); // Assert order in the SDK
+    assertEquals(queryOrder, listenerOrder);
   }
 
   @Test
@@ -1314,6 +1314,6 @@ public class ITQueryTest extends ITBaseTest {
 
     assertEquals(
         queryOrder, Arrays.asList("Sierpiński", "Łukasiewicz", "岩澤", "︒", "Ｐ", "🄟", "🐵"));
-    assertEquals(queryOrder, listenerOrder); // Assert order in the SDK
+    assertEquals(queryOrder, listenerOrder);
   }
 }

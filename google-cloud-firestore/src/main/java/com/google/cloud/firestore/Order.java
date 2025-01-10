@@ -217,7 +217,6 @@ class Order implements Comparator<Value> {
     while (leftIterator.hasNext() && rightIterator.hasNext()) {
       Entry<String, Value> leftEntry = leftIterator.next();
       Entry<String, Value> rightEntry = rightIterator.next();
-      //      int keyCompare = leftEntry.getKey().compareTo(rightEntry.getKey());
       int keyCompare = compareUtf8Strings(leftEntry.getKey(), rightEntry.getKey());
       if (keyCompare != 0) {
         return keyCompare;
