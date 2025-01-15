@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>google-cloud-firestore</artifactId>
-  <version>3.30.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+  <version>3.30.3</version><!-- {x-version-update:google-cloud-firestore:current} -->
   <packaging>jar</packaging>
   <name>Google Cloud Firestore</name>
   <url>https://github.com/googleapis/java-firestore</url>
@@ -12,11 +12,11 @@
   <parent>
     <groupId>com.google.cloud</groupId>
     <artifactId>google-cloud-firestore-parent</artifactId>
-    <version>3.30.1-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+    <version>3.30.3</version><!-- {x-version-update:google-cloud-firestore:current} -->
   </parent>
   <properties>
     <site.installationModule>google-cloud-firestore</site.installationModule>
-    <opentelemetry.version>1.44.1</opentelemetry.version>
+    <opentelemetry.version>1.46.0</opentelemetry.version>
   </properties>
   <dependencies>
     <dependency>
@@ -232,13 +232,13 @@
     <dependency>
       <groupId>com.google.api.grpc</groupId>
       <artifactId>proto-google-cloud-trace-v1</artifactId>
-      <version>2.54.0</version>
+      <version>2.56.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-trace</artifactId>
-      <version>2.54.0</version>
+      <version>2.56.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -303,7 +303,7 @@
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>2.43.0</version>
+        <version>2.44.1</version>
         <configuration>
           <kotlin>
             <includes>

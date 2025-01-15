@@ -115,7 +115,7 @@ class Order implements Comparator<Value> {
       case TIMESTAMP:
         return compareTimestamps(left, right);
       case STRING:
-        return compareStrings(left, right);
+        return compareUtf8Strings(left.getStringValue(), right.getStringValue());
       case BLOB:
         return compareBlobs(left, right);
       case REF:
@@ -134,14 +134,20 @@ class Order implements Comparator<Value> {
     }
   }
 
-  private int compareStrings(Value left, Value right) {
-    return left.getStringValue().compareTo(right.getStringValue());
+  /** Compare strings in UTF-8 encoded byte order */
+  public static int compareUtf8Strings(String left, String right) {
+    ByteString leftBytes = ByteString.copyFromUtf8(left);
+    ByteString rightBytes = ByteString.copyFromUtf8(right);
+    return compareByteStrings(leftBytes, rightBytes);
   }
 
   private int compareBlobs(Value left, Value right) {
     ByteString leftBytes = left.getBytesValue();
     ByteString rightBytes = right.getBytesValue();
+    return compareByteStrings(leftBytes, rightBytes);
+  }
 
+  private static int compareByteStrings(ByteString leftBytes, ByteString rightBytes) {
     int size = Math.min(leftBytes.size(), rightBytes.size());
     for (int i = 0; i < size; i++) {
       // Make sure the bytes are unsigned
@@ -211,7 +217,7 @@ class Order implements Comparator<Value> {
     while (leftIterator.hasNext() && rightIterator.hasNext()) {
       Entry<String, Value> leftEntry = leftIterator.next();
       Entry<String, Value> rightEntry = rightIterator.next();
-      int keyCompare = leftEntry.getKey().compareTo(rightEntry.getKey());
+      int keyCompare = compareUtf8Strings(leftEntry.getKey(), rightEntry.getKey());
       if (keyCompare != 0) {
         return keyCompare;
       }
@@ -250,31 +256,60 @@ class Order implements Comparator<Value> {
   }
 
   private int compareNumbers(Value left, Value right) {
+    // NaN is smaller than any other numbers
+    if (isNaN(left)) {
+      return isNaN(right) ? 0 : -1;
+    } else if (isNaN(right)) {
+      return 1;
+    }
+
     if (left.getValueTypeCase() == ValueTypeCase.DOUBLE_VALUE) {
       if (right.getValueTypeCase() == ValueTypeCase.DOUBLE_VALUE) {
         return compareDoubles(left.getDoubleValue(), right.getDoubleValue());
       } else {
-        return compareDoubles(left.getDoubleValue(), right.getIntegerValue());
+        return compareDoubleAndLong(left.getDoubleValue(), right.getIntegerValue());
       }
     } else {
       if (right.getValueTypeCase() == ValueTypeCase.INTEGER_VALUE) {
         return Long.compare(left.getIntegerValue(), right.getIntegerValue());
       } else {
-        return compareDoubles(left.getIntegerValue(), right.getDoubleValue());
+        return -compareDoubleAndLong(right.getDoubleValue(), left.getIntegerValue());
       }
     }
   }
 
+  private boolean isNaN(Value value) {
+    return value.hasDoubleValue() && Double.isNaN(value.getDoubleValue());
+  }
+
   private int compareDoubles(double left, double right) {
-    // Firestore orders NaNs before all other numbers and treats -0.0, 0.0 and +0.0 as equal.
-    if (Double.isNaN(left)) {
-      return Double.isNaN(right) ? 0 : -1;
-    }
-
-    if (Double.isNaN(right)) {
-      return 1;
-    }
-
+    // Firestore treats -0.0, 0.0 and +0.0 as equal.
     return Double.compare(left == -0.0 ? 0 : left, right == -0.0 ? 0 : right);
+  }
+
+  /**
+   * The maximum integer absolute number that can be represented as a double without loss of
+   * precision. This is 2^53 because double-precision floating point numbers have 53 bits
+   * significand precision (52 explicit bit + 1 hidden bit).
+   */
+  private static final long MAX_INTEGER_TO_DOUBLE_PRECISION = 1L << 53;
+
+  private int compareDoubleAndLong(double doubleValue, long longValue) {
+    if (Math.abs(longValue) <= MAX_INTEGER_TO_DOUBLE_PRECISION) {
+      // Enough precision to compare as double, the cast will not be lossy.
+      return compareDoubles(doubleValue, (double) longValue);
+    } else if (doubleValue < ((double) Long.MAX_VALUE)
+        && doubleValue >= ((double) Long.MIN_VALUE)) {
+      // The above condition captures all doubles that belong to [min long, max long] inclusive.
+      // Java long to double conversion rounds-to-nearest, so Long.MAX_VALUE casts to 2^63, hence
+      // the use of "<" operator.
+      // The cast to long below may be lossy, but only for absolute values < 2^52 so the loss of
+      // precision does not affect the comparison, as longValue is outside that range.
+      return Long.compare((long) doubleValue, longValue);
+    } else {
+      // doubleValue is outside the representable range for longs, so always smaller if negative,
+      // and always greater otherwise.
+      return doubleValue < 0 ? -1 : 1;
+    }
   }
 }
