@@ -1117,6 +1117,46 @@ public class ITQueryTest extends ITBaseTest {
   }
 
   @Test
+  public void snapshotListenerSortsNumbersSameWayAsServer() throws Exception {
+    CollectionReference col = createEmptyCollection();
+    firestore
+        .batch()
+        .set(col.document("intMin"), map("value", Long.MIN_VALUE))
+        .set(col.document("doubleMin"), map("value", ((double) Long.MIN_VALUE) - 100))
+        .set(col.document("intMax"), map("value", Long.MAX_VALUE))
+        .set(col.document("doubleMax"), map("value", ((double) Long.MAX_VALUE) + 100))
+        .set(col.document("NaN"), map("value", Double.NaN))
+        .set(col.document("integerMax"), map("value", (long) Integer.MAX_VALUE))
+        .set(col.document("integerMin"), map("value", (long) Integer.MIN_VALUE))
+        .set(col.document("negativeInfinity"), map("value", Double.NEGATIVE_INFINITY))
+        .set(col.document("positiveInfinity"), map("value", Double.POSITIVE_INFINITY))
+        .commit()
+        .get();
+
+    Query query = col.orderBy("value", Direction.ASCENDING);
+
+    QuerySnapshot snapshot = query.get().get();
+    List<String> queryOrder =
+        snapshot.getDocuments().stream().map(doc -> doc.getId()).collect(Collectors.toList());
+
+    CountDownLatch latch = new CountDownLatch(1);
+    List<String> listenerOrder = new ArrayList<>();
+    ListenerRegistration registration =
+        query.addSnapshotListener(
+            (value, error) -> {
+              listenerOrder.addAll(
+                  value.getDocuments().stream()
+                      .map(doc -> doc.getId())
+                      .collect(Collectors.toList()));
+              latch.countDown();
+            });
+    latch.await();
+    registration.remove();
+
+    assertEquals(queryOrder, listenerOrder); // Assert order in the SDK
+  }
+
+  @Test
   public void snapshotListenerSortsUnicodeStringsSameWayAsServer() throws Exception {
     CollectionReference col = createEmptyCollection();
 
