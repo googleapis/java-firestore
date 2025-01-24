@@ -26,6 +26,7 @@ import com.google.api.gax.rpc.PagedCallSettings;
 import com.google.api.gax.rpc.ServerStreamingCallSettings;
 import com.google.api.gax.rpc.StatusCode.Code;
 import com.google.api.gax.rpc.UnaryCallSettings;
+import com.google.cloud.firestore.FirestoreOpenTelemetryOptions;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse;
 import com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
@@ -59,7 +60,13 @@ public class GrpcFirestoreRpcTest {
   private static FirestoreStubSettings defaultStubSettings;
 
   private final FirestoreOptions firestoreOptionsWithoutOverride =
-      FirestoreOptions.newBuilder().setProjectId("test-project").build();
+      FirestoreOptions.newBuilder()
+          .setProjectId("test-project")
+          .setOpenTelemetryOptions(
+              FirestoreOpenTelemetryOptions.newBuilder()
+                  .exportBuiltinMetricsToGoogleCloudMonitoring(false)
+                  .build())
+          .build();
 
   @BeforeClass
   public static void beforeClass() throws IOException {
@@ -85,6 +92,10 @@ public class GrpcFirestoreRpcTest {
         FirestoreOptions.newBuilder()
             .setProjectId("test-project")
             .setRetrySettings(retrySettings)
+            .setOpenTelemetryOptions(
+                FirestoreOpenTelemetryOptions.newBuilder()
+                    .exportBuiltinMetricsToGoogleCloudMonitoring(false)
+                    .build())
             .build();
     GrpcFirestoreRpc grpcFirestoreRpc = new GrpcFirestoreRpc(firestoreOptions);
 

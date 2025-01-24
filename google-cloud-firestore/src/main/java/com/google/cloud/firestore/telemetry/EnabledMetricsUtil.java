@@ -35,6 +35,7 @@ import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.opentelemetry.metric.GoogleCloudMetricExporter;
 import com.google.cloud.opentelemetry.metric.MetricConfiguration;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -49,6 +50,7 @@ import io.opentelemetry.sdk.metrics.SdkMeterProvider;
 import io.opentelemetry.sdk.metrics.SdkMeterProviderBuilder;
 import io.opentelemetry.sdk.metrics.View;
 import io.opentelemetry.sdk.metrics.export.MetricExporter;
+import io.opentelemetry.sdk.metrics.export.MetricReader;
 import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -67,41 +69,50 @@ import javax.annotation.Nullable;
 class EnabledMetricsUtil implements MetricsUtil {
   private BuiltinMetricsProvider defaultMetricsProvider;
   private BuiltinMetricsProvider customMetricsProvider;
+  private MetricReader metricReader;
 
   private static final Logger logger = Logger.getLogger(EnabledMetricsUtil.class.getName());
 
   EnabledMetricsUtil(FirestoreOptions firestoreOptions) {
     try {
-      configureDefaultMetricsProvider(firestoreOptions);
-      configureCustomMetricsProvider(firestoreOptions);
-    } catch (IOException e) {
+      this.defaultMetricsProvider = configureDefaultMetricsProvider(firestoreOptions);
+      this.customMetricsProvider = configureCustomMetricsProvider(firestoreOptions);
+    } catch (Exception e) {
       logger.warning(
           "Unable to create MetricsUtil object for client side metrics, will skip exporting client side metrics"
               + e);
     }
   }
 
-  private void configureDefaultMetricsProvider(FirestoreOptions firestoreOptions)
-      throws IOException {
-    OpenTelemetry defaultOpenTelemetry;
-    boolean exportBuiltinMetricsToGoogleCloudMonitoring =
-        firestoreOptions.getOpenTelemetryOptions().exportBuiltinMetricsToGoogleCloudMonitoring();
-    if (exportBuiltinMetricsToGoogleCloudMonitoring) {
-      defaultOpenTelemetry = getDefaultOpenTelemetryInstance(firestoreOptions.getProjectId());
-    } else {
-      defaultOpenTelemetry = OpenTelemetry.noop();
+  private BuiltinMetricsProvider configureDefaultMetricsProvider(
+      FirestoreOptions firestoreOptions) {
+    OpenTelemetry defaultOpenTelemetry = OpenTelemetry.noop();
+    if (firestoreOptions.getOpenTelemetryOptions().exportBuiltinMetricsToGoogleCloudMonitoring()) {
+      String projectId = firestoreOptions.getProjectId();
+      if (projectId == null) {
+        logger.warning(
+            "Project ID is null, skipping client side metrics export to Cloud Monitoring.");
+      } else {
+        try {
+          defaultOpenTelemetry = getDefaultOpenTelemetryInstance(projectId);
+        } catch (Exception e) {
+          logger.warning(
+              "Unable to create default OpenTelemetry instance for client side metrics, will skip exporting client side metrics to Cloud Monitoring: "
+                  + e);
+        }
+      }
     }
-    this.defaultMetricsProvider = new BuiltinMetricsProvider(defaultOpenTelemetry);
+    return new BuiltinMetricsProvider(defaultOpenTelemetry);
   }
 
-  private void configureCustomMetricsProvider(FirestoreOptions firestoreOptions)
+  private BuiltinMetricsProvider configureCustomMetricsProvider(FirestoreOptions firestoreOptions)
       throws IOException {
     OpenTelemetry customOpenTelemetry =
         firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
     if (customOpenTelemetry == null) {
       customOpenTelemetry = GlobalOpenTelemetry.get();
     }
-    this.customMetricsProvider = new BuiltinMetricsProvider(customOpenTelemetry);
+    return new BuiltinMetricsProvider(customOpenTelemetry);
   }
 
   @Override
@@ -113,6 +124,16 @@ class EnabledMetricsUtil implements MetricsUtil {
   public void addMetricsTracerFactory(List<ApiTracerFactory> apiTracerFactories) {
     addTracerFactory(apiTracerFactories, defaultMetricsProvider);
     addTracerFactory(apiTracerFactories, customMetricsProvider);
+  }
+
+  @VisibleForTesting
+  BuiltinMetricsProvider getCustomMetricsProvider() {
+    return customMetricsProvider;
+  }
+
+  @VisibleForTesting
+  BuiltinMetricsProvider getDefaultMetricsProvider() {
+    return defaultMetricsProvider;
   }
 
   /**
@@ -134,9 +155,11 @@ class EnabledMetricsUtil implements MetricsUtil {
                 // Ignore library info as it is collected by the metric attributes as well
                 .setInstrumentationLibraryLabelsEnabled(false)
                 .build());
-    sdkMeterProviderBuilder.registerMetricReader(PeriodicMetricReader.create(metricExporter));
+    metricReader = PeriodicMetricReader.create(metricExporter);
 
-    return OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProviderBuilder.build()).build();
+    return OpenTelemetrySdk.builder()
+        .setMeterProvider(sdkMeterProviderBuilder.registerMetricReader(metricReader).build())
+        .build();
   }
 
   private static Map<InstrumentSelector, View> getAllViews() {
@@ -165,6 +188,19 @@ class EnabledMetricsUtil implements MetricsUtil {
     ApiTracerFactory tracerFactory = metricsProvider.getApiTracerFactory();
     if (tracerFactory != null) {
       apiTracerFactories.add(tracerFactory);
+    }
+  }
+
+  @Override
+  public void shutdown() {
+    // Gracefully shutdown the metric reader registered to the default OTEL instance inside the sdk.
+    if (metricReader != null) {
+      try {
+        metricReader.shutdown();
+      } catch (Exception e) {
+        // Handle the exception or retry with exponential backoff
+        logger.warning("Error shutting down MetricReader: " + e.getMessage());
+      }
     }
   }
 
@@ -234,10 +270,8 @@ class EnabledMetricsUtil implements MetricsUtil {
 
     private void recordCounter(MetricType metric, String status) {
       Map<String, String> attributes = createAttributes(status, methodName);
-      defaultMetricsProvider.counterRecorder(
-          MetricType.TRANSACTION_ATTEMPT_COUNT, (long) counter, attributes);
-      customMetricsProvider.counterRecorder(
-          MetricType.TRANSACTION_ATTEMPT_COUNT, (long) counter, attributes);
+      defaultMetricsProvider.counterRecorder(metric, (long) counter, attributes);
+      customMetricsProvider.counterRecorder(metric, (long) counter, attributes);
     }
   }
 
@@ -248,14 +282,15 @@ class EnabledMetricsUtil implements MetricsUtil {
     return attributes;
   }
 
-  private String extractErrorStatus(@Nullable Throwable throwable) {
+  @VisibleForTesting
+  String extractErrorStatus(@Nullable Throwable throwable) {
     if (!(throwable instanceof FirestoreException)) {
-      return StatusCode.Code.UNKNOWN.toString();
+      return Status.Code.UNKNOWN.toString();
     }
 
     Status status = ((FirestoreException) throwable).getStatus();
     if (status == null) {
-      return StatusCode.Code.UNKNOWN.toString();
+      return Status.Code.UNKNOWN.toString();
     }
     return status.getCode().name();
   }
