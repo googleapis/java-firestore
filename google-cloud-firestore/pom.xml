@@ -130,17 +130,6 @@
     <dependency>
       <groupId>com.google.cloud.opentelemetry</groupId>
       <artifactId>exporter-metrics</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>io.opentelemetry.semconv</groupId>
-          <artifactId>opentelemetry-semconv</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>io.opentelemetry.semconv</groupId>
-      <artifactId>opentelemetry-semconv</artifactId>
-      <version>1.26.0-alpha</version>
     </dependency>
     <!-- END OpenTelemetry -->
 
@@ -226,6 +215,12 @@
       <groupId>com.google.cloud.opentelemetry</groupId>
       <artifactId>exporter-trace</artifactId>
       <version>0.33.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry.semconv</groupId>
+      <artifactId>opentelemetry-semconv</artifactId>
+      <version>1.26.0-alpha</version>
       <scope>test</scope>
     </dependency>
     <!-- END OpenTelemetry -->
