@@ -144,7 +144,7 @@ class Order implements Comparator<Value> {
       if (leftCodePoint != rightCodePoint) {
         if (leftCodePoint < 128 && rightCodePoint < 128) {
           // ASCII comparison
-          return left.compareTo(right);
+          return Integer.compare(leftCodePoint, rightCodePoint);
         } else {
           // UTF-8 encoded byte comparison, substring 2 indexes to cover surrogate pairs
           ByteString leftBytes =
