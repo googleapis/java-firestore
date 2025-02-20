@@ -136,8 +136,7 @@ class Order implements Comparator<Value> {
 
   /** Compare strings in UTF-8 encoded byte order */
   public static int compareUtf8Strings(String left, String right) {
-    int i = 0;
-    while (i < left.length() && i < right.length()) {
+    for (int i = 0; i < left.length() && i < right.length(); i++) {
       int leftCodePoint = left.codePointAt(i);
       int rightCodePoint = right.codePointAt(i);
 
@@ -146,21 +145,30 @@ class Order implements Comparator<Value> {
           // ASCII comparison
           return Integer.compare(leftCodePoint, rightCodePoint);
         } else {
-          // UTF-8 encoded byte comparison, substring 2 indexes to cover surrogate pairs
-          ByteString leftBytes =
-              ByteString.copyFromUtf8(left.substring(i, Math.min(i + 2, left.length())));
-          ByteString rightBytes =
-              ByteString.copyFromUtf8(right.substring(i, Math.min(i + 2, right.length())));
-          return compareByteStrings(leftBytes, rightBytes);
+          // substring and do UTF-8 encoded byte comparison
+          ByteString leftBytes = ByteString.copyFromUtf8(getUtf8SafeBytes(left, i));
+          ByteString rightBytes = ByteString.copyFromUtf8(getUtf8SafeBytes(right, i));
+          int comp = compareByteStrings(leftBytes, rightBytes);
+          if (comp != 0) {
+            return comp;
+          }
         }
       }
-
-      // Increment by 2 for surrogate pairs, 1 otherwise
-      i += Character.charCount(leftCodePoint);
     }
 
     // Compare lengths if all characters are equal
     return Integer.compare(left.length(), right.length());
+  }
+
+  private static String getUtf8SafeBytes(String str, int index) {
+    int firstCodePoint = str.codePointAt(index);
+    if (firstCodePoint > 0xffff) {
+      // It's a surrogate pair, return the whole pair
+      return str.substring(index, index + 2);
+    } else {
+      // It's a single code point, return it
+      return str.substring(index, index + 1);
+    }
   }
 
   private int compareBlobs(Value left, Value right) {
@@ -169,7 +177,7 @@ class Order implements Comparator<Value> {
     return compareByteStrings(leftBytes, rightBytes);
   }
 
-  private static int compareByteStrings(ByteString leftBytes, ByteString rightBytes) {
+  static int compareByteStrings(ByteString leftBytes, ByteString rightBytes) {
     int size = Math.min(leftBytes.size(), rightBytes.size());
     for (int i = 0; i < size; i++) {
       // Make sure the bytes are unsigned
