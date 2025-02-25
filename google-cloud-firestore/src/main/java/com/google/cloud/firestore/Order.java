@@ -136,7 +136,8 @@ class Order implements Comparator<Value> {
 
   /** Compare strings in UTF-8 encoded byte order */
   public static int compareUtf8Strings(String left, String right) {
-    for (int i = 0; i < left.length() && i < right.length(); i++) {
+    int i = 0;
+    while (i < left.length() && i < right.length()) {
       int leftCodePoint = left.codePointAt(i);
       int rightCodePoint = right.codePointAt(i);
 
@@ -145,15 +146,24 @@ class Order implements Comparator<Value> {
           // ASCII comparison
           return Integer.compare(leftCodePoint, rightCodePoint);
         } else {
-          // substring and do UTF-8 encoded byte comparison
+          // UTF-8 encode the character at index i for byte comparison.
           ByteString leftBytes = ByteString.copyFromUtf8(getUtf8SafeBytes(left, i));
           ByteString rightBytes = ByteString.copyFromUtf8(getUtf8SafeBytes(right, i));
           int comp = compareByteStrings(leftBytes, rightBytes);
           if (comp != 0) {
             return comp;
+          } else {
+            // leftCodePoint and rightCodePoint differs, the `comp` here could be equal only if the
+            // character(s) at index i are invalid surrogates and Java mis-encoded the substring.
+            // Encode the whole string instead to be consistent with what backend could have return.
+            leftBytes = ByteString.copyFromUtf8(left);
+            rightBytes = ByteString.copyFromUtf8(right);
+            return compareByteStrings(leftBytes, rightBytes);
           }
         }
       }
+      // Increment by 2 for surrogate pairs, 1 otherwise.
+      i += Character.charCount(leftCodePoint);
     }
 
     // Compare lengths if all characters are equal
