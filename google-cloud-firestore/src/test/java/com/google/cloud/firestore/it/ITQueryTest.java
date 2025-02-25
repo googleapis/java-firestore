@@ -1378,4 +1378,44 @@ public class ITQueryTest extends ITBaseTest {
             "Sierpiński", "Łukasiewicz", "你好", "你顥", "岩澤", "︒", "Ｐ", "🄟", "🐵", "😀", "😁"));
     assertEquals(queryOrder, listenerOrder);
   }
+
+  @Test
+  public void snapshotListenerSortsInvalidUnicodeStringsSameWayAsServer() throws Exception {
+    CollectionReference col = createEmptyCollection();
+
+    firestore
+        .batch()
+        .set(col.document("a"), map("value", "Z"))
+        .set(col.document("b"), map("value", "你好"))
+        .set(col.document("c"), map("value", "😀"))
+        .set(col.document("d"), map("value", "ab\\uD800")) // Lone high surrogate
+        .set(col.document("e"), map("value", "ab\\uDC00")) // Lone low surrogate
+        .set(col.document("f"), map("value", "ab\\uD800\\uD800")) // Unpaired high surrogate
+        .set(col.document("g"), map("value", "ab\\uDC00\\uDC00")) // Unpaired low surrogate
+        .commit()
+        .get();
+
+    Query query = col.orderBy("value", Direction.ASCENDING);
+
+    QuerySnapshot snapshot = query.get().get();
+    List<String> queryOrder =
+        snapshot.getDocuments().stream().map(doc -> doc.getId()).collect(Collectors.toList());
+
+    CountDownLatch latch = new CountDownLatch(1);
+    List<String> listenerOrder = new ArrayList<>();
+    ListenerRegistration registration =
+        query.addSnapshotListener(
+            (value, error) -> {
+              listenerOrder.addAll(
+                  value.getDocuments().stream()
+                      .map(doc -> doc.getId())
+                      .collect(Collectors.toList()));
+              latch.countDown();
+            });
+    latch.await();
+    registration.remove();
+
+    assertEquals(queryOrder, Arrays.asList("b", "a", "h", "i", "c", "f", "e", "d", "g", "k", "j"));
+    assertEquals(queryOrder, listenerOrder);
+  }
 }
