@@ -1489,8 +1489,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
         "Query results for queries that include limitToLast() constraints cannot be streamed. "
             + "Use Query.get() instead.");
 
-    MetricsContext metricsContext =
-        createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_QUERY_GET);
+    MetricsContext metricsContext = createMetricsContext(TelemetryConstants.METHOD_NAME_QUERY_GET);
 
     ApiStreamObserver<RunQueryResponse> observer =
         new ApiStreamObserver<RunQueryResponse>() {
@@ -1542,7 +1541,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
             + "Use Query.explain() instead.");
 
     MetricsContext metricsContext =
-        createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_QUERY_EXPLAIN);
+        createMetricsContext(TelemetryConstants.METHOD_NAME_QUERY_EXPLAIN);
 
     final SettableApiFuture<ExplainMetrics> metricsFuture = SettableApiFuture.create();
 
