@@ -153,12 +153,13 @@ class Order implements Comparator<Value> {
           if (comp != 0) {
             return comp;
           } else {
-            // leftCodePoint and rightCodePoint differs, the `comp` here could be equal only if the
-            // character(s) at index i are invalid surrogates and Java mis-encoded the substring.
-            // Encode the whole string instead to be consistent with what backend could have return.
-            leftBytes = ByteString.copyFromUtf8(left);
-            rightBytes = ByteString.copyFromUtf8(right);
-            return compareByteStrings(leftBytes, rightBytes);
+            // EXTREMELY RARE CASE: Code points differ, but their UTF-8 byte representations are
+            // identical. This can happen with malformed input (invalid surrogate pairs), where
+            // Java's encoding leads to unexpected byte sequences. Meanwhile, any invalid surrogate
+            // inputs get converted to "?" by protocol buffer while round tripping, so we almost
+            // never receive invalid strings from backend.
+            // Fallback to code point comparison for graceful handling.
+            return Integer.compare(leftCodePoint, rightCodePoint);
           }
         }
       }

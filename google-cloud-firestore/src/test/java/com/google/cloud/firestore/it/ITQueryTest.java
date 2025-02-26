@@ -1383,15 +1383,16 @@ public class ITQueryTest extends ITBaseTest {
   public void snapshotListenerSortsInvalidUnicodeStringsSameWayAsServer() throws Exception {
     CollectionReference col = createEmptyCollection();
 
+    // Note: Protocol Buffer converts any invalid surrogates to "?".
     firestore
         .batch()
         .set(col.document("a"), map("value", "Z"))
         .set(col.document("b"), map("value", "你好"))
         .set(col.document("c"), map("value", "😀"))
-        .set(col.document("d"), map("value", "ab\\uD800")) // Lone high surrogate
-        .set(col.document("e"), map("value", "ab\\uDC00")) // Lone low surrogate
-        .set(col.document("f"), map("value", "ab\\uD800\\uD800")) // Unpaired high surrogate
-        .set(col.document("g"), map("value", "ab\\uDC00\\uDC00")) // Unpaired low surrogate
+        .set(col.document("d"), map("value", "ab\uD800")) // Lone high surrogate
+        .set(col.document("e"), map("value", "ab\uDC00")) // Lone low surrogate
+        .set(col.document("f"), map("value", "ab\uD800\uD800")) // Unpaired high surrogate
+        .set(col.document("g"), map("value", "ab\uDC00\uDC00")) // Unpaired low surrogate
         .commit()
         .get();
 
@@ -1415,7 +1416,7 @@ public class ITQueryTest extends ITBaseTest {
     latch.await();
     registration.remove();
 
-    assertEquals(queryOrder, Arrays.asList("b", "a", "h", "i", "c", "f", "e", "d", "g", "k", "j"));
+    assertEquals(queryOrder, Arrays.asList("a", "d", "e", "f", "g", "b", "c"));
     assertEquals(queryOrder, listenerOrder);
   }
 }
