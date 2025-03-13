@@ -107,6 +107,7 @@ if [ -z "${pr_num}" ]; then
   git push -u origin "${current_branch}"
 else
   gh pr checkout "${pr_num}"
+  git pull
 fi
 
 # Only allow fast-forward merging; exit with non-zero result if there's merging
