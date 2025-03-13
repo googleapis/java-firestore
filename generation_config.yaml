@@ -1,6 +1,6 @@
-gapic_generator_version: 2.52.0
-googleapis_commitish: dd1210af5bee414c9e606f5637e0eb0fd9d894e8
-libraries_bom_version: 26.53.0
+gapic_generator_version: 2.55.1
+googleapis_commitish: a6c9ed2d33105cb3dc9a0867a0a5d761b049b932
+libraries_bom_version: 26.56.0
 libraries:
   - api_shortname: firestore
     name_pretty: Cloud Firestore
