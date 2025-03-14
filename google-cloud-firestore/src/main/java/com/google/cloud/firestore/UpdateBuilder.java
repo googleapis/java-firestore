@@ -26,7 +26,9 @@ import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
 import com.google.cloud.firestore.encoding.CustomClassMapper;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
+import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.common.base.Preconditions;
@@ -621,6 +623,18 @@ public abstract class UpdateBuilder<T> {
                     : TelemetryConstants.METHOD_NAME_TRANSACTION_COMMIT);
     span.setAttribute(ATTRIBUTE_KEY_DOC_COUNT, writes.size());
     span.setAttribute(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null);
+
+    MetricsContext metricsContext = null;
+
+    metricsContext =
+        firestore
+            .getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(
+                transactionId == null
+                    ? TelemetryConstants.METHOD_NAME_BATCH_COMMIT
+                    : TelemetryConstants.METHOD_NAME_TRANSACTION_COMMIT);
+
     try (Scope ignored = span.makeCurrent()) {
       // Sequence is thread safe.
       //
@@ -654,9 +668,13 @@ public abstract class UpdateBuilder<T> {
               },
               MoreExecutors.directExecutor());
       span.endAtFuture(returnValue);
+      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, returnValue);
+
       return returnValue;
     } catch (Exception error) {
       span.end(error);
+      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY);
+
       throw error;
     }
   }
