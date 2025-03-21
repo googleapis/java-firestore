@@ -670,7 +670,7 @@ public final class LocalFirestoreHelper {
                                 Value.newBuilder()
                                     .setArrayValue(vectorArrayBuilder.build())
                                     .build())))
-            .setLimit(Int32Value.newBuilder().setValue(limit))
+            .setLimit(com.google.protobuf.Int32Value.newBuilder().setValue(limit))
             .setDistanceMeasure(measure);
 
     StructuredQuery.Builder structuredQuery = StructuredQuery.newBuilder();
@@ -980,6 +980,13 @@ public final class LocalFirestoreHelper {
     public GeoPoint geoPointValue = GEO_POINT;
     public Map<String, Object> model = ImmutableMap.of("foo", SINGLE_FIELD_OBJECT.foo);
     public VectorValue vectorValue = FieldValue.vector(new double[] {0.1, 0.2, 0.3});
+    public MinKey minKey = FieldValue.minKey();
+    public MaxKey maxKey = FieldValue.maxKey();
+    public RegexValue regexValue = FieldValue.regex("^foo", "i");
+    public Int32Value int32Value = FieldValue.int32(55);
+    public BsonObjectId bsonObjectId = FieldValue.bsonObjectId("507f191e810c19729de860eb");
+    public BsonTimestamp bsonTimestamp = FieldValue.bsonTimestamp(100, 10);
+    public BsonBinaryData bsonBinaryData = FieldValue.bsonBinaryData(127, new byte[] {1, 2, 3});
 
     @Override
     public boolean equals(Object o) {
@@ -1007,7 +1014,14 @@ public final class LocalFirestoreHelper {
           && Objects.equals(bytesValue, that.bytesValue)
           && Objects.equals(geoPointValue, that.geoPointValue)
           && Objects.equals(model, that.model)
-          && Objects.equals(vectorValue, that.vectorValue);
+          && Objects.equals(vectorValue, that.vectorValue)
+          && Objects.equals(minKey, that.minKey)
+          && Objects.equals(maxKey, that.maxKey)
+          && Objects.equals(regexValue, that.regexValue)
+          && Objects.equals(int32Value, that.int32Value)
+          && Objects.equals(bsonObjectId, that.bsonObjectId)
+          && Objects.equals(bsonTimestamp, that.bsonTimestamp)
+          && Objects.equals(bsonBinaryData, that.bsonBinaryData);
     }
   }
 
@@ -1129,6 +1143,15 @@ public final class LocalFirestoreHelper {
     ALL_SUPPORTED_TYPES_MAP.put("geoPointValue", GEO_POINT);
     ALL_SUPPORTED_TYPES_MAP.put("model", map("foo", SINGLE_FIELD_OBJECT.foo));
     ALL_SUPPORTED_TYPES_MAP.put("vectorValue", FieldValue.vector(new double[] {0.1, 0.2, 0.3}));
+    ALL_SUPPORTED_TYPES_MAP.put("minKey", FieldValue.minKey());
+    ALL_SUPPORTED_TYPES_MAP.put("maxKey", FieldValue.maxKey());
+    ALL_SUPPORTED_TYPES_MAP.put("regexValue", FieldValue.regex("^foo", "i"));
+    ALL_SUPPORTED_TYPES_MAP.put("int32Value", FieldValue.int32(55));
+    ALL_SUPPORTED_TYPES_MAP.put(
+        "bsonObjectId", FieldValue.bsonObjectId("507f191e810c19729de860eb"));
+    ALL_SUPPORTED_TYPES_MAP.put("bsonTimestamp", FieldValue.bsonTimestamp(100, 10));
+    ALL_SUPPORTED_TYPES_MAP.put(
+        "bsonBinaryData", FieldValue.bsonBinaryData(127, new byte[] {1, 2, 3}));
     ALL_SUPPORTED_TYPES_PROTO =
         ImmutableMap.<String, Value>builder()
             .put("foo", Value.newBuilder().setStringValue("bar").build())
@@ -1161,6 +1184,100 @@ public final class LocalFirestoreHelper {
                                                 .addValues(Value.newBuilder().setDoubleValue(0.2))
                                                 .addValues(Value.newBuilder().setDoubleValue(0.3)))
                                         .build())))
+                    .build())
+            .put(
+                "minKey",
+                Value.newBuilder()
+                    .setMapValue(
+                        MapValue.newBuilder()
+                            .putAllFields(
+                                map(
+                                    "__min__",
+                                    Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build()))
+                            .build())
+                    .build())
+            .put(
+                "maxKey",
+                Value.newBuilder()
+                    .setMapValue(
+                        MapValue.newBuilder()
+                            .putAllFields(
+                                map(
+                                    "__max__",
+                                    Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build()))
+                            .build())
+                    .build())
+            .put(
+                "regexValue",
+                Value.newBuilder()
+                    .setMapValue(
+                        MapValue.newBuilder()
+                            .putFields(
+                                "__regex__",
+                                Value.newBuilder()
+                                    .setMapValue(
+                                        MapValue.newBuilder()
+                                            .putFields(
+                                                "pattern",
+                                                Value.newBuilder().setStringValue("^foo").build())
+                                            .putFields(
+                                                "options",
+                                                Value.newBuilder().setStringValue("i").build())
+                                            .build())
+                                    .build())
+                            .build())
+                    .build())
+            .put(
+                "int32Value",
+                Value.newBuilder()
+                    .setMapValue(
+                        MapValue.newBuilder()
+                            .putFields("__int__", Value.newBuilder().setIntegerValue(55).build())
+                            .build())
+                    .build())
+            .put(
+                "bsonObjectId",
+                Value.newBuilder()
+                    .setMapValue(
+                        MapValue.newBuilder()
+                            .putFields(
+                                "__oid__",
+                                Value.newBuilder()
+                                    .setStringValue("507f191e810c19729de860eb")
+                                    .build())
+                            .build())
+                    .build())
+            .put(
+                "bsonTimestamp",
+                Value.newBuilder()
+                    .setMapValue(
+                        MapValue.newBuilder()
+                            .putFields(
+                                "__request_timestamp__",
+                                Value.newBuilder()
+                                    .setMapValue(
+                                        MapValue.newBuilder()
+                                            .putFields(
+                                                "seconds",
+                                                Value.newBuilder().setIntegerValue(100).build())
+                                            .putFields(
+                                                "increment",
+                                                Value.newBuilder().setIntegerValue(10).build())
+                                            .build())
+                                    .build())
+                            .build())
+                    .build())
+            .put(
+                "bsonBinaryData",
+                Value.newBuilder()
+                    .setMapValue(
+                        MapValue.newBuilder()
+                            .putFields(
+                                "__binary__",
+                                Value.newBuilder()
+                                    .setBytesValue(ByteString.copyFrom(new byte[] {127, 1, 2, 3}))
+                                    .build())
+                            .build())
                     .build())
             .put(
                 "dateValue",

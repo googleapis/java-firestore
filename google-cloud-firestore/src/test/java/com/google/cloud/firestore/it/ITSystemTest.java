@@ -1332,6 +1332,17 @@ public class ITSystemTest extends ITBaseTest {
     return randomDoc.get().get().getData();
   }
 
+  private <T> void checkRoundTrip(T value) throws Exception {
+    randomDoc.set(Collections.singletonMap("key", value)).get();
+    DocumentSnapshot snapshot = randomDoc.get().get();
+    Object fieldValue = snapshot.get("key");
+    if (!value.getClass().isInstance(fieldValue)) {
+      throw new RuntimeException("Error: round trip value has a different type.");
+    }
+    T roundtripValue = (T) fieldValue;
+    assertThat(value).isEqualTo(roundtripValue);
+  }
+
   @Test
   public void writeAndReadVectorEmbeddings() throws ExecutionException, InterruptedException {
     Map<String, VectorValue> expected = new HashMap<>();
@@ -2310,5 +2321,94 @@ public class ITSystemTest extends ITBaseTest {
     assertThrows(
         FirestoreException.class,
         () -> collection.document().listCollections().iterator().hasNext());
+  }
+
+  // Tests for non-native Firestore types.
+
+  @Test
+  public void canWriteAndReadBackMinKey() throws Exception {
+    checkRoundTrip(FieldValue.minKey());
+  }
+
+  @Test
+  public void canWriteAndReadBackMaxKey() throws Exception {
+    checkRoundTrip(FieldValue.maxKey());
+  }
+
+  @Test
+  public void canWriteAndReadBackRegex() throws Exception {
+    checkRoundTrip(FieldValue.regex("^foo", "i"));
+  }
+
+  @Test
+  public void canWriteAndReadBackInt32() throws Exception {
+    checkRoundTrip(FieldValue.int32(-57));
+    checkRoundTrip(FieldValue.int32(0));
+    checkRoundTrip(FieldValue.int32(57));
+  }
+
+  @Test
+  public void canWriteAndReadBackBsonObjectId() throws Exception {
+    checkRoundTrip(FieldValue.bsonObjectId("507f191e810c19729de860ea"));
+  }
+
+  @Test
+  public void canWriteAndReadBackBsonTimestampValue() throws Exception {
+    checkRoundTrip(FieldValue.bsonTimestamp(123, 45));
+  }
+
+  @Test
+  public void canWriteAndReadBackBsonBinaryData() throws Exception {
+    checkRoundTrip(FieldValue.bsonBinaryData(127, new byte[] {1, 2, 3}));
+  }
+
+  @Test
+  public void invalidRegexGetsRejected() throws Exception {
+    Exception error = null;
+    try {
+      randomColl
+          .document()
+          .set(Collections.singletonMap("key", FieldValue.regex("foo", "a")))
+          .get();
+    } catch (Exception e) {
+      error = e;
+    }
+    assertThat(error).isNotNull();
+    assertThat(error.getMessage())
+        .contains("Invalid regex option 'a'. Supported options are 'i', 'm', 's', 'u', and 'x'");
+  }
+
+  @Test
+  public void invalidBsonObjectIdGetsRejected() throws Exception {
+    Exception error = null;
+    try {
+      randomColl
+          .document()
+          .set(Collections.singletonMap("key", FieldValue.bsonObjectId("foobar")))
+          .get();
+    } catch (Exception e) {
+      error = e;
+    }
+    assertThat(error).isNotNull();
+    assertThat(error.getMessage()).contains("Object ID hex string has incorrect length.");
+  }
+
+  @Test
+  public void invalidBsonBinaryDataGetsRejected() throws Exception {
+    Exception error = null;
+    try {
+      randomColl
+          .document()
+          .set(
+              Collections.singletonMap(
+                  "key", FieldValue.bsonBinaryData(1234, new byte[] {1, 2, 3})))
+          .get();
+    } catch (Exception e) {
+      error = e;
+    }
+    assertThat(error).isNotNull();
+    assertThat(error.getMessage())
+        .contains(
+            "The subtype for BsonBinaryData must be a value in the inclusive [0, 255] range.");
   }
 }

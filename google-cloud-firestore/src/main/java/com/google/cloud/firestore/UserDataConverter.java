@@ -24,6 +24,7 @@ import com.google.common.primitives.Doubles;
 import com.google.firestore.v1.ArrayValue;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.NullValue;
 import com.google.protobuf.Struct;
 import java.util.ArrayList;
@@ -189,6 +190,27 @@ class UserDataConverter {
     } else if (sanitizedObject instanceof VectorValue) {
       VectorValue vectorValue = (VectorValue) sanitizedObject;
       return Value.newBuilder().setMapValue(vectorValue.toProto()).build();
+    } else if (sanitizedObject instanceof MinKey) {
+      MinKey minKey = (MinKey) sanitizedObject;
+      return Value.newBuilder().setMapValue(minKey.toProto()).build();
+    } else if (sanitizedObject instanceof MaxKey) {
+      MaxKey maxKey = (MaxKey) sanitizedObject;
+      return Value.newBuilder().setMapValue(maxKey.toProto()).build();
+    } else if (sanitizedObject instanceof RegexValue) {
+      RegexValue regexValue = (RegexValue) sanitizedObject;
+      return Value.newBuilder().setMapValue(regexValue.toProto()).build();
+    } else if (sanitizedObject instanceof Int32Value) {
+      Int32Value int32Value = (Int32Value) sanitizedObject;
+      return Value.newBuilder().setMapValue(int32Value.toProto()).build();
+    } else if (sanitizedObject instanceof BsonObjectId) {
+      BsonObjectId bsonObjectId = (BsonObjectId) sanitizedObject;
+      return Value.newBuilder().setMapValue(bsonObjectId.toProto()).build();
+    } else if (sanitizedObject instanceof BsonTimestamp) {
+      BsonTimestamp bsonTimestamp = (BsonTimestamp) sanitizedObject;
+      return Value.newBuilder().setMapValue(bsonTimestamp.toProto()).build();
+    } else if (sanitizedObject instanceof BsonBinaryData) {
+      BsonBinaryData bsonBinaryData = (BsonBinaryData) sanitizedObject;
+      return Value.newBuilder().setMapValue(bsonBinaryData.toProto()).build();
     }
 
     throw FirestoreException.forInvalidArgument(
@@ -212,6 +234,78 @@ class UserDataConverter {
             ARGUMENT));
 
     return res.build();
+  }
+
+  static MapValue encodeMinKey() {
+    return MapValue.newBuilder()
+        .putFields(
+            MapType.RESERVED_MIN_KEY, Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build())
+        .build();
+  }
+
+  static MapValue encodeMaxKey() {
+    return MapValue.newBuilder()
+        .putFields(
+            MapType.RESERVED_MAX_KEY, Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build())
+        .build();
+  }
+
+  static MapValue encodeRegexValue(String pattern, String options) {
+    return MapValue.newBuilder()
+        .putFields(
+            MapType.RESERVED_REGEX_KEY,
+            Value.newBuilder()
+                .setMapValue(
+                    MapValue.newBuilder()
+                        .putFields(
+                            MapType.RESERVED_REGEX_PATTERN_KEY,
+                            Value.newBuilder().setStringValue(pattern).build())
+                        .putFields(
+                            MapType.RESERVED_REGEX_OPTIONS_KEY,
+                            Value.newBuilder().setStringValue(options).build())
+                        .build())
+                .build())
+        .build();
+  }
+
+  static MapValue encodeInt32Value(int value) {
+    return MapValue.newBuilder()
+        .putFields(MapType.RESERVED_INT32_KEY, Value.newBuilder().setIntegerValue(value).build())
+        .build();
+  }
+
+  static MapValue encodeBsonBinaryData(int subtype, ByteString data) {
+    return MapValue.newBuilder()
+        .putFields(
+            MapType.RESERVED_BSON_BINARY_KEY,
+            Value.newBuilder()
+                .setBytesValue(ByteString.copyFrom(new byte[] {(byte) subtype}).concat(data))
+                .build())
+        .build();
+  }
+
+  static MapValue encodeBsonObjectId(String oid) {
+    return MapValue.newBuilder()
+        .putFields(MapType.RESERVED_OBJECT_ID_KEY, Value.newBuilder().setStringValue(oid).build())
+        .build();
+  }
+
+  static MapValue encodeBsonTimestampValue(long seconds, long increment) {
+    return MapValue.newBuilder()
+        .putFields(
+            MapType.RESERVED_BSON_TIMESTAMP_KEY,
+            Value.newBuilder()
+                .setMapValue(
+                    MapValue.newBuilder()
+                        .putFields(
+                            MapType.RESERVED_BSON_TIMESTAMP_SECONDS_KEY,
+                            Value.newBuilder().setIntegerValue(seconds).build())
+                        .putFields(
+                            MapType.RESERVED_BSON_TIMESTAMP_INCREMENT_KEY,
+                            Value.newBuilder().setIntegerValue(increment).build())
+                        .build())
+                .build())
+        .build();
   }
 
   static Object decodeValue(FirestoreRpcContext<?> rpcContext, Value v) {
@@ -252,6 +346,60 @@ class UserDataConverter {
     }
   }
 
+  /** Decodes the given MapValue into a Regex. Assumes the given map is a regex. */
+  static RegexValue decodeRegexValue(MapValue mapValue) {
+    Map<String, Value> regexMap =
+        mapValue.getFieldsMap().get(MapType.RESERVED_REGEX_KEY).getMapValue().getFieldsMap();
+    String pattern = regexMap.get(MapType.RESERVED_REGEX_PATTERN_KEY).getStringValue();
+    String options = regexMap.get(MapType.RESERVED_REGEX_OPTIONS_KEY).getStringValue();
+    return new RegexValue(pattern, options);
+  }
+
+  /** Decodes the given MapValue into a BsonObjectId. Assumes the given map is a BSON object ID. */
+  static BsonObjectId decodeBsonObjectId(MapValue mapValue) {
+    return new BsonObjectId(
+        mapValue.getFieldsMap().get(MapType.RESERVED_OBJECT_ID_KEY).getStringValue());
+  }
+
+  /** Decodes the given MapValue into a BsonObjectId. Assumes the given map is a BSON object ID. */
+  static BsonTimestamp decodeBsonTimestamp(MapValue mapValue) {
+    Map<String, Value> timestampMap =
+        mapValue
+            .getFieldsMap()
+            .get(MapType.RESERVED_BSON_TIMESTAMP_KEY)
+            .getMapValue()
+            .getFieldsMap();
+    long seconds = timestampMap.get(MapType.RESERVED_BSON_TIMESTAMP_SECONDS_KEY).getIntegerValue();
+    long increment =
+        timestampMap.get(MapType.RESERVED_BSON_TIMESTAMP_INCREMENT_KEY).getIntegerValue();
+    return new BsonTimestamp(seconds, increment);
+  }
+
+  /** Decodes the given MapValue into a BsonBinaryData. Assumes the given map is a BSON binary. */
+  static BsonBinaryData decodeBsonBinary(MapValue mapValue) {
+    ByteString bytes =
+        mapValue.getFieldsMap().get(MapType.RESERVED_BSON_BINARY_KEY).getBytesValue();
+    // Note: A byte is interpreted as a signed 8-bit value. Since values larger than 127 have a
+    // leading '1' bit, simply casting them to integer results in sign-extension and lead to a
+    // negative integer value. For example, the byte `0x80` casted to `int` results in `-128`,
+    // rather than `128`, and the byte `0xFF` casted to `int` will be `-1` rather than `255`.
+    // Since we want the `subtype` to be an unsigned byte, we need to perform 0-extension (rather
+    // than sign-extension) to convert it to an int.
+    int subtype = bytes.byteAt(0) & 0xFF;
+    return BsonBinaryData.fromByteString(subtype, bytes.substring(1));
+  }
+
+  /**
+   * Decodes the given MapValue into an Int32Value. Assumes the given map is a 32-bit integer value.
+   */
+  static Int32Value decodeInt32Value(MapValue mapValue) {
+    // The "integer_value" in the proto is a 64-bit integer, but since this
+    // value is in a special map with the "__int__" field, we know we can
+    // safely cast this value down to a 32-bit integer value.
+    long value = mapValue.getFieldsMap().get(MapType.RESERVED_INT32_KEY).getIntegerValue();
+    return new Int32Value((int) value);
+  }
+
   static Object decodeMap(FirestoreRpcContext<?> rpcContext, MapValue mapValue) {
     MapRepresentation mapRepresentation = detectMapRepresentation(mapValue);
     Map<String, Value> inputMap = mapValue.getFieldsMap();
@@ -271,6 +419,20 @@ class UserDataConverter {
                 .mapToDouble(val -> val.getDoubleValue())
                 .toArray();
         return new VectorValue(values);
+      case MIN_KEY:
+        return MinKey.instance();
+      case MAX_KEY:
+        return MaxKey.instance();
+      case REGEX:
+        return decodeRegexValue(mapValue);
+      case INT32:
+        return decodeInt32Value(mapValue);
+      case BSON_OBJECT_ID:
+        return decodeBsonObjectId(mapValue);
+      case BSON_TIMESTAMP:
+        return decodeBsonTimestamp(mapValue);
+      case BSON_BINARY_DATA:
+        return decodeBsonBinary(mapValue);
       default:
         throw FirestoreException.forInvalidArgument(
             String.format("Unsupported MapRepresentation: %s", mapRepresentation));
@@ -284,31 +446,61 @@ class UserDataConverter {
     /** The MapValue does not represent any special data type. */
     NONE,
     /** The MapValue represents a VectorValue. */
-    VECTOR_VALUE
+    VECTOR_VALUE,
+    /** The MapValue represents a MinKey. */
+    MIN_KEY,
+    /** The MapValue represents a MaxKey. */
+    MAX_KEY,
+    /** The MapValue represents a regular expression. */
+    REGEX,
+    /** The MapValue represents a 32-bit integer. */
+    INT32,
+    /** The MapValue represents a BSON ObjectId. */
+    BSON_OBJECT_ID,
+    /** The MapValue represents a BSON Timestamp. */
+    BSON_TIMESTAMP,
+    /** The MapValue represents a BSON Binary Data. */
+    BSON_BINARY_DATA,
   }
 
   static MapRepresentation detectMapRepresentation(MapValue mapValue) {
     Map<String, Value> fields = mapValue.getFieldsMap();
-    if (!fields.containsKey(MapType.RESERVED_MAP_KEY)) {
+
+    if (fields.containsKey(MapType.RESERVED_MIN_KEY)) {
+      return MapRepresentation.MIN_KEY;
+    } else if (fields.containsKey(MapType.RESERVED_MAX_KEY)) {
+      return MapRepresentation.MAX_KEY;
+    } else if (fields.containsKey(MapType.RESERVED_REGEX_KEY)) {
+      return MapRepresentation.REGEX;
+    } else if (fields.containsKey(MapType.RESERVED_INT32_KEY)) {
+      return MapRepresentation.INT32;
+    } else if (fields.containsKey(MapType.RESERVED_BSON_BINARY_KEY)) {
+      return MapRepresentation.BSON_BINARY_DATA;
+    } else if (fields.containsKey(MapType.RESERVED_OBJECT_ID_KEY)) {
+      return MapRepresentation.BSON_OBJECT_ID;
+    } else if (fields.containsKey(MapType.RESERVED_BSON_TIMESTAMP_KEY)) {
+      return MapRepresentation.BSON_TIMESTAMP;
+    } else if (fields.containsKey(MapType.RESERVED_MAP_KEY)) { // Vector
+      Value typeValue = fields.get(MapType.RESERVED_MAP_KEY);
+      if (typeValue.getValueTypeCase() != Value.ValueTypeCase.STRING_VALUE) {
+        LOGGER.warning(
+            "Unable to parse __type__ field of map. Unsupported value type: "
+                + typeValue.getValueTypeCase().toString());
+        return MapRepresentation.UNKNOWN;
+      }
+
+      String typeString = typeValue.getStringValue();
+
+      if (typeString.equals(MapType.RESERVED_MAP_KEY_VECTOR_VALUE)) {
+        return MapRepresentation.VECTOR_VALUE;
+      }
+
+      LOGGER.warning("Unsupported __type__ value for map: " + typeString);
+      return MapRepresentation.UNKNOWN;
+    } else {
+      // Regular map.
       return MapRepresentation.NONE;
     }
-
-    Value typeValue = fields.get(MapType.RESERVED_MAP_KEY);
-    if (typeValue.getValueTypeCase() != Value.ValueTypeCase.STRING_VALUE) {
-      LOGGER.warning(
-          "Unable to parse __type__ field of map. Unsupported value type: "
-              + typeValue.getValueTypeCase().toString());
-      return MapRepresentation.UNKNOWN;
-    }
-
-    String typeString = typeValue.getStringValue();
-
-    if (typeString.equals(MapType.RESERVED_MAP_KEY_VECTOR_VALUE)) {
-      return MapRepresentation.VECTOR_VALUE;
-    }
-
-    LOGGER.warning("Unsupported __type__ value for map: " + typeString);
-    return MapRepresentation.UNKNOWN;
   }
 
   static Object decodeGoogleProtobufValue(com.google.protobuf.Value v) {
