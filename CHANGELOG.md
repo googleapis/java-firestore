@@ -1,5 +1,36 @@
 # Changelog
 
+## [3.30.11](https://github.com/googleapis/java-firestore/compare/v3.30.10...v3.30.11) (2025-03-20)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.55.1 ([3348504](https://github.com/googleapis/java-firestore/commit/3348504313bef2ec34cc1f7a00eaf5a23fd8debc))
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.60.0 ([#2049](https://github.com/googleapis/java-firestore/issues/2049)) ([f68462c](https://github.com/googleapis/java-firestore/commit/f68462c815e7d08bccaa0a750e07919218cc6569))
+* Update dependency com.google.cloud:google-cloud-trace to v2.60.0 ([#2050](https://github.com/googleapis/java-firestore/issues/2050)) ([39111f5](https://github.com/googleapis/java-firestore/commit/39111f594351b6488a770e086d95b236f5d959d6))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.45.1 ([#2038](https://github.com/googleapis/java-firestore/issues/2038)) ([bbe6623](https://github.com/googleapis/java-firestore/commit/bbe66239b08bb7900774963c7a187b3d8d781614))
+* Update dependency node to v22 ([#2037](https://github.com/googleapis/java-firestore/issues/2037)) ([315987f](https://github.com/googleapis/java-firestore/commit/315987f5e5fcbd75fd29e670b7bca54e35381d27))
+* Update googleapis/sdk-platform-java action to v2.55.0 ([#2039](https://github.com/googleapis/java-firestore/issues/2039)) ([093850a](https://github.com/googleapis/java-firestore/commit/093850af5ff9713e9a425ed6c3abf834717670b3))
+* Update googleapis/sdk-platform-java action to v2.55.1 ([#2043](https://github.com/googleapis/java-firestore/issues/2043)) ([40973f2](https://github.com/googleapis/java-firestore/commit/40973f22576e57e9c5296b0526b4ed2b2693a2e1))
+* Update opentelemetry.version to v1.48.0 ([#2036](https://github.com/googleapis/java-firestore/issues/2036)) ([3a35489](https://github.com/googleapis/java-firestore/commit/3a354896e76bf459730b4d686b7c49ae3a88bd11))
+
+## [3.30.10](https://github.com/googleapis/java-firestore/compare/v3.30.9...v3.30.10) (2025-03-06)
+
+
+### Bug Fixes
+
+* Use lazy encoding in UTF-8 encoded string comparison ([#2021](https://github.com/googleapis/java-firestore/issues/2021)) ([11a4c74](https://github.com/googleapis/java-firestore/commit/11a4c743beddbc7415ef0157bbc4f545a27509f7))
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.59.0 ([#2030](https://github.com/googleapis/java-firestore/issues/2030)) ([38d80ac](https://github.com/googleapis/java-firestore/commit/38d80ac587351c2c675e669f126a7825bba7235c))
+* Update dependency com.google.cloud:google-cloud-trace to v2.59.0 ([#2031](https://github.com/googleapis/java-firestore/issues/2031)) ([73a68a6](https://github.com/googleapis/java-firestore/commit/73a68a69e156cff1bf1ca6652ddd6e8dc58cf3f3))
+
 ## [3.30.9](https://github.com/googleapis/java-firestore/compare/v3.30.8...v3.30.9) (2025-02-26)
 
 
