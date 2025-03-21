@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 # This script should be run at the root of the repository.
 # This script is used to update googleapis_commitish, gapic_generator_version,
 # and libraries_bom_version in generation configuration at the time of running
@@ -107,6 +107,7 @@ if [ -z "${pr_num}" ]; then
   git push -u origin "${current_branch}"
 else
   gh pr checkout "${pr_num}"
+  git pull
 fi
 
 # Only allow fast-forward merging; exit with non-zero result if there's merging
