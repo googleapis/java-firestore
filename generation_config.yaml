@@ -3,7 +3,7 @@ googleapis_commitish: 985a0b98f96b47da45882877259265c2fcb31ff5
 libraries_bom_version: 26.56.0
 libraries:
   - api_shortname: firestore
-    name_pretty: Cloud Firestore
+    name_pretty: Cloud Firestore test
     product_documentation: https://cloud.google.com/firestore
     client_documentation: https://cloud.google.com/java/docs/reference/google-cloud-firestore/latest/history
     issue_tracker: https://issuetracker.google.com/savedsearches/5337669
