@@ -59,8 +59,7 @@ public class FirestoreOpenTelemetryOptions {
     @Nullable private OpenTelemetry openTelemetry;
 
     private Builder() {
-      // TODO(metrics): default this to true when feature is ready
-      exportBuiltinMetricsToGoogleCloudMonitoring = false;
+      exportBuiltinMetricsToGoogleCloudMonitoring = true;
       openTelemetry = null;
     }
 
@@ -75,7 +74,6 @@ public class FirestoreOpenTelemetryOptions {
       return new FirestoreOpenTelemetryOptions(this);
     }
 
-    // TODO(metrics): make this public when feature is ready.
     /**
      * Sets whether built-in metrics should be exported to Google Cloud Monitoring
      *
@@ -83,7 +81,7 @@ public class FirestoreOpenTelemetryOptions {
      *     Monitoring.
      */
     @Nonnull
-    private FirestoreOpenTelemetryOptions.Builder exportBuiltinMetricsToGoogleCloudMonitoring(
+    public FirestoreOpenTelemetryOptions.Builder exportBuiltinMetricsToGoogleCloudMonitoring(
         boolean exportBuiltinMetrics) {
       this.exportBuiltinMetricsToGoogleCloudMonitoring = exportBuiltinMetrics;
       return this;

@@ -35,24 +35,19 @@ public interface TelemetryConstants {
   String METHOD_NAME_COL_REF_ADD = "CollectionReference.Add";
   String METHOD_NAME_COL_REF_LIST_DOCUMENTS = "CollectionReference.ListDocuments";
   String METHOD_NAME_QUERY_GET = "Query.Get";
+  String METHOD_NAME_QUERY_EXPLAIN = "Query.Explain";
   String METHOD_NAME_AGGREGATION_QUERY_GET = "AggregationQuery.Get";
+  String METHOD_NAME_AGGREGATION_QUERY_EXPLAIN = "AggregationQuery.Explain";
   String METHOD_NAME_RUN_QUERY = "RunQuery";
-  String METHOD_NAME_RUN_QUERY_EXPLAIN = "RunQuery.Explain";
-  String METHOD_NAME_RUN_QUERY_GET = "RunQuery.Get";
-  String METHOD_NAME_RUN_QUERY_TRANSACTIONAL = "RunQuery.Transactional";
   String METHOD_NAME_RUN_AGGREGATION_QUERY = "RunAggregationQuery";
-  String METHOD_NAME_RUN_AGGREGATION_QUERY_EXPLAIN = "RunAggregationQuery.Explain";
-  String METHOD_NAME_RUN_AGGREGATION_QUERY_GET = "RunAggregationQuery.Get";
-  String METHOD_NAME_RUN_AGGREGATION_QUERY_TRANSACTIONAL = "RunAggregationQuery.Transactional";
   String METHOD_NAME_BATCH_GET_DOCUMENTS = "BatchGetDocuments";
-  String METHOD_NAME_BATCH_GET_DOCUMENTS_GET_ALL = "BatchGetDocuments.GetAll";
-  String METHOD_NAME_BATCH_GET_DOCUMENTS_TRANSACTIONAL = "BatchGetDocuments.Transactional";
   String METHOD_NAME_TRANSACTION_RUN = "Transaction.Run";
   String METHOD_NAME_TRANSACTION_BEGIN = "Transaction.Begin";
   String METHOD_NAME_TRANSACTION_GET_QUERY = "Transaction.Get.Query";
   String METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY = "Transaction.Get.AggregationQuery";
   String METHOD_NAME_TRANSACTION_GET_DOCUMENT = "Transaction.Get.Document";
   String METHOD_NAME_TRANSACTION_GET_DOCUMENTS = "Transaction.Get.Documents";
+  String METHOD_NAME_TRANSACTION_BATCH_GET_DOCUMENTS = "Transaction.BatchGetDocuments";
   String METHOD_NAME_TRANSACTION_ROLLBACK = "Transaction.Rollback";
   String METHOD_NAME_BATCH_COMMIT = "Batch.Commit";
   String METHOD_NAME_TRANSACTION_COMMIT = "Transaction.Commit";
@@ -66,6 +61,7 @@ public interface TelemetryConstants {
   String METRIC_PREFIX = "custom.googleapis.com/internal/client";
   String FIRESTORE_METER_NAME = "java_firestore";
   String GAX_METER_NAME = OpenTelemetryMetricsRecorder.GAX_METER_NAME;
+  String FIRESTORE_LIBRARY_NAME = "com.google.cloud.firestore";
 
   // Monitored resource keys for labels
   String RESOURCE_KEY_RESOURCE_CONTAINER = "resource_container";
