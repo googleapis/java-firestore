@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 /** Represents a BSON ObjectId type in Firestore documents. */
 public class BsonObjectId implements Serializable {
   private static final long serialVersionUID = 430753173775328933L;
-  public final String value;
+  @Nonnull public final String value;
 
   /**
    * Constructor that creates a new BSON ObjectId value with the given value.
@@ -65,6 +65,6 @@ public class BsonObjectId implements Serializable {
   @Nonnull
   @Override
   public String toString() {
-    return "BsonObjectId { value=" + this.value + " }";
+    return "BsonObjectId{value=" + this.value + "}";
   }
 }

@@ -65,8 +65,7 @@ public class BsonTimestamp implements Serializable {
       return false;
     }
     BsonTimestamp other = (BsonTimestamp) obj;
-    return Objects.equals(this.seconds, other.seconds)
-        && Objects.equals(this.increment, other.increment);
+    return this.seconds == other.seconds && this.increment == other.increment;
   }
 
   @Override
@@ -77,6 +76,6 @@ public class BsonTimestamp implements Serializable {
   @Nonnull
   @Override
   public String toString() {
-    return "BsonTimestamp { seconds=" + this.seconds + ", increment=" + this.increment + " }";
+    return "BsonTimestamp{seconds=" + this.seconds + ", increment=" + this.increment + "}";
   }
 }

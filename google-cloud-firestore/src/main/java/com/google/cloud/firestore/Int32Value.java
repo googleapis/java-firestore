@@ -56,6 +56,6 @@ public class Int32Value implements Serializable {
   @Nonnull
   @Override
   public String toString() {
-    return "Int32Value { value=" + this.value + " }";
+    return "Int32Value{value=" + this.value + "}";
   }
 }

@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 public class BsonBinaryData implements Serializable {
   private static final long serialVersionUID = 1830984831902814656L;
   private final int subtype;
-  private final ByteString data;
+  @Nonnull private final ByteString data;
 
   private BsonBinaryData(int subtype, @Nonnull ByteString data) {
     // By definition the subtype should be 1 byte and should therefore
@@ -108,7 +108,7 @@ public class BsonBinaryData implements Serializable {
       return false;
     }
     BsonBinaryData other = (BsonBinaryData) obj;
-    return Objects.equals(this.subtype, other.subtype) && Objects.equals(this.data, other.data);
+    return this.subtype == other.subtype && Objects.equals(this.data, other.data);
   }
 
   @Override
@@ -119,7 +119,7 @@ public class BsonBinaryData implements Serializable {
   @Nonnull
   @Override
   public String toString() {
-    return "BsonBinaryData { subtype=" + this.subtype + ", data=" + this.data.toString() + " }";
+    return "BsonBinaryData{subtype=" + this.subtype + ", data=" + this.data.toString() + " }";
   }
 
   MapValue toProto() {

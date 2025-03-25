@@ -28,7 +28,7 @@ public class RegexValue implements Serializable {
   public final String pattern;
   public final String options;
 
-  public RegexValue(String pattern, String options) {
+  public RegexValue(@Nonnull String pattern, @Nonnull String options) {
     this.pattern = pattern;
     this.options = options;
   }
@@ -63,6 +63,6 @@ public class RegexValue implements Serializable {
   @Nonnull
   @Override
   public String toString() {
-    return "RegexValue { pattern=" + this.pattern + ", options=" + this.options + " }";
+    return "RegexValue{pattern=" + this.pattern + ", options=" + this.options + "}";
   }
 }

@@ -28,6 +28,7 @@ public class MaxKey implements Serializable {
 
   private MaxKey() {}
 
+  @Nonnull
   public static MaxKey instance() {
     return INSTANCE;
   }
@@ -44,10 +45,7 @@ public class MaxKey implements Serializable {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    return obj != null && getClass() == obj.getClass();
+    return this == obj;
   }
 
   @Override

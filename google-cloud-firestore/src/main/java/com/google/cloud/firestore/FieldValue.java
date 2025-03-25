@@ -359,7 +359,7 @@ public abstract class FieldValue {
    * @return A new {@link RegexValue} constructed using the given pattern and options.
    */
   @Nonnull
-  public static RegexValue regex(String pattern, String options) {
+  public static RegexValue regex(@Nonnull String pattern, @Nonnull String options) {
     return new RegexValue(pattern, options);
   }
 
@@ -393,7 +393,7 @@ public abstract class FieldValue {
    * @return A new {@link BsonObjectId} constructed using the given value.
    */
   @Nonnull
-  public static BsonObjectId bsonObjectId(String oid) {
+  public static BsonObjectId bsonObjectId(@Nonnull String oid) {
     return new BsonObjectId(oid);
   }
 

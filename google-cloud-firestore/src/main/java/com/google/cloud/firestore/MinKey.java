@@ -28,6 +28,7 @@ public class MinKey implements Serializable {
 
   private MinKey() {}
 
+  @Nonnull
   public static MinKey instance() {
     return INSTANCE;
   }
@@ -44,10 +45,7 @@ public class MinKey implements Serializable {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    return obj != null && getClass() == obj.getClass();
+    return this == obj;
   }
 
   @Override
