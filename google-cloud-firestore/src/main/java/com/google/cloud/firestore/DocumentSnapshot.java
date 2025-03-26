@@ -459,14 +459,14 @@ public class DocumentSnapshot {
   }
 
   /**
-   * Returns the value of the field as a BsonTimestampValue.
+   * Returns the value of the field as a BsonTimestamp.
    *
    * @param field The path to the field.
-   * @throws RuntimeException if the value is not a BsonTimestampValue.
+   * @throws RuntimeException if the value is not a BsonTimestamp.
    * @return The value of the field.
    */
   @Nullable
-  public BsonTimestamp getBsonTimestampValue(@Nonnull String field) {
+  public BsonTimestamp getBsonTimestamp(@Nonnull String field) {
     return (BsonTimestamp) get(field);
   }
 

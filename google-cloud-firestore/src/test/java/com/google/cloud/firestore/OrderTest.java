@@ -157,6 +157,8 @@ public class OrderTest {
     groups.add(new Value[] {objectValue("bar", intValue(2))});
     groups.add(new Value[] {objectValue("bar", stringValue("0"))});
 
+    groups.add(new Value[] {maxKeyValue(), maxKeyValue()});
+
     for (int left = 0; left < groups.size(); left++) {
       for (int right = 0; right < groups.size(); right++) {
         for (int i = 0; i < groups.get(left).length; i++) {

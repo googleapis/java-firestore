@@ -47,14 +47,14 @@ public class BsonTimestamp implements Serializable {
   }
 
   MapValue toProto() {
-    return UserDataConverter.encodeBsonTimestampValue(seconds, increment);
+    return UserDataConverter.encodeBsonTimestamp(seconds, increment);
   }
 
   /**
-   * Returns true if this BsonTimestampValue is equal to the provided object.
+   * Returns true if this BsonTimestamp is equal to the provided object.
    *
    * @param obj The object to compare against.
-   * @return Whether this BsonTimestampValue is equal to the provided object.
+   * @return Whether this BsonTimestamp is equal to the provided object.
    */
   @Override
   public boolean equals(Object obj) {

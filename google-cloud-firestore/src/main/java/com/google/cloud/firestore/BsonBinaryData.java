@@ -119,7 +119,7 @@ public class BsonBinaryData implements Serializable {
   @Nonnull
   @Override
   public String toString() {
-    return "BsonBinaryData{subtype=" + this.subtype + ", data=" + this.data.toString() + " }";
+    return "BsonBinaryData{subtype=" + this.subtype + ", data=" + this.data.toString() + "}";
   }
 
   MapValue toProto() {

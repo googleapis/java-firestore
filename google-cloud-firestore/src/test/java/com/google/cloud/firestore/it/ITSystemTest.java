@@ -2353,7 +2353,7 @@ public class ITSystemTest extends ITBaseTest {
   }
 
   @Test
-  public void canWriteAndReadBackBsonTimestampValue() throws Exception {
+  public void canWriteAndReadBackBsonTimestamp() throws Exception {
     checkRoundTrip(FieldValue.bsonTimestamp(123, 45));
   }
 

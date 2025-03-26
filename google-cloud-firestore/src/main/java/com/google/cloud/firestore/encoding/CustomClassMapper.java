@@ -340,7 +340,7 @@ public class CustomClassMapper {
     } else if (BsonObjectId.class.isAssignableFrom(clazz)) {
       return (T) convertBsonObjectId(o, context.errorPath);
     } else if (BsonTimestamp.class.isAssignableFrom(clazz)) {
-      return (T) convertBsonTimestampValue(o, context.errorPath);
+      return (T) convertBsonTimestamp(o, context.errorPath);
     } else if (BsonBinaryData.class.isAssignableFrom(clazz)) {
       return (T) convertBsonBinaryData(o, context.errorPath);
     } else if (DocumentReference.class.isAssignableFrom(clazz)) {
@@ -661,13 +661,13 @@ public class CustomClassMapper {
     }
   }
 
-  private static BsonTimestamp convertBsonTimestampValue(
+  private static BsonTimestamp convertBsonTimestamp(
       Object o, DeserializeContext.ErrorPath errorPath) {
     if (o instanceof BsonTimestamp) {
       return (BsonTimestamp) o;
     } else {
       throw errorPath.deserializeError(
-          "Failed to convert value of type " + o.getClass().getName() + " to BsonTimestampValue");
+          "Failed to convert value of type " + o.getClass().getName() + " to BsonTimestamp");
     }
   }
 

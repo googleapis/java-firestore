@@ -290,7 +290,7 @@ class UserDataConverter {
         .build();
   }
 
-  static MapValue encodeBsonTimestampValue(long seconds, long increment) {
+  static MapValue encodeBsonTimestamp(long seconds, long increment) {
     return MapValue.newBuilder()
         .putFields(
             MapType.RESERVED_BSON_TIMESTAMP_KEY,
