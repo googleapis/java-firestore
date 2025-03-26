@@ -1,6 +1,6 @@
-# Google Cloud Firestore Client for Java
+# Google Cloud Firestore test Client for Java
 
-Java idiomatic client for [Cloud Firestore][product-docs].
+Java idiomatic client for [Cloud Firestore test][product-docs].
 
 [![Maven][maven-version-image]][maven-version-link]
 ![Stability][stability-image]
@@ -71,14 +71,14 @@ See the [Authentication][authentication] section in the base directory's README.
 
 ## Authorization
 
-The client application making API calls must be granted [authorization scopes][auth-scopes] required for the desired Cloud Firestore APIs, and the authenticated principal must have the [IAM role(s)][predefined-iam-roles] required to access GCP resources using the Cloud Firestore API calls.
+The client application making API calls must be granted [authorization scopes][auth-scopes] required for the desired Cloud Firestore test APIs, and the authenticated principal must have the [IAM role(s)][predefined-iam-roles] required to access GCP resources using the Cloud Firestore test API calls.
 
 ## Getting Started
 
 ### Prerequisites
 
-You will need a [Google Cloud Platform Console][developer-console] project with the Cloud Firestore [API enabled][enable-api].
-You will need to [enable billing][enable-billing] to use Google Cloud Firestore.
+You will need a [Google Cloud Platform Console][developer-console] project with the Cloud Firestore test [API enabled][enable-api].
+You will need to [enable billing][enable-billing] to use Google Cloud Firestore test.
 [Follow these instructions][create-project] to get your project set up. You will also need to set up the local development environment by
 [installing the Google Cloud Command Line Interface][cloud-cli] and running the following commands in command line:
 `gcloud auth login` and `gcloud config set project [YOUR PROJECT ID]`.
@@ -88,13 +88,13 @@ You will need to [enable billing][enable-billing] to use Google Cloud Firestore.
 You'll need to obtain the `google-cloud-firestore` library.  See the [Quickstart](#quickstart) section
 to add `google-cloud-firestore` as a dependency in your code.
 
-## About Cloud Firestore
+## About Cloud Firestore test
 
 
-[Cloud Firestore][product-docs] is a fully-managed NoSQL document database for mobile, web, and server development from Firebase and Google Cloud Platform.  It's backed by a multi-region replicated database that ensures once data is committed, it's durable even in the face of unexpected disasters. Not only that, but despite being a distributed database, it's also strongly consistent and offers seamless integration with other Firebase and Google Cloud Platform products, including Google Cloud Functions.
+[Cloud Firestore test][product-docs] is a fully-managed NoSQL document database for mobile, web, and server development from Firebase and Google Cloud Platform.  It's backed by a multi-region replicated database that ensures once data is committed, it's durable even in the face of unexpected disasters. Not only that, but despite being a distributed database, it's also strongly consistent and offers seamless integration with other Firebase and Google Cloud Platform products, including Google Cloud Functions.
 
-See the [Cloud Firestore client library docs][javadocs] to learn how to
-use this Cloud Firestore Client Library.
+See the [Cloud Firestore test client library docs][javadocs] to learn how to
+use this Cloud Firestore test Client Library.
 
 
 
@@ -125,7 +125,7 @@ To get help, follow the instructions in the [shared Troubleshooting document][tr
 
 ## Transport
 
-Cloud Firestore uses gRPC for the transport layer.
+Cloud Firestore test uses gRPC for the transport layer.
 
 ## Supported Java Versions
 
