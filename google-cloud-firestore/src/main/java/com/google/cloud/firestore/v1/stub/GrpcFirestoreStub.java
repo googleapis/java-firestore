@@ -58,6 +58,7 @@ import com.google.firestore.v1.UpdateDocumentRequest;
 import com.google.firestore.v1.WriteRequest;
 import com.google.firestore.v1.WriteResponse;
 import com.google.longrunning.stub.GrpcOperationsStub;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 import io.grpc.MethodDescriptor;
 import io.grpc.protobuf.ProtoUtils;
@@ -302,6 +303,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   RequestParamsBuilder builder = RequestParamsBuilder.create();
                   builder.add("name", String.valueOf(request.getName()));
+                  builder.add("transaction", (request.hasTransaction() ? "true" : "false"));
                   return builder.build();
                 })
             .build();
@@ -313,6 +315,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                   RequestParamsBuilder builder = RequestParamsBuilder.create();
                   builder.add("collection_id", String.valueOf(request.getCollectionId()));
                   builder.add("parent", String.valueOf(request.getParent()));
+                  builder.add("transaction", (request.hasTransaction() ? "true" : "false"));
                   return builder.build();
                 })
             .build();
@@ -344,6 +347,11 @@ public class GrpcFirestoreStub extends FirestoreStub {
                     request -> {
                       RequestParamsBuilder builder = RequestParamsBuilder.create();
                       builder.add("database", String.valueOf(request.getDatabase()));
+                      builder.add(
+                          "transaction",
+                          (request.hasTransaction() || request.hasNewTransaction()
+                              ? "true"
+                              : "false"));
                       return builder.build();
                     })
                 .build();
@@ -355,6 +363,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                     request -> {
                       RequestParamsBuilder builder = RequestParamsBuilder.create();
                       builder.add("database", String.valueOf(request.getDatabase()));
+                      builder.add("transaction", "true");
                       return builder.build();
                     })
                 .build();
@@ -365,6 +374,9 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   RequestParamsBuilder builder = RequestParamsBuilder.create();
                   builder.add("database", String.valueOf(request.getDatabase()));
+                  builder.add(
+                      "transaction",
+                      (request.getTransaction().equals(ByteString.EMPTY) ? "false" : "true"));
                   return builder.build();
                 })
             .build();
@@ -375,6 +387,7 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   RequestParamsBuilder builder = RequestParamsBuilder.create();
                   builder.add("database", String.valueOf(request.getDatabase()));
+                  builder.add("transaction", "true");
                   return builder.build();
                 })
             .build();
@@ -385,6 +398,9 @@ public class GrpcFirestoreStub extends FirestoreStub {
                 request -> {
                   RequestParamsBuilder builder = RequestParamsBuilder.create();
                   builder.add("parent", String.valueOf(request.getParent()));
+                  builder.add(
+                      "transaction",
+                      (request.hasTransaction() || request.hasNewTransaction() ? "true" : "false"));
                   return builder.build();
                 })
             .build();
@@ -396,6 +412,11 @@ public class GrpcFirestoreStub extends FirestoreStub {
                     request -> {
                       RequestParamsBuilder builder = RequestParamsBuilder.create();
                       builder.add("parent", String.valueOf(request.getParent()));
+                      builder.add(
+                          "transaction",
+                          (request.hasTransaction() || request.hasNewTransaction()
+                              ? "true"
+                              : "false"));
                       return builder.build();
                     })
                 .build();
