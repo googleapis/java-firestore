@@ -1153,13 +1153,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
    */
   @Nonnull
   public Query startAt(Object... fieldValues) {
-    // TODO(b/296435819): Remove this warning message.
-    warningOnSingleDocumentReference(fieldValues);
-
-    ImmutableList<FieldOrder> fieldOrders =
-        fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
-            ? createImplicitOrderBy()
-            : options.getFieldOrders();
+    ImmutableList<FieldOrder> fieldOrders = options.getFieldOrders();
     Cursor cursor = createCursor(fieldOrders, fieldValues, true);
 
     Builder newOptions = options.toBuilder();
@@ -1248,13 +1242,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
    * @return The created Query.
    */
   public Query startAfter(Object... fieldValues) {
-    // TODO(b/296435819): Remove this warning message.
-    warningOnSingleDocumentReference(fieldValues);
-
-    ImmutableList<FieldOrder> fieldOrders =
-        fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
-            ? createImplicitOrderBy()
-            : options.getFieldOrders();
+    ImmutableList<FieldOrder> fieldOrders = options.getFieldOrders();
     Cursor cursor = createCursor(fieldOrders, fieldValues, false);
 
     Builder newOptions = options.toBuilder();
@@ -1292,13 +1280,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
    */
   @Nonnull
   public Query endBefore(Object... fieldValues) {
-    // TODO(b/296435819): Remove this warning message.
-    warningOnSingleDocumentReference(fieldValues);
-
-    ImmutableList<FieldOrder> fieldOrders =
-        fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
-            ? createImplicitOrderBy()
-            : options.getFieldOrders();
+    ImmutableList<FieldOrder> fieldOrders = options.getFieldOrders();
     Cursor cursor = createCursor(fieldOrders, fieldValues, true);
 
     Builder newOptions = options.toBuilder();
@@ -1316,29 +1298,13 @@ public class Query extends StreamableQuery<QuerySnapshot> {
    */
   @Nonnull
   public Query endAt(Object... fieldValues) {
-    // TODO(b/296435819): Remove this warning message.
-    warningOnSingleDocumentReference(fieldValues);
-
-    ImmutableList<FieldOrder> fieldOrders =
-        fieldValues.length == 1 && fieldValues[0] instanceof DocumentReference
-            ? createImplicitOrderBy()
-            : options.getFieldOrders();
+    ImmutableList<FieldOrder> fieldOrders = options.getFieldOrders();
     Cursor cursor = createCursor(fieldOrders, fieldValues, false);
 
     Builder newOptions = options.toBuilder();
     newOptions.setFieldOrders(fieldOrders);
     newOptions.setEndCursor(cursor);
     return new Query(rpcContext, newOptions.build());
-  }
-
-  private void warningOnSingleDocumentReference(Object... fieldValues) {
-    if (options.getFieldOrders().isEmpty()
-        && fieldValues.length == 1
-        && fieldValues[0] instanceof DocumentReference) {
-      LOGGER.warning(
-          "Warning: Passing DocumentReference into a cursor without orderBy clause is not an intended "
-              + "behavior. Please use DocumentSnapshot or add an explicit orderBy on document key field.");
-    }
   }
 
   /**
