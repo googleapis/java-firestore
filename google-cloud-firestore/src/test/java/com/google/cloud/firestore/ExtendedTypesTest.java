@@ -16,7 +16,11 @@
 package com.google.cloud.firestore;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import com.google.cloud.firestore.UserDataConverter.MapRepresentation;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
@@ -163,6 +167,99 @@ public class ExtendedTypesTest {
     BsonBinaryData b4 = BsonBinaryData.fromBytes(128, bytes);
     assertThat(b3.toProto()).isEqualTo(b4.toProto());
     assertThat(b3).isEqualTo(b4);
+  }
+
+  @Test
+  public void DetectsBsonTypesCorrectly() {
+    MapValue minKeyMapValue = UserDataConverter.encodeMinKey();
+    MapValue maxKeyMapValue = UserDataConverter.encodeMaxKey();
+    MapValue int32MapValue = UserDataConverter.encodeInt32Value(5);
+    MapValue regexMapValue = UserDataConverter.encodeRegexValue("^foo", "i");
+    MapValue bsonTimestamp = UserDataConverter.encodeBsonTimestamp(1, 2);
+    MapValue bsonObjectId = UserDataConverter.encodeBsonObjectId("foo");
+    MapValue bsonBinaryData1 = UserDataConverter.encodeBsonBinaryData(128, ByteString.EMPTY);
+    MapValue bsonBinaryData2 =
+        UserDataConverter.encodeBsonBinaryData(128, ByteString.fromHex("010203"));
+
+    assertTrue(UserDataConverter.isMinKey(minKeyMapValue));
+    assertFalse(UserDataConverter.isMinKey(maxKeyMapValue));
+    assertFalse(UserDataConverter.isMinKey(int32MapValue));
+    assertFalse(UserDataConverter.isMinKey(regexMapValue));
+    assertFalse(UserDataConverter.isMinKey(bsonTimestamp));
+    assertFalse(UserDataConverter.isMinKey(bsonObjectId));
+    assertFalse(UserDataConverter.isMinKey(bsonBinaryData1));
+    assertFalse(UserDataConverter.isMinKey(bsonBinaryData2));
+
+    assertFalse(UserDataConverter.isMaxKey(minKeyMapValue));
+    assertTrue(UserDataConverter.isMaxKey(maxKeyMapValue));
+    assertFalse(UserDataConverter.isMaxKey(int32MapValue));
+    assertFalse(UserDataConverter.isMaxKey(regexMapValue));
+    assertFalse(UserDataConverter.isMaxKey(bsonTimestamp));
+    assertFalse(UserDataConverter.isMaxKey(bsonObjectId));
+    assertFalse(UserDataConverter.isMaxKey(bsonBinaryData1));
+    assertFalse(UserDataConverter.isMaxKey(bsonBinaryData2));
+
+    assertFalse(UserDataConverter.isInt32Value(minKeyMapValue));
+    assertFalse(UserDataConverter.isInt32Value(maxKeyMapValue));
+    assertTrue(UserDataConverter.isInt32Value(int32MapValue));
+    assertFalse(UserDataConverter.isInt32Value(regexMapValue));
+    assertFalse(UserDataConverter.isInt32Value(bsonTimestamp));
+    assertFalse(UserDataConverter.isInt32Value(bsonObjectId));
+    assertFalse(UserDataConverter.isInt32Value(bsonBinaryData1));
+    assertFalse(UserDataConverter.isInt32Value(bsonBinaryData2));
+
+    assertFalse(UserDataConverter.isRegexValue(minKeyMapValue));
+    assertFalse(UserDataConverter.isRegexValue(maxKeyMapValue));
+    assertFalse(UserDataConverter.isRegexValue(int32MapValue));
+    assertTrue(UserDataConverter.isRegexValue(regexMapValue));
+    assertFalse(UserDataConverter.isRegexValue(bsonTimestamp));
+    assertFalse(UserDataConverter.isRegexValue(bsonObjectId));
+    assertFalse(UserDataConverter.isRegexValue(bsonBinaryData1));
+    assertFalse(UserDataConverter.isRegexValue(bsonBinaryData2));
+
+    assertFalse(UserDataConverter.isBsonTimestamp(minKeyMapValue));
+    assertFalse(UserDataConverter.isBsonTimestamp(maxKeyMapValue));
+    assertFalse(UserDataConverter.isBsonTimestamp(int32MapValue));
+    assertFalse(UserDataConverter.isBsonTimestamp(regexMapValue));
+    assertTrue(UserDataConverter.isBsonTimestamp(bsonTimestamp));
+    assertFalse(UserDataConverter.isBsonTimestamp(bsonObjectId));
+    assertFalse(UserDataConverter.isBsonTimestamp(bsonBinaryData1));
+    assertFalse(UserDataConverter.isBsonTimestamp(bsonBinaryData2));
+
+    assertFalse(UserDataConverter.isBsonObjectId(minKeyMapValue));
+    assertFalse(UserDataConverter.isBsonObjectId(maxKeyMapValue));
+    assertFalse(UserDataConverter.isBsonObjectId(int32MapValue));
+    assertFalse(UserDataConverter.isBsonObjectId(regexMapValue));
+    assertFalse(UserDataConverter.isBsonObjectId(bsonTimestamp));
+    assertTrue(UserDataConverter.isBsonObjectId(bsonObjectId));
+    assertFalse(UserDataConverter.isBsonObjectId(bsonBinaryData1));
+    assertFalse(UserDataConverter.isBsonObjectId(bsonBinaryData2));
+
+    assertFalse(UserDataConverter.isBsonBinaryData(minKeyMapValue));
+    assertFalse(UserDataConverter.isBsonBinaryData(maxKeyMapValue));
+    assertFalse(UserDataConverter.isBsonBinaryData(int32MapValue));
+    assertFalse(UserDataConverter.isBsonBinaryData(regexMapValue));
+    assertFalse(UserDataConverter.isBsonBinaryData(bsonTimestamp));
+    assertFalse(UserDataConverter.isBsonBinaryData(bsonObjectId));
+    assertTrue(UserDataConverter.isBsonBinaryData(bsonBinaryData1));
+    assertTrue(UserDataConverter.isBsonBinaryData(bsonBinaryData2));
+
+    assertEquals(
+        UserDataConverter.detectMapRepresentation(minKeyMapValue), MapRepresentation.MIN_KEY);
+    assertEquals(
+        UserDataConverter.detectMapRepresentation(maxKeyMapValue), MapRepresentation.MAX_KEY);
+    assertEquals(UserDataConverter.detectMapRepresentation(int32MapValue), MapRepresentation.INT32);
+    assertEquals(UserDataConverter.detectMapRepresentation(regexMapValue), MapRepresentation.REGEX);
+    assertEquals(
+        UserDataConverter.detectMapRepresentation(bsonTimestamp), MapRepresentation.BSON_TIMESTAMP);
+    assertEquals(
+        UserDataConverter.detectMapRepresentation(bsonObjectId), MapRepresentation.BSON_OBJECT_ID);
+    assertEquals(
+        UserDataConverter.detectMapRepresentation(bsonBinaryData1),
+        MapRepresentation.BSON_BINARY_DATA);
+    assertEquals(
+        UserDataConverter.detectMapRepresentation(bsonBinaryData2),
+        MapRepresentation.BSON_BINARY_DATA);
   }
 
   @Test

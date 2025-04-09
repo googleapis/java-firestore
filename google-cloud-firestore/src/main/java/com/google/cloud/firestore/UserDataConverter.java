@@ -463,22 +463,84 @@ class UserDataConverter {
     BSON_BINARY_DATA,
   }
 
+  static boolean isMinKey(MapValue mapValue) {
+    return mapValue.getFieldsCount() == 1
+        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_MIN_KEY)
+        && mapValue.getFieldsMap().get(MapType.RESERVED_MIN_KEY).hasNullValue();
+  }
+
+  static boolean isMaxKey(MapValue mapValue) {
+    return mapValue.getFieldsCount() == 1
+        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_MAX_KEY)
+        && mapValue.getFieldsMap().get(MapType.RESERVED_MAX_KEY).hasNullValue();
+  }
+
+  static boolean isInt32Value(MapValue mapValue) {
+    return mapValue.getFieldsCount() == 1
+        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_INT32_KEY)
+        && mapValue.getFieldsMap().get(MapType.RESERVED_INT32_KEY).hasIntegerValue();
+  }
+
+  static boolean isBsonObjectId(MapValue mapValue) {
+    return mapValue.getFieldsCount() == 1
+        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_OBJECT_ID_KEY)
+        && mapValue.getFieldsMap().get(MapType.RESERVED_OBJECT_ID_KEY).hasStringValue();
+  }
+
+  static boolean isBsonBinaryData(MapValue mapValue) {
+    return mapValue.getFieldsCount() == 1
+        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_BSON_BINARY_KEY)
+        && mapValue.getFieldsMap().get(MapType.RESERVED_BSON_BINARY_KEY).hasBytesValue();
+  }
+
+  static boolean isRegexValue(MapValue mapValue) {
+    if (mapValue.getFieldsCount() == 1
+        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_REGEX_KEY)
+        && mapValue.getFieldsMap().get(MapType.RESERVED_REGEX_KEY).hasMapValue()) {
+      MapValue innerMapValue =
+          mapValue.getFieldsMap().get(MapType.RESERVED_REGEX_KEY).getMapValue();
+      Map<String, Value> values = innerMapValue.getFieldsMap();
+      return innerMapValue.getFieldsCount() == 2
+          && values.containsKey(MapType.RESERVED_REGEX_PATTERN_KEY)
+          && values.containsKey(MapType.RESERVED_REGEX_OPTIONS_KEY)
+          && values.get(MapType.RESERVED_REGEX_PATTERN_KEY).hasStringValue()
+          && values.get(MapType.RESERVED_REGEX_OPTIONS_KEY).hasStringValue();
+    }
+    return false;
+  }
+
+  static boolean isBsonTimestamp(MapValue mapValue) {
+    if (mapValue.getFieldsCount() == 1
+        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_BSON_TIMESTAMP_KEY)
+        && mapValue.getFieldsMap().get(MapType.RESERVED_BSON_TIMESTAMP_KEY).hasMapValue()) {
+      MapValue innerMapValue =
+          mapValue.getFieldsMap().get(MapType.RESERVED_BSON_TIMESTAMP_KEY).getMapValue();
+      Map<String, Value> values = innerMapValue.getFieldsMap();
+      return innerMapValue.getFieldsCount() == 2
+          && values.containsKey(MapType.RESERVED_BSON_TIMESTAMP_SECONDS_KEY)
+          && values.containsKey(MapType.RESERVED_BSON_TIMESTAMP_INCREMENT_KEY)
+          && values.get(MapType.RESERVED_BSON_TIMESTAMP_SECONDS_KEY).hasIntegerValue()
+          && values.get(MapType.RESERVED_BSON_TIMESTAMP_INCREMENT_KEY).hasIntegerValue();
+    }
+    return false;
+  }
+
   static MapRepresentation detectMapRepresentation(MapValue mapValue) {
     Map<String, Value> fields = mapValue.getFieldsMap();
 
-    if (fields.containsKey(MapType.RESERVED_MIN_KEY)) {
+    if (isMinKey(mapValue)) {
       return MapRepresentation.MIN_KEY;
-    } else if (fields.containsKey(MapType.RESERVED_MAX_KEY)) {
+    } else if (isMaxKey(mapValue)) {
       return MapRepresentation.MAX_KEY;
-    } else if (fields.containsKey(MapType.RESERVED_REGEX_KEY)) {
+    } else if (isRegexValue(mapValue)) {
       return MapRepresentation.REGEX;
-    } else if (fields.containsKey(MapType.RESERVED_INT32_KEY)) {
+    } else if (isInt32Value(mapValue)) {
       return MapRepresentation.INT32;
-    } else if (fields.containsKey(MapType.RESERVED_BSON_BINARY_KEY)) {
+    } else if (isBsonBinaryData(mapValue)) {
       return MapRepresentation.BSON_BINARY_DATA;
-    } else if (fields.containsKey(MapType.RESERVED_OBJECT_ID_KEY)) {
+    } else if (isBsonObjectId(mapValue)) {
       return MapRepresentation.BSON_OBJECT_ID;
-    } else if (fields.containsKey(MapType.RESERVED_BSON_TIMESTAMP_KEY)) {
+    } else if (isBsonTimestamp(mapValue)) {
       return MapRepresentation.BSON_TIMESTAMP;
     } else if (fields.containsKey(MapType.RESERVED_MAP_KEY)) { // Vector
       Value typeValue = fields.get(MapType.RESERVED_MAP_KEY);
