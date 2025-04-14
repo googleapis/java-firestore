@@ -78,6 +78,8 @@ s.remove_staging_dirs()
 java.common_templates(excludes=[
     # firestore uses a different project for its integration tests
     # due to the default project running datastore
+    '.kokoro/continuous.cfg',
+    '.kokoro/presubmit.cfg',
     '.kokoro/presubmit/integration.cfg',
     '.kokoro/presubmit/graalvm-native.cfg',
     '.kokoro/presubmit/graalvm-native-17.cfg',

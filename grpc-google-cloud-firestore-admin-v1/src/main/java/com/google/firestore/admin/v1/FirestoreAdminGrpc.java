@@ -1136,6 +1136,19 @@ public final class FirestoreAdminGrpc {
     return FirestoreAdminStub.newStub(factory, channel);
   }
 
+  /** Creates a new blocking-style stub that supports all types of calls on the service */
+  public static FirestoreAdminBlockingV2Stub newBlockingV2Stub(io.grpc.Channel channel) {
+    io.grpc.stub.AbstractStub.StubFactory<FirestoreAdminBlockingV2Stub> factory =
+        new io.grpc.stub.AbstractStub.StubFactory<FirestoreAdminBlockingV2Stub>() {
+          @java.lang.Override
+          public FirestoreAdminBlockingV2Stub newStub(
+              io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+            return new FirestoreAdminBlockingV2Stub(channel, callOptions);
+          }
+        };
+    return FirestoreAdminBlockingV2Stub.newStub(factory, channel);
+  }
+
   /**
    * Creates a new blocking-style stub that supports unary and streaming output calls on the service
    */
@@ -2110,6 +2123,416 @@ public final class FirestoreAdminGrpc {
 
   /**
    * A stub to allow clients to do synchronous rpc calls to service FirestoreAdmin.
+   *
+   * <pre>
+   * The Cloud Firestore Admin API.
+   * This API provides several administrative services for Cloud Firestore.
+   * Project, Database, Namespace, Collection, Collection Group, and Document are
+   * used as defined in the Google Cloud Firestore API.
+   * Operation: An Operation represents work being performed in the background.
+   * The index service manages Cloud Firestore indexes.
+   * Index creation is performed asynchronously.
+   * An Operation resource is created for each such asynchronous operation.
+   * The state of the operation (including any errors encountered)
+   * may be queried via the Operation resource.
+   * The Operations collection provides a record of actions performed for the
+   * specified Project (including any Operations in progress). Operations are not
+   * created directly but through calls on other collections or resources.
+   * An Operation that is done may be deleted so that it is no longer listed as
+   * part of the Operation collection. Operations are garbage collected after
+   * 30 days. By default, ListOperations will only return in progress and failed
+   * operations. To list completed operation, issue a ListOperations request with
+   * the filter `done: true`.
+   * Operations are created by service `FirestoreAdmin`, but are accessed via
+   * service `google.longrunning.Operations`.
+   * </pre>
+   */
+  public static final class FirestoreAdminBlockingV2Stub
+      extends io.grpc.stub.AbstractBlockingStub<FirestoreAdminBlockingV2Stub> {
+    private FirestoreAdminBlockingV2Stub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+      super(channel, callOptions);
+    }
+
+    @java.lang.Override
+    protected FirestoreAdminBlockingV2Stub build(
+        io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+      return new FirestoreAdminBlockingV2Stub(channel, callOptions);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a composite index. This returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the creation. The metadata for the operation
+     * will be the type
+     * [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
+     * </pre>
+     */
+    public com.google.longrunning.Operation createIndex(
+        com.google.firestore.admin.v1.CreateIndexRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getCreateIndexMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Lists composite indexes.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.ListIndexesResponse listIndexes(
+        com.google.firestore.admin.v1.ListIndexesRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getListIndexesMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets a composite index.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.Index getIndex(
+        com.google.firestore.admin.v1.GetIndexRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGetIndexMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a composite index.
+     * </pre>
+     */
+    public com.google.protobuf.Empty deleteIndex(
+        com.google.firestore.admin.v1.DeleteIndexRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getDeleteIndexMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets the metadata and configuration for a Field.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.Field getField(
+        com.google.firestore.admin.v1.GetFieldRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGetFieldMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Updates a field configuration. Currently, field updates apply only to
+     * single field index configuration. However, calls to
+     * [FirestoreAdmin.UpdateField][google.firestore.admin.v1.FirestoreAdmin.UpdateField]
+     * should provide a field mask to avoid changing any configuration that the
+     * caller isn't aware of. The field mask should be specified as: `{ paths:
+     * "index_config" }`.
+     * This call returns a
+     * [google.longrunning.Operation][google.longrunning.Operation] which may be
+     * used to track the status of the field update. The metadata for the
+     * operation will be the type
+     * [FieldOperationMetadata][google.firestore.admin.v1.FieldOperationMetadata].
+     * To configure the default field settings for the database, use
+     * the special `Field` with resource name:
+     * `projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/&#42;`.
+     * </pre>
+     */
+    public com.google.longrunning.Operation updateField(
+        com.google.firestore.admin.v1.UpdateFieldRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getUpdateFieldMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Lists the field configuration and metadata for this database.
+     * Currently,
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * only supports listing fields that have been explicitly overridden. To issue
+     * this query, call
+     * [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields]
+     * with the filter set to `indexConfig.usesAncestorConfig:false` or
+     * `ttlConfig:*`.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.ListFieldsResponse listFields(
+        com.google.firestore.admin.v1.ListFieldsRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getListFieldsMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Exports a copy of all or a subset of documents from Google Cloud Firestore
+     * to another storage system, such as Google Cloud Storage. Recent updates to
+     * documents may not be reflected in the export. The export occurs in the
+     * background and its progress can be monitored and managed via the
+     * Operation resource that is created. The output of an export may only be
+     * used once the associated operation is done. If an export operation is
+     * cancelled before completion it may leave partial data behind in Google
+     * Cloud Storage.
+     * For more details on export behavior and output format, refer to:
+     * https://cloud.google.com/firestore/docs/manage-data/export-import
+     * </pre>
+     */
+    public com.google.longrunning.Operation exportDocuments(
+        com.google.firestore.admin.v1.ExportDocumentsRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getExportDocumentsMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Imports documents into Google Cloud Firestore. Existing documents with the
+     * same name are overwritten. The import occurs in the background and its
+     * progress can be monitored and managed via the Operation resource that is
+     * created. If an ImportDocuments operation is cancelled, it is possible
+     * that a subset of the data has already been imported to Cloud Firestore.
+     * </pre>
+     */
+    public com.google.longrunning.Operation importDocuments(
+        com.google.firestore.admin.v1.ImportDocumentsRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getImportDocumentsMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Bulk deletes a subset of documents from Google Cloud Firestore.
+     * Documents created or updated after the underlying system starts to process
+     * the request will not be deleted. The bulk delete occurs in the background
+     * and its progress can be monitored and managed via the Operation resource
+     * that is created.
+     * For more details on bulk delete behavior, refer to:
+     * https://cloud.google.com/firestore/docs/manage-data/bulk-delete
+     * </pre>
+     */
+    public com.google.longrunning.Operation bulkDeleteDocuments(
+        com.google.firestore.admin.v1.BulkDeleteDocumentsRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getBulkDeleteDocumentsMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Create a database.
+     * </pre>
+     */
+    public com.google.longrunning.Operation createDatabase(
+        com.google.firestore.admin.v1.CreateDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getCreateDatabaseMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets information about a database.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.Database getDatabase(
+        com.google.firestore.admin.v1.GetDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGetDatabaseMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * List all the databases in the project.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.ListDatabasesResponse listDatabases(
+        com.google.firestore.admin.v1.ListDatabasesRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getListDatabasesMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Updates a database.
+     * </pre>
+     */
+    public com.google.longrunning.Operation updateDatabase(
+        com.google.firestore.admin.v1.UpdateDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getUpdateDatabaseMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a database.
+     * </pre>
+     */
+    public com.google.longrunning.Operation deleteDatabase(
+        com.google.firestore.admin.v1.DeleteDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getDeleteDatabaseMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets information about a backup.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.Backup getBackup(
+        com.google.firestore.admin.v1.GetBackupRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGetBackupMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Lists all the backups.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.ListBackupsResponse listBackups(
+        com.google.firestore.admin.v1.ListBackupsRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getListBackupsMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a backup.
+     * </pre>
+     */
+    public com.google.protobuf.Empty deleteBackup(
+        com.google.firestore.admin.v1.DeleteBackupRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getDeleteBackupMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new database by restoring from an existing backup.
+     * The new database must be in the same cloud region or multi-region location
+     * as the existing backup. This behaves similar to
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase]
+     * except instead of creating a new empty database, a new database is created
+     * with the database type, index configuration, and documents from an existing
+     * backup.
+     * The [long-running operation][google.longrunning.Operation] can be used to
+     * track the progress of the restore, with the Operation's
+     * [metadata][google.longrunning.Operation.metadata] field type being the
+     * [RestoreDatabaseMetadata][google.firestore.admin.v1.RestoreDatabaseMetadata].
+     * The [response][google.longrunning.Operation.response] type is the
+     * [Database][google.firestore.admin.v1.Database] if the restore was
+     * successful. The new database is not readable or writeable until the LRO has
+     * completed.
+     * </pre>
+     */
+    public com.google.longrunning.Operation restoreDatabase(
+        com.google.firestore.admin.v1.RestoreDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getRestoreDatabaseMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a backup schedule on a database.
+     * At most two backup schedules can be configured on a database, one daily
+     * backup schedule and one weekly backup schedule.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.BackupSchedule createBackupSchedule(
+        com.google.firestore.admin.v1.CreateBackupScheduleRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getCreateBackupScheduleMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Gets information about a backup schedule.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.BackupSchedule getBackupSchedule(
+        com.google.firestore.admin.v1.GetBackupScheduleRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGetBackupScheduleMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * List backup schedules.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.ListBackupSchedulesResponse listBackupSchedules(
+        com.google.firestore.admin.v1.ListBackupSchedulesRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getListBackupSchedulesMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Updates a backup schedule.
+     * </pre>
+     */
+    public com.google.firestore.admin.v1.BackupSchedule updateBackupSchedule(
+        com.google.firestore.admin.v1.UpdateBackupScheduleRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getUpdateBackupScheduleMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Deletes a backup schedule.
+     * </pre>
+     */
+    public com.google.protobuf.Empty deleteBackupSchedule(
+        com.google.firestore.admin.v1.DeleteBackupScheduleRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getDeleteBackupScheduleMethod(), getCallOptions(), request);
+    }
+  }
+
+  /**
+   * A stub to allow clients to do limited synchronous rpc calls to service FirestoreAdmin.
    *
    * <pre>
    * The Cloud Firestore Admin API.
