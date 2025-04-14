@@ -37,6 +37,7 @@ public interface DatabaseOrBuilder
    * @return The name.
    */
   java.lang.String getName();
+
   /**
    *
    *
@@ -63,6 +64,7 @@ public interface DatabaseOrBuilder
    * @return The uid.
    */
   java.lang.String getUid();
+
   /**
    *
    *
@@ -90,6 +92,7 @@ public interface DatabaseOrBuilder
    * @return Whether the createTime field is set.
    */
   boolean hasCreateTime();
+
   /**
    *
    *
@@ -104,6 +107,7 @@ public interface DatabaseOrBuilder
    * @return The createTime.
    */
   com.google.protobuf.Timestamp getCreateTime();
+
   /**
    *
    *
@@ -132,6 +136,7 @@ public interface DatabaseOrBuilder
    * @return Whether the updateTime field is set.
    */
   boolean hasUpdateTime();
+
   /**
    *
    *
@@ -147,6 +152,7 @@ public interface DatabaseOrBuilder
    * @return The updateTime.
    */
   com.google.protobuf.Timestamp getUpdateTime();
+
   /**
    *
    *
@@ -175,6 +181,7 @@ public interface DatabaseOrBuilder
    * @return Whether the deleteTime field is set.
    */
   boolean hasDeleteTime();
+
   /**
    *
    *
@@ -189,6 +196,7 @@ public interface DatabaseOrBuilder
    * @return The deleteTime.
    */
   com.google.protobuf.Timestamp getDeleteTime();
+
   /**
    *
    *
@@ -215,6 +223,7 @@ public interface DatabaseOrBuilder
    * @return The locationId.
    */
   java.lang.String getLocationId();
+
   /**
    *
    *
@@ -243,6 +252,7 @@ public interface DatabaseOrBuilder
    * @return The enum numeric value on the wire for type.
    */
   int getTypeValue();
+
   /**
    *
    *
@@ -270,6 +280,7 @@ public interface DatabaseOrBuilder
    * @return The enum numeric value on the wire for concurrencyMode.
    */
   int getConcurrencyModeValue();
+
   /**
    *
    *
@@ -306,6 +317,7 @@ public interface DatabaseOrBuilder
    * @return Whether the versionRetentionPeriod field is set.
    */
   boolean hasVersionRetentionPeriod();
+
   /**
    *
    *
@@ -329,6 +341,7 @@ public interface DatabaseOrBuilder
    * @return The versionRetentionPeriod.
    */
   com.google.protobuf.Duration getVersionRetentionPeriod();
+
   /**
    *
    *
@@ -372,6 +385,7 @@ public interface DatabaseOrBuilder
    * @return Whether the earliestVersionTime field is set.
    */
   boolean hasEarliestVersionTime();
+
   /**
    *
    *
@@ -393,6 +407,7 @@ public interface DatabaseOrBuilder
    * @return The earliestVersionTime.
    */
   com.google.protobuf.Timestamp getEarliestVersionTime();
+
   /**
    *
    *
@@ -427,6 +442,7 @@ public interface DatabaseOrBuilder
    * @return The enum numeric value on the wire for pointInTimeRecoveryEnablement.
    */
   int getPointInTimeRecoveryEnablementValue();
+
   /**
    *
    *
@@ -457,6 +473,7 @@ public interface DatabaseOrBuilder
    * @return The enum numeric value on the wire for appEngineIntegrationMode.
    */
   int getAppEngineIntegrationModeValue();
+
   /**
    *
    *
@@ -490,6 +507,7 @@ public interface DatabaseOrBuilder
    * @return The keyPrefix.
    */
   java.lang.String getKeyPrefix();
+
   /**
    *
    *
@@ -522,6 +540,7 @@ public interface DatabaseOrBuilder
    * @return The enum numeric value on the wire for deleteProtectionState.
    */
   int getDeleteProtectionStateValue();
+
   /**
    *
    *
@@ -550,6 +569,7 @@ public interface DatabaseOrBuilder
    * @return Whether the cmekConfig field is set.
    */
   boolean hasCmekConfig();
+
   /**
    *
    *
@@ -564,6 +584,7 @@ public interface DatabaseOrBuilder
    * @return The cmekConfig.
    */
   com.google.firestore.admin.v1.Database.CmekConfig getCmekConfig();
+
   /**
    *
    *
@@ -590,6 +611,7 @@ public interface DatabaseOrBuilder
    * @return The previousId.
    */
   java.lang.String getPreviousId();
+
   /**
    *
    *
@@ -618,6 +640,7 @@ public interface DatabaseOrBuilder
    * @return Whether the sourceInfo field is set.
    */
   boolean hasSourceInfo();
+
   /**
    *
    *
@@ -632,6 +655,7 @@ public interface DatabaseOrBuilder
    * @return The sourceInfo.
    */
   com.google.firestore.admin.v1.Database.SourceInfo getSourceInfo();
+
   /**
    *
    *
@@ -659,6 +683,7 @@ public interface DatabaseOrBuilder
    * @return The etag.
    */
   java.lang.String getEtag();
+
   /**
    *
    *
