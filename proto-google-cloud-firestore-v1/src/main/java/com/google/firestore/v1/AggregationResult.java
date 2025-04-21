@@ -605,7 +605,7 @@ public final class AggregationResult extends com.google.protobuf.GeneratedMessag
           defaultEntry() {
         return AggregateFieldsDefaultEntryHolder.defaultEntry;
       }
-    }
+    };
 
     private static final AggregateFieldsConverter aggregateFieldsConverter =
         new AggregateFieldsConverter();
