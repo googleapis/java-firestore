@@ -87,13 +87,18 @@ public class ITE2EMetricsTest extends ITBaseTest {
       logger.log(Level.INFO, "Integration test using default database.");
     }
 
-    // We only perform end-to-end metrics tests on a nightly basis.
+    // These end-to-end metrics tests are resource-intensive and are only intended to run in a
+    // nightly testing environment.
     // assumeTrue(isNightlyTesting);
   }
 
   @After
   public void after() throws Exception {
     if (firestore != null) {
+      // Shutting down Firestore can trigger a final export of metrics, potentially leading to
+      // "frequent write" errors in Cloud Monitoring. This sleep attempts to mitigate this by
+      // allowing a brief pause.
+      Thread.sleep(Duration.ofSeconds(30).toMillis());
       firestore.shutdown();
     }
     metricClient.shutdown();
@@ -102,7 +107,6 @@ public class ITE2EMetricsTest extends ITBaseTest {
   @Test
   public void builtinMetricsWithDefaultOTEL() throws Exception {
     firestore = optionsBuilder.build().getService();
-
     TimeInterval interval = createTimeInterval();
 
     firestore.collection("col").get().get();
@@ -116,6 +120,7 @@ public class ITE2EMetricsTest extends ITBaseTest {
             TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY,
             TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
 
+    // Verify metric data are published to Cloud Monitoring
     for (String METRIC : METRICS) {
       assertMetricsArePublished(METRIC, interval);
     }
@@ -128,7 +133,6 @@ public class ITE2EMetricsTest extends ITBaseTest {
         SdkMeterProvider.builder().registerMetricReader(metricReader);
     OpenTelemetrySdk customOpenTelemetrySdk =
         OpenTelemetrySdk.builder().setMeterProvider(meterProvider.build()).build();
-
     firestore =
         optionsBuilder
             .setOpenTelemetryOptions(
@@ -137,8 +141,8 @@ public class ITE2EMetricsTest extends ITBaseTest {
                     .build())
             .build()
             .getService();
-
     TimeInterval interval = createTimeInterval();
+
     firestore.collection("col").count().get().get();
 
     // Verify metric data are published to Cloud Monitoring
@@ -207,26 +211,26 @@ public class ITE2EMetricsTest extends ITBaseTest {
             TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY,
             TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
 
+    // Verify metric data are published to Cloud Monitoring
     for (String METRIC : METRICS) {
       assertMetricsArePublished(METRIC, interval);
     }
   }
 
   private TimeInterval createTimeInterval() {
-    Instant startTime = Instant.now();
-    Instant endTime = Instant.now().plus(Duration.ofMinutes(1));
+    Instant startTime = Instant.now().minus(Duration.ofSeconds(10));
+    // Set a wider time interval to make sure SDK has finished the batching (60s) and exporting of
+    // the metrics
+    Instant endTime = Instant.now().plus(Duration.ofSeconds(90));
     return TimeInterval.newBuilder()
         .setStartTime(Timestamps.fromMillis(startTime.toEpochMilli()))
         .setEndTime(Timestamps.fromMillis(endTime.toEpochMilli()))
         .build();
   }
 
-  private ListTimeSeriesResponse assertMetricsArePublished(String metric, TimeInterval interval)
-      throws Exception {
-
+  private void assertMetricsArePublished(String metric, TimeInterval interval) throws Exception {
     String metricFilter =
         String.format("metric.type=\"%s/%s\"", TelemetryConstants.METRIC_PREFIX, metric);
-
     ListTimeSeriesRequest request =
         ListTimeSeriesRequest.newBuilder()
             .setName("projects/" + projectId)
@@ -234,41 +238,51 @@ public class ITE2EMetricsTest extends ITBaseTest {
             .setInterval(interval)
             .build();
 
-    ListTimeSeriesResponse response = metricClient.listTimeSeriesCallable().call(request);
-    int attemptsMade = 0;
-    while (response.getTimeSeriesCount() == 0 && attemptsMade < 3) {
-      // Call listTimeSeries every minute
-      Thread.sleep(Duration.ofMinutes(1).toMillis());
-      response = metricClient.listTimeSeriesCallable().call(request);
-      attemptsMade++;
-    }
+    List<TimeSeries> filteredData = Collections.emptyList();
+    // Metrics are batched and exported periodically in the SDK (e.g., every 60s). And there is a
+    // potential delay between when the metric is published by the client library and when it
+    // becomes available. So we retry the fetching for multiple times with specified interval, to
+    // allow the monitoring system to catch up and for the data to become available.
+    int maxAttempts = 5;
+    Duration retryDelay = Duration.ofSeconds(30);
 
-    // When querying from Cloud Monitoring database, we cannot reset the state for each individual
-    // test cases, and the response fetched could include time series data from previous test cases.
-    // So filter the response based on the time interval used by each single test case to make sure
-    // each test case has published expected metric data.
-    List<TimeSeries> filteredData =
-        response.getTimeSeriesList().stream()
-            .filter(
-                ts ->
-                    ts.getPoints(0).getInterval().getStartTime().getSeconds()
-                        >= interval.getStartTime().getSeconds())
-            .collect(Collectors.toList());
+    for (int attempt = 0; attempt < maxAttempts; attempt++) {
+      // Query Cloud Monitoring for the specific metric within the test's time window.
+      ListTimeSeriesResponse response = metricClient.listTimeSeriesCallable().call(request);
+
+      // In the testing environment where multiple tests might be running, the initial
+      // response could contain data from previous test runs. Filter the response to
+      // ensure we're validating the metrics generated by this specific test run and
+      // avoid interference from older data.
+      filteredData =
+          response.getTimeSeriesList().stream()
+              .filter(
+                  ts ->
+                      ts.getPoints(0).getInterval().getStartTime().getSeconds()
+                          >= interval.getStartTime().getSeconds())
+              .collect(Collectors.toList());
+      if (!filteredData.isEmpty()) {
+        break;
+      }
+      logger.info(
+          "Retry fetching metrics data from Cloud Monitoring after "
+              + retryDelay.getSeconds()
+              + " seconds.");
+      Thread.sleep(retryDelay.toMillis());
+    }
 
     assertWithMessage("Metric " + metric + " didn't return any data.")
         .that(filteredData.size())
         .isGreaterThan(0);
-
-    return response;
   }
 
   private void assertMetricsAreCollected(InMemoryMetricReader metricReader, String metricName) {
     String fullMetricName = TelemetryConstants.METRIC_PREFIX + "/" + metricName;
-
     List<MetricData> matchingMetadata =
         metricReader.collectAllMetrics().stream()
             .filter(md -> md.getName().equals(fullMetricName))
             .collect(Collectors.toList());
+
     // Fetch the MetricData with retries
     int attemptsMade = 0;
     while (matchingMetadata.size() == 0 && attemptsMade < 10) {
