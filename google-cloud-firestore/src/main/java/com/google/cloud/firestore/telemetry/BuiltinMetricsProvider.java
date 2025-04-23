@@ -20,7 +20,6 @@ import static com.google.cloud.firestore.telemetry.TelemetryConstants.FIRESTORE_
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_CLIENT_UID;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_NAME;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY;
@@ -51,7 +50,6 @@ class BuiltinMetricsProvider {
   private static final Logger logger = Logger.getLogger(BuiltinMetricsProvider.class.getName());
 
   private OpenTelemetry openTelemetry;
-  private DoubleHistogram endToEndLatency;
   private DoubleHistogram firstResponseLatency;
   private DoubleHistogram transactionLatency;
   private LongCounter transactionAttemptCount;
@@ -99,13 +97,6 @@ class BuiltinMetricsProvider {
   /** Registers metrics to be collected at the Firestore SDK layer */
   private void configureSDKLayerMetrics() {
     Meter meter = openTelemetry.getMeter(FIRESTORE_METER_NAME);
-
-    this.endToEndLatency =
-        meter
-            .histogramBuilder(METRIC_PREFIX + "/" + METRIC_NAME_END_TO_END_LATENCY)
-            .setDescription("Firestore operations' end-to-end latency")
-            .setUnit(MILLISECOND_UNIT)
-            .build();
 
     this.firstResponseLatency =
         meter
@@ -160,8 +151,6 @@ class BuiltinMetricsProvider {
 
   public DoubleHistogram getHistogram(MetricType metricType) {
     switch (metricType) {
-      case END_TO_END_LATENCY:
-        return endToEndLatency;
       case FIRST_RESPONSE_LATENCY:
         return firstResponseLatency;
       case TRANSACTION_LATENCY:

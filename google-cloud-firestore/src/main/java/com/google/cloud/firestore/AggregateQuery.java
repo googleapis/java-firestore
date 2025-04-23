@@ -120,11 +120,9 @@ public class AggregateQuery {
       runQuery(responseDeliverer, /* attempt */ 0);
       ApiFuture<ExplainResults<AggregateQuerySnapshot>> result = responseDeliverer.getFuture();
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -155,11 +153,9 @@ public class AggregateQuery {
       runQuery(responseDeliverer, /* attempt= */ 0);
       ApiFuture<AggregateQuerySnapshot> result = responseDeliverer.getFuture();
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -232,7 +228,6 @@ public class AggregateQuery {
 
     void deliverError(Throwable throwable) {
       future.setException(throwable);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, throwable);
     }
 
     void deliverResult(

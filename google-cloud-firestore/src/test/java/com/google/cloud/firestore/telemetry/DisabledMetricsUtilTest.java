@@ -57,13 +57,12 @@ public class DisabledMetricsUtilTest {
 
     // Ensure no exceptions are thrown by no-op methods
     try {
-      context.recordLatency(MetricType.END_TO_END_LATENCY);
-      context.recordLatency(MetricType.END_TO_END_LATENCY, new Exception("test"));
+      context.recordLatency(MetricType.FIRST_RESPONSE_LATENCY, new Exception("test"));
       context.recordLatency(MetricType.FIRST_RESPONSE_LATENCY);
       context.incrementCounter();
 
       ApiFuture<String> future = ApiFutures.immediateFuture("test");
-      context.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, future);
+      context.recordLatencyAtFuture(MetricType.FIRST_RESPONSE_LATENCY, future);
     } catch (Exception e) {
       assertThat(e).isNull(); // Fail the test if any exception is thrown
     }

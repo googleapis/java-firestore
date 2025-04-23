@@ -28,7 +28,6 @@ import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.StatusCode.Code;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
-import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Context;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
@@ -939,10 +938,8 @@ public final class BulkWriter implements AutoCloseable {
               bulkWriterExecutor);
         }
         span.endAtFuture(result);
-        metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       } catch (Exception error) {
         span.end(error);
-        metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
         throw error;
       }
     } else {

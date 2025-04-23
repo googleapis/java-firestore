@@ -261,12 +261,12 @@ public class EnabledMetricsUtilTest {
 
     MetricsContext context = metricsUtil.createMetricsContext("testMethod");
     ApiFuture<String> future = ApiFutures.immediateFuture("success");
-    context.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, future);
+    context.recordLatencyAtFuture(MetricType.FIRST_RESPONSE_LATENCY, future);
 
     verify(defaultProvider)
-        .latencyRecorder(eq(MetricType.END_TO_END_LATENCY), anyDouble(), Mockito.anyMap());
+        .latencyRecorder(eq(MetricType.FIRST_RESPONSE_LATENCY), anyDouble(), Mockito.anyMap());
     verify(customProvider)
-        .latencyRecorder(eq(MetricType.END_TO_END_LATENCY), anyDouble(), Mockito.anyMap());
+        .latencyRecorder(eq(MetricType.FIRST_RESPONSE_LATENCY), anyDouble(), Mockito.anyMap());
   }
 
   @Test
@@ -282,12 +282,12 @@ public class EnabledMetricsUtilTest {
                 GrpcStatusCode.of(Status.Code.INVALID_ARGUMENT),
                 false));
     ApiFuture<String> future = ApiFutures.immediateFailedFuture(firestoreException);
-    context.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, future);
+    context.recordLatencyAtFuture(MetricType.FIRST_RESPONSE_LATENCY, future);
 
     // TODO(b/305998085):Change this to correct status code
     Mockito.verify(defaultProvider)
         .latencyRecorder(
-            Mockito.eq(MetricType.END_TO_END_LATENCY),
+            Mockito.eq(MetricType.FIRST_RESPONSE_LATENCY),
             Mockito.anyDouble(),
             Mockito.argThat(
                 attributes ->
@@ -296,7 +296,7 @@ public class EnabledMetricsUtilTest {
                         .equals(Status.Code.UNKNOWN.toString())));
     Mockito.verify(customProvider)
         .latencyRecorder(
-            Mockito.eq(MetricType.END_TO_END_LATENCY),
+            Mockito.eq(MetricType.FIRST_RESPONSE_LATENCY),
             Mockito.anyDouble(),
             Mockito.argThat(
                 attributes ->

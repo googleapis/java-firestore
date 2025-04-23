@@ -92,7 +92,6 @@ public interface TelemetryConstants {
   String METRIC_NAME_ATTEMPT_LATENCY = "attempt_latency";
   String METRIC_NAME_ATTEMPT_COUNT = "attempt_count";
   String METRIC_NAME_FIRST_RESPONSE_LATENCY = "first_response_latency";
-  String METRIC_NAME_END_TO_END_LATENCY = "end_to_end_latency";
   String METRIC_NAME_TRANSACTION_LATENCY = "transaction_latency";
   String METRIC_NAME_TRANSACTION_ATTEMPT_COUNT = "transaction_attempt_count";
 
@@ -107,12 +106,10 @@ public interface TelemetryConstants {
   Set<String> FIRESTORE_METRICS =
       ImmutableSet.of(
           METRIC_NAME_FIRST_RESPONSE_LATENCY,
-          METRIC_NAME_END_TO_END_LATENCY,
           METRIC_NAME_TRANSACTION_LATENCY,
           METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
 
   public enum MetricType {
-    END_TO_END_LATENCY,
     FIRST_RESPONSE_LATENCY,
     TRANSACTION_LATENCY,
     TRANSACTION_ATTEMPT_COUNT

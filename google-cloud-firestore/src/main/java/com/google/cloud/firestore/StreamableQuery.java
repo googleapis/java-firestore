@@ -171,7 +171,6 @@ public abstract class StreamableQuery<SnapshotType> {
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -265,7 +264,6 @@ public abstract class StreamableQuery<SnapshotType> {
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -293,13 +291,11 @@ public abstract class StreamableQuery<SnapshotType> {
 
     @Override
     public void onError(Throwable t) {
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, t);
       observer.onError(t);
     }
 
     @Override
     public void onCompleted() {
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY);
       observer.onCompleted();
     }
   }

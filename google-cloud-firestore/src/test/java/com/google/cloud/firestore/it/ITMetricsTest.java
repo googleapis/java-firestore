@@ -165,7 +165,6 @@ public class ITMetricsTest {
                 TelemetryConstants.METHOD_NAME_QUERY_GET, Status.OK.getCode().toString(), 1)
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY, expectedMetrics);
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
   }
@@ -210,7 +209,6 @@ public class ITMetricsTest {
             .build();
 
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY, expectedMetrics);
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
   }
@@ -236,7 +234,6 @@ public class ITMetricsTest {
             .build();
 
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY, expectedMetrics);
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
   }
@@ -264,7 +261,6 @@ public class ITMetricsTest {
                 TelemetryConstants.METHOD_NAME_BATCH_COMMIT, Status.OK.getCode().toString(), 1)
             .build();
 
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
@@ -297,7 +293,6 @@ public class ITMetricsTest {
                 1)
             .build();
 
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
@@ -316,7 +311,6 @@ public class ITMetricsTest {
                 TelemetryConstants.METHOD_NAME_PARTITION_QUERY, Status.OK.getCode().toString(), 1)
             .build();
 
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
@@ -336,7 +330,6 @@ public class ITMetricsTest {
                 1)
             .build();
 
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
@@ -356,7 +349,6 @@ public class ITMetricsTest {
                 1)
             .build();
 
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
@@ -386,7 +378,6 @@ public class ITMetricsTest {
                 TelemetryConstants.METHOD_NAME_DOC_REF_SET, Status.OK.getCode().toString(), 1)
             .build();
 
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
@@ -416,7 +407,6 @@ public class ITMetricsTest {
             .build();
 
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY, expectedMetrics);
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
   }
@@ -490,7 +480,6 @@ public class ITMetricsTest {
                 Status.OK.getCode().toString(),
                 1)
             .build();
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
 
     expectedMetrics =
         new MetricsExpectationBuilder()
@@ -543,7 +532,6 @@ public class ITMetricsTest {
                 Status.UNKNOWN.getCode().toString(),
                 1)
             .build();
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY, expectedMetrics);
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT, expectedMetrics);
   }
@@ -591,7 +579,6 @@ public class ITMetricsTest {
                 1)
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY, expectedMetrics);
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY, expectedMetrics);
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT, expectedMetrics);
   }
@@ -650,7 +637,6 @@ public class ITMetricsTest {
                 Status.OK.getCode().toString(),
                 1)
             .build();
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
 
     expectedMetrics =
         new MetricsExpectationBuilder()
@@ -718,7 +704,6 @@ public class ITMetricsTest {
             .expectMetricData(
                 TelemetryConstants.METHOD_NAME_BATCH_COMMIT, Status.OK.getCode().toString(), 3)
             .build();
-    validateSDKMetrics(TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY, expectedMetrics);
 
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);

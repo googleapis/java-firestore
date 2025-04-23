@@ -313,7 +313,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
           @Override
           public void onError(Throwable throwable) {
             getTraceUtil().currentSpan().end(throwable);
-            metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, throwable);
             apiStreamObserver.onError(throwable);
           }
 
@@ -329,7 +328,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                         + numResponses
                         + " responses.",
                     Collections.singletonMap(ATTRIBUTE_KEY_NUM_RESPONSES, numResponses));
-            metricsContext.recordLatency(MetricType.END_TO_END_LATENCY);
             apiStreamObserver.onCompleted();
           }
         };
@@ -462,9 +460,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
         // that cannot be tracked client side.
         result = new ServerSideTransactionRunner<>(this, updateFunction, transactionOptions).run();
       }
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
     } catch (Exception error) {
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
     return result;

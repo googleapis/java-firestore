@@ -43,7 +43,6 @@ import org.junit.runners.JUnit4;
 public final class BuiltinMetricsProviderTest {
   private OpenTelemetry mockOpenTelemetry;
   private Meter mockMeter;
-  private DoubleHistogram mockEndToEndLatency;
   private DoubleHistogram mockFirstResponseLatency;
   private DoubleHistogram mockTransactionLatency;
   private LongCounter mockTransactionAttemptCount;
@@ -72,16 +71,14 @@ public final class BuiltinMetricsProviderTest {
     when(mockCounterBuilder.setDescription(anyString())).thenReturn(mockCounterBuilder);
     when(mockCounterBuilder.setUnit(anyString())).thenReturn(mockCounterBuilder);
 
-    mockEndToEndLatency = mock(DoubleHistogram.class);
     mockFirstResponseLatency = mock(DoubleHistogram.class);
     mockTransactionLatency = mock(DoubleHistogram.class);
     mockTransactionAttemptCount = mock(LongCounter.class);
 
-    // Configure mockHistogramBuilder to return the first 3 histogram mocks created in sequence.
-    // The SDK configures 4 SDK layer metrics first, and then the RPC metrics gets created in GAX
+    // Configure mockHistogramBuilder to return the first 2 histogram mocks created in sequence.
+    // The SDK configures 3 SDK layer metrics first, and then the RPC metrics gets created in GAX
     // layer
     when(mockHistogramBuilder.build())
-        .thenReturn(mockEndToEndLatency)
         .thenReturn(mockFirstResponseLatency)
         .thenReturn(mockTransactionLatency);
 
@@ -95,7 +92,6 @@ public final class BuiltinMetricsProviderTest {
   @Test
   public void SDKLayerMetricsConfiguredSuccessfully() {
     metricsProvider = new BuiltinMetricsProvider(mockOpenTelemetry);
-    assertNotNull(metricsProvider.getHistogram(MetricType.END_TO_END_LATENCY));
     assertNotNull(metricsProvider.getHistogram(MetricType.FIRST_RESPONSE_LATENCY));
     assertNotNull(metricsProvider.getHistogram(MetricType.TRANSACTION_LATENCY));
     assertNotNull(metricsProvider.getCounter(MetricType.TRANSACTION_ATTEMPT_COUNT));
@@ -103,10 +99,7 @@ public final class BuiltinMetricsProviderTest {
 
   @Test
   public void getHistogramReturnsHistogramsInstrumentCorrectly() {
-    DoubleHistogram mockHistogram = metricsProvider.getHistogram(MetricType.END_TO_END_LATENCY);
-    assertEquals(mockEndToEndLatency, mockHistogram);
-
-    mockHistogram = metricsProvider.getHistogram(MetricType.FIRST_RESPONSE_LATENCY);
+    DoubleHistogram mockHistogram = metricsProvider.getHistogram(MetricType.FIRST_RESPONSE_LATENCY);
     assertEquals(mockFirstResponseLatency, mockHistogram);
 
     mockHistogram = metricsProvider.getHistogram(MetricType.TRANSACTION_LATENCY);
@@ -133,21 +126,14 @@ public final class BuiltinMetricsProviderTest {
     Exception exception =
         assertThrows(
             IllegalArgumentException.class,
-            () -> metricsProvider.getCounter(MetricType.END_TO_END_LATENCY));
-    assertEquals("Unknown counter MetricType: END_TO_END_LATENCY", exception.getMessage());
+            () -> metricsProvider.getCounter(MetricType.FIRST_RESPONSE_LATENCY));
+    assertEquals("Unknown counter MetricType: FIRST_RESPONSE_LATENCY", exception.getMessage());
   }
 
   @Test
   public void latencyRecorderTriggersCorrectInstrument() {
     Map<String, String> attributes = new HashMap<>();
     attributes.put("attribute", "value");
-
-    metricsProvider.latencyRecorder(MetricType.END_TO_END_LATENCY, 100.0, attributes);
-    verify(mockEndToEndLatency)
-        .record(
-            eq(100.0),
-            argThat(
-                arguments -> arguments.get(AttributeKey.stringKey("attribute")).equals("value")));
 
     metricsProvider.latencyRecorder(MetricType.FIRST_RESPONSE_LATENCY, 50.0, attributes);
     verify(mockFirstResponseLatency)
@@ -180,7 +166,6 @@ public final class BuiltinMetricsProviderTest {
     attributes.put("key", "disabledTest");
 
     try {
-      provider.latencyRecorder(MetricType.END_TO_END_LATENCY, 50.0, attributes);
       provider.latencyRecorder(MetricType.FIRST_RESPONSE_LATENCY, 100.0, attributes);
       provider.latencyRecorder(MetricType.TRANSACTION_LATENCY, 150.0, attributes);
       provider.counterRecorder(MetricType.TRANSACTION_ATTEMPT_COUNT, 1, attributes);

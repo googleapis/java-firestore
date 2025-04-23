@@ -24,7 +24,6 @@ import com.google.api.gax.rpc.ApiExceptions;
 import com.google.cloud.firestore.telemetry.MetricsUtil;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
-import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse;
@@ -166,11 +165,9 @@ public class DocumentReference {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.create(this, fields).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -192,11 +189,9 @@ public class DocumentReference {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.create(this, pojo).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -218,11 +213,9 @@ public class DocumentReference {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, fields).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -247,11 +240,9 @@ public class DocumentReference {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, fields, options).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -273,11 +264,9 @@ public class DocumentReference {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, pojo).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -301,11 +290,9 @@ public class DocumentReference {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.set(this, pojo, options).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -327,11 +314,9 @@ public class DocumentReference {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.update(this, fields).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -355,11 +340,9 @@ public class DocumentReference {
       ApiFuture<WriteResult> result =
           extractFirst(writeBatch.update(this, fields, options).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -385,11 +368,9 @@ public class DocumentReference {
       ApiFuture<WriteResult> result =
           extractFirst(writeBatch.update(this, field, value, moreFieldsAndValues).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -415,11 +396,9 @@ public class DocumentReference {
       ApiFuture<WriteResult> result =
           extractFirst(writeBatch.update(this, fieldPath, value, moreFieldsAndValues).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -450,11 +429,9 @@ public class DocumentReference {
           extractFirst(
               writeBatch.update(this, options, field, value, moreFieldsAndValues).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -485,11 +462,9 @@ public class DocumentReference {
           extractFirst(
               writeBatch.update(this, options, fieldPath, value, moreFieldsAndValues).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -510,11 +485,9 @@ public class DocumentReference {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.delete(this, options).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -534,11 +507,9 @@ public class DocumentReference {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.delete(this).commit());
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -559,11 +530,9 @@ public class DocumentReference {
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<DocumentSnapshot> result = extractFirst(rpcContext.getFirestore().getAll(this));
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -586,11 +555,9 @@ public class DocumentReference {
       ApiFuture<DocumentSnapshot> result =
           extractFirst(rpcContext.getFirestore().getAll(new DocumentReference[] {this}, fieldMask));
       span.endAtFuture(result);
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -642,11 +609,9 @@ public class DocumentReference {
             }
           };
       span.end();
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY);
       return result;
     } catch (ApiException exception) {
       span.end(exception);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, exception);
       throw FirestoreException.forApiException(exception);
     }
   }

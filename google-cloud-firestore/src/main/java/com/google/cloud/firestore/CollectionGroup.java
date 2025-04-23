@@ -23,7 +23,6 @@ import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
-import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreClient.PartitionQueryPagedResponse;
@@ -138,15 +137,12 @@ public class CollectionGroup extends Query {
                 },
                 MoreExecutors.directExecutor());
         span.endAtFuture(result);
-        metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
         return result;
       } catch (ApiException exception) {
         span.end(exception);
-        metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, exception);
         throw FirestoreException.forApiException(exception);
       } catch (Throwable throwable) {
         span.end(throwable);
-        metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, throwable);
         throw throwable;
       }
     }

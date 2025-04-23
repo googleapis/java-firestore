@@ -117,7 +117,6 @@ public class ITE2EMetricsTest extends ITBaseTest {
             TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY,
             TelemetryConstants.METRIC_NAME_OPERATION_COUNT,
             TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT,
-            TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY,
             TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
 
     // Verify metric data are published to Cloud Monitoring
@@ -152,7 +151,6 @@ public class ITE2EMetricsTest extends ITBaseTest {
             TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY,
             TelemetryConstants.METRIC_NAME_OPERATION_COUNT,
             TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT,
-            TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY,
             TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
 
     for (String METRIC : METRICS) {
@@ -166,7 +164,6 @@ public class ITE2EMetricsTest extends ITBaseTest {
             TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY,
             TelemetryConstants.METRIC_NAME_OPERATION_COUNT,
             TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT,
-            TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY,
             TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     for (String METRIC : METRICS) {
       assertMetricsAreCollected(metricReader, METRIC);
@@ -206,7 +203,6 @@ public class ITE2EMetricsTest extends ITBaseTest {
             TelemetryConstants.METRIC_NAME_ATTEMPT_LATENCY,
             TelemetryConstants.METRIC_NAME_OPERATION_COUNT,
             TelemetryConstants.METRIC_NAME_ATTEMPT_COUNT,
-            TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY,
             TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY,
             TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY,
             TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
