@@ -355,6 +355,18 @@
   </difference>
 
   <difference>
+    <differenceType>6011</differenceType>
+    <className>com/google/cloud/firestore/telemetry/TelemetryConstants</className>
+    <field>METRIC_NAME_END_TO_END_LATENCY</field>
+  </difference>
+
+  <difference>
+    <differenceType>6001</differenceType>
+    <className>com/google/cloud/firestore/telemetry/TelemetryConstants$MetricType</className>
+    <field>END_TO_END_LATENCY</field>
+  </difference>
+
+  <difference>
     <differenceType>7012</differenceType>
     <className>com/google/cloud/firestore/telemetry/MetricsUtil</className>
     <method>void shutdown()</method>

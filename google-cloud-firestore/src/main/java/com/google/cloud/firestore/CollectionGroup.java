@@ -21,7 +21,6 @@ import com.google.api.core.ApiFutures;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.ApiStreamObserver;
-import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
@@ -112,13 +111,6 @@ public class CollectionGroup extends Query {
               .getOptions()
               .getTraceUtil()
               .startSpan(TelemetryConstants.METHOD_NAME_PARTITION_QUERY);
-
-      MetricsContext metricsContext =
-          rpcContext
-              .getFirestore()
-              .getOptions()
-              .getMetricsUtil()
-              .createMetricsContext(TelemetryConstants.METHOD_NAME_PARTITION_QUERY);
 
       try (Scope ignored = span.makeCurrent()) {
         ApiFuture<List<QueryPartition>> result =

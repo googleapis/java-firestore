@@ -26,7 +26,6 @@ import com.google.api.core.ApiFutures;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.cloud.firestore.UserDataConverter.EncodingOptions;
 import com.google.cloud.firestore.encoding.CustomClassMapper;
-import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
@@ -622,17 +621,6 @@ public abstract class UpdateBuilder<T> {
                     : TelemetryConstants.METHOD_NAME_TRANSACTION_COMMIT);
     span.setAttribute(ATTRIBUTE_KEY_DOC_COUNT, writes.size());
     span.setAttribute(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null);
-
-    MetricsContext metricsContext = null;
-
-    metricsContext =
-        firestore
-            .getOptions()
-            .getMetricsUtil()
-            .createMetricsContext(
-                transactionId == null
-                    ? TelemetryConstants.METHOD_NAME_BATCH_COMMIT
-                    : TelemetryConstants.METHOD_NAME_TRANSACTION_COMMIT);
 
     try (Scope ignored = span.makeCurrent()) {
       // Sequence is thread safe.

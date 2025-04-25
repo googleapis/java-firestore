@@ -24,7 +24,6 @@ import com.google.api.gax.rpc.ApiExceptions;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.firestore.encoding.CustomClassMapper;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
-import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
@@ -138,13 +137,6 @@ public class CollectionReference extends Query {
             .getTraceUtil()
             .startSpan(TelemetryConstants.METHOD_NAME_COL_REF_LIST_DOCUMENTS);
 
-    MetricsContext metricsContext =
-        rpcContext
-            .getFirestore()
-            .getOptions()
-            .getMetricsUtil()
-            .createMetricsContext(TelemetryConstants.METHOD_NAME_COL_REF_LIST_DOCUMENTS);
-
     try (Scope ignored = span.makeCurrent()) {
       ListDocumentsRequest.Builder request = ListDocumentsRequest.newBuilder();
       request.setParent(options.getParentPath().toString());
@@ -211,13 +203,6 @@ public class CollectionReference extends Query {
             .getOptions()
             .getTraceUtil()
             .startSpan(TelemetryConstants.METHOD_NAME_COL_REF_ADD);
-
-    MetricsContext metricsContext =
-        rpcContext
-            .getFirestore()
-            .getOptions()
-            .getMetricsUtil()
-            .createMetricsContext(TelemetryConstants.METHOD_NAME_COL_REF_ADD);
 
     try (Scope ignored = span.makeCurrent()) {
       final DocumentReference documentReference = document();

@@ -26,7 +26,6 @@ import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.StatusCode.Code;
-import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Context;
@@ -917,12 +916,6 @@ public final class BulkWriter implements AutoCloseable {
               .getTraceUtil()
               .startSpan(TelemetryConstants.METHOD_NAME_BULK_WRITER_COMMIT, traceContext)
               .setAttribute(ATTRIBUTE_KEY_DOC_COUNT, batch.getMutationsSize());
-
-      MetricsContext metricsContext =
-          firestore
-              .getOptions()
-              .getMetricsUtil()
-              .createMetricsContext(TelemetryConstants.METHOD_NAME_BULK_WRITER_COMMIT);
 
       try (Scope ignored = span.makeCurrent()) {
         ApiFuture<Void> result = batch.bulkCommit();

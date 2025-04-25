@@ -442,10 +442,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nonnull final Transaction.AsyncFunction<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
 
-    MetricsContext metricsContext =
-        getOptions()
-            .getMetricsUtil()
-            .createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_TRANSACTION);
     ApiFuture<T> result;
 
     try {

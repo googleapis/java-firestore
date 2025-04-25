@@ -22,7 +22,6 @@ import com.google.api.core.InternalExtensionOnly;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.ApiExceptions;
 import com.google.cloud.firestore.telemetry.MetricsUtil;
-import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
@@ -158,9 +157,6 @@ public class DocumentReference {
   public ApiFuture<WriteResult> create(@Nonnull Map<String, Object> fields) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_CREATE);
 
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_CREATE);
-
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
       ApiFuture<WriteResult> result = extractFirst(writeBatch.create(this, fields).commit());
@@ -182,8 +178,6 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> create(@Nonnull Object pojo) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_CREATE);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_CREATE);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -206,8 +200,6 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Map<String, Object> fields) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_SET);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_SET);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -233,8 +225,6 @@ public class DocumentReference {
   public ApiFuture<WriteResult> set(
       @Nonnull Map<String, Object> fields, @Nonnull SetOptions options) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_SET);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_SET);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -257,8 +247,6 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Object pojo) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_SET);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_SET);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -283,8 +271,6 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> set(@Nonnull Object pojo, @Nonnull SetOptions options) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_SET);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_SET);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -307,8 +293,6 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> update(@Nonnull Map<String, Object> fields) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -332,8 +316,6 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> update(@Nonnull Map<String, Object> fields, Precondition options) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -360,8 +342,6 @@ public class DocumentReference {
   public ApiFuture<WriteResult> update(
       @Nonnull String field, @Nullable Object value, Object... moreFieldsAndValues) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -388,8 +368,6 @@ public class DocumentReference {
   public ApiFuture<WriteResult> update(
       @Nonnull FieldPath fieldPath, @Nullable Object value, Object... moreFieldsAndValues) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -420,8 +398,6 @@ public class DocumentReference {
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -453,8 +429,6 @@ public class DocumentReference {
       @Nullable Object value,
       Object... moreFieldsAndValues) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -478,8 +452,6 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> delete(@Nonnull Precondition options) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_DELETE);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_DELETE);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -500,8 +472,6 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<WriteResult> delete() {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_DELETE);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_DELETE);
 
     try (Scope ignored = span.makeCurrent()) {
       WriteBatch writeBatch = rpcContext.getFirestore().batch();
@@ -524,8 +494,6 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<DocumentSnapshot> get() {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_GET);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_GET);
 
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<DocumentSnapshot> result = extractFirst(rpcContext.getFirestore().getAll(this));
@@ -548,8 +516,6 @@ public class DocumentReference {
   @Nonnull
   public ApiFuture<DocumentSnapshot> get(FieldMask fieldMask) {
     TraceUtil.Span span = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_GET);
-    MetricsContext metricsContext =
-        getMetricsUtil().createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_GET);
 
     try (Scope ignored = span.makeCurrent()) {
       ApiFuture<DocumentSnapshot> result =
@@ -572,9 +538,6 @@ public class DocumentReference {
   public Iterable<CollectionReference> listCollections() {
     TraceUtil.Span span =
         getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_DOC_REF_LIST_COLLECTIONS);
-    MetricsContext metricsContext =
-        getMetricsUtil()
-            .createMetricsContext(TelemetryConstants.METHOD_NAME_DOC_REF_LIST_COLLECTIONS);
 
     try (Scope ignored = span.makeCurrent()) {
       ListCollectionIdsRequest.Builder request = ListCollectionIdsRequest.newBuilder();
