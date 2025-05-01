@@ -45,6 +45,9 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.BsonBinaryData;
+import com.google.cloud.firestore.BsonObjectId;
+import com.google.cloud.firestore.BsonTimestamp;
 import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
@@ -56,16 +59,20 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreBundle;
 import com.google.cloud.firestore.FirestoreException;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.Int32Value;
 import com.google.cloud.firestore.ListenerRegistration;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.LocalFirestoreHelper.AllSupportedTypes;
 import com.google.cloud.firestore.LocalFirestoreHelper.SingleField;
+import com.google.cloud.firestore.MaxKey;
+import com.google.cloud.firestore.MinKey;
 import com.google.cloud.firestore.Precondition;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.Query.Direction;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QueryPartition;
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.RegexValue;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.Transaction;
 import com.google.cloud.firestore.Transaction.Function;
@@ -2327,49 +2334,46 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void canWriteAndReadBackMinKey() throws Exception {
-    checkRoundTrip(FieldValue.minKey());
+    checkRoundTrip(MinKey.instance());
   }
 
   @Test
   public void canWriteAndReadBackMaxKey() throws Exception {
-    checkRoundTrip(FieldValue.maxKey());
+    checkRoundTrip(MaxKey.instance());
   }
 
   @Test
   public void canWriteAndReadBackRegex() throws Exception {
-    checkRoundTrip(FieldValue.regex("^foo", "i"));
+    checkRoundTrip(new RegexValue("^foo", "i"));
   }
 
   @Test
   public void canWriteAndReadBackInt32() throws Exception {
-    checkRoundTrip(FieldValue.int32(-57));
-    checkRoundTrip(FieldValue.int32(0));
-    checkRoundTrip(FieldValue.int32(57));
+    checkRoundTrip(new Int32Value(-57));
+    checkRoundTrip(new Int32Value(0));
+    checkRoundTrip(new Int32Value(57));
   }
 
   @Test
   public void canWriteAndReadBackBsonObjectId() throws Exception {
-    checkRoundTrip(FieldValue.bsonObjectId("507f191e810c19729de860ea"));
+    checkRoundTrip(new BsonObjectId("507f191e810c19729de860ea"));
   }
 
   @Test
   public void canWriteAndReadBackBsonTimestamp() throws Exception {
-    checkRoundTrip(FieldValue.bsonTimestamp(123, 45));
+    checkRoundTrip(new BsonTimestamp(123, 45));
   }
 
   @Test
   public void canWriteAndReadBackBsonBinaryData() throws Exception {
-    checkRoundTrip(FieldValue.bsonBinaryData(127, new byte[] {1, 2, 3}));
+    checkRoundTrip(BsonBinaryData.fromBytes(127, new byte[] {1, 2, 3}));
   }
 
   @Test
   public void invalidRegexGetsRejected() throws Exception {
     Exception error = null;
     try {
-      randomColl
-          .document()
-          .set(Collections.singletonMap("key", FieldValue.regex("foo", "a")))
-          .get();
+      randomColl.document().set(Collections.singletonMap("key", new RegexValue("foo", "a"))).get();
     } catch (Exception e) {
       error = e;
     }
@@ -2382,10 +2386,7 @@ public class ITSystemTest extends ITBaseTest {
   public void invalidBsonObjectIdGetsRejected() throws Exception {
     Exception error = null;
     try {
-      randomColl
-          .document()
-          .set(Collections.singletonMap("key", FieldValue.bsonObjectId("foobar")))
-          .get();
+      randomColl.document().set(Collections.singletonMap("key", new BsonObjectId("foobar"))).get();
     } catch (Exception e) {
       error = e;
     }
@@ -2400,8 +2401,7 @@ public class ITSystemTest extends ITBaseTest {
       randomColl
           .document()
           .set(
-              Collections.singletonMap(
-                  "key", FieldValue.bsonBinaryData(1234, new byte[] {1, 2, 3})))
+              Collections.singletonMap("key", BsonBinaryData.fromBytes(1234, new byte[] {1, 2, 3})))
           .get();
     } catch (Exception e) {
       error = e;

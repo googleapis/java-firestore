@@ -52,23 +52,23 @@ public class ExtendedTypesTest {
 
   @Test
   public void minKeyIsSingleton() {
-    MinKey minKey1 = FieldValue.minKey();
+    MinKey minKey1 = MinKey.instance();
     MinKey minKey2 = MinKey.instance();
     assertThat(minKey1).isEqualTo(minKey2);
-    assertThat(minKey1).isNotEqualTo(FieldValue.maxKey());
+    assertThat(minKey1).isNotEqualTo(MaxKey.instance());
   }
 
   @Test
   public void maxKeyIsSingleton() {
-    MaxKey maxKey1 = FieldValue.maxKey();
+    MaxKey maxKey1 = MaxKey.instance();
     MaxKey maxKey2 = MaxKey.instance();
     assertThat(maxKey1).isEqualTo(maxKey2);
-    assertThat(maxKey1).isNotEqualTo(FieldValue.minKey());
+    assertThat(maxKey1).isNotEqualTo(MinKey.instance());
   }
 
   @Test
   public void regexFieldsAndEquality() {
-    RegexValue regex1 = FieldValue.regex("^foo", "i");
+    RegexValue regex1 = new RegexValue("^foo", "i");
     RegexValue regex2 = new RegexValue("^foo", "i");
     RegexValue regex3 = new RegexValue("^foo", "x");
     RegexValue regex4 = new RegexValue("^bar", "i");
@@ -82,7 +82,7 @@ public class ExtendedTypesTest {
 
   @Test
   public void Int32ValueAndEquality() {
-    Int32Value i1 = FieldValue.int32(123);
+    Int32Value i1 = new Int32Value(123);
     Int32Value i2 = new Int32Value(123);
     Int32Value i3 = new Int32Value(456);
 
@@ -93,7 +93,7 @@ public class ExtendedTypesTest {
 
   @Test
   public void BsonObjectIdValueAndEquality() {
-    BsonObjectId oid1 = FieldValue.bsonObjectId("foo");
+    BsonObjectId oid1 = new BsonObjectId("foo");
     BsonObjectId oid2 = new BsonObjectId("foo");
     BsonObjectId oid3 = new BsonObjectId("bar");
 
@@ -104,7 +104,7 @@ public class ExtendedTypesTest {
 
   @Test
   public void BsonTimestampValuesAndEquality() {
-    BsonTimestamp t1 = FieldValue.bsonTimestamp(123, 456);
+    BsonTimestamp t1 = new BsonTimestamp(123, 456);
     BsonTimestamp t2 = new BsonTimestamp(123, 456);
     BsonTimestamp t3 = new BsonTimestamp(124, 456);
     BsonTimestamp t4 = new BsonTimestamp(123, 457);
@@ -118,7 +118,7 @@ public class ExtendedTypesTest {
 
   @Test
   public void BsonBinaryDataValuesAndEquality() {
-    BsonBinaryData b1 = FieldValue.bsonBinaryData(127, new byte[] {1, 2, 3});
+    BsonBinaryData b1 = BsonBinaryData.fromBytes(127, new byte[] {1, 2, 3});
     BsonBinaryData b2 = BsonBinaryData.fromBytes(127, new byte[] {1, 2, 3});
     BsonBinaryData b3 = BsonBinaryData.fromBytes(1, new byte[] {1, 2, 3});
     BsonBinaryData b4 = BsonBinaryData.fromBytes(127, new byte[] {1, 2, 4});
@@ -133,8 +133,8 @@ public class ExtendedTypesTest {
   @Test
   public void BsonBinaryDataConvertsByteToIntAndIntToByteCorrectly() {
     byte[] data = new byte[] {1, 2, 3};
-    BsonBinaryData b1 = FieldValue.bsonBinaryData(127, data); // 0x7F - MSB:0
-    BsonBinaryData b2 = FieldValue.bsonBinaryData(128, data); // 0x80 - MSB:1
+    BsonBinaryData b1 = BsonBinaryData.fromBytes(127, data); // 0x7F - MSB:0
+    BsonBinaryData b2 = BsonBinaryData.fromBytes(128, data); // 0x80 - MSB:1
     BsonBinaryData b3 = BsonBinaryData.fromBytes(255, data); // 0xFF - MSB:1
 
     BsonBinaryData b4 = UserDataConverter.decodeBsonBinary(b1.toProto());
@@ -267,7 +267,7 @@ public class ExtendedTypesTest {
     // Negative seconds
     IllegalArgumentException error1 = null;
     try {
-      BsonTimestamp t1 = FieldValue.bsonTimestamp(-1, 1);
+      BsonTimestamp t1 = new BsonTimestamp(-1, 1);
     } catch (IllegalArgumentException e) {
       error1 = e;
     }
@@ -278,7 +278,7 @@ public class ExtendedTypesTest {
     // Larger than 2^32-1 seconds
     IllegalArgumentException error2 = null;
     try {
-      BsonTimestamp t1 = FieldValue.bsonTimestamp(4294967296L, 1);
+      BsonTimestamp t1 = new BsonTimestamp(4294967296L, 1);
     } catch (IllegalArgumentException e) {
       error2 = e;
     }
@@ -289,7 +289,7 @@ public class ExtendedTypesTest {
     // Negative increment
     IllegalArgumentException error3 = null;
     try {
-      BsonTimestamp t1 = FieldValue.bsonTimestamp(1234, -1);
+      BsonTimestamp t1 = new BsonTimestamp(1234, -1);
     } catch (IllegalArgumentException e) {
       error3 = e;
     }
@@ -300,7 +300,7 @@ public class ExtendedTypesTest {
     // Larger than 2^32-1 increment
     IllegalArgumentException error4 = null;
     try {
-      BsonTimestamp t1 = FieldValue.bsonTimestamp(123, 4294967296L);
+      BsonTimestamp t1 = new BsonTimestamp(123, 4294967296L);
     } catch (IllegalArgumentException e) {
       error4 = e;
     }
@@ -311,7 +311,7 @@ public class ExtendedTypesTest {
 
   @Test
   public void canEncodeAndDecodeMinKey() {
-    MinKey minKey = FieldValue.minKey();
+    MinKey minKey = MinKey.instance();
     Value proto =
         Value.newBuilder()
             .setMapValue(
@@ -325,7 +325,7 @@ public class ExtendedTypesTest {
 
   @Test
   public void canEncodeAndDecodeMaxKey() {
-    MaxKey maxKey = FieldValue.maxKey();
+    MaxKey maxKey = MaxKey.instance();
     Value proto =
         Value.newBuilder()
             .setMapValue(
@@ -389,7 +389,7 @@ public class ExtendedTypesTest {
 
   @Test
   public void canEncodeAndDecodeBsonTimestamp() {
-    BsonTimestamp bsonTimestamp = FieldValue.bsonTimestamp(12345, 67);
+    BsonTimestamp bsonTimestamp = new BsonTimestamp(12345, 67);
     Value proto =
         Value.newBuilder()
             .setMapValue(
@@ -413,7 +413,7 @@ public class ExtendedTypesTest {
 
   @Test
   public void canEncodeAndDecodeBsonBinaryData() {
-    BsonBinaryData bsonBinaryData = FieldValue.bsonBinaryData(127, new byte[] {1, 2, 3});
+    BsonBinaryData bsonBinaryData = BsonBinaryData.fromBytes(127, new byte[] {1, 2, 3});
     Value proto =
         Value.newBuilder()
             .setMapValue(

@@ -980,13 +980,13 @@ public final class LocalFirestoreHelper {
     public GeoPoint geoPointValue = GEO_POINT;
     public Map<String, Object> model = ImmutableMap.of("foo", SINGLE_FIELD_OBJECT.foo);
     public VectorValue vectorValue = FieldValue.vector(new double[] {0.1, 0.2, 0.3});
-    public MinKey minKey = FieldValue.minKey();
-    public MaxKey maxKey = FieldValue.maxKey();
-    public RegexValue regexValue = FieldValue.regex("^foo", "i");
-    public Int32Value int32Value = FieldValue.int32(55);
-    public BsonObjectId bsonObjectId = FieldValue.bsonObjectId("507f191e810c19729de860eb");
-    public BsonTimestamp bsonTimestamp = FieldValue.bsonTimestamp(100, 10);
-    public BsonBinaryData bsonBinaryData = FieldValue.bsonBinaryData(127, new byte[] {1, 2, 3});
+    public MinKey minKey = MinKey.instance();
+    public MaxKey maxKey = MaxKey.instance();
+    public RegexValue regexValue = new RegexValue("^foo", "i");
+    public Int32Value int32Value = new Int32Value(55);
+    public BsonObjectId bsonObjectId = new BsonObjectId("507f191e810c19729de860eb");
+    public BsonTimestamp bsonTimestamp = new BsonTimestamp(100, 10);
+    public BsonBinaryData bsonBinaryData = BsonBinaryData.fromBytes(127, new byte[] {1, 2, 3});
 
     @Override
     public boolean equals(Object o) {
@@ -1143,15 +1143,14 @@ public final class LocalFirestoreHelper {
     ALL_SUPPORTED_TYPES_MAP.put("geoPointValue", GEO_POINT);
     ALL_SUPPORTED_TYPES_MAP.put("model", map("foo", SINGLE_FIELD_OBJECT.foo));
     ALL_SUPPORTED_TYPES_MAP.put("vectorValue", FieldValue.vector(new double[] {0.1, 0.2, 0.3}));
-    ALL_SUPPORTED_TYPES_MAP.put("minKey", FieldValue.minKey());
-    ALL_SUPPORTED_TYPES_MAP.put("maxKey", FieldValue.maxKey());
-    ALL_SUPPORTED_TYPES_MAP.put("regexValue", FieldValue.regex("^foo", "i"));
-    ALL_SUPPORTED_TYPES_MAP.put("int32Value", FieldValue.int32(55));
+    ALL_SUPPORTED_TYPES_MAP.put("minKey", MinKey.instance());
+    ALL_SUPPORTED_TYPES_MAP.put("maxKey", MaxKey.instance());
+    ALL_SUPPORTED_TYPES_MAP.put("regexValue", new RegexValue("^foo", "i"));
+    ALL_SUPPORTED_TYPES_MAP.put("int32Value", new Int32Value(55));
+    ALL_SUPPORTED_TYPES_MAP.put("bsonObjectId", new BsonObjectId("507f191e810c19729de860eb"));
+    ALL_SUPPORTED_TYPES_MAP.put("bsonTimestamp", new BsonTimestamp(100, 10));
     ALL_SUPPORTED_TYPES_MAP.put(
-        "bsonObjectId", FieldValue.bsonObjectId("507f191e810c19729de860eb"));
-    ALL_SUPPORTED_TYPES_MAP.put("bsonTimestamp", FieldValue.bsonTimestamp(100, 10));
-    ALL_SUPPORTED_TYPES_MAP.put(
-        "bsonBinaryData", FieldValue.bsonBinaryData(127, new byte[] {1, 2, 3}));
+        "bsonBinaryData", BsonBinaryData.fromBytes(127, new byte[] {1, 2, 3}));
     ALL_SUPPORTED_TYPES_PROTO =
         ImmutableMap.<String, Value>builder()
             .put("foo", Value.newBuilder().setStringValue("bar").build())

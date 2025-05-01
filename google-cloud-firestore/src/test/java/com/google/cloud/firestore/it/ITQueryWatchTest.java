@@ -30,6 +30,9 @@ import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Blob;
+import com.google.cloud.firestore.BsonBinaryData;
+import com.google.cloud.firestore.BsonObjectId;
+import com.google.cloud.firestore.BsonTimestamp;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentChange;
 import com.google.cloud.firestore.DocumentReference;
@@ -40,12 +43,16 @@ import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Filter;
 import com.google.cloud.firestore.FirestoreException;
 import com.google.cloud.firestore.GeoPoint;
+import com.google.cloud.firestore.Int32Value;
 import com.google.cloud.firestore.ListenerRegistration;
 import com.google.cloud.firestore.LocalFirestoreHelper;
+import com.google.cloud.firestore.MaxKey;
+import com.google.cloud.firestore.MinKey;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.Query.Direction;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.RegexValue;
 import com.google.cloud.firestore.WriteResult;
 import com.google.cloud.firestore.it.ITQueryWatchTest.QuerySnapshotEventListener.ListenerAssertions;
 import com.google.common.base.Joiner;
@@ -783,15 +790,15 @@ public final class ITQueryWatchTest extends ITBaseTest {
   public void canFilterAndOrderObjectId() throws Exception {
     Map<String, Map<String, Object>> data =
         map(
-            "doc1", map("key", FieldValue.bsonObjectId("507f191e810c19729de860ea")),
-            "doc2", map("key", FieldValue.bsonObjectId("507f191e810c19729de860eb")),
-            "doc3", map("key", FieldValue.bsonObjectId("507f191e810c19729de860ec")));
+            "doc1", map("key", new BsonObjectId("507f191e810c19729de860ea")),
+            "doc2", map("key", new BsonObjectId("507f191e810c19729de860eb")),
+            "doc3", map("key", new BsonObjectId("507f191e810c19729de860ec")));
     addDocs(data);
 
     QuerySnapshot snapshot =
         getFirstSnapshot(
             randomColl
-                .whereGreaterThan("key", FieldValue.bsonObjectId("507f191e810c19729de860ea"))
+                .whereGreaterThan("key", new BsonObjectId("507f191e810c19729de860ea"))
                 .orderBy("key", Direction.DESCENDING));
     List<Map<String, Object>> resultData = toDataArray(snapshot);
     assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc3"), data.get("doc2")));
@@ -802,8 +809,8 @@ public final class ITQueryWatchTest extends ITBaseTest {
                 .whereIn(
                     "key",
                     Arrays.asList(
-                        FieldValue.bsonObjectId("507f191e810c19729de860ea"),
-                        FieldValue.bsonObjectId("507f191e810c19729de860eb")))
+                        new BsonObjectId("507f191e810c19729de860ea"),
+                        new BsonObjectId("507f191e810c19729de860eb")))
                 .orderBy("key", Direction.DESCENDING));
     resultData = toDataArray(snapshot);
     assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc2"), data.get("doc1")));
@@ -813,15 +820,15 @@ public final class ITQueryWatchTest extends ITBaseTest {
   public void canFilterAndOrderInt32() throws Exception {
     Map<String, Map<String, Object>> data =
         map(
-            "doc1", map("key", FieldValue.int32(-1)),
-            "doc2", map("key", FieldValue.int32(1)),
-            "doc3", map("key", FieldValue.int32(2)));
+            "doc1", map("key", new Int32Value(-1)),
+            "doc2", map("key", new Int32Value(1)),
+            "doc3", map("key", new Int32Value(2)));
     addDocs(data);
 
     QuerySnapshot snapshot =
         getFirstSnapshot(
             randomColl
-                .whereGreaterThanOrEqualTo("key", FieldValue.int32(1))
+                .whereGreaterThanOrEqualTo("key", new Int32Value(1))
                 .orderBy("key", Direction.DESCENDING));
     List<Map<String, Object>> resultData = toDataArray(snapshot);
     assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc3"), data.get("doc2")));
@@ -829,7 +836,7 @@ public final class ITQueryWatchTest extends ITBaseTest {
     snapshot =
         getFirstSnapshot(
             randomColl
-                .whereNotIn("key", Arrays.asList(FieldValue.int32(1)))
+                .whereNotIn("key", Arrays.asList(new Int32Value(1)))
                 .orderBy("key", Direction.DESCENDING));
     resultData = toDataArray(snapshot);
     assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc3"), data.get("doc1")));
@@ -839,15 +846,15 @@ public final class ITQueryWatchTest extends ITBaseTest {
   public void canFilterAndOrderBsonTimestamp() throws Exception {
     Map<String, Map<String, Object>> data =
         map(
-            "doc1", map("key", FieldValue.bsonTimestamp(1, 1)),
-            "doc2", map("key", FieldValue.bsonTimestamp(1, 2)),
-            "doc3", map("key", FieldValue.bsonTimestamp(2, 1)));
+            "doc1", map("key", new BsonTimestamp(1, 1)),
+            "doc2", map("key", new BsonTimestamp(1, 2)),
+            "doc3", map("key", new BsonTimestamp(2, 1)));
     addDocs(data);
 
     QuerySnapshot snapshot =
         getFirstSnapshot(
             randomColl
-                .whereGreaterThan("key", FieldValue.bsonTimestamp(1, 1))
+                .whereGreaterThan("key", new BsonTimestamp(1, 1))
                 .orderBy("key", Direction.DESCENDING));
     List<Map<String, Object>> resultData = toDataArray(snapshot);
     assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc3"), data.get("doc2")));
@@ -855,7 +862,7 @@ public final class ITQueryWatchTest extends ITBaseTest {
     snapshot =
         getFirstSnapshot(
             randomColl
-                .whereNotEqualTo("key", FieldValue.bsonTimestamp(1, 1))
+                .whereNotEqualTo("key", new BsonTimestamp(1, 1))
                 .orderBy("key", Direction.DESCENDING));
     resultData = toDataArray(snapshot);
     assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc3"), data.get("doc2")));
@@ -865,15 +872,15 @@ public final class ITQueryWatchTest extends ITBaseTest {
   public void canFilterAndOrderBsonBinaryData() throws Exception {
     Map<String, Map<String, Object>> data =
         map(
-            "doc1", map("key", FieldValue.bsonBinaryData(1, new byte[] {1, 2, 3})),
-            "doc2", map("key", FieldValue.bsonBinaryData(1, new byte[] {1, 2, 4})),
-            "doc3", map("key", FieldValue.bsonBinaryData(2, new byte[] {1, 2, 3})));
+            "doc1", map("key", BsonBinaryData.fromBytes(1, new byte[] {1, 2, 3})),
+            "doc2", map("key", BsonBinaryData.fromBytes(1, new byte[] {1, 2, 4})),
+            "doc3", map("key", BsonBinaryData.fromBytes(2, new byte[] {1, 2, 3})));
     addDocs(data);
 
     QuerySnapshot snapshot =
         getFirstSnapshot(
             randomColl
-                .whereGreaterThan("key", FieldValue.bsonBinaryData(1, new byte[] {1, 2, 3}))
+                .whereGreaterThan("key", BsonBinaryData.fromBytes(1, new byte[] {1, 2, 3}))
                 .orderBy("key", Direction.DESCENDING));
     List<Map<String, Object>> resultData = toDataArray(snapshot);
     assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc3"), data.get("doc2")));
@@ -881,9 +888,8 @@ public final class ITQueryWatchTest extends ITBaseTest {
     snapshot =
         getFirstSnapshot(
             randomColl
-                .whereGreaterThanOrEqualTo(
-                    "key", FieldValue.bsonBinaryData(1, new byte[] {1, 2, 3}))
-                .whereLessThan("key", FieldValue.bsonBinaryData(2, new byte[] {1, 2, 3}))
+                .whereGreaterThanOrEqualTo("key", BsonBinaryData.fromBytes(1, new byte[] {1, 2, 3}))
+                .whereLessThan("key", BsonBinaryData.fromBytes(2, new byte[] {1, 2, 3}))
                 .orderBy("key", Direction.DESCENDING));
     resultData = toDataArray(snapshot);
     assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc2"), data.get("doc1")));
@@ -893,9 +899,9 @@ public final class ITQueryWatchTest extends ITBaseTest {
   public void canFilterAndOrderRegexValues() throws Exception {
     Map<String, Map<String, Object>> data =
         map(
-            "doc1", map("key", FieldValue.regex("^bar", "i")),
-            "doc2", map("key", FieldValue.regex("^bar", "x")),
-            "doc3", map("key", FieldValue.regex("^baz", "i")));
+            "doc1", map("key", new RegexValue("^bar", "i")),
+            "doc2", map("key", new RegexValue("^bar", "x")),
+            "doc3", map("key", new RegexValue("^baz", "i")));
     addDocs(data);
 
     QuerySnapshot snapshot =
@@ -903,8 +909,8 @@ public final class ITQueryWatchTest extends ITBaseTest {
             randomColl
                 .where(
                     Filter.or(
-                        Filter.greaterThan("key", FieldValue.regex("^bar", "x")),
-                        Filter.notEqualTo("key", FieldValue.regex("^bar", "x"))))
+                        Filter.greaterThan("key", new RegexValue("^bar", "x")),
+                        Filter.notEqualTo("key", new RegexValue("^bar", "x"))))
                 .orderBy("key", Direction.DESCENDING));
     List<Map<String, Object>> resultData = toDataArray(snapshot);
     assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc3"), data.get("doc1")));
@@ -914,17 +920,15 @@ public final class ITQueryWatchTest extends ITBaseTest {
   public void canFilterAndOrderMinKeys() throws Exception {
     Map<String, Map<String, Object>> data =
         map(
-            "doc1", map("key", FieldValue.minKey()),
-            "doc2", map("key", FieldValue.minKey()),
-            "doc3", map("key", FieldValue.maxKey()));
+            "doc1", map("key", MinKey.instance()),
+            "doc2", map("key", MinKey.instance()),
+            "doc3", map("key", MaxKey.instance()));
     addDocs(data);
 
     // MinKeys are equal, would sort by documentId as secondary order
     QuerySnapshot snapshot =
         getFirstSnapshot(
-            randomColl
-                .whereEqualTo("key", FieldValue.minKey())
-                .orderBy("key", Direction.DESCENDING));
+            randomColl.whereEqualTo("key", MinKey.instance()).orderBy("key", Direction.DESCENDING));
     List<Map<String, Object>> resultData = toDataArray(snapshot);
     assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc2"), data.get("doc1")));
   }
@@ -933,17 +937,15 @@ public final class ITQueryWatchTest extends ITBaseTest {
   public void canFilterAndOrderMaxKeys() throws Exception {
     Map<String, Map<String, Object>> data =
         map(
-            "doc1", map("key", FieldValue.minKey()),
-            "doc2", map("key", FieldValue.maxKey()),
-            "doc3", map("key", FieldValue.maxKey()));
+            "doc1", map("key", MinKey.instance()),
+            "doc2", map("key", MaxKey.instance()),
+            "doc3", map("key", MaxKey.instance()));
     addDocs(data);
 
     // MaxKeys are equal, would sort by documentId as secondary order
     QuerySnapshot snapshot =
         getFirstSnapshot(
-            randomColl
-                .whereEqualTo("key", FieldValue.maxKey())
-                .orderBy("key", Direction.DESCENDING));
+            randomColl.whereEqualTo("key", MaxKey.instance()).orderBy("key", Direction.DESCENDING));
     List<Map<String, Object>> resultData = toDataArray(snapshot);
     assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc3"), data.get("doc2")));
   }
@@ -953,25 +955,25 @@ public final class ITQueryWatchTest extends ITBaseTest {
     Map<String, Map<String, Object>> data =
         map(
             "s", map("key", null),
-            "t", map("key", FieldValue.minKey()),
+            "t", map("key", MinKey.instance()),
             "c", map("key", true),
             "d", map("key", Double.NaN),
-            "e", map("key", FieldValue.int32(1)),
+            "e", map("key", new Int32Value(1)),
             "f", map("key", 2.0),
             "g", map("key", 3),
             "h", map("key", Timestamp.ofTimeSecondsAndNanos(100, 123456000)),
-            "i", map("key", FieldValue.bsonTimestamp(1, 2)),
+            "i", map("key", new BsonTimestamp(1, 2)),
             "j", map("key", "string"),
             "k", map("key", Blob.fromBytes(new byte[] {0, 1, 3})),
-            "l", map("key", FieldValue.bsonBinaryData(1, new byte[] {1, 2, 3})),
+            "l", map("key", BsonBinaryData.fromBytes(1, new byte[] {1, 2, 3})),
             "m", map("key", randomColl.getFirestore().collection("c1").document("doc")),
-            "n", map("key", FieldValue.bsonObjectId("507f191e810c19729de860ea")),
+            "n", map("key", new BsonObjectId("507f191e810c19729de860ea")),
             "o", map("key", new GeoPoint(0, 0)),
-            "p", map("key", FieldValue.regex("^foo", "i")),
+            "p", map("key", new RegexValue("^foo", "i")),
             "q", map("key", Arrays.asList(1, 2)),
             "r", map("key", FieldValue.vector(new double[] {1, 2})),
             "a", map("key", Collections.singletonMap("a", 1)),
-            "b", map("key", FieldValue.maxKey()));
+            "b", map("key", MaxKey.instance()));
     addDocs(data);
 
     List<String> expectedResult =

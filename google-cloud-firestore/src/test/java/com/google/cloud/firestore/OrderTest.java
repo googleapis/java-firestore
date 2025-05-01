@@ -213,26 +213,24 @@ public class OrderTest {
   }
 
   private Value regexValue(String pattern, String options) {
-    return Value.newBuilder().setMapValue(FieldValue.regex(pattern, options).toProto()).build();
+    return Value.newBuilder().setMapValue(new RegexValue(pattern, options).toProto()).build();
   }
 
   private Value int32Value(int value) {
-    return Value.newBuilder().setMapValue(FieldValue.int32(value).toProto()).build();
+    return Value.newBuilder().setMapValue(new Int32Value(value).toProto()).build();
   }
 
   private Value bsonObjectIdValue(String oid) {
-    return Value.newBuilder().setMapValue(FieldValue.bsonObjectId(oid).toProto()).build();
+    return Value.newBuilder().setMapValue(new BsonObjectId(oid).toProto()).build();
   }
 
   private Value bsonTimestampValue(long seconds, long increment) {
-    return Value.newBuilder()
-        .setMapValue(FieldValue.bsonTimestamp(seconds, increment).toProto())
-        .build();
+    return Value.newBuilder().setMapValue(new BsonTimestamp(seconds, increment).toProto()).build();
   }
 
   private Value bsonBinaryData(int subtype, byte[] data) {
     return Value.newBuilder()
-        .setMapValue(FieldValue.bsonBinaryData(subtype, data).toProto())
+        .setMapValue(BsonBinaryData.fromBytes(subtype, data).toProto())
         .build();
   }
 
