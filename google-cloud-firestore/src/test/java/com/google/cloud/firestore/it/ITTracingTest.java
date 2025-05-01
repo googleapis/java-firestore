@@ -18,7 +18,6 @@ package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.*;
 import static com.google.cloud.firestore.telemetry.TraceUtil.*;
-import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -108,8 +107,7 @@ public abstract class ITTracingTest {
   public void before() {
     inMemorySpanExporter = InMemorySpanExporter.create();
 
-    Resource resource =
-        Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
+    Resource resource = Resource.getDefault();
     SpanProcessor inMemorySpanProcessor = SimpleSpanProcessor.create(inMemorySpanExporter);
     FirestoreOptions.Builder optionsBuilder = FirestoreOptions.newBuilder();
     FirestoreOpenTelemetryOptions.Builder otelOptionsBuilder =
@@ -159,7 +157,8 @@ public abstract class ITTracingTest {
   public void after() throws Exception {
     Preconditions.checkNotNull(
         firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
+        "Error instantiating Firestore. Check that the service account credentials were properly"
+            + " set.");
     firestore.shutdown();
     inMemorySpanExporter.reset();
   }

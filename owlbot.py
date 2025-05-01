@@ -79,8 +79,9 @@ java.common_templates(excludes=[
     # firestore uses a different project for its integration tests
     # due to the default project running datastore
     '.kokoro/presubmit/integration.cfg',
-    '.kokoro/presubmit/graalvm-native.cfg',
-    '.kokoro/presubmit/graalvm-native-17.cfg',
+    '.kokoro/presubmit/graalvm-native-a.cfg',
+    '.kokoro/presubmit/graalvm-native-b.cfg',
+    '.kokoro/presubmit/graalvm-native-c.cfg',
     '.kokoro/presubmit/samples.cfg',
     '.kokoro/nightly/integration.cfg',
     '.kokoro/nightly/java11-integration.cfg',
@@ -93,5 +94,6 @@ java.common_templates(excludes=[
     '.kokoro/requirements.in',
     '.kokoro/requirements.txt',
     '.github/CODEOWNERS',
+    '.github/workflows/samples.yaml',
     'renovate.json'
 ])

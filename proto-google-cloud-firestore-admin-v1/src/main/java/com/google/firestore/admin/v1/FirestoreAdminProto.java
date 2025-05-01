@@ -65,6 +65,38 @@ public final class FirestoreAdminProto {
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_admin_v1_DeleteDatabaseMetadata_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_CreateUserCredsRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_CreateUserCredsRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_GetUserCredsRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_GetUserCredsRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_ListUserCredsRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_ListUserCredsRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_ListUserCredsResponse_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_ListUserCredsResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_EnableUserCredsRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_EnableUserCredsRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_DisableUserCredsRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_DisableUserCredsRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_ResetUserPasswordRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_ResetUserPasswordRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_google_firestore_admin_v1_DeleteUserCredsRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_google_firestore_admin_v1_DeleteUserCredsRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
       internal_static_google_firestore_admin_v1_CreateBackupScheduleRequest_descriptor;
   static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_google_firestore_admin_v1_CreateBackupScheduleRequest_fieldAccessorTable;
@@ -179,231 +211,283 @@ public final class FirestoreAdminProto {
           + "e/firestore/admin/v1/field.proto\032%google"
           + "/firestore/admin/v1/index.proto\032)google/"
           + "firestore/admin/v1/operation.proto\032(goog"
-          + "le/firestore/admin/v1/schedule.proto\032#go"
-          + "ogle/longrunning/operations.proto\032\033googl"
-          + "e/protobuf/empty.proto\032 google/protobuf/"
-          + "field_mask.proto\032\037google/protobuf/timest"
-          + "amp.proto\"g\n\024ListDatabasesRequest\0229\n\006par"
-          + "ent\030\001 \001(\tB)\340A\002\372A#\022!firestore.googleapis."
-          + "com/Database\022\024\n\014show_deleted\030\004 \001(\010\"\250\001\n\025C"
-          + "reateDatabaseRequest\0229\n\006parent\030\001 \001(\tB)\340A"
-          + "\002\372A#\022!firestore.googleapis.com/Database\022"
-          + ":\n\010database\030\002 \001(\0132#.google.firestore.adm"
-          + "in.v1.DatabaseB\003\340A\002\022\030\n\013database_id\030\003 \001(\t"
-          + "B\003\340A\002\"\030\n\026CreateDatabaseMetadata\"d\n\025ListD"
-          + "atabasesResponse\0226\n\tdatabases\030\001 \003(\0132#.go"
-          + "ogle.firestore.admin.v1.Database\022\023\n\013unre"
-          + "achable\030\003 \003(\t\"M\n\022GetDatabaseRequest\0227\n\004n"
-          + "ame\030\001 \001(\tB)\340A\002\372A#\n!firestore.googleapis."
-          + "com/Database\"\204\001\n\025UpdateDatabaseRequest\022:"
-          + "\n\010database\030\001 \001(\0132#.google.firestore.admi"
-          + "n.v1.DatabaseB\003\340A\002\022/\n\013update_mask\030\002 \001(\0132"
-          + "\032.google.protobuf.FieldMask\"\030\n\026UpdateDat"
-          + "abaseMetadata\"^\n\025DeleteDatabaseRequest\0227"
-          + "\n\004name\030\001 \001(\tB)\340A\002\372A#\n!firestore.googleap"
-          + "is.com/Database\022\014\n\004etag\030\003 \001(\t\"\030\n\026DeleteD"
-          + "atabaseMetadata\"\241\001\n\033CreateBackupSchedule"
-          + "Request\0229\n\006parent\030\001 \001(\tB)\340A\002\372A#\n!firesto"
-          + "re.googleapis.com/Database\022G\n\017backup_sch"
-          + "edule\030\002 \001(\0132).google.firestore.admin.v1."
-          + "BackupScheduleB\003\340A\002\"Y\n\030GetBackupSchedule"
-          + "Request\022=\n\004name\030\001 \001(\tB/\340A\002\372A)\n\'firestore"
-          + ".googleapis.com/BackupSchedule\"\227\001\n\033Updat"
-          + "eBackupScheduleRequest\022G\n\017backup_schedul"
-          + "e\030\001 \001(\0132).google.firestore.admin.v1.Back"
-          + "upScheduleB\003\340A\002\022/\n\013update_mask\030\002 \001(\0132\032.g"
-          + "oogle.protobuf.FieldMask\"W\n\032ListBackupSc"
-          + "hedulesRequest\0229\n\006parent\030\001 \001(\tB)\340A\002\372A#\n!"
-          + "firestore.googleapis.com/Database\"b\n\033Lis"
-          + "tBackupSchedulesResponse\022C\n\020backup_sched"
-          + "ules\030\001 \003(\0132).google.firestore.admin.v1.B"
-          + "ackupSchedule\"\\\n\033DeleteBackupScheduleReq"
-          + "uest\022=\n\004name\030\001 \001(\tB/\340A\002\372A)\n\'firestore.go"
-          + "ogleapis.com/BackupSchedule\"\214\001\n\022CreateIn"
-          + "dexRequest\022@\n\006parent\030\001 \001(\tB0\340A\002\372A*\n(fire"
-          + "store.googleapis.com/CollectionGroup\0224\n\005"
-          + "index\030\002 \001(\0132 .google.firestore.admin.v1."
-          + "IndexB\003\340A\002\"\215\001\n\022ListIndexesRequest\022@\n\006par"
-          + "ent\030\001 \001(\tB0\340A\002\372A*\n(firestore.googleapis."
-          + "com/CollectionGroup\022\016\n\006filter\030\002 \001(\t\022\021\n\tp"
-          + "age_size\030\003 \001(\005\022\022\n\npage_token\030\004 \001(\t\"a\n\023Li"
-          + "stIndexesResponse\0221\n\007indexes\030\001 \003(\0132 .goo"
-          + "gle.firestore.admin.v1.Index\022\027\n\017next_pag"
-          + "e_token\030\002 \001(\t\"G\n\017GetIndexRequest\0224\n\004name"
-          + "\030\001 \001(\tB&\340A\002\372A \n\036firestore.googleapis.com"
-          + "/Index\"J\n\022DeleteIndexRequest\0224\n\004name\030\001 \001"
-          + "(\tB&\340A\002\372A \n\036firestore.googleapis.com/Ind"
-          + "ex\"{\n\022UpdateFieldRequest\0224\n\005field\030\001 \001(\0132"
-          + " .google.firestore.admin.v1.FieldB\003\340A\002\022/"
-          + "\n\013update_mask\030\002 \001(\0132\032.google.protobuf.Fi"
-          + "eldMask\"G\n\017GetFieldRequest\0224\n\004name\030\001 \001(\t"
-          + "B&\340A\002\372A \n\036firestore.googleapis.com/Field"
-          + "\"\214\001\n\021ListFieldsRequest\022@\n\006parent\030\001 \001(\tB0"
-          + "\340A\002\372A*\n(firestore.googleapis.com/Collect"
-          + "ionGroup\022\016\n\006filter\030\002 \001(\t\022\021\n\tpage_size\030\003 "
-          + "\001(\005\022\022\n\npage_token\030\004 \001(\t\"_\n\022ListFieldsRes"
-          + "ponse\0220\n\006fields\030\001 \003(\0132 .google.firestore"
-          + ".admin.v1.Field\022\027\n\017next_page_token\030\002 \001(\t"
-          + "\"\316\001\n\026ExportDocumentsRequest\0227\n\004name\030\001 \001("
-          + "\tB)\340A\002\372A#\n!firestore.googleapis.com/Data"
-          + "base\022\026\n\016collection_ids\030\002 \003(\t\022\031\n\021output_u"
-          + "ri_prefix\030\003 \001(\t\022\025\n\rnamespace_ids\030\004 \003(\t\0221"
-          + "\n\rsnapshot_time\030\005 \001(\0132\032.google.protobuf."
-          + "Timestamp\"\232\001\n\026ImportDocumentsRequest\0227\n\004"
+          + "le/firestore/admin/v1/schedule.proto\032*go"
+          + "ogle/firestore/admin/v1/user_creds.proto"
+          + "\032#google/longrunning/operations.proto\032\033g"
+          + "oogle/protobuf/empty.proto\032 google/proto"
+          + "buf/field_mask.proto\032\037google/protobuf/ti"
+          + "mestamp.proto\"g\n\024ListDatabasesRequest\0229\n"
+          + "\006parent\030\001 \001(\tB)\340A\002\372A#\022!firestore.googlea"
+          + "pis.com/Database\022\024\n\014show_deleted\030\004 \001(\010\"\250"
+          + "\001\n\025CreateDatabaseRequest\0229\n\006parent\030\001 \001(\t"
+          + "B)\340A\002\372A#\022!firestore.googleapis.com/Datab"
+          + "ase\022:\n\010database\030\002 \001(\0132#.google.firestore"
+          + ".admin.v1.DatabaseB\003\340A\002\022\030\n\013database_id\030\003"
+          + " \001(\tB\003\340A\002\"\030\n\026CreateDatabaseMetadata\"d\n\025L"
+          + "istDatabasesResponse\0226\n\tdatabases\030\001 \003(\0132"
+          + "#.google.firestore.admin.v1.Database\022\023\n\013"
+          + "unreachable\030\003 \003(\t\"M\n\022GetDatabaseRequest\022"
+          + "7\n\004name\030\001 \001(\tB)\340A\002\372A#\n!firestore.googlea"
+          + "pis.com/Database\"\204\001\n\025UpdateDatabaseReque"
+          + "st\022:\n\010database\030\001 \001(\0132#.google.firestore."
+          + "admin.v1.DatabaseB\003\340A\002\022/\n\013update_mask\030\002 "
+          + "\001(\0132\032.google.protobuf.FieldMask\"\030\n\026Updat"
+          + "eDatabaseMetadata\"^\n\025DeleteDatabaseReque"
+          + "st\0227\n\004name\030\001 \001(\tB)\340A\002\372A#\n!firestore.goog"
+          + "leapis.com/Database\022\014\n\004etag\030\003 \001(\t\"\030\n\026Del"
+          + "eteDatabaseMetadata\"\257\001\n\026CreateUserCredsR"
+          + "equest\022:\n\006parent\030\001 \001(\tB*\340A\002\372A$\022\"firestor"
+          + "e.googleapis.com/UserCreds\022=\n\nuser_creds"
+          + "\030\002 \001(\0132$.google.firestore.admin.v1.UserC"
+          + "redsB\003\340A\002\022\032\n\ruser_creds_id\030\003 \001(\tB\003\340A\002\"O\n"
+          + "\023GetUserCredsRequest\0228\n\004name\030\001 \001(\tB*\340A\002\372"
+          + "A$\n\"firestore.googleapis.com/UserCreds\"R"
+          + "\n\024ListUserCredsRequest\022:\n\006parent\030\001 \001(\tB*"
+          + "\340A\002\372A$\022\"firestore.googleapis.com/UserCre"
+          + "ds\"Q\n\025ListUserCredsResponse\0228\n\nuser_cred"
+          + "s\030\001 \003(\0132$.google.firestore.admin.v1.User"
+          + "Creds\"R\n\026EnableUserCredsRequest\0228\n\004name\030"
+          + "\001 \001(\tB*\340A\002\372A$\n\"firestore.googleapis.com/"
+          + "UserCreds\"S\n\027DisableUserCredsRequest\0228\n\004"
+          + "name\030\001 \001(\tB*\340A\002\372A$\n\"firestore.googleapis"
+          + ".com/UserCreds\"T\n\030ResetUserPasswordReque"
+          + "st\0228\n\004name\030\001 \001(\tB*\340A\002\372A$\n\"firestore.goog"
+          + "leapis.com/UserCreds\"R\n\026DeleteUserCredsR"
+          + "equest\0228\n\004name\030\001 \001(\tB*\340A\002\372A$\n\"firestore."
+          + "googleapis.com/UserCreds\"\241\001\n\033CreateBacku"
+          + "pScheduleRequest\0229\n\006parent\030\001 \001(\tB)\340A\002\372A#"
+          + "\n!firestore.googleapis.com/Database\022G\n\017b"
+          + "ackup_schedule\030\002 \001(\0132).google.firestore."
+          + "admin.v1.BackupScheduleB\003\340A\002\"Y\n\030GetBacku"
+          + "pScheduleRequest\022=\n\004name\030\001 \001(\tB/\340A\002\372A)\n\'"
+          + "firestore.googleapis.com/BackupSchedule\""
+          + "\227\001\n\033UpdateBackupScheduleRequest\022G\n\017backu"
+          + "p_schedule\030\001 \001(\0132).google.firestore.admi"
+          + "n.v1.BackupScheduleB\003\340A\002\022/\n\013update_mask\030"
+          + "\002 \001(\0132\032.google.protobuf.FieldMask\"W\n\032Lis"
+          + "tBackupSchedulesRequest\0229\n\006parent\030\001 \001(\tB"
+          + ")\340A\002\372A#\n!firestore.googleapis.com/Databa"
+          + "se\"b\n\033ListBackupSchedulesResponse\022C\n\020bac"
+          + "kup_schedules\030\001 \003(\0132).google.firestore.a"
+          + "dmin.v1.BackupSchedule\"\\\n\033DeleteBackupSc"
+          + "heduleRequest\022=\n\004name\030\001 \001(\tB/\340A\002\372A)\n\'fir"
+          + "estore.googleapis.com/BackupSchedule\"\214\001\n"
+          + "\022CreateIndexRequest\022@\n\006parent\030\001 \001(\tB0\340A\002"
+          + "\372A*\n(firestore.googleapis.com/Collection"
+          + "Group\0224\n\005index\030\002 \001(\0132 .google.firestore."
+          + "admin.v1.IndexB\003\340A\002\"\215\001\n\022ListIndexesReque"
+          + "st\022@\n\006parent\030\001 \001(\tB0\340A\002\372A*\n(firestore.go"
+          + "ogleapis.com/CollectionGroup\022\016\n\006filter\030\002"
+          + " \001(\t\022\021\n\tpage_size\030\003 \001(\005\022\022\n\npage_token\030\004 "
+          + "\001(\t\"a\n\023ListIndexesResponse\0221\n\007indexes\030\001 "
+          + "\003(\0132 .google.firestore.admin.v1.Index\022\027\n"
+          + "\017next_page_token\030\002 \001(\t\"G\n\017GetIndexReques"
+          + "t\0224\n\004name\030\001 \001(\tB&\340A\002\372A \n\036firestore.googl"
+          + "eapis.com/Index\"J\n\022DeleteIndexRequest\0224\n"
+          + "\004name\030\001 \001(\tB&\340A\002\372A \n\036firestore.googleapi"
+          + "s.com/Index\"{\n\022UpdateFieldRequest\0224\n\005fie"
+          + "ld\030\001 \001(\0132 .google.firestore.admin.v1.Fie"
+          + "ldB\003\340A\002\022/\n\013update_mask\030\002 \001(\0132\032.google.pr"
+          + "otobuf.FieldMask\"G\n\017GetFieldRequest\0224\n\004n"
+          + "ame\030\001 \001(\tB&\340A\002\372A \n\036firestore.googleapis."
+          + "com/Field\"\214\001\n\021ListFieldsRequest\022@\n\006paren"
+          + "t\030\001 \001(\tB0\340A\002\372A*\n(firestore.googleapis.co"
+          + "m/CollectionGroup\022\016\n\006filter\030\002 \001(\t\022\021\n\tpag"
+          + "e_size\030\003 \001(\005\022\022\n\npage_token\030\004 \001(\t\"_\n\022List"
+          + "FieldsResponse\0220\n\006fields\030\001 \003(\0132 .google."
+          + "firestore.admin.v1.Field\022\027\n\017next_page_to"
+          + "ken\030\002 \001(\t\"\316\001\n\026ExportDocumentsRequest\0227\n\004"
           + "name\030\001 \001(\tB)\340A\002\372A#\n!firestore.googleapis"
-          + ".com/Database\022\026\n\016collection_ids\030\002 \003(\t\022\030\n"
-          + "\020input_uri_prefix\030\003 \001(\t\022\025\n\rnamespace_ids"
-          + "\030\004 \003(\t\"\216\001\n\032BulkDeleteDocumentsRequest\0227\n"
-          + "\004name\030\001 \001(\tB)\340A\002\372A#\n!firestore.googleapi"
-          + "s.com/Database\022\033\n\016collection_ids\030\002 \003(\tB\003"
-          + "\340A\001\022\032\n\rnamespace_ids\030\003 \003(\tB\003\340A\001\"\035\n\033BulkD"
-          + "eleteDocumentsResponse\"I\n\020GetBackupReque"
+          + ".com/Database\022\026\n\016collection_ids\030\002 \003(\t\022\031\n"
+          + "\021output_uri_prefix\030\003 \001(\t\022\025\n\rnamespace_id"
+          + "s\030\004 \003(\t\0221\n\rsnapshot_time\030\005 \001(\0132\032.google."
+          + "protobuf.Timestamp\"\232\001\n\026ImportDocumentsRe"
+          + "quest\0227\n\004name\030\001 \001(\tB)\340A\002\372A#\n!firestore.g"
+          + "oogleapis.com/Database\022\026\n\016collection_ids"
+          + "\030\002 \003(\t\022\030\n\020input_uri_prefix\030\003 \001(\t\022\025\n\rname"
+          + "space_ids\030\004 \003(\t\"\216\001\n\032BulkDeleteDocumentsR"
+          + "equest\0227\n\004name\030\001 \001(\tB)\340A\002\372A#\n!firestore."
+          + "googleapis.com/Database\022\033\n\016collection_id"
+          + "s\030\002 \003(\tB\003\340A\001\022\032\n\rnamespace_ids\030\003 \003(\tB\003\340A\001"
+          + "\"\035\n\033BulkDeleteDocumentsResponse\"I\n\020GetBa"
+          + "ckupRequest\0225\n\004name\030\001 \001(\tB\'\340A\002\372A!\n\037fires"
+          + "tore.googleapis.com/Backup\"_\n\022ListBackup"
+          + "sRequest\0229\n\006parent\030\001 \001(\tB)\340A\002\372A#\n!firest"
+          + "ore.googleapis.com/Location\022\016\n\006filter\030\002 "
+          + "\001(\t\"^\n\023ListBackupsResponse\0222\n\007backups\030\001 "
+          + "\003(\0132!.google.firestore.admin.v1.Backup\022\023"
+          + "\n\013unreachable\030\003 \003(\t\"L\n\023DeleteBackupReque"
           + "st\0225\n\004name\030\001 \001(\tB\'\340A\002\372A!\n\037firestore.goog"
-          + "leapis.com/Backup\"O\n\022ListBackupsRequest\022"
-          + "9\n\006parent\030\001 \001(\tB)\340A\002\372A#\n!firestore.googl"
-          + "eapis.com/Location\"^\n\023ListBackupsRespons"
-          + "e\0222\n\007backups\030\001 \003(\0132!.google.firestore.ad"
-          + "min.v1.Backup\022\023\n\013unreachable\030\003 \003(\t\"L\n\023De"
-          + "leteBackupRequest\0225\n\004name\030\001 \001(\tB\'\340A\002\372A!\n"
-          + "\037firestore.googleapis.com/Backup\"\374\001\n\026Res"
-          + "toreDatabaseRequest\0229\n\006parent\030\001 \001(\tB)\340A\002"
-          + "\372A#\022!firestore.googleapis.com/Database\022\030"
-          + "\n\013database_id\030\002 \001(\tB\003\340A\002\0227\n\006backup\030\003 \001(\t"
-          + "B\'\340A\002\372A!\n\037firestore.googleapis.com/Backu"
-          + "p\022T\n\021encryption_config\030\t \001(\01324.google.fi"
-          + "restore.admin.v1.Database.EncryptionConf"
-          + "igB\003\340A\0012\313%\n\016FirestoreAdmin\022\333\001\n\013CreateInd"
-          + "ex\022-.google.firestore.admin.v1.CreateInd"
-          + "exRequest\032\035.google.longrunning.Operation"
-          + "\"~\312A\037\n\005Index\022\026IndexOperationMetadata\332A\014p"
-          + "arent,index\202\323\344\223\002G\">/v1/{parent=projects/"
-          + "*/databases/*/collectionGroups/*}/indexe"
-          + "s:\005index\022\275\001\n\013ListIndexes\022-.google.firest"
-          + "ore.admin.v1.ListIndexesRequest\032..google"
-          + ".firestore.admin.v1.ListIndexesResponse\""
-          + "O\332A\006parent\202\323\344\223\002@\022>/v1/{parent=projects/*"
-          + "/databases/*/collectionGroups/*}/indexes"
-          + "\022\247\001\n\010GetIndex\022*.google.firestore.admin.v"
-          + "1.GetIndexRequest\032 .google.firestore.adm"
-          + "in.v1.Index\"M\332A\004name\202\323\344\223\002@\022>/v1/{name=pr"
-          + "ojects/*/databases/*/collectionGroups/*/"
-          + "indexes/*}\022\243\001\n\013DeleteIndex\022-.google.fire"
-          + "store.admin.v1.DeleteIndexRequest\032\026.goog"
-          + "le.protobuf.Empty\"M\332A\004name\202\323\344\223\002@*>/v1/{n"
-          + "ame=projects/*/databases/*/collectionGro"
-          + "ups/*/indexes/*}\022\246\001\n\010GetField\022*.google.f"
-          + "irestore.admin.v1.GetFieldRequest\032 .goog"
-          + "le.firestore.admin.v1.Field\"L\332A\004name\202\323\344\223"
-          + "\002?\022=/v1/{name=projects/*/databases/*/col"
-          + "lectionGroups/*/fields/*}\022\331\001\n\013UpdateFiel"
-          + "d\022-.google.firestore.admin.v1.UpdateFiel"
-          + "dRequest\032\035.google.longrunning.Operation\""
-          + "|\312A\037\n\005Field\022\026FieldOperationMetadata\332A\005fi"
-          + "eld\202\323\344\223\002L2C/v1/{field.name=projects/*/da"
-          + "tabases/*/collectionGroups/*/fields/*}:\005"
-          + "field\022\271\001\n\nListFields\022,.google.firestore."
-          + "admin.v1.ListFieldsRequest\032-.google.fire"
-          + "store.admin.v1.ListFieldsResponse\"N\332A\006pa"
-          + "rent\202\323\344\223\002?\022=/v1/{parent=projects/*/datab"
-          + "ases/*/collectionGroups/*}/fields\022\335\001\n\017Ex"
-          + "portDocuments\0221.google.firestore.admin.v"
-          + "1.ExportDocumentsRequest\032\035.google.longru"
-          + "nning.Operation\"x\312A2\n\027ExportDocumentsRes"
-          + "ponse\022\027ExportDocumentsMetadata\332A\004name\202\323\344"
-          + "\223\0026\"1/v1/{name=projects/*/databases/*}:e"
-          + "xportDocuments:\001*\022\333\001\n\017ImportDocuments\0221."
-          + "google.firestore.admin.v1.ImportDocument"
-          + "sRequest\032\035.google.longrunning.Operation\""
-          + "v\312A0\n\025google.protobuf.Empty\022\027ImportDocum"
-          + "entsMetadata\332A\004name\202\323\344\223\0026\"1/v1/{name=pro"
-          + "jects/*/databases/*}:importDocuments:\001*\022"
-          + "\362\001\n\023BulkDeleteDocuments\0225.google.firesto"
-          + "re.admin.v1.BulkDeleteDocumentsRequest\032\035"
-          + ".google.longrunning.Operation\"\204\001\312A:\n\033Bul"
-          + "kDeleteDocumentsResponse\022\033BulkDeleteDocu"
-          + "mentsMetadata\332A\004name\202\323\344\223\002:\"5/v1/{name=pr"
-          + "ojects/*/databases/*}:bulkDeleteDocument"
-          + "s:\001*\022\331\001\n\016CreateDatabase\0220.google.firesto"
-          + "re.admin.v1.CreateDatabaseRequest\032\035.goog"
-          + "le.longrunning.Operation\"v\312A\"\n\010Database\022"
-          + "\026CreateDatabaseMetadata\332A\033parent,databas"
-          + "e,database_id\202\323\344\223\002-\"!/v1/{parent=project"
-          + "s/*}/databases:\010database\022\223\001\n\013GetDatabase"
-          + "\022-.google.firestore.admin.v1.GetDatabase"
-          + "Request\032#.google.firestore.admin.v1.Data"
-          + "base\"0\332A\004name\202\323\344\223\002#\022!/v1/{name=projects/"
-          + "*/databases/*}\022\246\001\n\rListDatabases\022/.googl"
-          + "e.firestore.admin.v1.ListDatabasesReques"
-          + "t\0320.google.firestore.admin.v1.ListDataba"
-          + "sesResponse\"2\332A\006parent\202\323\344\223\002#\022!/v1/{paren"
-          + "t=projects/*}/databases\022\333\001\n\016UpdateDataba"
-          + "se\0220.google.firestore.admin.v1.UpdateDat"
-          + "abaseRequest\032\035.google.longrunning.Operat"
-          + "ion\"x\312A\"\n\010Database\022\026UpdateDatabaseMetada"
-          + "ta\332A\024database,update_mask\202\323\344\223\00262*/v1/{da"
-          + "tabase.name=projects/*/databases/*}:\010dat"
-          + "abase\022\270\001\n\016DeleteDatabase\0220.google.firest"
-          + "ore.admin.v1.DeleteDatabaseRequest\032\035.goo"
-          + "gle.longrunning.Operation\"U\312A\"\n\010Database"
-          + "\022\026DeleteDatabaseMetadata\332A\004name\202\323\344\223\002#*!/"
-          + "v1/{name=projects/*/databases/*}\022\227\001\n\tGet"
-          + "Backup\022+.google.firestore.admin.v1.GetBa"
-          + "ckupRequest\032!.google.firestore.admin.v1."
-          + "Backup\":\332A\004name\202\323\344\223\002-\022+/v1/{name=project"
-          + "s/*/locations/*/backups/*}\022\252\001\n\013ListBacku"
-          + "ps\022-.google.firestore.admin.v1.ListBacku"
-          + "psRequest\032..google.firestore.admin.v1.Li"
-          + "stBackupsResponse\"<\332A\006parent\202\323\344\223\002-\022+/v1/"
-          + "{parent=projects/*/locations/*}/backups\022"
-          + "\222\001\n\014DeleteBackup\022..google.firestore.admi"
-          + "n.v1.DeleteBackupRequest\032\026.google.protob"
-          + "uf.Empty\":\332A\004name\202\323\344\223\002-*+/v1/{name=proje"
-          + "cts/*/locations/*/backups/*}\022\277\001\n\017Restore"
-          + "Database\0221.google.firestore.admin.v1.Res"
-          + "toreDatabaseRequest\032\035.google.longrunning"
-          + ".Operation\"Z\312A#\n\010Database\022\027RestoreDataba"
-          + "seMetadata\202\323\344\223\002.\")/v1/{parent=projects/*"
-          + "}/databases:restore:\001*\022\340\001\n\024CreateBackupS"
-          + "chedule\0226.google.firestore.admin.v1.Crea"
-          + "teBackupScheduleRequest\032).google.firesto"
-          + "re.admin.v1.BackupSchedule\"e\332A\026parent,ba"
-          + "ckup_schedule\202\323\344\223\002F\"3/v1/{parent=project"
-          + "s/*/databases/*}/backupSchedules:\017backup"
-          + "_schedule\022\267\001\n\021GetBackupSchedule\0223.google"
-          + ".firestore.admin.v1.GetBackupScheduleReq"
-          + "uest\032).google.firestore.admin.v1.BackupS"
-          + "chedule\"B\332A\004name\202\323\344\223\0025\0223/v1/{name=projec"
-          + "ts/*/databases/*/backupSchedules/*}\022\312\001\n\023"
-          + "ListBackupSchedules\0225.google.firestore.a"
-          + "dmin.v1.ListBackupSchedulesRequest\0326.goo"
+          + "leapis.com/Backup\"\374\001\n\026RestoreDatabaseReq"
+          + "uest\0229\n\006parent\030\001 \001(\tB)\340A\002\372A#\022!firestore."
+          + "googleapis.com/Database\022\030\n\013database_id\030\002"
+          + " \001(\tB\003\340A\002\0227\n\006backup\030\003 \001(\tB\'\340A\002\372A!\n\037fires"
+          + "tore.googleapis.com/Backup\022T\n\021encryption"
+          + "_config\030\t \001(\01324.google.firestore.admin.v"
+          + "1.Database.EncryptionConfigB\003\340A\0012\301/\n\016Fir"
+          + "estoreAdmin\022\333\001\n\013CreateIndex\022-.google.fir"
+          + "estore.admin.v1.CreateIndexRequest\032\035.goo"
+          + "gle.longrunning.Operation\"~\312A\037\n\005Index\022\026I"
+          + "ndexOperationMetadata\332A\014parent,index\202\323\344\223"
+          + "\002G\">/v1/{parent=projects/*/databases/*/c"
+          + "ollectionGroups/*}/indexes:\005index\022\275\001\n\013Li"
+          + "stIndexes\022-.google.firestore.admin.v1.Li"
+          + "stIndexesRequest\032..google.firestore.admi"
+          + "n.v1.ListIndexesResponse\"O\332A\006parent\202\323\344\223\002"
+          + "@\022>/v1/{parent=projects/*/databases/*/co"
+          + "llectionGroups/*}/indexes\022\247\001\n\010GetIndex\022*"
+          + ".google.firestore.admin.v1.GetIndexReque"
+          + "st\032 .google.firestore.admin.v1.Index\"M\332A"
+          + "\004name\202\323\344\223\002@\022>/v1/{name=projects/*/databa"
+          + "ses/*/collectionGroups/*/indexes/*}\022\243\001\n\013"
+          + "DeleteIndex\022-.google.firestore.admin.v1."
+          + "DeleteIndexRequest\032\026.google.protobuf.Emp"
+          + "ty\"M\332A\004name\202\323\344\223\002@*>/v1/{name=projects/*/"
+          + "databases/*/collectionGroups/*/indexes/*"
+          + "}\022\246\001\n\010GetField\022*.google.firestore.admin."
+          + "v1.GetFieldRequest\032 .google.firestore.ad"
+          + "min.v1.Field\"L\332A\004name\202\323\344\223\002?\022=/v1/{name=p"
+          + "rojects/*/databases/*/collectionGroups/*"
+          + "/fields/*}\022\331\001\n\013UpdateField\022-.google.fire"
+          + "store.admin.v1.UpdateFieldRequest\032\035.goog"
+          + "le.longrunning.Operation\"|\312A\037\n\005Field\022\026Fi"
+          + "eldOperationMetadata\332A\005field\202\323\344\223\002L2C/v1/"
+          + "{field.name=projects/*/databases/*/colle"
+          + "ctionGroups/*/fields/*}:\005field\022\271\001\n\nListF"
+          + "ields\022,.google.firestore.admin.v1.ListFi"
+          + "eldsRequest\032-.google.firestore.admin.v1."
+          + "ListFieldsResponse\"N\332A\006parent\202\323\344\223\002?\022=/v1"
+          + "/{parent=projects/*/databases/*/collecti"
+          + "onGroups/*}/fields\022\335\001\n\017ExportDocuments\0221"
+          + ".google.firestore.admin.v1.ExportDocumen"
+          + "tsRequest\032\035.google.longrunning.Operation"
+          + "\"x\312A2\n\027ExportDocumentsResponse\022\027ExportDo"
+          + "cumentsMetadata\332A\004name\202\323\344\223\0026\"1/v1/{name="
+          + "projects/*/databases/*}:exportDocuments:"
+          + "\001*\022\333\001\n\017ImportDocuments\0221.google.firestor"
+          + "e.admin.v1.ImportDocumentsRequest\032\035.goog"
+          + "le.longrunning.Operation\"v\312A0\n\025google.pr"
+          + "otobuf.Empty\022\027ImportDocumentsMetadata\332A\004"
+          + "name\202\323\344\223\0026\"1/v1/{name=projects/*/databas"
+          + "es/*}:importDocuments:\001*\022\362\001\n\023BulkDeleteD"
+          + "ocuments\0225.google.firestore.admin.v1.Bul"
+          + "kDeleteDocumentsRequest\032\035.google.longrun"
+          + "ning.Operation\"\204\001\312A:\n\033BulkDeleteDocument"
+          + "sResponse\022\033BulkDeleteDocumentsMetadata\332A"
+          + "\004name\202\323\344\223\002:\"5/v1/{name=projects/*/databa"
+          + "ses/*}:bulkDeleteDocuments:\001*\022\331\001\n\016Create"
+          + "Database\0220.google.firestore.admin.v1.Cre"
+          + "ateDatabaseRequest\032\035.google.longrunning."
+          + "Operation\"v\312A\"\n\010Database\022\026CreateDatabase"
+          + "Metadata\332A\033parent,database,database_id\202\323"
+          + "\344\223\002-\"!/v1/{parent=projects/*}/databases:"
+          + "\010database\022\223\001\n\013GetDatabase\022-.google.fires"
+          + "tore.admin.v1.GetDatabaseRequest\032#.googl"
+          + "e.firestore.admin.v1.Database\"0\332A\004name\202\323"
+          + "\344\223\002#\022!/v1/{name=projects/*/databases/*}\022"
+          + "\246\001\n\rListDatabases\022/.google.firestore.adm"
+          + "in.v1.ListDatabasesRequest\0320.google.fire"
+          + "store.admin.v1.ListDatabasesResponse\"2\332A"
+          + "\006parent\202\323\344\223\002#\022!/v1/{parent=projects/*}/d"
+          + "atabases\022\333\001\n\016UpdateDatabase\0220.google.fir"
+          + "estore.admin.v1.UpdateDatabaseRequest\032\035."
+          + "google.longrunning.Operation\"x\312A\"\n\010Datab"
+          + "ase\022\026UpdateDatabaseMetadata\332A\024database,u"
+          + "pdate_mask\202\323\344\223\00262*/v1/{database.name=pro"
+          + "jects/*/databases/*}:\010database\022\270\001\n\016Delet"
+          + "eDatabase\0220.google.firestore.admin.v1.De"
+          + "leteDatabaseRequest\032\035.google.longrunning"
+          + ".Operation\"U\312A\"\n\010Database\022\026DeleteDatabas"
+          + "eMetadata\332A\004name\202\323\344\223\002#*!/v1/{name=projec"
+          + "ts/*/databases/*}\022\317\001\n\017CreateUserCreds\0221."
+          + "google.firestore.admin.v1.CreateUserCred"
+          + "sRequest\032$.google.firestore.admin.v1.Use"
+          + "rCreds\"c\332A\037parent,user_creds,user_creds_"
+          + "id\202\323\344\223\002;\"-/v1/{parent=projects/*/databas"
+          + "es/*}/userCreds:\nuser_creds\022\242\001\n\014GetUserC"
+          + "reds\022..google.firestore.admin.v1.GetUser"
+          + "CredsRequest\032$.google.firestore.admin.v1"
+          + ".UserCreds\"<\332A\004name\202\323\344\223\002/\022-/v1/{name=pro"
+          + "jects/*/databases/*/userCreds/*}\022\262\001\n\rLis"
+          + "tUserCreds\022/.google.firestore.admin.v1.L"
+          + "istUserCredsRequest\0320.google.firestore.a"
+          + "dmin.v1.ListUserCredsResponse\">\332A\006parent"
+          + "\202\323\344\223\002/\022-/v1/{parent=projects/*/databases"
+          + "/*}/userCreds\022\262\001\n\017EnableUserCreds\0221.goog"
+          + "le.firestore.admin.v1.EnableUserCredsReq"
+          + "uest\032$.google.firestore.admin.v1.UserCre"
+          + "ds\"F\332A\004name\202\323\344\223\0029\"4/v1/{name=projects/*/"
+          + "databases/*/userCreds/*}:enable:\001*\022\265\001\n\020D"
+          + "isableUserCreds\0222.google.firestore.admin"
+          + ".v1.DisableUserCredsRequest\032$.google.fir"
+          + "estore.admin.v1.UserCreds\"G\332A\004name\202\323\344\223\002:"
+          + "\"5/v1/{name=projects/*/databases/*/userC"
+          + "reds/*}:disable:\001*\022\275\001\n\021ResetUserPassword"
+          + "\0223.google.firestore.admin.v1.ResetUserPa"
+          + "sswordRequest\032$.google.firestore.admin.v"
+          + "1.UserCreds\"M\332A\004name\202\323\344\223\002@\";/v1/{name=pr"
+          + "ojects/*/databases/*/userCreds/*}:resetP"
+          + "assword:\001*\022\232\001\n\017DeleteUserCreds\0221.google."
+          + "firestore.admin.v1.DeleteUserCredsReques"
+          + "t\032\026.google.protobuf.Empty\"<\332A\004name\202\323\344\223\002/"
+          + "*-/v1/{name=projects/*/databases/*/userC"
+          + "reds/*}\022\227\001\n\tGetBackup\022+.google.firestore"
+          + ".admin.v1.GetBackupRequest\032!.google.fire"
+          + "store.admin.v1.Backup\":\332A\004name\202\323\344\223\002-\022+/v"
+          + "1/{name=projects/*/locations/*/backups/*"
+          + "}\022\252\001\n\013ListBackups\022-.google.firestore.adm"
+          + "in.v1.ListBackupsRequest\032..google.firest"
+          + "ore.admin.v1.ListBackupsResponse\"<\332A\006par"
+          + "ent\202\323\344\223\002-\022+/v1/{parent=projects/*/locati"
+          + "ons/*}/backups\022\222\001\n\014DeleteBackup\022..google"
+          + ".firestore.admin.v1.DeleteBackupRequest\032"
+          + "\026.google.protobuf.Empty\":\332A\004name\202\323\344\223\002-*+"
+          + "/v1/{name=projects/*/locations/*/backups"
+          + "/*}\022\277\001\n\017RestoreDatabase\0221.google.firesto"
+          + "re.admin.v1.RestoreDatabaseRequest\032\035.goo"
+          + "gle.longrunning.Operation\"Z\312A#\n\010Database"
+          + "\022\027RestoreDatabaseMetadata\202\323\344\223\002.\")/v1/{pa"
+          + "rent=projects/*}/databases:restore:\001*\022\340\001"
+          + "\n\024CreateBackupSchedule\0226.google.firestor"
+          + "e.admin.v1.CreateBackupScheduleRequest\032)"
+          + ".google.firestore.admin.v1.BackupSchedul"
+          + "e\"e\332A\026parent,backup_schedule\202\323\344\223\002F\"3/v1/"
+          + "{parent=projects/*/databases/*}/backupSc"
+          + "hedules:\017backup_schedule\022\267\001\n\021GetBackupSc"
+          + "hedule\0223.google.firestore.admin.v1.GetBa"
+          + "ckupScheduleRequest\032).google.firestore.a"
+          + "dmin.v1.BackupSchedule\"B\332A\004name\202\323\344\223\0025\0223/"
+          + "v1/{name=projects/*/databases/*/backupSc"
+          + "hedules/*}\022\312\001\n\023ListBackupSchedules\0225.goo"
           + "gle.firestore.admin.v1.ListBackupSchedul"
-          + "esResponse\"D\332A\006parent\202\323\344\223\0025\0223/v1/{parent"
-          + "=projects/*/databases/*}/backupSchedules"
-          + "\022\365\001\n\024UpdateBackupSchedule\0226.google.fires"
-          + "tore.admin.v1.UpdateBackupScheduleReques"
-          + "t\032).google.firestore.admin.v1.BackupSche"
-          + "dule\"z\332A\033backup_schedule,update_mask\202\323\344\223"
-          + "\002V2C/v1/{backup_schedule.name=projects/*"
-          + "/databases/*/backupSchedules/*}:\017backup_"
-          + "schedule\022\252\001\n\024DeleteBackupSchedule\0226.goog"
-          + "le.firestore.admin.v1.DeleteBackupSchedu"
-          + "leRequest\032\026.google.protobuf.Empty\"B\332A\004na"
-          + "me\202\323\344\223\0025*3/v1/{name=projects/*/databases"
-          + "/*/backupSchedules/*}\032v\312A\030firestore.goog"
-          + "leapis.com\322AXhttps://www.googleapis.com/"
-          + "auth/cloud-platform,https://www.googleap"
-          + "is.com/auth/datastoreB\245\003\n\035com.google.fir"
-          + "estore.admin.v1B\023FirestoreAdminProtoP\001Z9"
-          + "cloud.google.com/go/firestore/apiv1/admi"
-          + "n/adminpb;adminpb\242\002\004GCFS\252\002\037Google.Cloud."
-          + "Firestore.Admin.V1\312\002\037Google\\Cloud\\Firest"
-          + "ore\\Admin\\V1\352\002#Google::Cloud::Firestore:"
-          + ":Admin::V1\352AL\n!firestore.googleapis.com/"
-          + "Location\022\'projects/{project}/locations/{"
-          + "location}\352Aq\n(firestore.googleapis.com/C"
-          + "ollectionGroup\022Eprojects/{project}/datab"
-          + "ases/{database}/collectionGroups/{collec"
-          + "tion}b\006proto3"
+          + "esRequest\0326.google.firestore.admin.v1.Li"
+          + "stBackupSchedulesResponse\"D\332A\006parent\202\323\344\223"
+          + "\0025\0223/v1/{parent=projects/*/databases/*}/"
+          + "backupSchedules\022\365\001\n\024UpdateBackupSchedule"
+          + "\0226.google.firestore.admin.v1.UpdateBacku"
+          + "pScheduleRequest\032).google.firestore.admi"
+          + "n.v1.BackupSchedule\"z\332A\033backup_schedule,"
+          + "update_mask\202\323\344\223\002V2C/v1/{backup_schedule."
+          + "name=projects/*/databases/*/backupSchedu"
+          + "les/*}:\017backup_schedule\022\252\001\n\024DeleteBackup"
+          + "Schedule\0226.google.firestore.admin.v1.Del"
+          + "eteBackupScheduleRequest\032\026.google.protob"
+          + "uf.Empty\"B\332A\004name\202\323\344\223\0025*3/v1/{name=proje"
+          + "cts/*/databases/*/backupSchedules/*}\032v\312A"
+          + "\030firestore.googleapis.com\322AXhttps://www."
+          + "googleapis.com/auth/cloud-platform,https"
+          + "://www.googleapis.com/auth/datastoreB\245\003\n"
+          + "\035com.google.firestore.admin.v1B\023Firestor"
+          + "eAdminProtoP\001Z9cloud.google.com/go/fires"
+          + "tore/apiv1/admin/adminpb;adminpb\242\002\004GCFS\252"
+          + "\002\037Google.Cloud.Firestore.Admin.V1\312\002\037Goog"
+          + "le\\Cloud\\Firestore\\Admin\\V1\352\002#Google::Cl"
+          + "oud::Firestore::Admin::V1\352AL\n!firestore."
+          + "googleapis.com/Location\022\'projects/{proje"
+          + "ct}/locations/{location}\352Aq\n(firestore.g"
+          + "oogleapis.com/CollectionGroup\022Eprojects/"
+          + "{project}/databases/{database}/collectio"
+          + "nGroups/{collection}b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -419,6 +503,7 @@ public final class FirestoreAdminProto {
               com.google.firestore.admin.v1.IndexProto.getDescriptor(),
               com.google.firestore.admin.v1.OperationProto.getDescriptor(),
               com.google.firestore.admin.v1.ScheduleProto.getDescriptor(),
+              com.google.firestore.admin.v1.UserCredsProto.getDescriptor(),
               com.google.longrunning.OperationsProto.getDescriptor(),
               com.google.protobuf.EmptyProto.getDescriptor(),
               com.google.protobuf.FieldMaskProto.getDescriptor(),
@@ -490,8 +575,72 @@ public final class FirestoreAdminProto {
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_DeleteDatabaseMetadata_descriptor,
             new java.lang.String[] {});
-    internal_static_google_firestore_admin_v1_CreateBackupScheduleRequest_descriptor =
+    internal_static_google_firestore_admin_v1_CreateUserCredsRequest_descriptor =
         getDescriptor().getMessageTypes().get(9);
+    internal_static_google_firestore_admin_v1_CreateUserCredsRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_CreateUserCredsRequest_descriptor,
+            new java.lang.String[] {
+              "Parent", "UserCreds", "UserCredsId",
+            });
+    internal_static_google_firestore_admin_v1_GetUserCredsRequest_descriptor =
+        getDescriptor().getMessageTypes().get(10);
+    internal_static_google_firestore_admin_v1_GetUserCredsRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_GetUserCredsRequest_descriptor,
+            new java.lang.String[] {
+              "Name",
+            });
+    internal_static_google_firestore_admin_v1_ListUserCredsRequest_descriptor =
+        getDescriptor().getMessageTypes().get(11);
+    internal_static_google_firestore_admin_v1_ListUserCredsRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_ListUserCredsRequest_descriptor,
+            new java.lang.String[] {
+              "Parent",
+            });
+    internal_static_google_firestore_admin_v1_ListUserCredsResponse_descriptor =
+        getDescriptor().getMessageTypes().get(12);
+    internal_static_google_firestore_admin_v1_ListUserCredsResponse_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_ListUserCredsResponse_descriptor,
+            new java.lang.String[] {
+              "UserCreds",
+            });
+    internal_static_google_firestore_admin_v1_EnableUserCredsRequest_descriptor =
+        getDescriptor().getMessageTypes().get(13);
+    internal_static_google_firestore_admin_v1_EnableUserCredsRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_EnableUserCredsRequest_descriptor,
+            new java.lang.String[] {
+              "Name",
+            });
+    internal_static_google_firestore_admin_v1_DisableUserCredsRequest_descriptor =
+        getDescriptor().getMessageTypes().get(14);
+    internal_static_google_firestore_admin_v1_DisableUserCredsRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_DisableUserCredsRequest_descriptor,
+            new java.lang.String[] {
+              "Name",
+            });
+    internal_static_google_firestore_admin_v1_ResetUserPasswordRequest_descriptor =
+        getDescriptor().getMessageTypes().get(15);
+    internal_static_google_firestore_admin_v1_ResetUserPasswordRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_ResetUserPasswordRequest_descriptor,
+            new java.lang.String[] {
+              "Name",
+            });
+    internal_static_google_firestore_admin_v1_DeleteUserCredsRequest_descriptor =
+        getDescriptor().getMessageTypes().get(16);
+    internal_static_google_firestore_admin_v1_DeleteUserCredsRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_google_firestore_admin_v1_DeleteUserCredsRequest_descriptor,
+            new java.lang.String[] {
+              "Name",
+            });
+    internal_static_google_firestore_admin_v1_CreateBackupScheduleRequest_descriptor =
+        getDescriptor().getMessageTypes().get(17);
     internal_static_google_firestore_admin_v1_CreateBackupScheduleRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_CreateBackupScheduleRequest_descriptor,
@@ -499,7 +648,7 @@ public final class FirestoreAdminProto {
               "Parent", "BackupSchedule",
             });
     internal_static_google_firestore_admin_v1_GetBackupScheduleRequest_descriptor =
-        getDescriptor().getMessageTypes().get(10);
+        getDescriptor().getMessageTypes().get(18);
     internal_static_google_firestore_admin_v1_GetBackupScheduleRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_GetBackupScheduleRequest_descriptor,
@@ -507,7 +656,7 @@ public final class FirestoreAdminProto {
               "Name",
             });
     internal_static_google_firestore_admin_v1_UpdateBackupScheduleRequest_descriptor =
-        getDescriptor().getMessageTypes().get(11);
+        getDescriptor().getMessageTypes().get(19);
     internal_static_google_firestore_admin_v1_UpdateBackupScheduleRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_UpdateBackupScheduleRequest_descriptor,
@@ -515,7 +664,7 @@ public final class FirestoreAdminProto {
               "BackupSchedule", "UpdateMask",
             });
     internal_static_google_firestore_admin_v1_ListBackupSchedulesRequest_descriptor =
-        getDescriptor().getMessageTypes().get(12);
+        getDescriptor().getMessageTypes().get(20);
     internal_static_google_firestore_admin_v1_ListBackupSchedulesRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ListBackupSchedulesRequest_descriptor,
@@ -523,7 +672,7 @@ public final class FirestoreAdminProto {
               "Parent",
             });
     internal_static_google_firestore_admin_v1_ListBackupSchedulesResponse_descriptor =
-        getDescriptor().getMessageTypes().get(13);
+        getDescriptor().getMessageTypes().get(21);
     internal_static_google_firestore_admin_v1_ListBackupSchedulesResponse_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ListBackupSchedulesResponse_descriptor,
@@ -531,7 +680,7 @@ public final class FirestoreAdminProto {
               "BackupSchedules",
             });
     internal_static_google_firestore_admin_v1_DeleteBackupScheduleRequest_descriptor =
-        getDescriptor().getMessageTypes().get(14);
+        getDescriptor().getMessageTypes().get(22);
     internal_static_google_firestore_admin_v1_DeleteBackupScheduleRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_DeleteBackupScheduleRequest_descriptor,
@@ -539,7 +688,7 @@ public final class FirestoreAdminProto {
               "Name",
             });
     internal_static_google_firestore_admin_v1_CreateIndexRequest_descriptor =
-        getDescriptor().getMessageTypes().get(15);
+        getDescriptor().getMessageTypes().get(23);
     internal_static_google_firestore_admin_v1_CreateIndexRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_CreateIndexRequest_descriptor,
@@ -547,7 +696,7 @@ public final class FirestoreAdminProto {
               "Parent", "Index",
             });
     internal_static_google_firestore_admin_v1_ListIndexesRequest_descriptor =
-        getDescriptor().getMessageTypes().get(16);
+        getDescriptor().getMessageTypes().get(24);
     internal_static_google_firestore_admin_v1_ListIndexesRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ListIndexesRequest_descriptor,
@@ -555,7 +704,7 @@ public final class FirestoreAdminProto {
               "Parent", "Filter", "PageSize", "PageToken",
             });
     internal_static_google_firestore_admin_v1_ListIndexesResponse_descriptor =
-        getDescriptor().getMessageTypes().get(17);
+        getDescriptor().getMessageTypes().get(25);
     internal_static_google_firestore_admin_v1_ListIndexesResponse_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ListIndexesResponse_descriptor,
@@ -563,7 +712,7 @@ public final class FirestoreAdminProto {
               "Indexes", "NextPageToken",
             });
     internal_static_google_firestore_admin_v1_GetIndexRequest_descriptor =
-        getDescriptor().getMessageTypes().get(18);
+        getDescriptor().getMessageTypes().get(26);
     internal_static_google_firestore_admin_v1_GetIndexRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_GetIndexRequest_descriptor,
@@ -571,7 +720,7 @@ public final class FirestoreAdminProto {
               "Name",
             });
     internal_static_google_firestore_admin_v1_DeleteIndexRequest_descriptor =
-        getDescriptor().getMessageTypes().get(19);
+        getDescriptor().getMessageTypes().get(27);
     internal_static_google_firestore_admin_v1_DeleteIndexRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_DeleteIndexRequest_descriptor,
@@ -579,7 +728,7 @@ public final class FirestoreAdminProto {
               "Name",
             });
     internal_static_google_firestore_admin_v1_UpdateFieldRequest_descriptor =
-        getDescriptor().getMessageTypes().get(20);
+        getDescriptor().getMessageTypes().get(28);
     internal_static_google_firestore_admin_v1_UpdateFieldRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_UpdateFieldRequest_descriptor,
@@ -587,7 +736,7 @@ public final class FirestoreAdminProto {
               "Field", "UpdateMask",
             });
     internal_static_google_firestore_admin_v1_GetFieldRequest_descriptor =
-        getDescriptor().getMessageTypes().get(21);
+        getDescriptor().getMessageTypes().get(29);
     internal_static_google_firestore_admin_v1_GetFieldRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_GetFieldRequest_descriptor,
@@ -595,7 +744,7 @@ public final class FirestoreAdminProto {
               "Name",
             });
     internal_static_google_firestore_admin_v1_ListFieldsRequest_descriptor =
-        getDescriptor().getMessageTypes().get(22);
+        getDescriptor().getMessageTypes().get(30);
     internal_static_google_firestore_admin_v1_ListFieldsRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ListFieldsRequest_descriptor,
@@ -603,7 +752,7 @@ public final class FirestoreAdminProto {
               "Parent", "Filter", "PageSize", "PageToken",
             });
     internal_static_google_firestore_admin_v1_ListFieldsResponse_descriptor =
-        getDescriptor().getMessageTypes().get(23);
+        getDescriptor().getMessageTypes().get(31);
     internal_static_google_firestore_admin_v1_ListFieldsResponse_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ListFieldsResponse_descriptor,
@@ -611,7 +760,7 @@ public final class FirestoreAdminProto {
               "Fields", "NextPageToken",
             });
     internal_static_google_firestore_admin_v1_ExportDocumentsRequest_descriptor =
-        getDescriptor().getMessageTypes().get(24);
+        getDescriptor().getMessageTypes().get(32);
     internal_static_google_firestore_admin_v1_ExportDocumentsRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ExportDocumentsRequest_descriptor,
@@ -619,7 +768,7 @@ public final class FirestoreAdminProto {
               "Name", "CollectionIds", "OutputUriPrefix", "NamespaceIds", "SnapshotTime",
             });
     internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor =
-        getDescriptor().getMessageTypes().get(25);
+        getDescriptor().getMessageTypes().get(33);
     internal_static_google_firestore_admin_v1_ImportDocumentsRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ImportDocumentsRequest_descriptor,
@@ -627,7 +776,7 @@ public final class FirestoreAdminProto {
               "Name", "CollectionIds", "InputUriPrefix", "NamespaceIds",
             });
     internal_static_google_firestore_admin_v1_BulkDeleteDocumentsRequest_descriptor =
-        getDescriptor().getMessageTypes().get(26);
+        getDescriptor().getMessageTypes().get(34);
     internal_static_google_firestore_admin_v1_BulkDeleteDocumentsRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_BulkDeleteDocumentsRequest_descriptor,
@@ -635,13 +784,13 @@ public final class FirestoreAdminProto {
               "Name", "CollectionIds", "NamespaceIds",
             });
     internal_static_google_firestore_admin_v1_BulkDeleteDocumentsResponse_descriptor =
-        getDescriptor().getMessageTypes().get(27);
+        getDescriptor().getMessageTypes().get(35);
     internal_static_google_firestore_admin_v1_BulkDeleteDocumentsResponse_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_BulkDeleteDocumentsResponse_descriptor,
             new java.lang.String[] {});
     internal_static_google_firestore_admin_v1_GetBackupRequest_descriptor =
-        getDescriptor().getMessageTypes().get(28);
+        getDescriptor().getMessageTypes().get(36);
     internal_static_google_firestore_admin_v1_GetBackupRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_GetBackupRequest_descriptor,
@@ -649,15 +798,15 @@ public final class FirestoreAdminProto {
               "Name",
             });
     internal_static_google_firestore_admin_v1_ListBackupsRequest_descriptor =
-        getDescriptor().getMessageTypes().get(29);
+        getDescriptor().getMessageTypes().get(37);
     internal_static_google_firestore_admin_v1_ListBackupsRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ListBackupsRequest_descriptor,
             new java.lang.String[] {
-              "Parent",
+              "Parent", "Filter",
             });
     internal_static_google_firestore_admin_v1_ListBackupsResponse_descriptor =
-        getDescriptor().getMessageTypes().get(30);
+        getDescriptor().getMessageTypes().get(38);
     internal_static_google_firestore_admin_v1_ListBackupsResponse_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_ListBackupsResponse_descriptor,
@@ -665,7 +814,7 @@ public final class FirestoreAdminProto {
               "Backups", "Unreachable",
             });
     internal_static_google_firestore_admin_v1_DeleteBackupRequest_descriptor =
-        getDescriptor().getMessageTypes().get(31);
+        getDescriptor().getMessageTypes().get(39);
     internal_static_google_firestore_admin_v1_DeleteBackupRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_DeleteBackupRequest_descriptor,
@@ -673,7 +822,7 @@ public final class FirestoreAdminProto {
               "Name",
             });
     internal_static_google_firestore_admin_v1_RestoreDatabaseRequest_descriptor =
-        getDescriptor().getMessageTypes().get(32);
+        getDescriptor().getMessageTypes().get(40);
     internal_static_google_firestore_admin_v1_RestoreDatabaseRequest_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_google_firestore_admin_v1_RestoreDatabaseRequest_descriptor,
@@ -702,6 +851,7 @@ public final class FirestoreAdminProto {
     com.google.firestore.admin.v1.IndexProto.getDescriptor();
     com.google.firestore.admin.v1.OperationProto.getDescriptor();
     com.google.firestore.admin.v1.ScheduleProto.getDescriptor();
+    com.google.firestore.admin.v1.UserCredsProto.getDescriptor();
     com.google.longrunning.OperationsProto.getDescriptor();
     com.google.protobuf.EmptyProto.getDescriptor();
     com.google.protobuf.FieldMaskProto.getDescriptor();

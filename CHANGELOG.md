@@ -1,5 +1,164 @@
 # Changelog
 
+## [3.31.1](https://github.com/googleapis/java-firestore/compare/v3.31.0...v3.31.1) (2025-04-25)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.56.2 ([38aa23d](https://github.com/googleapis/java-firestore/commit/38aa23dcea0d8837403317e75c6abf04b2fc4050))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.46.1 ([#2084](https://github.com/googleapis/java-firestore/issues/2084)) ([83a593e](https://github.com/googleapis/java-firestore/commit/83a593e1745f488bc304fdfcb15d6a08f35eb177))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.46.2 ([#2088](https://github.com/googleapis/java-firestore/issues/2088)) ([757aa1c](https://github.com/googleapis/java-firestore/commit/757aa1c41db6da0a59bedc7a4335b8911def5b41))
+* Update googleapis/sdk-platform-java action to v2.56.1 ([#2081](https://github.com/googleapis/java-firestore/issues/2081)) ([455af48](https://github.com/googleapis/java-firestore/commit/455af48be2eb034d04c0f85efe104e1934abf295))
+* Update googleapis/sdk-platform-java action to v2.56.2 ([#2087](https://github.com/googleapis/java-firestore/issues/2087)) ([9aad696](https://github.com/googleapis/java-firestore/commit/9aad6966385d3873c30748d4e42df2c88cf77333))
+
+## [3.31.0](https://github.com/googleapis/java-firestore/compare/v3.30.13...v3.31.0) (2025-04-23)
+
+
+### Features
+
+* Add the UserCreds API ([f0e1ba1](https://github.com/googleapis/java-firestore/commit/f0e1ba1b9d9bae7235943ac1fbf5793ffec5d555))
+* New Firestore index modes and Database Editions ([f0e1ba1](https://github.com/googleapis/java-firestore/commit/f0e1ba1b9d9bae7235943ac1fbf5793ffec5d555))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.56.0 ([f0e1ba1](https://github.com/googleapis/java-firestore/commit/f0e1ba1b9d9bae7235943ac1fbf5793ffec5d555))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.46.0 ([#2076](https://github.com/googleapis/java-firestore/issues/2076)) ([1d1f633](https://github.com/googleapis/java-firestore/commit/1d1f633fafd2e935fb9cf9382d38a41548dafd41))
+* Update googleapis/sdk-platform-java action to v2.56.0 ([#2075](https://github.com/googleapis/java-firestore/issues/2075)) ([e88755d](https://github.com/googleapis/java-firestore/commit/e88755d777ae0e1c36c3ae0ad22556026db82578))
+
+## [3.30.13](https://github.com/googleapis/java-firestore/compare/v3.30.12...v3.30.13) (2025-04-08)
+
+
+### Dependencies
+
+* Update beam.version to v2.64.0 ([#2068](https://github.com/googleapis/java-firestore/issues/2068)) ([22e7b89](https://github.com/googleapis/java-firestore/commit/22e7b89fcc954ace5d1260a95a2405ca49e7c9f7))
+* Update dependency com.diffplug.spotless:spotless-maven-plugin to v2.44.4 ([#2071](https://github.com/googleapis/java-firestore/issues/2071)) ([5ccefcf](https://github.com/googleapis/java-firestore/commit/5ccefcfa15f7c8d8bf33e0fdc04f5bdb95c5a72c))
+* Update opentelemetry.version to v1.49.0 ([#2070](https://github.com/googleapis/java-firestore/issues/2070)) ([23a1809](https://github.com/googleapis/java-firestore/commit/23a18095891f6b0ecb2f6d7a040d8ecf6a0f1720))
+
+## [3.30.12](https://github.com/googleapis/java-firestore/compare/v3.30.11...v3.30.12) (2025-03-22)
+
+
+### Bug Fixes
+
+* Elide string processing of 'fine' level log messages unless they will actually be logged ([#2055](https://github.com/googleapis/java-firestore/issues/2055)) ([22a41a2](https://github.com/googleapis/java-firestore/commit/22a41a265a24070ae08e88213319a7df6dd82759))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud.opentelemetry:exporter-trace to v0.34.0 ([#2046](https://github.com/googleapis/java-firestore/issues/2046)) ([cd610f3](https://github.com/googleapis/java-firestore/commit/cd610f3bea6ff676a943363b2fa40067a7705914))
+
+## [3.30.11](https://github.com/googleapis/java-firestore/compare/v3.30.10...v3.30.11) (2025-03-20)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.55.1 ([3348504](https://github.com/googleapis/java-firestore/commit/3348504313bef2ec34cc1f7a00eaf5a23fd8debc))
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.60.0 ([#2049](https://github.com/googleapis/java-firestore/issues/2049)) ([f68462c](https://github.com/googleapis/java-firestore/commit/f68462c815e7d08bccaa0a750e07919218cc6569))
+* Update dependency com.google.cloud:google-cloud-trace to v2.60.0 ([#2050](https://github.com/googleapis/java-firestore/issues/2050)) ([39111f5](https://github.com/googleapis/java-firestore/commit/39111f594351b6488a770e086d95b236f5d959d6))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.45.1 ([#2038](https://github.com/googleapis/java-firestore/issues/2038)) ([bbe6623](https://github.com/googleapis/java-firestore/commit/bbe66239b08bb7900774963c7a187b3d8d781614))
+* Update dependency node to v22 ([#2037](https://github.com/googleapis/java-firestore/issues/2037)) ([315987f](https://github.com/googleapis/java-firestore/commit/315987f5e5fcbd75fd29e670b7bca54e35381d27))
+* Update googleapis/sdk-platform-java action to v2.55.0 ([#2039](https://github.com/googleapis/java-firestore/issues/2039)) ([093850a](https://github.com/googleapis/java-firestore/commit/093850af5ff9713e9a425ed6c3abf834717670b3))
+* Update googleapis/sdk-platform-java action to v2.55.1 ([#2043](https://github.com/googleapis/java-firestore/issues/2043)) ([40973f2](https://github.com/googleapis/java-firestore/commit/40973f22576e57e9c5296b0526b4ed2b2693a2e1))
+* Update opentelemetry.version to v1.48.0 ([#2036](https://github.com/googleapis/java-firestore/issues/2036)) ([3a35489](https://github.com/googleapis/java-firestore/commit/3a354896e76bf459730b4d686b7c49ae3a88bd11))
+
+## [3.30.10](https://github.com/googleapis/java-firestore/compare/v3.30.9...v3.30.10) (2025-03-06)
+
+
+### Bug Fixes
+
+* Use lazy encoding in UTF-8 encoded string comparison ([#2021](https://github.com/googleapis/java-firestore/issues/2021)) ([11a4c74](https://github.com/googleapis/java-firestore/commit/11a4c743beddbc7415ef0157bbc4f545a27509f7))
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.59.0 ([#2030](https://github.com/googleapis/java-firestore/issues/2030)) ([38d80ac](https://github.com/googleapis/java-firestore/commit/38d80ac587351c2c675e669f126a7825bba7235c))
+* Update dependency com.google.cloud:google-cloud-trace to v2.59.0 ([#2031](https://github.com/googleapis/java-firestore/issues/2031)) ([73a68a6](https://github.com/googleapis/java-firestore/commit/73a68a69e156cff1bf1ca6652ddd6e8dc58cf3f3))
+
+## [3.30.9](https://github.com/googleapis/java-firestore/compare/v3.30.8...v3.30.9) (2025-02-26)
+
+
+### Dependencies
+
+* Update beam.version to v2.63.0 ([#2020](https://github.com/googleapis/java-firestore/issues/2020)) ([dce5a4d](https://github.com/googleapis/java-firestore/commit/dce5a4d7d76c4544ecb408f3f0249f0302a199dd))
+* Update dependency com.android.tools.metalava:metalava to v1.0.0-alpha12 ([#2013](https://github.com/googleapis/java-firestore/issues/2013)) ([929d41c](https://github.com/googleapis/java-firestore/commit/929d41c2587a9836a715cb1488b6c24bdebdf5ba))
+* Update dependency com.diffplug.spotless:spotless-maven-plugin to v2.44.3 ([#2023](https://github.com/googleapis/java-firestore/issues/2023)) ([6123125](https://github.com/googleapis/java-firestore/commit/6123125db23cc8c013498f64d22384669a60365f))
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.58.0 ([#2018](https://github.com/googleapis/java-firestore/issues/2018)) ([966a471](https://github.com/googleapis/java-firestore/commit/966a4715173b48a37bf8dedd93b957a1165df8a9))
+* Update dependency com.google.cloud:google-cloud-trace to v2.58.0 ([#2019](https://github.com/googleapis/java-firestore/issues/2019)) ([3bd7fdb](https://github.com/googleapis/java-firestore/commit/3bd7fdbf368fb5f94f6150754cb66f987b467492))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.44.0 ([#2025](https://github.com/googleapis/java-firestore/issues/2025)) ([ff9ef43](https://github.com/googleapis/java-firestore/commit/ff9ef43852242c790a2cb78c9a44f4dc45ff8523))
+* Update dependency io.opentelemetry.semconv:opentelemetry-semconv to v1.30.0 ([#2022](https://github.com/googleapis/java-firestore/issues/2022)) ([3767e36](https://github.com/googleapis/java-firestore/commit/3767e36ca109a133a230f586a0253b01730668cb))
+* Update googleapis/sdk-platform-java action to v2.54.0 ([#2026](https://github.com/googleapis/java-firestore/issues/2026)) ([cde290d](https://github.com/googleapis/java-firestore/commit/cde290dec598ed6698ef6d361b52a5864fd28ab8))
+
+## [3.30.8](https://github.com/googleapis/java-firestore/compare/v3.30.7...v3.30.8) (2025-02-13)
+
+
+### Dependencies
+
+* Migrate to io.opentelemetry.semconv:opentelemetry-semconv dep ([#2014](https://github.com/googleapis/java-firestore/issues/2014)) ([b3df19e](https://github.com/googleapis/java-firestore/commit/b3df19e8ce2d11cc351e74e6155f30a7f947145c))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.43.0 ([#2011](https://github.com/googleapis/java-firestore/issues/2011)) ([b8c050e](https://github.com/googleapis/java-firestore/commit/b8c050e33e348daebf536e8cd6c25abe0280fc34))
+* Update googleapis/sdk-platform-java action to v2.53.0 ([#2012](https://github.com/googleapis/java-firestore/issues/2012)) ([04cc429](https://github.com/googleapis/java-firestore/commit/04cc429320cddef716d71f2b94ff710c1bcfa37a))
+* Update opentelemetry.version to v1.47.0 ([#2009](https://github.com/googleapis/java-firestore/issues/2009)) ([a832829](https://github.com/googleapis/java-firestore/commit/a8328297b2af87fe445cbd88e80ae7cbb87abdc6))
+
+## [3.30.7](https://github.com/googleapis/java-firestore/compare/v3.30.6...v3.30.7) (2025-02-04)
+
+
+### Bug Fixes
+
+* GetAuthenticationType in EmulatorCredentials should not throw. ([#2003](https://github.com/googleapis/java-firestore/issues/2003)) ([29afb41](https://github.com/googleapis/java-firestore/commit/29afb413f1f1f5bdbe7825b13fc3b200e8da211a))
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.57.0 ([#2000](https://github.com/googleapis/java-firestore/issues/2000)) ([c5207bc](https://github.com/googleapis/java-firestore/commit/c5207bcb123130e261493283a345e674fc9d4b4b))
+* Update dependency com.google.cloud:google-cloud-trace to v2.57.0 ([#2001](https://github.com/googleapis/java-firestore/issues/2001)) ([b3917a9](https://github.com/googleapis/java-firestore/commit/b3917a98fb50d4bbf14f9840271f99a296df9c24))
+
+## [3.30.6](https://github.com/googleapis/java-firestore/compare/v3.30.5...v3.30.6) (2025-01-28)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.42.0 ([#1996](https://github.com/googleapis/java-firestore/issues/1996)) ([050fe55](https://github.com/googleapis/java-firestore/commit/050fe55ab6f117866fa81012ca5ada1b334dd404))
+* Update googleapis/sdk-platform-java action to v2.52.0 ([#1993](https://github.com/googleapis/java-firestore/issues/1993)) ([24dfe38](https://github.com/googleapis/java-firestore/commit/24dfe38b0c2e06662151b76fb5b1b8a793119fdb))
+
+## [3.30.5](https://github.com/googleapis/java-firestore/compare/v3.30.4...v3.30.5) (2025-01-24)
+
+
+### Bug Fixes
+
+* Bump default deadline on CreateDatabase and RestoreDatabase to 2 minutes ([f3dac25](https://github.com/googleapis/java-firestore/commit/f3dac255a9ffb81b95da6a60ad2487f138157578))
+
+
+### Dependencies
+
+* Update beam.version to v2.62.0 ([#1984](https://github.com/googleapis/java-firestore/issues/1984)) ([cbf1ceb](https://github.com/googleapis/java-firestore/commit/cbf1cebfa3c17fe3dca103cf6bb2d523857529c9))
+
+## [3.30.4](https://github.com/googleapis/java-firestore/compare/v3.30.3...v3.30.4) (2025-01-16)
+
+
+### Bug Fixes
+
+* Comparing double with long  ([#1960](https://github.com/googleapis/java-firestore/issues/1960)) ([8cb4dc8](https://github.com/googleapis/java-firestore/commit/8cb4dc8859b1d8331657704f36baba472ea3115c))
+* Sort strings in UTF-8 encoded byte order ([#1967](https://github.com/googleapis/java-firestore/issues/1967)) ([4309639](https://github.com/googleapis/java-firestore/commit/43096393dd9e49dd9144fd2351e29cb40ea855c5))
+
+
+### Dependencies
+
+* Update dependency com.diffplug.spotless:spotless-maven-plugin to v2.44.2 ([#1981](https://github.com/googleapis/java-firestore/issues/1981)) ([c4ea331](https://github.com/googleapis/java-firestore/commit/c4ea33134a63c722a15288421cc023a1ec5c5c74))
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.56.0 ([#1975](https://github.com/googleapis/java-firestore/issues/1975)) ([7388291](https://github.com/googleapis/java-firestore/commit/73882910443407c529e4d6763ebe78fd1c0411b1))
+* Update dependency com.google.cloud:google-cloud-trace to v2.56.0 ([#1976](https://github.com/googleapis/java-firestore/issues/1976)) ([978c053](https://github.com/googleapis/java-firestore/commit/978c053b0801da5f708d0016cae3358d33f1b2bd))
+* Update opentelemetry.version to v1.46.0 ([#1977](https://github.com/googleapis/java-firestore/issues/1977)) ([2b3de13](https://github.com/googleapis/java-firestore/commit/2b3de13db866badf1b405b3b2383cc85076460eb))
+
 ## [3.30.3](https://github.com/googleapis/java-firestore/compare/v3.30.2...v3.30.3) (2025-01-11)
 
 

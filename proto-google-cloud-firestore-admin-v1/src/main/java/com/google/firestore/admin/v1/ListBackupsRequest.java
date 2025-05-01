@@ -34,6 +34,7 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
     // @@protoc_insertion_point(message_implements:google.firestore.admin.v1.ListBackupsRequest)
     ListBackupsRequestOrBuilder {
   private static final long serialVersionUID = 0L;
+
   // Use ListBackupsRequest.newBuilder() to construct.
   private ListBackupsRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
@@ -41,6 +42,7 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
 
   private ListBackupsRequest() {
     parent_ = "";
+    filter_ = "";
   }
 
   @java.lang.Override
@@ -68,6 +70,7 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object parent_ = "";
+
   /**
    *
    *
@@ -98,6 +101,7 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
       return s;
     }
   }
+
   /**
    *
    *
@@ -129,6 +133,81 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
     }
   }
 
+  public static final int FILTER_FIELD_NUMBER = 2;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object filter_ = "";
+
+  /**
+   *
+   *
+   * <pre>
+   * An expression that filters the list of returned backups.
+   *
+   * A filter expression consists of a field name, a comparison operator, and a
+   * value for filtering.
+   * The value must be a string, a number, or a boolean. The comparison operator
+   * must be one of: `&lt;`, `&gt;`, `&lt;=`, `&gt;=`, `!=`, `=`, or `:`.
+   * Colon `:` is the contains operator. Filter rules are not case sensitive.
+   *
+   * The following fields in the [Backup][google.firestore.admin.v1.Backup] are
+   * eligible for filtering:
+   *
+   *   * `database_uid` (supports `=` only)
+   * </pre>
+   *
+   * <code>string filter = 2;</code>
+   *
+   * @return The filter.
+   */
+  @java.lang.Override
+  public java.lang.String getFilter() {
+    java.lang.Object ref = filter_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      filter_ = s;
+      return s;
+    }
+  }
+
+  /**
+   *
+   *
+   * <pre>
+   * An expression that filters the list of returned backups.
+   *
+   * A filter expression consists of a field name, a comparison operator, and a
+   * value for filtering.
+   * The value must be a string, a number, or a boolean. The comparison operator
+   * must be one of: `&lt;`, `&gt;`, `&lt;=`, `&gt;=`, `!=`, `=`, or `:`.
+   * Colon `:` is the contains operator. Filter rules are not case sensitive.
+   *
+   * The following fields in the [Backup][google.firestore.admin.v1.Backup] are
+   * eligible for filtering:
+   *
+   *   * `database_uid` (supports `=` only)
+   * </pre>
+   *
+   * <code>string filter = 2;</code>
+   *
+   * @return The bytes for filter.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString getFilterBytes() {
+    java.lang.Object ref = filter_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+      filter_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -146,6 +225,9 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(parent_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, parent_);
     }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(filter_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, filter_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -157,6 +239,9 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
     size = 0;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(parent_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, parent_);
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(filter_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, filter_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -175,6 +260,7 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
         (com.google.firestore.admin.v1.ListBackupsRequest) obj;
 
     if (!getParent().equals(other.getParent())) return false;
+    if (!getFilter().equals(other.getFilter())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -188,6 +274,8 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + PARENT_FIELD_NUMBER;
     hash = (53 * hash) + getParent().hashCode();
+    hash = (37 * hash) + FILTER_FIELD_NUMBER;
+    hash = (53 * hash) + getFilter().hashCode();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -288,6 +376,7 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
     Builder builder = new Builder(parent);
     return builder;
   }
+
   /**
    *
    *
@@ -329,6 +418,7 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
       super.clear();
       bitField0_ = 0;
       parent_ = "";
+      filter_ = "";
       return this;
     }
 
@@ -367,6 +457,9 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.parent_ = parent_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
+        result.filter_ = filter_;
       }
     }
 
@@ -421,6 +514,11 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
         bitField0_ |= 0x00000001;
         onChanged();
       }
+      if (!other.getFilter().isEmpty()) {
+        filter_ = other.filter_;
+        bitField0_ |= 0x00000002;
+        onChanged();
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -453,6 +551,12 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
                 bitField0_ |= 0x00000001;
                 break;
               } // case 10
+            case 18:
+              {
+                filter_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -473,6 +577,7 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
     private int bitField0_;
 
     private java.lang.Object parent_ = "";
+
     /**
      *
      *
@@ -502,6 +607,7 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
         return (java.lang.String) ref;
       }
     }
+
     /**
      *
      *
@@ -531,6 +637,7 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
         return (com.google.protobuf.ByteString) ref;
       }
     }
+
     /**
      *
      *
@@ -559,6 +666,7 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -583,6 +691,7 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -609,6 +718,172 @@ public final class ListBackupsRequest extends com.google.protobuf.GeneratedMessa
       checkByteStringIsUtf8(value);
       parent_ = value;
       bitField0_ |= 0x00000001;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object filter_ = "";
+
+    /**
+     *
+     *
+     * <pre>
+     * An expression that filters the list of returned backups.
+     *
+     * A filter expression consists of a field name, a comparison operator, and a
+     * value for filtering.
+     * The value must be a string, a number, or a boolean. The comparison operator
+     * must be one of: `&lt;`, `&gt;`, `&lt;=`, `&gt;=`, `!=`, `=`, or `:`.
+     * Colon `:` is the contains operator. Filter rules are not case sensitive.
+     *
+     * The following fields in the [Backup][google.firestore.admin.v1.Backup] are
+     * eligible for filtering:
+     *
+     *   * `database_uid` (supports `=` only)
+     * </pre>
+     *
+     * <code>string filter = 2;</code>
+     *
+     * @return The filter.
+     */
+    public java.lang.String getFilter() {
+      java.lang.Object ref = filter_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        filter_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * An expression that filters the list of returned backups.
+     *
+     * A filter expression consists of a field name, a comparison operator, and a
+     * value for filtering.
+     * The value must be a string, a number, or a boolean. The comparison operator
+     * must be one of: `&lt;`, `&gt;`, `&lt;=`, `&gt;=`, `!=`, `=`, or `:`.
+     * Colon `:` is the contains operator. Filter rules are not case sensitive.
+     *
+     * The following fields in the [Backup][google.firestore.admin.v1.Backup] are
+     * eligible for filtering:
+     *
+     *   * `database_uid` (supports `=` only)
+     * </pre>
+     *
+     * <code>string filter = 2;</code>
+     *
+     * @return The bytes for filter.
+     */
+    public com.google.protobuf.ByteString getFilterBytes() {
+      java.lang.Object ref = filter_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        filter_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * An expression that filters the list of returned backups.
+     *
+     * A filter expression consists of a field name, a comparison operator, and a
+     * value for filtering.
+     * The value must be a string, a number, or a boolean. The comparison operator
+     * must be one of: `&lt;`, `&gt;`, `&lt;=`, `&gt;=`, `!=`, `=`, or `:`.
+     * Colon `:` is the contains operator. Filter rules are not case sensitive.
+     *
+     * The following fields in the [Backup][google.firestore.admin.v1.Backup] are
+     * eligible for filtering:
+     *
+     *   * `database_uid` (supports `=` only)
+     * </pre>
+     *
+     * <code>string filter = 2;</code>
+     *
+     * @param value The filter to set.
+     * @return This builder for chaining.
+     */
+    public Builder setFilter(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      filter_ = value;
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * An expression that filters the list of returned backups.
+     *
+     * A filter expression consists of a field name, a comparison operator, and a
+     * value for filtering.
+     * The value must be a string, a number, or a boolean. The comparison operator
+     * must be one of: `&lt;`, `&gt;`, `&lt;=`, `&gt;=`, `!=`, `=`, or `:`.
+     * Colon `:` is the contains operator. Filter rules are not case sensitive.
+     *
+     * The following fields in the [Backup][google.firestore.admin.v1.Backup] are
+     * eligible for filtering:
+     *
+     *   * `database_uid` (supports `=` only)
+     * </pre>
+     *
+     * <code>string filter = 2;</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearFilter() {
+      filter_ = getDefaultInstance().getFilter();
+      bitField0_ = (bitField0_ & ~0x00000002);
+      onChanged();
+      return this;
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * An expression that filters the list of returned backups.
+     *
+     * A filter expression consists of a field name, a comparison operator, and a
+     * value for filtering.
+     * The value must be a string, a number, or a boolean. The comparison operator
+     * must be one of: `&lt;`, `&gt;`, `&lt;=`, `&gt;=`, `!=`, `=`, or `:`.
+     * Colon `:` is the contains operator. Filter rules are not case sensitive.
+     *
+     * The following fields in the [Backup][google.firestore.admin.v1.Backup] are
+     * eligible for filtering:
+     *
+     *   * `database_uid` (supports `=` only)
+     * </pre>
+     *
+     * <code>string filter = 2;</code>
+     *
+     * @param value The bytes for filter to set.
+     * @return This builder for chaining.
+     */
+    public Builder setFilterBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      filter_ = value;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
