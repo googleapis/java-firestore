@@ -292,7 +292,7 @@ public class EnabledMetricsUtilTest {
             Mockito.argThat(
                 attributes ->
                     attributes
-                        .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS.getKey())
+                        .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS)
                         .equals(Status.Code.UNKNOWN.toString())));
     Mockito.verify(customProvider)
         .latencyRecorder(
@@ -301,7 +301,7 @@ public class EnabledMetricsUtilTest {
             Mockito.argThat(
                 attributes ->
                     attributes
-                        .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS.getKey())
+                        .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS)
                         .equals(Status.Code.UNKNOWN.toString())));
   }
 
@@ -345,7 +345,7 @@ public class EnabledMetricsUtilTest {
             Mockito.argThat(
                 attributes ->
                     attributes
-                        .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS.getKey())
+                        .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS)
                         .equals(Status.Code.UNKNOWN.toString())));
     Mockito.verify(customProvider)
         .counterRecorder(
@@ -354,7 +354,7 @@ public class EnabledMetricsUtilTest {
             Mockito.argThat(
                 attributes ->
                     attributes
-                        .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS.getKey())
+                        .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS)
                         .equals(Status.Code.UNKNOWN.toString())));
   }
 }

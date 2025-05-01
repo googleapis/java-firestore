@@ -16,19 +16,11 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.FIRESTORE_METER_NAME;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_CLIENT_UID;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_NAME;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_PREFIX;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.*;
 
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.api.gax.tracing.MetricsTracerFactory;
 import com.google.api.gax.tracing.OpenTelemetryMetricsRecorder;
-import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.common.annotations.VisibleForTesting;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
@@ -77,13 +69,11 @@ class BuiltinMetricsProvider {
 
   private Map<String, String> createStaticAttributes() {
     Map<String, String> staticAttributes = new HashMap<>();
-    staticAttributes.put(METRIC_ATTRIBUTE_KEY_CLIENT_UID.getKey(), ClientIdentifier.getClientUid());
-    staticAttributes.put(
-        METRIC_ATTRIBUTE_KEY_LIBRARY_NAME.getKey(), TelemetryConstants.FIRESTORE_LIBRARY_NAME);
-    String pkgVersion = this.getClass().getPackage().getImplementationVersion();
-    if (pkgVersion != null) {
-      staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION.getKey(), pkgVersion);
-    }
+    staticAttributes.put(METRIC_ATTRIBUTE_KEY_CLIENT_UID, ClientIdentifier.getClientUid());
+
+    staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_NAME, FIRESTORE_LIBRARY_NAME);
+    staticAttributes.put(METRIC_ATTRIBUTE_KEY_SERVICE, FIRESTORE_SERVICE);
+
     return staticAttributes;
   }
 

@@ -153,6 +153,10 @@
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk-common</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.google.cloud.opentelemetry</groupId>
+      <artifactId>detector-resources-support</artifactId>
+    </dependency>
     <!-- END OpenTelemetry -->
 
     <!-- Test dependencies -->

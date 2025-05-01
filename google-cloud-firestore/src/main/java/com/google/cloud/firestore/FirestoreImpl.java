@@ -36,7 +36,6 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
-import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -268,7 +267,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                   .addEvent(
                       TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS
                           + ": First response received");
-              metricsContext.recordLatency(MetricType.FIRST_RESPONSE_LATENCY);
+              metricsContext.recordLatency(TelemetryConstants.MetricType.FIRST_RESPONSE_LATENCY);
             } else if (numResponses % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
               getTraceUtil()
                   .currentSpan()

@@ -16,14 +16,8 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.COMMON_ATTRIBUTES;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.FIRESTORE_METER_NAME;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.FIRESTORE_METRICS;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.GAX_METER_NAME;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.GAX_METRICS;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_PREFIX;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.*;
+import static com.google.cloud.opentelemetry.detection.GCPPlatformDetector.SupportedPlatform.GOOGLE_KUBERNETES_ENGINE;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
@@ -32,9 +26,12 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.cloud.firestore.FirestoreException;
 import com.google.cloud.firestore.FirestoreOptions;
-import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
+import com.google.cloud.opentelemetry.detection.AttributeKeys;
+import com.google.cloud.opentelemetry.detection.DetectedPlatform;
+import com.google.cloud.opentelemetry.detection.GCPPlatformDetector;
 import com.google.cloud.opentelemetry.metric.GoogleCloudMetricExporter;
 import com.google.cloud.opentelemetry.metric.MetricConfiguration;
+import com.google.cloud.opentelemetry.metric.MonitoredResourceDescription;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableMap;
@@ -43,7 +40,8 @@ import com.google.common.util.concurrent.MoreExecutors;
 import io.grpc.Status;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.common.AttributeKey;
+import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.metrics.InstrumentSelector;
 import io.opentelemetry.sdk.metrics.SdkMeterProvider;
@@ -52,6 +50,7 @@ import io.opentelemetry.sdk.metrics.View;
 import io.opentelemetry.sdk.metrics.export.MetricExporter;
 import io.opentelemetry.sdk.metrics.export.MetricReader;
 import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader;
+import io.opentelemetry.sdk.resources.Resource;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +66,8 @@ import javax.annotation.Nullable;
  * `FirestoreOpenTelemetryOptions` in `FirestoreOptions` can be used to configure its behavior.
  */
 class EnabledMetricsUtil implements MetricsUtil {
+
+  private FirestoreOptions firestoreOptions;
   private BuiltinMetricsProvider defaultMetricsProvider;
   private BuiltinMetricsProvider customMetricsProvider;
   private MetricReader metricReader;
@@ -74,9 +75,10 @@ class EnabledMetricsUtil implements MetricsUtil {
   private static final Logger logger = Logger.getLogger(EnabledMetricsUtil.class.getName());
 
   EnabledMetricsUtil(FirestoreOptions firestoreOptions) {
+    this.firestoreOptions = firestoreOptions;
     try {
-      this.defaultMetricsProvider = configureDefaultMetricsProvider(firestoreOptions);
-      this.customMetricsProvider = configureCustomMetricsProvider(firestoreOptions);
+      this.defaultMetricsProvider = configureDefaultMetricsProvider();
+      this.customMetricsProvider = configureCustomMetricsProvider();
     } catch (Exception e) {
       logger.warning(
           "Unable to create MetricsUtil object for client side metrics, will skip exporting client side metrics"
@@ -84,17 +86,15 @@ class EnabledMetricsUtil implements MetricsUtil {
     }
   }
 
-  private BuiltinMetricsProvider configureDefaultMetricsProvider(
-      FirestoreOptions firestoreOptions) {
+  private BuiltinMetricsProvider configureDefaultMetricsProvider() {
     OpenTelemetry defaultOpenTelemetry = OpenTelemetry.noop();
     if (firestoreOptions.getOpenTelemetryOptions().exportBuiltinMetricsToGoogleCloudMonitoring()) {
-      String projectId = firestoreOptions.getProjectId();
-      if (projectId == null) {
+      if (firestoreOptions.getProjectId() == null) {
         logger.warning(
             "Project ID is null, skipping client side metrics export to Cloud Monitoring.");
       } else {
         try {
-          defaultOpenTelemetry = getDefaultOpenTelemetryInstance(projectId);
+          defaultOpenTelemetry = getDefaultOpenTelemetryInstance();
         } catch (Exception e) {
           logger.warning(
               "Unable to create default OpenTelemetry instance for client side metrics, will skip exporting client side metrics to Cloud Monitoring: "
@@ -105,8 +105,7 @@ class EnabledMetricsUtil implements MetricsUtil {
     return new BuiltinMetricsProvider(defaultOpenTelemetry);
   }
 
-  private BuiltinMetricsProvider configureCustomMetricsProvider(FirestoreOptions firestoreOptions)
-      throws IOException {
+  private BuiltinMetricsProvider configureCustomMetricsProvider() throws IOException {
     OpenTelemetry customOpenTelemetry =
         firestoreOptions.getOpenTelemetryOptions().getOpenTelemetry();
     if (customOpenTelemetry == null) {
@@ -140,7 +139,7 @@ class EnabledMetricsUtil implements MetricsUtil {
    * Creates a default {@link OpenTelemetry} instance to collect and export built-in client side
    * metrics to Google Cloud Monitoring.
    */
-  private OpenTelemetry getDefaultOpenTelemetryInstance(String projectId) throws IOException {
+  private OpenTelemetry getDefaultOpenTelemetryInstance() throws IOException {
     SdkMeterProviderBuilder sdkMeterProviderBuilder = SdkMeterProvider.builder();
 
     // Filter out attributes that are not defined
@@ -148,18 +147,48 @@ class EnabledMetricsUtil implements MetricsUtil {
       sdkMeterProviderBuilder.registerView(entry.getKey(), entry.getValue());
     }
 
+    sdkMeterProviderBuilder.setResource(Resource.create(createResourceAttributes()));
+
+    MonitoredResourceDescription monitoredResourceMapping =
+        new MonitoredResourceDescription(FIRESTORE_RESOURCE_TYPE, FIRESTORE_RESOURCE_LABELS);
+
     MetricExporter metricExporter =
         GoogleCloudMetricExporter.createWithConfiguration(
             MetricConfiguration.builder()
-                .setProjectId(projectId)
+                .setProjectId(firestoreOptions.getProjectId())
                 // Ignore library info as it is collected by the metric attributes as well
                 .setInstrumentationLibraryLabelsEnabled(false)
+                .setMonitoredResourceDescription(monitoredResourceMapping)
+                // .setUseServiceTimeSeries(true)
                 .build());
     metricReader = PeriodicMetricReader.create(metricExporter);
+    sdkMeterProviderBuilder.registerMetricReader(metricReader);
 
-    return OpenTelemetrySdk.builder()
-        .setMeterProvider(sdkMeterProviderBuilder.registerMetricReader(metricReader).build())
-        .build();
+    return OpenTelemetrySdk.builder().setMeterProvider(sdkMeterProviderBuilder.build()).build();
+  }
+
+  Attributes createResourceAttributes() {
+    AttributesBuilder attributesBuilder =
+        Attributes.builder()
+            .put(RESOURCE_KEY_LOCATION, detectClientLocation())
+            .put(RESOURCE_KEY_PROJECT, firestoreOptions.getProjectId())
+            .put(RESOURCE_KEY_DATABASE, firestoreOptions.getDatabaseId());
+    String pkgVersion = this.getClass().getPackage().getImplementationVersion();
+    attributesBuilder.put(
+        RESOURCE_KEY_INSTANCE, "java_" + (pkgVersion != null ? pkgVersion : "unknown"));
+
+    return attributesBuilder.build();
+  }
+
+  private String detectClientLocation() {
+    GCPPlatformDetector detector = GCPPlatformDetector.DEFAULT_INSTANCE;
+    DetectedPlatform detectedPlatform = detector.detectPlatform();
+    // All platform except GKE uses "cloud_region" for region attribute.
+    String region = detectedPlatform.getAttributes().get("cloud_region");
+    if (detectedPlatform.getSupportedPlatform() == GOOGLE_KUBERNETES_ENGINE) {
+      region = detectedPlatform.getAttributes().get(AttributeKeys.GKE_LOCATION_TYPE_REGION);
+    }
+    return region == null ? "global" : region;
   }
 
   private static Map<InstrumentSelector, View> getAllViews() {
@@ -175,8 +204,7 @@ class EnabledMetricsUtil implements MetricsUtil {
         InstrumentSelector.builder().setMeterName(meter).setName(METRIC_PREFIX + "/" + id).build();
     Set<String> attributesFilter =
         ImmutableSet.<String>builder()
-            .addAll(
-                COMMON_ATTRIBUTES.stream().map(AttributeKey::getKey).collect(Collectors.toSet()))
+            .addAll(COMMON_ATTRIBUTES.stream().collect(Collectors.toSet()))
             .build();
     View view = View.builder().setAttributeFilter(attributesFilter).build();
 
@@ -277,8 +305,8 @@ class EnabledMetricsUtil implements MetricsUtil {
 
   private Map<String, String> createAttributes(String status, String methodName) {
     Map<String, String> attributes = new HashMap<>();
-    attributes.put(METRIC_ATTRIBUTE_KEY_METHOD.getKey(), methodName);
-    attributes.put(METRIC_ATTRIBUTE_KEY_STATUS.getKey(), status);
+    attributes.put(METRIC_ATTRIBUTE_KEY_METHOD, methodName);
+    attributes.put(METRIC_ATTRIBUTE_KEY_STATUS, status);
     return attributes;
   }
 

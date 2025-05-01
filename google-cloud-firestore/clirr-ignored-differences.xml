@@ -347,17 +347,25 @@
     <to>*</to>
   </difference>
 
-    <!-- Remove unused constants in TelemetryConstants -->
+    <!-- Update TelemetryConstants -->
   <difference>
     <differenceType>6011</differenceType>
     <className>com/google/cloud/firestore/telemetry/TelemetryConstants</className>
-    <field>METHOD_NAME_*</field>
+    <field>*</field>
+  </difference>
+
+    <difference>
+    <differenceType>6001</differenceType>
+    <className>com/google/cloud/firestore/telemetry/TelemetryConstants</className>
+    <field>*</field>
   </difference>
 
   <difference>
-    <differenceType>6011</differenceType>
+    <differenceType>6004</differenceType>
     <className>com/google/cloud/firestore/telemetry/TelemetryConstants</className>
-    <field>METRIC_NAME_END_TO_END_LATENCY</field>
+    <field>METRIC_ATTRIBUTE_KEY_*</field>
+    <from>io.opentelemetry.api.common.AttributeKey</from>
+    <to>java.lang.String</to>
   </difference>
 
   <difference>

@@ -28,7 +28,6 @@ import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
-import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.telemetry.TraceUtil.Span;
@@ -103,8 +102,9 @@ final class ServerSideTransactionRunner<T> {
 
   ApiFuture<T> run() {
     ApiFuture<T> result = runInternally();
-    metricsContext.recordLatencyAtFuture(MetricType.TRANSACTION_LATENCY, result);
-    metricsContext.recordCounterAtFuture(MetricType.TRANSACTION_ATTEMPT_COUNT, result);
+    metricsContext.recordLatencyAtFuture(TelemetryConstants.MetricType.TRANSACTION_LATENCY, result);
+    metricsContext.recordCounterAtFuture(
+        TelemetryConstants.MetricType.TRANSACTION_ATTEMPT_COUNT, result);
     return result;
   }
 
@@ -154,7 +154,8 @@ final class ServerSideTransactionRunner<T> {
       // Record the first time latency for the first BeginTransaction call only
       Boolean isFirstAttempt = (transactionOptions.getNumberOfAttempts() - attemptsRemaining) == 1;
       if (isFirstAttempt) {
-        metricsContext.recordLatencyAtFuture(MetricType.FIRST_RESPONSE_LATENCY, result);
+        metricsContext.recordLatencyAtFuture(
+            TelemetryConstants.MetricType.FIRST_RESPONSE_LATENCY, result);
       }
       span.endAtFuture(result);
       return result;

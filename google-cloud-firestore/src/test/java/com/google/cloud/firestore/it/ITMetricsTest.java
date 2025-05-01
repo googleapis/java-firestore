@@ -31,6 +31,7 @@ import com.google.cloud.firestore.telemetry.ClientIdentifier;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.common.base.Preconditions;
 import io.grpc.Status;
+import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
@@ -66,10 +67,9 @@ public class ITMetricsTest {
 
   protected Firestore firestore;
 
-  private static Attributes expectedBaseAttributes;
+  private static Attributes baseAttributes;
 
   private final String ClientUid = ClientIdentifier.getClientUid();
-  private final String libraryVersion = this.getClass().getPackage().getImplementationVersion();
 
   @Rule public TestName testName = new TestName();
 
@@ -81,7 +81,7 @@ public class ITMetricsTest {
     Preconditions.checkNotNull(
         firestore,
         "Error instantiating Firestore. Check that the service account credentials were properly set.");
-    expectedBaseAttributes = buildExpectedAttributes();
+    baseAttributes = buildBaseAttributes();
   }
 
   private OpenTelemetrySdk setupOpenTelemetrySdk() {
@@ -98,16 +98,15 @@ public class ITMetricsTest {
         .getService();
   }
 
-  private Attributes buildExpectedAttributes() {
+  private Attributes buildBaseAttributes() {
     AttributesBuilder attributesBuilder = Attributes.builder();
     attributesBuilder.put(
-        TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_NAME.getKey(),
+        TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_NAME,
         TelemetryConstants.FIRESTORE_LIBRARY_NAME);
-    attributesBuilder.put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_CLIENT_UID.getKey(), ClientUid);
-    if (libraryVersion != null) {
-      attributesBuilder.put(
-          TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION.getKey(), libraryVersion);
-    }
+    attributesBuilder.put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_CLIENT_UID, ClientUid);
+    attributesBuilder.put(
+        TelemetryConstants.METRIC_ATTRIBUTE_KEY_SERVICE, TelemetryConstants.FIRESTORE_SERVICE);
+
     return attributesBuilder.build();
   }
 
@@ -121,7 +120,7 @@ public class ITMetricsTest {
   }
 
   class MetricInfo {
-    // The expected number of measurements is called
+    // The expected number of measurements collected
     public int count;
     // Attributes expected to be recorded in the measurements
     public Attributes attributes;
@@ -255,12 +254,6 @@ public class ITMetricsTest {
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
-    expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_BATCH_COMMIT, Status.OK.getCode().toString(), 1)
-            .build();
-
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
@@ -285,14 +278,6 @@ public class ITMetricsTest {
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
-    expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_BULK_WRITER_COMMIT,
-                Status.OK.getCode().toString(),
-                1)
-            .build();
-
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
@@ -305,12 +290,6 @@ public class ITMetricsTest {
 
     // Note: pagedCallable requests are not traced at GAX layer
     // Validate SDK layer metric
-    Map<String, MetricInfo> expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_PARTITION_QUERY, Status.OK.getCode().toString(), 1)
-            .build();
-
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
@@ -322,14 +301,6 @@ public class ITMetricsTest {
 
     // Note: pagedCallable requests are not traced at GAX layer
     // Validate SDK layer metric
-    Map<String, MetricInfo> expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_DOC_REF_LIST_COLLECTIONS,
-                Status.OK.getCode().toString(),
-                1)
-            .build();
-
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
@@ -341,14 +312,6 @@ public class ITMetricsTest {
 
     // Note: pagedCallable requests are not traced at GAX layer
     // Validate SDK layer metric
-    Map<String, MetricInfo> expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_COL_REF_LIST_DOCUMENTS,
-                Status.OK.getCode().toString(),
-                1)
-            .build();
-
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
@@ -370,14 +333,6 @@ public class ITMetricsTest {
     validateGaxMetrics(expectedMetrics);
 
     // Validate SDK layer metric
-    expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_BATCH_COMMIT, Status.OK.getCode().toString(), 1)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_DOC_REF_SET, Status.OK.getCode().toString(), 1)
-            .build();
-
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
@@ -462,24 +417,6 @@ public class ITMetricsTest {
                 1)
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY, expectedMetrics);
-
-    expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_TRANSACTION_GET_QUERY,
-                Status.OK.getCode().toString(),
-                1)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
-                Status.OK.getCode().toString(),
-                1)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_TRANSACTION_COMMIT,
-                Status.OK.getCode().toString(),
-                1)
-            .build();
 
     expectedMetrics =
         new MetricsExpectationBuilder()
@@ -632,16 +569,6 @@ public class ITMetricsTest {
         new MetricsExpectationBuilder()
             .expectMetricData(
                 TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_TRANSACTION_COMMIT,
-                Status.OK.getCode().toString(),
-                1)
-            .build();
-
-    expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_RUN_TRANSACTION, Status.OK.getCode().toString(), 1)
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY, expectedMetrics);
 
@@ -687,30 +614,12 @@ public class ITMetricsTest {
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY, expectedMetrics);
 
-    expectedMetrics =
-        new MetricsExpectationBuilder()
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_QUERY_GET, Status.OK.getCode().toString(), 2)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_AGGREGATION_QUERY_GET,
-                Status.OK.getCode().toString(),
-                1)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_DOC_REF_SET, Status.OK.getCode().toString(), 1)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE, Status.OK.getCode().toString(), 1)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_DOC_REF_DELETE, Status.OK.getCode().toString(), 1)
-            .expectMetricData(
-                TelemetryConstants.METHOD_NAME_BATCH_COMMIT, Status.OK.getCode().toString(), 3)
-            .build();
-
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY);
     assertMetricAbsent(TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT);
   }
 
   private Attributes buildAttributes(String method, String status) {
-    return expectedBaseAttributes
+    return baseAttributes
         .toBuilder()
         .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, status)
         .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, method)
@@ -744,7 +653,10 @@ public class ITMetricsTest {
     assertThat(points.size()).isEqualTo(expectedMetrics.size());
 
     for (PointData point : points) {
-      String method = point.getAttributes().get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD);
+      String method =
+          point
+              .getAttributes()
+              .get(AttributeKey.stringKey(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD));
       MetricInfo expectedMetricInfo = expectedMetrics.get(method);
       if (isHistogram) {
         assertThat(((HistogramPointData) point).getCount()).isEqualTo(expectedMetricInfo.count);

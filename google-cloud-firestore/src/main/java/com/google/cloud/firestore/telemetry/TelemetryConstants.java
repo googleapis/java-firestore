@@ -19,7 +19,6 @@ package com.google.cloud.firestore.telemetry;
 import com.google.api.core.InternalApi;
 import com.google.api.gax.tracing.OpenTelemetryMetricsRecorder;
 import com.google.common.collect.ImmutableSet;
-import io.opentelemetry.api.common.AttributeKey;
 import java.util.Set;
 
 /** Constants used for telemetry in the Firestore SDK. */
@@ -55,36 +54,45 @@ public interface TelemetryConstants {
   String METHOD_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
   String METHOD_NAME_RUN_TRANSACTION = "RunTransaction";
 
-  // OpenTelemetry built-in metrics constants
-  String FIRESTORE_RESOURCE_TYPE = "firestore_client_raw";
   // TODO(metrics): change to firestore.googleapis.com
   String METRIC_PREFIX = "custom.googleapis.com/internal/client";
   String FIRESTORE_METER_NAME = "java_firestore";
   String GAX_METER_NAME = OpenTelemetryMetricsRecorder.GAX_METER_NAME;
   String FIRESTORE_LIBRARY_NAME = "com.google.cloud.firestore";
 
-  // Monitored resource keys for labels
-  String RESOURCE_KEY_RESOURCE_CONTAINER = "resource_container";
+  String FIRESTORE_SERVICE = "firestore V1";
+
+  // Monitored resource
+  String FIRESTORE_RESOURCE_TYPE =
+      "firestore.googleapis.com/Database"; // or maybe "firestore.googleapis.com/Database"
   String RESOURCE_KEY_LOCATION = "location";
-  String RESOURCE_KEY_DATABASE_ID = "database_id";
+  String RESOURCE_KEY_INSTANCE = "instance";
+  String RESOURCE_KEY_DATABASE = "database";
+  String RESOURCE_KEY_PROJECT = "project";
   Set<String> FIRESTORE_RESOURCE_LABELS =
       ImmutableSet.of(
-          RESOURCE_KEY_RESOURCE_CONTAINER, RESOURCE_KEY_LOCATION, RESOURCE_KEY_DATABASE_ID);
+          RESOURCE_KEY_LOCATION,
+          RESOURCE_KEY_INSTANCE,
+          RESOURCE_KEY_DATABASE,
+          RESOURCE_KEY_PROJECT);
 
   // Metric attribute keys for labels
-  AttributeKey<String> METRIC_ATTRIBUTE_KEY_METHOD = AttributeKey.stringKey("method");
-  AttributeKey<String> METRIC_ATTRIBUTE_KEY_STATUS = AttributeKey.stringKey("status");
-  AttributeKey<String> METRIC_ATTRIBUTE_KEY_LIBRARY_NAME = AttributeKey.stringKey("library_name");
-  AttributeKey<String> METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION =
-      AttributeKey.stringKey("library_version");
-  AttributeKey<String> METRIC_ATTRIBUTE_KEY_CLIENT_UID = AttributeKey.stringKey("client_uid");
-  Set<AttributeKey> COMMON_ATTRIBUTES =
+  String METRIC_ATTRIBUTE_KEY_METHOD = "method";
+  String METRIC_ATTRIBUTE_KEY_STATUS = "status";
+  String METRIC_ATTRIBUTE_KEY_LIBRARY_NAME = "library_name";
+  String METRIC_ATTRIBUTE_KEY_CLIENT_UID = "client_uid";
+  String METRIC_ATTRIBUTE_KEY_SERVICE = "service";
+  Set<String> COMMON_ATTRIBUTES =
       ImmutableSet.of(
           METRIC_ATTRIBUTE_KEY_CLIENT_UID,
           METRIC_ATTRIBUTE_KEY_LIBRARY_NAME,
-          METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION,
           METRIC_ATTRIBUTE_KEY_STATUS,
-          METRIC_ATTRIBUTE_KEY_METHOD);
+          METRIC_ATTRIBUTE_KEY_METHOD,
+          METRIC_ATTRIBUTE_KEY_SERVICE,
+          RESOURCE_KEY_LOCATION,
+          RESOURCE_KEY_INSTANCE,
+          RESOURCE_KEY_DATABASE,
+          RESOURCE_KEY_PROJECT);
 
   // Metric names
   String METRIC_NAME_OPERATION_LATENCY = "operation_latency";

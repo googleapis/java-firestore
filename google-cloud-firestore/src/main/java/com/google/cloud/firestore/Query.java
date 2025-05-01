@@ -35,8 +35,6 @@ import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
 import com.google.cloud.firestore.encoding.CustomClassMapper;
-import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
-import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.bundle.BundledQuery;
@@ -1489,8 +1487,6 @@ public class Query extends StreamableQuery<QuerySnapshot> {
         "Query results for queries that include limitToLast() constraints cannot be streamed. "
             + "Use Query.get() instead.");
 
-    MetricsContext metricsContext = createMetricsContext(TelemetryConstants.METHOD_NAME_QUERY_GET);
-
     ApiStreamObserver<RunQueryResponse> observer =
         new ApiStreamObserver<RunQueryResponse>() {
           @Override
@@ -1516,7 +1512,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
         };
 
     internalStream(
-        new MonitoredStreamResponseObserver(observer, metricsContext),
+        observer,
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         /* transactionId= */ null,
         /* readTime= */ null,
@@ -1539,9 +1535,6 @@ public class Query extends StreamableQuery<QuerySnapshot> {
         !LimitType.Last.equals(Query.this.options.getLimitType()),
         "Query results for queries that include limitToLast() constraints cannot be streamed. "
             + "Use Query.explain() instead.");
-
-    MetricsContext metricsContext =
-        createMetricsContext(TelemetryConstants.METHOD_NAME_QUERY_EXPLAIN);
 
     final SettableApiFuture<ExplainMetrics> metricsFuture = SettableApiFuture.create();
 
@@ -1580,7 +1573,7 @@ public class Query extends StreamableQuery<QuerySnapshot> {
         };
 
     internalStream(
-        new MonitoredStreamResponseObserver(observer, metricsContext),
+        observer,
         /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
         /* transactionId= */ null,
         /* readTime= */ null,
