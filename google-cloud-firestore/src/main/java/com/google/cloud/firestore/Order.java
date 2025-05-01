@@ -125,7 +125,7 @@ class Order implements Comparator<Value> {
 
     // So they are the same type.
     switch (leftType) {
-        // Nulls are all equal, MaxKeys are all equal, and MinKeys are all equal.
+      // Nulls are all equal, MaxKeys are all equal, and MinKeys are all equal.
       case NULL:
       case MIN_KEY:
       case MAX_KEY:
