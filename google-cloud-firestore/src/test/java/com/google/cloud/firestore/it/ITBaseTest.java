@@ -46,10 +46,6 @@ public abstract class ITBaseTest {
 
   private static final Logger logger = Logger.getLogger(ITBaseTest.class.getName());
 
-  // TODO(types/ehsan): Remove this line which forces all integration tests
-  //  to run against nightly.
-  private static String unused = System.setProperty("FIRESTORE_TARGET_BACKEND", "NIGHTLY");
-
   protected Firestore firestore;
   protected FirestoreSpy firestoreSpy;
   private FirestoreOptions firestoreOptions;
