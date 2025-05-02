@@ -197,7 +197,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
             if (dfsContainsCallStack(
                 childSpan,
                 expectedCallStack.subList(
-                    /*fromIndexInclusive=*/ 1, /*toIndexExclusive*/ callStackListSize))) {
+                    /* fromIndexInclusive= */ 1, /*toIndexExclusive*/ callStackListSize))) {
               return true;
             }
           }
@@ -1133,7 +1133,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
 
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        /*numExpectedSpans=*/ 11,
+        /* numExpectedSpans= */ 11,
         Arrays.asList(
             Arrays.asList(
                 METHOD_NAME_TRANSACTION_RUN,
@@ -1188,7 +1188,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
 
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        /*numExpectedSpans=*/ 5,
+        /* numExpectedSpans= */ 5,
         Arrays.asList(
             Arrays.asList(
                 METHOD_NAME_TRANSACTION_RUN,

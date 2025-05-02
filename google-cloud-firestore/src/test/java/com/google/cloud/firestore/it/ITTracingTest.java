@@ -158,7 +158,8 @@ public abstract class ITTracingTest {
   public void after() throws Exception {
     Preconditions.checkNotNull(
         firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
+        "Error instantiating Firestore. Check that the service account credentials were properly"
+            + " set.");
     firestore.shutdown();
     inMemorySpanExporter.reset();
   }

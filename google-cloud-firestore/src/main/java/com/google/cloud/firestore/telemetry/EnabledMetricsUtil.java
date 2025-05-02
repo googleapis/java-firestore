@@ -81,7 +81,8 @@ class EnabledMetricsUtil implements MetricsUtil {
       this.customMetricsProvider = configureCustomMetricsProvider();
     } catch (Exception e) {
       logger.warning(
-          "Unable to create MetricsUtil object for client side metrics, will skip exporting client side metrics"
+          "Unable to create MetricsUtil object for client side metrics, will skip exporting client"
+              + " side metrics"
               + e);
     }
   }
