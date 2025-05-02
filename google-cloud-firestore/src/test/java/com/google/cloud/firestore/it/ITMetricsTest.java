@@ -80,7 +80,8 @@ public class ITMetricsTest {
     firestore = setupFirestoreService();
     Preconditions.checkNotNull(
         firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
+        "Error instantiating Firestore. Check that the service account credentials were properly"
+            + " set.");
     baseAttributes = buildBaseAttributes();
   }
 
@@ -619,8 +620,7 @@ public class ITMetricsTest {
   }
 
   private Attributes buildAttributes(String method, String status) {
-    return baseAttributes
-        .toBuilder()
+    return baseAttributes.toBuilder()
         .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS, status)
         .put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_METHOD, method)
         .build();

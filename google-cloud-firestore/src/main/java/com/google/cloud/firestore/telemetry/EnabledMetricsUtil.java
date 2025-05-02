@@ -98,7 +98,8 @@ class EnabledMetricsUtil implements MetricsUtil {
           defaultOpenTelemetry = getDefaultOpenTelemetryInstance();
         } catch (Exception e) {
           logger.warning(
-              "Unable to create default OpenTelemetry instance for client side metrics, will skip exporting client side metrics to Cloud Monitoring: "
+              "Unable to create default OpenTelemetry instance for client side metrics, will skip"
+                  + " exporting client side metrics to Cloud Monitoring: "
                   + e);
         }
       }
