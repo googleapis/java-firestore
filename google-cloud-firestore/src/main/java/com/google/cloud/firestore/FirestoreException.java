@@ -123,6 +123,14 @@ public class FirestoreException extends BaseGrpcServiceException {
     return status;
   }
 
+  /**
+   * Converts a GAX {@code StatusCode.Code} to an equivalent gRPC {@code Status} object. This method
+   * assumes that the names of the enum values in {@code com.google.api.gax.rpc.StatusCode.Code}
+   * directly correspond to the names of the enum values in {@code io.grpc.Status.Code}.
+   *
+   * <p>If the provided {@code StatusCode.Code} name does not have a direct matching {@code
+   * io.grpc.Status.Code}, {@code Status.UNKNOWN} with a descriptive message is returned.
+   */
   private static Status toStatus(StatusCode.Code code) {
     try {
       Status.Code grpcCode = Status.Code.valueOf(code.name());
@@ -130,54 +138,5 @@ public class FirestoreException extends BaseGrpcServiceException {
     } catch (IllegalArgumentException e) {
       return Status.UNKNOWN.withDescription("Unrecognized StatusCode: " + code);
     }
-
-    // Option II: use for loop
-    // for (Status.Code grpcStatusCode : Status.Code.values()) {
-    //   if (code.toString().equals(grpcStatusCode.toString())) {
-    //     return grpcStatusCode.toStatus();
-    //   }
-    // }
-
-    // return Status.UNKNOWN.withDescription("No matching io.grpc.Status.Code found for " + code);
-
-    // option III: use switch
-    // switch (code) {
-    //   case OK:
-    //     return Status.OK;
-    //   case CANCELLED:
-    //     return Status.CANCELLED;
-    //   case UNKNOWN:
-    //     return Status.UNKNOWN;
-    //   case INVALID_ARGUMENT:
-    //     return Status.INVALID_ARGUMENT;
-    //   case DEADLINE_EXCEEDED:
-    //     return Status.DEADLINE_EXCEEDED;
-    //   case NOT_FOUND:
-    //     return Status.NOT_FOUND;
-    //   case ALREADY_EXISTS:
-    //     return Status.ALREADY_EXISTS;
-    //   case PERMISSION_DENIED:
-    //     return Status.PERMISSION_DENIED;
-    //   case RESOURCE_EXHAUSTED:
-    //     return Status.RESOURCE_EXHAUSTED;
-    //   case FAILED_PRECONDITION:
-    //     return Status.FAILED_PRECONDITION;
-    //   case ABORTED:
-    //     return Status.ABORTED;
-    //   case OUT_OF_RANGE:
-    //     return Status.OUT_OF_RANGE;
-    //   case UNIMPLEMENTED:
-    //     return Status.UNIMPLEMENTED;
-    //   case INTERNAL:
-    //     return Status.INTERNAL;
-    //   case UNAVAILABLE:
-    //     return Status.UNAVAILABLE;
-    //   case DATA_LOSS:
-    //     return Status.DATA_LOSS;
-    //   case UNAUTHENTICATED:
-    //     return Status.UNAUTHENTICATED;
-    //   default:
-    //     return Status.UNKNOWN.withDescription("Unknown StatusCode: " + code);
-    // }
   }
 }
