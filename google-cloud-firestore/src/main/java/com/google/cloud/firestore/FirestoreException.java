@@ -18,6 +18,7 @@ package com.google.cloud.firestore;
 
 import com.google.api.core.BetaApi;
 import com.google.api.gax.rpc.ApiException;
+import com.google.api.gax.rpc.StatusCode;
 import com.google.cloud.grpc.BaseGrpcServiceException;
 import io.grpc.Status;
 import java.io.IOException;
@@ -43,6 +44,8 @@ public class FirestoreException extends BaseGrpcServiceException {
         exception,
         exception.getStatusCode().getCode().getHttpStatusCode(),
         exception.isRetryable());
+
+    this.status = FirestoreException.toStatus(exception.getStatusCode().getCode());
   }
 
   private FirestoreException(IOException exception, boolean retryable) {
@@ -118,5 +121,63 @@ public class FirestoreException extends BaseGrpcServiceException {
   @Nullable
   public Status getStatus() {
     return status;
+  }
+
+  private static Status toStatus(StatusCode.Code code) {
+    try {
+      Status.Code grpcCode = Status.Code.valueOf(code.name());
+      return grpcCode.toStatus();
+    } catch (IllegalArgumentException e) {
+      return Status.UNKNOWN.withDescription("Unrecognized StatusCode: " + code);
+    }
+
+    // Option II: use for loop
+    // for (Status.Code grpcStatusCode : Status.Code.values()) {
+    //   if (code.toString().equals(grpcStatusCode.toString())) {
+    //     return grpcStatusCode.toStatus();
+    //   }
+    // }
+
+    // return Status.UNKNOWN.withDescription("No matching io.grpc.Status.Code found for " + code);
+
+    // option III: use switch
+    // switch (code) {
+    //   case OK:
+    //     return Status.OK;
+    //   case CANCELLED:
+    //     return Status.CANCELLED;
+    //   case UNKNOWN:
+    //     return Status.UNKNOWN;
+    //   case INVALID_ARGUMENT:
+    //     return Status.INVALID_ARGUMENT;
+    //   case DEADLINE_EXCEEDED:
+    //     return Status.DEADLINE_EXCEEDED;
+    //   case NOT_FOUND:
+    //     return Status.NOT_FOUND;
+    //   case ALREADY_EXISTS:
+    //     return Status.ALREADY_EXISTS;
+    //   case PERMISSION_DENIED:
+    //     return Status.PERMISSION_DENIED;
+    //   case RESOURCE_EXHAUSTED:
+    //     return Status.RESOURCE_EXHAUSTED;
+    //   case FAILED_PRECONDITION:
+    //     return Status.FAILED_PRECONDITION;
+    //   case ABORTED:
+    //     return Status.ABORTED;
+    //   case OUT_OF_RANGE:
+    //     return Status.OUT_OF_RANGE;
+    //   case UNIMPLEMENTED:
+    //     return Status.UNIMPLEMENTED;
+    //   case INTERNAL:
+    //     return Status.INTERNAL;
+    //   case UNAVAILABLE:
+    //     return Status.UNAVAILABLE;
+    //   case DATA_LOSS:
+    //     return Status.DATA_LOSS;
+    //   case UNAUTHENTICATED:
+    //     return Status.UNAUTHENTICATED;
+    //   default:
+    //     return Status.UNKNOWN.withDescription("Unknown StatusCode: " + code);
+    // }
   }
 }
