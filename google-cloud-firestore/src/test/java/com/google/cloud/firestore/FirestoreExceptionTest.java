@@ -32,7 +32,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class FirestoreExceptionTest {
   @Test
   public void testConstructorWithReasonAndStatus() {
-    String reason = "Test Reason for an Aborted operation";
+    String reason = "Aborted operation";
     Status status = Status.ABORTED;
     FirestoreException exception = new FirestoreException(reason, status);
 
@@ -91,14 +91,19 @@ public class FirestoreExceptionTest {
   @Test
   public void testForIOException() {
     IOException ioException = new IOException("Simulated network read error");
-    boolean retryable = false;
+    // The 'retryable' argument is passed, but BaseGrpcServiceException determines actual
+    // retryability for IOExceptions.
+    boolean retryable = true;
 
     FirestoreException exception = FirestoreException.forIOException(ioException, retryable);
 
     assertEquals(ioException.getMessage(), exception.getMessage());
     assertEquals(ioException, exception.getCause());
+    // BaseGrpcServiceException classifies generic IOExceptions as non-retryable.
     assertFalse(exception.isRetryable());
     assertNull(exception.getStatus());
+    // BaseGrpcServiceException extracts Code from HttpResponseException, or set it to
+    // UNKNOWN_CODE, which is 0.
     assertEquals(0, exception.getCode());
   }
 
