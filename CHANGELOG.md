@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.31.4](https://github.com/googleapis/java-firestore/compare/v3.31.3...v3.31.4) (2025-05-09)
+
+
+### Bug Fixes
+
+* Status is missing while creating FirestoreException from ApiException ([#2107](https://github.com/googleapis/java-firestore/issues/2107)) ([00a6f54](https://github.com/googleapis/java-firestore/commit/00a6f54e044c963ca960ab1cec022a21cc4da29e))
+
 ## [3.31.3](https://github.com/googleapis/java-firestore/compare/v3.31.2...v3.31.3) (2025-05-08)
 
 
