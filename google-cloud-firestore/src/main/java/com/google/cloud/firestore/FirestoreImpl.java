@@ -36,7 +36,6 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
-import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -236,8 +235,8 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             .getMetricsUtil()
             .createMetricsContext(
                 transactionId == null
-                    ? TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS_GET_ALL
-                    : TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS_TRANSACTIONAL);
+                    ? TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS
+                    : TelemetryConstants.METHOD_NAME_TRANSACTION_BATCH_GET_DOCUMENTS);
 
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
         new ResponseObserver<BatchGetDocumentsResponse>() {
@@ -268,7 +267,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                   .addEvent(
                       TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS
                           + ": First response received");
-              metricsContext.recordLatency(MetricType.FIRST_RESPONSE_LATENCY);
+              metricsContext.recordLatency(TelemetryConstants.MetricType.FIRST_RESPONSE_LATENCY);
             } else if (numResponses % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
               getTraceUtil()
                   .currentSpan()
@@ -313,7 +312,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
           @Override
           public void onError(Throwable throwable) {
             getTraceUtil().currentSpan().end(throwable);
-            metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, throwable);
             apiStreamObserver.onError(throwable);
           }
 
@@ -329,7 +327,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
                         + numResponses
                         + " responses.",
                     Collections.singletonMap(ATTRIBUTE_KEY_NUM_RESPONSES, numResponses));
-            metricsContext.recordLatency(MetricType.END_TO_END_LATENCY);
             apiStreamObserver.onCompleted();
           }
         };
@@ -444,10 +441,6 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nonnull final Transaction.AsyncFunction<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
 
-    MetricsContext metricsContext =
-        getOptions()
-            .getMetricsUtil()
-            .createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_TRANSACTION);
     ApiFuture<T> result;
 
     try {
@@ -462,9 +455,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
         // that cannot be tracked client side.
         result = new ServerSideTransactionRunner<>(this, updateFunction, transactionOptions).run();
       }
-      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
     } catch (Exception error) {
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
     return result;
@@ -558,18 +549,21 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
   @Override
   public void close() throws Exception {
     firestoreClient.close();
+    firestoreOptions.getMetricsUtil().shutdown();
     closed = true;
   }
 
   @Override
   public void shutdown() {
     firestoreClient.shutdown();
+    firestoreOptions.getMetricsUtil().shutdown();
     closed = true;
   }
 
   @Override
   public void shutdownNow() {
     firestoreClient.shutdownNow();
+    firestoreOptions.getMetricsUtil().shutdown();
     closed = true;
   }
 
