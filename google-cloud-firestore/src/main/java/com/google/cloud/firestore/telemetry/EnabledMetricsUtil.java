@@ -22,10 +22,12 @@ import static com.google.cloud.opentelemetry.detection.GCPPlatformDetector.Suppo
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
+import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.cloud.firestore.FirestoreException;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.opentelemetry.detection.AttributeKeys;
 import com.google.cloud.opentelemetry.detection.DetectedPlatform;
 import com.google.cloud.opentelemetry.detection.GCPPlatformDetector;
@@ -175,6 +177,7 @@ class EnabledMetricsUtil implements MetricsUtil {
             .put(RESOURCE_KEY_LOCATION, detectClientLocation())
             .put(RESOURCE_KEY_PROJECT, firestoreOptions.getProjectId())
             .put(RESOURCE_KEY_DATABASE, firestoreOptions.getDatabaseId());
+
     String pkgVersion = this.getClass().getPackage().getImplementationVersion();
     attributesBuilder.put(
         RESOURCE_KEY_INSTANCE, "java_" + (pkgVersion != null ? pkgVersion : "unknown"));
@@ -314,11 +317,14 @@ class EnabledMetricsUtil implements MetricsUtil {
 
   @VisibleForTesting
   String extractErrorStatus(@Nullable Throwable throwable) {
-    if (!(throwable instanceof FirestoreException)) {
-      return Status.Code.UNKNOWN.toString();
+    Status status = null;
+
+    if (throwable instanceof FirestoreException) {
+      status = ((FirestoreException) throwable).getStatus();
+    } else if (throwable instanceof ApiException) {
+      status = FirestoreException.forApiException((ApiException) throwable).getStatus();
     }
 
-    Status status = ((FirestoreException) throwable).getStatus();
     if (status == null) {
       return Status.Code.UNKNOWN.toString();
     }

@@ -511,9 +511,7 @@ public class ITMetricsTest {
         new MetricsExpectationBuilder()
             .expectMetricData(
                 TelemetryConstants.METHOD_NAME_RUN_TRANSACTION,
-                Status.UNKNOWN
-                    .getCode()
-                    .toString(), // TODO(b/305998085):Change this to correct status code
+                Status.NOT_FOUND.getCode().toString(),
                 1)
             .build();
     validateSDKMetrics(TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY, expectedMetrics);

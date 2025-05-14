@@ -223,13 +223,13 @@ public class EnabledMetricsUtilTest {
                 new IllegalStateException("Mock batchWrite failed in test"),
                 GrpcStatusCode.of(Status.Code.INVALID_ARGUMENT),
                 false));
+
     String errorStatus = metricsUtil.extractErrorStatus(firestoreException);
-    // TODO(b/305998085):Change this to correct status code
-    assertThat(errorStatus).isEqualTo(StatusCode.Code.UNKNOWN.toString());
+    assertThat(errorStatus).isEqualTo(StatusCode.Code.INVALID_ARGUMENT.toString());
   }
 
   @Test
-  public void errorStatusSetToUnknownOnNonFirestoreException() {
+  public void extractsErrorStatusFromApiException() {
     EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
     ApiException apiException =
         new ApiException(
@@ -237,6 +237,14 @@ public class EnabledMetricsUtilTest {
             GrpcStatusCode.of(Status.Code.INVALID_ARGUMENT),
             false);
     String errorStatus = metricsUtil.extractErrorStatus(apiException);
+    assertThat(errorStatus).isEqualTo(StatusCode.Code.INVALID_ARGUMENT.toString());
+  }
+
+  @Test
+  public void errorStatusSetToUnknownOnNotRecognizedException() {
+    EnabledMetricsUtil metricsUtil = newEnabledMetricsUtil();
+    Throwable t = new Throwable(new IllegalStateException("Mock batchWrite failed in test"));
+    String errorStatus = metricsUtil.extractErrorStatus(t);
     assertThat(errorStatus).isEqualTo(StatusCode.Code.UNKNOWN.toString());
   }
 
@@ -284,7 +292,7 @@ public class EnabledMetricsUtilTest {
     ApiFuture<String> future = ApiFutures.immediateFailedFuture(firestoreException);
     context.recordLatencyAtFuture(MetricType.FIRST_RESPONSE_LATENCY, future);
 
-    // TODO(b/305998085):Change this to correct status code
+    // TODO(b/376473320):Change this to correct status code
     Mockito.verify(defaultProvider)
         .latencyRecorder(
             Mockito.eq(MetricType.FIRST_RESPONSE_LATENCY),
@@ -293,7 +301,7 @@ public class EnabledMetricsUtilTest {
                 attributes ->
                     attributes
                         .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS)
-                        .equals(Status.Code.UNKNOWN.toString())));
+                        .equals(Status.Code.INVALID_ARGUMENT.toString())));
     Mockito.verify(customProvider)
         .latencyRecorder(
             Mockito.eq(MetricType.FIRST_RESPONSE_LATENCY),
@@ -302,7 +310,7 @@ public class EnabledMetricsUtilTest {
                 attributes ->
                     attributes
                         .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS)
-                        .equals(Status.Code.UNKNOWN.toString())));
+                        .equals(Status.Code.INVALID_ARGUMENT.toString())));
   }
 
   @Test
@@ -337,7 +345,6 @@ public class EnabledMetricsUtilTest {
     ApiFuture<String> future = ApiFutures.immediateFailedFuture(firestoreException);
     context.recordCounterAtFuture(MetricType.TRANSACTION_ATTEMPT_COUNT, future);
 
-    // TODO(b/305998085):Change this to correct status code
     Mockito.verify(defaultProvider)
         .counterRecorder(
             Mockito.eq(MetricType.TRANSACTION_ATTEMPT_COUNT),
@@ -346,7 +353,7 @@ public class EnabledMetricsUtilTest {
                 attributes ->
                     attributes
                         .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS)
-                        .equals(Status.Code.UNKNOWN.toString())));
+                        .equals(Status.Code.INVALID_ARGUMENT.toString())));
     Mockito.verify(customProvider)
         .counterRecorder(
             Mockito.eq(MetricType.TRANSACTION_ATTEMPT_COUNT),
@@ -355,6 +362,6 @@ public class EnabledMetricsUtilTest {
                 attributes ->
                     attributes
                         .get(TelemetryConstants.METRIC_ATTRIBUTE_KEY_STATUS)
-                        .equals(Status.Code.UNKNOWN.toString())));
+                        .equals(Status.Code.INVALID_ARGUMENT.toString())));
   }
 }
