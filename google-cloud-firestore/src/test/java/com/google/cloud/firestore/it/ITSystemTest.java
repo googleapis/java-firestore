@@ -45,6 +45,9 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.BsonBinaryData;
+import com.google.cloud.firestore.BsonObjectId;
+import com.google.cloud.firestore.BsonTimestamp;
 import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
@@ -56,16 +59,20 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreBundle;
 import com.google.cloud.firestore.FirestoreException;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.Int32Value;
 import com.google.cloud.firestore.ListenerRegistration;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.LocalFirestoreHelper.AllSupportedTypes;
 import com.google.cloud.firestore.LocalFirestoreHelper.SingleField;
+import com.google.cloud.firestore.MaxKey;
+import com.google.cloud.firestore.MinKey;
 import com.google.cloud.firestore.Precondition;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.Query.Direction;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QueryPartition;
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.RegexValue;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.Transaction;
 import com.google.cloud.firestore.Transaction.Function;
@@ -1332,6 +1339,17 @@ public class ITSystemTest extends ITBaseTest {
     return randomDoc.get().get().getData();
   }
 
+  private <T> void checkRoundTrip(T value) throws Exception {
+    randomDoc.set(Collections.singletonMap("key", value)).get();
+    DocumentSnapshot snapshot = randomDoc.get().get();
+    Object fieldValue = snapshot.get("key");
+    if (!value.getClass().isInstance(fieldValue)) {
+      throw new RuntimeException("Error: round trip value has a different type.");
+    }
+    T roundtripValue = (T) fieldValue;
+    assertThat(value).isEqualTo(roundtripValue);
+  }
+
   @Test
   public void writeAndReadVectorEmbeddings() throws ExecutionException, InterruptedException {
     Map<String, VectorValue> expected = new HashMap<>();
@@ -2310,5 +2328,87 @@ public class ITSystemTest extends ITBaseTest {
     assertThrows(
         FirestoreException.class,
         () -> collection.document().listCollections().iterator().hasNext());
+  }
+
+  // Tests for non-native Firestore types.
+
+  @Test
+  public void canWriteAndReadBackMinKey() throws Exception {
+    checkRoundTrip(MinKey.instance());
+  }
+
+  @Test
+  public void canWriteAndReadBackMaxKey() throws Exception {
+    checkRoundTrip(MaxKey.instance());
+  }
+
+  @Test
+  public void canWriteAndReadBackRegex() throws Exception {
+    checkRoundTrip(new RegexValue("^foo", "i"));
+  }
+
+  @Test
+  public void canWriteAndReadBackInt32() throws Exception {
+    checkRoundTrip(new Int32Value(-57));
+    checkRoundTrip(new Int32Value(0));
+    checkRoundTrip(new Int32Value(57));
+  }
+
+  @Test
+  public void canWriteAndReadBackBsonObjectId() throws Exception {
+    checkRoundTrip(new BsonObjectId("507f191e810c19729de860ea"));
+  }
+
+  @Test
+  public void canWriteAndReadBackBsonTimestamp() throws Exception {
+    checkRoundTrip(new BsonTimestamp(123, 45));
+  }
+
+  @Test
+  public void canWriteAndReadBackBsonBinaryData() throws Exception {
+    checkRoundTrip(BsonBinaryData.fromBytes(127, new byte[] {1, 2, 3}));
+  }
+
+  @Test
+  public void invalidRegexGetsRejected() throws Exception {
+    Exception error = null;
+    try {
+      randomColl.document().set(Collections.singletonMap("key", new RegexValue("foo", "a"))).get();
+    } catch (Exception e) {
+      error = e;
+    }
+    assertThat(error).isNotNull();
+    assertThat(error.getMessage())
+        .contains("Invalid regex option 'a'. Supported options are 'i', 'm', 's', 'u', and 'x'");
+  }
+
+  @Test
+  public void invalidBsonObjectIdGetsRejected() throws Exception {
+    Exception error = null;
+    try {
+      randomColl.document().set(Collections.singletonMap("key", new BsonObjectId("foobar"))).get();
+    } catch (Exception e) {
+      error = e;
+    }
+    assertThat(error).isNotNull();
+    assertThat(error.getMessage()).contains("Object ID hex string has incorrect length.");
+  }
+
+  @Test
+  public void invalidBsonBinaryDataGetsRejected() throws Exception {
+    Exception error = null;
+    try {
+      randomColl
+          .document()
+          .set(
+              Collections.singletonMap("key", BsonBinaryData.fromBytes(1234, new byte[] {1, 2, 3})))
+          .get();
+    } catch (Exception e) {
+      error = e;
+    }
+    assertThat(error).isNotNull();
+    assertThat(error.getMessage())
+        .contains(
+            "The subtype for BsonBinaryData must be a value in the inclusive [0, 255] range.");
   }
 }
