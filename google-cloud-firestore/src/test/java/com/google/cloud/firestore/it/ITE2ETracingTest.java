@@ -323,6 +323,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
           optionsBuilder.setOpenTelemetryOptions(
               FirestoreOpenTelemetryOptions.newBuilder()
                   .setOpenTelemetry(openTelemetrySdk)
+                  .exportBuiltinMetricsToGoogleCloudMonitoring(false)
                   .build());
     }
 

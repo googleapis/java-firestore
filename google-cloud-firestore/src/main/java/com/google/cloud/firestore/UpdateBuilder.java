@@ -621,6 +621,7 @@ public abstract class UpdateBuilder<T> {
                     : TelemetryConstants.METHOD_NAME_TRANSACTION_COMMIT);
     span.setAttribute(ATTRIBUTE_KEY_DOC_COUNT, writes.size());
     span.setAttribute(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null);
+
     try (Scope ignored = span.makeCurrent()) {
       // Sequence is thread safe.
       //
@@ -654,9 +655,11 @@ public abstract class UpdateBuilder<T> {
               },
               MoreExecutors.directExecutor());
       span.endAtFuture(returnValue);
+
       return returnValue;
     } catch (Exception error) {
       span.end(error);
+
       throw error;
     }
   }
