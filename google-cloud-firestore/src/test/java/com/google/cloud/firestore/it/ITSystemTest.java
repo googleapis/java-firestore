@@ -25,6 +25,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.fullPath;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
+import static com.google.cloud.firestore.it.TestHelper.getLargestDocContent;
 import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
@@ -45,6 +46,7 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
@@ -81,6 +83,7 @@ import com.google.firestore.bundle.BundledDocumentMetadata;
 import com.google.firestore.bundle.BundledQuery.LimitType;
 import com.google.firestore.bundle.NamedQuery;
 import com.google.firestore.v1.RunQueryRequest;
+import com.google.protobuf.ByteString;
 import io.grpc.Status;
 import io.grpc.Status.Code;
 import io.grpc.StatusRuntimeException;
@@ -2310,5 +2313,63 @@ public class ITSystemTest extends ITBaseTest {
     assertThrows(
         FirestoreException.class,
         () -> collection.document().listCollections().iterator().hasNext());
+  }
+
+  @Test
+  public void canSetAndGetAndQueryLargeDocument() throws Exception {
+    DocumentReference ref = randomColl.document("foo");
+
+    // Set
+    ref.set(getLargestDocContent()).get();
+
+    // Get
+    DocumentSnapshot documentSnapshot = ref.get().get();
+    assertEquals(getLargestDocContent(), documentSnapshot.getData());
+
+    // Query
+    QuerySnapshot querySnapshot = randomColl.get().get();
+    assertEquals(querySnapshot.size(), 1);
+    assertEquals(getLargestDocContent(), querySnapshot.getDocuments().get(0).getData());
+  }
+
+  @Test
+  public void canUpdateAndGetLargeDocument() throws Exception {
+    DocumentReference ref = randomColl.document("foo");
+    Blob initialValue = Blob.fromByteString(ByteString.copyFromUtf8("bar"));
+    ref.set(Collections.singletonMap("blob", initialValue)).get();
+
+    // Update
+    ref.update(getLargestDocContent()).get();
+
+    // Get
+    DocumentSnapshot documentSnapshot = ref.get().get();
+    assertEquals(getLargestDocContent(), documentSnapshot.getData());
+  }
+
+  @Test
+  public void canSetAndGetAndUpdateLargeDocumentInATransaction() throws Exception {
+    DocumentReference ref1 = randomColl.document("doc1");
+    DocumentReference ref2 = randomColl.document("doc2");
+
+    Blob initialValue = Blob.fromByteString(ByteString.copyFromUtf8("bar"));
+    ref1.set(Collections.singletonMap("blob", initialValue)).get();
+
+    // Update in transaction.
+    firestore.runTransaction(
+            transaction -> {
+              transaction.update(ref1, getLargestDocContent());
+              return ref1;
+            }).get();
+
+    assertEquals(getLargestDocContent(), ref1.get().get().getData());
+
+    // Set in transaction.
+    firestore.runTransaction(
+            transaction -> {
+              transaction.set(ref2, getLargestDocContent());
+              return ref2;
+            });
+
+    assertEquals(getLargestDocContent(), ref2.get().get().getData());
   }
 }

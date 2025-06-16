@@ -17,6 +17,7 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
+import static com.google.cloud.firestore.it.TestHelper.getLargestDocContent;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
@@ -607,6 +608,55 @@ public final class ITQueryWatchTest extends ITBaseTest {
     }
     Query query = randomColl.orderBy("counter").startAt(5).endAt(6).limitToLast(3);
     assertQueryResultContainsDocsInOrder(query, "doc5", "doc6");
+  }
+
+  /**
+   * Verifies that query listeners work for large document sizes.
+   */
+  @Test
+  public void listenToLargeQuerySnapshot() throws Exception {
+    DocumentReference ref = randomColl.document("foo");
+    ref.set(getLargestDocContent()).get();
+
+    CountDownLatch latch = new CountDownLatch(1);
+    List<QuerySnapshot> querySnapshots = new ArrayList<>();
+    ListenerRegistration registration =
+            randomColl.addSnapshotListener(
+                    (value, error) -> {
+                      querySnapshots.add(value);
+                      latch.countDown();
+                    });
+
+    latch.await();
+    registration.remove();
+
+    assertEquals(querySnapshots.size(), 1);
+    assertEquals(querySnapshots.get(0).getDocuments().size(), 1);
+    assertEquals(getLargestDocContent(), querySnapshots.get(0).getDocuments().get(0).getData());
+  }
+
+  /**
+   * Verifies that document listeners work for large document sizes.
+   */
+  @Test
+  public void listenToLargeDocumentSnapshot() throws Exception {
+    DocumentReference ref = randomColl.document("foo");
+    ref.set(getLargestDocContent()).get();
+
+    CountDownLatch latch = new CountDownLatch(1);
+    List<DocumentSnapshot> documentSnapshots = new ArrayList<>();
+    ListenerRegistration registration =
+            ref.addSnapshotListener(
+                    (value, error) -> {
+                      documentSnapshots.add(value);
+                      latch.countDown();
+                    });
+
+    latch.await();
+    registration.remove();
+
+    assertEquals(documentSnapshots.size(), 1);
+    assertEquals(getLargestDocContent(), documentSnapshots.get(0).getData());
   }
 
   private static void assertQueryResultContainsDocsInOrder(Query query, String... docIds)

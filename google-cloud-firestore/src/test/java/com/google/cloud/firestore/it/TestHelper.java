@@ -17,7 +17,12 @@
 package com.google.cloud.firestore.it;
 
 import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.Firestore;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -25,6 +30,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class TestHelper {
   /** Make constructor private to prevent creating instances. */
   private TestHelper() {}
+
+  private static final int MAX_BYTES_PER_FIELD_VALUE = 1048487;
 
   /** Returns whether the tests are running against the Firestore emulator. */
   static boolean isRunningAgainstFirestoreEmulator(Firestore firestore) {
@@ -54,5 +61,19 @@ public final class TestHelper {
     }
 
     executor.shutdown();
+  }
+
+  /**
+   * Returns a Blob with the size equal to the largest number of bytes allowed to
+   * be stored in a Firestore document.
+   */
+  public static Map<String, Object> getLargestDocContent() {
+    // Subtract 8 for '__name__', 20 for its value, and 4 for 'blob'.
+    int numBytesToUse = MAX_BYTES_PER_FIELD_VALUE - 8 - 20 - 4;
+    byte[] bytes = new byte[numBytesToUse];
+    for (int i = 0; i < numBytesToUse; ++i) {
+      bytes[i] = (byte) (i % 256);
+    }
+    return Collections.singletonMap("blob", Blob.fromBytes(bytes));
   }
 }
