@@ -53,9 +53,7 @@ public interface TelemetryConstants {
   String METHOD_NAME_PARTITION_QUERY = "PartitionQuery";
   String METHOD_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
   String METHOD_NAME_RUN_TRANSACTION = "RunTransaction";
-
-  // TODO(metrics): change to firestore.googleapis.com
-  String METRIC_PREFIX = "custom.googleapis.com/internal/client";
+  String METRIC_PREFIX = "firestore.googleapis.com/internal/client";
   String FIRESTORE_METER_NAME = "java_firestore";
   String GAX_METER_NAME = OpenTelemetryMetricsRecorder.GAX_METER_NAME;
   String FIRESTORE_LIBRARY_NAME = "com.google.cloud.firestore";
