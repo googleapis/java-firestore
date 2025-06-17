@@ -70,8 +70,6 @@ class BuiltinMetricsProvider {
   private Map<String, String> createStaticAttributes() {
     Map<String, String> staticAttributes = new HashMap<>();
     staticAttributes.put(METRIC_ATTRIBUTE_KEY_CLIENT_UID, ClientIdentifier.getClientUid());
-
-    staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_NAME, FIRESTORE_LIBRARY_NAME);
     staticAttributes.put(METRIC_ATTRIBUTE_KEY_SERVICE, FIRESTORE_SERVICE);
 
     return staticAttributes;

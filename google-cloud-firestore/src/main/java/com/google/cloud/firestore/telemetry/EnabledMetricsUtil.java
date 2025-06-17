@@ -156,14 +156,16 @@ class EnabledMetricsUtil implements MetricsUtil {
     MonitoredResourceDescription monitoredResourceMapping =
         new MonitoredResourceDescription(FIRESTORE_RESOURCE_TYPE, FIRESTORE_RESOURCE_LABELS);
 
+    // TODO: uncomment the configuration below
     MetricExporter metricExporter =
         GoogleCloudMetricExporter.createWithConfiguration(
             MetricConfiguration.builder()
                 .setProjectId(firestoreOptions.getProjectId())
+                //               .setPrefix("firestore.googleapis.com")
                 // Ignore library info as it is collected by the metric attributes as well
                 .setInstrumentationLibraryLabelsEnabled(false)
-                .setMonitoredResourceDescription(monitoredResourceMapping)
-                // .setUseServiceTimeSeries(true)
+                //                .setMonitoredResourceDescription(monitoredResourceMapping)
+                //                 .setUseServiceTimeSeries(true)
                 .build());
     metricReader = PeriodicMetricReader.create(metricExporter);
     sdkMeterProviderBuilder.registerMetricReader(metricReader);
@@ -176,7 +178,8 @@ class EnabledMetricsUtil implements MetricsUtil {
         Attributes.builder()
             .put(RESOURCE_KEY_LOCATION, detectClientLocation())
             .put(RESOURCE_KEY_PROJECT, firestoreOptions.getProjectId())
-            .put(RESOURCE_KEY_DATABASE, firestoreOptions.getDatabaseId());
+            .put(RESOURCE_KEY_DATABASE, firestoreOptions.getDatabaseId())
+            .put(RESOURCE_KEY_UID, ClientIdentifier.getClientUid());
 
     String pkgVersion = this.getClass().getPackage().getImplementationVersion();
     attributesBuilder.put(

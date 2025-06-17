@@ -60,39 +60,44 @@ public interface TelemetryConstants {
   String GAX_METER_NAME = OpenTelemetryMetricsRecorder.GAX_METER_NAME;
   String FIRESTORE_LIBRARY_NAME = "com.google.cloud.firestore";
 
-  String FIRESTORE_SERVICE = "firestore V1";
+  String FIRESTORE_SERVICE = "firestore v1";
 
   // Monitored resource
+  // TODO: check the monitored resource type with jimit
   String FIRESTORE_RESOURCE_TYPE =
-      "firestore.googleapis.com/Database"; // or maybe "firestore.googleapis.com/Database"
+      //          "datastore_request";
+      //          "datastore_client_raw";
+      "firestore.googleapis.com/Database";
   String RESOURCE_KEY_LOCATION = "location";
   String RESOURCE_KEY_INSTANCE = "instance";
   String RESOURCE_KEY_DATABASE = "database";
   String RESOURCE_KEY_PROJECT = "project";
+  String RESOURCE_KEY_UID = "uid";
+
   Set<String> FIRESTORE_RESOURCE_LABELS =
       ImmutableSet.of(
           RESOURCE_KEY_LOCATION,
           RESOURCE_KEY_INSTANCE,
           RESOURCE_KEY_DATABASE,
-          RESOURCE_KEY_PROJECT);
+          RESOURCE_KEY_PROJECT,
+          RESOURCE_KEY_UID);
 
   // Metric attribute keys for labels
   String METRIC_ATTRIBUTE_KEY_METHOD = "method";
   String METRIC_ATTRIBUTE_KEY_STATUS = "status";
-  String METRIC_ATTRIBUTE_KEY_LIBRARY_NAME = "library_name";
   String METRIC_ATTRIBUTE_KEY_CLIENT_UID = "client_uid";
   String METRIC_ATTRIBUTE_KEY_SERVICE = "service";
   Set<String> COMMON_ATTRIBUTES =
       ImmutableSet.of(
           METRIC_ATTRIBUTE_KEY_CLIENT_UID,
-          METRIC_ATTRIBUTE_KEY_LIBRARY_NAME,
           METRIC_ATTRIBUTE_KEY_STATUS,
           METRIC_ATTRIBUTE_KEY_METHOD,
           METRIC_ATTRIBUTE_KEY_SERVICE,
           RESOURCE_KEY_LOCATION,
           RESOURCE_KEY_INSTANCE,
           RESOURCE_KEY_DATABASE,
-          RESOURCE_KEY_PROJECT);
+          RESOURCE_KEY_PROJECT,
+          RESOURCE_KEY_UID);
 
   // Metric names
   String METRIC_NAME_OPERATION_LATENCY = "operation_latency";
