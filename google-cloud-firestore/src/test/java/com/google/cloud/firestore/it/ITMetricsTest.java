@@ -101,9 +101,6 @@ public class ITMetricsTest {
 
   private Attributes buildBaseAttributes() {
     AttributesBuilder attributesBuilder = Attributes.builder();
-    attributesBuilder.put(
-        TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_NAME,
-        TelemetryConstants.FIRESTORE_LIBRARY_NAME);
     attributesBuilder.put(TelemetryConstants.METRIC_ATTRIBUTE_KEY_CLIENT_UID, ClientUid);
     attributesBuilder.put(
         TelemetryConstants.METRIC_ATTRIBUTE_KEY_SERVICE, TelemetryConstants.FIRESTORE_SERVICE);
