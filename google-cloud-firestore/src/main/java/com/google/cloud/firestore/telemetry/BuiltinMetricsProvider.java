@@ -16,20 +16,12 @@
 
 package com.google.cloud.firestore.telemetry;
 
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.FIRESTORE_METER_NAME;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_CLIENT_UID;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_NAME;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_END_TO_END_LATENCY;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_FIRST_RESPONSE_LATENCY;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_TRANSACTION_ATTEMPT_COUNT;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_NAME_TRANSACTION_LATENCY;
-import static com.google.cloud.firestore.telemetry.TelemetryConstants.METRIC_PREFIX;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.*;
 
 import com.google.api.gax.tracing.ApiTracerFactory;
 import com.google.api.gax.tracing.MetricsTracerFactory;
 import com.google.api.gax.tracing.OpenTelemetryMetricsRecorder;
-import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
+import com.google.common.annotations.VisibleForTesting;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.common.AttributesBuilder;
@@ -50,7 +42,6 @@ class BuiltinMetricsProvider {
   private static final Logger logger = Logger.getLogger(BuiltinMetricsProvider.class.getName());
 
   private OpenTelemetry openTelemetry;
-  private DoubleHistogram endToEndLatency;
   private DoubleHistogram firstResponseLatency;
   private DoubleHistogram transactionLatency;
   private LongCounter transactionAttemptCount;
@@ -60,26 +51,27 @@ class BuiltinMetricsProvider {
 
   private static final String MILLISECOND_UNIT = "ms";
   private static final String INTEGER_UNIT = "1";
-  private static final String FIRESTORE_LIBRARY_NAME = "com.google.cloud.firestore";
 
   public BuiltinMetricsProvider(OpenTelemetry openTelemetry) {
     this.openTelemetry = openTelemetry;
     this.staticAttributes = createStaticAttributes();
 
     if (openTelemetry.getMeterProvider() != MeterProvider.noop()) {
-      configureRPCLayerMetrics();
       configureSDKLayerMetrics();
+      configureRPCLayerMetrics();
     }
+  }
+
+  @VisibleForTesting
+  OpenTelemetry getOpenTelemetry() {
+    return openTelemetry;
   }
 
   private Map<String, String> createStaticAttributes() {
     Map<String, String> staticAttributes = new HashMap<>();
-    staticAttributes.put(METRIC_ATTRIBUTE_KEY_CLIENT_UID.getKey(), ClientIdentifier.getClientUid());
-    staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_NAME.getKey(), FIRESTORE_LIBRARY_NAME);
-    String pkgVersion = this.getClass().getPackage().getImplementationVersion();
-    if (pkgVersion != null) {
-      staticAttributes.put(METRIC_ATTRIBUTE_KEY_LIBRARY_VERSION.getKey(), pkgVersion);
-    }
+    staticAttributes.put(METRIC_ATTRIBUTE_KEY_CLIENT_UID, ClientIdentifier.getClientUid());
+    staticAttributes.put(METRIC_ATTRIBUTE_KEY_SERVICE, FIRESTORE_SERVICE);
+
     return staticAttributes;
   }
 
@@ -93,13 +85,6 @@ class BuiltinMetricsProvider {
   /** Registers metrics to be collected at the Firestore SDK layer */
   private void configureSDKLayerMetrics() {
     Meter meter = openTelemetry.getMeter(FIRESTORE_METER_NAME);
-
-    this.endToEndLatency =
-        meter
-            .histogramBuilder(METRIC_PREFIX + "/" + METRIC_NAME_END_TO_END_LATENCY)
-            .setDescription("Firestore operations' end-to-end latency")
-            .setUnit(MILLISECOND_UNIT)
-            .build();
 
     this.firstResponseLatency =
         meter
@@ -154,8 +139,6 @@ class BuiltinMetricsProvider {
 
   public DoubleHistogram getHistogram(MetricType metricType) {
     switch (metricType) {
-      case END_TO_END_LATENCY:
-        return endToEndLatency;
       case FIRST_RESPONSE_LATENCY:
         return firstResponseLatency;
       case TRANSACTION_LATENCY:
