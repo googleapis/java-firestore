@@ -34,6 +34,7 @@ import com.google.cloud.firestore.BsonBinaryData;
 import com.google.cloud.firestore.BsonObjectId;
 import com.google.cloud.firestore.BsonTimestamp;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.Decimal128Value;
 import com.google.cloud.firestore.DocumentChange;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -843,6 +844,32 @@ public final class ITQueryWatchTest extends ITBaseTest {
   }
 
   @Test
+  public void canFilterAndOrderDecimal128() throws Exception {
+    Map<String, Map<String, Object>> data =
+        map(
+            "doc1", map("key", new Decimal128Value("-1.2e3")),
+            "doc2", map("key", new Decimal128Value("0")),
+            "doc3", map("key", new Decimal128Value("1.2e-3")));
+    addDocs(data);
+
+    QuerySnapshot snapshot =
+        getFirstSnapshot(
+            randomColl
+                .whereGreaterThanOrEqualTo("key", new Decimal128Value("-1.1"))
+                .orderBy("key", Direction.DESCENDING));
+    List<Map<String, Object>> resultData = toDataArray(snapshot);
+    assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc3"), data.get("doc2")));
+
+    snapshot =
+        getFirstSnapshot(
+            randomColl
+                .whereNotIn("key", Arrays.asList(new Decimal128Value("1.2e-3")))
+                .orderBy("key", Direction.DESCENDING));
+    resultData = toDataArray(snapshot);
+    assertThat(resultData).isEqualTo(Arrays.asList(data.get("doc2"), data.get("doc1")));
+  }
+
+  @Test
   public void canFilterAndOrderBsonTimestamp() throws Exception {
     Map<String, Map<String, Object>> data =
         map(
@@ -954,32 +981,33 @@ public final class ITQueryWatchTest extends ITBaseTest {
   public void crossTypeOrder() throws Exception {
     Map<String, Map<String, Object>> data =
         map(
-            "s", map("key", null),
-            "t", map("key", MinKey.instance()),
+            "t", map("key", null),
+            "u", map("key", MinKey.instance()),
             "c", map("key", true),
             "d", map("key", Double.NaN),
             "e", map("key", new Int32Value(1)),
             "f", map("key", 2.0),
-            "g", map("key", 3),
-            "h", map("key", Timestamp.ofTimeSecondsAndNanos(100, 123456000)),
-            "i", map("key", new BsonTimestamp(1, 2)),
-            "j", map("key", "string"),
-            "k", map("key", Blob.fromBytes(new byte[] {0, 1, 3})),
-            "l", map("key", BsonBinaryData.fromBytes(1, new byte[] {1, 2, 3})),
-            "m", map("key", randomColl.getFirestore().collection("c1").document("doc")),
-            "n", map("key", new BsonObjectId("507f191e810c19729de860ea")),
-            "o", map("key", new GeoPoint(0, 0)),
-            "p", map("key", new RegexValue("^foo", "i")),
-            "q", map("key", Arrays.asList(1, 2)),
-            "r", map("key", FieldValue.vector(new double[] {1, 2})),
+            "g", map("key", new Decimal128Value("2.01e-5")),
+            "h", map("key", 3),
+            "i", map("key", Timestamp.ofTimeSecondsAndNanos(100, 123456000)),
+            "j", map("key", new BsonTimestamp(1, 2)),
+            "k", map("key", "string"),
+            "l", map("key", Blob.fromBytes(new byte[] {0, 1, 3})),
+            "m", map("key", BsonBinaryData.fromBytes(1, new byte[] {1, 2, 3})),
+            "n", map("key", randomColl.getFirestore().collection("c1").document("doc")),
+            "o", map("key", new BsonObjectId("507f191e810c19729de860ea")),
+            "p", map("key", new GeoPoint(0, 0)),
+            "q", map("key", new RegexValue("^foo", "i")),
+            "r", map("key", Arrays.asList(1, 2)),
+            "s", map("key", FieldValue.vector(new double[] {1, 2})),
             "a", map("key", Collections.singletonMap("a", 1)),
             "b", map("key", MaxKey.instance()));
     addDocs(data);
 
     List<String> expectedResult =
         Arrays.asList(
-            "b", "a", "r", "q", "p", "o", "n", "m", "l", "k", "j", "i", "h", "g", "f", "e", "d",
-            "c", "t", "s");
+            "b", "a", "s", "r", "q", "p", "o", "n", "m", "l", "k", "j", "i", "h", "f", "e", "g",
+            "d", "c", "u", "t");
 
     Query query = randomColl.orderBy("key", Direction.DESCENDING);
     QuerySnapshot getResult = query.get().get();

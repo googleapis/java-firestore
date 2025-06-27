@@ -50,6 +50,7 @@ import com.google.cloud.firestore.BsonObjectId;
 import com.google.cloud.firestore.BsonTimestamp;
 import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.Decimal128Value;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldMask;
@@ -2352,6 +2353,46 @@ public class ITSystemTest extends ITBaseTest {
     checkRoundTrip(new Int32Value(-57));
     checkRoundTrip(new Int32Value(0));
     checkRoundTrip(new Int32Value(57));
+  }
+
+  @Test
+  public void canWriteAndReadBackDecimal128() throws Exception {
+    checkRoundTrip(new Decimal128Value("NaN"));
+    checkRoundTrip(new Decimal128Value("-Infinity"));
+    checkRoundTrip(new Decimal128Value("-1.2e3"));
+    checkRoundTrip(new Decimal128Value("-4.2e+3"));
+    checkRoundTrip(new Decimal128Value("-1.2e-3"));
+    checkRoundTrip(new Decimal128Value("-4.2e-3"));
+    checkRoundTrip(new Decimal128Value("-1"));
+    checkRoundTrip(new Decimal128Value("-0"));
+    checkRoundTrip(new Decimal128Value("0"));
+    checkRoundTrip(new Decimal128Value("1"));
+    checkRoundTrip(new Decimal128Value("1.2e3"));
+    checkRoundTrip(new Decimal128Value("4.2e+3"));
+    checkRoundTrip(new Decimal128Value("1.2e-3"));
+    checkRoundTrip(new Decimal128Value("4.2e-3"));
+    checkRoundTrip(new Decimal128Value("Infinity"));
+  }
+
+  @Test
+  public void canQueryNumericallyEqualNumbersOfDifferentTypes() throws Exception {
+    randomColl
+        .document("doc1")
+        .set(Collections.singletonMap("key", new Decimal128Value("1.0")))
+        .get();
+    randomColl.document("doc2").set(Collections.singletonMap("key", 1.0)).get();
+    randomColl.document("doc3").set(Collections.singletonMap("key", 1)).get();
+    randomColl
+        .document("doc4")
+        .set(Collections.singletonMap("key", new Decimal128Value("1.5")))
+        .get();
+    randomColl.document("doc5").set(Collections.singletonMap("key", 1.5)).get();
+
+    Query query1 = randomColl.whereEqualTo("key", 1);
+    assertEquals(asList("doc1", "doc2", "doc3"), querySnapshotToIds(query1.get().get()));
+
+    Query query2 = randomColl.whereEqualTo("key", new Decimal128Value("1.5"));
+    assertEquals(asList("doc4", "doc5"), querySnapshotToIds(query2.get().get()));
   }
 
   @Test

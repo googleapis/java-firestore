@@ -38,6 +38,9 @@ abstract class MapType {
   // For Int32 type
   static final String RESERVED_INT32_KEY = "__int__";
 
+  // For Decimal128 type.
+  static final String RESERVED_DECIMAL128_KEY = "__decimal128__";
+
   // For RequestTimestamp
   static final String RESERVED_BSON_TIMESTAMP_KEY = "__request_timestamp__";
   static final String RESERVED_BSON_TIMESTAMP_SECONDS_KEY = "seconds";

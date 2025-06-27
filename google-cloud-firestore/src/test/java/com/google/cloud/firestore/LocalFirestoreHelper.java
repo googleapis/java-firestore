@@ -984,6 +984,7 @@ public final class LocalFirestoreHelper {
     public MaxKey maxKey = MaxKey.instance();
     public RegexValue regexValue = new RegexValue("^foo", "i");
     public Int32Value int32Value = new Int32Value(55);
+    public Decimal128Value decimal128Value = new Decimal128Value("1.2e3");
     public BsonObjectId bsonObjectId = new BsonObjectId("507f191e810c19729de860eb");
     public BsonTimestamp bsonTimestamp = new BsonTimestamp(100, 10);
     public BsonBinaryData bsonBinaryData = BsonBinaryData.fromBytes(127, new byte[] {1, 2, 3});
@@ -1019,6 +1020,7 @@ public final class LocalFirestoreHelper {
           && Objects.equals(maxKey, that.maxKey)
           && Objects.equals(regexValue, that.regexValue)
           && Objects.equals(int32Value, that.int32Value)
+          && Objects.equals(decimal128Value, that.decimal128Value)
           && Objects.equals(bsonObjectId, that.bsonObjectId)
           && Objects.equals(bsonTimestamp, that.bsonTimestamp)
           && Objects.equals(bsonBinaryData, that.bsonBinaryData);
@@ -1147,6 +1149,7 @@ public final class LocalFirestoreHelper {
     ALL_SUPPORTED_TYPES_MAP.put("maxKey", MaxKey.instance());
     ALL_SUPPORTED_TYPES_MAP.put("regexValue", new RegexValue("^foo", "i"));
     ALL_SUPPORTED_TYPES_MAP.put("int32Value", new Int32Value(55));
+    ALL_SUPPORTED_TYPES_MAP.put("decimal128Value", new Decimal128Value("1.2e3"));
     ALL_SUPPORTED_TYPES_MAP.put("bsonObjectId", new BsonObjectId("507f191e810c19729de860eb"));
     ALL_SUPPORTED_TYPES_MAP.put("bsonTimestamp", new BsonTimestamp(100, 10));
     ALL_SUPPORTED_TYPES_MAP.put(
@@ -1232,6 +1235,16 @@ public final class LocalFirestoreHelper {
                     .setMapValue(
                         MapValue.newBuilder()
                             .putFields("__int__", Value.newBuilder().setIntegerValue(55).build())
+                            .build())
+                    .build())
+            .put(
+                "decimal128Value",
+                Value.newBuilder()
+                    .setMapValue(
+                        MapValue.newBuilder()
+                            .putFields(
+                                "__decimal128__",
+                                Value.newBuilder().setStringValue("1.2e3").build())
                             .build())
                     .build())
             .put(

@@ -886,6 +886,7 @@ public class DocumentReferenceTest {
             "second.maxKey",
             "second.regexValue",
             "second.int32Value",
+            "second.decimal128Value",
             "second.bsonObjectId",
             "second.bsonTimestamp",
             "second.bsonBinaryData");

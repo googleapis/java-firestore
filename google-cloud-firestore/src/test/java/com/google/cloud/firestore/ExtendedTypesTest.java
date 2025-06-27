@@ -92,6 +92,55 @@ public class ExtendedTypesTest {
   }
 
   @Test
+  public void Decimal128ValueAndEquality() {
+    Decimal128Value i1 = new Decimal128Value("1.2e3");
+    Decimal128Value i2 = new Decimal128Value("12e2");
+    Decimal128Value i3 = new Decimal128Value("0.12e4");
+    Decimal128Value i4 = new Decimal128Value("12000e-1");
+    Decimal128Value i5 = new Decimal128Value("1.2");
+
+    assertThat(i1).isEqualTo(i2);
+    assertThat(i1).isEqualTo(i3);
+    assertThat(i1).isEqualTo(i4);
+    assertThat(i1).isNotEqualTo(i5);
+
+    assertThat(i1.hashCode()).isEqualTo(i2.hashCode());
+    assertThat(i1.hashCode()).isEqualTo(i3.hashCode());
+    assertThat(i1.hashCode()).isEqualTo(i4.hashCode());
+    assertThat(i1.hashCode()).isNotEqualTo(i5.hashCode());
+  }
+
+  @Test
+  public void Decimal128ValueZeros() {
+    Decimal128Value i1 = new Decimal128Value("0");
+    Decimal128Value i2 = new Decimal128Value("+0");
+    Decimal128Value i3 = new Decimal128Value("-0");
+    Decimal128Value i4 = new Decimal128Value("0.0");
+    Decimal128Value i5 = new Decimal128Value("+0.0");
+    Decimal128Value i6 = new Decimal128Value("-0.0");
+
+    assertThat(i1).isEqualTo(i2);
+    assertThat(i1).isEqualTo(i3);
+    assertThat(i1).isEqualTo(i4);
+    assertThat(i1).isEqualTo(i5);
+    assertThat(i1).isEqualTo(i6);
+
+    assertThat(i1.hashCode()).isEqualTo(i2.hashCode());
+    assertThat(i1.hashCode()).isEqualTo(i3.hashCode());
+    assertThat(i1.hashCode()).isEqualTo(i4.hashCode());
+    assertThat(i1.hashCode()).isEqualTo(i5.hashCode());
+    assertThat(i1.hashCode()).isEqualTo(i6.hashCode());
+  }
+
+  @Test
+  public void Decimal128ValueNaNs() {
+    Decimal128Value i1 = new Decimal128Value("NaN");
+    Decimal128Value i2 = new Decimal128Value("NaN");
+    assertThat(i1).isEqualTo(i2);
+    assertThat(i1.hashCode()).isEqualTo(i2.hashCode());
+  }
+
+  @Test
   public void BsonObjectIdValueAndEquality() {
     BsonObjectId oid1 = new BsonObjectId("foo");
     BsonObjectId oid2 = new BsonObjectId("foo");
@@ -174,6 +223,7 @@ public class ExtendedTypesTest {
     MapValue minKeyMapValue = UserDataConverter.encodeMinKey();
     MapValue maxKeyMapValue = UserDataConverter.encodeMaxKey();
     MapValue int32MapValue = UserDataConverter.encodeInt32Value(5);
+    MapValue decimal128MapValue = UserDataConverter.encodeDecimal128Value("1.2e3");
     MapValue regexMapValue = UserDataConverter.encodeRegexValue("^foo", "i");
     MapValue bsonTimestamp = UserDataConverter.encodeBsonTimestamp(1, 2);
     MapValue bsonObjectId = UserDataConverter.encodeBsonObjectId("foo");
@@ -184,6 +234,7 @@ public class ExtendedTypesTest {
     assertTrue(UserDataConverter.isMinKey(minKeyMapValue));
     assertFalse(UserDataConverter.isMinKey(maxKeyMapValue));
     assertFalse(UserDataConverter.isMinKey(int32MapValue));
+    assertFalse(UserDataConverter.isMinKey(decimal128MapValue));
     assertFalse(UserDataConverter.isMinKey(regexMapValue));
     assertFalse(UserDataConverter.isMinKey(bsonTimestamp));
     assertFalse(UserDataConverter.isMinKey(bsonObjectId));
@@ -193,6 +244,7 @@ public class ExtendedTypesTest {
     assertFalse(UserDataConverter.isMaxKey(minKeyMapValue));
     assertTrue(UserDataConverter.isMaxKey(maxKeyMapValue));
     assertFalse(UserDataConverter.isMaxKey(int32MapValue));
+    assertFalse(UserDataConverter.isMaxKey(decimal128MapValue));
     assertFalse(UserDataConverter.isMaxKey(regexMapValue));
     assertFalse(UserDataConverter.isMaxKey(bsonTimestamp));
     assertFalse(UserDataConverter.isMaxKey(bsonObjectId));
@@ -202,15 +254,27 @@ public class ExtendedTypesTest {
     assertFalse(UserDataConverter.isInt32Value(minKeyMapValue));
     assertFalse(UserDataConverter.isInt32Value(maxKeyMapValue));
     assertTrue(UserDataConverter.isInt32Value(int32MapValue));
+    assertFalse(UserDataConverter.isInt32Value(decimal128MapValue));
     assertFalse(UserDataConverter.isInt32Value(regexMapValue));
     assertFalse(UserDataConverter.isInt32Value(bsonTimestamp));
     assertFalse(UserDataConverter.isInt32Value(bsonObjectId));
     assertFalse(UserDataConverter.isInt32Value(bsonBinaryData1));
     assertFalse(UserDataConverter.isInt32Value(bsonBinaryData2));
 
+    assertFalse(UserDataConverter.isDecimal128Value(minKeyMapValue));
+    assertFalse(UserDataConverter.isDecimal128Value(maxKeyMapValue));
+    assertFalse(UserDataConverter.isDecimal128Value(int32MapValue));
+    assertTrue(UserDataConverter.isDecimal128Value(decimal128MapValue));
+    assertFalse(UserDataConverter.isDecimal128Value(regexMapValue));
+    assertFalse(UserDataConverter.isDecimal128Value(bsonTimestamp));
+    assertFalse(UserDataConverter.isDecimal128Value(bsonObjectId));
+    assertFalse(UserDataConverter.isDecimal128Value(bsonBinaryData1));
+    assertFalse(UserDataConverter.isDecimal128Value(bsonBinaryData2));
+
     assertFalse(UserDataConverter.isRegexValue(minKeyMapValue));
     assertFalse(UserDataConverter.isRegexValue(maxKeyMapValue));
     assertFalse(UserDataConverter.isRegexValue(int32MapValue));
+    assertFalse(UserDataConverter.isRegexValue(decimal128MapValue));
     assertTrue(UserDataConverter.isRegexValue(regexMapValue));
     assertFalse(UserDataConverter.isRegexValue(bsonTimestamp));
     assertFalse(UserDataConverter.isRegexValue(bsonObjectId));
@@ -220,6 +284,7 @@ public class ExtendedTypesTest {
     assertFalse(UserDataConverter.isBsonTimestamp(minKeyMapValue));
     assertFalse(UserDataConverter.isBsonTimestamp(maxKeyMapValue));
     assertFalse(UserDataConverter.isBsonTimestamp(int32MapValue));
+    assertFalse(UserDataConverter.isBsonTimestamp(decimal128MapValue));
     assertFalse(UserDataConverter.isBsonTimestamp(regexMapValue));
     assertTrue(UserDataConverter.isBsonTimestamp(bsonTimestamp));
     assertFalse(UserDataConverter.isBsonTimestamp(bsonObjectId));
@@ -229,6 +294,7 @@ public class ExtendedTypesTest {
     assertFalse(UserDataConverter.isBsonObjectId(minKeyMapValue));
     assertFalse(UserDataConverter.isBsonObjectId(maxKeyMapValue));
     assertFalse(UserDataConverter.isBsonObjectId(int32MapValue));
+    assertFalse(UserDataConverter.isBsonObjectId(decimal128MapValue));
     assertFalse(UserDataConverter.isBsonObjectId(regexMapValue));
     assertFalse(UserDataConverter.isBsonObjectId(bsonTimestamp));
     assertTrue(UserDataConverter.isBsonObjectId(bsonObjectId));
@@ -238,6 +304,7 @@ public class ExtendedTypesTest {
     assertFalse(UserDataConverter.isBsonBinaryData(minKeyMapValue));
     assertFalse(UserDataConverter.isBsonBinaryData(maxKeyMapValue));
     assertFalse(UserDataConverter.isBsonBinaryData(int32MapValue));
+    assertFalse(UserDataConverter.isBsonBinaryData(decimal128MapValue));
     assertFalse(UserDataConverter.isBsonBinaryData(regexMapValue));
     assertFalse(UserDataConverter.isBsonBinaryData(bsonTimestamp));
     assertFalse(UserDataConverter.isBsonBinaryData(bsonObjectId));
@@ -249,6 +316,9 @@ public class ExtendedTypesTest {
     assertEquals(
         UserDataConverter.detectMapRepresentation(maxKeyMapValue), MapRepresentation.MAX_KEY);
     assertEquals(UserDataConverter.detectMapRepresentation(int32MapValue), MapRepresentation.INT32);
+    assertEquals(
+        UserDataConverter.detectMapRepresentation(decimal128MapValue),
+        MapRepresentation.DECIMAL128);
     assertEquals(UserDataConverter.detectMapRepresentation(regexMapValue), MapRepresentation.REGEX);
     assertEquals(
         UserDataConverter.detectMapRepresentation(bsonTimestamp), MapRepresentation.BSON_TIMESTAMP);
@@ -372,6 +442,19 @@ public class ExtendedTypesTest {
                     .build())
             .build();
     assertEncodesAndDecodesCorrectly(proto, int32Value);
+  }
+
+  @Test
+  public void canEncodeAndDecodeDecimal128Value() {
+    Decimal128Value decimal128Value = new Decimal128Value("1.2e3");
+    Value proto =
+        Value.newBuilder()
+            .setMapValue(
+                MapValue.newBuilder()
+                    .putFields("__decimal128__", Value.newBuilder().setStringValue("1.2e3").build())
+                    .build())
+            .build();
+    assertEncodesAndDecodesCorrectly(proto, decimal128Value);
   }
 
   @Test

@@ -90,6 +90,7 @@ class Order implements Comparator<Value> {
         return TypeOrder.MAX_KEY;
       case REGEX:
         return TypeOrder.REGEX;
+      case DECIMAL128:
       case INT32:
         return TypeOrder.NUMBER;
       case BSON_OBJECT_ID:
@@ -328,8 +329,7 @@ class Order implements Comparator<Value> {
     if (value.hasIntegerValue()) {
       return value.getIntegerValue();
     }
-    if (value.hasMapValue()
-        && value.getMapValue().getFieldsMap().containsKey(MapType.RESERVED_INT32_KEY)) {
+    if (UserDataConverter.isInt32Value(value)) {
       return value.getMapValue().getFieldsMap().get(MapType.RESERVED_INT32_KEY).getIntegerValue();
     }
     throw new IllegalArgumentException("getIntegerValue was called on a non-integer value.");
@@ -341,6 +341,18 @@ class Order implements Comparator<Value> {
       return isNaN(right) ? 0 : -1;
     } else if (isNaN(right)) {
       return 1;
+    }
+
+    // If either argument is Decimal128, we cast both to wider (128-bit) representation, and compare
+    // Quadruple values.
+    if (UserDataConverter.isDecimal128Value(left) || UserDataConverter.isDecimal128Value(right)) {
+      Quadruple leftQuadruple = convertNumberToQuadruple(left);
+      Quadruple rightQuadruple = convertNumberToQuadruple(right);
+
+      // Firestore considers +0 and -0 to be equal, but `Quadruple.compareTo()` does not.
+      if (leftQuadruple.isZero() && rightQuadruple.isZero()) return 0;
+
+      return leftQuadruple.compareTo(rightQuadruple);
     }
 
     if (left.getValueTypeCase() == ValueTypeCase.DOUBLE_VALUE) {
@@ -391,7 +403,44 @@ class Order implements Comparator<Value> {
   }
 
   private boolean isNaN(Value value) {
-    return value.hasDoubleValue() && Double.isNaN(value.getDoubleValue());
+    if (value.hasDoubleValue() && Double.isNaN(value.getDoubleValue())) {
+      return true;
+    }
+
+    if (UserDataConverter.isDecimal128Value(value)) {
+      return value
+          .getMapValue()
+          .getFieldsMap()
+          .get(MapType.RESERVED_DECIMAL128_KEY)
+          .getStringValue()
+          .equals("NaN");
+    }
+
+    return false;
+  }
+
+  /**
+   * Converts the given number value to a Quadruple. Throws an exception if the value is not a
+   * number.
+   */
+  private Quadruple convertNumberToQuadruple(Value value) {
+    // Doubles
+    if (value.hasDoubleValue()) {
+      return Quadruple.fromDouble(value.getDoubleValue());
+    }
+
+    // 32-bit and 64-bit integers.
+    if (UserDataConverter.isIntegerValue(value)) {
+      return Quadruple.fromLong(getIntegerValue(value));
+    }
+
+    // Decimal128 numbers
+    if (UserDataConverter.isDecimal128Value(value)) {
+      return UserDataConverter.decodeDecimal128Value(value.getMapValue()).value;
+    }
+
+    throw new IllegalArgumentException(
+        "convertNumberToQuadruple was called on a non-numeric value.");
   }
 
   private int compareDoubles(double left, double right) {

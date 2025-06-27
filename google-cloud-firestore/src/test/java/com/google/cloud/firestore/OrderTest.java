@@ -48,31 +48,57 @@ public class OrderTest {
     groups.add(new Value[] {booleanValue(true)});
 
     // numbers
-    groups.add(new Value[] {doubleValue(Double.NaN), doubleValue(Double.NaN)});
-    groups.add(new Value[] {doubleValue(Double.NEGATIVE_INFINITY)});
+    groups.add(
+        new Value[] {doubleValue(Double.NaN), doubleValue(Double.NaN), decimal128Value("NaN")});
+    groups.add(new Value[] {doubleValue(Double.NEGATIVE_INFINITY), decimal128Value("-Infinity")});
     groups.add(new Value[] {doubleValue((double) Long.MIN_VALUE - 100)});
-    groups.add(new Value[] {intValue((long) Integer.MIN_VALUE - 1)});
+    groups.add(
+        new Value[] {intValue((long) Integer.MIN_VALUE - 1), decimal128Value("-2147483649")});
     // 64-bit and 32-bit integers order together numerically, so the same
     // value (-2147483648) as int or long should order equally.
-    groups.add(new Value[] {intValue(Integer.MIN_VALUE), int32Value(Integer.MIN_VALUE)});
+    groups.add(
+        new Value[] {
+          intValue(Integer.MIN_VALUE), int32Value(Integer.MIN_VALUE), decimal128Value("-2147483648")
+        });
     groups.add(new Value[] {doubleValue(-1.1)});
     // Integers and Doubles and int32 order together numerically.
-    groups.add(new Value[] {intValue(-1), doubleValue(-1.0), int32Value(-1)});
+    groups.add(
+        new Value[] {intValue(-1), doubleValue(-1.0), int32Value(-1), decimal128Value("-1")});
     groups.add(new Value[] {doubleValue(-Double.MIN_VALUE)});
     // zeros all compare the same.
     groups.add(
         new Value[] {
-          intValue(0), doubleValue(-0.0), doubleValue(0.0), doubleValue(+0.0), int32Value(0)
+          intValue(0),
+          doubleValue(-0.0),
+          doubleValue(0.0),
+          doubleValue(+0.0),
+          int32Value(0),
+          decimal128Value("+0"),
+          decimal128Value("0"),
+          decimal128Value("-0"),
+          decimal128Value("+0.0"),
+          decimal128Value("0.0"),
+          decimal128Value("-0.0"),
+          decimal128Value("+00.000"),
+          decimal128Value("00.000"),
+          decimal128Value("-00.000"),
+          decimal128Value("-00.000e-10"),
+          decimal128Value("-00.000e-0"),
+          decimal128Value("-00.000e10"),
         });
     groups.add(new Value[] {doubleValue(Double.MIN_VALUE)});
     groups.add(new Value[] {intValue(1), doubleValue(1.0), int32Value(1)});
     groups.add(new Value[] {doubleValue(1.1)});
-    groups.add(new Value[] {int32Value(11)});
-    groups.add(new Value[] {int32Value(12)});
-    groups.add(new Value[] {intValue(Integer.MAX_VALUE), int32Value(Integer.MAX_VALUE)});
-    groups.add(new Value[] {intValue((long) Integer.MAX_VALUE + 1)});
+    groups.add(new Value[] {doubleValue(2.0), decimal128Value("2.0")});
+    groups.add(new Value[] {int32Value(11), decimal128Value("11")});
+    groups.add(new Value[] {int32Value(12), decimal128Value("12")});
+    groups.add(
+        new Value[] {
+          intValue(Integer.MAX_VALUE), int32Value(Integer.MAX_VALUE), decimal128Value("2147483647")
+        });
+    groups.add(new Value[] {intValue((long) Integer.MAX_VALUE + 1), decimal128Value("2147483648")});
     groups.add(new Value[] {doubleValue(((double) Long.MAX_VALUE) + 100)});
-    groups.add(new Value[] {doubleValue(Double.POSITIVE_INFINITY)});
+    groups.add(new Value[] {doubleValue(Double.POSITIVE_INFINITY), decimal128Value("Infinity")});
 
     groups.add(new Value[] {timestampValue(123, 0)});
     groups.add(new Value[] {timestampValue(123, 123)});
@@ -222,6 +248,10 @@ public class OrderTest {
 
   private Value int32Value(int value) {
     return Value.newBuilder().setMapValue(new Int32Value(value).toProto()).build();
+  }
+
+  private Value decimal128Value(String value) {
+    return Value.newBuilder().setMapValue(new Decimal128Value(value).toProto()).build();
   }
 
   private Value bsonObjectIdValue(String oid) {

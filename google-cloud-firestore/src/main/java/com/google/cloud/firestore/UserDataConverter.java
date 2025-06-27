@@ -16,6 +16,12 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.firestore.v1.Value.ValueTypeCase.BYTES_VALUE;
+import static com.google.firestore.v1.Value.ValueTypeCase.INTEGER_VALUE;
+import static com.google.firestore.v1.Value.ValueTypeCase.MAP_VALUE;
+import static com.google.firestore.v1.Value.ValueTypeCase.NULL_VALUE;
+import static com.google.firestore.v1.Value.ValueTypeCase.STRING_VALUE;
+
 import com.google.cloud.Timestamp;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -202,6 +208,9 @@ class UserDataConverter {
     } else if (sanitizedObject instanceof Int32Value) {
       Int32Value int32Value = (Int32Value) sanitizedObject;
       return Value.newBuilder().setMapValue(int32Value.toProto()).build();
+    } else if (sanitizedObject instanceof Decimal128Value) {
+      Decimal128Value decimal128Value = (Decimal128Value) sanitizedObject;
+      return Value.newBuilder().setMapValue(decimal128Value.toProto()).build();
     } else if (sanitizedObject instanceof BsonObjectId) {
       BsonObjectId bsonObjectId = (BsonObjectId) sanitizedObject;
       return Value.newBuilder().setMapValue(bsonObjectId.toProto()).build();
@@ -271,6 +280,13 @@ class UserDataConverter {
   static MapValue encodeInt32Value(int value) {
     return MapValue.newBuilder()
         .putFields(MapType.RESERVED_INT32_KEY, Value.newBuilder().setIntegerValue(value).build())
+        .build();
+  }
+
+  static MapValue encodeDecimal128Value(String value) {
+    return MapValue.newBuilder()
+        .putFields(
+            MapType.RESERVED_DECIMAL128_KEY, Value.newBuilder().setStringValue(value).build())
         .build();
   }
 
@@ -400,6 +416,15 @@ class UserDataConverter {
     return new Int32Value((int) value);
   }
 
+  /**
+   * Decodes the given MapValue into a Decimal128Value. Assumes the given map is a 128-bit decimal
+   * value.
+   */
+  static Decimal128Value decodeDecimal128Value(MapValue mapValue) {
+    String value = mapValue.getFieldsMap().get(MapType.RESERVED_DECIMAL128_KEY).getStringValue();
+    return new Decimal128Value(value);
+  }
+
   static Object decodeMap(FirestoreRpcContext<?> rpcContext, MapValue mapValue) {
     MapRepresentation mapRepresentation = detectMapRepresentation(mapValue);
     Map<String, Value> inputMap = mapValue.getFieldsMap();
@@ -428,6 +453,8 @@ class UserDataConverter {
         return decodeRegexValue(mapValue);
       case INT32:
         return decodeInt32Value(mapValue);
+      case DECIMAL128:
+        return decodeDecimal128Value(mapValue);
       case BSON_OBJECT_ID:
         return decodeBsonObjectId(mapValue);
       case BSON_TIMESTAMP:
@@ -456,6 +483,8 @@ class UserDataConverter {
     REGEX,
     /** The MapValue represents a 32-bit integer. */
     INT32,
+    /** The MapValue represents a 128-bit decimal. */
+    DECIMAL128,
     /** The MapValue represents a BSON ObjectId. */
     BSON_OBJECT_ID,
     /** The MapValue represents a BSON Timestamp. */
@@ -464,40 +493,51 @@ class UserDataConverter {
     BSON_BINARY_DATA,
   }
 
-  static boolean isMinKey(MapValue mapValue) {
+  private static boolean isMapWithSingleKeyAndType(
+      MapValue mapValue, String key, Value.ValueTypeCase type) {
     return mapValue.getFieldsCount() == 1
-        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_MIN_KEY)
-        && mapValue.getFieldsMap().get(MapType.RESERVED_MIN_KEY).hasNullValue();
+        && mapValue.getFieldsMap().containsKey(key)
+        && mapValue.getFieldsMap().get(key).getValueTypeCase().equals(type);
+  }
+
+  static boolean isMinKey(MapValue mapValue) {
+    return isMapWithSingleKeyAndType(mapValue, MapType.RESERVED_MIN_KEY, NULL_VALUE);
   }
 
   static boolean isMaxKey(MapValue mapValue) {
-    return mapValue.getFieldsCount() == 1
-        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_MAX_KEY)
-        && mapValue.getFieldsMap().get(MapType.RESERVED_MAX_KEY).hasNullValue();
+    return isMapWithSingleKeyAndType(mapValue, MapType.RESERVED_MAX_KEY, NULL_VALUE);
   }
 
   static boolean isInt32Value(MapValue mapValue) {
-    return mapValue.getFieldsCount() == 1
-        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_INT32_KEY)
-        && mapValue.getFieldsMap().get(MapType.RESERVED_INT32_KEY).hasIntegerValue();
+    return isMapWithSingleKeyAndType(mapValue, MapType.RESERVED_INT32_KEY, INTEGER_VALUE);
+  }
+
+  static boolean isInt32Value(Value value) {
+    return value.hasMapValue() && isInt32Value(value.getMapValue());
+  }
+
+  static boolean isIntegerValue(Value value) {
+    return value.hasIntegerValue() || isInt32Value(value);
+  }
+
+  static boolean isDecimal128Value(MapValue mapValue) {
+    return isMapWithSingleKeyAndType(mapValue, MapType.RESERVED_DECIMAL128_KEY, STRING_VALUE);
+  }
+
+  static boolean isDecimal128Value(Value value) {
+    return value.hasMapValue() && isDecimal128Value(value.getMapValue());
   }
 
   static boolean isBsonObjectId(MapValue mapValue) {
-    return mapValue.getFieldsCount() == 1
-        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_OBJECT_ID_KEY)
-        && mapValue.getFieldsMap().get(MapType.RESERVED_OBJECT_ID_KEY).hasStringValue();
+    return isMapWithSingleKeyAndType(mapValue, MapType.RESERVED_OBJECT_ID_KEY, STRING_VALUE);
   }
 
   static boolean isBsonBinaryData(MapValue mapValue) {
-    return mapValue.getFieldsCount() == 1
-        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_BSON_BINARY_KEY)
-        && mapValue.getFieldsMap().get(MapType.RESERVED_BSON_BINARY_KEY).hasBytesValue();
+    return isMapWithSingleKeyAndType(mapValue, MapType.RESERVED_BSON_BINARY_KEY, BYTES_VALUE);
   }
 
   static boolean isRegexValue(MapValue mapValue) {
-    if (mapValue.getFieldsCount() == 1
-        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_REGEX_KEY)
-        && mapValue.getFieldsMap().get(MapType.RESERVED_REGEX_KEY).hasMapValue()) {
+    if (isMapWithSingleKeyAndType(mapValue, MapType.RESERVED_REGEX_KEY, MAP_VALUE)) {
       MapValue innerMapValue =
           mapValue.getFieldsMap().get(MapType.RESERVED_REGEX_KEY).getMapValue();
       Map<String, Value> values = innerMapValue.getFieldsMap();
@@ -511,9 +551,7 @@ class UserDataConverter {
   }
 
   static boolean isBsonTimestamp(MapValue mapValue) {
-    if (mapValue.getFieldsCount() == 1
-        && mapValue.getFieldsMap().containsKey(MapType.RESERVED_BSON_TIMESTAMP_KEY)
-        && mapValue.getFieldsMap().get(MapType.RESERVED_BSON_TIMESTAMP_KEY).hasMapValue()) {
+    if (isMapWithSingleKeyAndType(mapValue, MapType.RESERVED_BSON_TIMESTAMP_KEY, MAP_VALUE)) {
       MapValue innerMapValue =
           mapValue.getFieldsMap().get(MapType.RESERVED_BSON_TIMESTAMP_KEY).getMapValue();
       Map<String, Value> values = innerMapValue.getFieldsMap();
@@ -537,6 +575,8 @@ class UserDataConverter {
       return MapRepresentation.REGEX;
     } else if (isInt32Value(mapValue)) {
       return MapRepresentation.INT32;
+    } else if (isDecimal128Value(mapValue)) {
+      return MapRepresentation.DECIMAL128;
     } else if (isBsonBinaryData(mapValue)) {
       return MapRepresentation.BSON_BINARY_DATA;
     } else if (isBsonObjectId(mapValue)) {
