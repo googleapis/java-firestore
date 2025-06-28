@@ -331,7 +331,7 @@
     <differenceType>7009</differenceType>
     <method>void internalStream(*)</method>
   </difference>
-  
+
   <!-- Relocate constants in TraceUtil -->
   <difference>
     <differenceType>6011</differenceType>
@@ -346,4 +346,38 @@
     <method>void internalStream(*)</method>
     <to>*</to>
   </difference>
+
+    <!-- Update TelemetryConstants -->
+  <difference>
+    <differenceType>6011</differenceType>
+    <className>com/google/cloud/firestore/telemetry/TelemetryConstants</className>
+    <field>*</field>
+  </difference>
+
+    <difference>
+    <differenceType>6001</differenceType>
+    <className>com/google/cloud/firestore/telemetry/TelemetryConstants</className>
+    <field>*</field>
+  </difference>
+
+  <difference>
+    <differenceType>6004</differenceType>
+    <className>com/google/cloud/firestore/telemetry/TelemetryConstants</className>
+    <field>METRIC_ATTRIBUTE_KEY_*</field>
+    <from>io.opentelemetry.api.common.AttributeKey</from>
+    <to>java.lang.String</to>
+  </difference>
+
+  <difference>
+    <differenceType>6001</differenceType>
+    <className>com/google/cloud/firestore/telemetry/TelemetryConstants$MetricType</className>
+    <field>END_TO_END_LATENCY</field>
+  </difference>
+
+  <difference>
+    <differenceType>7012</differenceType>
+    <className>com/google/cloud/firestore/telemetry/MetricsUtil</className>
+    <method>void shutdown()</method>
+  </difference>
+
 </differences>

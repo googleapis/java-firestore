@@ -196,7 +196,14 @@ public class ConformanceTest {
       this.firestore =
           Mockito.spy(
               new FirestoreImpl(
-                  FirestoreOptions.newBuilder().setProjectId("projectID").build(), firestoreRpc));
+                  FirestoreOptions.newBuilder()
+                      .setProjectId("projectID")
+                      .setOpenTelemetryOptions(
+                          FirestoreOpenTelemetryOptions.newBuilder()
+                              .exportBuiltinMetricsToGoogleCloudMonitoring(false)
+                              .build())
+                      .build(),
+                  firestoreRpc));
     }
 
     @Override

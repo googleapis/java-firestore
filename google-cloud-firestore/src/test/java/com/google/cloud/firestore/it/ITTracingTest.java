@@ -111,7 +111,8 @@ public abstract class ITTracingTest {
     SpanProcessor inMemorySpanProcessor = SimpleSpanProcessor.create(inMemorySpanExporter);
     FirestoreOptions.Builder optionsBuilder = FirestoreOptions.newBuilder();
     FirestoreOpenTelemetryOptions.Builder otelOptionsBuilder =
-        FirestoreOpenTelemetryOptions.newBuilder();
+        FirestoreOpenTelemetryOptions.newBuilder()
+            .exportBuiltinMetricsToGoogleCloudMonitoring(false);
     OpenTelemetrySdkBuilder openTelemetrySdkBuilder =
         OpenTelemetrySdk.builder()
             .setTracerProvider(

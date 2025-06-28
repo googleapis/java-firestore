@@ -114,12 +114,6 @@ public abstract class StreamableQuery<SnapshotType> {
                     ? TelemetryConstants.METHOD_NAME_QUERY_GET
                     : TelemetryConstants.METHOD_NAME_TRANSACTION_GET_QUERY);
 
-    MetricsContext metricsContext =
-        createMetricsContext(
-            transactionId != null
-                ? TelemetryConstants.METHOD_NAME_RUN_QUERY_TRANSACTIONAL
-                : TelemetryConstants.METHOD_NAME_RUN_QUERY_GET);
-
     try (Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<SnapshotType> result = SettableApiFuture.create();
 
@@ -161,7 +155,7 @@ public abstract class StreamableQuery<SnapshotType> {
           };
 
       internalStream(
-          new MonitoredStreamResponseObserver(observer, metricsContext),
+          observer,
           /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
           transactionId,
           /* readTime= */ requestReadTime,
@@ -172,7 +166,6 @@ public abstract class StreamableQuery<SnapshotType> {
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
@@ -192,9 +185,6 @@ public abstract class StreamableQuery<SnapshotType> {
             .getOptions()
             .getTraceUtil()
             .startSpan(TelemetryConstants.METHOD_NAME_QUERY_GET);
-
-    MetricsContext metricsContext =
-        createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_QUERY_EXPLAIN);
 
     try (Scope ignored = span.makeCurrent()) {
       final SettableApiFuture<ExplainResults<SnapshotType>> result = SettableApiFuture.create();
@@ -255,7 +245,7 @@ public abstract class StreamableQuery<SnapshotType> {
           };
 
       internalStream(
-          new MonitoredStreamResponseObserver(observer, metricsContext),
+          observer,
           /* startTimeNanos= */ rpcContext.getClock().nanoTime(),
           /* transactionId= */ null,
           /* readTime= */ null,
@@ -266,47 +256,12 @@ public abstract class StreamableQuery<SnapshotType> {
       return result;
     } catch (Exception error) {
       span.end(error);
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
       throw error;
     }
   }
 
-  class MonitoredStreamResponseObserver implements ApiStreamObserver<RunQueryResponse> {
-    private final ApiStreamObserver<RunQueryResponse> observer;
-    private final MetricsContext metricsContext;
-    private boolean receivedFirstResponse = false;
-
-    // Constructor to initialize with the delegate and MetricsContext
-    public MonitoredStreamResponseObserver(
-        ApiStreamObserver<RunQueryResponse> observer, MetricsContext metricsContext) {
-      this.observer = observer;
-      this.metricsContext = metricsContext;
-    }
-
-    @Override
-    public void onNext(RunQueryResponse value) {
-      if (!receivedFirstResponse) {
-        receivedFirstResponse = true;
-        metricsContext.recordLatency(MetricType.FIRST_RESPONSE_LATENCY);
-      }
-      observer.onNext(value);
-    }
-
-    @Override
-    public void onError(Throwable t) {
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, t);
-      observer.onError(t);
-    }
-
-    @Override
-    public void onCompleted() {
-      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY);
-      observer.onCompleted();
-    }
-  }
-
   void internalStream(
-      final MonitoredStreamResponseObserver streamResponseObserver,
+      final ApiStreamObserver<RunQueryResponse> runQueryResponseObserver,
       final long startTimeNanos,
       @Nullable final ByteString transactionId,
       @Nullable final Timestamp readTime,
@@ -325,6 +280,14 @@ public abstract class StreamableQuery<SnapshotType> {
             .put(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null)
             .put(ATTRIBUTE_KEY_IS_RETRY_WITH_CURSOR, isRetryRequestWithCursor)
             .build());
+
+    String methodName =
+        (transactionId != null)
+            ? TelemetryConstants.METHOD_NAME_TRANSACTION_GET_QUERY
+            : (explainOptions != null
+                ? TelemetryConstants.METHOD_NAME_QUERY_EXPLAIN
+                : TelemetryConstants.METHOD_NAME_QUERY_GET);
+    MetricsContext metricsContext = createMetricsContext(methodName);
 
     final AtomicReference<QueryDocumentSnapshot> lastReceivedDocument = new AtomicReference<>();
 
@@ -346,9 +309,10 @@ public abstract class StreamableQuery<SnapshotType> {
             if (!firstResponse) {
               firstResponse = true;
               currentSpan.addEvent(TelemetryConstants.METHOD_NAME_RUN_QUERY + ": First Response");
+              metricsContext.recordLatency(MetricType.FIRST_RESPONSE_LATENCY);
             }
 
-            streamResponseObserver.onNext(response);
+            runQueryResponseObserver.onNext(response);
 
             if (response.hasDocument()) {
               numDocuments++;
@@ -383,7 +347,7 @@ public abstract class StreamableQuery<SnapshotType> {
 
               startAfter(cursor)
                   .internalStream(
-                      streamResponseObserver,
+                      runQueryResponseObserver,
                       startTimeNanos,
                       /* transactionId= */ null,
                       options.getRequireConsistency() ? cursor.getReadTime() : null,
@@ -393,7 +357,7 @@ public abstract class StreamableQuery<SnapshotType> {
               currentSpan.addEvent(
                   TelemetryConstants.METHOD_NAME_RUN_QUERY + ": Error",
                   Collections.singletonMap("error.message", throwable.toString()));
-              streamResponseObserver.onError(throwable);
+              runQueryResponseObserver.onError(throwable);
             }
           }
 
@@ -404,7 +368,7 @@ public abstract class StreamableQuery<SnapshotType> {
             currentSpan.addEvent(
                 TelemetryConstants.METHOD_NAME_RUN_QUERY + ": Completed",
                 Collections.singletonMap(ATTRIBUTE_KEY_DOC_COUNT, numDocuments));
-            streamResponseObserver.onCompleted();
+            runQueryResponseObserver.onCompleted();
           }
 
           boolean shouldRetry(DocumentSnapshot lastDocument, Throwable t) {

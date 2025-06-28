@@ -52,11 +52,12 @@ public interface MetricsUtil {
     }
   }
 
+  abstract void shutdown();
+
   static boolean shouldCreateEnabledInstance() {
     // Client side metrics feature is default on unless it is manually turned off by
     // environment variables
-    // TODO(metrics): The feature is disabled before it is ready for general release.
-    boolean shouldCreateEnabledInstance = false;
+    boolean shouldCreateEnabledInstance = true;
 
     String enableMetricsEnvVar = System.getenv(ENABLE_METRICS_ENV_VAR);
     if (enableMetricsEnvVar != null) {

@@ -28,7 +28,6 @@ import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
-import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.telemetry.TraceUtil.Span;
@@ -93,7 +92,7 @@ final class ServerSideTransactionRunner<T> {
         firestore
             .getOptions()
             .getMetricsUtil()
-            .createMetricsContext(TelemetryConstants.METHOD_NAME_TRANSACTION_RUN);
+            .createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_TRANSACTION);
   }
 
   @Nonnull
@@ -103,8 +102,9 @@ final class ServerSideTransactionRunner<T> {
 
   ApiFuture<T> run() {
     ApiFuture<T> result = runInternally();
-    metricsContext.recordLatencyAtFuture(MetricType.TRANSACTION_LATENCY, result);
-    metricsContext.recordCounterAtFuture(MetricType.TRANSACTION_ATTEMPT_COUNT, result);
+    metricsContext.recordLatencyAtFuture(TelemetryConstants.MetricType.TRANSACTION_LATENCY, result);
+    metricsContext.recordCounterAtFuture(
+        TelemetryConstants.MetricType.TRANSACTION_ATTEMPT_COUNT, result);
     return result;
   }
 
@@ -150,6 +150,13 @@ final class ServerSideTransactionRunner<T> {
                 serverSideTransaction.setTransactionTraceContext(runTransactionContext);
                 return serverSideTransaction;
               });
+
+      // Record the first time latency for the first BeginTransaction call only
+      Boolean isFirstAttempt = (transactionOptions.getNumberOfAttempts() - attemptsRemaining) == 1;
+      if (isFirstAttempt) {
+        metricsContext.recordLatencyAtFuture(
+            TelemetryConstants.MetricType.FIRST_RESPONSE_LATENCY, result);
+      }
       span.endAtFuture(result);
       return result;
     } catch (Exception error) {
