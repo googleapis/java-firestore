@@ -1536,9 +1536,7 @@ public class QueryTest {
   public void documentSnapshotGetDataSize_nonExistentDocument() {
     DocumentSnapshot missingSnapshot =
         DocumentSnapshot.fromMissing(
-            firestoreMock,
-            firestoreMock.document("coll/doc"),
-            Timestamp.now());
+            firestoreMock, firestoreMock.document("coll/doc"), Timestamp.now());
     assertEquals(0, missingSnapshot.getDataSize());
   }
 }
