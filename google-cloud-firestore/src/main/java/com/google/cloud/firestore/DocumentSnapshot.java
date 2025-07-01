@@ -468,4 +468,21 @@ public class DocumentSnapshot {
         "%s{doc=%s, fields=%s, readTime=%s, updateTime=%s, createTime=%s}",
         getClass().getSimpleName(), docRef, fields, readTime, updateTime, createTime);
   }
+
+  /**
+   * Returns the size of the data in this snapshot in bytes.
+   *
+   * @return The size of the data in bytes.
+   */
+  public int getDataSize() {
+    if (fields == null) {
+      return 0;
+    }
+
+    int totalSize = 0;
+    for (Value value : fields.values()) {
+      totalSize += value.getSerializedSize();
+    }
+    return totalSize;
+  }
 }
