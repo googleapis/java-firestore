@@ -1523,19 +1523,22 @@ public class QueryTest {
   }
 
   @Test
-  public void documentSnapshotGetDataSize() {
-    // Test with an existing document
+  public void documentSnapshotGetDataSize_existingDocument() {
     DocumentSnapshot snapshot = SINGLE_FIELD_SNAPSHOT;
     int expectedSize = 0;
     for (Value value : snapshot.getProtoFields().values()) {
       expectedSize += value.getSerializedSize();
     }
     assertEquals(expectedSize, snapshot.getDataSize());
+  }
 
-    // Test with a non-existent document
+  @Test
+  public void documentSnapshotGetDataSize_nonExistentDocument() {
     DocumentSnapshot missingSnapshot =
         DocumentSnapshot.fromMissing(
-            firestoreMock, firestoreMock.document("coll/doc"), Timestamp.now());
+            firestoreMock,
+            firestoreMock.document("coll/doc"),
+            Timestamp.now());
     assertEquals(0, missingSnapshot.getDataSize());
   }
 }
