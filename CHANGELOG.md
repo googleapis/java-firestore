@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.31.9](https://github.com/googleapis/java-firestore/compare/v3.31.8...v3.31.9) (2025-07-05)
+
+
+### Dependencies
+
+* Update googleapis/sdk-platform-java action to v2.60.0 ([#2176](https://github.com/googleapis/java-firestore/issues/2176)) ([8283a08](https://github.com/googleapis/java-firestore/commit/8283a08b1749e06864b50ab1813c13e9eb61c087))
+
 ## [3.31.8](https://github.com/googleapis/java-firestore/compare/v3.31.7...v3.31.8) (2025-07-02)
 
 
