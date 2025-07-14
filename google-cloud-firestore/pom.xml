@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>google-cloud-firestore</artifactId>
-  <version>3.30.11-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+  <version>3.31.9</version><!-- {x-version-update:google-cloud-firestore:current} -->
   <packaging>jar</packaging>
   <name>Google Cloud Firestore</name>
   <url>https://github.com/googleapis/java-firestore</url>
@@ -12,11 +12,11 @@
   <parent>
     <groupId>com.google.cloud</groupId>
     <artifactId>google-cloud-firestore-parent</artifactId>
-    <version>3.30.11-SNAPSHOT</version><!-- {x-version-update:google-cloud-firestore:current} -->
+    <version>3.31.9</version><!-- {x-version-update:google-cloud-firestore:current} -->
   </parent>
   <properties>
     <site.installationModule>google-cloud-firestore</site.installationModule>
-    <opentelemetry.version>1.47.0</opentelemetry.version>
+    <opentelemetry.version>1.51.0</opentelemetry.version>
   </properties>
   <dependencies>
     <dependency>
@@ -135,6 +135,10 @@
           <groupId>io.opentelemetry.semconv</groupId>
           <artifactId>opentelemetry-semconv</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>com.google.re2j</groupId>
+          <artifactId>re2j</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <!-- END OpenTelemetry -->
@@ -195,7 +199,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.17.0</version>
+      <version>3.18.0</version>
       <scope>test</scope>
     </dependency>
     <!-- OpenTelemetry -->
@@ -220,7 +224,7 @@
     <dependency>
       <groupId>com.google.cloud.opentelemetry</groupId>
       <artifactId>exporter-trace</artifactId>
-      <version>0.33.0</version>
+      <version>0.36.0</version>
       <scope>test</scope>
     </dependency>
     <!-- END OpenTelemetry -->
@@ -228,13 +232,13 @@
     <dependency>
       <groupId>com.google.api.grpc</groupId>
       <artifactId>proto-google-cloud-trace-v1</artifactId>
-      <version>2.59.0</version>
+      <version>2.67.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-trace</artifactId>
-      <version>2.59.0</version>
+      <version>2.67.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -287,7 +291,7 @@
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>2.44.3</version>
+        <version>2.45.0</version>
         <configuration>
           <kotlin>
             <includes>
