@@ -37,9 +37,7 @@ import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
-import com.google.cloud.firestore.Transaction;
 import com.google.cloud.firestore.WriteResult;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import java.util.Collections;
@@ -157,7 +155,8 @@ public class ITPortedTests {
     assertTrue(stats.getReadOperations() > 0);
     assertEquals(2L, stats.getResultsReturned());
     assertTrue(
-        stats.getExecutionDuration().getNano() > 0 || stats.getExecutionDuration().getSeconds() > 0);
+        stats.getExecutionDuration().getNano() > 0
+            || stats.getExecutionDuration().getSeconds() > 0);
     assertTrue(stats.getDebugStats() != null);
 
     assertEquals(2, explainResults.getSnapshot().size());
@@ -192,7 +191,8 @@ public class ITPortedTests {
     assertTrue(stats.getReadOperations() > 0);
     assertEquals(0L, stats.getResultsReturned());
     assertTrue(
-        stats.getExecutionDuration().getNano() > 0 || stats.getExecutionDuration().getSeconds() > 0);
+        stats.getExecutionDuration().getNano() > 0
+            || stats.getExecutionDuration().getSeconds() > 0);
     assertTrue(stats.getDebugStats() != null);
 
     assertEquals(0, explainResults.getSnapshot().size());
@@ -382,7 +382,8 @@ public class ITPortedTests {
     assertTrue(stats.getReadOperations() > 0);
     assertEquals(1L, stats.getResultsReturned());
     assertTrue(
-        stats.getExecutionDuration().getNano() > 0 || stats.getExecutionDuration().getSeconds() > 0);
+        stats.getExecutionDuration().getNano() > 0
+            || stats.getExecutionDuration().getSeconds() > 0);
     assertTrue(stats.getDebugStats() != null);
 
     assertNotNull(explainResults.getSnapshot());
@@ -404,8 +405,9 @@ public class ITPortedTests {
     DocumentReference ref1 = randomCol.document("doc1");
     ref1.set(ImmutableMap.of("foo", "a", "bar", "b")).get();
     List<DocumentSnapshot> docs =
-        firestore.getAll(
-            new DocumentReference[] {ref1}, com.google.cloud.firestore.FieldMask.of("foo")).get();
+        firestore
+            .getAll(new DocumentReference[] {ref1}, com.google.cloud.firestore.FieldMask.of("foo"))
+            .get();
     assertEquals(ImmutableMap.of("foo", "a"), docs.get(0).getData());
   }
 
@@ -417,8 +419,9 @@ public class ITPortedTests {
     ref1.set(ImmutableMap.of("f", "a", "b", "b")).get();
     ref2.set(ImmutableMap.of("f", "a", "b", "b")).get();
     List<DocumentSnapshot> docs =
-        firestore.getAll(
-            new DocumentReference[] {ref1, ref2}, com.google.cloud.firestore.FieldMask.of("f"))
+        firestore
+            .getAll(
+                new DocumentReference[] {ref1, ref2}, com.google.cloud.firestore.FieldMask.of("f"))
             .get();
     assertEquals(ImmutableMap.of("f", "a"), docs.get(0).getData());
     assertEquals(ImmutableMap.of("f", "a"), docs.get(1).getData());
@@ -531,7 +534,8 @@ public class ITPortedTests {
   //   batch.commit().get();
 
   //   List<QueryPartition> partitions =
-  //       collectionGroup.withConverter(new Post.PostConverter()).getPartitions(desiredPartitionCount).get();
+  //       collectionGroup.withConverter(new
+  // Post.PostConverter()).getPartitions(desiredPartitionCount).get();
 
   //   assertFalse(partitions.isEmpty());
   // }
@@ -584,7 +588,8 @@ public class ITPortedTests {
   }
 
   @Test
-  public void testCollectionReferenceHasAddMethod() throws ExecutionException, InterruptedException {
+  public void testCollectionReferenceHasAddMethod()
+      throws ExecutionException, InterruptedException {
     DocumentReference ref = randomCol.add(ImmutableMap.of("foo", "a")).get();
     DocumentSnapshot doc = ref.get().get();
     assertEquals("a", doc.getString("foo"));
@@ -598,7 +603,8 @@ public class ITPortedTests {
 
     java.util.List<DocumentReference> documentRefs = new java.util.ArrayList<>();
     randomCol.listDocuments().forEach(documentRefs::add);
-    List<DocumentSnapshot> documents = firestore.getAll(documentRefs.toArray(new DocumentReference[0])).get();
+    List<DocumentSnapshot> documents =
+        firestore.getAll(documentRefs.toArray(new DocumentReference[0])).get();
 
     List<String> existingDocs =
         documents.stream()
@@ -632,7 +638,10 @@ public class ITPortedTests {
     randomCol.listDocuments().forEach(documentRefs::add);
 
     List<String> actualDocIds =
-        documentRefs.stream().map(dr -> dr.getId()).sorted().collect(java.util.stream.Collectors.toList());
+        documentRefs.stream()
+            .map(dr -> dr.getId())
+            .sorted()
+            .collect(java.util.stream.Collectors.toList());
 
     assertEquals(expectedResults, actualDocIds);
   }
@@ -688,8 +697,7 @@ public class ITPortedTests {
 
   @Test
   public void testDocumentReferenceHasSetMethod() throws ExecutionException, InterruptedException {
-    Map<String, Object> allSupportedTypesObject =
-        new java.util.HashMap<>();
+    Map<String, Object> allSupportedTypesObject = new java.util.HashMap<>();
     allSupportedTypesObject.put("stringValue", "a");
     allSupportedTypesObject.put("trueValue", true);
     allSupportedTypesObject.put("falseValue", false);
@@ -700,16 +708,17 @@ public class ITPortedTests {
     allSupportedTypesObject.put("negativeInfinityValue", Double.NEGATIVE_INFINITY);
     allSupportedTypesObject.put("objectValue", ImmutableMap.of("foo", "bar", "😀", "😜"));
     allSupportedTypesObject.put("emptyObject", Collections.emptyMap());
-    allSupportedTypesObject.put("dateValue", com.google.cloud.Timestamp.ofTimeSecondsAndNanos(479978400, 123000000));
-    allSupportedTypesObject.put("zeroDateValue", com.google.cloud.Timestamp.ofTimeSecondsAndNanos(0, 0));
+    allSupportedTypesObject.put(
+        "dateValue", com.google.cloud.Timestamp.ofTimeSecondsAndNanos(479978400, 123000000));
+    allSupportedTypesObject.put(
+        "zeroDateValue", com.google.cloud.Timestamp.ofTimeSecondsAndNanos(0, 0));
     allSupportedTypesObject.put("pathValue", firestore.document("col1/ref1"));
     allSupportedTypesObject.put("arrayValue", Arrays.asList("foo", 42, "bar"));
     allSupportedTypesObject.put("emptyArray", Collections.emptyList());
     allSupportedTypesObject.put("nilValue", null);
     allSupportedTypesObject.put(
         "geoPointValue", new com.google.cloud.firestore.GeoPoint(50.1430847, -122.947778));
-    allSupportedTypesObject.put(
-        "zeroGeoPointValue", new com.google.cloud.firestore.GeoPoint(0, 0));
+    allSupportedTypesObject.put("zeroGeoPointValue", new com.google.cloud.firestore.GeoPoint(0, 0));
     allSupportedTypesObject.put(
         "bytesValue", com.google.cloud.firestore.Blob.fromBytes(new byte[] {0x01, 0x02}));
 
@@ -738,7 +747,11 @@ public class ITPortedTests {
     long bigIntValue = Long.MAX_VALUE;
 
     Firestore firestoreWithBigInt =
-        FirestoreOptions.newBuilder().setProjectId("test-project").setUseBigInt(true).build().getService();
+        FirestoreOptions.newBuilder()
+            .setProjectId("test-project")
+            .setUseBigInt(true)
+            .build()
+            .getService();
     CollectionReference randomColWithBigInt =
         firestoreWithBigInt.collection(testName.getMethodName() + "_" + System.nanoTime());
     DocumentReference ref = randomColWithBigInt.document("doc");
@@ -764,10 +777,14 @@ public class ITPortedTests {
     assertNotNull(setTimestamp);
     assertEquals(
         ImmutableMap.of(
-            "a", "bar",
-            "b", ImmutableMap.of("remove", "bar"),
-            "d", ImmutableMap.of("keep", "bar"),
-            "f", setTimestamp),
+            "a",
+            "bar",
+            "b",
+            ImmutableMap.of("remove", "bar"),
+            "d",
+            ImmutableMap.of("keep", "bar"),
+            "f",
+            setTimestamp),
         doc.getData());
     ref.update(
             ImmutableMap.of(
@@ -780,10 +797,14 @@ public class ITPortedTests {
     assertNotNull(updateTimestamp);
     assertEquals(
         ImmutableMap.of(
-            "a", updateTimestamp,
-            "b", ImmutableMap.of("c", updateTimestamp),
-            "d", ImmutableMap.of("e", updateTimestamp, "keep", "bar"),
-            "f", setTimestamp),
+            "a",
+            updateTimestamp,
+            "b",
+            ImmutableMap.of("c", updateTimestamp),
+            "d",
+            ImmutableMap.of("e", updateTimestamp, "keep", "bar"),
+            "f",
+            setTimestamp),
         doc.getData());
   }
 
@@ -913,7 +934,10 @@ public class ITPortedTests {
   public void willFailToDeleteDocumentWithExistsTrueIfDocDoesNotExist() {
     DocumentReference ref = randomCol.document();
     try {
-      ref.delete(com.google.cloud.firestore.Precondition.fromUpdateTime(com.google.cloud.Timestamp.ofTimeSecondsAndNanos(0,0))).get();
+      ref.delete(
+              com.google.cloud.firestore.Precondition.fromUpdateTime(
+                  com.google.cloud.Timestamp.ofTimeSecondsAndNanos(0, 0)))
+          .get();
       fail("should have thrown");
     } catch (Exception e) {
       assertTrue(e.getCause() instanceof AbortedException);
@@ -1133,12 +1157,10 @@ public class ITPortedTests {
           com.google.cloud.firestore.VectorValue.from(Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0))),
       ImmutableMap.of(
           "embedding",
-          com.google.cloud.firestore.VectorValue.from(
-              Arrays.asList(1.0, 2.0, 100.0, 4.0, 4.0))),
+          com.google.cloud.firestore.VectorValue.from(Arrays.asList(1.0, 2.0, 100.0, 4.0, 4.0))),
       ImmutableMap.of(
           "embedding",
-          com.google.cloud.firestore.VectorValue.from(
-              Arrays.asList(100.0, 2.0, 3.0, 4.0, 5.0))),
+          com.google.cloud.firestore.VectorValue.from(Arrays.asList(100.0, 2.0, 3.0, 4.0, 5.0))),
       ImmutableMap.of("embedding", ImmutableMap.of("HELLO", "WORLD")),
       ImmutableMap.of("embedding", ImmutableMap.of("hello", "world")),
     };
@@ -1314,7 +1336,8 @@ public class ITPortedTests {
   public void querySupportsNaNAndNull() throws ExecutionException, InterruptedException {
     DocumentReference ref = randomCol.document("doc");
     ref.set(ImmutableMap.of("foo", Double.NaN, "bar", null)).get();
-    QuerySnapshot res = randomCol.whereEqualTo("foo", Double.NaN).whereEqualTo("bar", null).get().get();
+    QuerySnapshot res =
+        randomCol.whereEqualTo("foo", Double.NaN).whereEqualTo("bar", null).get().get();
     assertEquals(Double.NaN, res.getDocuments().get(0).getDouble("foo"), 0);
     assertNull(res.getDocuments().get(0).get("bar"));
   }
@@ -1349,11 +1372,12 @@ public class ITPortedTests {
       throws ExecutionException, InterruptedException {
     List<DocumentReference> refs =
         addDocs(
-            ImmutableMap.of("count", 1),
-            ImmutableMap.of("count", 2),
-            ImmutableMap.of("count", 3));
+            ImmutableMap.of("count", 1), ImmutableMap.of("count", 2), ImmutableMap.of("count", 3));
     QuerySnapshot res =
-        randomCol.whereNotEqualTo(com.google.cloud.firestore.FieldPath.documentId(), refs.get(0).getId()).get().get();
+        randomCol
+            .whereNotEqualTo(com.google.cloud.firestore.FieldPath.documentId(), refs.get(0).getId())
+            .get()
+            .get();
     assertEquals(2, res.size());
   }
 
@@ -1375,9 +1399,7 @@ public class ITPortedTests {
       throws ExecutionException, InterruptedException {
     List<DocumentReference> refs =
         addDocs(
-            ImmutableMap.of("count", 1),
-            ImmutableMap.of("count", 2),
-            ImmutableMap.of("count", 3));
+            ImmutableMap.of("count", 1), ImmutableMap.of("count", 2), ImmutableMap.of("count", 3));
     QuerySnapshot res =
         randomCol
             .whereNotIn(
@@ -1405,9 +1427,7 @@ public class ITPortedTests {
   public void querySupportsInWithDocumentIdArray() throws ExecutionException, InterruptedException {
     List<DocumentReference> refs =
         addDocs(
-            ImmutableMap.of("count", 1),
-            ImmutableMap.of("count", 2),
-            ImmutableMap.of("count", 3));
+            ImmutableMap.of("count", 1), ImmutableMap.of("count", 2), ImmutableMap.of("count", 3));
     QuerySnapshot res =
         randomCol
             .whereIn(
@@ -1423,14 +1443,14 @@ public class ITPortedTests {
     addDocs(
         ImmutableMap.of("array", Arrays.asList(42)),
         ImmutableMap.of("array", Arrays.asList("a", 42, "c")),
-        ImmutableMap.of("array", Arrays.asList(41.999, "42", ImmutableMap.of("a", Arrays.asList(42)))),
+        ImmutableMap.of(
+            "array", Arrays.asList(41.999, "42", ImmutableMap.of("a", Arrays.asList(42)))),
         ImmutableMap.of("array", Arrays.asList(42), "array2", Arrays.asList("sigh")),
         ImmutableMap.of("array", Arrays.asList(43)),
         ImmutableMap.of("array", Arrays.asList(ImmutableMap.of("a", 42))),
         ImmutableMap.of("array", 42));
 
-    QuerySnapshot res =
-        randomCol.whereArrayContainsAny("array", Arrays.asList(42, 43)).get().get();
+    QuerySnapshot res = randomCol.whereArrayContainsAny("array", Arrays.asList(42, 43)).get().get();
 
     assertEquals(4, res.size());
   }
@@ -1449,7 +1469,10 @@ public class ITPortedTests {
     DocumentReference ref = randomCol.document("foo");
     ref.set(Collections.emptyMap()).get();
     QuerySnapshot res =
-        randomCol.whereGreaterThanOrEqualTo(com.google.cloud.firestore.FieldPath.documentId(), "bar").get().get();
+        randomCol
+            .whereGreaterThanOrEqualTo(com.google.cloud.firestore.FieldPath.documentId(), "bar")
+            .get()
+            .get();
     assertEquals(1, res.size());
   }
 
@@ -1508,14 +1531,11 @@ public class ITPortedTests {
     addDocs(ImmutableMap.of("foo", "a"), ImmutableMap.of("foo", "b"));
     final java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
     final AtomicInteger received = new AtomicInteger();
-    randomCol
-        .orderBy("foo")
-        .limit(1)
-        .stream(
-            (doc, error) -> {
-              received.incrementAndGet();
-            },
-            latch::countDown);
+    randomCol.orderBy("foo").limit(1).stream(
+        (doc, error) -> {
+          received.incrementAndGet();
+        },
+        latch::countDown);
     latch.await();
     assertEquals(1, received.get());
   }
@@ -1534,24 +1554,18 @@ public class ITPortedTests {
     addDocs(ImmutableMap.of("foo", "a"), ImmutableMap.of("foo", "b"));
     final java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
     final AtomicInteger received = new AtomicInteger();
-    randomCol
-        .orderBy("foo")
-        .limit(3)
-        .stream(
-            (doc, error) -> {
-              received.incrementAndGet();
-            },
-            latch::countDown);
+    randomCol.orderBy("foo").limit(3).stream(
+        (doc, error) -> {
+          received.incrementAndGet();
+        },
+        latch::countDown);
     latch.await();
     assertEquals(2, received.get());
   }
 
   @Test
   public void hasLimitToLastMethod() throws ExecutionException, InterruptedException {
-    addDocs(
-        ImmutableMap.of("doc", 1),
-        ImmutableMap.of("doc", 2),
-        ImmutableMap.of("doc", 3));
+    addDocs(ImmutableMap.of("doc", 1), ImmutableMap.of("doc", 2), ImmutableMap.of("doc", 3));
     QuerySnapshot res = randomCol.orderBy("doc").limitToLast(2).get().get();
     assertEquals(2, res.size());
     assertEquals(2L, res.getDocuments().get(0).getLong("doc").longValue());
@@ -1566,8 +1580,7 @@ public class ITPortedTests {
         ImmutableMap.of("doc", 3),
         ImmutableMap.of("doc", 4),
         ImmutableMap.of("doc", 5));
-    QuerySnapshot res =
-        randomCol.orderBy("doc").startAt(2).endAt(4).limitToLast(5).get().get();
+    QuerySnapshot res = randomCol.orderBy("doc").startAt(2).endAt(4).limitToLast(5).get().get();
     assertEquals(3, res.size());
     assertEquals(2L, res.getDocuments().get(0).getLong("doc").longValue());
     assertEquals(3L, res.getDocuments().get(1).getLong("doc").longValue());
@@ -1587,14 +1600,11 @@ public class ITPortedTests {
     addDocs(ImmutableMap.of("foo", "a"), ImmutableMap.of("foo", "b"));
     final java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
     final AtomicInteger received = new AtomicInteger();
-    randomCol
-        .orderBy("foo")
-        .offset(1)
-        .stream(
-            (doc, error) -> {
-              received.incrementAndGet();
-            },
-            latch::countDown);
+    randomCol.orderBy("foo").offset(1).stream(
+        (doc, error) -> {
+          received.incrementAndGet();
+        },
+        latch::countDown);
     latch.await();
     assertEquals(1, received.get());
   }
@@ -1613,14 +1623,11 @@ public class ITPortedTests {
     addDocs(ImmutableMap.of("foo", "a"), ImmutableMap.of("foo", "b"));
     final java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
     final AtomicInteger received = new AtomicInteger();
-    randomCol
-        .orderBy("foo")
-        .offset(3)
-        .stream(
-            (doc, error) -> {
-              received.incrementAndGet();
-            },
-            latch::countDown);
+    randomCol.orderBy("foo").offset(3).stream(
+        (doc, error) -> {
+          received.incrementAndGet();
+        },
+        latch::countDown);
     latch.await();
     assertEquals(0, received.get());
   }
@@ -1662,8 +1669,7 @@ public class ITPortedTests {
       throws ExecutionException, InterruptedException {
     WriteBatch batch = firestore.batch();
     for (int i = 0; i < 10; ++i) {
-      batch.set(
-          randomCol.document("doc" + i), ImmutableMap.of("array", Arrays.asList("foo")));
+      batch.set(randomCol.document("doc" + i), ImmutableMap.of("array", Arrays.asList("foo")));
     }
     batch.commit().get();
     Query query = randomCol.whereArrayContains("array", "foo").limit(3);
@@ -1765,8 +1771,7 @@ public class ITPortedTests {
     QuerySnapshot querySnapshot = firestore.collectionGroup(collectionGroup).get().get();
     List<String> actualIds =
         querySnapshot.getDocuments().stream().map(d -> d.getId()).collect(Collectors.toList());
-    assertEquals(
-        Arrays.asList("cg-doc1", "cg-doc2", "cg-doc3", "cg-doc4", "cg-doc5"), actualIds);
+    assertEquals(Arrays.asList("cg-doc1", "cg-doc2", "cg-doc3", "cg-doc4", "cg-doc5"), actualIds);
   }
 
   @Test
@@ -2167,8 +2172,7 @@ public class ITPortedTests {
   public void countQueriesUsingAggregateApiRunOutsideTransaction()
       throws ExecutionException, InterruptedException {
     assertEquals(
-        0,
-        randomCol.aggregate(AggregateField.count()).get().get().get(AggregateField.count()));
+        0, randomCol.aggregate(AggregateField.count()).get().get().get(AggregateField.count()));
 
     randomCol.document("doc").set(ImmutableMap.of("foo", "bar")).get();
     assertEquals(
@@ -2181,8 +2185,7 @@ public class ITPortedTests {
             .get(AggregateField.count()));
 
     assertEquals(
-        1,
-        randomCol.aggregate(AggregateField.count()).get().get().get(AggregateField.count()));
+        1, randomCol.aggregate(AggregateField.count()).get().get().get(AggregateField.count()));
 
     randomCol.document("doc1").set(ImmutableMap.of("foo", "bar")).get();
     randomCol.document("doc2").set(ImmutableMap.of("foo", "bar")).get();
@@ -2232,9 +2235,7 @@ public class ITPortedTests {
               AggregateQuerySnapshot snapshot =
                   transaction
                       .get(
-                          randomCol
-                              .whereEqualTo("foo", "notbar")
-                              .aggregate(AggregateField.count()))
+                          randomCol.whereEqualTo("foo", "notbar").aggregate(AggregateField.count()))
                       .get();
               assertEquals(0, snapshot.get(AggregateField.count()).longValue());
               return null;
@@ -2258,8 +2259,7 @@ public class ITPortedTests {
         ImmutableMap.of(
             "a", ImmutableMap.of("author", "authorA", "title", "titleA", "pages", 100),
             "b", ImmutableMap.of("author", "authorB", "title", "titleB", "pages", 50)));
-    AggregateQuerySnapshot snapshot =
-        randomCol.aggregate(AggregateField.sum("pages")).get().get();
+    AggregateQuerySnapshot snapshot = randomCol.aggregate(AggregateField.sum("pages")).get().get();
     assertEquals(150, snapshot.get(AggregateField.sum("pages")).longValue());
   }
 
@@ -2359,8 +2359,7 @@ public class ITPortedTests {
                     5),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
-                    4),
+                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating", 4),
             "c",
                 ImmutableMap.of(
                     "author", "authorC", "title", "titleC", "pages", 100, "year", 1980, "rating",
@@ -2393,8 +2392,7 @@ public class ITPortedTests {
                 ImmutableMap.of(
                     "author", "authorB", "title", "titleB", "pages", 150, "year", 2021, "rating",
                     3)));
-    AggregateQuerySnapshot snapshot =
-        randomCol.aggregate(AggregateField.sum("rating")).get().get();
+    AggregateQuerySnapshot snapshot = randomCol.aggregate(AggregateField.sum("rating")).get().get();
     assertEquals(12.5, snapshot.get(AggregateField.sum("rating")), 0);
   }
 
@@ -2415,8 +2413,7 @@ public class ITPortedTests {
                 ImmutableMap.of(
                     "author", "authorB", "title", "titleB", "pages", 150, "year", 2021, "rating",
                     3.5)));
-    AggregateQuerySnapshot snapshot =
-        randomCol.aggregate(AggregateField.sum("rating")).get().get();
+    AggregateQuerySnapshot snapshot = randomCol.aggregate(AggregateField.sum("rating")).get().get();
     assertEquals(13.0, snapshot.get(AggregateField.sum("rating")), 0);
   }
 
@@ -2434,9 +2431,9 @@ public class ITPortedTests {
                 ImmutableMap.of(
                     "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
                     maxLong)));
-    AggregateQuerySnapshot snapshot =
-        randomCol.aggregate(AggregateField.sum("rating")).get().get();
-    assertEquals((double) maxLong + (double) maxLong, snapshot.get(AggregateField.sum("rating")), 0);
+    AggregateQuerySnapshot snapshot = randomCol.aggregate(AggregateField.sum("rating")).get().get();
+    assertEquals(
+        (double) maxLong + (double) maxLong, snapshot.get(AggregateField.sum("rating")), 0);
   }
 
   @Test
@@ -2446,18 +2443,24 @@ public class ITPortedTests {
         ImmutableMap.of(
             "a",
                 ImmutableMap.of(
-                    "author", "authorA", "title", "titleA", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorA",
+                    "title",
+                    "titleA",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     Long.MAX_VALUE),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
-                    1),
+                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating", 1),
             "c",
                 ImmutableMap.of(
                     "author", "authorC", "title", "titleC", "pages", 50, "year", 2020, "rating",
                     -101)));
-    AggregateQuerySnapshot snapshot =
-        randomCol.aggregate(AggregateField.sum("rating")).get().get();
+    AggregateQuerySnapshot snapshot = randomCol.aggregate(AggregateField.sum("rating")).get().get();
     assertEquals(Long.MAX_VALUE - 100, snapshot.get(AggregateField.sum("rating")));
   }
 
@@ -2467,11 +2470,27 @@ public class ITPortedTests {
         ImmutableMap.of(
             "a",
                 ImmutableMap.of(
-                    "author", "authorA", "title", "titleA", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorA",
+                    "title",
+                    "titleA",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     Long.MAX_VALUE),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
+                    "author",
+                    "authorB",
+                    "title",
+                    "titleB",
+                    "pages",
+                    50,
+                    "year",
+                    2020,
+                    "rating",
                     Long.MIN_VALUE),
             "c",
                 ImmutableMap.of(
@@ -2481,8 +2500,7 @@ public class ITPortedTests {
                 ImmutableMap.of(
                     "author", "authorD", "title", "titleD", "pages", 50, "year", 2020, "rating",
                     -10000)));
-    AggregateQuerySnapshot snapshot =
-        randomCol.aggregate(AggregateField.sum("rating")).get().get();
+    AggregateQuerySnapshot snapshot = randomCol.aggregate(AggregateField.sum("rating")).get().get();
     assertEquals(-10101.0, snapshot.get(AggregateField.sum("rating")), 0);
   }
 
@@ -2492,31 +2510,54 @@ public class ITPortedTests {
         ImmutableMap.of(
             "a",
                 ImmutableMap.of(
-                    "author", "authorA", "title", "titleA", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorA",
+                    "title",
+                    "titleA",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     Double.MAX_VALUE),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
+                    "author",
+                    "authorB",
+                    "title",
+                    "titleB",
+                    "pages",
+                    50,
+                    "year",
+                    2020,
+                    "rating",
                     Double.MAX_VALUE)));
-    AggregateQuerySnapshot snapshot =
-        randomCol.aggregate(AggregateField.sum("rating")).get().get();
+    AggregateQuerySnapshot snapshot = randomCol.aggregate(AggregateField.sum("rating")).get().get();
     assertEquals(Double.POSITIVE_INFINITY, snapshot.get(AggregateField.sum("rating")), 0);
   }
 
   @Test
-  public void performsSumThatIsPositiveInfinityV2() throws ExecutionException, InterruptedException {
+  public void performsSumThatIsPositiveInfinityV2()
+      throws ExecutionException, InterruptedException {
     testCollectionWithDocs(
         ImmutableMap.of(
             "a",
                 ImmutableMap.of(
-                    "author", "authorA", "title", "titleA", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorA",
+                    "title",
+                    "titleA",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     Double.MAX_VALUE),
             "b",
                 ImmutableMap.of(
                     "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
                     1e293)));
-    AggregateQuerySnapshot snapshot =
-        randomCol.aggregate(AggregateField.sum("rating")).get().get();
+    AggregateQuerySnapshot snapshot = randomCol.aggregate(AggregateField.sum("rating")).get().get();
     assertEquals(Double.POSITIVE_INFINITY, snapshot.get(AggregateField.sum("rating")), 0);
   }
 
@@ -2526,14 +2567,29 @@ public class ITPortedTests {
         ImmutableMap.of(
             "a",
                 ImmutableMap.of(
-                    "author", "authorA", "title", "titleA", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorA",
+                    "title",
+                    "titleA",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     -Double.MAX_VALUE),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
+                    "author",
+                    "authorB",
+                    "title",
+                    "titleB",
+                    "pages",
+                    50,
+                    "year",
+                    2020,
+                    "rating",
                     -Double.MAX_VALUE)));
-    AggregateQuerySnapshot snapshot =
-        randomCol.aggregate(AggregateField.sum("rating")).get().get();
+    AggregateQuerySnapshot snapshot = randomCol.aggregate(AggregateField.sum("rating")).get().get();
     assertEquals(Double.NEGATIVE_INFINITY, snapshot.get(AggregateField.sum("rating")), 0);
   }
 
@@ -2544,38 +2600,101 @@ public class ITPortedTests {
         ImmutableMap.of(
             "a",
                 ImmutableMap.of(
-                    "author", "authorA", "title", "titleA", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorA",
+                    "title",
+                    "titleA",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     Double.MAX_VALUE),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
+                    "author",
+                    "authorB",
+                    "title",
+                    "titleB",
+                    "pages",
+                    50,
+                    "year",
+                    2020,
+                    "rating",
                     Double.MAX_VALUE),
             "c",
                 ImmutableMap.of(
-                    "author", "authorC", "title", "titleC", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorC",
+                    "title",
+                    "titleC",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     -Double.MAX_VALUE),
             "d",
                 ImmutableMap.of(
-                    "author", "authorD", "title", "titleD", "pages", 50, "year", 2020, "rating",
+                    "author",
+                    "authorD",
+                    "title",
+                    "titleD",
+                    "pages",
+                    50,
+                    "year",
+                    2020,
+                    "rating",
                     -Double.MAX_VALUE),
             "e",
                 ImmutableMap.of(
-                    "author", "authorE", "title", "titleE", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorE",
+                    "title",
+                    "titleE",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     Double.MAX_VALUE),
             "f",
                 ImmutableMap.of(
-                    "author", "authorF", "title", "titleF", "pages", 50, "year", 2020, "rating",
+                    "author",
+                    "authorF",
+                    "title",
+                    "titleF",
+                    "pages",
+                    50,
+                    "year",
+                    2020,
+                    "rating",
                     -Double.MAX_VALUE),
             "g",
                 ImmutableMap.of(
-                    "author", "authorG", "title", "titleG", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorG",
+                    "title",
+                    "titleG",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     -Double.MAX_VALUE),
             "h",
                 ImmutableMap.of(
-                    "author", "authorH", "title", "titleDH", "pages", 50, "year", 2020, "rating",
+                    "author",
+                    "authorH",
+                    "title",
+                    "titleDH",
+                    "pages",
+                    50,
+                    "year",
+                    2020,
+                    "rating",
                     Double.MAX_VALUE)));
-    AggregateQuerySnapshot snapshot =
-        randomCol.aggregate(AggregateField.sum("rating")).get().get();
+    AggregateQuerySnapshot snapshot = randomCol.aggregate(AggregateField.sum("rating")).get().get();
     assertTrue(
         snapshot.get(AggregateField.sum("rating")) == 0.0
             || snapshot.get(AggregateField.sum("rating")) == Double.NEGATIVE_INFINITY
@@ -2592,18 +2711,24 @@ public class ITPortedTests {
                     5),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
-                    4),
+                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating", 4),
             "c",
                 ImmutableMap.of(
-                    "author", "authorC", "title", "titleC", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorC",
+                    "title",
+                    "titleC",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     Double.NaN),
             "d",
                 ImmutableMap.of(
                     "author", "authorD", "title", "titleD", "pages", 50, "year", 2020, "rating",
                     0)));
-    AggregateQuerySnapshot snapshot =
-        randomCol.aggregate(AggregateField.sum("rating")).get().get();
+    AggregateQuerySnapshot snapshot = randomCol.aggregate(AggregateField.sum("rating")).get().get();
     assertEquals(Double.NaN, snapshot.get(AggregateField.sum("rating")), 0);
   }
 
@@ -2618,8 +2743,7 @@ public class ITPortedTests {
                     4),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
-                    4),
+                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating", 4),
             "c",
                 ImmutableMap.of(
                     "author", "authorC", "title", "titleC", "pages", 100, "year", 1980, "rating",
@@ -2629,11 +2753,7 @@ public class ITPortedTests {
                     "author", "authorD", "title", "titleD", "pages", 50, "year", 2020, "rating",
                     0)));
     AggregateQuerySnapshot snapshot =
-        randomCol
-            .whereGreaterThan("rating", 4)
-            .aggregate(AggregateField.sum("rating"))
-            .get()
-            .get();
+        randomCol.whereGreaterThan("rating", 4).aggregate(AggregateField.sum("rating")).get().get();
     assertEquals(0.0, snapshot.get(AggregateField.sum("rating")), 0);
   }
 
@@ -2647,8 +2767,7 @@ public class ITPortedTests {
                     5),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
-                    4),
+                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating", 4),
             "c",
                 ImmutableMap.of(
                     "author", "authorC", "title", "titleC", "pages", 100, "year", 1980, "rating",
@@ -2658,10 +2777,7 @@ public class ITPortedTests {
                     "author", "authorD", "title", "titleD", "pages", 50, "year", 2020, "rating",
                     1)));
     AggregateQuerySnapshot snapshot =
-        randomCol
-            .aggregate(AggregateField.sum("rating"), AggregateField.count())
-            .get()
-            .get();
+        randomCol.aggregate(AggregateField.sum("rating"), AggregateField.count()).get().get();
     assertEquals(10.0, snapshot.get(AggregateField.sum("rating")), 0);
     assertEquals(4, snapshot.get(AggregateField.count()).longValue());
   }
@@ -2671,11 +2787,18 @@ public class ITPortedTests {
     testCollectionWithDocs(
         ImmutableMap.of(
             "a",
-                ImmutableMap.of(
-                    "author", "authorA", "title", "titleA", "pages", 100, "year", 1980, "rating",
-                    Double.MIN_VALUE)));
-    AggregateQuerySnapshot snapshot =
-        randomCol.aggregate(AggregateField.sum("rating")).get().get();
+            ImmutableMap.of(
+                "author",
+                "authorA",
+                "title",
+                "titleA",
+                "pages",
+                100,
+                "year",
+                1980,
+                "rating",
+                Double.MIN_VALUE)));
+    AggregateQuerySnapshot snapshot = randomCol.aggregate(AggregateField.sum("rating")).get().get();
     assertEquals(Double.MIN_VALUE, snapshot.get(AggregateField.sum("rating")), 0);
   }
 
@@ -2690,8 +2813,7 @@ public class ITPortedTests {
                     10),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
-                    5),
+                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating", 5),
             "c",
                 ImmutableMap.of(
                     "author", "authorB", "title", "titleB", "pages", 150, "year", 2021, "rating",
@@ -2774,8 +2896,7 @@ public class ITPortedTests {
                     8.6),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
-                    9),
+                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating", 9),
             "c",
                 ImmutableMap.of(
                     "author", "authorC", "title", "titleC", "pages", 150, "year", 2021, "rating",
@@ -2809,7 +2930,15 @@ public class ITPortedTests {
         ImmutableMap.of(
             "a",
                 ImmutableMap.of(
-                    "author", "authorA", "title", "titleA", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorA",
+                    "title",
+                    "titleA",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     Double.MIN_VALUE),
             "b",
                 ImmutableMap.of(
@@ -2825,9 +2954,17 @@ public class ITPortedTests {
     testCollectionWithDocs(
         ImmutableMap.of(
             "a",
-                ImmutableMap.of(
-                    "author", "authorA", "title", "titleA", "pages", 100, "year", 1980, "rating",
-                    Double.MIN_VALUE)));
+            ImmutableMap.of(
+                "author",
+                "authorA",
+                "title",
+                "titleA",
+                "pages",
+                100,
+                "year",
+                1980,
+                "rating",
+                Double.MIN_VALUE)));
     AggregateQuerySnapshot snapshot =
         randomCol.aggregate(AggregateField.average("rating")).get().get();
     assertEquals(Double.MIN_VALUE, snapshot.get(AggregateField.average("rating")), 0);
@@ -2840,11 +2977,27 @@ public class ITPortedTests {
         ImmutableMap.of(
             "a",
                 ImmutableMap.of(
-                    "author", "authorA", "title", "titleA", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorA",
+                    "title",
+                    "titleA",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     Double.MAX_VALUE),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
+                    "author",
+                    "authorB",
+                    "title",
+                    "titleB",
+                    "pages",
+                    50,
+                    "year",
+                    2020,
+                    "rating",
                     Double.MAX_VALUE)));
     AggregateQuerySnapshot snapshot =
         randomCol.aggregate(AggregateField.average("rating")).get().get();
@@ -2861,11 +3014,18 @@ public class ITPortedTests {
                     5),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
-                    4),
+                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating", 4),
             "c",
                 ImmutableMap.of(
-                    "author", "authorC", "title", "titleC", "pages", 100, "year", 1980, "rating",
+                    "author",
+                    "authorC",
+                    "title",
+                    "titleC",
+                    "pages",
+                    100,
+                    "year",
+                    1980,
+                    "rating",
                     Double.NaN),
             "d",
                 ImmutableMap.of(
@@ -2887,8 +3047,7 @@ public class ITPortedTests {
                     4),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
-                    4),
+                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating", 4),
             "c",
                 ImmutableMap.of(
                     "author", "authorC", "title", "titleC", "pages", 100, "year", 1980, "rating",
@@ -2916,8 +3075,7 @@ public class ITPortedTests {
                     5),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
-                    4),
+                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating", 4),
             "c",
                 ImmutableMap.of(
                     "author", "authorC", "title", "titleC", "pages", 100, "year", 1980, "rating",
@@ -2927,10 +3085,7 @@ public class ITPortedTests {
                     "author", "authorD", "title", "titleD", "pages", 50, "year", 2020, "rating",
                     6)));
     AggregateQuerySnapshot snapshot =
-        randomCol
-            .aggregate(AggregateField.average("rating"), AggregateField.count())
-            .get()
-            .get();
+        randomCol.aggregate(AggregateField.average("rating"), AggregateField.count()).get().get();
     assertEquals(5.0, snapshot.get(AggregateField.average("rating")), 0);
     assertEquals(4, snapshot.get(AggregateField.count()).longValue());
   }
@@ -2969,7 +3124,8 @@ public class ITPortedTests {
                     "title",
                     "titleA",
                     "metadata",
-                    ImmutableMap.of("pages", 100, "rating", ImmutableMap.of("critic", 2, "user", 5))),
+                    ImmutableMap.of(
+                        "pages", 100, "rating", ImmutableMap.of("critic", 2, "user", 5))),
             "b",
                 ImmutableMap.of(
                     "author",
@@ -2977,7 +3133,8 @@ public class ITPortedTests {
                     "title",
                     "titleB",
                     "metadata",
-                    ImmutableMap.of("pages", 50, "rating", ImmutableMap.of("critic", 4, "user", 4)))));
+                    ImmutableMap.of(
+                        "pages", 50, "rating", ImmutableMap.of("critic", 4, "user", 4)))));
     AggregateQuerySnapshot snapshot =
         randomCol
             .aggregate(
@@ -3002,8 +3159,7 @@ public class ITPortedTests {
                     5),
             "b",
                 ImmutableMap.of(
-                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating",
-                    4),
+                    "author", "authorB", "title", "titleB", "pages", 50, "year", 2020, "rating", 4),
             "c",
                 ImmutableMap.of(
                     "author", "authorC", "title", "titleC", "pages", 100, "year", 1980, "rating",
@@ -3115,7 +3271,8 @@ public class ITPortedTests {
   }
 
   @Test
-  public void getAllSupportsGenericsInTransaction() throws ExecutionException, InterruptedException {
+  public void getAllSupportsGenericsInTransaction()
+      throws ExecutionException, InterruptedException {
     DocumentReference ref1 = randomCol.document("doc1").withConverter(new Post.PostConverter());
     DocumentReference ref2 = randomCol.document("doc2").withConverter(new Post.PostConverter());
     ref1.set(new Post("post1", "author1")).get();
@@ -3183,29 +3340,18 @@ public class ITPortedTests {
   @Test
   public void transactionHasUpdateMethod() throws ExecutionException, InterruptedException {
     DocumentReference ref = randomCol.document("doc");
-    ref.set(
-            ImmutableMap.of(
-                "boo", Arrays.asList("ghost", "sebastian"),
-                "moo", "chicken"))
-        .get();
+    ref.set(ImmutableMap.of("boo", Arrays.asList("ghost", "sebastian"), "moo", "chicken")).get();
     firestore
         .runTransaction(
             transaction -> {
               transaction.get(ref).get();
               transaction.update(
-                  ref,
-                  ImmutableMap.of(
-                      "boo", FieldValue.arrayRemove("sebastian"),
-                      "moo", "cow"));
+                  ref, ImmutableMap.of("boo", FieldValue.arrayRemove("sebastian"), "moo", "cow"));
               return null;
             })
         .get();
     DocumentSnapshot doc = ref.get().get();
-    assertEquals(
-        ImmutableMap.of(
-            "boo", Arrays.asList("ghost"),
-            "moo", "cow"),
-        doc.getData());
+    assertEquals(ImmutableMap.of("boo", Arrays.asList("ghost"), "moo", "cow"), doc.getData());
   }
 
   @Test
@@ -3507,7 +3653,8 @@ public class ITPortedTests {
   }
 
   @Test
-  public void recursiveDeleteOnTopLevelCollection() throws ExecutionException, InterruptedException {
+  public void recursiveDeleteOnTopLevelCollection()
+      throws ExecutionException, InterruptedException {
     WriteBatch batch = firestore.batch();
     batch.set(randomCol.document("anna"), ImmutableMap.of("name", "anna"));
     batch.set(randomCol.document("bob"), ImmutableMap.of("name", "bob"));
@@ -3528,8 +3675,7 @@ public class ITPortedTests {
   @Test
   public void canRetryFailedWritesWithAProvidedCallback() {
     AtomicInteger retryCount = new AtomicInteger();
-    AtomicReference<com.google.cloud.firestore.BulkWriterException> code =
-        new AtomicReference<>();
+    AtomicReference<com.google.cloud.firestore.BulkWriterException> code = new AtomicReference<>();
     com.google.cloud.firestore.BulkWriter writer = firestore.bulkWriter();
     writer.addWriteErrorListener(
         error -> {
@@ -3553,8 +3699,7 @@ public class ITPortedTests {
     writer.close();
     assertEquals(3, retryCount.get());
     assertEquals(
-        com.google.api.gax.rpc.StatusCode.Code.INVALID_ARGUMENT,
-        code.get().getStatus().getCode());
+        com.google.api.gax.rpc.StatusCode.Code.INVALID_ARGUMENT, code.get().getStatus().getCode());
   }
 
   @Test
@@ -3570,11 +3715,10 @@ public class ITPortedTests {
   }
 
   @Test
-  public void clientInitializationSucceedsForCollectionReferenceStream() throws InterruptedException {
+  public void clientInitializationSucceedsForCollectionReferenceStream()
+      throws InterruptedException {
     final java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
-    randomCol.stream(
-        (doc, error) -> {},
-        latch::countDown);
+    randomCol.stream((doc, error) -> {}, latch::countDown);
     latch.await();
   }
 
@@ -3685,8 +3829,7 @@ public class ITPortedTests {
   @Test
   public void bundleBuildingSucceedsWhenThereAreNoResults()
       throws ExecutionException, InterruptedException {
-    com.google.cloud.firestore.bundle.FirestoreBundle bundle =
-        firestore.bundle("test-bundle");
+    com.google.cloud.firestore.bundle.FirestoreBundle bundle = firestore.bundle("test-bundle");
     Query query = randomCol.whereEqualTo("value", "42");
     QuerySnapshot snap = query.get().get();
 
@@ -3699,8 +3842,7 @@ public class ITPortedTests {
   @Test
   public void bundleBuildingSucceedsWhenAddedDocumentDoesNotExist()
       throws ExecutionException, InterruptedException {
-    com.google.cloud.firestore.bundle.FirestoreBundle bundle =
-        firestore.bundle("test-bundle");
+    com.google.cloud.firestore.bundle.FirestoreBundle bundle = firestore.bundle("test-bundle");
     DocumentSnapshot snap = randomCol.document("doc5-not-exist").get().get();
 
     bundle.add(snap);
@@ -3712,8 +3854,7 @@ public class ITPortedTests {
   @Test
   public void bundleBuildingSucceedsToSaveLimitAndLimitToLastQueries()
       throws ExecutionException, InterruptedException {
-    com.google.cloud.firestore.bundle.FirestoreBundle bundle =
-        firestore.bundle("test-bundle");
+    com.google.cloud.firestore.bundle.FirestoreBundle bundle = firestore.bundle("test-bundle");
     Query limitQuery = randomCol.orderBy("sort", Query.Direction.DESCENDING).limit(1);
     QuerySnapshot limitSnap = limitQuery.get().get();
     Query limitToLastQuery = randomCol.orderBy("sort", Query.Direction.ASCENDING).limitToLast(1);

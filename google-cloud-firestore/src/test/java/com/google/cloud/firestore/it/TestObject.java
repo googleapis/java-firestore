@@ -16,13 +16,8 @@
 
 package com.google.cloud.firestore.it;
 
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldValue;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.SetOptions;
-import com.google.cloud.firestore.annotation.DocumentId;
-import com.google.cloud.firestore.annotation.ServerTimestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -57,8 +52,7 @@ class TestObject {
     }
   }
 
-  public static class TestObjectConverterMerge
-      implements FirestoreDataConverter<TestObject> {
+  public static class TestObjectConverterMerge implements FirestoreDataConverter<TestObject> {
     @Override
     public Map<String, Object> toFirestore(TestObject testObject) {
       return null;

@@ -18,7 +18,6 @@ package com.google.cloud.firestore.it;
 
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FirestoreDataConverter;
-import com.google.cloud.firestore.annotation.Exclude;
 
 public class Post {
   public String title;
@@ -34,8 +33,7 @@ public class Post {
     return title + ", by " + author;
   }
 
-  public static class PostConverter
-      implements FirestoreDataConverter<Post> {
+  public static class PostConverter implements FirestoreDataConverter<Post> {
     @Override
     public java.util.Map<String, Object> toFirestore(Post post) {
       java.util.Map<String, Object> data = new java.util.HashMap<>();
@@ -55,8 +53,7 @@ public class Post {
     }
   }
 
-  public static class PostConverterMerge
-      implements FirestoreDataConverter<Post> {
+  public static class PostConverterMerge implements FirestoreDataConverter<Post> {
     @Override
     public java.util.Map<String, Object> toFirestore(Post post) {
       java.util.Map<String, Object> data = new java.util.HashMap<>();
