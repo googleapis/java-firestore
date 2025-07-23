@@ -161,8 +161,8 @@ public final class BulkWriter implements AutoCloseable {
   final ScheduledExecutorService bulkWriterExecutor;
 
   /**
-   * The BulkWriter will shutdown executor when closed and are writes are done. This is important
-   * to prevent leaking threads.
+   * The BulkWriter will shutdown executor when closed and are writes are done. This is important to
+   * prevent leaking threads.
    */
   boolean autoShutdownBulkWriterExecutor;
 

@@ -377,7 +377,6 @@ public class BulkWriterTest {
     assertTrue(timeoutExecutor.isShutdown());
   }
 
-
   @Test
   public void sendsWritesToSameDocInDifferentBatches() throws Exception {
     ResponseStubber responseStubber =
