@@ -158,7 +158,7 @@ public final class BulkWriter implements AutoCloseable {
 
   // Executor used to run all BulkWriter operations. BulkWriter uses its own executor since we
   // don't want to block a gax/grpc executor while running user error and success callbacks.
-  final ScheduledExecutorService bulkWriterExecutor;
+  private final ScheduledExecutorService bulkWriterExecutor;
 
   /**
    * The BulkWriter will shutdown executor when closed and are writes are done. This is important to
