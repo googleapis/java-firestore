@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.31.10](https://github.com/googleapis/java-firestore/compare/v3.31.9...v3.31.10) (2025-07-24)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.60.1 ([e90f7d1](https://github.com/googleapis/java-firestore/commit/e90f7d1d992c172afb96a43003d45ca1fb3143b0))
+* Implement BulkWriter shutdown logic ([#2202](https://github.com/googleapis/java-firestore/issues/2202)) ([7301774](https://github.com/googleapis/java-firestore/commit/73017741fce52fd37e08af4f3f32fb901b7214a3))
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.68.0 ([#2193](https://github.com/googleapis/java-firestore/issues/2193)) ([30c5a19](https://github.com/googleapis/java-firestore/commit/30c5a19f6d1294a4b281de9664ce42917b451a0b))
+* Update dependency com.google.cloud:google-cloud-trace to v2.68.0 ([#2194](https://github.com/googleapis/java-firestore/issues/2194)) ([5fba79d](https://github.com/googleapis/java-firestore/commit/5fba79d7f24a81886e6a5089a9166e16a9491ea0))
+* Update opentelemetry.version to v1.52.0 ([#2191](https://github.com/googleapis/java-firestore/issues/2191)) ([cfb4453](https://github.com/googleapis/java-firestore/commit/cfb4453fca5ae483af7710c627996a6c0c7381a7))
+
 ## [3.31.9](https://github.com/googleapis/java-firestore/compare/v3.31.8...v3.31.9) (2025-07-11)
 
 
