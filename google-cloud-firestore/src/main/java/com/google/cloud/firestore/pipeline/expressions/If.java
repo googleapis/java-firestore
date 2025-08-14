@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class If extends Function implements FilterCondition {
+public final class If extends FilterCondition {
   @InternalApi
   If(FilterCondition condition, Expr trueExpr, Expr falseExpr) {
     super(

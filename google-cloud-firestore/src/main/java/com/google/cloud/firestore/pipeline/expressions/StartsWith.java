@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class StartsWith extends Function implements FilterCondition {
+public final class StartsWith extends FilterCondition {
   @InternalApi
   StartsWith(Expr expr, Expr prefix) {
     super("starts_with", ImmutableList.of(expr, prefix));

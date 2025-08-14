@@ -17,12 +17,18 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.BetaApi;
+import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public interface Accumulator extends Expr {
+public abstract class Accumulator extends Function {
+
+  protected Accumulator(String name, ImmutableList<? extends Expr> params) {
+    super(name, params);
+  }
+
   @BetaApi
   @Override
-  default ExprWithAlias<Accumulator> as(String fieldName) {
+  public ExprWithAlias<Accumulator> as(String fieldName) {
     return new ExprWithAlias<>(this, fieldName);
   }
 }
