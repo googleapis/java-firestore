@@ -19,9 +19,7 @@ package com.google.cloud.firestore.pipeline.stages;
 import com.google.cloud.firestore.PipelineUtils;
 import com.google.firestore.v1.Value;
 
-public final class PipelineOptions extends AbstractOptions<PipelineOptions> {
-
-  public static PipelineOptions DEFAULT = new PipelineOptions(InternalOptions.EMPTY);
+public final class PipelineExecuteOptions extends AbstractOptions<PipelineExecuteOptions> {
 
   public enum ExecutionMode {
     EXECUTE("execute"),
@@ -29,33 +27,38 @@ public final class PipelineOptions extends AbstractOptions<PipelineOptions> {
     PROFILE("profile");
 
     private final Value value;
+
     ExecutionMode(String profile) {
       value = PipelineUtils.encodeValue(profile);
     }
   }
 
-  PipelineOptions(InternalOptions options) {
+  public PipelineExecuteOptions() {
+    super(InternalOptions.EMPTY);
+  }
+
+  PipelineExecuteOptions(InternalOptions options) {
     super(options);
   }
 
   @Override
-  PipelineOptions self(InternalOptions options) {
-    return new PipelineOptions(options);
+  PipelineExecuteOptions self(InternalOptions options) {
+    return new PipelineExecuteOptions(options);
   }
 
-  public PipelineOptions withExecutionMode(ExecutionMode mode) {
+  public PipelineExecuteOptions withExecutionMode(ExecutionMode mode) {
     return with("execution_mode", mode.value);
   }
 
-  public PipelineOptions withIndexRecommendationEnabled() {
+  public PipelineExecuteOptions withIndexRecommendationEnabled() {
     return with("index_recommendation", true);
   }
 
-  public PipelineOptions withShowAlternativePlanEnabled() {
+  public PipelineExecuteOptions withShowAlternativePlanEnabled() {
     return with("show_alternative_plans", true);
   }
 
-  public PipelineOptions withRedactEnabled() {
+  public PipelineExecuteOptions withRedactEnabled() {
     return with("redact", true);
   }
 }

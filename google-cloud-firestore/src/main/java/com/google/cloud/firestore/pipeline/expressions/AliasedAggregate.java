@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,22 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.BetaApi;
-import com.google.api.core.InternalApi;
-import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class ReplaceFirst extends Function {
-  @InternalApi
-  ReplaceFirst(Expr value, Expr find, Expr replacement) {
-    super("replace_first", ImmutableList.of(value, find, replacement));
+public class AliasedAggregate {
+  private final String alias;
+  private final AggregateFunction expr;
+
+  AliasedAggregate(String alias, AggregateFunction expr) {
+    this.alias = alias;
+    this.expr = expr;
+  }
+
+  public String getAlias() {
+    return alias;
+  }
+
+  public AggregateFunction getExpr() {
+    return expr;
   }
 }

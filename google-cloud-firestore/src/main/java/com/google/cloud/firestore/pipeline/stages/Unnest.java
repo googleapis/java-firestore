@@ -44,5 +44,4 @@ public final class Unnest extends Stage {
   Iterable<Value> toStageArgs() {
     return ImmutableList.of(encodeValue(field), encodeValue(alias));
   }
-
 }

@@ -32,5 +32,4 @@ public final class CollectionOptions extends AbstractOptions<CollectionOptions> 
   public CollectionOptions withHints(CollectionHints hints) {
     return with("hints", hints);
   }
-
 }

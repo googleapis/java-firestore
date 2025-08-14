@@ -40,7 +40,6 @@ public final class CollectionGroup extends Stage {
   @Override
   Iterable<Value> toStageArgs() {
     return ImmutableList.of(
-        Value.newBuilder().setReferenceValue("").build(),
-        encodeValue(collectionId));
+        Value.newBuilder().setReferenceValue("").build(), encodeValue(collectionId));
   }
 }

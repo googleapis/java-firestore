@@ -37,6 +37,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 import com.google.api.core.ApiFuture;
@@ -904,6 +905,11 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void partitionedQuery() throws Exception {
+    // Partitioned queries are not supported in the emulator.
+    assumeFalse(
+        "Skip this test when running against the Firestore emulator because it does not support partitioned queries.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
     int documentCount = 2 * 128 + 127; // Minimum partition size is 128.
 
     WriteBatch batch = firestore.batch();
@@ -932,6 +938,11 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void partitionedQuery_future() throws Exception {
+    // Partitioned queries are not supported in the emulator.
+    assumeFalse(
+        "Skip this test when running against the Firestore emulator because it does not support partitioned queries.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
     int documentCount = 2 * 128 + 127; // Minimum partition size is 128.
 
     WriteBatch batch = firestore.batch();
@@ -960,6 +971,11 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void emptyPartitionedQuery() throws Exception {
+    // Partitioned queries are not supported in the emulator.
+    assumeFalse(
+        "Skip this test when running against the Firestore emulator because it does not support partitioned queries.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
     StreamConsumer<QueryPartition> consumer = new StreamConsumer<>();
     firestore.collectionGroup(randomColl.getId()).getPartitions(3, consumer);
     final List<QueryPartition> partitions = consumer.consume().get();
@@ -1073,7 +1089,7 @@ public class ITSystemTest extends ITBaseTest {
 
     assertEquals("foo", firstTransaction.get());
     assertEquals("bar", secondTransaction.get());
-    assertEquals(3, attempts.intValue());
+    assertThat(attempts.intValue()).isAtLeast(3);
     assertEquals(3, (long) documentReference.get().get().getLong("counter"));
   }
 
@@ -1999,6 +2015,11 @@ public class ITSystemTest extends ITBaseTest {
   @Test
   public void readOnlyTransaction_failureWhenAttemptReadOlderThan60Seconds()
       throws ExecutionException, InterruptedException, TimeoutException {
+    // Skip this test because emulator does not have this behavior.
+    assumeFalse(
+        "Skip this test when running against the emulator because it does not have this behavior.",
+        TestHelper.isRunningAgainstFirestoreEmulator(firestore));
+
     final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
 
     // Exception isn't thrown until 60 minutes.

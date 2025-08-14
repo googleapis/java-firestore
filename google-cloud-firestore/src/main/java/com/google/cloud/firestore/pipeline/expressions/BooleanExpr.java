@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,15 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.BetaApi;
-import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
-import javax.annotation.Nonnull;
 
 @BetaApi
-public final class LogicalMax extends Function {
-  @InternalApi
-  LogicalMax(@Nonnull Expr left, @Nonnull Expr right) {
-    super("logical_max", ImmutableList.of(left, right));
+public class BooleanExpr extends FunctionExpr {
+  BooleanExpr(String name, Expr... params) {
+    super(name, ImmutableList.copyOf(params));
+  }
+
+  BooleanExpr(String name, ImmutableList<Expr> params) {
+    super(name, params);
   }
 }

@@ -16,14 +16,38 @@
 
 package com.google.cloud.firestore.pipeline.expressions;
 
-import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
-import com.google.common.collect.ImmutableList;
+import com.google.firestore.v1.Value;
 
-@BetaApi
-public final class Lt extends FilterCondition {
+@InternalApi
+public final class AliasedExpr<T extends Expr> extends Expr implements Selectable {
+
+  private final String alias;
+  private final T expr;
+
   @InternalApi
-  Lt(Expr left, Expr right) {
-    super("lt", ImmutableList.of(left, right == null ? Constant.nullValue() : right));
+  AliasedExpr(T expr, String alias) {
+    this.expr = expr;
+    this.alias = alias;
+  }
+
+  @InternalApi
+  public String getAlias() {
+    return alias;
+  }
+
+  @InternalApi
+  public T getExpr() {
+    return expr;
+  }
+
+  @Override
+  public Selectable as(String alias) {
+    return new AliasedExpr<>(this.expr, alias);
+  }
+
+  @Override
+  Value toProto() {
+    return expr.toProto();
   }
 }

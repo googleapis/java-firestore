@@ -19,17 +19,17 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
-import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
+import com.google.cloud.firestore.pipeline.expressions.BooleanExpr;
 import com.google.firestore.v1.Value;
 import java.util.Collections;
 
 @InternalApi
 public final class Where extends Stage {
 
-  private final FilterCondition condition;
+  private final BooleanExpr condition;
 
   @InternalApi
-  public Where(FilterCondition condition) {
+  public Where(BooleanExpr condition) {
     super("where", InternalOptions.EMPTY);
     this.condition = condition;
   }

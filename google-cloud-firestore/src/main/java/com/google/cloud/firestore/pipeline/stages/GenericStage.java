@@ -16,8 +16,6 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-import static com.google.cloud.firestore.PipelineUtils.encodeValue;
-
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.PipelineUtils;
 import com.google.common.collect.Iterables;

@@ -16,12 +16,14 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.pipeline.expressions.Function.and;
-import static com.google.cloud.firestore.pipeline.expressions.Function.arrayContainsAny;
-import static com.google.cloud.firestore.pipeline.expressions.Function.countAll;
-import static com.google.cloud.firestore.pipeline.expressions.Function.inAny;
-import static com.google.cloud.firestore.pipeline.expressions.Function.not;
-import static com.google.cloud.firestore.pipeline.expressions.Function.or;
+import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.countAll;
+import static com.google.cloud.firestore.pipeline.expressions.Expr.and;
+import static com.google.cloud.firestore.pipeline.expressions.Expr.arrayContainsAny;
+import static com.google.cloud.firestore.pipeline.expressions.Expr.eqAny;
+import static com.google.cloud.firestore.pipeline.expressions.Expr.field;
+import static com.google.cloud.firestore.pipeline.expressions.Expr.not;
+import static com.google.cloud.firestore.pipeline.expressions.Expr.or;
+import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.aggregateFunctionToValue;
 import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.exprToValue;
 
 import com.google.api.core.InternalApi;
@@ -30,12 +32,12 @@ import com.google.cloud.firestore.Query.CompositeFilterInternal;
 import com.google.cloud.firestore.Query.FilterInternal;
 import com.google.cloud.firestore.Query.LimitType;
 import com.google.cloud.firestore.Query.UnaryFilterInternal;
-import com.google.cloud.firestore.pipeline.expressions.Accumulator;
-import com.google.cloud.firestore.pipeline.expressions.AccumulatorTarget;
+import com.google.cloud.firestore.pipeline.expressions.AggregateFunction;
+import com.google.cloud.firestore.pipeline.expressions.AliasedAggregate;
+import com.google.cloud.firestore.pipeline.expressions.AliasedExpr;
+import com.google.cloud.firestore.pipeline.expressions.BooleanExpr;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
-import com.google.cloud.firestore.pipeline.expressions.ExprWithAlias;
 import com.google.cloud.firestore.pipeline.expressions.Field;
-import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.common.collect.Lists;
 import com.google.firestore.v1.Cursor;
@@ -56,6 +58,11 @@ public class PipelineUtils {
   @InternalApi
   public static Value encodeValue(Expr value) {
     return exprToValue(value);
+  }
+
+  @InternalApi
+  public static Value encodeValue(AggregateFunction value) {
+    return aggregateFunctionToValue(value);
   }
 
   @InternalApi
@@ -80,14 +87,16 @@ public class PipelineUtils {
 
   @InternalApi
   public static Value encodeValue(Map<String, Value> options) {
-    return Value.newBuilder().setMapValue(MapValue.newBuilder().putAllFields(options).build()).build();
+    return Value.newBuilder()
+        .setMapValue(MapValue.newBuilder().putAllFields(options).build())
+        .build();
   }
 
   @InternalApi
-  static FilterCondition toPipelineFilterCondition(FilterInternal f) {
+  static BooleanExpr toPipelineBooleanExpr(FilterInternal f) {
     if (f instanceof ComparisonFilterInternal) {
       ComparisonFilterInternal comparisonFilter = (ComparisonFilterInternal) f;
-      Field field = Field.of(comparisonFilter.fieldReference.getFieldPath());
+      Field field = Field.ofServerPath(comparisonFilter.fieldReference.getFieldPath());
       Value value = comparisonFilter.value;
       switch (comparisonFilter.operator) {
         case LESS_THAN:
@@ -106,13 +115,13 @@ public class PipelineUtils {
           return and(field.exists(), field.arrayContains(value));
         case IN:
           List<Value> valuesList = value.getArrayValue().getValuesList();
-          return and(field.exists(), inAny(field, Lists.newArrayList(valuesList)));
+          return and(field.exists(), eqAny(field, Lists.newArrayList(valuesList)));
         case ARRAY_CONTAINS_ANY:
           List<Value> valuesListAny = value.getArrayValue().getValuesList();
           return and(field.exists(), arrayContainsAny(field, Lists.newArrayList(valuesListAny)));
         case NOT_IN:
           List<Value> notInValues = value.getArrayValue().getValuesList();
-          return and(field.exists(), not(inAny(field, Lists.newArrayList(notInValues))));
+          return and(field.exists(), not(eqAny(field, Lists.newArrayList(notInValues))));
         default:
           // Handle OPERATOR_UNSPECIFIED and UNRECOGNIZED cases as needed
           throw new IllegalArgumentException("Unsupported operator: " + comparisonFilter.operator);
@@ -121,21 +130,21 @@ public class PipelineUtils {
       CompositeFilterInternal compositeFilter = (CompositeFilterInternal) f;
       switch (compositeFilter.getOperator()) {
         case AND:
-          List<FilterCondition> conditions =
+          List<BooleanExpr> conditions =
               compositeFilter.getFilters().stream()
-                  .map(PipelineUtils::toPipelineFilterCondition)
+                  .map(PipelineUtils::toPipelineBooleanExpr)
                   .collect(Collectors.toList());
           return and(
               conditions.get(0),
-              conditions.subList(1, conditions.size()).toArray(new FilterCondition[0]));
+              conditions.subList(1, conditions.size()).toArray(new BooleanExpr[0]));
         case OR:
-          List<FilterCondition> orConditions =
+          List<BooleanExpr> orConditions =
               compositeFilter.getFilters().stream()
-                  .map(PipelineUtils::toPipelineFilterCondition)
+                  .map(PipelineUtils::toPipelineBooleanExpr)
                   .collect(Collectors.toList());
           return or(
               orConditions.get(0),
-              orConditions.subList(1, orConditions.size()).toArray(new FilterCondition[0]));
+              orConditions.subList(1, orConditions.size()).toArray(new BooleanExpr[0]));
         default:
           // Handle OPERATOR_UNSPECIFIED and UNRECOGNIZED cases as needed
           throw new IllegalArgumentException(
@@ -143,7 +152,7 @@ public class PipelineUtils {
       }
     } else if (f instanceof UnaryFilterInternal) {
       UnaryFilterInternal unaryFilter = (UnaryFilterInternal) f;
-      Field field = Field.of(unaryFilter.fieldReference.getFieldPath());
+      Field field = Field.ofServerPath(unaryFilter.fieldReference.getFieldPath());
       switch (unaryFilter.getOperator()) {
         case IS_NAN:
           return and(field.exists(), field.isNaN());
@@ -176,22 +185,32 @@ public class PipelineUtils {
   }
 
   @InternalApi
-  static ExprWithAlias<Accumulator> toPipelineAggregatorTarget(AggregateField f) {
+  static AliasedAggregate toPipelineAggregatorTarget(AggregateField f) {
     String operator = f.getOperator();
     String fieldPath = f.getFieldPath();
 
     switch (operator) {
       case "sum":
-        return Field.of(fieldPath).sum().as(f.getAlias());
+        return Field.ofServerPath(fieldPath).sum().as(f.getAlias());
 
       case "count":
         return countAll().as(f.getAlias());
       case "average":
-        return Field.of(fieldPath).avg().as(f.getAlias());
+        return Field.ofServerPath(fieldPath).avg().as(f.getAlias());
       default:
         // Handle the 'else' case appropriately in your Java code
         throw new IllegalArgumentException("Unsupported operator: " + operator);
     }
+  }
+
+  @InternalApi
+  static BooleanExpr toPipelineExistsExpr(AggregateField f) {
+    String fieldPath = f.getFieldPath();
+
+    if (fieldPath.isEmpty()) {
+      return null;
+    }
+    return Field.ofServerPath(fieldPath).exists();
   }
 
   @InternalApi
@@ -201,12 +220,9 @@ public class PipelineUtils {
       if (proj instanceof Field) {
         Field fieldProj = (Field) proj;
         projMap.put(fieldProj.getPath().getEncodedPath(), fieldProj);
-      } else if (proj instanceof AccumulatorTarget) {
-        AccumulatorTarget aggregatorProj = (AccumulatorTarget) proj;
-        projMap.put(aggregatorProj.getFieldName(), aggregatorProj.getAccumulator());
-      } else if (proj instanceof ExprWithAlias) {
-        ExprWithAlias exprWithAlias = (ExprWithAlias) proj;
-        projMap.put(exprWithAlias.getAlias(), exprWithAlias.getExpr());
+      } else if (proj instanceof AliasedExpr) {
+        AliasedExpr aliasedExpr = (AliasedExpr) proj;
+        projMap.put(aliasedExpr.getAlias(), aliasedExpr.getExpr());
       }
     }
     return projMap;
@@ -216,7 +232,7 @@ public class PipelineUtils {
   public static Map<String, Expr> fieldNamesToMap(String... fields) {
     Map<String, Expr> projMap = new HashMap<>();
     for (String field : fields) {
-      projMap.put(field, Field.of(field));
+      projMap.put(field, field(field));
     }
     return projMap;
   }

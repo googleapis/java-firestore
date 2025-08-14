@@ -16,9 +16,11 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.aggregateFunctionToValue;
 import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.exprToValue;
 
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.pipeline.expressions.AggregateFunction;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -168,6 +170,8 @@ class UserDataConverter {
       return Value.newBuilder().setBytesValue(blob.toByteString()).build();
     } else if (sanitizedObject instanceof Expr) {
       return exprToValue((Expr) sanitizedObject);
+    } else if (sanitizedObject instanceof AggregateFunction) {
+      return aggregateFunctionToValue((AggregateFunction) sanitizedObject);
     } else if (sanitizedObject instanceof Value) {
       return (Value) sanitizedObject;
     } else if (sanitizedObject instanceof DocumentReference) {

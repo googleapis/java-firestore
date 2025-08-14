@@ -25,7 +25,6 @@ import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.GeoPoint;
-import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.Value;
 import java.util.Arrays;
 import java.util.Date;
@@ -82,6 +81,11 @@ public final class Constant extends Expr {
     return new Constant(value);
   }
 
+  @BetaApi
+  public static Constant of(byte[] value) {
+    return new Constant(value);
+  }
+
   @InternalApi
   public static Constant of(Value value) {
     return new Constant(value);
@@ -112,6 +116,8 @@ public final class Constant extends Expr {
       return of((Blob) value);
     } else if (value instanceof DocumentReference) {
       return of((DocumentReference) value);
+    } else if (value instanceof byte[]) {
+      return of((byte[]) value);
     } else if (value instanceof Value) {
       return of((Value) value);
     } else if (value instanceof Constant) {

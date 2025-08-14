@@ -24,10 +24,10 @@ import com.google.firestore.v1.Value;
 /**
  * Wither style Key/Value options object.
  *
- * Basic `wither` functionality built upon `ImmutableMap<String, Value>`. Exposes methods to
- * construct, augment, and encode Kay/Value pairs. The wrapped collection
- * `ImmutableMap<String, Value>` is an implementation detail, not to be exposed, since more
- * efficient implementations are possible.
+ * <p>Basic `wither` functionality built upon `ImmutableMap<String, Value>`. Exposes methods to
+ * construct, augment, and encode Kay/Value pairs. The wrapped collection `ImmutableMap<String,
+ * Value>` is an implementation detail, not to be exposed, since more efficient implementations are
+ * possible.
  */
 final class InternalOptions {
 
@@ -44,8 +44,8 @@ final class InternalOptions {
   }
 
   InternalOptions with(String key, Value value) {
-    ImmutableMap.Builder<String, Value> builder = ImmutableMap.builderWithExpectedSize(
-        options.size() + 1);
+    ImmutableMap.Builder<String, Value> builder =
+        ImmutableMap.builderWithExpectedSize(options.size() + 1);
     builder.putAll(options);
     builder.put(key, value);
     return new InternalOptions(builder.buildKeepingLast());

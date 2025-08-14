@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import static com.google.cloud.firestore.pipeline.expressions.Expr.field;
+
 import com.google.api.core.BetaApi;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 
@@ -42,6 +44,6 @@ public final class FindNearestOptions extends AbstractOptions<FindNearestOptions
   }
 
   public FindNearestOptions withDistanceField(String distanceField) {
-    return withDistanceField(Field.of(distanceField));
+    return withDistanceField(field(distanceField));
   }
 }

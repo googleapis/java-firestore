@@ -82,8 +82,8 @@ public abstract class ITBaseTest {
       } else if (targetBackend.equals("NIGHTLY")) {
         optionsBuilder.setChannelProvider(
             defaultProvider.withEndpoint("test-firestore.sandbox.googleapis.com:443"));
-      } else {
-        throw new IllegalArgumentException("Illegal target backend: " + targetBackend);
+      } else if (targetBackend.equals("EMULATOR")) {
+        optionsBuilder.setEmulatorHost("localhost:8080");
       }
     }
 

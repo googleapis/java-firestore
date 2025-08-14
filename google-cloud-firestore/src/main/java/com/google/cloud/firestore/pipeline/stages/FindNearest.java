@@ -27,7 +27,7 @@ import com.google.firestore.v1.Value;
 @BetaApi
 public final class FindNearest extends Stage {
 
-  public final static class DistanceMeasure {
+  public static final class DistanceMeasure {
 
     final String protoString;
 
@@ -38,6 +38,7 @@ public final class FindNearest extends Stage {
     public static final DistanceMeasure EUCLIDEAN = new DistanceMeasure("euclidean");
     public static final DistanceMeasure COSINE = new DistanceMeasure("cosine");
     public static final DistanceMeasure DOT_PRODUCT = new DistanceMeasure("dot_product");
+
     public static DistanceMeasure generic(String name) {
       return new DistanceMeasure(name);
     }

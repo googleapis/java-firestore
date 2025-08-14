@@ -32,7 +32,9 @@ import java.util.List;
  * Parent class to Pipeline and Stage options.
  *
  * <p>Provides a base set of `wither` methods for adding undefined options.
+ *
  * <p>Standardizes structure of options for uniform encoding and handling.
+ *
  * <p>Intentionally package-private to prevent extension outside of library.
  *
  * @param <T> Subclass type.

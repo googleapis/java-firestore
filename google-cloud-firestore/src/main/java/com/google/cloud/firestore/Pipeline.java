@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.cloud.firestore.pipeline.expressions.Expr.field;
+
 import com.google.api.core.ApiFuture;
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
@@ -25,15 +27,11 @@ import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
-import com.google.cloud.firestore.pipeline.stages.PipelineOptions;
-import com.google.cloud.firestore.pipeline.stages.GenericOptions;
-import com.google.cloud.firestore.pipeline.expressions.Accumulator;
+import com.google.cloud.firestore.pipeline.expressions.AliasedAggregate;
+import com.google.cloud.firestore.pipeline.expressions.AliasedExpr;
+import com.google.cloud.firestore.pipeline.expressions.BooleanExpr;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
-import com.google.cloud.firestore.pipeline.expressions.ExprWithAlias;
 import com.google.cloud.firestore.pipeline.expressions.Field;
-import com.google.cloud.firestore.pipeline.expressions.FilterCondition;
-import com.google.cloud.firestore.pipeline.expressions.Function;
 import com.google.cloud.firestore.pipeline.expressions.Ordering;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.cloud.firestore.pipeline.stages.AddFields;
@@ -41,9 +39,11 @@ import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.cloud.firestore.pipeline.stages.Distinct;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
+import com.google.cloud.firestore.pipeline.stages.GenericOptions;
 import com.google.cloud.firestore.pipeline.stages.GenericStage;
 import com.google.cloud.firestore.pipeline.stages.Limit;
 import com.google.cloud.firestore.pipeline.stages.Offset;
+import com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions;
 import com.google.cloud.firestore.pipeline.stages.RemoveFields;
 import com.google.cloud.firestore.pipeline.stages.Replace;
 import com.google.cloud.firestore.pipeline.stages.Sample;
@@ -98,7 +98,7 @@ import javax.annotation.Nullable;
  * // Example 1: Select specific fields and rename 'rating' to 'bookRating'
  * List<PipelineResult> results1 = firestore.pipeline()
  *     .collection("books")
- *     .select("title", "author", Field.of("rating").as("bookRating"))
+ *     .select("title", "author", field("rating").as("bookRating"))
  *     .execute()
  *     .get();
  *
@@ -111,7 +111,7 @@ import javax.annotation.Nullable;
  * // Same as above but using methods on expressions as opposed to static functions.
  * results2 = firestore.pipeline()
  *     .collection("books")
- *     .where(and(Field.of("genre").eq("Science Fiction"), Field.of("published").gt(1950)))
+ *     .where(and(field("genre").eq("Science Fiction"), field("published").gt(1950)))
  *     .execute()
  *     .get();
  *
@@ -165,8 +165,8 @@ public final class Pipeline {
    * <pre>{@code
    * firestore.pipeline().collection("books")
    *   .addFields(
-   *     Field.of("rating").as("bookRating"), // Rename 'rating' to 'bookRating'
-   *     add(5, Field.of("quantity")).as("totalCost")  // Calculate 'totalCost'
+   *     field("rating").as("bookRating"), // Rename 'rating' to 'bookRating'
+   *     add(5, field("quantity")).as("totalCost")  // Calculate 'totalCost'
    *   );
    * }</pre>
    *
@@ -198,7 +198,7 @@ public final class Pipeline {
     return append(
         new RemoveFields(
             ImmutableList.<Field>builder()
-                .addAll(Arrays.stream(fields).map(f -> Field.of(f)).iterator())
+                .addAll(Arrays.stream(fields).map(f -> Field.ofUserPath(f)).iterator())
                 .build()));
   }
 
@@ -210,7 +210,7 @@ public final class Pipeline {
    * <pre>{@code
    * firestore.pipeline().collection("books")
    *   .removeFields(
-   *     Field.of("rating"), Field.of("cost")
+   *     field("rating"), field("cost")
    *   );
    * }</pre>
    *
@@ -244,8 +244,8 @@ public final class Pipeline {
    * <pre>{@code
    * firestore.pipeline().collection("books")
    *   .select(
-   *     Field.of("name"),
-   *     Field.of("address").toUppercase().as("upperAddress"),
+   *     field("name"),
+   *     field("address").toUppercase().as("upperAddress"),
    *   );
    * }</pre>
    *
@@ -273,7 +273,7 @@ public final class Pipeline {
    *
    * // The above is a shorthand of this:
    * firestore.pipeline().collection("books")
-   *    .select(Field.of("name"), Field.of("address"));
+   *    .select(field("name"), field("address"));
    * }</pre>
    *
    * @param fields The name of the fields to include in the output documents.
@@ -307,7 +307,7 @@ public final class Pipeline {
    *   .where(
    *     and(
    *         gt("rating", 4.0),   // Filter for ratings greater than 4.0
-   *         Field.of("genre").eq("Science Fiction") // Equivalent to gt("genre", "Science Fiction")
+   *         field("genre").eq("Science Fiction") // Equivalent to gt("genre", "Science Fiction")
    *     )
    *   );
    * }</pre>
@@ -316,7 +316,7 @@ public final class Pipeline {
    * @return A new Pipeline object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline where(FilterCondition condition) {
+  public Pipeline where(BooleanExpr condition) {
     return append(new Where(condition));
   }
 
@@ -332,7 +332,7 @@ public final class Pipeline {
    * <pre>{@code
    * // Retrieve the second page of 20 results
    * firestore.pipeline().collection("books")
-   *     .sort(Field.of("published").descending())
+   *     .sort(field("published").descending())
    *     .offset(20)  // Skip the first 20 results
    *     .limit(20);   // Take the next 20 results
    * }</pre>
@@ -363,7 +363,7 @@ public final class Pipeline {
    * <pre>{@code
    * // Limit the results to the top 10 highest-rated books
    * firestore.pipeline().collection("books")
-   *     .sort(Field.of("rating").descending())
+   *     .sort(field("rating").descending())
    *     .limit(10);
    * }</pre>
    *
@@ -379,7 +379,7 @@ public final class Pipeline {
    * Performs aggregation operations on the documents from previous stages.
    *
    * <p>This stage allows you to calculate aggregate values over a set of documents. You define the
-   * aggregations to perform using {@link ExprWithAlias} expressions which are typically results of
+   * aggregations to perform using {@link AliasedExpr} expressions which are typically results of
    * calling {@link Expr#as(String)} on {@link Accumulator} instances.
    *
    * <p>Example:
@@ -388,17 +388,17 @@ public final class Pipeline {
    * // Calculate the average rating and the total number of books
    * firestore.pipeline().collection("books")
    *     .aggregate(
-   *         Field.of("rating").avg().as("averageRating"),
+   *         field("rating").avg().as("averageRating"),
    *         countAll().as("totalBooks")
    *     );
    * }</pre>
    *
-   * @param accumulators The {@link ExprWithAlias} expressions, each wrapping an {@link Accumulator}
+   * @param accumulators The {@link AliasedExpr} expressions, each wrapping an {@link Accumulator}
    *     and provide a name for the accumulated results.
    * @return A new Pipeline object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline aggregate(ExprWithAlias<Accumulator>... accumulators) {
+  public Pipeline aggregate(AliasedAggregate... accumulators) {
     return append(Aggregate.withAccumulators(accumulators));
   }
 
@@ -414,9 +414,9 @@ public final class Pipeline {
    *       If no grouping fields are provided, a single group containing all documents is used. Not
    *       specifying groups is the same as putting the entire inputs into one group.
    *   <li>**Accumulators:** One or more accumulation operations to perform within each group. These
-   *       are defined using {@link ExprWithAlias} expressions, which are typically created by
-   *       calling {@link Expr#as(String)} on {@link Accumulator} instances. Each aggregation
-   *       calculates a value (e.g., sum, average, count) based on the documents within its group.
+   *       are defined using {@link AliasedExpr} expressions, which are typically created by calling
+   *       {@link Expr#as(String)} on {@link Accumulator} instances. Each aggregation calculates a
+   *       value (e.g., sum, average, count) based on the documents within its group.
    * </ul>
    *
    * <p>Example:
@@ -480,7 +480,7 @@ public final class Pipeline {
    * <pre>{@code
    * // Get a list of unique author names in uppercase and genre combinations.
    * firestore.pipeline().collection("books")
-   *     .distinct(toUppercase(Field.of("author")).as("authorName"), Field.of("genre"))
+   *     .distinct(toUppercase(field("author")).as("authorName"), field("genre"))
    *     .select("authorName");
    * }</pre>
    *
@@ -525,7 +525,7 @@ public final class Pipeline {
       double[] vector,
       FindNearest.DistanceMeasure distanceMeasure,
       FindNearestOptions options) {
-    return findNearest(Field.of(fieldName), vector, distanceMeasure, options);
+    return findNearest(field(fieldName), vector, distanceMeasure, options);
   }
 
   /**
@@ -542,7 +542,7 @@ public final class Pipeline {
    * // Find books with similar "topicVectors" to the given targetVector
    * firestore.pipeline().collection("books")
    *     .findNearest(
-   *        FindNearest.of(Field.of("topicVectors"), targetVector, FindNearest.DistanceMeasure.COSINE),
+   *        FindNearest.of(field("topicVectors"), targetVector, FindNearest.DistanceMeasure.COSINE),
    *        FindNearestOptions.DEFAULT
    *          .withLimit(10)
    *          .withDistanceField("distance"));
@@ -625,7 +625,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline replace(String fieldName) {
-    return replace(Field.of(fieldName));
+    return replace(field(fieldName));
   }
 
   /**
@@ -646,7 +646,7 @@ public final class Pipeline {
    * // }
    *
    * // Emit parents as document.
-   * firestore.pipeline().collection("people").replace(Field.of("parents"));
+   * firestore.pipeline().collection("people").replace(field("parents"));
    *
    * // Output
    * // {
@@ -768,8 +768,8 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline unnest(String fieldName, String alias) {
-    //    return unnest(Field.of(fieldName));
-    return append(new Unnest(Field.of(fieldName), alias));
+    //    return unnest(field(fieldName));
+    return append(new Unnest(field(fieldName), alias));
   }
 
   // /**
@@ -789,7 +789,7 @@ public final class Pipeline {
   //  *
   //  * // Emit a book document for each tag of the book.
   //  * firestore.pipeline().collection("books")
-  //  *     .unnest(Field.of("tags").as("tag"));
+  //  *     .unnest(field("tags").as("tag"));
   //  *
   //  * // Output:
   //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tag": "comedy", "tags": [ "comedy",
@@ -842,8 +842,8 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline unnest(String fieldName, String alias, UnnestOptions options) {
-    //    return unnest(Field.of(fieldName), options);
-    return append(new Unnest(Field.of(fieldName), alias, options));
+    //    return unnest(field(fieldName), options);
+    return append(new Unnest(field(fieldName), alias, options));
   }
 
   // /**
@@ -863,7 +863,7 @@ public final class Pipeline {
   //  *
   //  * // Emit a book document for each tag of the book.
   //  * firestore.pipeline().collection("books")
-  //  *     .unnest(Field.of("tags").as("tag"), UnnestOptions.indexField("tagIndex"));
+  //  *     .unnest(field("tags").as("tag"), UnnestOptions.indexField("tagIndex"));
   //  *
   //  * // Output:
   //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 0, "tag": "comedy",
@@ -895,10 +895,10 @@ public final class Pipeline {
    * <pre>{@code
    * // Assume we don't have a built-in "where" stage
    * Map<String, Object> whereParams = new HashMap<>();
-   * whereParams.put("condition", Field.of("published").lt(1900));
+   * whereParams.put("condition", field("published").lt(1900));
    *
    * firestore.pipeline().collection("books")
-   *     .genericStage("where", Lists.newArrayList(Field.of("published").lt(1900))) // Custom "where" stage
+   *     .genericStage("where", Lists.newArrayList(field("published").lt(1900))) // Custom "where" stage
    *     .select("title", "author");
    * }</pre>
    *
@@ -910,7 +910,9 @@ public final class Pipeline {
   @BetaApi
   public Pipeline genericStage(String name, List<Object> params, GenericOptions optionalParams) {
     // Implementation for genericStage (add the GenericStage if needed)
-    return append(new GenericStage(name, params, optionalParams)); // Assuming GenericStage takes a list of params
+    return append(
+        new GenericStage(
+            name, params, optionalParams)); // Assuming GenericStage takes a list of params
   }
 
   /**
@@ -946,11 +948,12 @@ public final class Pipeline {
    */
   @BetaApi
   public ApiFuture<List<PipelineResult>> execute() {
-    return execute(PipelineOptions.DEFAULT, (ByteString) null, (com.google.protobuf.Timestamp) null);
+    return execute(
+        new PipelineExecuteOptions(), (ByteString) null, (com.google.protobuf.Timestamp) null);
   }
 
   @BetaApi
-  public ApiFuture<List<PipelineResult>> execute(PipelineOptions options) {
+  public ApiFuture<List<PipelineResult>> execute(PipelineExecuteOptions options) {
     return execute(options, (ByteString) null, (com.google.protobuf.Timestamp) null);
   }
 
@@ -1001,27 +1004,11 @@ public final class Pipeline {
    */
   @BetaApi
   public void execute(ApiStreamObserver<PipelineResult> observer) {
-    executeInternal(PipelineOptions.DEFAULT, null, null, observer);
+    executeInternal(new PipelineExecuteOptions(), null, null, observer);
   }
 
-  // @BetaApi
-  // public void execute(ApiStreamObserver<PipelineResult> observer, PipelineOptions options) {
-  //   throw new RuntimeException("Not Implemented");
-  // }
-  //
-  // @BetaApi
-  // public ApiFuture<List<PipelineResult>> explain() {
-  //   throw new RuntimeException("Not Implemented");
-  // }
-  //
-  // @BetaApi
-  // public void explain(ApiStreamObserver<PipelineResult> observer, PipelineExplainOptions options)
-  // {
-  //   throw new RuntimeException("Not Implemented");
-  // }
-
   ApiFuture<List<PipelineResult>> execute(
-      @Nonnull PipelineOptions options,
+      @Nonnull PipelineExecuteOptions options,
       @Nullable final ByteString transactionId,
       @Nullable com.google.protobuf.Timestamp readTime) {
     SettableApiFuture<List<PipelineResult>> futureResult = SettableApiFuture.create();
@@ -1053,17 +1040,18 @@ public final class Pipeline {
   }
 
   void executeInternal(
-      @Nonnull PipelineOptions options,
+      @Nonnull PipelineExecuteOptions options,
       @Nullable final ByteString transactionId,
       @Nullable com.google.protobuf.Timestamp readTime,
       ApiStreamObserver<PipelineResult> observer) {
     ExecutePipelineRequest.Builder request =
         ExecutePipelineRequest.newBuilder()
             .setDatabase(rpcContext.getDatabaseName())
-            .setStructuredPipeline(StructuredPipeline.newBuilder()
-                .setPipeline(toProto())
-                .putAllOptions(StageUtils.toMap(options))
-                .build());
+            .setStructuredPipeline(
+                StructuredPipeline.newBuilder()
+                    .setPipeline(toProto())
+                    .putAllOptions(StageUtils.toMap(options))
+                    .build());
 
     if (transactionId != null) {
       request.setTransaction(transactionId);
@@ -1172,13 +1160,13 @@ public final class Pipeline {
           }
         };
 
-    logger.log(Level.INFO, "Sending pipeline request: " + request.getStructuredPipeline());
+    logger.log(Level.FINEST, "Sending pipeline request: " + request.getStructuredPipeline());
 
     rpcContext.streamRequest(request, observer, rpcContext.getClient().executePipelineCallable());
   }
 
   @InternalExtensionOnly
-  static abstract class PipelineResultObserver implements ApiStreamObserver<PipelineResult> {
+  abstract static class PipelineResultObserver implements ApiStreamObserver<PipelineResult> {
     private Timestamp executionTime; // Remove optional since Java doesn't have it
 
     public void onCompleted(Timestamp executionTime) {

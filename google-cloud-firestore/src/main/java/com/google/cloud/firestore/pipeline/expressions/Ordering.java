@@ -28,7 +28,7 @@ import java.util.Locale;
 public final class Ordering {
 
   private final Expr expr;
-  private Ordering.Direction dir = Ordering.Direction.ASCENDING;
+  private final Ordering.Direction dir;
 
   private Ordering(Expr expr, Ordering.Direction dir) {
     this.expr = expr;
@@ -52,7 +52,7 @@ public final class Ordering {
         .setMapValue(
             MapValue.newBuilder()
                 .putFields("direction", encodeValue(dir.toString()))
-                .putFields("expression", encodeValue(expr))
+                .putFields("expression", expr.toProto())
                 .build())
         .build();
   }

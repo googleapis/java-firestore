@@ -16,9 +16,10 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.PipelineUtils.toPaginatedPipeline;
-import static com.google.cloud.firestore.PipelineUtils.toPipelineFilterCondition;
-import static com.google.cloud.firestore.pipeline.expressions.Function.and;
+import static com.google.cloud.firestore.PipelineUtils.toPipelineBooleanExpr;
+import static com.google.cloud.firestore.pipeline.expressions.Expr.and;
+import static com.google.cloud.firestore.pipeline.expressions.Expr.eq;
+import static com.google.cloud.firestore.pipeline.expressions.Expr.or;
 import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 import static com.google.common.collect.Lists.reverse;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS;
@@ -43,7 +44,7 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
-import com.google.cloud.firestore.pipeline.expressions.Exists;
+import com.google.cloud.firestore.pipeline.expressions.BooleanExpr;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Ordering;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
@@ -84,7 +85,6 @@ import java.util.TreeSet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.threeten.bp.Duration;
@@ -2160,7 +2160,7 @@ public class Query {
 
     // Filters
     for (FilterInternal f : this.options.getFilters()) {
-      ppl = ppl.where(toPipelineFilterCondition(f));
+      ppl = ppl.where(toPipelineBooleanExpr(f));
     }
 
     // Projections
@@ -2169,60 +2169,121 @@ public class Query {
       ppl =
           ppl.select(
               this.options.getFieldProjections().stream()
-                  .map(fieldReference -> Field.of(fieldReference.getFieldPath()))
+                  .map(fieldReference -> Field.ofServerPath(fieldReference.getFieldPath()))
                   .toArray(Selectable[]::new));
     }
 
     // Orders
-    List<FieldOrder> normalizedOrderbys = this.createImplicitOrderBy();
-    if (normalizedOrderbys != null && !normalizedOrderbys.isEmpty()) {
-      // Add exists filters to match Query's implicit orderby semantics.
-      List<Exists> exists =
-          normalizedOrderbys.stream()
-              // .filter(order -> !order.fieldReference.getFieldPath().equals("__name__"))
-              .map(order -> Field.of(order.fieldReference.getFieldPath()).exists())
-              .collect(Collectors.toList());
-      if (exists.size() > 1) {
-        ppl =
-            ppl.where(
-                and(exists.get(0), exists.subList(1, exists.size()).toArray(new Exists[] {})));
-      } else if (exists.size() == 1) {
-        ppl = ppl.where(exists.get(0));
+    List<FieldOrder> normalizedOrderBy = createImplicitOrderBy();
+    int size = normalizedOrderBy.size();
+    List<Field> fields = new ArrayList<>(size);
+    List<Ordering> orderings = new ArrayList<>(size);
+    for (FieldOrder order : normalizedOrderBy) {
+      Field field = Field.ofServerPath(order.fieldReference.getFieldPath());
+      fields.add(field);
+      if (order.direction == Direction.ASCENDING) {
+        orderings.add(field.ascending());
+      } else {
+        orderings.add(field.descending());
       }
-
-      List<Ordering> orders =
-          normalizedOrderbys.stream()
-              .map(
-                  fieldOrder ->
-                      fieldOrder.direction == Direction.ASCENDING
-                          ? Field.of(fieldOrder.fieldReference.getFieldPath()).ascending()
-                          : Field.of(fieldOrder.fieldReference.getFieldPath()).descending())
-              .collect(Collectors.toList());
-      ppl = ppl.sort(orders.toArray(new Ordering[] {}));
     }
 
-    // Cursors, Limit and Offset
-    if (this.options.getStartCursor() != null
-        || this.options.getEndCursor() != null
-        || this.options.getLimitType() == LimitType.Last) {
+    if (fields.size() == 1) {
+      ppl = ppl.where(fields.get(0).exists());
+    } else {
       ppl =
-          toPaginatedPipeline(
-              ppl,
-              options.getStartCursor(),
-              options.getEndCursor(),
-              options.getLimit(),
-              options.getLimitType(),
-              options.getOffset());
-    } else { // Limit & Offset without cursors
-      if (this.options.getOffset() != null) {
-        ppl = ppl.offset(this.options.getOffset());
+          ppl.where(
+              and(
+                  fields.get(0).exists(),
+                  fields.subList(1, fields.size()).stream()
+                      .map((Field field) -> field.exists())
+                      .toArray(BooleanExpr[]::new)));
+    }
+
+    // Cursors, Limit, Offset
+    if (this.options.getStartCursor() != null) {
+      ppl = ppl.where(whereConditionsFromCursor(options.getStartCursor(), orderings, true));
+    }
+
+    if (this.options.getEndCursor() != null) {
+      ppl = ppl.where(whereConditionsFromCursor(options.getEndCursor(), orderings, false));
+    }
+
+    if (options.getLimit() != null) {
+      // TODO: Handle situation where user enters limit larger than integer.
+      if (options.getLimitType() == LimitType.First) {
+        ppl = ppl.sort(orderings.toArray(new Ordering[0]));
+        ppl = ppl.limit(options.getLimit());
+      } else {
+        if (options.getFieldOrders().isEmpty()) {
+          throw new IllegalStateException(
+              "limitToLast() queries require specifying at least one orderBy() clause");
+        }
+
+        List<Ordering> reversedOrderings = new ArrayList<>();
+        for (Ordering ordering : orderings) {
+          reversedOrderings.add(reverseOrdering(ordering));
+        }
+        ppl = ppl.sort(reversedOrderings.toArray(new Ordering[0]));
+        ppl = ppl.limit(options.getLimit());
+        ppl = ppl.sort(orderings.toArray(new Ordering[0]));
       }
-      if (this.options.getLimit() != null) {
-        ppl = ppl.limit(this.options.getLimit());
-      }
+    } else {
+      ppl = ppl.sort(orderings.toArray(new Ordering[0]));
     }
 
     return ppl;
+  }
+
+  private static Ordering reverseOrdering(Ordering ordering) {
+    if (ordering.getDir() == Ordering.Direction.ASCENDING) {
+      return ordering.getExpr().descending();
+    } else {
+      return ordering.getExpr().ascending();
+    }
+  }
+
+  private static BooleanExpr getCursorExclusiveCondition(
+      boolean isStart, Ordering ordering, Value value) {
+    if (isStart && ordering.getDir() == Ordering.Direction.ASCENDING
+        || !isStart && ordering.getDir() == Ordering.Direction.DESCENDING) {
+      return ordering.getExpr().gt(value);
+    } else {
+      return ordering.getExpr().lt(value);
+    }
+  }
+
+  private static BooleanExpr whereConditionsFromCursor(
+      Cursor bound, List<Ordering> orderings, boolean isStart) {
+    List<Value> boundPosition = bound.getValuesList();
+    int size = boundPosition.size();
+    if (size > orderings.size()) {
+      throw new IllegalArgumentException("Bound positions must not exceed order fields.");
+    }
+
+    int last = size - 1;
+    BooleanExpr condition =
+        getCursorExclusiveCondition(isStart, orderings.get(last), boundPosition.get(last));
+    if (isBoundInclusive(bound, isStart)) {
+      condition = or(condition, eq(orderings.get(last).getExpr(), boundPosition.get(last)));
+    }
+    for (int i = size - 2; i >= 0; i--) {
+      final Ordering ordering = orderings.get(i);
+      final Value value = boundPosition.get(i);
+      condition =
+          or(
+              getCursorExclusiveCondition(isStart, ordering, value),
+              and(ordering.getExpr().eq(value), condition));
+    }
+    return condition;
+  }
+
+  private static boolean isBoundInclusive(Cursor bound, boolean isStart) {
+    if (isStart) {
+      return bound.getBefore();
+    } else {
+      return !bound.getBefore();
+    }
   }
 
   /**

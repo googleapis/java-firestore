@@ -22,7 +22,6 @@ import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.Pipeline;
 import com.google.common.base.Objects;
 import com.google.firestore.v1.Value;
-import java.util.Map;
 import javax.annotation.Nullable;
 
 /**
@@ -69,12 +68,20 @@ public final class Field extends Expr implements Selectable {
    * @param path The path to the field.
    * @return A new {@code Field} instance representing the specified field.
    */
-  @BetaApi
-  public static Field of(String path) {
+  @InternalApi
+  public static Field ofUserPath(String path) {
     if (path.equals(DOCUMENT_ID)) {
       return new Field(FieldPath.documentId());
     }
     return new Field(FieldPath.fromDotSeparatedString(path));
+  }
+
+  @InternalApi
+  public static Field ofServerPath(String path) {
+    if (path.equals(DOCUMENT_ID)) {
+      return new Field(FieldPath.documentId());
+    }
+    return new Field(FieldPath.fromServerFormat(path));
   }
 
   @InternalApi

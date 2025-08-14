@@ -94,6 +94,10 @@ public class ITQueryAggregationsTest extends ITBaseTest {
 
   @Test
   public void allowsAliasesForLongestFieldNames() throws Exception {
+    assumeFalse(
+        "Skip this test when running against the Firestore emulator because it does not support long field names.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
     // The longest field name allowed is 1499 characters long.
     // Ensure that sum(longestField) and average(longestField) work.
     StringBuilder builder = new StringBuilder(1500);
@@ -272,7 +276,9 @@ public class ITQueryAggregationsTest extends ITBaseTest {
       exception = e;
     }
     assertThat(exception).isNotNull();
-    assertThat(exception.getMessage()).contains("maximum number of aggregations");
+    if (!isRunningAgainstFirestoreEmulator(firestore)) {
+      assertThat(exception.getMessage()).contains("maximum number of aggregations");
+    }
   }
 
   @Test
@@ -654,7 +660,7 @@ public class ITQueryAggregationsTest extends ITBaseTest {
     AggregateQuerySnapshot snapshot = collection.aggregate(sum("rating")).get().get();
     Object sum = snapshot.get(sum("rating"));
     assertThat(sum instanceof Double).isTrue();
-    assertThat(sum).isAnyOf(0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+    assertThat(sum).isAnyOf(0, 0.0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
   }
 
   @Test
