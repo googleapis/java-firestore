@@ -24,53 +24,57 @@ import com.google.cloud.firestore.pipeline.expressions.Accumulator;
 import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.cloud.firestore.pipeline.expressions.ExprWithAlias;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
-import com.google.firestore.v1.Pipeline;
+import com.google.firestore.v1.Value;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 
 @BetaApi
 public final class Aggregate extends Stage {
 
-  private static final String name = "aggregate";
   private final Map<String, Expr> groups;
   private final Map<String, Accumulator> accumulators;
 
   @BetaApi
   public Aggregate withGroups(String... fields) {
-    return new Aggregate(PipelineUtils.fieldNamesToMap(fields), this.accumulators);
+    return new Aggregate(PipelineUtils.fieldNamesToMap(fields), this.accumulators, AggregateOptions.DEFAULT);
   }
 
   @BetaApi
   public Aggregate withGroups(Selectable... selectables) {
-    return new Aggregate(PipelineUtils.selectablesToMap(selectables), this.accumulators);
+    return new Aggregate(PipelineUtils.selectablesToMap(selectables), this.accumulators, AggregateOptions.DEFAULT);
   }
 
   @BetaApi
   public static Aggregate withAccumulators(ExprWithAlias<Accumulator>... accumulators) {
-    if (accumulators.length == 0) {
+    return new Aggregate(
+        Collections.emptyMap(),
+        Arrays.stream(accumulators)
+            .collect(Collectors.toMap(ExprWithAlias::getAlias, ExprWithAlias::getExpr)),
+        AggregateOptions.DEFAULT);
+  }
+
+  @BetaApi
+  public Aggregate withOptions(@Nonnull AggregateOptions options) {
+    return new Aggregate(groups, accumulators, options);
+  }
+
+  private Aggregate(Map<String, Expr> groups, Map<String, Accumulator> accumulators,
+      AggregateOptions options) {
+    super("aggregate", options.options);
+    if (accumulators.isEmpty()) {
       throw new IllegalArgumentException(
           "Must specify at least one accumulator for aggregate() stage. There is a distinct() stage if only distinct group values are needed.");
     }
 
-    return new Aggregate(
-        Collections.emptyMap(),
-        Arrays.stream(accumulators)
-            .collect(Collectors.toMap(ExprWithAlias::getAlias, ExprWithAlias::getExpr)));
-  }
-
-  private Aggregate(Map<String, Expr> groups, Map<String, Accumulator> accumulators) {
     this.groups = groups;
     this.accumulators = accumulators;
   }
 
   @Override
-  Pipeline.Stage toStageProto() {
-    return Pipeline.Stage.newBuilder()
-        .setName(name)
-        .addArgs(encodeValue(accumulators))
-        .addArgs(encodeValue(groups))
-        .build();
+  Iterable<Value> toStageArgs() {
+    return Arrays.asList(encodeValue(accumulators), encodeValue(groups));
   }
 }

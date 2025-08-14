@@ -20,25 +20,22 @@ import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.PipelineUtils;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.common.collect.ImmutableList;
-import com.google.firestore.v1.Pipeline;
+import com.google.common.collect.Iterables;
+import com.google.firestore.v1.Value;
 
 @InternalApi
 public final class RemoveFields extends Stage {
 
-  private static final String name = "remove_fields";
   private final ImmutableList<Field> fields;
 
   @InternalApi
   public RemoveFields(ImmutableList<Field> fields) {
+    super("remove_fields", InternalOptions.EMPTY);
     this.fields = fields;
   }
 
   @Override
-  Pipeline.Stage toStageProto() {
-    Pipeline.Stage.Builder builder = Pipeline.Stage.newBuilder().setName(name);
-    for (Field field : fields) {
-      builder.addArgs(PipelineUtils.encodeValue(field));
-    }
-    return builder.build();
+  Iterable<Value> toStageArgs() {
+    return Iterables.transform(fields, PipelineUtils::encodeValue);
   }
 }

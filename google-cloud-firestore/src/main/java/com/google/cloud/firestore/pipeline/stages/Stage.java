@@ -16,11 +16,28 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import com.google.firestore.v1.Pipeline;
+import com.google.firestore.v1.Value;
+
 /** Parent to all stages. */
 public abstract class Stage {
 
-  /** Constructor is package-private to prevent extension. */
-  Stage() {}
+  protected final String name;
+  final InternalOptions options;
 
-  abstract com.google.firestore.v1.Pipeline.Stage toStageProto();
+  /** Constructor is package-private to prevent extension. */
+  Stage(String name, InternalOptions options) {
+    this.name = name;
+    this.options = options;
+  }
+
+  final Pipeline.Stage toStageProto() {
+    return Pipeline.Stage.newBuilder()
+        .setName(name)
+        .addAllArgs(toStageArgs())
+        .putAllOptions(options.options)
+        .build();
+  }
+
+  abstract Iterable<Value> toStageArgs();
 }

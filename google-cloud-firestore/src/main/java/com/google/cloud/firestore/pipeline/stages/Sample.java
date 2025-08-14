@@ -16,21 +16,54 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+
+import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
-import com.google.firestore.v1.Pipeline;
+import com.google.common.collect.ImmutableList;
+import com.google.firestore.v1.Value;
+import javax.annotation.Nonnull;
 
 public final class Sample extends Stage {
 
-  private static final String name = "sample";
-  private final SampleOptions options;
+  private final Number size;
+  private final Mode mode;
+
+  public enum Mode {
+    DOCUMENTS(encodeValue("documents")),
+    PERCENT(encodeValue("percent"));
+
+    public final Value value;
+
+    Mode(Value value) {
+      this.value = value;
+    }
+  }
+
+  @BetaApi
+  public static Sample withPercentage(double percentage) {
+    return new Sample(percentage, Mode.PERCENT, SampleOptions.DEFAULT);
+  }
+
+  @BetaApi
+  public static Sample withDocLimit(int documents) {
+    return new Sample(documents, Mode.DOCUMENTS, SampleOptions.DEFAULT);
+  }
+
+  @BetaApi
+  public Sample withOptions(@Nonnull SampleOptions options) {
+    return new Sample(size, mode, options);
+  }
 
   @InternalApi
-  public Sample(SampleOptions options) {
-    this.options = options;
+  private Sample(Number size, Mode mode, SampleOptions options) {
+    super("sample", options.options);
+    this.size = size;
+    this.mode = mode;
   }
 
   @Override
-  Pipeline.Stage toStageProto() {
-    return Pipeline.Stage.newBuilder().setName(name).addAllArgs(options.getProtoArgs()).build();
+  Iterable<Value> toStageArgs() {
+    return ImmutableList.of(encodeValue(size), mode.value);
   }
 }

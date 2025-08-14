@@ -43,6 +43,7 @@ import javax.annotation.Nullable;
 class UserDataConverter {
 
   static final Value NULL_VALUE = Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build();
+
   private static final Logger LOGGER = Logger.getLogger(UserDataConverter.class.getName());
 
   /** Controls the behavior for field deletes. */
