@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class Not extends Function implements FilterCondition {
+public final class Not extends FilterCondition {
   @InternalApi
   Not(Expr condition) {
     super("not", ImmutableList.of(condition));

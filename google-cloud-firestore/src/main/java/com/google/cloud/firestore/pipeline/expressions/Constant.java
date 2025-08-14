@@ -25,13 +25,17 @@ import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.GeoPoint;
+import com.google.common.collect.ImmutableMap;
 import com.google.firestore.v1.Value;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
 @BetaApi
-public final class Constant implements Expr {
+public final class Constant extends Expr {
+
+  static final Constant NULL = new Constant(null);
+
   private final Object value;
 
   Constant(Object value) {
@@ -85,16 +89,14 @@ public final class Constant implements Expr {
 
   @InternalApi
   public static Constant nullValue() {
-    return new Constant(null);
+    return NULL;
   }
 
   @BetaApi
   static Constant of(Object value) {
     if (value == null) {
-      return new Constant(null);
-    }
-
-    if (value instanceof String) {
+      return NULL;
+    } else if (value instanceof String) {
       return of((String) value);
     } else if (value instanceof Number) {
       return of((Number) value);
@@ -112,23 +114,25 @@ public final class Constant implements Expr {
       return of((DocumentReference) value);
     } else if (value instanceof Value) {
       return of((Value) value);
+    } else if (value instanceof Constant) {
+      return (Constant) value;
     } else {
       throw new IllegalArgumentException("Unknown type: " + value);
     }
   }
 
   @BetaApi
-  public static <T> Constant of(Iterable<T> value) {
+  public static Constant of(Iterable<?> value) {
     return new Constant(value);
   }
 
   @BetaApi
-  public static <T> Constant of(T[] value) {
+  public static Constant of(Object[] value) {
     return new Constant(Arrays.asList(value.clone())); // Convert array to list
   }
 
   @BetaApi
-  public static <T> Constant of(Map<String, T> value) {
+  public static Constant of(Map<String, ?> value) {
     return new Constant(value);
   }
 
@@ -137,8 +141,8 @@ public final class Constant implements Expr {
     return new Constant(FieldValue.vector(value));
   }
 
-  @InternalApi
-  public Value toProto() {
+  @Override
+  Value toProto() {
     return encodeValue(value);
   }
 }

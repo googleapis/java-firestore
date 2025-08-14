@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableList;
 import javax.annotation.Nonnull;
 
 @BetaApi
-public final class Count extends Function implements Accumulator {
+public final class Count extends Accumulator {
   @InternalApi
   Count(@Nonnull Expr value) {
     super("count", ImmutableList.of(value));

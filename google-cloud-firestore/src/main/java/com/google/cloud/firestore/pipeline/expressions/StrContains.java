@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class StrContains extends Function implements FilterCondition {
+public final class StrContains extends FilterCondition {
   @InternalApi
   StrContains(Expr expr, Expr substring) {
     super("str_contains", ImmutableList.of(expr, substring));

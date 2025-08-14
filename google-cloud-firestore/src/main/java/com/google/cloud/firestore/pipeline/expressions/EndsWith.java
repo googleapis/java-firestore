@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class EndsWith extends Function implements FilterCondition {
+public final class EndsWith extends FilterCondition {
   @InternalApi
   EndsWith(Expr expr, Expr postfix) {
     super("ends_with", ImmutableList.of(expr, postfix));

@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 
 @BetaApi
-public final class In extends Function implements FilterCondition {
+public final class In extends FilterCondition {
   @InternalApi
   In(Expr left, List<Expr> others) {
     super("in", ImmutableList.of(left, new ListOfExprs(others)));

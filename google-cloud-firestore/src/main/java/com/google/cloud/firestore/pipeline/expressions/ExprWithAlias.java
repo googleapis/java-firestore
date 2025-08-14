@@ -17,9 +17,10 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.InternalApi;
+import com.google.firestore.v1.Value;
 
 @InternalApi
-public final class ExprWithAlias<T extends Expr> implements Expr, Selectable {
+public final class ExprWithAlias<T extends Expr> extends Expr implements Selectable {
 
   private final String alias;
   private final T expr;
@@ -43,5 +44,10 @@ public final class ExprWithAlias<T extends Expr> implements Expr, Selectable {
   @Override
   public Selectable as(String alias) {
     return new ExprWithAlias<>(this.expr, alias);
+  }
+
+  @Override
+  Value toProto() {
+    return expr.toProto();
   }
 }

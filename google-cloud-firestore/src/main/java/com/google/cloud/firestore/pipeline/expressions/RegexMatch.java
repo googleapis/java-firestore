@@ -21,7 +21,7 @@ import com.google.api.core.InternalApi;
 import com.google.common.collect.ImmutableList;
 
 @BetaApi
-public final class RegexMatch extends Function implements FilterCondition {
+public final class RegexMatch extends FilterCondition {
   @InternalApi
   RegexMatch(Expr expr, Expr regex) {
     super("regex_match", ImmutableList.of(expr, regex));
