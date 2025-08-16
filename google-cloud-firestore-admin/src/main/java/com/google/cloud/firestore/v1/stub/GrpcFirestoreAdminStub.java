@@ -27,11 +27,14 @@ import com.google.api.gax.rpc.ClientContext;
 import com.google.api.gax.rpc.OperationCallable;
 import com.google.api.gax.rpc.RequestParamsBuilder;
 import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.pathtemplate.PathTemplate;
 import com.google.firestore.admin.v1.Backup;
 import com.google.firestore.admin.v1.BackupSchedule;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CloneDatabaseMetadata;
+import com.google.firestore.admin.v1.CloneDatabaseRequest;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
@@ -393,6 +396,16 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
               .setResponseMarshaller(ProtoUtils.marshaller(Empty.getDefaultInstance()))
               .build();
 
+  private static final MethodDescriptor<CloneDatabaseRequest, Operation>
+      cloneDatabaseMethodDescriptor =
+          MethodDescriptor.<CloneDatabaseRequest, Operation>newBuilder()
+              .setType(MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/CloneDatabase")
+              .setRequestMarshaller(
+                  ProtoUtils.marshaller(CloneDatabaseRequest.getDefaultInstance()))
+              .setResponseMarshaller(ProtoUtils.marshaller(Operation.getDefaultInstance()))
+              .build();
+
   private final UnaryCallable<CreateIndexRequest, Operation> createIndexCallable;
   private final OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
       createIndexOperationCallable;
@@ -450,10 +463,18 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
   private final UnaryCallable<UpdateBackupScheduleRequest, BackupSchedule>
       updateBackupScheduleCallable;
   private final UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable;
+  private final UnaryCallable<CloneDatabaseRequest, Operation> cloneDatabaseCallable;
+  private final OperationCallable<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationCallable;
 
   private final BackgroundResource backgroundResources;
   private final GrpcOperationsStub operationsStub;
   private final GrpcStubCallableFactory callableFactory;
+
+  private static final PathTemplate CLONE_DATABASE_0_PATH_TEMPLATE =
+      PathTemplate.create("projects/{project_id=*}/**");
+  private static final PathTemplate CLONE_DATABASE_1_PATH_TEMPLATE =
+      PathTemplate.create("projects/*/databases/{database_id=*}/**");
 
   public static final GrpcFirestoreAdminStub create(FirestoreAdminStubSettings settings)
       throws IOException {
@@ -810,6 +831,27 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
                   return builder.build();
                 })
             .build();
+    GrpcCallSettings<CloneDatabaseRequest, Operation> cloneDatabaseTransportSettings =
+        GrpcCallSettings.<CloneDatabaseRequest, Operation>newBuilder()
+            .setMethodDescriptor(cloneDatabaseMethodDescriptor)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  if (request.getPitrSnapshot() != null) {
+                    builder.add(
+                        request.getPitrSnapshot().getDatabase(),
+                        "project_id",
+                        CLONE_DATABASE_0_PATH_TEMPLATE);
+                  }
+                  if (request.getPitrSnapshot() != null) {
+                    builder.add(
+                        request.getPitrSnapshot().getDatabase(),
+                        "database_id",
+                        CLONE_DATABASE_1_PATH_TEMPLATE);
+                  }
+                  return builder.build();
+                })
+            .build();
 
     this.createIndexCallable =
         callableFactory.createUnaryCallable(
@@ -978,6 +1020,15 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
             deleteBackupScheduleTransportSettings,
             settings.deleteBackupScheduleSettings(),
             clientContext);
+    this.cloneDatabaseCallable =
+        callableFactory.createUnaryCallable(
+            cloneDatabaseTransportSettings, settings.cloneDatabaseSettings(), clientContext);
+    this.cloneDatabaseOperationCallable =
+        callableFactory.createOperationCallable(
+            cloneDatabaseTransportSettings,
+            settings.cloneDatabaseOperationSettings(),
+            clientContext,
+            operationsStub);
 
     this.backgroundResources =
         new BackgroundResourceAggregation(clientContext.getBackgroundResources());
@@ -1206,6 +1257,17 @@ public class GrpcFirestoreAdminStub extends FirestoreAdminStub {
   @Override
   public UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable() {
     return deleteBackupScheduleCallable;
+  }
+
+  @Override
+  public UnaryCallable<CloneDatabaseRequest, Operation> cloneDatabaseCallable() {
+    return cloneDatabaseCallable;
+  }
+
+  @Override
+  public OperationCallable<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationCallable() {
+    return cloneDatabaseOperationCallable;
   }
 
   @Override
