@@ -202,6 +202,31 @@ public class BulkWriterTest {
   }
 
   @Test
+  public void closeHandlesLargeNumberOfBufferedOps() throws Exception {
+    final int numOps = 100;
+
+    bulkWriter.setMaxPendingOpCount(5);
+    bulkWriter.setMaxBatchSize(1);
+
+    ResponseStubber responseStubber = new ResponseStubber();
+
+    for (int i = 0; i < numOps; i += 1) {
+      responseStubber.put(
+              batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc" + i)),
+              successResponse(1));
+    }
+
+    responseStubber.initializeStub(batchWriteCapture, firestoreMock);
+
+    for (int i = 0; i < numOps; ++i) {
+      bulkWriter.set(
+          firestoreMock.document("coll/doc" + i), LocalFirestoreHelper.SINGLE_FIELD_MAP);
+    }
+    bulkWriter.close();
+    responseStubber.verifyAllRequestsSent();
+  }
+
+  @Test
   public void hasUpdateMethod() throws Exception {
     ResponseStubber responseStubber =
         new ResponseStubber() {
@@ -1277,6 +1302,7 @@ public class BulkWriterTest {
     assertEquals(2, retryAttempts[0]);
     shutdownScheduledExecutorService(customExecutor);
   }
+
 
   @Test
   public void sendsBackoffBatchAfterOtherEnqueuedBatches() throws Exception {
