@@ -37,6 +37,7 @@ public interface StructuredPipelineOrBuilder
    * @return Whether the pipeline field is set.
    */
   boolean hasPipeline();
+
   /**
    *
    *
@@ -50,6 +51,7 @@ public interface StructuredPipelineOrBuilder
    * @return The pipeline.
    */
   com.google.firestore.v1.Pipeline getPipeline();
+
   /**
    *
    *
@@ -74,6 +76,7 @@ public interface StructuredPipelineOrBuilder
    * </code>
    */
   int getOptionsCount();
+
   /**
    *
    *
@@ -86,9 +89,11 @@ public interface StructuredPipelineOrBuilder
    * </code>
    */
   boolean containsOptions(java.lang.String key);
+
   /** Use {@link #getOptionsMap()} instead. */
   @java.lang.Deprecated
   java.util.Map<java.lang.String, com.google.firestore.v1.Value> getOptions();
+
   /**
    *
    *
@@ -101,6 +106,7 @@ public interface StructuredPipelineOrBuilder
    * </code>
    */
   java.util.Map<java.lang.String, com.google.firestore.v1.Value> getOptionsMap();
+
   /**
    *
    *
@@ -117,6 +123,7 @@ public interface StructuredPipelineOrBuilder
       java.lang.String key,
       /* nullable */
       com.google.firestore.v1.Value defaultValue);
+
   /**
    *
    *

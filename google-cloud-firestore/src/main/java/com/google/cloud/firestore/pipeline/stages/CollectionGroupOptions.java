@@ -18,8 +18,9 @@ package com.google.cloud.firestore.pipeline.stages;
 
 public final class CollectionGroupOptions extends AbstractOptions<CollectionGroupOptions> {
 
-  public static final CollectionGroupOptions DEFAULT =
-      new CollectionGroupOptions(InternalOptions.EMPTY);
+  public CollectionGroupOptions() {
+    this(InternalOptions.EMPTY);
+  }
 
   CollectionGroupOptions(InternalOptions options) {
     super(options);

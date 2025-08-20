@@ -157,11 +157,11 @@ public class PipelineUtils {
         case IS_NAN:
           return and(field.exists(), field.isNaN());
         case IS_NULL:
-          return and(field.exists(), field.eq(null));
+          return and(field.exists(), field.isNull());
         case IS_NOT_NAN:
-          return and(field.exists(), not(field.isNaN()));
+          return and(field.exists(), field.isNotNaN());
         case IS_NOT_NULL:
-          return and(field.exists(), not(field.eq(null)));
+          return and(field.exists(), field.isNotNull());
         default:
           // Handle OPERATOR_UNSPECIFIED and UNRECOGNIZED cases as needed
           throw new IllegalArgumentException("Unsupported operator: " + unaryFilter.getOperator());

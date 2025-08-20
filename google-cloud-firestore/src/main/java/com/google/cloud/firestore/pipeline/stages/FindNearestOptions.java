@@ -24,7 +24,9 @@ import com.google.cloud.firestore.pipeline.expressions.Field;
 @BetaApi
 public final class FindNearestOptions extends AbstractOptions<FindNearestOptions> {
 
-  public static FindNearestOptions DEFAULT = new FindNearestOptions(InternalOptions.EMPTY);
+  public FindNearestOptions() {
+    this(InternalOptions.EMPTY);
+  }
 
   private FindNearestOptions(InternalOptions options) {
     super(options);

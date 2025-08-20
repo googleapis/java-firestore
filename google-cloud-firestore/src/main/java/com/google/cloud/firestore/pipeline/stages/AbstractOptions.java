@@ -85,6 +85,10 @@ abstract class AbstractOptions<T> {
     return self(options.with(key, subSection.options));
   }
 
+  protected final T adding(AbstractOptions<?> subSection) {
+    return self(options.adding(subSection));
+  }
+
   public final T withSection(String key, GenericOptions subSection) {
     return with(key, subSection);
   }

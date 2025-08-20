@@ -18,7 +18,9 @@ package com.google.cloud.firestore.pipeline.stages;
 
 public final class CollectionOptions extends AbstractOptions<CollectionOptions> {
 
-  public static final CollectionOptions DEFAULT = new CollectionOptions(InternalOptions.EMPTY);
+  public CollectionOptions() {
+    super(InternalOptions.EMPTY);
+  }
 
   CollectionOptions(InternalOptions options) {
     super(options);
@@ -30,6 +32,6 @@ public final class CollectionOptions extends AbstractOptions<CollectionOptions> 
   }
 
   public CollectionOptions withHints(CollectionHints hints) {
-    return with("hints", hints);
+    return adding(hints);
   }
 }

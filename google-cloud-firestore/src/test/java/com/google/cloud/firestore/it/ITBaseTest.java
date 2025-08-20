@@ -51,6 +51,16 @@ public abstract class ITBaseTest {
   private FirestoreOptions firestoreOptions;
   private boolean backendPrimed = false;
 
+  static String getTargetBackend() {
+    String targetPropertyName = "FIRESTORE_TARGET_BACKEND";
+    String targetBackend = System.getProperty(targetPropertyName);
+    if (targetBackend == null) {
+      targetBackend = System.getenv(targetPropertyName);
+    }
+
+    return targetBackend;
+  }
+
   @Before
   public void before() throws Exception {
     FirestoreOptions.Builder optionsBuilder = FirestoreOptions.newBuilder();
@@ -67,11 +77,7 @@ public abstract class ITBaseTest {
       logger.log(Level.INFO, "Integration test using default database.");
     }
 
-    String targetPropertyName = "FIRESTORE_TARGET_BACKEND";
-    String targetBackend = System.getProperty(targetPropertyName);
-    if (targetBackend == null) {
-      targetBackend = System.getenv(targetPropertyName);
-    }
+    String targetBackend = getTargetBackend();
     TransportChannelProvider defaultProvider = optionsBuilder.build().getTransportChannelProvider();
     if (targetBackend != null) {
       if (targetBackend.equals("PROD")) {

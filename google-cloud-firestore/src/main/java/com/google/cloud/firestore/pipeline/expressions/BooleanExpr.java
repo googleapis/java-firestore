@@ -18,11 +18,12 @@ package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.BetaApi;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 @BetaApi
 public class BooleanExpr extends FunctionExpr {
   BooleanExpr(String name, Expr... params) {
-    super(name, ImmutableList.copyOf(params));
+    super(name, Lists.newArrayList(params));
   }
 
   BooleanExpr(String name, ImmutableList<Expr> params) {

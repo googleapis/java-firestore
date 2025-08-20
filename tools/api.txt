@@ -3,85 +3,85 @@ package com.google.cloud.firestore {
 
   public abstract class AggregateField {
     ctor public AggregateField();
-    method @NonNull public static com.google.cloud.firestore.AggregateField.AverageAggregateField average(@NonNull com.google.cloud.firestore.FieldPath);
-    method @NonNull public static com.google.cloud.firestore.AggregateField.AverageAggregateField average(@NonNull String);
-    method @NonNull public static com.google.cloud.firestore.AggregateField.CountAggregateField count();
+    method public static com.google.cloud.firestore.AggregateField.AverageAggregateField average(com.google.cloud.firestore.FieldPath);
+    method public static com.google.cloud.firestore.AggregateField.AverageAggregateField average(String);
+    method public static com.google.cloud.firestore.AggregateField.CountAggregateField count();
     method public boolean equals(Object);
     method public int hashCode();
-    method @NonNull public static com.google.cloud.firestore.AggregateField.SumAggregateField sum(@NonNull com.google.cloud.firestore.FieldPath);
-    method @NonNull public static com.google.cloud.firestore.AggregateField.SumAggregateField sum(@NonNull String);
+    method public static com.google.cloud.firestore.AggregateField.SumAggregateField sum(com.google.cloud.firestore.FieldPath);
+    method public static com.google.cloud.firestore.AggregateField.SumAggregateField sum(String);
   }
 
   public static class AggregateField.AverageAggregateField extends com.google.cloud.firestore.AggregateField {
-    method @NonNull public String getOperator();
+    method public String getOperator();
   }
 
   public static class AggregateField.CountAggregateField extends com.google.cloud.firestore.AggregateField {
-    method @NonNull public String getOperator();
+    method public String getOperator();
   }
 
   public static class AggregateField.SumAggregateField extends com.google.cloud.firestore.AggregateField {
-    method @NonNull public String getOperator();
+    method public String getOperator();
   }
 
   public class AggregateQuery {
     method public boolean equals(Object);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.ExplainResults<com.google.cloud.firestore.AggregateQuerySnapshot>> explain(com.google.cloud.firestore.ExplainOptions);
-    method @NonNull public static com.google.cloud.firestore.AggregateQuery fromProto(com.google.cloud.firestore.Firestore, RunAggregationQueryRequest);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.AggregateQuerySnapshot> get();
-    method @NonNull public com.google.cloud.firestore.Query getQuery();
+    method public ApiFuture<com.google.cloud.firestore.ExplainResults<com.google.cloud.firestore.AggregateQuerySnapshot>> explain(com.google.cloud.firestore.ExplainOptions);
+    method public static com.google.cloud.firestore.AggregateQuery fromProto(com.google.cloud.firestore.Firestore, RunAggregationQueryRequest);
+    method public ApiFuture<com.google.cloud.firestore.AggregateQuerySnapshot> get();
+    method public com.google.cloud.firestore.Query getQuery();
     method public int hashCode();
-    method @NonNull public RunAggregationQueryRequest toProto();
+    method public RunAggregationQueryRequest toProto();
   }
 
   public class AggregateQuerySnapshot {
     method public boolean equals(Object);
-    method @Nullable public Object get(@NonNull com.google.cloud.firestore.AggregateField);
-    method @Nullable public Double get(@NonNull com.google.cloud.firestore.AggregateField.AverageAggregateField);
-    method public long get(@NonNull com.google.cloud.firestore.AggregateField.CountAggregateField);
+    method @Nullable public Object get(com.google.cloud.firestore.AggregateField);
+    method @Nullable public Double get(com.google.cloud.firestore.AggregateField.AverageAggregateField);
+    method public long get(com.google.cloud.firestore.AggregateField.CountAggregateField);
     method public long getCount();
-    method @Nullable public Double getDouble(@NonNull com.google.cloud.firestore.AggregateField);
-    method @Nullable public Long getLong(@NonNull com.google.cloud.firestore.AggregateField);
-    method @NonNull public com.google.cloud.firestore.AggregateQuery getQuery();
-    method @NonNull public Timestamp getReadTime();
+    method @Nullable public Double getDouble(com.google.cloud.firestore.AggregateField);
+    method @Nullable public Long getLong(com.google.cloud.firestore.AggregateField);
+    method public com.google.cloud.firestore.AggregateQuery getQuery();
+    method public Timestamp getReadTime();
     method public int hashCode();
   }
 
   public abstract class BasePath<B extends com.google.cloud.firestore.BasePath<B>> {
     ctor public BasePath();
-    method public int compareTo(@NonNull B);
+    method public int compareTo(B);
   }
 
   public final class Blob {
     method public boolean equals(Object);
-    method @NonNull public static com.google.cloud.firestore.Blob fromByteString(@NonNull ByteString);
-    method @NonNull public static com.google.cloud.firestore.Blob fromBytes(@NonNull byte[]);
+    method public static com.google.cloud.firestore.Blob fromByteString(ByteString);
+    method public static com.google.cloud.firestore.Blob fromBytes(byte[]);
     method public int hashCode();
-    method @NonNull public ByteString toByteString();
-    method @NonNull public byte[] toBytes();
+    method public ByteString toByteString();
+    method public byte[] toBytes();
   }
 
   public final class BulkWriter {
     method public void addWriteErrorListener(com.google.cloud.firestore.BulkWriter.WriteErrorCallback);
-    method public void addWriteErrorListener(@NonNull Executor, com.google.cloud.firestore.BulkWriter.WriteErrorCallback);
+    method public void addWriteErrorListener(Executor, com.google.cloud.firestore.BulkWriter.WriteErrorCallback);
     method public void addWriteResultListener(com.google.cloud.firestore.BulkWriter.WriteResultCallback);
-    method public void addWriteResultListener(@NonNull Executor, com.google.cloud.firestore.BulkWriter.WriteResultCallback);
+    method public void addWriteResultListener(Executor, com.google.cloud.firestore.BulkWriter.WriteResultCallback);
     method public void close();
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> create(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> create(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Object);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> delete(@NonNull com.google.cloud.firestore.DocumentReference);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> delete(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.Precondition);
-    method @NonNull public ApiFuture<Void> flush();
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>, @NonNull com.google.cloud.firestore.SetOptions);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Object);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Object, @NonNull com.google.cloud.firestore.SetOptions);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.Precondition, @NonNull com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.Precondition, @NonNull String, @Nullable Object, Object...);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>, @NonNull com.google.cloud.firestore.Precondition);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull String, @Nullable Object, Object...);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> create(com.google.cloud.firestore.DocumentReference, Map<String,Object>);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> create(com.google.cloud.firestore.DocumentReference, Object);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> delete(com.google.cloud.firestore.DocumentReference);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> delete(com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.Precondition);
+    method public ApiFuture<Void> flush();
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> set(com.google.cloud.firestore.DocumentReference, Map<String,Object>);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> set(com.google.cloud.firestore.DocumentReference, Map<String,Object>, com.google.cloud.firestore.SetOptions);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> set(com.google.cloud.firestore.DocumentReference, Object);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> set(com.google.cloud.firestore.DocumentReference, Object, com.google.cloud.firestore.SetOptions);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> update(com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> update(com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.Precondition, com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> update(com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.Precondition, String, @Nullable Object, Object...);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> update(com.google.cloud.firestore.DocumentReference, Map<String,Object>);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> update(com.google.cloud.firestore.DocumentReference, Map<String,Object>, com.google.cloud.firestore.Precondition);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> update(com.google.cloud.firestore.DocumentReference, String, @Nullable Object, Object...);
     field public static final int MAX_BATCH_SIZE = 20; // 0x14
     field public static final int MAX_RETRY_ATTEMPTS = 10; // 0xa
     field public static final int RETRY_MAX_BATCH_SIZE = 10; // 0xa
@@ -116,7 +116,7 @@ package com.google.cloud.firestore {
   public abstract static class BulkWriterOptions.Builder {
     ctor public BulkWriterOptions.Builder();
     method public abstract com.google.cloud.firestore.BulkWriterOptions autoBuild();
-    method @NonNull public com.google.cloud.firestore.BulkWriterOptions build();
+    method public com.google.cloud.firestore.BulkWriterOptions build();
     method public abstract com.google.cloud.firestore.BulkWriterOptions.Builder setExecutor(@Nullable ScheduledExecutorService);
     method public com.google.cloud.firestore.BulkWriterOptions.Builder setInitialOpsPerSecond(int);
     method public com.google.cloud.firestore.BulkWriterOptions.Builder setMaxOpsPerSecond(int);
@@ -129,22 +129,22 @@ package com.google.cloud.firestore {
   }
 
   public class CollectionReference extends com.google.cloud.firestore.Query {
-    method @NonNull public ApiFuture<com.google.cloud.firestore.DocumentReference> add(@NonNull Map<String,Object>);
+    method public ApiFuture<com.google.cloud.firestore.DocumentReference> add(Map<String,Object>);
     method public ApiFuture<com.google.cloud.firestore.DocumentReference> add(Object);
-    method @NonNull public com.google.cloud.firestore.DocumentReference document();
-    method @NonNull public com.google.cloud.firestore.DocumentReference document(@NonNull String);
-    method @NonNull public String getId();
+    method public com.google.cloud.firestore.DocumentReference document();
+    method public com.google.cloud.firestore.DocumentReference document(String);
+    method public String getId();
     method @Nullable public com.google.cloud.firestore.DocumentReference getParent();
-    method @NonNull public String getPath();
-    method @NonNull public Iterable<com.google.cloud.firestore.DocumentReference> listDocuments();
+    method public String getPath();
+    method public Iterable<com.google.cloud.firestore.DocumentReference> listDocuments();
   }
 
   public class DocumentChange {
     method public boolean equals(Object);
-    method @NonNull public com.google.cloud.firestore.QueryDocumentSnapshot getDocument();
+    method public com.google.cloud.firestore.QueryDocumentSnapshot getDocument();
     method public int getNewIndex();
     method public int getOldIndex();
-    method @NonNull public com.google.cloud.firestore.DocumentChange.Type getType();
+    method public com.google.cloud.firestore.DocumentChange.Type getType();
     method public int hashCode();
   }
 
@@ -155,60 +155,61 @@ package com.google.cloud.firestore {
   }
 
   public class DocumentReference {
-    method @NonNull public com.google.cloud.firestore.ListenerRegistration addSnapshotListener(@NonNull com.google.cloud.firestore.EventListener<com.google.cloud.firestore.DocumentSnapshot>);
-    method @NonNull public com.google.cloud.firestore.ListenerRegistration addSnapshotListener(@NonNull Executor, @NonNull com.google.cloud.firestore.EventListener<com.google.cloud.firestore.DocumentSnapshot>);
-    method @NonNull public com.google.cloud.firestore.CollectionReference collection(@NonNull String);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> create(@NonNull Map<String,Object>);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> create(@NonNull Object);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> delete();
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> delete(@NonNull com.google.cloud.firestore.Precondition);
+    method public com.google.cloud.firestore.ListenerRegistration addSnapshotListener(com.google.cloud.firestore.EventListener<com.google.cloud.firestore.DocumentSnapshot>);
+    method public com.google.cloud.firestore.ListenerRegistration addSnapshotListener(Executor, com.google.cloud.firestore.EventListener<com.google.cloud.firestore.DocumentSnapshot>);
+    method public com.google.cloud.firestore.CollectionReference collection(String);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> create(Map<String,Object>);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> create(Object);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> delete();
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> delete(com.google.cloud.firestore.Precondition);
     method public boolean equals(Object);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.DocumentSnapshot> get();
-    method @NonNull public ApiFuture<com.google.cloud.firestore.DocumentSnapshot> get(com.google.cloud.firestore.FieldMask);
-    method @NonNull public com.google.cloud.firestore.Firestore getFirestore();
-    method @NonNull public String getId();
-    method @NonNull public com.google.cloud.firestore.CollectionReference getParent();
-    method @NonNull public String getPath();
+    method public ApiFuture<com.google.cloud.firestore.DocumentSnapshot> get();
+    method public ApiFuture<com.google.cloud.firestore.DocumentSnapshot> get(com.google.cloud.firestore.FieldMask);
+    method public com.google.cloud.firestore.Firestore getFirestore();
+    method public String getId();
+    method public com.google.cloud.firestore.CollectionReference getParent();
+    method public String getPath();
     method public int hashCode();
-    method @NonNull public Iterable<com.google.cloud.firestore.CollectionReference> listCollections();
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull Map<String,Object>);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull Map<String,Object>, @NonNull com.google.cloud.firestore.SetOptions);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull Object);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> set(@NonNull Object, @NonNull com.google.cloud.firestore.SetOptions);
+    method public Iterable<com.google.cloud.firestore.CollectionReference> listCollections();
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> set(Map<String,Object>);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> set(Map<String,Object>, com.google.cloud.firestore.SetOptions);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> set(Object);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> set(Object, com.google.cloud.firestore.SetOptions);
     method public String toString();
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.Precondition, @NonNull com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull com.google.cloud.firestore.Precondition, @NonNull String, @Nullable Object, Object...);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull Map<String,Object>);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull Map<String,Object>, com.google.cloud.firestore.Precondition);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.WriteResult> update(@NonNull String, @Nullable Object, Object...);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> update(com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> update(com.google.cloud.firestore.Precondition, com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> update(com.google.cloud.firestore.Precondition, String, @Nullable Object, Object...);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> update(Map<String,Object>);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> update(Map<String,Object>, com.google.cloud.firestore.Precondition);
+    method public ApiFuture<com.google.cloud.firestore.WriteResult> update(String, @Nullable Object, Object...);
   }
 
   public class DocumentSnapshot {
-    method public boolean contains(@NonNull com.google.cloud.firestore.FieldPath);
-    method public boolean contains(@NonNull String);
+    method public boolean contains(com.google.cloud.firestore.FieldPath);
+    method public boolean contains(String);
     method public boolean equals(Object);
     method public boolean exists();
-    method @Nullable public Object get(@NonNull com.google.cloud.firestore.FieldPath);
-    method @Nullable public <T> T get(@NonNull com.google.cloud.firestore.FieldPath, Class<T>);
-    method @Nullable public Object get(@NonNull String);
-    method @Nullable public <T> T get(@NonNull String, @NonNull Class<T>);
-    method @Nullable public com.google.cloud.firestore.Blob getBlob(@NonNull String);
-    method @Nullable public Boolean getBoolean(@NonNull String);
+    method @Nullable public Object get(com.google.cloud.firestore.FieldPath);
+    method @Nullable public <T> T get(com.google.cloud.firestore.FieldPath, Class<T>);
+    method @Nullable public Object get(String);
+    method @Nullable public <T> T get(String, Class<T>);
+    method @Nullable public com.google.cloud.firestore.Blob getBlob(String);
+    method @Nullable public Boolean getBoolean(String);
     method @Nullable public Timestamp getCreateTime();
     method @Nullable public Map<String,Object> getData();
-    method @Nullable public Date getDate(@NonNull String);
-    method @Nullable public Double getDouble(@NonNull String);
-    method @Nullable public com.google.cloud.firestore.GeoPoint getGeoPoint(@NonNull String);
-    method @NonNull public String getId();
-    method @Nullable public Long getLong(@NonNull String);
+    method @Nullable public Date getDate(String);
+    method @Nullable public Double getDouble(String);
+    method @Nullable public com.google.cloud.firestore.GeoPoint getGeoPoint(String);
+    method public String getId();
+    method @Nullable public Long getLong(String);
     method @Nullable public Timestamp getReadTime();
-    method @NonNull public com.google.cloud.firestore.DocumentReference getReference();
-    method @Nullable public String getString(@NonNull String);
-    method @Nullable public Timestamp getTimestamp(@NonNull String);
+    method public com.google.cloud.firestore.DocumentReference getReference();
+    method @Nullable public String getString(String);
+    method @Nullable public Timestamp getTimestamp(String);
     method @Nullable public Timestamp getUpdateTime();
+    method @Nullable public com.google.cloud.firestore.VectorValue getVectorValue(String);
     method public int hashCode();
-    method @Nullable public <T> T toObject(@NonNull Class<T>);
+    method @Nullable public <T> T toObject(Class<T>);
     method public String toString();
   }
 
@@ -217,15 +218,15 @@ package com.google.cloud.firestore {
   }
 
   public final class ExecutionStats {
-    method @NonNull public Map<String,Object> getDebugStats();
-    method @NonNull public Duration getExecutionDuration();
+    method public Map<String,Object> getDebugStats();
+    method public Duration getExecutionDuration();
     method public long getReadOperations();
     method public long getResultsReturned();
   }
 
   public final class ExplainMetrics {
     method @Nullable public com.google.cloud.firestore.ExecutionStats getExecutionStats();
-    method @NonNull public com.google.cloud.firestore.PlanSummary getPlanSummary();
+    method public com.google.cloud.firestore.PlanSummary getPlanSummary();
   }
 
   public abstract class ExplainOptions {
@@ -243,82 +244,90 @@ package com.google.cloud.firestore {
   }
 
   public final class ExplainResults<T> {
-    method @NonNull public com.google.cloud.firestore.ExplainMetrics getMetrics();
+    method public com.google.cloud.firestore.ExplainMetrics getMetrics();
     method @Nullable public T getSnapshot();
   }
 
+  public final class ExplainStats {
+    method public Any getRawData();
+    method public String getText();
+  }
+
   public final class FieldMask {
-    method @NonNull public static com.google.cloud.firestore.FieldMask of(com.google.cloud.firestore.FieldPath...);
-    method @NonNull public static com.google.cloud.firestore.FieldMask of(String...);
+    method public static com.google.cloud.firestore.FieldMask of(com.google.cloud.firestore.FieldPath...);
+    method public static com.google.cloud.firestore.FieldMask of(String...);
   }
 
   public abstract class FieldPath extends com.google.cloud.firestore.BasePath<com.google.cloud.firestore.FieldPath> {
     ctor public FieldPath();
     method public static com.google.cloud.firestore.FieldPath documentId();
+    method public static com.google.cloud.firestore.FieldPath fromDotSeparatedString(String);
     method public static com.google.cloud.firestore.FieldPath fromServerFormat(String);
-    method public static com.google.cloud.firestore.FieldPath of(@NonNull String...);
+    method public static com.google.cloud.firestore.FieldPath of(String...);
     method public String toString();
   }
 
   public abstract class FieldValue {
-    method @NonNull public static com.google.cloud.firestore.FieldValue arrayRemove(@NonNull Object...);
-    method @NonNull public static com.google.cloud.firestore.FieldValue arrayUnion(@NonNull Object...);
-    method @NonNull public static com.google.cloud.firestore.FieldValue delete();
+    method public static com.google.cloud.firestore.FieldValue arrayRemove(Object...);
+    method public static com.google.cloud.firestore.FieldValue arrayUnion(Object...);
+    method public static com.google.cloud.firestore.FieldValue delete();
     method public boolean equals(Object);
     method public int hashCode();
-    method @NonNull public static com.google.cloud.firestore.FieldValue increment(double);
-    method @NonNull public static com.google.cloud.firestore.FieldValue increment(long);
-    method @NonNull public static com.google.cloud.firestore.FieldValue serverTimestamp();
+    method public static com.google.cloud.firestore.FieldValue increment(double);
+    method public static com.google.cloud.firestore.FieldValue increment(long);
+    method public static com.google.cloud.firestore.FieldValue serverTimestamp();
+    method public static com.google.cloud.firestore.VectorValue vector(double[]);
   }
 
   public class Filter {
     ctor public Filter();
-    method @NonNull public static com.google.cloud.firestore.Filter and(com.google.cloud.firestore.Filter...);
-    method @NonNull public static com.google.cloud.firestore.Filter arrayContains(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter arrayContains(@NonNull String, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter arrayContainsAny(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter arrayContainsAny(@NonNull String, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter equalTo(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter equalTo(@NonNull String, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter greaterThan(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter greaterThan(@NonNull String, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter greaterThanOrEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter greaterThanOrEqualTo(@NonNull String, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter inArray(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter inArray(@NonNull String, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter lessThan(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter lessThan(@NonNull String, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter lessThanOrEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter lessThanOrEqualTo(@NonNull String, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter notEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter notEqualTo(@NonNull String, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter notInArray(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter notInArray(@NonNull String, @Nullable Object);
-    method @NonNull public static com.google.cloud.firestore.Filter or(com.google.cloud.firestore.Filter...);
+    method public static com.google.cloud.firestore.Filter and(com.google.cloud.firestore.Filter...);
+    method public static com.google.cloud.firestore.Filter arrayContains(com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter arrayContains(String, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter arrayContainsAny(com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter arrayContainsAny(String, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter equalTo(com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter equalTo(String, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter greaterThan(com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter greaterThan(String, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter greaterThanOrEqualTo(com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter greaterThanOrEqualTo(String, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter inArray(com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter inArray(String, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter lessThan(com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter lessThan(String, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter lessThanOrEqualTo(com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter lessThanOrEqualTo(String, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter notEqualTo(com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter notEqualTo(String, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter notInArray(com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter notInArray(String, @Nullable Object);
+    method public static com.google.cloud.firestore.Filter or(com.google.cloud.firestore.Filter...);
   }
 
   public interface Firestore {
-    method @NonNull public com.google.cloud.firestore.WriteBatch batch();
-    method @NonNull public com.google.cloud.firestore.BulkWriter bulkWriter();
-    method @NonNull public com.google.cloud.firestore.BulkWriter bulkWriter(com.google.cloud.firestore.BulkWriterOptions);
-    method @NonNull public com.google.cloud.firestore.FirestoreBundle.Builder bundleBuilder();
-    method @NonNull public com.google.cloud.firestore.FirestoreBundle.Builder bundleBuilder(@NonNull String);
+    method public com.google.cloud.firestore.WriteBatch batch();
+    method public com.google.cloud.firestore.BulkWriter bulkWriter();
+    method public com.google.cloud.firestore.BulkWriter bulkWriter(com.google.cloud.firestore.BulkWriterOptions);
+    method public com.google.cloud.firestore.FirestoreBundle.Builder bundleBuilder();
+    method public com.google.cloud.firestore.FirestoreBundle.Builder bundleBuilder(String);
     method public void close();
-    method @NonNull public com.google.cloud.firestore.CollectionReference collection(@NonNull String);
-    method public com.google.cloud.firestore.CollectionGroup collectionGroup(@NonNull String);
-    method @NonNull public com.google.cloud.firestore.DocumentReference document(@NonNull String);
-    method @NonNull public ApiFuture<List<com.google.cloud.firestore.DocumentSnapshot>> getAll(@NonNull com.google.cloud.firestore.DocumentReference...);
-    method @NonNull public ApiFuture<List<com.google.cloud.firestore.DocumentSnapshot>> getAll(@NonNull com.google.cloud.firestore.DocumentReference[], @Nullable com.google.cloud.firestore.FieldMask);
-    method public void getAll(@NonNull com.google.cloud.firestore.DocumentReference[], @Nullable com.google.cloud.firestore.FieldMask, ApiStreamObserver<com.google.cloud.firestore.DocumentSnapshot>);
-    method @NonNull public Iterable<com.google.cloud.firestore.CollectionReference> listCollections();
-    method @NonNull public ApiFuture<Void> recursiveDelete(com.google.cloud.firestore.CollectionReference);
-    method @NonNull public ApiFuture<Void> recursiveDelete(com.google.cloud.firestore.CollectionReference, com.google.cloud.firestore.BulkWriter);
-    method @NonNull public ApiFuture<Void> recursiveDelete(com.google.cloud.firestore.DocumentReference);
-    method @NonNull public ApiFuture<Void> recursiveDelete(com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.BulkWriter);
-    method @NonNull public <T> ApiFuture<T> runAsyncTransaction(@NonNull com.google.cloud.firestore.Transaction.AsyncFunction<T>);
-    method @NonNull public <T> ApiFuture<T> runAsyncTransaction(@NonNull com.google.cloud.firestore.Transaction.AsyncFunction<T>, @NonNull com.google.cloud.firestore.TransactionOptions);
-    method @NonNull public <T> ApiFuture<T> runTransaction(@NonNull com.google.cloud.firestore.Transaction.Function<T>);
-    method @NonNull public <T> ApiFuture<T> runTransaction(@NonNull com.google.cloud.firestore.Transaction.Function<T>, @NonNull com.google.cloud.firestore.TransactionOptions);
+    method public com.google.cloud.firestore.CollectionReference collection(String);
+    method public com.google.cloud.firestore.CollectionGroup collectionGroup(String);
+    method public com.google.cloud.firestore.DocumentReference document(String);
+    method public ApiFuture<List<com.google.cloud.firestore.DocumentSnapshot>> getAll(com.google.cloud.firestore.DocumentReference...);
+    method public ApiFuture<List<com.google.cloud.firestore.DocumentSnapshot>> getAll(com.google.cloud.firestore.DocumentReference[], @Nullable com.google.cloud.firestore.FieldMask);
+    method public void getAll(com.google.cloud.firestore.DocumentReference[], @Nullable com.google.cloud.firestore.FieldMask, ApiStreamObserver<com.google.cloud.firestore.DocumentSnapshot>);
+    method public Iterable<com.google.cloud.firestore.CollectionReference> listCollections();
+    method public com.google.cloud.firestore.PipelineSource pipeline();
+    method public ApiFuture<Void> recursiveDelete(com.google.cloud.firestore.CollectionReference);
+    method public ApiFuture<Void> recursiveDelete(com.google.cloud.firestore.CollectionReference, com.google.cloud.firestore.BulkWriter);
+    method public ApiFuture<Void> recursiveDelete(com.google.cloud.firestore.DocumentReference);
+    method public ApiFuture<Void> recursiveDelete(com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.BulkWriter);
+    method public <T> ApiFuture<T> runAsyncTransaction(com.google.cloud.firestore.Transaction.AsyncFunction<T>);
+    method public <T> ApiFuture<T> runAsyncTransaction(com.google.cloud.firestore.Transaction.AsyncFunction<T>, com.google.cloud.firestore.TransactionOptions);
+    method public <T> ApiFuture<T> runTransaction(com.google.cloud.firestore.Transaction.Function<T>);
+    method public <T> ApiFuture<T> runTransaction(com.google.cloud.firestore.Transaction.Function<T>, com.google.cloud.firestore.TransactionOptions);
     method public void shutdown();
     method public void shutdownNow();
   }
@@ -347,42 +356,57 @@ package com.google.cloud.firestore {
   public interface FirestoreFactory {
   }
 
+  public class FirestoreOpenTelemetryOptions {
+    method public OpenTelemetry getOpenTelemetry();
+    method public boolean isTracingEnabled();
+    method public static com.google.cloud.firestore.FirestoreOpenTelemetryOptions.Builder newBuilder();
+    method public com.google.cloud.firestore.FirestoreOpenTelemetryOptions.Builder toBuilder();
+  }
+
+  public static class FirestoreOpenTelemetryOptions.Builder {
+    method public com.google.cloud.firestore.FirestoreOpenTelemetryOptions build();
+    method public com.google.cloud.firestore.FirestoreOpenTelemetryOptions.Builder setOpenTelemetry(OpenTelemetry);
+    method public com.google.cloud.firestore.FirestoreOpenTelemetryOptions.Builder setTracingEnabled(boolean);
+  }
+
   public final class FirestoreOptions {
     ctor protected FirestoreOptions(com.google.cloud.firestore.FirestoreOptions.Builder);
     method public boolean equals(Object);
     method public CredentialsProvider getCredentialsProvider();
     method public String getDatabaseId();
-    method @NonNull public static GoogleCredentialsProvider.Builder getDefaultCredentialsProviderBuilder();
+    method public static GoogleCredentialsProvider.Builder getDefaultCredentialsProviderBuilder();
     method protected String getDefaultHost();
     method public static com.google.cloud.firestore.FirestoreOptions getDefaultInstance();
-    method @NonNull public static InstantiatingGrpcChannelProvider.Builder getDefaultTransportChannelProviderBuilder();
-    method @NonNull public static GrpcTransportOptions.Builder getDefaultTransportOptionsBuilder();
+    method public static InstantiatingGrpcChannelProvider.Builder getDefaultTransportChannelProviderBuilder();
+    method public static GrpcTransportOptions.Builder getDefaultTransportOptionsBuilder();
     method public String getEmulatorHost();
+    method public com.google.cloud.firestore.FirestoreOpenTelemetryOptions getOpenTelemetryOptions();
     method protected Set<String> getScopes();
     method public TransportChannelProvider getTransportChannelProvider();
     method public int hashCode();
-    method @NonNull public static com.google.cloud.firestore.FirestoreOptions.Builder newBuilder();
+    method public static com.google.cloud.firestore.FirestoreOptions.Builder newBuilder();
     method protected boolean projectIdRequired();
-    method @NonNull public com.google.cloud.firestore.FirestoreOptions.Builder toBuilder();
+    method public com.google.cloud.firestore.FirestoreOptions.Builder toBuilder();
   }
 
   public static class FirestoreOptions.Builder {
-    method @NonNull public com.google.cloud.firestore.FirestoreOptions build();
-    method @NonNull public com.google.cloud.firestore.FirestoreOptions.Builder setChannelProvider(@NonNull TransportChannelProvider);
-    method @NonNull public com.google.cloud.firestore.FirestoreOptions.Builder setCredentialsProvider(@NonNull CredentialsProvider);
-    method public com.google.cloud.firestore.FirestoreOptions.Builder setDatabaseId(@NonNull String);
-    method public com.google.cloud.firestore.FirestoreOptions.Builder setEmulatorHost(@NonNull String);
-    method @NonNull public com.google.cloud.firestore.FirestoreOptions.Builder setTransportOptions(@NonNull TransportOptions);
+    method public com.google.cloud.firestore.FirestoreOptions build();
+    method public com.google.cloud.firestore.FirestoreOptions.Builder setChannelProvider(TransportChannelProvider);
+    method public com.google.cloud.firestore.FirestoreOptions.Builder setCredentialsProvider(CredentialsProvider);
+    method public com.google.cloud.firestore.FirestoreOptions.Builder setDatabaseId(String);
+    method public com.google.cloud.firestore.FirestoreOptions.Builder setEmulatorHost(String);
+    method public com.google.cloud.firestore.FirestoreOptions.Builder setOpenTelemetryOptions(com.google.cloud.firestore.FirestoreOpenTelemetryOptions);
+    method public com.google.cloud.firestore.FirestoreOptions.Builder setTransportOptions(TransportOptions);
   }
 
   public static class FirestoreOptions.DefaultFirestoreFactory implements com.google.cloud.firestore.FirestoreFactory {
     ctor public FirestoreOptions.DefaultFirestoreFactory();
-    method @NonNull public com.google.cloud.firestore.Firestore create(@NonNull com.google.cloud.firestore.FirestoreOptions);
+    method public com.google.cloud.firestore.Firestore create(com.google.cloud.firestore.FirestoreOptions);
   }
 
   public static class FirestoreOptions.DefaultFirestoreRpcFactory implements com.google.cloud.firestore.FirestoreRpcFactory {
     ctor public FirestoreOptions.DefaultFirestoreRpcFactory();
-    method @NonNull public com.google.cloud.firestore.spi.v1.FirestoreRpc create(@NonNull com.google.cloud.firestore.FirestoreOptions);
+    method public com.google.cloud.firestore.spi.v1.FirestoreRpc create(com.google.cloud.firestore.FirestoreOptions);
   }
 
   public static class FirestoreOptions.EmulatorCredentials {
@@ -403,7 +427,7 @@ package com.google.cloud.firestore {
     method public double getLatitude();
     method public double getLongitude();
     method public int hashCode();
-    method @NonNull public String toString();
+    method public String toString();
   }
 
   public class Internal {
@@ -420,70 +444,162 @@ package com.google.cloud.firestore {
     method public void remove();
   }
 
+  public final class Pipeline {
+    method public com.google.cloud.firestore.Pipeline addFields(com.google.cloud.firestore.pipeline.expressions.Selectable...);
+    method public com.google.cloud.firestore.Pipeline aggregate(com.google.cloud.firestore.pipeline.expressions.AliasedAggregate...);
+    method public com.google.cloud.firestore.Pipeline aggregate(com.google.cloud.firestore.pipeline.stages.Aggregate);
+    method public com.google.cloud.firestore.Pipeline distinct(com.google.cloud.firestore.pipeline.expressions.Selectable...);
+    method public com.google.cloud.firestore.Pipeline distinct(String...);
+    method public ApiFuture<com.google.cloud.firestore.PipelineSnapshot> execute();
+    method public void execute(ApiStreamObserver<com.google.cloud.firestore.PipelineResult>);
+    method public ApiFuture<com.google.cloud.firestore.PipelineSnapshot> execute(com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions);
+    method public com.google.cloud.firestore.Pipeline findNearest(com.google.cloud.firestore.pipeline.expressions.Expr, double[], com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure, com.google.cloud.firestore.pipeline.stages.FindNearestOptions);
+    method public com.google.cloud.firestore.Pipeline findNearest(String, double[], com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure, com.google.cloud.firestore.pipeline.stages.FindNearestOptions);
+    method public com.google.cloud.firestore.Pipeline genericStage(String, List<Object>, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public com.google.cloud.firestore.Pipeline limit(int);
+    method public com.google.cloud.firestore.Pipeline offset(int);
+    method public com.google.cloud.firestore.Pipeline removeFields(com.google.cloud.firestore.pipeline.expressions.Field...);
+    method public com.google.cloud.firestore.Pipeline removeFields(String...);
+    method public com.google.cloud.firestore.Pipeline replaceWith(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public com.google.cloud.firestore.Pipeline replaceWith(String);
+    method public com.google.cloud.firestore.Pipeline sample(com.google.cloud.firestore.pipeline.stages.Sample);
+    method public com.google.cloud.firestore.Pipeline sample(int);
+    method public com.google.cloud.firestore.Pipeline select(com.google.cloud.firestore.pipeline.expressions.Selectable...);
+    method public com.google.cloud.firestore.Pipeline select(String...);
+    method public com.google.cloud.firestore.Pipeline sort(com.google.cloud.firestore.pipeline.expressions.Ordering...);
+    method public com.google.firestore.v1.Value toProtoValue();
+    method public com.google.cloud.firestore.Pipeline union(com.google.cloud.firestore.Pipeline);
+    method public com.google.cloud.firestore.Pipeline unnest(com.google.cloud.firestore.pipeline.expressions.Selectable);
+    method public com.google.cloud.firestore.Pipeline unnest(String, String);
+    method public com.google.cloud.firestore.Pipeline unnest(String, String, com.google.cloud.firestore.pipeline.stages.UnnestOptions);
+    method public com.google.cloud.firestore.Pipeline where(com.google.cloud.firestore.pipeline.expressions.BooleanExpr);
+  }
+
+  public final class PipelineResult {
+    method public boolean contains(com.google.cloud.firestore.FieldPath);
+    method public boolean contains(String);
+    method public boolean equals(Object);
+    method public boolean exists();
+    method @Nullable public Object get(com.google.cloud.firestore.FieldPath);
+    method @Nullable public <T> T get(com.google.cloud.firestore.FieldPath, Class<T>);
+    method @Nullable public Object get(String);
+    method @Nullable public <T> T get(String, Class<T>);
+    method @Nullable public com.google.cloud.firestore.Blob getBlob(String);
+    method @Nullable public Boolean getBoolean(String);
+    method @Nullable public Timestamp getCreateTime();
+    method public Map<String,Object> getData();
+    method @Nullable public Date getDate(String);
+    method @Nullable public Double getDouble(String);
+    method @Nullable public Timestamp getExecutionTime();
+    method @Nullable public com.google.cloud.firestore.GeoPoint getGeoPoint(String);
+    method @Nullable public String getId();
+    method @Nullable public Long getLong(String);
+    method public com.google.cloud.firestore.DocumentReference getReference();
+    method @Nullable public String getString(String);
+    method @Nullable public Timestamp getTimestamp(String);
+    method @Nullable public Timestamp getUpdateTime();
+    method public int hashCode();
+    method @Nullable public <T> T toObject(Class<T>);
+    method public String toString();
+  }
+
+  public final class PipelineSnapshot {
+    method public Timestamp getExecutionTime();
+    method @Nullable public com.google.cloud.firestore.ExplainStats getExplainStats();
+    method public com.google.cloud.firestore.Pipeline getPipeline();
+    method public List<com.google.cloud.firestore.PipelineResult> getResults();
+  }
+
+  public final class PipelineSource {
+    method public com.google.cloud.firestore.Pipeline collection(com.google.cloud.firestore.CollectionReference);
+    method public com.google.cloud.firestore.Pipeline collection(String);
+    method public com.google.cloud.firestore.Pipeline collection(String, com.google.cloud.firestore.pipeline.stages.CollectionOptions);
+    method public com.google.cloud.firestore.Pipeline collectionGroup(String);
+    method public com.google.cloud.firestore.Pipeline collectionGroup(String, com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions);
+    method public com.google.cloud.firestore.Pipeline createFrom(com.google.cloud.firestore.AggregateQuery);
+    method public com.google.cloud.firestore.Pipeline createFrom(com.google.cloud.firestore.Query);
+    method public com.google.cloud.firestore.Pipeline database();
+    method public com.google.cloud.firestore.Pipeline documents(com.google.cloud.firestore.DocumentReference...);
+  }
+
+  public class PipelineUtils {
+    ctor public PipelineUtils();
+    method public static Value encodeValue(boolean);
+    method public static Value encodeValue(com.google.cloud.firestore.pipeline.expressions.AggregateFunction);
+    method public static Value encodeValue(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static Value encodeValue(double);
+    method public static Value encodeValue(long);
+    method public static Value encodeValue(Map<String,Value>);
+    method public static Value encodeValue(Object);
+    method public static Value encodeValue(String);
+    method public static Map<String,com.google.cloud.firestore.pipeline.expressions.Expr> fieldNamesToMap(String...);
+    method public static Map<String,com.google.cloud.firestore.pipeline.expressions.Expr> selectablesToMap(com.google.cloud.firestore.pipeline.expressions.Selectable...);
+  }
+
   public final class PlanSummary {
-    method @NonNull public List<Map<String,Object>> getIndexesUsed();
+    method public List<Map<String,Object>> getIndexesUsed();
   }
 
   public final class Precondition {
     method public boolean equals(Object);
     method public int hashCode();
-    method @NonNull public static com.google.cloud.firestore.Precondition updatedAt(Timestamp);
+    method public static com.google.cloud.firestore.Precondition updatedAt(Timestamp);
     field public static final com.google.cloud.firestore.Precondition NONE;
   }
 
   public class Query {
     ctor protected Query(com.google.cloud.firestore.FirestoreRpcContext<?>, com.google.cloud.firestore.Query.QueryOptions);
-    method @NonNull public com.google.cloud.firestore.ListenerRegistration addSnapshotListener(@NonNull com.google.cloud.firestore.EventListener<com.google.cloud.firestore.QuerySnapshot>);
-    method @NonNull public com.google.cloud.firestore.ListenerRegistration addSnapshotListener(@NonNull Executor, @NonNull com.google.cloud.firestore.EventListener<com.google.cloud.firestore.QuerySnapshot>);
-    method @NonNull public com.google.cloud.firestore.AggregateQuery aggregate(@NonNull com.google.cloud.firestore.AggregateField, @NonNull com.google.cloud.firestore.AggregateField...);
-    method @NonNull public com.google.cloud.firestore.AggregateQuery count();
-    method @NonNull public com.google.cloud.firestore.Query endAt(@NonNull com.google.cloud.firestore.DocumentSnapshot);
-    method @NonNull public com.google.cloud.firestore.Query endAt(Object...);
-    method @NonNull public com.google.cloud.firestore.Query endBefore(@NonNull com.google.cloud.firestore.DocumentSnapshot);
-    method @NonNull public com.google.cloud.firestore.Query endBefore(Object...);
+    method public com.google.cloud.firestore.ListenerRegistration addSnapshotListener(com.google.cloud.firestore.EventListener<com.google.cloud.firestore.QuerySnapshot>);
+    method public com.google.cloud.firestore.ListenerRegistration addSnapshotListener(Executor, com.google.cloud.firestore.EventListener<com.google.cloud.firestore.QuerySnapshot>);
+    method public com.google.cloud.firestore.AggregateQuery aggregate(com.google.cloud.firestore.AggregateField, com.google.cloud.firestore.AggregateField...);
+    method public com.google.cloud.firestore.AggregateQuery count();
+    method public com.google.cloud.firestore.Query endAt(com.google.cloud.firestore.DocumentSnapshot);
+    method public com.google.cloud.firestore.Query endAt(Object...);
+    method public com.google.cloud.firestore.Query endBefore(com.google.cloud.firestore.DocumentSnapshot);
+    method public com.google.cloud.firestore.Query endBefore(Object...);
     method public boolean equals(Object);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.ExplainResults<com.google.cloud.firestore.QuerySnapshot>> explain(com.google.cloud.firestore.ExplainOptions);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.ExplainMetrics> explainStream(@NonNull com.google.cloud.firestore.ExplainOptions, @NonNull ApiStreamObserver<com.google.cloud.firestore.DocumentSnapshot>);
+    method public ApiFuture<com.google.cloud.firestore.ExplainResults<com.google.cloud.firestore.QuerySnapshot>> explain(com.google.cloud.firestore.ExplainOptions);
+    method public ApiFuture<com.google.cloud.firestore.ExplainMetrics> explainStream(com.google.cloud.firestore.ExplainOptions, ApiStreamObserver<com.google.cloud.firestore.DocumentSnapshot>);
     method public static com.google.cloud.firestore.Query fromProto(com.google.cloud.firestore.Firestore, RunQueryRequest);
-    method @NonNull public ApiFuture<com.google.cloud.firestore.QuerySnapshot> get();
-    method @NonNull public com.google.cloud.firestore.Firestore getFirestore();
+    method public ApiFuture<com.google.cloud.firestore.QuerySnapshot> get();
+    method public com.google.cloud.firestore.Firestore getFirestore();
     method public int hashCode();
-    method @NonNull public com.google.cloud.firestore.Query limit(int);
-    method @NonNull public com.google.cloud.firestore.Query limitToLast(int);
-    method @NonNull public com.google.cloud.firestore.Query offset(int);
-    method @NonNull public com.google.cloud.firestore.Query orderBy(@NonNull com.google.cloud.firestore.FieldPath);
-    method @NonNull public com.google.cloud.firestore.Query orderBy(@NonNull com.google.cloud.firestore.FieldPath, @NonNull com.google.cloud.firestore.Query.Direction);
-    method @NonNull public com.google.cloud.firestore.Query orderBy(@NonNull String);
-    method @NonNull public com.google.cloud.firestore.Query orderBy(@NonNull String, @NonNull com.google.cloud.firestore.Query.Direction);
-    method @NonNull public com.google.cloud.firestore.Query select(com.google.cloud.firestore.FieldPath...);
-    method @NonNull public com.google.cloud.firestore.Query select(String...);
-    method @NonNull public com.google.cloud.firestore.Query startAfter(@NonNull com.google.cloud.firestore.DocumentSnapshot);
+    method public com.google.cloud.firestore.Query limit(int);
+    method public com.google.cloud.firestore.Query limitToLast(int);
+    method public com.google.cloud.firestore.Query offset(int);
+    method public com.google.cloud.firestore.Query orderBy(com.google.cloud.firestore.FieldPath);
+    method public com.google.cloud.firestore.Query orderBy(com.google.cloud.firestore.FieldPath, com.google.cloud.firestore.Query.Direction);
+    method public com.google.cloud.firestore.Query orderBy(String);
+    method public com.google.cloud.firestore.Query orderBy(String, com.google.cloud.firestore.Query.Direction);
+    method public com.google.cloud.firestore.Query select(com.google.cloud.firestore.FieldPath...);
+    method public com.google.cloud.firestore.Query select(String...);
+    method public com.google.cloud.firestore.Query startAfter(com.google.cloud.firestore.DocumentSnapshot);
     method public com.google.cloud.firestore.Query startAfter(Object...);
-    method @NonNull public com.google.cloud.firestore.Query startAt(@NonNull com.google.cloud.firestore.DocumentSnapshot);
-    method @NonNull public com.google.cloud.firestore.Query startAt(Object...);
-    method public void stream(@NonNull ApiStreamObserver<com.google.cloud.firestore.DocumentSnapshot>);
+    method public com.google.cloud.firestore.Query startAt(com.google.cloud.firestore.DocumentSnapshot);
+    method public com.google.cloud.firestore.Query startAt(Object...);
+    method public void stream(ApiStreamObserver<com.google.cloud.firestore.DocumentSnapshot>);
     method public RunQueryRequest toProto();
     method public com.google.cloud.firestore.Query where(com.google.cloud.firestore.Filter);
-    method @NonNull public com.google.cloud.firestore.Query whereArrayContains(@NonNull com.google.cloud.firestore.FieldPath, @NonNull Object);
-    method @NonNull public com.google.cloud.firestore.Query whereArrayContains(@NonNull String, @NonNull Object);
-    method @NonNull public com.google.cloud.firestore.Query whereArrayContainsAny(@NonNull com.google.cloud.firestore.FieldPath, @NonNull List<? extends Object>);
-    method @NonNull public com.google.cloud.firestore.Query whereArrayContainsAny(@NonNull String, @NonNull List<? extends Object>);
-    method @NonNull public com.google.cloud.firestore.Query whereEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
-    method @NonNull public com.google.cloud.firestore.Query whereEqualTo(@NonNull String, @Nullable Object);
-    method @NonNull public com.google.cloud.firestore.Query whereGreaterThan(@NonNull com.google.cloud.firestore.FieldPath, @NonNull Object);
-    method @NonNull public com.google.cloud.firestore.Query whereGreaterThan(@NonNull String, @NonNull Object);
-    method @NonNull public com.google.cloud.firestore.Query whereGreaterThanOrEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @NonNull Object);
-    method @NonNull public com.google.cloud.firestore.Query whereGreaterThanOrEqualTo(@NonNull String, @NonNull Object);
-    method @NonNull public com.google.cloud.firestore.Query whereIn(@NonNull com.google.cloud.firestore.FieldPath, @NonNull List<? extends Object>);
-    method @NonNull public com.google.cloud.firestore.Query whereIn(@NonNull String, @NonNull List<? extends Object>);
-    method @NonNull public com.google.cloud.firestore.Query whereLessThan(@NonNull com.google.cloud.firestore.FieldPath, @NonNull Object);
-    method @NonNull public com.google.cloud.firestore.Query whereLessThan(@NonNull String, @NonNull Object);
-    method @NonNull public com.google.cloud.firestore.Query whereLessThanOrEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @NonNull Object);
-    method @NonNull public com.google.cloud.firestore.Query whereLessThanOrEqualTo(@NonNull String, @NonNull Object);
-    method @NonNull public com.google.cloud.firestore.Query whereNotEqualTo(@NonNull com.google.cloud.firestore.FieldPath, @Nullable Object);
-    method @NonNull public com.google.cloud.firestore.Query whereNotEqualTo(@NonNull String, @Nullable Object);
-    method @NonNull public com.google.cloud.firestore.Query whereNotIn(@NonNull com.google.cloud.firestore.FieldPath, @NonNull List<? extends Object>);
-    method @NonNull public com.google.cloud.firestore.Query whereNotIn(@NonNull String, @NonNull List<? extends Object>);
+    method public com.google.cloud.firestore.Query whereArrayContains(com.google.cloud.firestore.FieldPath, Object);
+    method public com.google.cloud.firestore.Query whereArrayContains(String, Object);
+    method public com.google.cloud.firestore.Query whereArrayContainsAny(com.google.cloud.firestore.FieldPath, List<? extends Object>);
+    method public com.google.cloud.firestore.Query whereArrayContainsAny(String, List<? extends Object>);
+    method public com.google.cloud.firestore.Query whereEqualTo(com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method public com.google.cloud.firestore.Query whereEqualTo(String, @Nullable Object);
+    method public com.google.cloud.firestore.Query whereGreaterThan(com.google.cloud.firestore.FieldPath, Object);
+    method public com.google.cloud.firestore.Query whereGreaterThan(String, Object);
+    method public com.google.cloud.firestore.Query whereGreaterThanOrEqualTo(com.google.cloud.firestore.FieldPath, Object);
+    method public com.google.cloud.firestore.Query whereGreaterThanOrEqualTo(String, Object);
+    method public com.google.cloud.firestore.Query whereIn(com.google.cloud.firestore.FieldPath, List<? extends Object>);
+    method public com.google.cloud.firestore.Query whereIn(String, List<? extends Object>);
+    method public com.google.cloud.firestore.Query whereLessThan(com.google.cloud.firestore.FieldPath, Object);
+    method public com.google.cloud.firestore.Query whereLessThan(String, Object);
+    method public com.google.cloud.firestore.Query whereLessThanOrEqualTo(com.google.cloud.firestore.FieldPath, Object);
+    method public com.google.cloud.firestore.Query whereLessThanOrEqualTo(String, Object);
+    method public com.google.cloud.firestore.Query whereNotEqualTo(com.google.cloud.firestore.FieldPath, @Nullable Object);
+    method public com.google.cloud.firestore.Query whereNotEqualTo(String, @Nullable Object);
+    method public com.google.cloud.firestore.Query whereNotIn(com.google.cloud.firestore.FieldPath, List<? extends Object>);
+    method public com.google.cloud.firestore.Query whereNotIn(String, List<? extends Object>);
   }
 
   public enum Query.Direction {
@@ -506,15 +622,15 @@ package com.google.cloud.firestore {
   public abstract class QuerySnapshot {
     ctor protected QuerySnapshot(com.google.cloud.firestore.Query, Timestamp);
     method public abstract boolean equals(Object);
-    method @NonNull public abstract List<com.google.cloud.firestore.DocumentChange> getDocumentChanges();
-    method @NonNull public abstract List<com.google.cloud.firestore.QueryDocumentSnapshot> getDocuments();
-    method @NonNull public com.google.cloud.firestore.Query getQuery();
-    method @NonNull public Timestamp getReadTime();
+    method public abstract List<com.google.cloud.firestore.DocumentChange> getDocumentChanges();
+    method public abstract List<com.google.cloud.firestore.QueryDocumentSnapshot> getDocuments();
+    method public com.google.cloud.firestore.Query getQuery();
+    method public Timestamp getReadTime();
     method public abstract int hashCode();
     method public boolean isEmpty();
-    method @NonNull public Iterator<com.google.cloud.firestore.QueryDocumentSnapshot> iterator();
+    method public Iterator<com.google.cloud.firestore.QueryDocumentSnapshot> iterator();
     method public abstract int size();
-    method @NonNull public <T> List<T> toObjects(@NonNull Class<T>);
+    method public <T> List<T> toObjects(Class<T>);
     method public static com.google.cloud.firestore.QuerySnapshot withChanges(com.google.cloud.firestore.Query, Timestamp, com.google.cloud.firestore.DocumentSet, List<com.google.cloud.firestore.DocumentChange>);
     method public static com.google.cloud.firestore.QuerySnapshot withDocuments(com.google.cloud.firestore.Query, Timestamp, List<com.google.cloud.firestore.QueryDocumentSnapshot>);
   }
@@ -523,26 +639,29 @@ package com.google.cloud.firestore {
     method public ApiFuture<Void> run();
     field public static final int MAX_PENDING_OPS = 5000; // 0x1388
     field public static final int MIN_PENDING_OPS = 1000; // 0x3e8
-    field public static final String REFERENCE_NAME_MIN_ID;
+    field public static final String REFERENCE_NAME_MIN_ID = "__id-9223372036854775808__";
   }
 
   public final class SetOptions {
     method public boolean equals(Object);
     method public int hashCode();
-    method @NonNull public static com.google.cloud.firestore.SetOptions merge();
-    method @NonNull public static com.google.cloud.firestore.SetOptions mergeFieldPaths(List<com.google.cloud.firestore.FieldPath>);
-    method @NonNull public static com.google.cloud.firestore.SetOptions mergeFields(List<String>);
-    method @NonNull public static com.google.cloud.firestore.SetOptions mergeFields(String...);
+    method public static com.google.cloud.firestore.SetOptions merge();
+    method public static com.google.cloud.firestore.SetOptions mergeFieldPaths(List<com.google.cloud.firestore.FieldPath>);
+    method public static com.google.cloud.firestore.SetOptions mergeFields(List<String>);
+    method public static com.google.cloud.firestore.SetOptions mergeFields(String...);
   }
 
   public abstract class Transaction extends com.google.cloud.firestore.UpdateBuilder<com.google.cloud.firestore.Transaction> {
     ctor protected Transaction(com.google.cloud.firestore.FirestoreImpl);
-    method @NonNull public abstract ApiFuture<com.google.cloud.firestore.AggregateQuerySnapshot> get(@NonNull com.google.cloud.firestore.AggregateQuery);
-    method @NonNull public abstract ApiFuture<com.google.cloud.firestore.DocumentSnapshot> get(@NonNull com.google.cloud.firestore.DocumentReference);
-    method @NonNull public abstract ApiFuture<com.google.cloud.firestore.QuerySnapshot> get(@NonNull com.google.cloud.firestore.Query);
-    method @NonNull public abstract ApiFuture<List<com.google.cloud.firestore.DocumentSnapshot>> getAll(@NonNull com.google.cloud.firestore.DocumentReference...);
-    method @NonNull public abstract ApiFuture<List<com.google.cloud.firestore.DocumentSnapshot>> getAll(@NonNull com.google.cloud.firestore.DocumentReference[], @Nullable com.google.cloud.firestore.FieldMask);
+    method public abstract ApiFuture<com.google.cloud.firestore.PipelineSnapshot> execute(com.google.cloud.firestore.Pipeline);
+    method public abstract ApiFuture<com.google.cloud.firestore.PipelineSnapshot> execute(com.google.cloud.firestore.Pipeline, com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions);
+    method public abstract ApiFuture<com.google.cloud.firestore.AggregateQuerySnapshot> get(com.google.cloud.firestore.AggregateQuery);
+    method public abstract ApiFuture<com.google.cloud.firestore.DocumentSnapshot> get(com.google.cloud.firestore.DocumentReference);
+    method public abstract ApiFuture<com.google.cloud.firestore.QuerySnapshot> get(com.google.cloud.firestore.Query);
+    method public abstract ApiFuture<List<com.google.cloud.firestore.DocumentSnapshot>> getAll(com.google.cloud.firestore.DocumentReference...);
+    method public abstract ApiFuture<List<com.google.cloud.firestore.DocumentSnapshot>> getAll(com.google.cloud.firestore.DocumentReference[], @Nullable com.google.cloud.firestore.FieldMask);
     method public abstract boolean hasTransactionId();
+    field protected com.google.cloud.firestore.telemetry.TraceUtil.Context transactionTraceContext;
   }
 
   public static interface Transaction.AsyncFunction<T> {
@@ -554,36 +673,36 @@ package com.google.cloud.firestore {
   }
 
   public final class TransactionOptions {
-    method @NonNull public static com.google.cloud.firestore.TransactionOptions create();
-    method @Deprecated @NonNull public static com.google.cloud.firestore.TransactionOptions create(@Nullable Executor);
-    method @Deprecated @NonNull public static com.google.cloud.firestore.TransactionOptions create(@Nullable Executor, int);
-    method @Deprecated @NonNull public static com.google.cloud.firestore.TransactionOptions create(int);
-    method @NonNull public static com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder createReadOnlyOptionsBuilder();
-    method @NonNull public static com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder createReadWriteOptionsBuilder();
+    method public static com.google.cloud.firestore.TransactionOptions create();
+    method @Deprecated public static com.google.cloud.firestore.TransactionOptions create(@Nullable Executor);
+    method @Deprecated public static com.google.cloud.firestore.TransactionOptions create(@Nullable Executor, int);
+    method @Deprecated public static com.google.cloud.firestore.TransactionOptions create(int);
+    method public static com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder createReadOnlyOptionsBuilder();
+    method public static com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder createReadWriteOptionsBuilder();
     method @Nullable public Executor getExecutor();
     method public int getNumberOfAttempts();
     method @Nullable public Timestamp getReadTime();
-    method @NonNull public com.google.cloud.firestore.TransactionOptions.TransactionOptionsType getType();
+    method public com.google.cloud.firestore.TransactionOptions.TransactionOptionsType getType();
   }
 
   public abstract static class TransactionOptions.Builder<B extends com.google.cloud.firestore.TransactionOptions.Builder<B>> {
     ctor protected TransactionOptions.Builder(@Nullable Executor);
-    method @NonNull public abstract com.google.cloud.firestore.TransactionOptions build();
+    method public abstract com.google.cloud.firestore.TransactionOptions build();
     method @Nullable public Executor getExecutor();
-    method @NonNull public B setExecutor(@Nullable Executor);
+    method public B setExecutor(@Nullable Executor);
     field @Nullable protected Executor executor;
   }
 
   public static final class TransactionOptions.ReadOnlyOptionsBuilder extends com.google.cloud.firestore.TransactionOptions.Builder<com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder> {
-    method @NonNull public com.google.cloud.firestore.TransactionOptions build();
+    method public com.google.cloud.firestore.TransactionOptions build();
     method @Nullable public TimestampOrBuilder getReadTime();
-    method @NonNull public com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder setReadTime(@Nullable TimestampOrBuilder);
+    method public com.google.cloud.firestore.TransactionOptions.ReadOnlyOptionsBuilder setReadTime(@Nullable TimestampOrBuilder);
   }
 
   public static final class TransactionOptions.ReadWriteOptionsBuilder extends com.google.cloud.firestore.TransactionOptions.Builder<com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder> {
-    method @NonNull public com.google.cloud.firestore.TransactionOptions build();
+    method public com.google.cloud.firestore.TransactionOptions build();
     method public int getNumberOfAttempts();
-    method @NonNull public com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder setNumberOfAttempts(int);
+    method public com.google.cloud.firestore.TransactionOptions.ReadWriteOptionsBuilder setNumberOfAttempts(int);
   }
 
   public enum TransactionOptions.TransactionOptionsType {
@@ -593,32 +712,38 @@ package com.google.cloud.firestore {
 
   public abstract class UpdateBuilder<T> {
     method protected String className();
-    method @NonNull public T create(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>);
-    method @NonNull public T create(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Object);
-    method @NonNull public T delete(@NonNull com.google.cloud.firestore.DocumentReference);
-    method @NonNull public T delete(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.Precondition);
+    method public T create(com.google.cloud.firestore.DocumentReference, Map<String,Object>);
+    method public T create(com.google.cloud.firestore.DocumentReference, Object);
+    method public T delete(com.google.cloud.firestore.DocumentReference);
+    method public T delete(com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.Precondition);
     method public int getMutationsSize();
-    method @NonNull public T set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>);
-    method @NonNull public T set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>, @NonNull com.google.cloud.firestore.SetOptions);
-    method @NonNull public T set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Object);
-    method @NonNull public T set(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Object, @NonNull com.google.cloud.firestore.SetOptions);
+    method public T set(com.google.cloud.firestore.DocumentReference, Map<String,Object>);
+    method public T set(com.google.cloud.firestore.DocumentReference, Map<String,Object>, com.google.cloud.firestore.SetOptions);
+    method public T set(com.google.cloud.firestore.DocumentReference, Object);
+    method public T set(com.google.cloud.firestore.DocumentReference, Object, com.google.cloud.firestore.SetOptions);
     method public String toString();
-    method @NonNull public T update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
-    method @NonNull public T update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.Precondition, @NonNull com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
-    method @NonNull public T update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull com.google.cloud.firestore.Precondition, @NonNull String, @Nullable Object, Object...);
-    method @NonNull public T update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>);
-    method @NonNull public T update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull Map<String,Object>, com.google.cloud.firestore.Precondition);
-    method @NonNull public T update(@NonNull com.google.cloud.firestore.DocumentReference, @NonNull String, @Nullable Object, Object...);
+    method public T update(com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
+    method public T update(com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.Precondition, com.google.cloud.firestore.FieldPath, @Nullable Object, Object...);
+    method public T update(com.google.cloud.firestore.DocumentReference, com.google.cloud.firestore.Precondition, String, @Nullable Object, Object...);
+    method public T update(com.google.cloud.firestore.DocumentReference, Map<String,Object>);
+    method public T update(com.google.cloud.firestore.DocumentReference, Map<String,Object>, com.google.cloud.firestore.Precondition);
+    method public T update(com.google.cloud.firestore.DocumentReference, String, @Nullable Object, Object...);
     field protected volatile boolean committed;
   }
 
+  public final class VectorValue {
+    method public boolean equals(Object);
+    method public int hashCode();
+    method public double[] toArray();
+  }
+
   public class WriteBatch extends com.google.cloud.firestore.UpdateBuilder<com.google.cloud.firestore.WriteBatch> {
-    method @NonNull public ApiFuture<List<com.google.cloud.firestore.WriteResult>> commit();
+    method public ApiFuture<List<com.google.cloud.firestore.WriteResult>> commit();
   }
 
   public final class WriteResult {
     method public boolean equals(Object);
-    method @NonNull public Timestamp getUpdateTime();
+    method public Timestamp getUpdateTime();
     method public int hashCode();
   }
 
@@ -841,6 +966,696 @@ package com.google.cloud.firestore.collection {
 
 }
 
+package com.google.cloud.firestore.pipeline.expressions {
+
+  public class AggregateFunction {
+    method public com.google.cloud.firestore.pipeline.expressions.AliasedAggregate as(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction avg(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction avg(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction count(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction count(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction countAll();
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction countDistinct(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction countDistinct(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction countIf(com.google.cloud.firestore.pipeline.expressions.BooleanExpr);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction generic(String, com.google.cloud.firestore.pipeline.expressions.Expr...);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction maximum(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction maximum(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction minimum(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction minimum(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction sum(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction sum(String);
+  }
+
+  public class AliasedAggregate {
+    method public String getAlias();
+    method public com.google.cloud.firestore.pipeline.expressions.AggregateFunction getExpr();
+  }
+
+  public final class AliasedExpr<T extends com.google.cloud.firestore.pipeline.expressions.Expr> extends com.google.cloud.firestore.pipeline.expressions.Expr implements com.google.cloud.firestore.pipeline.expressions.Selectable {
+    method public String getAlias();
+    method public T getExpr();
+  }
+
+  public class BooleanExpr extends com.google.cloud.firestore.pipeline.expressions.FunctionExpr {
+  }
+
+  public final class Constant extends com.google.cloud.firestore.pipeline.expressions.Expr {
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant nullValue();
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(Boolean);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(byte[]);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(com.google.cloud.firestore.Blob);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(com.google.cloud.firestore.DocumentReference);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(com.google.cloud.firestore.GeoPoint);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(Date);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(Iterable<?>);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(Map<String,?>);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(Object[]);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(Timestamp);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant of(Value);
+    method public static com.google.cloud.firestore.pipeline.expressions.Constant vector(double[]);
+  }
+
+  public abstract class Expr {
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr abs();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr abs(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr abs(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr add(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr add(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr add(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr add(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr add(String, Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr and(com.google.cloud.firestore.pipeline.expressions.BooleanExpr, com.google.cloud.firestore.pipeline.expressions.BooleanExpr...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr array(List<Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr array(Object...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayConcat(com.google.cloud.firestore.pipeline.expressions.Expr, Object...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr arrayConcat(com.google.cloud.firestore.pipeline.expressions.Expr...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayConcat(String, Object...);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContains(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContains(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContains(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContains(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContains(String, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAll(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAll(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAll(com.google.cloud.firestore.pipeline.expressions.Expr, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAll(List<Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAll(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAll(String, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAny(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAny(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAny(com.google.cloud.firestore.pipeline.expressions.Expr, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAny(List<Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAny(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAny(String, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr arrayGet(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayGet(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayGet(com.google.cloud.firestore.pipeline.expressions.Expr, int);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr arrayGet(int);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayGet(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayGet(String, int);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr arrayLength();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayLength(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayLength(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr arrayReverse();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayReverse(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayReverse(String);
+    method public com.google.cloud.firestore.pipeline.expressions.Selectable as(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Ordering ascending();
+    method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction avg();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr blob(byte[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr byteLength();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr byteLength(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr byteLength(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr ceil();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr ceil(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr ceil(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr charLength();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr charLength(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr charLength(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr collectionId();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr collectionId(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr collectionId(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr cond(com.google.cloud.firestore.pipeline.expressions.BooleanExpr, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr cond(com.google.cloud.firestore.pipeline.expressions.BooleanExpr, Object, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr cond(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr cond(Object, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr constant(Boolean);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(byte[]);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(com.google.cloud.firestore.Blob);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(com.google.cloud.firestore.DocumentReference);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(com.google.cloud.firestore.GeoPoint);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(com.google.cloud.firestore.VectorValue);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(Date);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(Timestamp);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr cosineDistance(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr cosineDistance(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr cosineDistance(com.google.cloud.firestore.pipeline.expressions.Expr, double[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr cosineDistance(double[]);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr cosineDistance(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr cosineDistance(String, double[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction count();
+    method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction countDistinct();
+    method public final com.google.cloud.firestore.pipeline.expressions.Ordering descending();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr divide(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr divide(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr divide(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr divide(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr divide(String, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr documentId();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr documentId(com.google.cloud.firestore.DocumentReference);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr documentId(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr documentId(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr dotProduct(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr dotProduct(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr dotProduct(com.google.cloud.firestore.pipeline.expressions.Expr, double[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr dotProduct(double[]);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr dotProduct(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr dotProduct(String, double[]);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr endsWith(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr endsWith(com.google.cloud.firestore.pipeline.expressions.Expr, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr endsWith(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr endsWith(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr endsWith(String, String);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eq(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eq(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr eq(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eq(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eq(String, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eqAny(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eqAny(com.google.cloud.firestore.pipeline.expressions.Expr, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr eqAny(List<Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eqAny(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eqAny(String, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr euclideanDistance(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr euclideanDistance(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr euclideanDistance(com.google.cloud.firestore.pipeline.expressions.Expr, double[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr euclideanDistance(double[]);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr euclideanDistance(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr euclideanDistance(String, double[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr exists();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr exists(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr exists(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr exp();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr exp(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr exp(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Field field(com.google.cloud.firestore.FieldPath);
+    method public static com.google.cloud.firestore.pipeline.expressions.Field field(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr floor();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr floor(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr floor(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr generic(String, com.google.cloud.firestore.pipeline.expressions.Expr...);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gt(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gt(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr gt(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gt(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gt(String, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gte(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gte(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr gte(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gte(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gte(String, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr ifError(com.google.cloud.firestore.pipeline.expressions.BooleanExpr, com.google.cloud.firestore.pipeline.expressions.BooleanExpr);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr ifError(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr ifError(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr ifError(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr ifError(Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr isAbsent();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isAbsent(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isAbsent(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr isError();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isError(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNaN();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNaN(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNaN(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNotNan();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNotNan(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNotNan(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNotNull();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNotNull(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNotNull(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNull();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNull(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNull(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr length();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr length(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr length(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr like(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr like(com.google.cloud.firestore.pipeline.expressions.Expr, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr like(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr like(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr like(String, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr ln();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr ln(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr ln(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr log(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr log(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr log(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr log(Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr log(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr log(String, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr log10();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr log10(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr log10(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr logicalMaximum(com.google.cloud.firestore.pipeline.expressions.Expr, Object...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr logicalMaximum(Object...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr logicalMaximum(String, Object...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr logicalMinimum(com.google.cloud.firestore.pipeline.expressions.Expr, Object...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr logicalMinimum(Object...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr logicalMinimum(String, Object...);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lt(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lt(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr lt(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lt(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lt(String, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lte(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lte(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr lte(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lte(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lte(String, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr map(Map<String,Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapGet(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapGet(com.google.cloud.firestore.pipeline.expressions.Expr, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr mapGet(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapGet(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapGet(String, String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapMerge(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapMerge(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr mapMerge(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapMerge(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapMerge(String, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr mapRemove(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapRemove(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapRemove(com.google.cloud.firestore.pipeline.expressions.Expr, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr mapRemove(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapRemove(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapRemove(String, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction maximum();
+    method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction minimum();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mod(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mod(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr mod(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mod(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr mod(String, Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr multiply(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr multiply(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr multiply(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr multiply(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr multiply(String, Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr neq(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr neq(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr neq(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr neq(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr neq(String, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr not(com.google.cloud.firestore.pipeline.expressions.BooleanExpr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr notEqAny(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr notEqAny(com.google.cloud.firestore.pipeline.expressions.Expr, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr notEqAny(List<Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr notEqAny(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr notEqAny(String, List<Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr nullValue();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr or(com.google.cloud.firestore.pipeline.expressions.BooleanExpr, com.google.cloud.firestore.pipeline.expressions.BooleanExpr...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr pow(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr pow(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr pow(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr pow(Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr pow(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr pow(String, Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr rand();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexContains(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexContains(com.google.cloud.firestore.pipeline.expressions.Expr, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexContains(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexContains(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexContains(String, String);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexMatch(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexMatch(com.google.cloud.firestore.pipeline.expressions.Expr, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexMatch(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexMatch(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexMatch(String, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr round();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr round(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr round(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr roundToPrecision(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr roundToPrecision(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr roundToPrecision(com.google.cloud.firestore.pipeline.expressions.Expr, int);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr roundToPrecision(int);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr roundToPrecision(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr roundToPrecision(String, int);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr sqrt();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr sqrt(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr sqrt(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr startsWith(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr startsWith(com.google.cloud.firestore.pipeline.expressions.Expr, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr startsWith(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr startsWith(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr startsWith(String, String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr strConcat(com.google.cloud.firestore.pipeline.expressions.Expr, Object...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr strConcat(com.google.cloud.firestore.pipeline.expressions.Expr...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr strConcat(String, Object...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr strConcat(String...);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr strContains(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr strContains(com.google.cloud.firestore.pipeline.expressions.Expr, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr strContains(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr strContains(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr strContains(String, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr strReverse();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr strReverse(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr strReverse(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr substring(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr substring(Object, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr substring(String, int, int);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr subtract(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr subtract(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr subtract(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr subtract(String, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr subtract(String, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction sum();
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampAdd(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampAdd(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampAdd(com.google.cloud.firestore.pipeline.expressions.Expr, String, long);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampAdd(String, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampAdd(String, long);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampAdd(String, String, long);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampSub(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampSub(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampSub(com.google.cloud.firestore.pipeline.expressions.Expr, String, long);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampSub(String, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampSub(String, long);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampSub(String, String, long);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixMicros();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixMicros(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixMicros(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixMillis();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixMillis(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixMillis(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixSeconds();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixSeconds(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixSeconds(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr toLower();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr toLower(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr toLower(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr toUpper();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr toUpper(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr toUpper(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr trim();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr trim(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr trim(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr unixMicrosToTimestamp();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr unixMicrosToTimestamp(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr unixMicrosToTimestamp(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr unixMillisToTimestamp();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr unixMillisToTimestamp(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr unixMillisToTimestamp(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr unixSecondsToTimestamp();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr unixSecondsToTimestamp(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr unixSecondsToTimestamp(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr vector(com.google.cloud.firestore.VectorValue);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr vector(double[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expr vectorLength();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr vectorLength(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expr vectorLength(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr xor(com.google.cloud.firestore.pipeline.expressions.BooleanExpr, com.google.cloud.firestore.pipeline.expressions.BooleanExpr...);
+  }
+
+  public final class Field extends com.google.cloud.firestore.pipeline.expressions.Expr implements com.google.cloud.firestore.pipeline.expressions.Selectable {
+    method public boolean equals(Object);
+    method public com.google.cloud.firestore.FieldPath getPath();
+    method public int hashCode();
+    method public static com.google.cloud.firestore.pipeline.expressions.Field ofServerPath(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Field ofUserPath(String);
+    method public Value toProto();
+    field public static final String DOCUMENT_ID = "__name__";
+  }
+
+  public class FunctionExpr extends com.google.cloud.firestore.pipeline.expressions.Expr {
+    method public boolean equals(Object);
+    method public int hashCode();
+  }
+
+  public final class FunctionUtils {
+    ctor public FunctionUtils();
+    method public static Value aggregateFunctionToValue(com.google.cloud.firestore.pipeline.expressions.AggregateFunction);
+    method public static Value exprToValue(com.google.cloud.firestore.pipeline.expressions.Expr);
+  }
+
+  public final class Ordering {
+    method public static com.google.cloud.firestore.pipeline.expressions.Ordering ascending(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Ordering descending(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public com.google.cloud.firestore.pipeline.expressions.Ordering.Direction getDir();
+    method public com.google.cloud.firestore.pipeline.expressions.Expr getExpr();
+    method public Value toProto();
+  }
+
+  public enum Ordering.Direction {
+    method public String toString();
+    enum_constant public static final com.google.cloud.firestore.pipeline.expressions.Ordering.Direction ASCENDING;
+    enum_constant public static final com.google.cloud.firestore.pipeline.expressions.Ordering.Direction DESCENDING;
+  }
+
+  public interface Selectable {
+  }
+
+}
+
+package com.google.cloud.firestore.pipeline.stages {
+
+  public final class AddFields extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public AddFields(Map<String,com.google.cloud.firestore.pipeline.expressions.Expr>);
+  }
+
+  public final class Aggregate extends com.google.cloud.firestore.pipeline.stages.Stage {
+    method public static com.google.cloud.firestore.pipeline.stages.Aggregate withAccumulators(com.google.cloud.firestore.pipeline.expressions.AliasedAggregate...);
+    method public com.google.cloud.firestore.pipeline.stages.Aggregate withGroups(com.google.cloud.firestore.pipeline.expressions.Selectable...);
+    method public com.google.cloud.firestore.pipeline.stages.Aggregate withGroups(String...);
+    method public com.google.cloud.firestore.pipeline.stages.Aggregate withOptions(com.google.cloud.firestore.pipeline.stages.AggregateOptions);
+  }
+
+  public final class AggregateHints {
+    ctor public AggregateHints();
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateHints with(String, boolean);
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateHints with(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateHints with(String, double);
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateHints with(String, long);
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateHints with(String, String);
+    method public com.google.cloud.firestore.pipeline.stages.AggregateHints withForceStreamableEnabled();
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateHints withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+  }
+
+  public final class AggregateOptions {
+    ctor public AggregateOptions();
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateOptions with(String, boolean);
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateOptions with(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateOptions with(String, double);
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateOptions with(String, long);
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateOptions with(String, String);
+    method public com.google.cloud.firestore.pipeline.stages.AggregateOptions withHints(com.google.cloud.firestore.pipeline.stages.AggregateHints);
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+  }
+
+  public final class Collection extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public Collection(String, com.google.cloud.firestore.pipeline.stages.CollectionOptions);
+    method public com.google.cloud.firestore.pipeline.stages.Collection withOptions(com.google.cloud.firestore.pipeline.stages.CollectionOptions);
+  }
+
+  public final class CollectionGroup extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public CollectionGroup(String, com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions);
+    method public com.google.cloud.firestore.pipeline.stages.CollectionGroup withOptions(com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions);
+  }
+
+  public final class CollectionGroupOptions {
+    ctor public CollectionGroupOptions();
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions with(String, boolean);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions with(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions with(String, double);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions with(String, long);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions with(String, String);
+    method public com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions withHints(com.google.cloud.firestore.pipeline.stages.CollectionHints);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+  }
+
+  public final class CollectionHints {
+    ctor public CollectionHints();
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionHints with(String, boolean);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionHints with(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionHints with(String, double);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionHints with(String, long);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionHints with(String, String);
+    method public com.google.cloud.firestore.pipeline.stages.CollectionHints withForceIndex(String);
+    method public com.google.cloud.firestore.pipeline.stages.CollectionHints withIgnoreIndexFields(String...);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionHints withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+  }
+
+  public final class CollectionOptions {
+    ctor public CollectionOptions();
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionOptions with(String, boolean);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionOptions with(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionOptions with(String, double);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionOptions with(String, long);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionOptions with(String, String);
+    method public com.google.cloud.firestore.pipeline.stages.CollectionOptions withHints(com.google.cloud.firestore.pipeline.stages.CollectionHints);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+  }
+
+  public final class Database extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public Database();
+  }
+
+  public final class Distinct extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public Distinct(Map<String,com.google.cloud.firestore.pipeline.expressions.Expr>);
+  }
+
+  public final class Documents extends com.google.cloud.firestore.pipeline.stages.Stage {
+    method public static com.google.cloud.firestore.pipeline.stages.Documents of(com.google.cloud.firestore.DocumentReference...);
+  }
+
+  public final class ExplainOptions {
+    ctor public ExplainOptions();
+    method public final com.google.cloud.firestore.pipeline.stages.ExplainOptions with(String, boolean);
+    method public final com.google.cloud.firestore.pipeline.stages.ExplainOptions with(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public final com.google.cloud.firestore.pipeline.stages.ExplainOptions with(String, double);
+    method public final com.google.cloud.firestore.pipeline.stages.ExplainOptions with(String, long);
+    method public final com.google.cloud.firestore.pipeline.stages.ExplainOptions with(String, String);
+    method public com.google.cloud.firestore.pipeline.stages.ExplainOptions withExecutionMode(com.google.cloud.firestore.pipeline.stages.ExplainOptions.ExecutionMode);
+    method public final com.google.cloud.firestore.pipeline.stages.ExplainOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+  }
+
+  public static class ExplainOptions.ExecutionMode {
+    method public Value toProto();
+    field public static final com.google.cloud.firestore.pipeline.stages.ExplainOptions.ExecutionMode ANALYZE;
+    field public static final com.google.cloud.firestore.pipeline.stages.ExplainOptions.ExecutionMode EXPLAIN;
+  }
+
+  public final class FindNearest extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public FindNearest(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.VectorValue, com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure, com.google.cloud.firestore.pipeline.stages.FindNearestOptions);
+  }
+
+  public static final class FindNearest.DistanceMeasure {
+    method public static com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure generic(String);
+    field public static final com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure COSINE;
+    field public static final com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure DOT_PRODUCT;
+    field public static final com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure EUCLIDEAN;
+  }
+
+  public final class FindNearestOptions {
+    ctor public FindNearestOptions();
+    method public final com.google.cloud.firestore.pipeline.stages.FindNearestOptions with(String, boolean);
+    method public final com.google.cloud.firestore.pipeline.stages.FindNearestOptions with(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public final com.google.cloud.firestore.pipeline.stages.FindNearestOptions with(String, double);
+    method public final com.google.cloud.firestore.pipeline.stages.FindNearestOptions with(String, long);
+    method public final com.google.cloud.firestore.pipeline.stages.FindNearestOptions with(String, String);
+    method public com.google.cloud.firestore.pipeline.stages.FindNearestOptions withDistanceField(com.google.cloud.firestore.pipeline.expressions.Field);
+    method public com.google.cloud.firestore.pipeline.stages.FindNearestOptions withDistanceField(String);
+    method public com.google.cloud.firestore.pipeline.stages.FindNearestOptions withLimit(long);
+    method public final com.google.cloud.firestore.pipeline.stages.FindNearestOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+  }
+
+  public final class GenericOptions {
+    ctor public GenericOptions();
+    method public static com.google.cloud.firestore.pipeline.stages.GenericOptions of(String, boolean);
+    method public static com.google.cloud.firestore.pipeline.stages.GenericOptions of(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public static com.google.cloud.firestore.pipeline.stages.GenericOptions of(String, double);
+    method public static com.google.cloud.firestore.pipeline.stages.GenericOptions of(String, long);
+    method public static com.google.cloud.firestore.pipeline.stages.GenericOptions of(String, String);
+    method protected com.google.cloud.firestore.pipeline.stages.GenericOptions self(com.google.cloud.firestore.pipeline.stages.InternalOptions);
+    method public final com.google.cloud.firestore.pipeline.stages.GenericOptions with(String, boolean);
+    method public final com.google.cloud.firestore.pipeline.stages.GenericOptions with(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public final com.google.cloud.firestore.pipeline.stages.GenericOptions with(String, double);
+    method public final com.google.cloud.firestore.pipeline.stages.GenericOptions with(String, long);
+    method public final com.google.cloud.firestore.pipeline.stages.GenericOptions with(String, String);
+    method public final com.google.cloud.firestore.pipeline.stages.GenericOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+  }
+
+  public final class GenericStage extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public GenericStage(String, List<Object>, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+  }
+
+  public final class Limit extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public Limit(int);
+  }
+
+  public final class Offset extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public Offset(int);
+  }
+
+  public final class PipelineExecuteOptions {
+    ctor public PipelineExecuteOptions();
+    method public final com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions with(String, boolean);
+    method public final com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions with(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public final com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions with(String, double);
+    method public final com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions with(String, long);
+    method public final com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions with(String, String);
+    method public com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions withExplainOptions(com.google.cloud.firestore.pipeline.stages.ExplainOptions);
+    method public com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions withIndexMode(String);
+    method public final com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+  }
+
+  public final class RemoveFields extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public RemoveFields(ImmutableList<com.google.cloud.firestore.pipeline.expressions.Field>);
+  }
+
+  public class ReplaceWith extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public ReplaceWith(com.google.cloud.firestore.pipeline.expressions.Expr);
+    ctor public ReplaceWith(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.stages.ReplaceWith.Mode);
+  }
+
+  public enum ReplaceWith.Mode {
+    enum_constant public static final com.google.cloud.firestore.pipeline.stages.ReplaceWith.Mode FULL_REPLACE;
+    enum_constant public static final com.google.cloud.firestore.pipeline.stages.ReplaceWith.Mode MERGE_PREFER_NEXT;
+    enum_constant public static final com.google.cloud.firestore.pipeline.stages.ReplaceWith.Mode MERGE_PREFER_PARENT;
+    field public final Value value;
+  }
+
+  public final class Sample extends com.google.cloud.firestore.pipeline.stages.Stage {
+    method public static com.google.cloud.firestore.pipeline.stages.Sample withDocLimit(int);
+    method public com.google.cloud.firestore.pipeline.stages.Sample withOptions(com.google.cloud.firestore.pipeline.stages.SampleOptions);
+    method public static com.google.cloud.firestore.pipeline.stages.Sample withPercentage(double);
+  }
+
+  public enum Sample.Mode {
+    enum_constant public static final com.google.cloud.firestore.pipeline.stages.Sample.Mode DOCUMENTS;
+    enum_constant public static final com.google.cloud.firestore.pipeline.stages.Sample.Mode PERCENT;
+    field public final Value value;
+  }
+
+  public final class SampleOptions {
+    ctor public SampleOptions();
+    method public final com.google.cloud.firestore.pipeline.stages.SampleOptions with(String, boolean);
+    method public final com.google.cloud.firestore.pipeline.stages.SampleOptions with(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public final com.google.cloud.firestore.pipeline.stages.SampleOptions with(String, double);
+    method public final com.google.cloud.firestore.pipeline.stages.SampleOptions with(String, long);
+    method public final com.google.cloud.firestore.pipeline.stages.SampleOptions with(String, String);
+    method public final com.google.cloud.firestore.pipeline.stages.SampleOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+  }
+
+  public final class Select extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public Select(Map<String,com.google.cloud.firestore.pipeline.expressions.Expr>);
+  }
+
+  public final class Sort extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public Sort(ImmutableList<com.google.cloud.firestore.pipeline.expressions.Ordering>);
+  }
+
+  public abstract class Stage {
+    field protected final String name;
+  }
+
+  public final class StageUtils {
+    ctor public StageUtils();
+    method public static ImmutableMap<String,Value> toMap(com.google.cloud.firestore.pipeline.stages.AbstractOptions<?>);
+    method public static com.google.firestore.v1.Pipeline.Stage toStageProto(com.google.cloud.firestore.pipeline.stages.Stage);
+  }
+
+  public final class Union extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public Union(com.google.cloud.firestore.Pipeline);
+  }
+
+  public final class Unnest extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public Unnest(com.google.cloud.firestore.pipeline.expressions.Field, String);
+    ctor public Unnest(com.google.cloud.firestore.pipeline.expressions.Field, String, com.google.cloud.firestore.pipeline.stages.UnnestOptions);
+    ctor public Unnest(com.google.cloud.firestore.pipeline.expressions.Selectable);
+  }
+
+  public final class UnnestOptions {
+    ctor public UnnestOptions();
+    method public final com.google.cloud.firestore.pipeline.stages.UnnestOptions with(String, boolean);
+    method public final com.google.cloud.firestore.pipeline.stages.UnnestOptions with(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public final com.google.cloud.firestore.pipeline.stages.UnnestOptions with(String, double);
+    method public final com.google.cloud.firestore.pipeline.stages.UnnestOptions with(String, long);
+    method public final com.google.cloud.firestore.pipeline.stages.UnnestOptions with(String, String);
+    method public com.google.cloud.firestore.pipeline.stages.UnnestOptions withIndexField(String);
+    method public final com.google.cloud.firestore.pipeline.stages.UnnestOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+  }
+
+  public final class Where extends com.google.cloud.firestore.pipeline.stages.Stage {
+    ctor public Where(com.google.cloud.firestore.pipeline.expressions.BooleanExpr);
+  }
+
+}
+
 package com.google.cloud.firestore.spi.v1 {
 
   public interface FirestoreRpc {
@@ -848,6 +1663,7 @@ package com.google.cloud.firestore.spi.v1 {
     method public UnaryCallable<BatchWriteRequest,BatchWriteResponse> batchWriteCallable();
     method public UnaryCallable<BeginTransactionRequest,BeginTransactionResponse> beginTransactionCallable();
     method public UnaryCallable<CommitRequest,CommitResponse> commitCallable();
+    method public ServerStreamingCallable<ExecutePipelineRequest,ExecutePipelineResponse> executePipelineCallable();
     method public ScheduledExecutorService getExecutor();
     method public UnaryCallable<ListCollectionIdsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsPagedCallable();
     method public UnaryCallable<ListDocumentsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse> listDocumentsPagedCallable();
@@ -867,6 +1683,7 @@ package com.google.cloud.firestore.spi.v1 {
     method public UnaryCallable<BeginTransactionRequest,BeginTransactionResponse> beginTransactionCallable();
     method public void close();
     method public UnaryCallable<CommitRequest,CommitResponse> commitCallable();
+    method public ServerStreamingCallable<ExecutePipelineRequest,ExecutePipelineResponse> executePipelineCallable();
     method public ScheduledExecutorService getExecutor();
     method public UnaryCallable<ListCollectionIdsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsPagedCallable();
     method public UnaryCallable<ListDocumentsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse> listDocumentsPagedCallable();
@@ -877,6 +1694,97 @@ package com.google.cloud.firestore.spi.v1 {
     method public ServerStreamingCallable<RunQueryRequest,RunQueryResponse> runQueryCallable();
     method public void shutdown();
     method public void shutdownNow();
+  }
+
+}
+
+package com.google.cloud.firestore.telemetry {
+
+  public class DisabledTraceUtil implements com.google.cloud.firestore.telemetry.TraceUtil {
+    ctor public DisabledTraceUtil();
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Context currentContext();
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Span currentSpan();
+    method @Nullable public ApiFunction<ManagedChannelBuilder,ManagedChannelBuilder> getChannelConfigurator();
+    method public com.google.cloud.firestore.telemetry.DisabledTraceUtil.Span startSpan(String);
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Span startSpan(String, com.google.cloud.firestore.telemetry.TraceUtil.Context);
+  }
+
+  public class EnabledTraceUtil implements com.google.cloud.firestore.telemetry.TraceUtil {
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Context currentContext();
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Span currentSpan();
+    method @Nullable public ApiFunction<ManagedChannelBuilder,ManagedChannelBuilder> getChannelConfigurator();
+    method public OpenTelemetry getOpenTelemetry();
+    method public com.google.cloud.firestore.telemetry.EnabledTraceUtil.Span startSpan(String);
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Span startSpan(String, com.google.cloud.firestore.telemetry.TraceUtil.Context);
+  }
+
+  public class EnabledTraceUtil.OpenTelemetryGrpcChannelConfigurator {
+    ctor public EnabledTraceUtil.OpenTelemetryGrpcChannelConfigurator();
+    method public ManagedChannelBuilder apply(ManagedChannelBuilder);
+  }
+
+  public interface TraceUtil {
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Context currentContext();
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Span currentSpan();
+    method @Nullable public ApiFunction<ManagedChannelBuilder,ManagedChannelBuilder> getChannelConfigurator();
+    method public static com.google.cloud.firestore.telemetry.TraceUtil getInstance(com.google.cloud.firestore.FirestoreOptions);
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Span startSpan(String);
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Span startSpan(String, com.google.cloud.firestore.telemetry.TraceUtil.Context);
+    field public static final String ATTRIBUTE_KEY_ATTEMPT = "attempt";
+    field public static final String ATTRIBUTE_KEY_ATTEMPTS_ALLOWED = "attempts_allowed";
+    field public static final String ATTRIBUTE_KEY_ATTEMPTS_REMAINING = "attempts_remaining";
+    field public static final String ATTRIBUTE_KEY_DOC_COUNT = "doc_count";
+    field public static final String ATTRIBUTE_KEY_IS_RETRY_WITH_CURSOR = "retry_query_with_cursor";
+    field public static final String ATTRIBUTE_KEY_IS_TRANSACTIONAL = "transactional";
+    field public static final String ATTRIBUTE_KEY_NUM_RESPONSES = "response_count";
+    field public static final String ATTRIBUTE_KEY_TRANSACTION_TYPE = "transaction_type";
+    field public static final String ATTRIBUTE_SERVICE_PREFIX = "gcp.firestore.";
+    field public static final String ENABLE_TRACING_ENV_VAR = "FIRESTORE_ENABLE_TRACING";
+    field public static final String LIBRARY_NAME = "com.google.cloud.firestore";
+    field public static final String SPAN_NAME_AGGREGATION_QUERY_GET = "AggregationQuery.Get";
+    field public static final String SPAN_NAME_BATCH_COMMIT = "Batch.Commit";
+    field public static final String SPAN_NAME_BATCH_GET_DOCUMENTS = "BatchGetDocuments";
+    field public static final String SPAN_NAME_BULK_WRITER_COMMIT = "BulkWriter.Commit";
+    field public static final String SPAN_NAME_COL_REF_ADD = "CollectionReference.Add";
+    field public static final String SPAN_NAME_COL_REF_LIST_DOCUMENTS = "CollectionReference.ListDocuments";
+    field public static final String SPAN_NAME_DOC_REF_CREATE = "DocumentReference.Create";
+    field public static final String SPAN_NAME_DOC_REF_DELETE = "DocumentReference.Delete";
+    field public static final String SPAN_NAME_DOC_REF_GET = "DocumentReference.Get";
+    field public static final String SPAN_NAME_DOC_REF_LIST_COLLECTIONS = "DocumentReference.ListCollections";
+    field public static final String SPAN_NAME_DOC_REF_SET = "DocumentReference.Set";
+    field public static final String SPAN_NAME_DOC_REF_UPDATE = "DocumentReference.Update";
+    field public static final String SPAN_NAME_PARTITION_QUERY = "PartitionQuery";
+    field public static final String SPAN_NAME_QUERY_GET = "Query.Get";
+    field public static final String SPAN_NAME_RUN_AGGREGATION_QUERY = "RunAggregationQuery";
+    field public static final String SPAN_NAME_RUN_QUERY = "RunQuery";
+    field public static final String SPAN_NAME_TRANSACTION_BEGIN = "Transaction.Begin";
+    field public static final String SPAN_NAME_TRANSACTION_COMMIT = "Transaction.Commit";
+    field public static final String SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY = "Transaction.Get.AggregationQuery";
+    field public static final String SPAN_NAME_TRANSACTION_GET_DOCUMENT = "Transaction.Get.Document";
+    field public static final String SPAN_NAME_TRANSACTION_GET_DOCUMENTS = "Transaction.Get.Documents";
+    field public static final String SPAN_NAME_TRANSACTION_GET_QUERY = "Transaction.Get.Query";
+    field public static final String SPAN_NAME_TRANSACTION_ROLLBACK = "Transaction.Rollback";
+    field public static final String SPAN_NAME_TRANSACTION_RUN = "Transaction.Run";
+  }
+
+  public static interface TraceUtil.Context {
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Scope makeCurrent();
+  }
+
+  public static interface TraceUtil.Scope {
+    method public void close();
+  }
+
+  public static interface TraceUtil.Span {
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Span addEvent(String);
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Span addEvent(String, Map<String,Object>);
+    method public void end();
+    method public void end(Throwable);
+    method public <T> void endAtFuture(ApiFuture<T>);
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Scope makeCurrent();
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Span setAttribute(String, boolean);
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Span setAttribute(String, int);
+    method public com.google.cloud.firestore.telemetry.TraceUtil.Span setAttribute(String, String);
   }
 
 }
@@ -905,6 +1813,7 @@ package com.google.cloud.firestore.v1 {
     method public final void deleteDocument(DeleteDocumentRequest);
     method public final void deleteDocument(String);
     method public final UnaryCallable<DeleteDocumentRequest,Empty> deleteDocumentCallable();
+    method public final ServerStreamingCallable<ExecutePipelineRequest,ExecutePipelineResponse> executePipelineCallable();
     method public final Document getDocument(GetDocumentRequest);
     method public final UnaryCallable<GetDocumentRequest,Document> getDocumentCallable();
     method public final com.google.cloud.firestore.v1.FirestoreSettings getSettings();
@@ -989,6 +1898,7 @@ package com.google.cloud.firestore.v1 {
     method public static InstantiatingHttpJsonChannelProvider.Builder defaultHttpJsonTransportProviderBuilder();
     method public static TransportChannelProvider defaultTransportChannelProvider();
     method public UnaryCallSettings<DeleteDocumentRequest,Empty> deleteDocumentSettings();
+    method public ServerStreamingCallSettings<ExecutePipelineRequest,ExecutePipelineResponse> executePipelineSettings();
     method public static String getDefaultEndpoint();
     method public static List<String> getDefaultServiceScopes();
     method public UnaryCallSettings<GetDocumentRequest,Document> getDocumentSettings();
@@ -1020,6 +1930,7 @@ package com.google.cloud.firestore.v1 {
     method public UnaryCallSettings.Builder<CommitRequest,CommitResponse> commitSettings();
     method public UnaryCallSettings.Builder<CreateDocumentRequest,Document> createDocumentSettings();
     method public UnaryCallSettings.Builder<DeleteDocumentRequest,Empty> deleteDocumentSettings();
+    method public ServerStreamingCallSettings.Builder<ExecutePipelineRequest,ExecutePipelineResponse> executePipelineSettings();
     method public UnaryCallSettings.Builder<GetDocumentRequest,Document> getDocumentSettings();
     method public com.google.cloud.firestore.v1.stub.FirestoreStubSettings.Builder getStubSettingsBuilder();
     method public PagedCallSettings.Builder<ListCollectionIdsRequest,ListCollectionIdsResponse,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsSettings();
@@ -1046,6 +1957,7 @@ package com.google.cloud.firestore.v1.stub {
     method public UnaryCallable<CommitRequest,CommitResponse> commitCallable();
     method public UnaryCallable<CreateDocumentRequest,Document> createDocumentCallable();
     method public UnaryCallable<DeleteDocumentRequest,Empty> deleteDocumentCallable();
+    method public ServerStreamingCallable<ExecutePipelineRequest,ExecutePipelineResponse> executePipelineCallable();
     method public UnaryCallable<GetDocumentRequest,Document> getDocumentCallable();
     method public UnaryCallable<ListCollectionIdsRequest,ListCollectionIdsResponse> listCollectionIdsCallable();
     method public UnaryCallable<ListCollectionIdsRequest,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsPagedCallable();
@@ -1078,6 +1990,7 @@ package com.google.cloud.firestore.v1.stub {
     method public static InstantiatingHttpJsonChannelProvider.Builder defaultHttpJsonTransportProviderBuilder();
     method public static TransportChannelProvider defaultTransportChannelProvider();
     method public UnaryCallSettings<DeleteDocumentRequest,Empty> deleteDocumentSettings();
+    method public ServerStreamingCallSettings<ExecutePipelineRequest,ExecutePipelineResponse> executePipelineSettings();
     method public static String getDefaultEndpoint();
     method public static String getDefaultMtlsEndpoint();
     method public static List<String> getDefaultServiceScopes();
@@ -1110,6 +2023,7 @@ package com.google.cloud.firestore.v1.stub {
     method public UnaryCallSettings.Builder<CommitRequest,CommitResponse> commitSettings();
     method public UnaryCallSettings.Builder<CreateDocumentRequest,Document> createDocumentSettings();
     method public UnaryCallSettings.Builder<DeleteDocumentRequest,Empty> deleteDocumentSettings();
+    method public ServerStreamingCallSettings.Builder<ExecutePipelineRequest,ExecutePipelineResponse> executePipelineSettings();
     method public UnaryCallSettings.Builder<GetDocumentRequest,Document> getDocumentSettings();
     method public PagedCallSettings.Builder<ListCollectionIdsRequest,ListCollectionIdsResponse,com.google.cloud.firestore.v1.FirestoreClient.ListCollectionIdsPagedResponse> listCollectionIdsSettings();
     method public PagedCallSettings.Builder<ListDocumentsRequest,ListDocumentsResponse,com.google.cloud.firestore.v1.FirestoreClient.ListDocumentsPagedResponse> listDocumentsSettings();

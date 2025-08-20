@@ -64,13 +64,24 @@ public final class PipelineSource {
   @Nonnull
   @BetaApi
   public Pipeline collection(@Nonnull String path) {
-    return collection(path, CollectionOptions.DEFAULT);
+    return collection(path, new CollectionOptions());
   }
 
   @Nonnull
   @BetaApi
   public Pipeline collection(@Nonnull String path, CollectionOptions options) {
     return new Pipeline(this.rpcContext, new Collection(path, options));
+  }
+
+  @Nonnull
+  @BetaApi
+  public Pipeline collection(@Nonnull CollectionReference ref) {
+    if (!this.rpcContext.getFirestore().equals(ref.getFirestore())) {
+      throw new IllegalArgumentException(
+          "Invalid CollectionReference. The Firestore instance of the CollectionReference must match the Firestore instance of the PipelineSource.");
+    }
+
+    return collection(ref.getPath(), new CollectionOptions());
   }
 
   /**
@@ -86,7 +97,7 @@ public final class PipelineSource {
   @Nonnull
   @BetaApi
   public Pipeline collectionGroup(@Nonnull String collectionId) {
-    return collectionGroup(collectionId, CollectionGroupOptions.DEFAULT);
+    return collectionGroup(collectionId, new CollectionGroupOptions());
   }
 
   @Nonnull
@@ -124,5 +135,31 @@ public final class PipelineSource {
   @BetaApi
   public Pipeline documents(DocumentReference... docs) {
     return new Pipeline(this.rpcContext, Documents.of(docs));
+  }
+
+  /**
+   * Creates a new {@link Pipeline} from the given {@link Query}. Under the hood, this will
+   * translate the query semantics (order by document ID, etc.) to an equivalent pipeline.
+   *
+   * @param query The {@link Query} to translate into the resulting pipeline.
+   * @return A new {@code Pipeline} that is equivalent to the given query.
+   */
+  @Nonnull
+  @BetaApi
+  public Pipeline createFrom(Query query) {
+    return query.pipeline();
+  }
+
+  /**
+   * Creates a new {@link Pipeline} from the given {@link AggregateQuery}. Under the hood, this will
+   * translate the query semantics (order by document ID, etc.) to an equivalent pipeline.
+   *
+   * @param query The {@link AggregateQuery} to translate into the resulting pipeline.
+   * @return A new {@code Pipeline} that is equivalent to the given query.
+   */
+  @Nonnull
+  @BetaApi
+  public Pipeline createFrom(AggregateQuery query) {
+    return query.pipeline();
   }
 }

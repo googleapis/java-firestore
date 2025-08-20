@@ -39,6 +39,7 @@ public interface PitrSnapshotOrBuilder
    * @return The database.
    */
   java.lang.String getDatabase();
+
   /**
    *
    *
@@ -81,6 +82,7 @@ public interface PitrSnapshotOrBuilder
    * @return Whether the snapshotTime field is set.
    */
   boolean hasSnapshotTime();
+
   /**
    *
    *
@@ -94,6 +96,7 @@ public interface PitrSnapshotOrBuilder
    * @return The snapshotTime.
    */
   com.google.protobuf.Timestamp getSnapshotTime();
+
   /**
    *
    *

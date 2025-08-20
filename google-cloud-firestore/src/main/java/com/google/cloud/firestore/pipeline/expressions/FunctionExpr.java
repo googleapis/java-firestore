@@ -19,7 +19,6 @@ package com.google.cloud.firestore.pipeline.expressions;
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Value;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +29,7 @@ public class FunctionExpr extends Expr {
   private final String name;
   private final List<Expr> params;
 
-  FunctionExpr(String name, ImmutableList<? extends Expr> params) {
+  FunctionExpr(String name, List<? extends Expr> params) {
     this.name = name;
     this.params = Collections.unmodifiableList(params);
   }

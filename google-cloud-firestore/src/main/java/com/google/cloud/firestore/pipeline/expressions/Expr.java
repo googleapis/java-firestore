@@ -119,7 +119,7 @@ public abstract class Expr {
    */
   @BetaApi
   public static BooleanExpr constant(Boolean value) {
-    return new BooleanExpr("constant", Constant.of(value));
+    return eq(Constant.of(value), true);
   }
 
   /**
@@ -1365,7 +1365,7 @@ public abstract class Expr {
    * @return A new {@link Expr} representing the substring.
    */
   @BetaApi
-  public static Expr substring(Expr string, Expr index, Expr length) {
+  public static Expr substr(Expr string, Expr index, Expr length) {
     return new FunctionExpr("substr", ImmutableList.of(string, index, length));
   }
 
@@ -1378,8 +1378,8 @@ public abstract class Expr {
    * @return A new {@link Expr} representing the substring.
    */
   @BetaApi
-  public static Expr substring(String fieldName, int index, int length) {
-    return substring(field(fieldName), constant(index), constant(length));
+  public static Expr substr(String fieldName, int index, int length) {
+    return substr(field(fieldName), constant(index), constant(length));
   }
 
   /**
@@ -1538,6 +1538,16 @@ public abstract class Expr {
   @BetaApi
   public static Expr mapGet(String fieldName, Expr key) {
     return mapGet(field(fieldName), key);
+  }
+
+  @BetaApi
+  public static Expr mapMerge(Expr firstMap, Expr secondMap) {
+    return mapMerge(firstMap, secondMap, new Expr[0]);
+  }
+
+  @BetaApi
+  public static Expr mapMerge(String firstMapFieldName, Expr secondMap) {
+    return mapMerge(field(firstMapFieldName), secondMap, new Expr[0]);
   }
 
   /**
@@ -2957,7 +2967,7 @@ public abstract class Expr {
    * @return A new {@link BooleanExpr} representing the isNotNan operation.
    */
   @BetaApi
-  public static BooleanExpr isNotNan(Expr expr) {
+  public static BooleanExpr isNotNaN(Expr expr) {
     return new BooleanExpr("is_not_nan", expr);
   }
 
@@ -2969,8 +2979,8 @@ public abstract class Expr {
    * @return A new {@link BooleanExpr} representing the isNotNan operation.
    */
   @BetaApi
-  public static BooleanExpr isNotNan(String fieldName) {
-    return isNotNan(field(fieldName));
+  public static BooleanExpr isNotNaN(String fieldName) {
+    return isNotNaN(field(fieldName));
   }
 
   /**
@@ -2986,7 +2996,7 @@ public abstract class Expr {
     ImmutableList.Builder<Expr> builder = ImmutableList.builder();
     builder.add(expr);
     builder.addAll(toArrayOfExprOrConstant(others));
-    return new FunctionExpr("logical_max", builder.build());
+    return new FunctionExpr("max", builder.build());
   }
 
   /**
@@ -3015,7 +3025,7 @@ public abstract class Expr {
     ImmutableList.Builder<Expr> builder = ImmutableList.builder();
     builder.add(expr);
     builder.addAll(toArrayOfExprOrConstant(others));
-    return new FunctionExpr("logical_min", builder.build());
+    return new FunctionExpr("min", builder.build());
   }
 
   /**
@@ -3038,8 +3048,8 @@ public abstract class Expr {
    * @return A new {@link BooleanExpr} representing the isNotNan operation.
    */
   @BetaApi
-  public final BooleanExpr isNotNan() {
-    return isNotNan(this);
+  public final BooleanExpr isNotNaN() {
+    return isNotNaN(this);
   }
 
   /**
@@ -3495,8 +3505,8 @@ public abstract class Expr {
    * @return A new {@link Expr} representing the substring.
    */
   @BetaApi
-  public final Expr substring(Object index, Object length) {
-    return substring(this, toExprOrConstant(index), toExprOrConstant(length));
+  public final Expr substr(Object index, Object length) {
+    return substr(this, toExprOrConstant(index), toExprOrConstant(length));
   }
 
   /**
@@ -3536,7 +3546,18 @@ public abstract class Expr {
    * @return A new {@link Expr} representing the concatenated string.
    */
   @BetaApi
-  public final Expr strConcat(Object... others) {
+  public final Expr strConcat(String... others) {
+    return strConcat(this, others);
+  }
+
+  /**
+   * Creates an expression that concatenates string expressions together.
+   *
+   * @param others The string expressions or string constants to concatenate.
+   * @return A new {@link Expr} representing the concatenated string.
+   */
+  @BetaApi
+  public final Expr strConcat(Expr... others) {
     return strConcat(this, others);
   }
 
@@ -3737,7 +3758,7 @@ public abstract class Expr {
    * @return A new {@link Expr} representing the arrayConcat operation.
    */
   @BetaApi
-  public final Expr arrayConcat(Object... otherArrays) {
+  public final Expr arrayConcat(Expr... otherArrays) {
     return arrayConcat(this, otherArrays);
   }
 

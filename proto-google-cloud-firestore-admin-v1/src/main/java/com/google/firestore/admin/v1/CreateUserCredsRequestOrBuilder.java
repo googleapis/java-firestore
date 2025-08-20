@@ -39,6 +39,7 @@ public interface CreateUserCredsRequestOrBuilder
    * @return The parent.
    */
   java.lang.String getParent();
+
   /**
    *
    *
@@ -69,6 +70,7 @@ public interface CreateUserCredsRequestOrBuilder
    * @return Whether the userCreds field is set.
    */
   boolean hasUserCreds();
+
   /**
    *
    *
@@ -83,6 +85,7 @@ public interface CreateUserCredsRequestOrBuilder
    * @return The userCreds.
    */
   com.google.firestore.admin.v1.UserCreds getUserCreds();
+
   /**
    *
    *
@@ -113,6 +116,7 @@ public interface CreateUserCredsRequestOrBuilder
    * @return The userCredsId.
    */
   java.lang.String getUserCredsId();
+
   /**
    *
    *

@@ -42,12 +42,12 @@ public final class Sample extends Stage {
 
   @BetaApi
   public static Sample withPercentage(double percentage) {
-    return new Sample(percentage, Mode.PERCENT, SampleOptions.DEFAULT);
+    return new Sample(percentage, Mode.PERCENT, new SampleOptions());
   }
 
   @BetaApi
   public static Sample withDocLimit(int documents) {
-    return new Sample(documents, Mode.DOCUMENTS, SampleOptions.DEFAULT);
+    return new Sample(documents, Mode.DOCUMENTS, new SampleOptions());
   }
 
   @BetaApi

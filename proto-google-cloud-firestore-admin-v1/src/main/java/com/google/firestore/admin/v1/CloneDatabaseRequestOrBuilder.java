@@ -39,6 +39,7 @@ public interface CloneDatabaseRequestOrBuilder
    * @return The parent.
    */
   java.lang.String getParent();
+
   /**
    *
    *
@@ -75,6 +76,7 @@ public interface CloneDatabaseRequestOrBuilder
    * @return The databaseId.
    */
   java.lang.String getDatabaseId();
+
   /**
    *
    *
@@ -114,6 +116,7 @@ public interface CloneDatabaseRequestOrBuilder
    * @return Whether the pitrSnapshot field is set.
    */
   boolean hasPitrSnapshot();
+
   /**
    *
    *
@@ -132,6 +135,7 @@ public interface CloneDatabaseRequestOrBuilder
    * @return The pitrSnapshot.
    */
   com.google.firestore.admin.v1.PitrSnapshot getPitrSnapshot();
+
   /**
    *
    *
@@ -167,6 +171,7 @@ public interface CloneDatabaseRequestOrBuilder
    * @return Whether the encryptionConfig field is set.
    */
   boolean hasEncryptionConfig();
+
   /**
    *
    *
@@ -185,6 +190,7 @@ public interface CloneDatabaseRequestOrBuilder
    * @return The encryptionConfig.
    */
   com.google.firestore.admin.v1.Database.EncryptionConfig getEncryptionConfig();
+
   /**
    *
    *
@@ -217,6 +223,7 @@ public interface CloneDatabaseRequestOrBuilder
    * </code>
    */
   int getTagsCount();
+
   /**
    *
    *
@@ -232,9 +239,11 @@ public interface CloneDatabaseRequestOrBuilder
    * </code>
    */
   boolean containsTags(java.lang.String key);
+
   /** Use {@link #getTagsMap()} instead. */
   @java.lang.Deprecated
   java.util.Map<java.lang.String, java.lang.String> getTags();
+
   /**
    *
    *
@@ -250,6 +259,7 @@ public interface CloneDatabaseRequestOrBuilder
    * </code>
    */
   java.util.Map<java.lang.String, java.lang.String> getTagsMap();
+
   /**
    *
    *
@@ -269,6 +279,7 @@ public interface CloneDatabaseRequestOrBuilder
       java.lang.String key,
       /* nullable */
       java.lang.String defaultValue);
+
   /**
    *
    *

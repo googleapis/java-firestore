@@ -60,6 +60,17 @@ final class InternalOptions {
     return with(key, value.toValue());
   }
 
+  InternalOptions adding(AbstractOptions<?> value) {
+    ImmutableMap.Builder<String, Value> builder =
+        ImmutableMap.builderWithExpectedSize(options.size() + value.toMap().size());
+    builder.putAll(options);
+    for(ImmutableMap.Entry<String, Value> entry : value.toMap().entrySet()){
+      builder.put(entry.getKey(), entry.getValue());
+    }
+
+    return new InternalOptions(builder.buildKeepingLast());
+  }
+
   private Value toValue() {
     MapValue mapValue = MapValue.newBuilder().putAllFields(options).build();
     return Value.newBuilder().setMapValue(mapValue).build();

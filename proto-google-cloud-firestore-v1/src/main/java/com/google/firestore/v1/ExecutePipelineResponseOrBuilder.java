@@ -62,6 +62,7 @@ public interface ExecutePipelineResponseOrBuilder
    * <code>repeated .google.firestore.v1.Document results = 2;</code>
    */
   java.util.List<com.google.firestore.v1.Document> getResultsList();
+
   /**
    *
    *
@@ -83,6 +84,7 @@ public interface ExecutePipelineResponseOrBuilder
    * <code>repeated .google.firestore.v1.Document results = 2;</code>
    */
   com.google.firestore.v1.Document getResults(int index);
+
   /**
    *
    *
@@ -104,6 +106,7 @@ public interface ExecutePipelineResponseOrBuilder
    * <code>repeated .google.firestore.v1.Document results = 2;</code>
    */
   int getResultsCount();
+
   /**
    *
    *
@@ -125,6 +128,7 @@ public interface ExecutePipelineResponseOrBuilder
    * <code>repeated .google.firestore.v1.Document results = 2;</code>
    */
   java.util.List<? extends com.google.firestore.v1.DocumentOrBuilder> getResultsOrBuilderList();
+
   /**
    *
    *
@@ -167,6 +171,7 @@ public interface ExecutePipelineResponseOrBuilder
    * @return Whether the executionTime field is set.
    */
   boolean hasExecutionTime();
+
   /**
    *
    *
@@ -187,6 +192,7 @@ public interface ExecutePipelineResponseOrBuilder
    * @return The executionTime.
    */
   com.google.protobuf.Timestamp getExecutionTime();
+
   /**
    *
    *
@@ -221,6 +227,7 @@ public interface ExecutePipelineResponseOrBuilder
    * @return Whether the explainStats field is set.
    */
   boolean hasExplainStats();
+
   /**
    *
    *
@@ -236,6 +243,7 @@ public interface ExecutePipelineResponseOrBuilder
    * @return The explainStats.
    */
   com.google.firestore.v1.ExplainStats getExplainStats();
+
   /**
    *
    *

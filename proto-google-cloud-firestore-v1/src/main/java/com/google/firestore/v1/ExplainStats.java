@@ -34,6 +34,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
     // @@protoc_insertion_point(message_implements:google.firestore.v1.ExplainStats)
     ExplainStatsOrBuilder {
   private static final long serialVersionUID = 0L;
+
   // Use ExplainStats.newBuilder() to construct.
   private ExplainStats(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
@@ -65,6 +66,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
   private int bitField0_;
   public static final int DATA_FIELD_NUMBER = 1;
   private com.google.protobuf.Any data_;
+
   /**
    *
    *
@@ -82,6 +84,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
   public boolean hasData() {
     return ((bitField0_ & 0x00000001) != 0);
   }
+
   /**
    *
    *
@@ -99,6 +102,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
   public com.google.protobuf.Any getData() {
     return data_ == null ? com.google.protobuf.Any.getDefaultInstance() : data_;
   }
+
   /**
    *
    *
@@ -277,6 +281,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
     Builder builder = new Builder(parent);
     return builder;
   }
+
   /**
    *
    *
@@ -479,6 +484,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
             com.google.protobuf.Any.Builder,
             com.google.protobuf.AnyOrBuilder>
         dataBuilder_;
+
     /**
      *
      *
@@ -495,6 +501,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
     public boolean hasData() {
       return ((bitField0_ & 0x00000001) != 0);
     }
+
     /**
      *
      *
@@ -515,6 +522,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
         return dataBuilder_.getMessage();
       }
     }
+
     /**
      *
      *
@@ -539,6 +547,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -560,6 +569,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -589,6 +599,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
       }
       return this;
     }
+
     /**
      *
      *
@@ -610,6 +621,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -626,6 +638,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
       onChanged();
       return getDataFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -644,6 +657,7 @@ public final class ExplainStats extends com.google.protobuf.GeneratedMessageV3
         return data_ == null ? com.google.protobuf.Any.getDefaultInstance() : data_;
       }
     }
+
     /**
      *
      *

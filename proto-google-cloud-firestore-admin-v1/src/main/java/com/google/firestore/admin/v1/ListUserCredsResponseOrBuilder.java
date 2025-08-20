@@ -34,6 +34,7 @@ public interface ListUserCredsResponseOrBuilder
    * <code>repeated .google.firestore.admin.v1.UserCreds user_creds = 1;</code>
    */
   java.util.List<com.google.firestore.admin.v1.UserCreds> getUserCredsList();
+
   /**
    *
    *
@@ -44,6 +45,7 @@ public interface ListUserCredsResponseOrBuilder
    * <code>repeated .google.firestore.admin.v1.UserCreds user_creds = 1;</code>
    */
   com.google.firestore.admin.v1.UserCreds getUserCreds(int index);
+
   /**
    *
    *
@@ -54,6 +56,7 @@ public interface ListUserCredsResponseOrBuilder
    * <code>repeated .google.firestore.admin.v1.UserCreds user_creds = 1;</code>
    */
   int getUserCredsCount();
+
   /**
    *
    *
@@ -65,6 +68,7 @@ public interface ListUserCredsResponseOrBuilder
    */
   java.util.List<? extends com.google.firestore.admin.v1.UserCredsOrBuilder>
       getUserCredsOrBuilderList();
+
   /**
    *
    *

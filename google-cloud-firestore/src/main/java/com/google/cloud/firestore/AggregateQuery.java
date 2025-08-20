@@ -21,7 +21,6 @@ import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_ATTEM
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_RUN_AGGREGATION_QUERY;
 
 import com.google.api.core.ApiFuture;
-import com.google.api.core.BetaApi;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ResponseObserver;
@@ -81,9 +80,7 @@ public class AggregateQuery {
     return query;
   }
 
-  @Nonnull
-  @BetaApi
-  public Pipeline pipeline() {
+  Pipeline pipeline() {
     Pipeline pipeline = getQuery().pipeline();
 
     List<BooleanExpr> existsExprs =

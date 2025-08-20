@@ -18,7 +18,9 @@ package com.google.cloud.firestore.pipeline.stages;
 
 public final class CollectionHints extends AbstractOptions<CollectionHints> {
 
-  public static CollectionHints DEFAULT = new CollectionHints(InternalOptions.EMPTY);
+  public CollectionHints() {
+    this(InternalOptions.EMPTY);
+  }
 
   CollectionHints(InternalOptions options) {
     super(options);
@@ -30,7 +32,7 @@ public final class CollectionHints extends AbstractOptions<CollectionHints> {
   }
 
   public CollectionHints withForceIndex(String value) {
-    return with("forceIndex", value);
+    return with("force_index", value);
   }
 
   public CollectionHints withIgnoreIndexFields(String... values) {

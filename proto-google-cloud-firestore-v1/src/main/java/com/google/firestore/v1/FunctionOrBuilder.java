@@ -40,6 +40,7 @@ public interface FunctionOrBuilder
    * @return The name.
    */
   java.lang.String getName();
+
   /**
    *
    *
@@ -68,6 +69,7 @@ public interface FunctionOrBuilder
    * </code>
    */
   java.util.List<com.google.firestore.v1.Value> getArgsList();
+
   /**
    *
    *
@@ -79,6 +81,7 @@ public interface FunctionOrBuilder
    * </code>
    */
   com.google.firestore.v1.Value getArgs(int index);
+
   /**
    *
    *
@@ -90,6 +93,7 @@ public interface FunctionOrBuilder
    * </code>
    */
   int getArgsCount();
+
   /**
    *
    *
@@ -101,6 +105,7 @@ public interface FunctionOrBuilder
    * </code>
    */
   java.util.List<? extends com.google.firestore.v1.ValueOrBuilder> getArgsOrBuilderList();
+
   /**
    *
    *
@@ -125,6 +130,7 @@ public interface FunctionOrBuilder
    * </code>
    */
   int getOptionsCount();
+
   /**
    *
    *
@@ -137,9 +143,11 @@ public interface FunctionOrBuilder
    * </code>
    */
   boolean containsOptions(java.lang.String key);
+
   /** Use {@link #getOptionsMap()} instead. */
   @java.lang.Deprecated
   java.util.Map<java.lang.String, com.google.firestore.v1.Value> getOptions();
+
   /**
    *
    *
@@ -152,6 +160,7 @@ public interface FunctionOrBuilder
    * </code>
    */
   java.util.Map<java.lang.String, com.google.firestore.v1.Value> getOptionsMap();
+
   /**
    *
    *
@@ -168,6 +177,7 @@ public interface FunctionOrBuilder
       java.lang.String key,
       /* nullable */
       com.google.firestore.v1.Value defaultValue);
+
   /**
    *
    *

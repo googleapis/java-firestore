@@ -39,6 +39,7 @@ public interface IndexOrBuilder
    * @return The name.
    */
   java.lang.String getName();
+
   /**
    *
    *
@@ -73,6 +74,7 @@ public interface IndexOrBuilder
    * @return The enum numeric value on the wire for queryScope.
    */
   int getQueryScopeValue();
+
   /**
    *
    *
@@ -104,6 +106,7 @@ public interface IndexOrBuilder
    * @return The enum numeric value on the wire for apiScope.
    */
   int getApiScopeValue();
+
   /**
    *
    *
@@ -137,6 +140,7 @@ public interface IndexOrBuilder
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
   java.util.List<com.google.firestore.admin.v1.Index.IndexField> getFieldsList();
+
   /**
    *
    *
@@ -157,6 +161,7 @@ public interface IndexOrBuilder
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
   com.google.firestore.admin.v1.Index.IndexField getFields(int index);
+
   /**
    *
    *
@@ -177,6 +182,7 @@ public interface IndexOrBuilder
    * <code>repeated .google.firestore.admin.v1.Index.IndexField fields = 3;</code>
    */
   int getFieldsCount();
+
   /**
    *
    *
@@ -198,6 +204,7 @@ public interface IndexOrBuilder
    */
   java.util.List<? extends com.google.firestore.admin.v1.Index.IndexFieldOrBuilder>
       getFieldsOrBuilderList();
+
   /**
    *
    *
@@ -231,6 +238,7 @@ public interface IndexOrBuilder
    * @return The enum numeric value on the wire for state.
    */
   int getStateValue();
+
   /**
    *
    *
@@ -258,6 +266,7 @@ public interface IndexOrBuilder
    * @return The enum numeric value on the wire for density.
    */
   int getDensityValue();
+
   /**
    *
    *
