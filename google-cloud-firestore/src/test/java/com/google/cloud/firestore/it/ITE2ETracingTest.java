@@ -40,6 +40,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
 
 import com.google.api.gax.rpc.NotFoundException;
 import com.google.cloud.firestore.BulkWriter;
@@ -197,7 +198,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
             if (dfsContainsCallStack(
                 childSpan,
                 expectedCallStack.subList(
-                    /*fromIndexInclusive=*/ 1, /*toIndexExclusive*/ callStackListSize))) {
+                    /* fromIndexInclusive= */ 1, /*toIndexExclusive*/ callStackListSize))) {
               return true;
             }
           }
@@ -342,6 +343,10 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
         firestore,
         "Error instantiating Firestore. Check that the service account credentials "
             + "were properly set.");
+
+    assumeFalse(
+        "ITTracingTest is not supported against the emulator.",
+        "EMULATOR".equals(getTargetBackend()));
 
     // Set up the tracer for custom TraceID injection
     rootSpanName =
@@ -1133,7 +1138,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
 
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        /*numExpectedSpans=*/ 11,
+        /* numExpectedSpans= */ 11,
         Arrays.asList(
             Arrays.asList(
                 SPAN_NAME_TRANSACTION_RUN,
@@ -1188,7 +1193,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
 
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        /*numExpectedSpans=*/ 5,
+        /* numExpectedSpans= */ 5,
         Arrays.asList(
             Arrays.asList(
                 SPAN_NAME_TRANSACTION_RUN,

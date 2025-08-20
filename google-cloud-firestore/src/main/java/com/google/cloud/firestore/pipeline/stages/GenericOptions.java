@@ -22,7 +22,9 @@ import com.google.cloud.firestore.pipeline.expressions.Field;
 
 public final class GenericOptions extends AbstractOptions<GenericOptions> {
 
-  public static GenericOptions DEFAULT = new GenericOptions(InternalOptions.EMPTY);
+  public GenericOptions() {
+    this(InternalOptions.EMPTY);
+  }
 
   public static GenericOptions of(String key, String value) {
     return new GenericOptions(InternalOptions.of(key, encodeValue(value)));

@@ -45,7 +45,7 @@ import com.google.cloud.firestore.pipeline.stages.Limit;
 import com.google.cloud.firestore.pipeline.stages.Offset;
 import com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions;
 import com.google.cloud.firestore.pipeline.stages.RemoveFields;
-import com.google.cloud.firestore.pipeline.stages.Replace;
+import com.google.cloud.firestore.pipeline.stages.ReplaceWith;
 import com.google.cloud.firestore.pipeline.stages.Sample;
 import com.google.cloud.firestore.pipeline.stages.Select;
 import com.google.cloud.firestore.pipeline.stages.Sort;
@@ -506,7 +506,7 @@ public final class Pipeline {
    * // Find books with similar "topicVectors" to the given targetVector
    * firestore.pipeline().collection("books")
    *     .findNearest("topicVectors", targetVector, FindNearest.DistanceMeasure.COSINE,
-   *        FindNearestOptions.DEFAULT
+   *        new FindNearestOptions()
    *          .withLimit(10)
    *          .withDistanceField("distance"));
    * }</pre>
@@ -543,7 +543,7 @@ public final class Pipeline {
    * firestore.pipeline().collection("books")
    *     .findNearest(
    *        FindNearest.of(field("topicVectors"), targetVector, FindNearest.DistanceMeasure.COSINE),
-   *        FindNearestOptions.DEFAULT
+   *        new FindNearestOptions()
    *          .withLimit(10)
    *          .withDistanceField("distance"));
    * }</pre>
@@ -562,7 +562,7 @@ public final class Pipeline {
       FindNearest.DistanceMeasure distanceMeasure,
       FindNearestOptions options) {
     // Implementation for findNearest (add the FindNearest stage if needed)
-    return append(new FindNearest(property, vector, distanceMeasure, options));
+    return append(new FindNearest(property, new VectorValue(vector), distanceMeasure, options));
   }
 
   /**
@@ -624,8 +624,8 @@ public final class Pipeline {
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline replace(String fieldName) {
-    return replace(field(fieldName));
+  public Pipeline replaceWith(String fieldName) {
+    return replaceWith(field(fieldName));
   }
 
   /**
@@ -659,8 +659,8 @@ public final class Pipeline {
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline replace(Selectable field) {
-    return append(new Replace(field));
+  public Pipeline replaceWith(Expr expr) {
+    return append(new ReplaceWith(expr));
   }
 
   /**
@@ -828,7 +828,7 @@ public final class Pipeline {
    *
    * // Emit a book document for each tag of the book.
    * firestore.pipeline().collection("books")
-   *     .unnest("tags", "tag", Unnest.Options.DEFAULT.withIndexField("tagIndex"));
+   *     .unnest("tags", "tag", new UnnestOptions().withIndexField("tagIndex"));
    *
    * // Output:
    * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 0, "tag": "comedy", ... }
@@ -842,8 +842,43 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline unnest(String fieldName, String alias, UnnestOptions options) {
-    //    return unnest(field(fieldName), options);
     return append(new Unnest(field(fieldName), alias, options));
+  }
+
+  /**
+   * Produces a document for each element in array found in previous stage document.
+   *
+   * <p>For each previous stage document, this stage will emit zero or more augmented documents. The
+   * input array found in the previous stage document field specified by the `fieldName` parameter,
+   * will for each input array element produce an augmented document. The input array element will
+   * augment the previous stage document by replacing the field specified by `fieldName` parameter
+   * with the element value.
+   *
+   * <p>In other words, the field containing the input array will be removed from the augmented
+   * document and replaced by the corresponding array element.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Input:
+   * // { "title": "The Hitchhiker's Guide to the Galaxy", "tags": [ "comedy", "space", "adventure" ], ... }
+   *
+   * // Emit a book document for each tag of the book.
+   * firestore.pipeline().collection("books")
+   *     .unnest(field("tags").as("tag"));
+   *
+   * // Output:
+   * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 0, "tag": "comedy", ... }
+   * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 1, "tag": "space", ... }
+   * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 2, "tag": "adventure", ... }
+   * }</pre>
+   *
+   * @param expr The name of the expression containing the array.
+   * @return A new {@code Pipeline} object with this stage appended to the stage list.
+   */
+  @BetaApi
+  public Pipeline unnest(Selectable expr) {
+    return append(new Unnest(expr));
   }
 
   // /**
@@ -947,14 +982,13 @@ public final class Pipeline {
    * @return An {@link ApiFuture} representing the asynchronous pipeline execution.
    */
   @BetaApi
-  public ApiFuture<List<PipelineResult>> execute() {
-    return execute(
-        new PipelineExecuteOptions(), (ByteString) null, (com.google.protobuf.Timestamp) null);
+  public ApiFuture<PipelineSnapshot> execute() {
+    return execute(new PipelineExecuteOptions(), null, null);
   }
 
   @BetaApi
-  public ApiFuture<List<PipelineResult>> execute(PipelineExecuteOptions options) {
-    return execute(options, (ByteString) null, (com.google.protobuf.Timestamp) null);
+  public ApiFuture<PipelineSnapshot> execute(PipelineExecuteOptions options) {
+    return execute(options, null, null);
   }
 
   /**
@@ -1004,14 +1038,33 @@ public final class Pipeline {
    */
   @BetaApi
   public void execute(ApiStreamObserver<PipelineResult> observer) {
-    executeInternal(new PipelineExecuteOptions(), null, null, observer);
+    executeInternal(
+        new PipelineExecuteOptions(),
+        null,
+        null,
+        new PipelineResultObserver() {
+          @Override
+          public void onNext(PipelineResult result) {
+            observer.onNext(result);
+          }
+
+          @Override
+          public void onError(Throwable t) {
+            observer.onError(t);
+          }
+
+          @Override
+          public void onCompleted() {
+            observer.onCompleted();
+          }
+        });
   }
 
-  ApiFuture<List<PipelineResult>> execute(
+  ApiFuture<PipelineSnapshot> execute(
       @Nonnull PipelineExecuteOptions options,
       @Nullable final ByteString transactionId,
       @Nullable com.google.protobuf.Timestamp readTime) {
-    SettableApiFuture<List<PipelineResult>> futureResult = SettableApiFuture.create();
+    SettableApiFuture<PipelineSnapshot> futureResult = SettableApiFuture.create();
 
     executeInternal(
         options,
@@ -1022,7 +1075,9 @@ public final class Pipeline {
 
           @Override
           public void onCompleted() {
-            futureResult.set(results);
+            futureResult.set(
+                new PipelineSnapshot(
+                    Pipeline.this, results, getExecutionTime(), getExplainStats()));
           }
 
           @Override
@@ -1043,7 +1098,7 @@ public final class Pipeline {
       @Nonnull PipelineExecuteOptions options,
       @Nullable final ByteString transactionId,
       @Nullable com.google.protobuf.Timestamp readTime,
-      ApiStreamObserver<PipelineResult> observer) {
+      PipelineResultObserver observer) {
     ExecutePipelineRequest.Builder request =
         ExecutePipelineRequest.newBuilder()
             .setDatabase(rpcContext.getDatabaseName())
@@ -1066,6 +1121,8 @@ public final class Pipeline {
         new PipelineResultObserver() {
           @Override
           public void onCompleted() {
+            observer.setExplainStats(getExplainStats());
+            observer.setExecutionTime(getExecutionTime());
             observer.onCompleted();
           }
 
@@ -1110,7 +1167,12 @@ public final class Pipeline {
 
           @Override
           public void onResponse(ExecutePipelineResponse response) {
-            if (executionTime == null) {
+            if (response.hasExplainStats()) {
+              resultObserver.setExplainStats(
+                  new ExplainStats(response.getExplainStats().getData()));
+            }
+
+            if (response.hasExecutionTime()) {
               executionTime = Timestamp.fromProto(response.getExecutionTime());
             }
 
@@ -1165,17 +1227,41 @@ public final class Pipeline {
     rpcContext.streamRequest(request, observer, rpcContext.getClient().executePipelineCallable());
   }
 
-  @InternalExtensionOnly
-  abstract static class PipelineResultObserver implements ApiStreamObserver<PipelineResult> {
-    private Timestamp executionTime; // Remove optional since Java doesn't have it
+  private interface ResultObserver extends ApiStreamObserver<PipelineResult> {
+    void onCompleted(Timestamp executionTime);
 
+    void setExplainStats(ExplainStats explainStats);
+
+    void setExecutionTime(Timestamp executionTime);
+  }
+
+  @InternalExtensionOnly
+  abstract static class PipelineResultObserver implements ResultObserver {
+    private Timestamp executionTime;
+    private ExplainStats explainStats;
+
+    @Override
     public void onCompleted(Timestamp executionTime) {
       this.executionTime = executionTime;
       this.onCompleted();
     }
 
-    public Timestamp getExecutionTime() { // Add getter for executionTime
+    public Timestamp getExecutionTime() {
       return executionTime;
+    }
+
+    public ExplainStats getExplainStats() {
+      return explainStats;
+    }
+
+    @Override
+    public void setExplainStats(ExplainStats explainStats) {
+      this.explainStats = explainStats;
+    }
+
+    @Override
+    public void setExecutionTime(Timestamp executionTime) {
+      this.executionTime = executionTime;
     }
   }
 }

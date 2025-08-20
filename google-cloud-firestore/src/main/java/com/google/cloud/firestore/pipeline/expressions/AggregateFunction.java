@@ -67,7 +67,7 @@ public class AggregateFunction {
 
   @BetaApi
   public static AggregateFunction countIf(BooleanExpr condition) {
-    return new AggregateFunction("countIf", condition);
+    return new AggregateFunction("count_if", condition);
   }
 
   @BetaApi

@@ -34,6 +34,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
     // @@protoc_insertion_point(message_implements:google.firestore.admin.v1.CloneDatabaseMetadata)
     CloneDatabaseMetadataOrBuilder {
   private static final long serialVersionUID = 0L;
+
   // Use CloneDatabaseMetadata.newBuilder() to construct.
   private CloneDatabaseMetadata(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
@@ -68,6 +69,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
   private int bitField0_;
   public static final int START_TIME_FIELD_NUMBER = 1;
   private com.google.protobuf.Timestamp startTime_;
+
   /**
    *
    *
@@ -83,6 +85,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
   public boolean hasStartTime() {
     return ((bitField0_ & 0x00000001) != 0);
   }
+
   /**
    *
    *
@@ -98,6 +101,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
   public com.google.protobuf.Timestamp getStartTime() {
     return startTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : startTime_;
   }
+
   /**
    *
    *
@@ -114,6 +118,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
 
   public static final int END_TIME_FIELD_NUMBER = 2;
   private com.google.protobuf.Timestamp endTime_;
+
   /**
    *
    *
@@ -129,6 +134,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
   public boolean hasEndTime() {
     return ((bitField0_ & 0x00000002) != 0);
   }
+
   /**
    *
    *
@@ -144,6 +150,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
   public com.google.protobuf.Timestamp getEndTime() {
     return endTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : endTime_;
   }
+
   /**
    *
    *
@@ -160,6 +167,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
 
   public static final int OPERATION_STATE_FIELD_NUMBER = 3;
   private int operationState_ = 0;
+
   /**
    *
    *
@@ -175,6 +183,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
   public int getOperationStateValue() {
     return operationState_;
   }
+
   /**
    *
    *
@@ -197,6 +206,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object database_ = "";
+
   /**
    *
    *
@@ -220,6 +230,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       return s;
     }
   }
+
   /**
    *
    *
@@ -246,6 +257,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
 
   public static final int PITR_SNAPSHOT_FIELD_NUMBER = 7;
   private com.google.firestore.admin.v1.PitrSnapshot pitrSnapshot_;
+
   /**
    *
    *
@@ -261,6 +273,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
   public boolean hasPitrSnapshot() {
     return ((bitField0_ & 0x00000004) != 0);
   }
+
   /**
    *
    *
@@ -278,6 +291,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
         ? com.google.firestore.admin.v1.PitrSnapshot.getDefaultInstance()
         : pitrSnapshot_;
   }
+
   /**
    *
    *
@@ -296,6 +310,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
 
   public static final int PROGRESS_PERCENTAGE_FIELD_NUMBER = 6;
   private com.google.firestore.admin.v1.Progress progressPercentage_;
+
   /**
    *
    *
@@ -311,6 +326,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
   public boolean hasProgressPercentage() {
     return ((bitField0_ & 0x00000008) != 0);
   }
+
   /**
    *
    *
@@ -328,6 +344,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
         ? com.google.firestore.admin.v1.Progress.getDefaultInstance()
         : progressPercentage_;
   }
+
   /**
    *
    *
@@ -570,6 +587,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
     Builder builder = new Builder(parent);
     return builder;
   }
+
   /**
    *
    *
@@ -864,6 +882,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
             com.google.protobuf.Timestamp.Builder,
             com.google.protobuf.TimestampOrBuilder>
         startTimeBuilder_;
+
     /**
      *
      *
@@ -878,6 +897,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
     public boolean hasStartTime() {
       return ((bitField0_ & 0x00000001) != 0);
     }
+
     /**
      *
      *
@@ -896,6 +916,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
         return startTimeBuilder_.getMessage();
       }
     }
+
     /**
      *
      *
@@ -918,6 +939,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -937,6 +959,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -964,6 +987,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       }
       return this;
     }
+
     /**
      *
      *
@@ -983,6 +1007,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -997,6 +1022,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return getStartTimeFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -1013,6 +1039,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
         return startTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : startTime_;
       }
     }
+
     /**
      *
      *
@@ -1045,6 +1072,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
             com.google.protobuf.Timestamp.Builder,
             com.google.protobuf.TimestampOrBuilder>
         endTimeBuilder_;
+
     /**
      *
      *
@@ -1059,6 +1087,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
     public boolean hasEndTime() {
       return ((bitField0_ & 0x00000002) != 0);
     }
+
     /**
      *
      *
@@ -1077,6 +1106,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
         return endTimeBuilder_.getMessage();
       }
     }
+
     /**
      *
      *
@@ -1099,6 +1129,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1118,6 +1149,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1145,6 +1177,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       }
       return this;
     }
+
     /**
      *
      *
@@ -1164,6 +1197,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1178,6 +1212,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return getEndTimeFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -1194,6 +1229,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
         return endTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : endTime_;
       }
     }
+
     /**
      *
      *
@@ -1221,6 +1257,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
     }
 
     private int operationState_ = 0;
+
     /**
      *
      *
@@ -1236,6 +1273,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
     public int getOperationStateValue() {
       return operationState_;
     }
+
     /**
      *
      *
@@ -1254,6 +1292,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1271,6 +1310,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
           com.google.firestore.admin.v1.OperationState.forNumber(operationState_);
       return result == null ? com.google.firestore.admin.v1.OperationState.UNRECOGNIZED : result;
     }
+
     /**
      *
      *
@@ -1292,6 +1332,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1311,6 +1352,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
     }
 
     private java.lang.Object database_ = "";
+
     /**
      *
      *
@@ -1333,6 +1375,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
         return (java.lang.String) ref;
       }
     }
+
     /**
      *
      *
@@ -1355,6 +1398,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
         return (com.google.protobuf.ByteString) ref;
       }
     }
+
     /**
      *
      *
@@ -1376,6 +1420,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1393,6 +1438,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1422,6 +1468,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
             com.google.firestore.admin.v1.PitrSnapshot.Builder,
             com.google.firestore.admin.v1.PitrSnapshotOrBuilder>
         pitrSnapshotBuilder_;
+
     /**
      *
      *
@@ -1436,6 +1483,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
     public boolean hasPitrSnapshot() {
       return ((bitField0_ & 0x00000010) != 0);
     }
+
     /**
      *
      *
@@ -1456,6 +1504,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
         return pitrSnapshotBuilder_.getMessage();
       }
     }
+
     /**
      *
      *
@@ -1478,6 +1527,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1498,6 +1548,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1525,6 +1576,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       }
       return this;
     }
+
     /**
      *
      *
@@ -1544,6 +1596,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1558,6 +1611,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return getPitrSnapshotFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -1576,6 +1630,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
             : pitrSnapshot_;
       }
     }
+
     /**
      *
      *
@@ -1608,6 +1663,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
             com.google.firestore.admin.v1.Progress.Builder,
             com.google.firestore.admin.v1.ProgressOrBuilder>
         progressPercentageBuilder_;
+
     /**
      *
      *
@@ -1622,6 +1678,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
     public boolean hasProgressPercentage() {
       return ((bitField0_ & 0x00000020) != 0);
     }
+
     /**
      *
      *
@@ -1642,6 +1699,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
         return progressPercentageBuilder_.getMessage();
       }
     }
+
     /**
      *
      *
@@ -1664,6 +1722,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1684,6 +1743,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1711,6 +1771,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       }
       return this;
     }
+
     /**
      *
      *
@@ -1730,6 +1791,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1744,6 +1806,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
       onChanged();
       return getProgressPercentageFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -1762,6 +1825,7 @@ public final class CloneDatabaseMetadata extends com.google.protobuf.GeneratedMe
             : progressPercentage_;
       }
     }
+
     /**
      *
      *

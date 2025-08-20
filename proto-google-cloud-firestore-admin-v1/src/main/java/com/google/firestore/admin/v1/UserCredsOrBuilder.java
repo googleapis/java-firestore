@@ -38,6 +38,7 @@ public interface UserCredsOrBuilder
    * @return The name.
    */
   java.lang.String getName();
+
   /**
    *
    *
@@ -66,6 +67,7 @@ public interface UserCredsOrBuilder
    * @return Whether the createTime field is set.
    */
   boolean hasCreateTime();
+
   /**
    *
    *
@@ -79,6 +81,7 @@ public interface UserCredsOrBuilder
    * @return The createTime.
    */
   com.google.protobuf.Timestamp getCreateTime();
+
   /**
    *
    *
@@ -104,6 +107,7 @@ public interface UserCredsOrBuilder
    * @return Whether the updateTime field is set.
    */
   boolean hasUpdateTime();
+
   /**
    *
    *
@@ -117,6 +121,7 @@ public interface UserCredsOrBuilder
    * @return The updateTime.
    */
   com.google.protobuf.Timestamp getUpdateTime();
+
   /**
    *
    *
@@ -144,6 +149,7 @@ public interface UserCredsOrBuilder
    * @return The enum numeric value on the wire for state.
    */
   int getStateValue();
+
   /**
    *
    *
@@ -173,6 +179,7 @@ public interface UserCredsOrBuilder
    * @return The securePassword.
    */
   java.lang.String getSecurePassword();
+
   /**
    *
    *
@@ -199,6 +206,7 @@ public interface UserCredsOrBuilder
    * @return Whether the resourceIdentity field is set.
    */
   boolean hasResourceIdentity();
+
   /**
    *
    *
@@ -211,6 +219,7 @@ public interface UserCredsOrBuilder
    * @return The resourceIdentity.
    */
   com.google.firestore.admin.v1.UserCreds.ResourceIdentity getResourceIdentity();
+
   /**
    *
    *

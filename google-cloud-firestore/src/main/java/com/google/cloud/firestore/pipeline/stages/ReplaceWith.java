@@ -18,14 +18,14 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
-import com.google.cloud.firestore.pipeline.expressions.Selectable;
+import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Value;
 import javax.annotation.Nonnull;
 
-public class Replace extends Stage {
+public class ReplaceWith extends Stage {
 
-  private final Selectable field;
+  private final Expr expr;
   private final Mode mode;
 
   public enum Mode {
@@ -40,18 +40,18 @@ public class Replace extends Stage {
     }
   }
 
-  public Replace(@Nonnull Selectable field) {
+  public ReplaceWith(@Nonnull Expr field) {
     this(field, Mode.FULL_REPLACE);
   }
 
-  public Replace(@Nonnull Selectable field, @Nonnull Mode mode) {
-    super("replace", InternalOptions.EMPTY);
-    this.field = field;
+  public ReplaceWith(@Nonnull Expr expr, @Nonnull Mode mode) {
+    super("replace_with", InternalOptions.EMPTY);
+    this.expr = expr;
     this.mode = mode;
   }
 
   @Override
   Iterable<Value> toStageArgs() {
-    return ImmutableList.of(encodeValue(field), mode.value);
+    return ImmutableList.of(encodeValue(expr), mode.value);
   }
 }

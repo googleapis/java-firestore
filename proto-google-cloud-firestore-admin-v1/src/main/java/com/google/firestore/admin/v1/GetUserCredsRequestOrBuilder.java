@@ -39,6 +39,7 @@ public interface GetUserCredsRequestOrBuilder
    * @return The name.
    */
   java.lang.String getName();
+
   /**
    *
    *

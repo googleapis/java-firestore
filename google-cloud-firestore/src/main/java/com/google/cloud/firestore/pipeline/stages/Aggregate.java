@@ -40,13 +40,13 @@ public final class Aggregate extends Stage {
   @BetaApi
   public Aggregate withGroups(String... fields) {
     return new Aggregate(
-        PipelineUtils.fieldNamesToMap(fields), this.accumulators, AggregateOptions.DEFAULT);
+        PipelineUtils.fieldNamesToMap(fields), this.accumulators, new AggregateOptions());
   }
 
   @BetaApi
   public Aggregate withGroups(Selectable... selectables) {
     return new Aggregate(
-        PipelineUtils.selectablesToMap(selectables), this.accumulators, AggregateOptions.DEFAULT);
+        PipelineUtils.selectablesToMap(selectables), this.accumulators, new AggregateOptions());
   }
 
   @BetaApi
@@ -55,7 +55,7 @@ public final class Aggregate extends Stage {
         Collections.emptyMap(),
         Arrays.stream(accumulators)
             .collect(Collectors.toMap(AliasedAggregate::getAlias, AliasedAggregate::getExpr)),
-        AggregateOptions.DEFAULT);
+        new AggregateOptions());
   }
 
   @BetaApi

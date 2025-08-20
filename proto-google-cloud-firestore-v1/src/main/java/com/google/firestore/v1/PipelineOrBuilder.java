@@ -36,6 +36,7 @@ public interface PipelineOrBuilder
    * </code>
    */
   java.util.List<com.google.firestore.v1.Pipeline.Stage> getStagesList();
+
   /**
    *
    *
@@ -48,6 +49,7 @@ public interface PipelineOrBuilder
    * </code>
    */
   com.google.firestore.v1.Pipeline.Stage getStages(int index);
+
   /**
    *
    *
@@ -60,6 +62,7 @@ public interface PipelineOrBuilder
    * </code>
    */
   int getStagesCount();
+
   /**
    *
    *
@@ -73,6 +76,7 @@ public interface PipelineOrBuilder
    */
   java.util.List<? extends com.google.firestore.v1.Pipeline.StageOrBuilder>
       getStagesOrBuilderList();
+
   /**
    *
    *

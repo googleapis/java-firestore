@@ -16,14 +16,17 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import com.google.firestore.v1.Value;
 import javax.annotation.Nonnull;
 
 public final class UnnestOptions extends AbstractOptions<UnnestOptions> {
 
-  public static UnnestOptions DEFAULT = new UnnestOptions(InternalOptions.EMPTY);
+  public UnnestOptions() {
+    this(InternalOptions.EMPTY);
+  }
 
   public UnnestOptions withIndexField(@Nonnull String indexField) {
-    return with("index_field", indexField);
+    return with("index_field", Value.newBuilder().setFieldReferenceValue(indexField).build());
   }
 
   @Override

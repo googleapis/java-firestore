@@ -61,7 +61,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
       throws ExecutionException, InterruptedException {
     AggregateQuerySnapshot snapshot = query.get().get();
 
-    List<PipelineResult> pipelineResults = query.pipeline().execute().get();
+    List<PipelineResult> pipelineResults =
+        query.getQuery().getFirestore().pipeline().createFrom(query).execute().get().getResults();
     assertThat(pipelineResults).hasSize(1);
     assertThat(pipelineResults.get(0).getData())
         .isEqualTo(TestUtil.getAggregateSnapshotData(snapshot));

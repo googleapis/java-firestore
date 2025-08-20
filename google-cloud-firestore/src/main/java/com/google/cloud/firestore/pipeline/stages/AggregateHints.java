@@ -18,7 +18,9 @@ package com.google.cloud.firestore.pipeline.stages;
 
 public final class AggregateHints extends AbstractOptions<AggregateHints> {
 
-  public static AggregateHints DEFAULT = new AggregateHints(InternalOptions.EMPTY);
+  public AggregateHints() {
+    this(InternalOptions.EMPTY);
+  }
 
   public AggregateHints(InternalOptions options) {
     super(options);

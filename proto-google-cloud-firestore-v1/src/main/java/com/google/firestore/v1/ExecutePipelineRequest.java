@@ -34,6 +34,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     // @@protoc_insertion_point(message_implements:google.firestore.v1.ExecutePipelineRequest)
     ExecutePipelineRequestOrBuilder {
   private static final long serialVersionUID = 0L;
+
   // Use ExecutePipelineRequest.newBuilder() to construct.
   private ExecutePipelineRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
@@ -80,6 +81,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     private PipelineTypeCase(int value) {
       this.value = value;
     }
+
     /**
      * @param value The number of the enum to look for.
      * @return The enum associated with the given number.
@@ -128,6 +130,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     private ConsistencySelectorCase(int value) {
       this.value = value;
     }
+
     /**
      * @param value The number of the enum to look for.
      * @return The enum associated with the given number.
@@ -166,6 +169,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object database_ = "";
+
   /**
    *
    *
@@ -190,6 +194,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       return s;
     }
   }
+
   /**
    *
    *
@@ -216,6 +221,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
   }
 
   public static final int STRUCTURED_PIPELINE_FIELD_NUMBER = 2;
+
   /**
    *
    *
@@ -231,6 +237,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
   public boolean hasStructuredPipeline() {
     return pipelineTypeCase_ == 2;
   }
+
   /**
    *
    *
@@ -249,6 +256,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     }
     return com.google.firestore.v1.StructuredPipeline.getDefaultInstance();
   }
+
   /**
    *
    *
@@ -267,6 +275,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
   }
 
   public static final int TRANSACTION_FIELD_NUMBER = 5;
+
   /**
    *
    *
@@ -284,6 +293,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
   public boolean hasTransaction() {
     return consistencySelectorCase_ == 5;
   }
+
   /**
    *
    *
@@ -306,6 +316,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
   }
 
   public static final int NEW_TRANSACTION_FIELD_NUMBER = 6;
+
   /**
    *
    *
@@ -324,6 +335,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
   public boolean hasNewTransaction() {
     return consistencySelectorCase_ == 6;
   }
+
   /**
    *
    *
@@ -345,6 +357,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     }
     return com.google.firestore.v1.TransactionOptions.getDefaultInstance();
   }
+
   /**
    *
    *
@@ -366,6 +379,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
   }
 
   public static final int READ_TIME_FIELD_NUMBER = 7;
+
   /**
    *
    *
@@ -385,6 +399,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
   public boolean hasReadTime() {
     return consistencySelectorCase_ == 7;
   }
+
   /**
    *
    *
@@ -407,6 +422,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     }
     return com.google.protobuf.Timestamp.getDefaultInstance();
   }
+
   /**
    *
    *
@@ -665,6 +681,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     Builder builder = new Builder(parent);
     return builder;
   }
+
   /**
    *
    *
@@ -964,6 +981,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     private int bitField0_;
 
     private java.lang.Object database_ = "";
+
     /**
      *
      *
@@ -987,6 +1005,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
         return (java.lang.String) ref;
       }
     }
+
     /**
      *
      *
@@ -1010,6 +1029,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
         return (com.google.protobuf.ByteString) ref;
       }
     }
+
     /**
      *
      *
@@ -1032,6 +1052,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1050,6 +1071,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1079,6 +1101,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
             com.google.firestore.v1.StructuredPipeline.Builder,
             com.google.firestore.v1.StructuredPipelineOrBuilder>
         structuredPipelineBuilder_;
+
     /**
      *
      *
@@ -1094,6 +1117,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     public boolean hasStructuredPipeline() {
       return pipelineTypeCase_ == 2;
     }
+
     /**
      *
      *
@@ -1119,6 +1143,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
         return com.google.firestore.v1.StructuredPipeline.getDefaultInstance();
       }
     }
+
     /**
      *
      *
@@ -1141,6 +1166,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       pipelineTypeCase_ = 2;
       return this;
     }
+
     /**
      *
      *
@@ -1161,6 +1187,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       pipelineTypeCase_ = 2;
       return this;
     }
+
     /**
      *
      *
@@ -1193,6 +1220,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       pipelineTypeCase_ = 2;
       return this;
     }
+
     /**
      *
      *
@@ -1218,6 +1246,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       }
       return this;
     }
+
     /**
      *
      *
@@ -1230,6 +1259,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     public com.google.firestore.v1.StructuredPipeline.Builder getStructuredPipelineBuilder() {
       return getStructuredPipelineFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -1250,6 +1280,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
         return com.google.firestore.v1.StructuredPipeline.getDefaultInstance();
       }
     }
+
     /**
      *
      *
@@ -1299,6 +1330,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     public boolean hasTransaction() {
       return consistencySelectorCase_ == 5;
     }
+
     /**
      *
      *
@@ -1318,6 +1350,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       }
       return com.google.protobuf.ByteString.EMPTY;
     }
+
     /**
      *
      *
@@ -1341,6 +1374,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1368,6 +1402,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
             com.google.firestore.v1.TransactionOptions.Builder,
             com.google.firestore.v1.TransactionOptionsOrBuilder>
         newTransactionBuilder_;
+
     /**
      *
      *
@@ -1386,6 +1421,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     public boolean hasNewTransaction() {
       return consistencySelectorCase_ == 6;
     }
+
     /**
      *
      *
@@ -1414,6 +1450,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
         return com.google.firestore.v1.TransactionOptions.getDefaultInstance();
       }
     }
+
     /**
      *
      *
@@ -1439,6 +1476,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       consistencySelectorCase_ = 6;
       return this;
     }
+
     /**
      *
      *
@@ -1462,6 +1500,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       consistencySelectorCase_ = 6;
       return this;
     }
+
     /**
      *
      *
@@ -1498,6 +1537,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       consistencySelectorCase_ = 6;
       return this;
     }
+
     /**
      *
      *
@@ -1526,6 +1566,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       }
       return this;
     }
+
     /**
      *
      *
@@ -1541,6 +1582,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     public com.google.firestore.v1.TransactionOptions.Builder getNewTransactionBuilder() {
       return getNewTransactionFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -1564,6 +1606,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
         return com.google.firestore.v1.TransactionOptions.getDefaultInstance();
       }
     }
+
     /**
      *
      *
@@ -1605,6 +1648,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
             com.google.protobuf.Timestamp.Builder,
             com.google.protobuf.TimestampOrBuilder>
         readTimeBuilder_;
+
     /**
      *
      *
@@ -1624,6 +1668,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     public boolean hasReadTime() {
       return consistencySelectorCase_ == 7;
     }
+
     /**
      *
      *
@@ -1653,6 +1698,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
         return com.google.protobuf.Timestamp.getDefaultInstance();
       }
     }
+
     /**
      *
      *
@@ -1679,6 +1725,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       consistencySelectorCase_ = 7;
       return this;
     }
+
     /**
      *
      *
@@ -1702,6 +1749,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       consistencySelectorCase_ = 7;
       return this;
     }
+
     /**
      *
      *
@@ -1738,6 +1786,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       consistencySelectorCase_ = 7;
       return this;
     }
+
     /**
      *
      *
@@ -1767,6 +1816,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
       }
       return this;
     }
+
     /**
      *
      *
@@ -1783,6 +1833,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
     public com.google.protobuf.Timestamp.Builder getReadTimeBuilder() {
       return getReadTimeFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -1807,6 +1858,7 @@ public final class ExecutePipelineRequest extends com.google.protobuf.GeneratedM
         return com.google.protobuf.Timestamp.getDefaultInstance();
       }
     }
+
     /**
      *
      *

@@ -18,7 +18,6 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.PipelineUtils;
 import com.google.common.collect.Iterables;
 import com.google.firestore.v1.Value;
 import java.util.Arrays;
@@ -44,6 +43,6 @@ public final class Documents extends Stage {
 
   @Override
   Iterable<Value> toStageArgs() {
-    return Iterables.transform(documents, PipelineUtils::encodeValue);
+    return Iterables.transform(documents, doc -> Value.newBuilder().setReferenceValue(doc).build());
   }
 }

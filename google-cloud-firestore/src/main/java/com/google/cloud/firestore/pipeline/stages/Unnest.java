@@ -17,31 +17,46 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+import static com.google.cloud.firestore.pipeline.expressions.Expr.field;
 
+import com.google.cloud.firestore.pipeline.expressions.AliasedExpr;
+import com.google.cloud.firestore.pipeline.expressions.Expr;
 import com.google.cloud.firestore.pipeline.expressions.Field;
+import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Value;
 import javax.annotation.Nonnull;
 
 public final class Unnest extends Stage {
 
-  private final Field field;
-  private final String alias;
+  private final Expr expr;
+  private final Field alias;
 
   public Unnest(@Nonnull Field field, @Nonnull String alias) {
     super("unnest", InternalOptions.EMPTY);
-    this.field = field;
-    this.alias = alias;
+    this.expr = field;
+    this.alias = field(alias);
   }
 
   public Unnest(@Nonnull Field field, @Nonnull String alias, @Nonnull UnnestOptions options) {
     super("unnest", options.options);
-    this.field = field;
-    this.alias = alias;
+    this.expr = field;
+    this.alias = field(alias);
+  }
+
+  public Unnest(@Nonnull Selectable field) {
+    super("unnest", InternalOptions.EMPTY);
+    if (field instanceof AliasedExpr) {
+      this.expr = ((AliasedExpr) field).getExpr();
+      this.alias = field(((AliasedExpr) field).getAlias());
+    } else {
+      this.expr = (Field) field;
+      this.alias = (Field) field;
+    }
   }
 
   @Override
   Iterable<Value> toStageArgs() {
-    return ImmutableList.of(encodeValue(field), encodeValue(alias));
+    return ImmutableList.of(encodeValue(expr), encodeValue(alias));
   }
 }

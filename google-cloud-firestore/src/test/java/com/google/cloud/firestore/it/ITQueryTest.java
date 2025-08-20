@@ -86,7 +86,8 @@ public class ITQueryTest extends ITBaseTest {
       // assertThat(result).isEqualTo(Arrays.asList(docs));
     }
 
-    List<PipelineResult> pipelineResults = query.pipeline().execute().get();
+    List<PipelineResult> pipelineResults =
+        query.getFirestore().pipeline().createFrom(query).execute().get().getResults();
     List<String> result =
         pipelineResults.stream()
             .map(pipelineResult -> Objects.requireNonNull(pipelineResult.getReference()).getId())
@@ -105,7 +106,8 @@ public class ITQueryTest extends ITBaseTest {
       assertThat(result).isEqualTo(Sets.newHashSet(docs));
     }
 
-    List<PipelineResult> pipelineResults = query.pipeline().execute().get();
+    List<PipelineResult> pipelineResults =
+        query.getFirestore().pipeline().createFrom(query).execute().get().getResults();
     Set<String> result =
         pipelineResults.stream()
             .map(pipelineResult -> Objects.requireNonNull(pipelineResult.getReference()).getId())
@@ -933,7 +935,16 @@ public class ITQueryTest extends ITBaseTest {
     if (isRunningAgainstFirestoreEmulator(firestore)) {
       assertThat(query.get().get().getCount()).isEqualTo(4);
     }
-    assertThat(query.pipeline().execute().get()).isNotEmpty();
+    assertThat(
+            query
+                .getQuery()
+                .getFirestore()
+                .pipeline()
+                .createFrom(query)
+                .execute()
+                .get()
+                .getResults())
+        .isNotEmpty();
     // TODO(MIEQ): Add sum and average when they are public.
   }
 

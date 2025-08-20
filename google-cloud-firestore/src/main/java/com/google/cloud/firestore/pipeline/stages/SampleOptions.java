@@ -18,7 +18,9 @@ package com.google.cloud.firestore.pipeline.stages;
 
 public final class SampleOptions extends AbstractOptions<SampleOptions> {
 
-  public static SampleOptions DEFAULT = new SampleOptions(InternalOptions.EMPTY);
+  public SampleOptions() {
+    this(InternalOptions.EMPTY);
+  }
 
   public SampleOptions(InternalOptions options) {
     super(options);

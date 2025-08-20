@@ -37,6 +37,7 @@ public interface ExecutePipelineRequestOrBuilder
    * @return The database.
    */
   java.lang.String getDatabase();
+
   /**
    *
    *
@@ -63,6 +64,7 @@ public interface ExecutePipelineRequestOrBuilder
    * @return Whether the structuredPipeline field is set.
    */
   boolean hasStructuredPipeline();
+
   /**
    *
    *
@@ -75,6 +77,7 @@ public interface ExecutePipelineRequestOrBuilder
    * @return The structuredPipeline.
    */
   com.google.firestore.v1.StructuredPipeline getStructuredPipeline();
+
   /**
    *
    *
@@ -100,6 +103,7 @@ public interface ExecutePipelineRequestOrBuilder
    * @return Whether the transaction field is set.
    */
   boolean hasTransaction();
+
   /**
    *
    *
@@ -130,6 +134,7 @@ public interface ExecutePipelineRequestOrBuilder
    * @return Whether the newTransaction field is set.
    */
   boolean hasNewTransaction();
+
   /**
    *
    *
@@ -145,6 +150,7 @@ public interface ExecutePipelineRequestOrBuilder
    * @return The newTransaction.
    */
   com.google.firestore.v1.TransactionOptions getNewTransaction();
+
   /**
    *
    *
@@ -175,6 +181,7 @@ public interface ExecutePipelineRequestOrBuilder
    * @return Whether the readTime field is set.
    */
   boolean hasReadTime();
+
   /**
    *
    *
@@ -191,6 +198,7 @@ public interface ExecutePipelineRequestOrBuilder
    * @return The readTime.
    */
   com.google.protobuf.Timestamp getReadTime();
+
   /**
    *
    *

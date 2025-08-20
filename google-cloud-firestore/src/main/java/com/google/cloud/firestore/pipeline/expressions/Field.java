@@ -49,6 +49,7 @@ public final class Field extends Expr implements Selectable {
   private Field(FieldPath path) {
     this.path = path;
   }
+
   /**
    * Creates a {@code Field} instance representing the field at the given path.
    *

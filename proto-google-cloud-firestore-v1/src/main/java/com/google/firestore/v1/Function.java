@@ -41,6 +41,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
     // @@protoc_insertion_point(message_implements:google.firestore.v1.Function)
     FunctionOrBuilder {
   private static final long serialVersionUID = 0L;
+
   // Use Function.newBuilder() to construct.
   private Function(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
@@ -87,6 +88,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object name_ = "";
+
   /**
    *
    *
@@ -114,6 +116,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       return s;
     }
   }
+
   /**
    *
    *
@@ -146,6 +149,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
 
   @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.Value> args_;
+
   /**
    *
    *
@@ -160,6 +164,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
   public java.util.List<com.google.firestore.v1.Value> getArgsList() {
     return args_;
   }
+
   /**
    *
    *
@@ -174,6 +179,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
   public java.util.List<? extends com.google.firestore.v1.ValueOrBuilder> getArgsOrBuilderList() {
     return args_;
   }
+
   /**
    *
    *
@@ -188,6 +194,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
   public int getArgsCount() {
     return args_.size();
   }
+
   /**
    *
    *
@@ -202,6 +209,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
   public com.google.firestore.v1.Value getArgs(int index) {
     return args_.get(index);
   }
+
   /**
    *
    *
@@ -246,6 +254,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
   public int getOptionsCount() {
     return internalGetOptions().getMap().size();
   }
+
   /**
    *
    *
@@ -264,12 +273,14 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
     }
     return internalGetOptions().getMap().containsKey(key);
   }
+
   /** Use {@link #getOptionsMap()} instead. */
   @java.lang.Override
   @java.lang.Deprecated
   public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getOptions() {
     return getOptionsMap();
   }
+
   /**
    *
    *
@@ -285,6 +296,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
   public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getOptionsMap() {
     return internalGetOptions().getMap();
   }
+
   /**
    *
    *
@@ -308,6 +320,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
         internalGetOptions().getMap();
     return map.containsKey(key) ? map.get(key) : defaultValue;
   }
+
   /**
    *
    *
@@ -517,6 +530,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
     Builder builder = new Builder(parent);
     return builder;
   }
+
   /**
    *
    *
@@ -807,6 +821,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
     private int bitField0_;
 
     private java.lang.Object name_ = "";
+
     /**
      *
      *
@@ -833,6 +848,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
         return (java.lang.String) ref;
       }
     }
+
     /**
      *
      *
@@ -859,6 +875,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
         return (com.google.protobuf.ByteString) ref;
       }
     }
+
     /**
      *
      *
@@ -884,6 +901,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -905,6 +923,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -964,6 +983,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
         return argsBuilder_.getMessageList();
       }
     }
+
     /**
      *
      *
@@ -981,6 +1001,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
         return argsBuilder_.getCount();
       }
     }
+
     /**
      *
      *
@@ -998,6 +1019,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
         return argsBuilder_.getMessage(index);
       }
     }
+
     /**
      *
      *
@@ -1021,6 +1043,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       }
       return this;
     }
+
     /**
      *
      *
@@ -1041,6 +1064,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       }
       return this;
     }
+
     /**
      *
      *
@@ -1064,6 +1088,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       }
       return this;
     }
+
     /**
      *
      *
@@ -1087,6 +1112,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       }
       return this;
     }
+
     /**
      *
      *
@@ -1107,6 +1133,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       }
       return this;
     }
+
     /**
      *
      *
@@ -1127,6 +1154,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       }
       return this;
     }
+
     /**
      *
      *
@@ -1147,6 +1175,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       }
       return this;
     }
+
     /**
      *
      *
@@ -1167,6 +1196,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       }
       return this;
     }
+
     /**
      *
      *
@@ -1187,6 +1217,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       }
       return this;
     }
+
     /**
      *
      *
@@ -1200,6 +1231,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.v1.Value.Builder getArgsBuilder(int index) {
       return getArgsFieldBuilder().getBuilder(index);
     }
+
     /**
      *
      *
@@ -1217,6 +1249,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
         return argsBuilder_.getMessageOrBuilder(index);
       }
     }
+
     /**
      *
      *
@@ -1234,6 +1267,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
         return java.util.Collections.unmodifiableList(args_);
       }
     }
+
     /**
      *
      *
@@ -1247,6 +1281,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
     public com.google.firestore.v1.Value.Builder addArgsBuilder() {
       return getArgsFieldBuilder().addBuilder(com.google.firestore.v1.Value.getDefaultInstance());
     }
+
     /**
      *
      *
@@ -1261,6 +1296,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       return getArgsFieldBuilder()
           .addBuilder(index, com.google.firestore.v1.Value.getDefaultInstance());
     }
+
     /**
      *
      *
@@ -1310,7 +1346,8 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
           defaultEntry() {
         return OptionsDefaultEntryHolder.defaultEntry;
       }
-    };
+    }
+    ;
 
     private static final OptionsConverter optionsConverter = new OptionsConverter();
 
@@ -1350,6 +1387,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
     public int getOptionsCount() {
       return internalGetOptions().ensureBuilderMap().size();
     }
+
     /**
      *
      *
@@ -1368,12 +1406,14 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       }
       return internalGetOptions().ensureBuilderMap().containsKey(key);
     }
+
     /** Use {@link #getOptionsMap()} instead. */
     @java.lang.Override
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getOptions() {
       return getOptionsMap();
     }
+
     /**
      *
      *
@@ -1389,6 +1429,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
     public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getOptionsMap() {
       return internalGetOptions().getImmutableMap();
     }
+
     /**
      *
      *
@@ -1412,6 +1453,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
           internalGetMutableOptions().ensureBuilderMap();
       return map.containsKey(key) ? optionsConverter.build(map.get(key)) : defaultValue;
     }
+
     /**
      *
      *
@@ -1441,6 +1483,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       internalGetMutableOptions().clear();
       return this;
     }
+
     /**
      *
      *
@@ -1459,12 +1502,14 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       internalGetMutableOptions().ensureBuilderMap().remove(key);
       return this;
     }
+
     /** Use alternate mutation accessors instead. */
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getMutableOptions() {
       bitField0_ |= 0x00000004;
       return internalGetMutableOptions().ensureMessageMap();
     }
+
     /**
      *
      *
@@ -1487,6 +1532,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       bitField0_ |= 0x00000004;
       return this;
     }
+
     /**
      *
      *
@@ -1510,6 +1556,7 @@ public final class Function extends com.google.protobuf.GeneratedMessageV3
       bitField0_ |= 0x00000004;
       return this;
     }
+
     /**
      *
      *

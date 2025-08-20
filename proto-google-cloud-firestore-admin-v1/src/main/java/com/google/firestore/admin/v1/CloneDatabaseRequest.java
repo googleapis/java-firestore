@@ -34,6 +34,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
     // @@protoc_insertion_point(message_implements:google.firestore.admin.v1.CloneDatabaseRequest)
     CloneDatabaseRequestOrBuilder {
   private static final long serialVersionUID = 0L;
+
   // Use CloneDatabaseRequest.newBuilder() to construct.
   private CloneDatabaseRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
@@ -82,6 +83,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object parent_ = "";
+
   /**
    *
    *
@@ -108,6 +110,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       return s;
     }
   }
+
   /**
    *
    *
@@ -139,6 +142,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object databaseId_ = "";
+
   /**
    *
    *
@@ -170,6 +174,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       return s;
     }
   }
+
   /**
    *
    *
@@ -204,6 +209,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
 
   public static final int PITR_SNAPSHOT_FIELD_NUMBER = 6;
   private com.google.firestore.admin.v1.PitrSnapshot pitrSnapshot_;
+
   /**
    *
    *
@@ -225,6 +231,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
   public boolean hasPitrSnapshot() {
     return ((bitField0_ & 0x00000001) != 0);
   }
+
   /**
    *
    *
@@ -248,6 +255,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
         ? com.google.firestore.admin.v1.PitrSnapshot.getDefaultInstance()
         : pitrSnapshot_;
   }
+
   /**
    *
    *
@@ -272,6 +280,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
 
   public static final int ENCRYPTION_CONFIG_FIELD_NUMBER = 4;
   private com.google.firestore.admin.v1.Database.EncryptionConfig encryptionConfig_;
+
   /**
    *
    *
@@ -293,6 +302,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
   public boolean hasEncryptionConfig() {
     return ((bitField0_ & 0x00000002) != 0);
   }
+
   /**
    *
    *
@@ -316,6 +326,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
         ? com.google.firestore.admin.v1.Database.EncryptionConfig.getDefaultInstance()
         : encryptionConfig_;
   }
+
   /**
    *
    *
@@ -365,6 +376,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
   public int getTagsCount() {
     return internalGetTags().getMap().size();
   }
+
   /**
    *
    *
@@ -386,12 +398,14 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
     }
     return internalGetTags().getMap().containsKey(key);
   }
+
   /** Use {@link #getTagsMap()} instead. */
   @java.lang.Override
   @java.lang.Deprecated
   public java.util.Map<java.lang.String, java.lang.String> getTags() {
     return getTagsMap();
   }
+
   /**
    *
    *
@@ -410,6 +424,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
   public java.util.Map<java.lang.String, java.lang.String> getTagsMap() {
     return internalGetTags().getMap();
   }
+
   /**
    *
    *
@@ -435,6 +450,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
     java.util.Map<java.lang.String, java.lang.String> map = internalGetTags().getMap();
     return map.containsKey(key) ? map.get(key) : defaultValue;
   }
+
   /**
    *
    *
@@ -674,6 +690,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
     Builder builder = new Builder(parent);
     return builder;
   }
+
   /**
    *
    *
@@ -963,6 +980,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
     private int bitField0_;
 
     private java.lang.Object parent_ = "";
+
     /**
      *
      *
@@ -988,6 +1006,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
         return (java.lang.String) ref;
       }
     }
+
     /**
      *
      *
@@ -1013,6 +1032,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
         return (com.google.protobuf.ByteString) ref;
       }
     }
+
     /**
      *
      *
@@ -1037,6 +1057,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1057,6 +1078,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1084,6 +1106,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
     }
 
     private java.lang.Object databaseId_ = "";
+
     /**
      *
      *
@@ -1114,6 +1137,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
         return (java.lang.String) ref;
       }
     }
+
     /**
      *
      *
@@ -1144,6 +1168,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
         return (com.google.protobuf.ByteString) ref;
       }
     }
+
     /**
      *
      *
@@ -1173,6 +1198,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1198,6 +1224,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1235,6 +1262,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
             com.google.firestore.admin.v1.PitrSnapshot.Builder,
             com.google.firestore.admin.v1.PitrSnapshotOrBuilder>
         pitrSnapshotBuilder_;
+
     /**
      *
      *
@@ -1255,6 +1283,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
     public boolean hasPitrSnapshot() {
       return ((bitField0_ & 0x00000004) != 0);
     }
+
     /**
      *
      *
@@ -1281,6 +1310,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
         return pitrSnapshotBuilder_.getMessage();
       }
     }
+
     /**
      *
      *
@@ -1309,6 +1339,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1335,6 +1366,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1368,6 +1400,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       }
       return this;
     }
+
     /**
      *
      *
@@ -1393,6 +1426,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1413,6 +1447,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return getPitrSnapshotFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -1437,6 +1472,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
             : pitrSnapshot_;
       }
     }
+
     /**
      *
      *
@@ -1475,6 +1511,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
             com.google.firestore.admin.v1.Database.EncryptionConfig.Builder,
             com.google.firestore.admin.v1.Database.EncryptionConfigOrBuilder>
         encryptionConfigBuilder_;
+
     /**
      *
      *
@@ -1495,6 +1532,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
     public boolean hasEncryptionConfig() {
       return ((bitField0_ & 0x00000008) != 0);
     }
+
     /**
      *
      *
@@ -1521,6 +1559,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
         return encryptionConfigBuilder_.getMessage();
       }
     }
+
     /**
      *
      *
@@ -1550,6 +1589,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1576,6 +1616,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1611,6 +1652,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       }
       return this;
     }
+
     /**
      *
      *
@@ -1636,6 +1678,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1657,6 +1700,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       onChanged();
       return getEncryptionConfigFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -1682,6 +1726,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
             : encryptionConfig_;
       }
     }
+
     /**
      *
      *
@@ -1739,6 +1784,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
     public int getTagsCount() {
       return internalGetTags().getMap().size();
     }
+
     /**
      *
      *
@@ -1760,12 +1806,14 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       }
       return internalGetTags().getMap().containsKey(key);
     }
+
     /** Use {@link #getTagsMap()} instead. */
     @java.lang.Override
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, java.lang.String> getTags() {
       return getTagsMap();
     }
+
     /**
      *
      *
@@ -1784,6 +1832,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
     public java.util.Map<java.lang.String, java.lang.String> getTagsMap() {
       return internalGetTags().getMap();
     }
+
     /**
      *
      *
@@ -1809,6 +1858,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       java.util.Map<java.lang.String, java.lang.String> map = internalGetTags().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
+
     /**
      *
      *
@@ -1840,6 +1890,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       internalGetMutableTags().getMutableMap().clear();
       return this;
     }
+
     /**
      *
      *
@@ -1861,12 +1912,14 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       internalGetMutableTags().getMutableMap().remove(key);
       return this;
     }
+
     /** Use alternate mutation accessors instead. */
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, java.lang.String> getMutableTags() {
       bitField0_ |= 0x00000010;
       return internalGetMutableTags().getMutableMap();
     }
+
     /**
      *
      *
@@ -1892,6 +1945,7 @@ public final class CloneDatabaseRequest extends com.google.protobuf.GeneratedMes
       bitField0_ |= 0x00000010;
       return this;
     }
+
     /**
      *
      *

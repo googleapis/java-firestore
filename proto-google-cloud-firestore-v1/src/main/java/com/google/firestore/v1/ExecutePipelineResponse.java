@@ -33,6 +33,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
     // @@protoc_insertion_point(message_implements:google.firestore.v1.ExecutePipelineResponse)
     ExecutePipelineResponseOrBuilder {
   private static final long serialVersionUID = 0L;
+
   // Use ExecutePipelineResponse.newBuilder() to construct.
   private ExecutePipelineResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
@@ -67,6 +68,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
   private int bitField0_;
   public static final int TRANSACTION_FIELD_NUMBER = 1;
   private com.google.protobuf.ByteString transaction_ = com.google.protobuf.ByteString.EMPTY;
+
   /**
    *
    *
@@ -91,6 +93,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
 
   @SuppressWarnings("serial")
   private java.util.List<com.google.firestore.v1.Document> results_;
+
   /**
    *
    *
@@ -115,6 +118,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
   public java.util.List<com.google.firestore.v1.Document> getResultsList() {
     return results_;
   }
+
   /**
    *
    *
@@ -140,6 +144,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       getResultsOrBuilderList() {
     return results_;
   }
+
   /**
    *
    *
@@ -164,6 +169,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
   public int getResultsCount() {
     return results_.size();
   }
+
   /**
    *
    *
@@ -188,6 +194,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
   public com.google.firestore.v1.Document getResults(int index) {
     return results_.get(index);
   }
+
   /**
    *
    *
@@ -215,6 +222,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
 
   public static final int EXECUTION_TIME_FIELD_NUMBER = 3;
   private com.google.protobuf.Timestamp executionTime_;
+
   /**
    *
    *
@@ -238,6 +246,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
   public boolean hasExecutionTime() {
     return ((bitField0_ & 0x00000001) != 0);
   }
+
   /**
    *
    *
@@ -263,6 +272,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
         ? com.google.protobuf.Timestamp.getDefaultInstance()
         : executionTime_;
   }
+
   /**
    *
    *
@@ -289,6 +299,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
 
   public static final int EXPLAIN_STATS_FIELD_NUMBER = 4;
   private com.google.firestore.v1.ExplainStats explainStats_;
+
   /**
    *
    *
@@ -307,6 +318,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
   public boolean hasExplainStats() {
     return ((bitField0_ & 0x00000002) != 0);
   }
+
   /**
    *
    *
@@ -327,6 +339,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
         ? com.google.firestore.v1.ExplainStats.getDefaultInstance()
         : explainStats_;
   }
+
   /**
    *
    *
@@ -544,6 +557,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
     Builder builder = new Builder(parent);
     return builder;
   }
+
   /**
    *
    *
@@ -837,6 +851,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
     private int bitField0_;
 
     private com.google.protobuf.ByteString transaction_ = com.google.protobuf.ByteString.EMPTY;
+
     /**
      *
      *
@@ -856,6 +871,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
     public com.google.protobuf.ByteString getTransaction() {
       return transaction_;
     }
+
     /**
      *
      *
@@ -881,6 +897,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -946,6 +963,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
         return resultsBuilder_.getMessageList();
       }
     }
+
     /**
      *
      *
@@ -973,6 +991,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
         return resultsBuilder_.getCount();
       }
     }
+
     /**
      *
      *
@@ -1000,6 +1019,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
         return resultsBuilder_.getMessage(index);
       }
     }
+
     /**
      *
      *
@@ -1033,6 +1053,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       }
       return this;
     }
+
     /**
      *
      *
@@ -1063,6 +1084,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       }
       return this;
     }
+
     /**
      *
      *
@@ -1096,6 +1118,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       }
       return this;
     }
+
     /**
      *
      *
@@ -1129,6 +1152,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       }
       return this;
     }
+
     /**
      *
      *
@@ -1159,6 +1183,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       }
       return this;
     }
+
     /**
      *
      *
@@ -1189,6 +1214,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       }
       return this;
     }
+
     /**
      *
      *
@@ -1220,6 +1246,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       }
       return this;
     }
+
     /**
      *
      *
@@ -1250,6 +1277,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       }
       return this;
     }
+
     /**
      *
      *
@@ -1280,6 +1308,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       }
       return this;
     }
+
     /**
      *
      *
@@ -1303,6 +1332,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
     public com.google.firestore.v1.Document.Builder getResultsBuilder(int index) {
       return getResultsFieldBuilder().getBuilder(index);
     }
+
     /**
      *
      *
@@ -1330,6 +1360,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
         return resultsBuilder_.getMessageOrBuilder(index);
       }
     }
+
     /**
      *
      *
@@ -1358,6 +1389,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
         return java.util.Collections.unmodifiableList(results_);
       }
     }
+
     /**
      *
      *
@@ -1382,6 +1414,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       return getResultsFieldBuilder()
           .addBuilder(com.google.firestore.v1.Document.getDefaultInstance());
     }
+
     /**
      *
      *
@@ -1406,6 +1439,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       return getResultsFieldBuilder()
           .addBuilder(index, com.google.firestore.v1.Document.getDefaultInstance());
     }
+
     /**
      *
      *
@@ -1453,6 +1487,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
             com.google.protobuf.Timestamp.Builder,
             com.google.protobuf.TimestampOrBuilder>
         executionTimeBuilder_;
+
     /**
      *
      *
@@ -1475,6 +1510,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
     public boolean hasExecutionTime() {
       return ((bitField0_ & 0x00000004) != 0);
     }
+
     /**
      *
      *
@@ -1503,6 +1539,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
         return executionTimeBuilder_.getMessage();
       }
     }
+
     /**
      *
      *
@@ -1533,6 +1570,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1560,6 +1598,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1595,6 +1634,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       }
       return this;
     }
+
     /**
      *
      *
@@ -1622,6 +1662,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1644,6 +1685,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       onChanged();
       return getExecutionTimeFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -1670,6 +1712,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
             : executionTime_;
       }
     }
+
     /**
      *
      *
@@ -1710,6 +1753,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
             com.google.firestore.v1.ExplainStats.Builder,
             com.google.firestore.v1.ExplainStatsOrBuilder>
         explainStatsBuilder_;
+
     /**
      *
      *
@@ -1727,6 +1771,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
     public boolean hasExplainStats() {
       return ((bitField0_ & 0x00000008) != 0);
     }
+
     /**
      *
      *
@@ -1750,6 +1795,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
         return explainStatsBuilder_.getMessage();
       }
     }
+
     /**
      *
      *
@@ -1775,6 +1821,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1797,6 +1844,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1827,6 +1875,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       }
       return this;
     }
+
     /**
      *
      *
@@ -1849,6 +1898,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1866,6 +1916,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
       onChanged();
       return getExplainStatsFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -1887,6 +1938,7 @@ public final class ExecutePipelineResponse extends com.google.protobuf.Generated
             : explainStats_;
       }
     }
+
     /**
      *
      *

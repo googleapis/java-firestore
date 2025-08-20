@@ -38,6 +38,7 @@ public interface ExplainStatsOrBuilder
    * @return Whether the data field is set.
    */
   boolean hasData();
+
   /**
    *
    *
@@ -52,6 +53,7 @@ public interface ExplainStatsOrBuilder
    * @return The data.
    */
   com.google.protobuf.Any getData();
+
   /**
    *
    *

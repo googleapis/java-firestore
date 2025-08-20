@@ -34,6 +34,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
     // @@protoc_insertion_point(message_implements:google.firestore.admin.v1.RestoreDatabaseRequest)
     RestoreDatabaseRequestOrBuilder {
   private static final long serialVersionUID = 0L;
+
   // Use RestoreDatabaseRequest.newBuilder() to construct.
   private RestoreDatabaseRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
@@ -83,6 +84,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object parent_ = "";
+
   /**
    *
    *
@@ -109,6 +111,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       return s;
     }
   }
+
   /**
    *
    *
@@ -140,6 +143,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object databaseId_ = "";
+
   /**
    *
    *
@@ -171,6 +175,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       return s;
     }
   }
+
   /**
    *
    *
@@ -207,6 +212,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object backup_ = "";
+
   /**
    *
    *
@@ -238,6 +244,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       return s;
     }
   }
+
   /**
    *
    *
@@ -272,6 +279,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
 
   public static final int ENCRYPTION_CONFIG_FIELD_NUMBER = 9;
   private com.google.firestore.admin.v1.Database.EncryptionConfig encryptionConfig_;
+
   /**
    *
    *
@@ -293,6 +301,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
   public boolean hasEncryptionConfig() {
     return ((bitField0_ & 0x00000001) != 0);
   }
+
   /**
    *
    *
@@ -316,6 +325,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
         ? com.google.firestore.admin.v1.Database.EncryptionConfig.getDefaultInstance()
         : encryptionConfig_;
   }
+
   /**
    *
    *
@@ -365,6 +375,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
   public int getTagsCount() {
     return internalGetTags().getMap().size();
   }
+
   /**
    *
    *
@@ -386,12 +397,14 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
     }
     return internalGetTags().getMap().containsKey(key);
   }
+
   /** Use {@link #getTagsMap()} instead. */
   @java.lang.Override
   @java.lang.Deprecated
   public java.util.Map<java.lang.String, java.lang.String> getTags() {
     return getTagsMap();
   }
+
   /**
    *
    *
@@ -410,6 +423,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
   public java.util.Map<java.lang.String, java.lang.String> getTagsMap() {
     return internalGetTags().getMap();
   }
+
   /**
    *
    *
@@ -435,6 +449,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
     java.util.Map<java.lang.String, java.lang.String> map = internalGetTags().getMap();
     return map.containsKey(key) ? map.get(key) : defaultValue;
   }
+
   /**
    *
    *
@@ -669,6 +684,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
     Builder builder = new Builder(parent);
     return builder;
   }
+
   /**
    *
    *
@@ -953,6 +969,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
     private int bitField0_;
 
     private java.lang.Object parent_ = "";
+
     /**
      *
      *
@@ -978,6 +995,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
         return (java.lang.String) ref;
       }
     }
+
     /**
      *
      *
@@ -1003,6 +1021,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
         return (com.google.protobuf.ByteString) ref;
       }
     }
+
     /**
      *
      *
@@ -1027,6 +1046,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1047,6 +1067,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1074,6 +1095,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
     }
 
     private java.lang.Object databaseId_ = "";
+
     /**
      *
      *
@@ -1104,6 +1126,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
         return (java.lang.String) ref;
       }
     }
+
     /**
      *
      *
@@ -1134,6 +1157,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
         return (com.google.protobuf.ByteString) ref;
       }
     }
+
     /**
      *
      *
@@ -1163,6 +1187,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1188,6 +1213,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1220,6 +1246,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
     }
 
     private java.lang.Object backup_ = "";
+
     /**
      *
      *
@@ -1250,6 +1277,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
         return (java.lang.String) ref;
       }
     }
+
     /**
      *
      *
@@ -1280,6 +1308,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
         return (com.google.protobuf.ByteString) ref;
       }
     }
+
     /**
      *
      *
@@ -1309,6 +1338,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1334,6 +1364,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1371,6 +1402,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
             com.google.firestore.admin.v1.Database.EncryptionConfig.Builder,
             com.google.firestore.admin.v1.Database.EncryptionConfigOrBuilder>
         encryptionConfigBuilder_;
+
     /**
      *
      *
@@ -1391,6 +1423,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
     public boolean hasEncryptionConfig() {
       return ((bitField0_ & 0x00000008) != 0);
     }
+
     /**
      *
      *
@@ -1417,6 +1450,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
         return encryptionConfigBuilder_.getMessage();
       }
     }
+
     /**
      *
      *
@@ -1446,6 +1480,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1472,6 +1507,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1507,6 +1543,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       }
       return this;
     }
+
     /**
      *
      *
@@ -1532,6 +1569,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -1553,6 +1591,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       onChanged();
       return getEncryptionConfigFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -1578,6 +1617,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
             : encryptionConfig_;
       }
     }
+
     /**
      *
      *
@@ -1635,6 +1675,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
     public int getTagsCount() {
       return internalGetTags().getMap().size();
     }
+
     /**
      *
      *
@@ -1656,12 +1697,14 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       }
       return internalGetTags().getMap().containsKey(key);
     }
+
     /** Use {@link #getTagsMap()} instead. */
     @java.lang.Override
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, java.lang.String> getTags() {
       return getTagsMap();
     }
+
     /**
      *
      *
@@ -1680,6 +1723,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
     public java.util.Map<java.lang.String, java.lang.String> getTagsMap() {
       return internalGetTags().getMap();
     }
+
     /**
      *
      *
@@ -1705,6 +1749,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       java.util.Map<java.lang.String, java.lang.String> map = internalGetTags().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
+
     /**
      *
      *
@@ -1736,6 +1781,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       internalGetMutableTags().getMutableMap().clear();
       return this;
     }
+
     /**
      *
      *
@@ -1757,12 +1803,14 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       internalGetMutableTags().getMutableMap().remove(key);
       return this;
     }
+
     /** Use alternate mutation accessors instead. */
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, java.lang.String> getMutableTags() {
       bitField0_ |= 0x00000010;
       return internalGetMutableTags().getMutableMap();
     }
+
     /**
      *
      *
@@ -1788,6 +1836,7 @@ public final class RestoreDatabaseRequest extends com.google.protobuf.GeneratedM
       bitField0_ |= 0x00000010;
       return this;
     }
+
     /**
      *
      *

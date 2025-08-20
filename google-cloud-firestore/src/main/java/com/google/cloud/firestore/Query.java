@@ -34,7 +34,6 @@ import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.NOT_E
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.NOT_IN;
 
 import com.google.api.core.ApiFuture;
-import com.google.api.core.BetaApi;
 import com.google.api.core.InternalExtensionOnly;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
@@ -1417,9 +1416,7 @@ public class Query {
       if (options.getStartCursor() != null) {
         // Swap the cursors to match the flipped query ordering.
         Cursor cursor =
-            options
-                .getStartCursor()
-                .toBuilder()
+            options.getStartCursor().toBuilder()
                 .setBefore(!options.getStartCursor().getBefore())
                 .build();
         structuredQuery.setEndAt(cursor);
@@ -1428,9 +1425,7 @@ public class Query {
       if (options.getEndCursor() != null) {
         // Swap the cursors to match the flipped query ordering.
         Cursor cursor =
-            options
-                .getEndCursor()
-                .toBuilder()
+            options.getEndCursor().toBuilder()
                 .setBefore(!options.getEndCursor().getBefore())
                 .build();
         structuredQuery.setStartAt(cursor);
@@ -2147,9 +2142,7 @@ public class Query {
     return new AggregateQuery(this, aggregateFieldList);
   }
 
-  @Nonnull
-  @BetaApi
-  public Pipeline pipeline() {
+  Pipeline pipeline() {
     // From
     Pipeline ppl =
         this.options.getAllDescendants()

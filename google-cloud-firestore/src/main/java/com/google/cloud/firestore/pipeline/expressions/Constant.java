@@ -25,6 +25,7 @@ import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.GeoPoint;
+import com.google.cloud.firestore.VectorValue;
 import com.google.firestore.v1.Value;
 import java.util.Arrays;
 import java.util.Date;
@@ -120,6 +121,8 @@ public final class Constant extends Expr {
       return of((byte[]) value);
     } else if (value instanceof Value) {
       return of((Value) value);
+    } else if (value instanceof VectorValue) {
+      return vector(((VectorValue) value).toArray());
     } else if (value instanceof Constant) {
       return (Constant) value;
     } else {

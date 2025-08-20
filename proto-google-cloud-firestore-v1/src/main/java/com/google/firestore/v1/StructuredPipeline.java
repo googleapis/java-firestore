@@ -37,6 +37,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
     // @@protoc_insertion_point(message_implements:google.firestore.v1.StructuredPipeline)
     StructuredPipelineOrBuilder {
   private static final long serialVersionUID = 0L;
+
   // Use StructuredPipeline.newBuilder() to construct.
   private StructuredPipeline(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
@@ -80,6 +81,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
   private int bitField0_;
   public static final int PIPELINE_FIELD_NUMBER = 1;
   private com.google.firestore.v1.Pipeline pipeline_;
+
   /**
    *
    *
@@ -96,6 +98,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
   public boolean hasPipeline() {
     return ((bitField0_ & 0x00000001) != 0);
   }
+
   /**
    *
    *
@@ -112,6 +115,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
   public com.google.firestore.v1.Pipeline getPipeline() {
     return pipeline_ == null ? com.google.firestore.v1.Pipeline.getDefaultInstance() : pipeline_;
   }
+
   /**
    *
    *
@@ -156,6 +160,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
   public int getOptionsCount() {
     return internalGetOptions().getMap().size();
   }
+
   /**
    *
    *
@@ -174,12 +179,14 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
     }
     return internalGetOptions().getMap().containsKey(key);
   }
+
   /** Use {@link #getOptionsMap()} instead. */
   @java.lang.Override
   @java.lang.Deprecated
   public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getOptions() {
     return getOptionsMap();
   }
+
   /**
    *
    *
@@ -195,6 +202,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
   public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getOptionsMap() {
     return internalGetOptions().getMap();
   }
+
   /**
    *
    *
@@ -218,6 +226,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
         internalGetOptions().getMap();
     return map.containsKey(key) ? map.get(key) : defaultValue;
   }
+
   /**
    *
    *
@@ -423,6 +432,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
     Builder builder = new Builder(parent);
     return builder;
   }
+
   /**
    *
    *
@@ -670,6 +680,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
             com.google.firestore.v1.Pipeline.Builder,
             com.google.firestore.v1.PipelineOrBuilder>
         pipelineBuilder_;
+
     /**
      *
      *
@@ -685,6 +696,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
     public boolean hasPipeline() {
       return ((bitField0_ & 0x00000001) != 0);
     }
+
     /**
      *
      *
@@ -706,6 +718,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
         return pipelineBuilder_.getMessage();
       }
     }
+
     /**
      *
      *
@@ -729,6 +742,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -749,6 +763,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -777,6 +792,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
       }
       return this;
     }
+
     /**
      *
      *
@@ -797,6 +813,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
       onChanged();
       return this;
     }
+
     /**
      *
      *
@@ -812,6 +829,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
       onChanged();
       return getPipelineFieldBuilder().getBuilder();
     }
+
     /**
      *
      *
@@ -831,6 +849,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
             : pipeline_;
       }
     }
+
     /**
      *
      *
@@ -876,7 +895,8 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
           defaultEntry() {
         return OptionsDefaultEntryHolder.defaultEntry;
       }
-    };
+    }
+    ;
 
     private static final OptionsConverter optionsConverter = new OptionsConverter();
 
@@ -916,6 +936,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
     public int getOptionsCount() {
       return internalGetOptions().ensureBuilderMap().size();
     }
+
     /**
      *
      *
@@ -934,12 +955,14 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
       }
       return internalGetOptions().ensureBuilderMap().containsKey(key);
     }
+
     /** Use {@link #getOptionsMap()} instead. */
     @java.lang.Override
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getOptions() {
       return getOptionsMap();
     }
+
     /**
      *
      *
@@ -955,6 +978,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
     public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getOptionsMap() {
       return internalGetOptions().getImmutableMap();
     }
+
     /**
      *
      *
@@ -978,6 +1002,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
           internalGetMutableOptions().ensureBuilderMap();
       return map.containsKey(key) ? optionsConverter.build(map.get(key)) : defaultValue;
     }
+
     /**
      *
      *
@@ -1007,6 +1032,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
       internalGetMutableOptions().clear();
       return this;
     }
+
     /**
      *
      *
@@ -1025,12 +1051,14 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
       internalGetMutableOptions().ensureBuilderMap().remove(key);
       return this;
     }
+
     /** Use alternate mutation accessors instead. */
     @java.lang.Deprecated
     public java.util.Map<java.lang.String, com.google.firestore.v1.Value> getMutableOptions() {
       bitField0_ |= 0x00000002;
       return internalGetMutableOptions().ensureMessageMap();
     }
+
     /**
      *
      *
@@ -1053,6 +1081,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
       bitField0_ |= 0x00000002;
       return this;
     }
+
     /**
      *
      *
@@ -1076,6 +1105,7 @@ public final class StructuredPipeline extends com.google.protobuf.GeneratedMessa
       bitField0_ |= 0x00000002;
       return this;
     }
+
     /**
      *
      *
