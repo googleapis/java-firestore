@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,16 +27,22 @@ import com.google.firestore.admin.v1.BackupSchedule;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CloneDatabaseMetadata;
+import com.google.firestore.admin.v1.CloneDatabaseRequest;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
+import com.google.firestore.admin.v1.CreateUserCredsRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DeleteBackupRequest;
 import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
 import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
 import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
+import com.google.firestore.admin.v1.DeleteUserCredsRequest;
+import com.google.firestore.admin.v1.DisableUserCredsRequest;
+import com.google.firestore.admin.v1.EnableUserCredsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
@@ -47,6 +53,7 @@ import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
+import com.google.firestore.admin.v1.GetUserCredsRequest;
 import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
@@ -61,12 +68,16 @@ import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.ListUserCredsRequest;
+import com.google.firestore.admin.v1.ListUserCredsResponse;
+import com.google.firestore.admin.v1.ResetUserPasswordRequest;
 import com.google.firestore.admin.v1.RestoreDatabaseMetadata;
 import com.google.firestore.admin.v1.RestoreDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
+import com.google.firestore.admin.v1.UserCreds;
 import com.google.longrunning.Operation;
 import com.google.longrunning.stub.OperationsStub;
 import com.google.protobuf.Empty;
@@ -199,6 +210,34 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
     throw new UnsupportedOperationException("Not implemented: deleteDatabaseCallable()");
   }
 
+  public UnaryCallable<CreateUserCredsRequest, UserCreds> createUserCredsCallable() {
+    throw new UnsupportedOperationException("Not implemented: createUserCredsCallable()");
+  }
+
+  public UnaryCallable<GetUserCredsRequest, UserCreds> getUserCredsCallable() {
+    throw new UnsupportedOperationException("Not implemented: getUserCredsCallable()");
+  }
+
+  public UnaryCallable<ListUserCredsRequest, ListUserCredsResponse> listUserCredsCallable() {
+    throw new UnsupportedOperationException("Not implemented: listUserCredsCallable()");
+  }
+
+  public UnaryCallable<EnableUserCredsRequest, UserCreds> enableUserCredsCallable() {
+    throw new UnsupportedOperationException("Not implemented: enableUserCredsCallable()");
+  }
+
+  public UnaryCallable<DisableUserCredsRequest, UserCreds> disableUserCredsCallable() {
+    throw new UnsupportedOperationException("Not implemented: disableUserCredsCallable()");
+  }
+
+  public UnaryCallable<ResetUserPasswordRequest, UserCreds> resetUserPasswordCallable() {
+    throw new UnsupportedOperationException("Not implemented: resetUserPasswordCallable()");
+  }
+
+  public UnaryCallable<DeleteUserCredsRequest, Empty> deleteUserCredsCallable() {
+    throw new UnsupportedOperationException("Not implemented: deleteUserCredsCallable()");
+  }
+
   public UnaryCallable<GetBackupRequest, Backup> getBackupCallable() {
     throw new UnsupportedOperationException("Not implemented: getBackupCallable()");
   }
@@ -239,6 +278,15 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
 
   public UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable() {
     throw new UnsupportedOperationException("Not implemented: deleteBackupScheduleCallable()");
+  }
+
+  public OperationCallable<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationCallable() {
+    throw new UnsupportedOperationException("Not implemented: cloneDatabaseOperationCallable()");
+  }
+
+  public UnaryCallable<CloneDatabaseRequest, Operation> cloneDatabaseCallable() {
+    throw new UnsupportedOperationException("Not implemented: cloneDatabaseCallable()");
   }
 
   @Override

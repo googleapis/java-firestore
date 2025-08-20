@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,16 +34,21 @@ import com.google.firestore.admin.v1.BackupSchedule;
 import com.google.firestore.admin.v1.BackupScheduleName;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CloneDatabaseRequest;
 import com.google.firestore.admin.v1.CollectionGroupName;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
+import com.google.firestore.admin.v1.CreateUserCredsRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DatabaseName;
 import com.google.firestore.admin.v1.DeleteBackupRequest;
 import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
 import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
+import com.google.firestore.admin.v1.DeleteUserCredsRequest;
+import com.google.firestore.admin.v1.DisableUserCredsRequest;
+import com.google.firestore.admin.v1.EnableUserCredsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
 import com.google.firestore.admin.v1.Field;
@@ -53,6 +58,7 @@ import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
+import com.google.firestore.admin.v1.GetUserCredsRequest;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.IndexName;
@@ -66,12 +72,18 @@ import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.ListUserCredsRequest;
+import com.google.firestore.admin.v1.ListUserCredsResponse;
 import com.google.firestore.admin.v1.LocationName;
+import com.google.firestore.admin.v1.PitrSnapshot;
 import com.google.firestore.admin.v1.ProjectName;
+import com.google.firestore.admin.v1.ResetUserPasswordRequest;
 import com.google.firestore.admin.v1.RestoreDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
+import com.google.firestore.admin.v1.UserCreds;
+import com.google.firestore.admin.v1.UserCredsName;
 import com.google.longrunning.Operation;
 import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.Any;
@@ -83,6 +95,7 @@ import io.grpc.StatusRuntimeException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -141,6 +154,8 @@ public class FirestoreAdminClientTest {
         Index.newBuilder()
             .setName(IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]").toString())
             .addAllFields(new ArrayList<Index.IndexField>())
+            .setMultikey(true)
+            .setShardCount(-495377042)
             .build();
     Operation resultOperation =
         Operation.newBuilder()
@@ -192,6 +207,8 @@ public class FirestoreAdminClientTest {
         Index.newBuilder()
             .setName(IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]").toString())
             .addAllFields(new ArrayList<Index.IndexField>())
+            .setMultikey(true)
+            .setShardCount(-495377042)
             .build();
     Operation resultOperation =
         Operation.newBuilder()
@@ -331,6 +348,8 @@ public class FirestoreAdminClientTest {
         Index.newBuilder()
             .setName(IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]").toString())
             .addAllFields(new ArrayList<Index.IndexField>())
+            .setMultikey(true)
+            .setShardCount(-495377042)
             .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
 
@@ -370,6 +389,8 @@ public class FirestoreAdminClientTest {
         Index.newBuilder()
             .setName(IndexName.of("[PROJECT]", "[DATABASE]", "[COLLECTION]", "[INDEX]").toString())
             .addAllFields(new ArrayList<Index.IndexField>())
+            .setMultikey(true)
+            .setShardCount(-495377042)
             .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
 
@@ -954,10 +975,16 @@ public class FirestoreAdminClientTest {
             .setUid("uid115792")
             .setCreateTime(Timestamp.newBuilder().build())
             .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
             .setVersionRetentionPeriod(Duration.newBuilder().build())
             .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
+            .setFreeTier(true)
             .setEtag("etag3123477")
             .build();
     Operation resultOperation =
@@ -1014,10 +1041,16 @@ public class FirestoreAdminClientTest {
             .setUid("uid115792")
             .setCreateTime(Timestamp.newBuilder().build())
             .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
             .setVersionRetentionPeriod(Duration.newBuilder().build())
             .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
+            .setFreeTier(true)
             .setEtag("etag3123477")
             .build();
     Operation resultOperation =
@@ -1074,10 +1107,16 @@ public class FirestoreAdminClientTest {
             .setUid("uid115792")
             .setCreateTime(Timestamp.newBuilder().build())
             .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
             .setVersionRetentionPeriod(Duration.newBuilder().build())
             .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
+            .setFreeTier(true)
             .setEtag("etag3123477")
             .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
@@ -1120,10 +1159,16 @@ public class FirestoreAdminClientTest {
             .setUid("uid115792")
             .setCreateTime(Timestamp.newBuilder().build())
             .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
             .setVersionRetentionPeriod(Duration.newBuilder().build())
             .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
+            .setFreeTier(true)
             .setEtag("etag3123477")
             .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
@@ -1244,10 +1289,16 @@ public class FirestoreAdminClientTest {
             .setUid("uid115792")
             .setCreateTime(Timestamp.newBuilder().build())
             .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
             .setVersionRetentionPeriod(Duration.newBuilder().build())
             .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
+            .setFreeTier(true)
             .setEtag("etag3123477")
             .build();
     Operation resultOperation =
@@ -1301,10 +1352,16 @@ public class FirestoreAdminClientTest {
             .setUid("uid115792")
             .setCreateTime(Timestamp.newBuilder().build())
             .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
             .setVersionRetentionPeriod(Duration.newBuilder().build())
             .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
+            .setFreeTier(true)
             .setEtag("etag3123477")
             .build();
     Operation resultOperation =
@@ -1355,10 +1412,16 @@ public class FirestoreAdminClientTest {
             .setUid("uid115792")
             .setCreateTime(Timestamp.newBuilder().build())
             .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
             .setVersionRetentionPeriod(Duration.newBuilder().build())
             .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
+            .setFreeTier(true)
             .setEtag("etag3123477")
             .build();
     Operation resultOperation =
@@ -1398,6 +1461,568 @@ public class FirestoreAdminClientTest {
       Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
       InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
       Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
+    }
+  }
+
+  @Test
+  public void createUserCredsTest() throws Exception {
+    UserCreds expectedResponse =
+        UserCreds.newBuilder()
+            .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setSecurePassword("securePassword715395890")
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    DatabaseName parent = DatabaseName.of("[PROJECT]", "[DATABASE]");
+    UserCreds userCreds = UserCreds.newBuilder().build();
+    String userCredsId = "userCredsId726775445";
+
+    UserCreds actualResponse = client.createUserCreds(parent, userCreds, userCredsId);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    CreateUserCredsRequest actualRequest = ((CreateUserCredsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(parent.toString(), actualRequest.getParent());
+    Assert.assertEquals(userCreds, actualRequest.getUserCreds());
+    Assert.assertEquals(userCredsId, actualRequest.getUserCredsId());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void createUserCredsExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      DatabaseName parent = DatabaseName.of("[PROJECT]", "[DATABASE]");
+      UserCreds userCreds = UserCreds.newBuilder().build();
+      String userCredsId = "userCredsId726775445";
+      client.createUserCreds(parent, userCreds, userCredsId);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void createUserCredsTest2() throws Exception {
+    UserCreds expectedResponse =
+        UserCreds.newBuilder()
+            .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setSecurePassword("securePassword715395890")
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String parent = "parent-995424086";
+    UserCreds userCreds = UserCreds.newBuilder().build();
+    String userCredsId = "userCredsId726775445";
+
+    UserCreds actualResponse = client.createUserCreds(parent, userCreds, userCredsId);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    CreateUserCredsRequest actualRequest = ((CreateUserCredsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(parent, actualRequest.getParent());
+    Assert.assertEquals(userCreds, actualRequest.getUserCreds());
+    Assert.assertEquals(userCredsId, actualRequest.getUserCredsId());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void createUserCredsExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String parent = "parent-995424086";
+      UserCreds userCreds = UserCreds.newBuilder().build();
+      String userCredsId = "userCredsId726775445";
+      client.createUserCreds(parent, userCreds, userCredsId);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void getUserCredsTest() throws Exception {
+    UserCreds expectedResponse =
+        UserCreds.newBuilder()
+            .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setSecurePassword("securePassword715395890")
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+
+    UserCreds actualResponse = client.getUserCreds(name);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    GetUserCredsRequest actualRequest = ((GetUserCredsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name.toString(), actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void getUserCredsExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+      client.getUserCreds(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void getUserCredsTest2() throws Exception {
+    UserCreds expectedResponse =
+        UserCreds.newBuilder()
+            .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setSecurePassword("securePassword715395890")
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String name = "name3373707";
+
+    UserCreds actualResponse = client.getUserCreds(name);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    GetUserCredsRequest actualRequest = ((GetUserCredsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name, actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void getUserCredsExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String name = "name3373707";
+      client.getUserCreds(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void listUserCredsTest() throws Exception {
+    ListUserCredsResponse expectedResponse =
+        ListUserCredsResponse.newBuilder().addAllUserCreds(new ArrayList<UserCreds>()).build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    DatabaseName parent = DatabaseName.of("[PROJECT]", "[DATABASE]");
+
+    ListUserCredsResponse actualResponse = client.listUserCreds(parent);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    ListUserCredsRequest actualRequest = ((ListUserCredsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(parent.toString(), actualRequest.getParent());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void listUserCredsExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      DatabaseName parent = DatabaseName.of("[PROJECT]", "[DATABASE]");
+      client.listUserCreds(parent);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void listUserCredsTest2() throws Exception {
+    ListUserCredsResponse expectedResponse =
+        ListUserCredsResponse.newBuilder().addAllUserCreds(new ArrayList<UserCreds>()).build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String parent = "parent-995424086";
+
+    ListUserCredsResponse actualResponse = client.listUserCreds(parent);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    ListUserCredsRequest actualRequest = ((ListUserCredsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(parent, actualRequest.getParent());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void listUserCredsExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String parent = "parent-995424086";
+      client.listUserCreds(parent);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void enableUserCredsTest() throws Exception {
+    UserCreds expectedResponse =
+        UserCreds.newBuilder()
+            .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setSecurePassword("securePassword715395890")
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+
+    UserCreds actualResponse = client.enableUserCreds(name);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    EnableUserCredsRequest actualRequest = ((EnableUserCredsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name.toString(), actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void enableUserCredsExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+      client.enableUserCreds(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void enableUserCredsTest2() throws Exception {
+    UserCreds expectedResponse =
+        UserCreds.newBuilder()
+            .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setSecurePassword("securePassword715395890")
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String name = "name3373707";
+
+    UserCreds actualResponse = client.enableUserCreds(name);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    EnableUserCredsRequest actualRequest = ((EnableUserCredsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name, actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void enableUserCredsExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String name = "name3373707";
+      client.enableUserCreds(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void disableUserCredsTest() throws Exception {
+    UserCreds expectedResponse =
+        UserCreds.newBuilder()
+            .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setSecurePassword("securePassword715395890")
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+
+    UserCreds actualResponse = client.disableUserCreds(name);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DisableUserCredsRequest actualRequest = ((DisableUserCredsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name.toString(), actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void disableUserCredsExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+      client.disableUserCreds(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void disableUserCredsTest2() throws Exception {
+    UserCreds expectedResponse =
+        UserCreds.newBuilder()
+            .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setSecurePassword("securePassword715395890")
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String name = "name3373707";
+
+    UserCreds actualResponse = client.disableUserCreds(name);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DisableUserCredsRequest actualRequest = ((DisableUserCredsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name, actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void disableUserCredsExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String name = "name3373707";
+      client.disableUserCreds(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void resetUserPasswordTest() throws Exception {
+    UserCreds expectedResponse =
+        UserCreds.newBuilder()
+            .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setSecurePassword("securePassword715395890")
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+
+    UserCreds actualResponse = client.resetUserPassword(name);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    ResetUserPasswordRequest actualRequest = ((ResetUserPasswordRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name.toString(), actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void resetUserPasswordExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+      client.resetUserPassword(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void resetUserPasswordTest2() throws Exception {
+    UserCreds expectedResponse =
+        UserCreds.newBuilder()
+            .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setSecurePassword("securePassword715395890")
+            .build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String name = "name3373707";
+
+    UserCreds actualResponse = client.resetUserPassword(name);
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    ResetUserPasswordRequest actualRequest = ((ResetUserPasswordRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name, actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void resetUserPasswordExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String name = "name3373707";
+      client.resetUserPassword(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void deleteUserCredsTest() throws Exception {
+    Empty expectedResponse = Empty.newBuilder().build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+
+    client.deleteUserCreds(name);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DeleteUserCredsRequest actualRequest = ((DeleteUserCredsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name.toString(), actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void deleteUserCredsExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+      client.deleteUserCreds(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
+    }
+  }
+
+  @Test
+  public void deleteUserCredsTest2() throws Exception {
+    Empty expectedResponse = Empty.newBuilder().build();
+    mockFirestoreAdmin.addResponse(expectedResponse);
+
+    String name = "name3373707";
+
+    client.deleteUserCreds(name);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    DeleteUserCredsRequest actualRequest = ((DeleteUserCredsRequest) actualRequests.get(0));
+
+    Assert.assertEquals(name, actualRequest.getName());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void deleteUserCredsExceptionTest2() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      String name = "name3373707";
+      client.deleteUserCreds(name);
+      Assert.fail("No exception raised");
+    } catch (InvalidArgumentException e) {
+      // Expected exception.
     }
   }
 
@@ -1641,10 +2266,16 @@ public class FirestoreAdminClientTest {
             .setUid("uid115792")
             .setCreateTime(Timestamp.newBuilder().build())
             .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
             .setLocationId("locationId1541836720")
             .setVersionRetentionPeriod(Duration.newBuilder().build())
             .setEarliestVersionTime(Timestamp.newBuilder().build())
             .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
+            .setFreeTier(true)
             .setEtag("etag3123477")
             .build();
     Operation resultOperation =
@@ -1660,6 +2291,8 @@ public class FirestoreAdminClientTest {
             .setParent(ProjectName.of("[PROJECT]").toString())
             .setDatabaseId("databaseId1688905718")
             .setBackup(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+            .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
             .build();
 
     Database actualResponse = client.restoreDatabaseAsync(request).get();
@@ -1672,6 +2305,8 @@ public class FirestoreAdminClientTest {
     Assert.assertEquals(request.getParent(), actualRequest.getParent());
     Assert.assertEquals(request.getDatabaseId(), actualRequest.getDatabaseId());
     Assert.assertEquals(request.getBackup(), actualRequest.getBackup());
+    Assert.assertEquals(request.getEncryptionConfig(), actualRequest.getEncryptionConfig());
+    Assert.assertEquals(request.getTagsMap(), actualRequest.getTagsMap());
     Assert.assertTrue(
         channelProvider.isHeaderSent(
             ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
@@ -1689,6 +2324,8 @@ public class FirestoreAdminClientTest {
               .setParent(ProjectName.of("[PROJECT]").toString())
               .setDatabaseId("databaseId1688905718")
               .setBackup(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+              .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+              .putAllTags(new HashMap<String, String>())
               .build();
       client.restoreDatabaseAsync(request).get();
       Assert.fail("No exception raised");
@@ -2066,6 +2703,84 @@ public class FirestoreAdminClientTest {
       Assert.fail("No exception raised");
     } catch (InvalidArgumentException e) {
       // Expected exception.
+    }
+  }
+
+  @Test
+  public void cloneDatabaseTest() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
+            .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
+            .setFreeTier(true)
+            .setEtag("etag3123477")
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("cloneDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockFirestoreAdmin.addResponse(resultOperation);
+
+    CloneDatabaseRequest request =
+        CloneDatabaseRequest.newBuilder()
+            .setParent(ProjectName.of("[PROJECT]").toString())
+            .setDatabaseId("databaseId1688905718")
+            .setPitrSnapshot(PitrSnapshot.newBuilder().build())
+            .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
+            .build();
+
+    Database actualResponse = client.cloneDatabaseAsync(request).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    CloneDatabaseRequest actualRequest = ((CloneDatabaseRequest) actualRequests.get(0));
+
+    Assert.assertEquals(request.getParent(), actualRequest.getParent());
+    Assert.assertEquals(request.getDatabaseId(), actualRequest.getDatabaseId());
+    Assert.assertEquals(request.getPitrSnapshot(), actualRequest.getPitrSnapshot());
+    Assert.assertEquals(request.getEncryptionConfig(), actualRequest.getEncryptionConfig());
+    Assert.assertEquals(request.getTagsMap(), actualRequest.getTagsMap());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void cloneDatabaseExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      CloneDatabaseRequest request =
+          CloneDatabaseRequest.newBuilder()
+              .setParent(ProjectName.of("[PROJECT]").toString())
+              .setDatabaseId("databaseId1688905718")
+              .setPitrSnapshot(PitrSnapshot.newBuilder().build())
+              .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+              .putAllTags(new HashMap<String, String>())
+              .build();
+      client.cloneDatabaseAsync(request).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
     }
   }
 }

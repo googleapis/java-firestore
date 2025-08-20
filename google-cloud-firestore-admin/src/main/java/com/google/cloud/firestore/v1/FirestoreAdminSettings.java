@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,16 +38,22 @@ import com.google.firestore.admin.v1.BackupSchedule;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CloneDatabaseMetadata;
+import com.google.firestore.admin.v1.CloneDatabaseRequest;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
+import com.google.firestore.admin.v1.CreateUserCredsRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DeleteBackupRequest;
 import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
 import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
 import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
+import com.google.firestore.admin.v1.DeleteUserCredsRequest;
+import com.google.firestore.admin.v1.DisableUserCredsRequest;
+import com.google.firestore.admin.v1.EnableUserCredsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
@@ -58,6 +64,7 @@ import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
+import com.google.firestore.admin.v1.GetUserCredsRequest;
 import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
@@ -72,12 +79,16 @@ import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.ListUserCredsRequest;
+import com.google.firestore.admin.v1.ListUserCredsResponse;
+import com.google.firestore.admin.v1.ResetUserPasswordRequest;
 import com.google.firestore.admin.v1.RestoreDatabaseMetadata;
 import com.google.firestore.admin.v1.RestoreDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
+import com.google.firestore.admin.v1.UserCreds;
 import com.google.longrunning.Operation;
 import com.google.protobuf.Empty;
 import java.io.IOException;
@@ -99,7 +110,9 @@ import javax.annotation.Generated;
  * <p>The builder of this class is recursive, so contained classes are themselves builders. When
  * build() is called, the tree of builders is called to create the complete settings object.
  *
- * <p>For example, to set the total timeout of getIndex to 30 seconds:
+ * <p>For example, to set the
+ * [RetrySettings](https://cloud.google.com/java/docs/reference/gax/latest/com.google.api.gax.retrying.RetrySettings)
+ * of getIndex:
  *
  * <pre>{@code
  * // This snippet has been automatically generated and should be regarded as a code template only.
@@ -116,9 +129,46 @@ import javax.annotation.Generated;
  *             .getIndexSettings()
  *             .getRetrySettings()
  *             .toBuilder()
- *             .setTotalTimeout(Duration.ofSeconds(30))
+ *             .setInitialRetryDelayDuration(Duration.ofSeconds(1))
+ *             .setInitialRpcTimeoutDuration(Duration.ofSeconds(5))
+ *             .setMaxAttempts(5)
+ *             .setMaxRetryDelayDuration(Duration.ofSeconds(30))
+ *             .setMaxRpcTimeoutDuration(Duration.ofSeconds(60))
+ *             .setRetryDelayMultiplier(1.3)
+ *             .setRpcTimeoutMultiplier(1.5)
+ *             .setTotalTimeoutDuration(Duration.ofSeconds(300))
  *             .build());
  * FirestoreAdminSettings firestoreAdminSettings = firestoreAdminSettingsBuilder.build();
+ * }</pre>
+ *
+ * Please refer to the [Client Side Retry
+ * Guide](https://github.com/googleapis/google-cloud-java/blob/main/docs/client_retries.md) for
+ * additional support in setting retries.
+ *
+ * <p>To configure the RetrySettings of a Long Running Operation method, create an
+ * OperationTimedPollAlgorithm object and update the RPC's polling algorithm. For example, to
+ * configure the RetrySettings for createIndex:
+ *
+ * <pre>{@code
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+ * FirestoreAdminSettings.Builder firestoreAdminSettingsBuilder =
+ *     FirestoreAdminSettings.newBuilder();
+ * TimedRetryAlgorithm timedRetryAlgorithm =
+ *     OperationalTimedPollAlgorithm.create(
+ *         RetrySettings.newBuilder()
+ *             .setInitialRetryDelayDuration(Duration.ofMillis(500))
+ *             .setRetryDelayMultiplier(1.5)
+ *             .setMaxRetryDelayDuration(Duration.ofMillis(5000))
+ *             .setTotalTimeoutDuration(Duration.ofHours(24))
+ *             .build());
+ * firestoreAdminSettingsBuilder
+ *     .createClusterOperationSettings()
+ *     .setPollingAlgorithm(timedRetryAlgorithm)
+ *     .build();
  * }</pre>
  */
 @Generated("by gapic-generator-java")
@@ -251,6 +301,41 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     return ((FirestoreAdminStubSettings) getStubSettings()).deleteDatabaseOperationSettings();
   }
 
+  /** Returns the object with the settings used for calls to createUserCreds. */
+  public UnaryCallSettings<CreateUserCredsRequest, UserCreds> createUserCredsSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).createUserCredsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to getUserCreds. */
+  public UnaryCallSettings<GetUserCredsRequest, UserCreds> getUserCredsSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).getUserCredsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to listUserCreds. */
+  public UnaryCallSettings<ListUserCredsRequest, ListUserCredsResponse> listUserCredsSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).listUserCredsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to enableUserCreds. */
+  public UnaryCallSettings<EnableUserCredsRequest, UserCreds> enableUserCredsSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).enableUserCredsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to disableUserCreds. */
+  public UnaryCallSettings<DisableUserCredsRequest, UserCreds> disableUserCredsSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).disableUserCredsSettings();
+  }
+
+  /** Returns the object with the settings used for calls to resetUserPassword. */
+  public UnaryCallSettings<ResetUserPasswordRequest, UserCreds> resetUserPasswordSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).resetUserPasswordSettings();
+  }
+
+  /** Returns the object with the settings used for calls to deleteUserCreds. */
+  public UnaryCallSettings<DeleteUserCredsRequest, Empty> deleteUserCredsSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).deleteUserCredsSettings();
+  }
+
   /** Returns the object with the settings used for calls to getBackup. */
   public UnaryCallSettings<GetBackupRequest, Backup> getBackupSettings() {
     return ((FirestoreAdminStubSettings) getStubSettings()).getBackupSettings();
@@ -303,6 +388,17 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
   /** Returns the object with the settings used for calls to deleteBackupSchedule. */
   public UnaryCallSettings<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleSettings() {
     return ((FirestoreAdminStubSettings) getStubSettings()).deleteBackupScheduleSettings();
+  }
+
+  /** Returns the object with the settings used for calls to cloneDatabase. */
+  public UnaryCallSettings<CloneDatabaseRequest, Operation> cloneDatabaseSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).cloneDatabaseSettings();
+  }
+
+  /** Returns the object with the settings used for calls to cloneDatabase. */
+  public OperationCallSettings<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).cloneDatabaseOperationSettings();
   }
 
   public static final FirestoreAdminSettings create(FirestoreAdminStubSettings stub)
@@ -547,6 +643,44 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
       return getStubSettingsBuilder().deleteDatabaseOperationSettings();
     }
 
+    /** Returns the builder for the settings used for calls to createUserCreds. */
+    public UnaryCallSettings.Builder<CreateUserCredsRequest, UserCreds> createUserCredsSettings() {
+      return getStubSettingsBuilder().createUserCredsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to getUserCreds. */
+    public UnaryCallSettings.Builder<GetUserCredsRequest, UserCreds> getUserCredsSettings() {
+      return getStubSettingsBuilder().getUserCredsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to listUserCreds. */
+    public UnaryCallSettings.Builder<ListUserCredsRequest, ListUserCredsResponse>
+        listUserCredsSettings() {
+      return getStubSettingsBuilder().listUserCredsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to enableUserCreds. */
+    public UnaryCallSettings.Builder<EnableUserCredsRequest, UserCreds> enableUserCredsSettings() {
+      return getStubSettingsBuilder().enableUserCredsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to disableUserCreds. */
+    public UnaryCallSettings.Builder<DisableUserCredsRequest, UserCreds>
+        disableUserCredsSettings() {
+      return getStubSettingsBuilder().disableUserCredsSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to resetUserPassword. */
+    public UnaryCallSettings.Builder<ResetUserPasswordRequest, UserCreds>
+        resetUserPasswordSettings() {
+      return getStubSettingsBuilder().resetUserPasswordSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to deleteUserCreds. */
+    public UnaryCallSettings.Builder<DeleteUserCredsRequest, Empty> deleteUserCredsSettings() {
+      return getStubSettingsBuilder().deleteUserCredsSettings();
+    }
+
     /** Returns the builder for the settings used for calls to getBackup. */
     public UnaryCallSettings.Builder<GetBackupRequest, Backup> getBackupSettings() {
       return getStubSettingsBuilder().getBackupSettings();
@@ -602,6 +736,17 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     public UnaryCallSettings.Builder<DeleteBackupScheduleRequest, Empty>
         deleteBackupScheduleSettings() {
       return getStubSettingsBuilder().deleteBackupScheduleSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to cloneDatabase. */
+    public UnaryCallSettings.Builder<CloneDatabaseRequest, Operation> cloneDatabaseSettings() {
+      return getStubSettingsBuilder().cloneDatabaseSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to cloneDatabase. */
+    public OperationCallSettings.Builder<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+        cloneDatabaseOperationSettings() {
+      return getStubSettingsBuilder().cloneDatabaseOperationSettings();
     }
 
     @Override

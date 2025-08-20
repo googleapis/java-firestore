@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +38,14 @@ import com.google.firestore.admin.v1.BackupScheduleName;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CloneDatabaseMetadata;
+import com.google.firestore.admin.v1.CloneDatabaseRequest;
 import com.google.firestore.admin.v1.CollectionGroupName;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
+import com.google.firestore.admin.v1.CreateUserCredsRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DatabaseName;
 import com.google.firestore.admin.v1.DeleteBackupRequest;
@@ -50,6 +53,9 @@ import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
 import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
 import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
+import com.google.firestore.admin.v1.DeleteUserCredsRequest;
+import com.google.firestore.admin.v1.DisableUserCredsRequest;
+import com.google.firestore.admin.v1.EnableUserCredsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
@@ -61,6 +67,7 @@ import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
+import com.google.firestore.admin.v1.GetUserCredsRequest;
 import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
@@ -76,14 +83,19 @@ import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.ListUserCredsRequest;
+import com.google.firestore.admin.v1.ListUserCredsResponse;
 import com.google.firestore.admin.v1.LocationName;
 import com.google.firestore.admin.v1.ProjectName;
+import com.google.firestore.admin.v1.ResetUserPasswordRequest;
 import com.google.firestore.admin.v1.RestoreDatabaseMetadata;
 import com.google.firestore.admin.v1.RestoreDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
+import com.google.firestore.admin.v1.UserCreds;
+import com.google.firestore.admin.v1.UserCredsName;
 import com.google.longrunning.Operation;
 import com.google.protobuf.Empty;
 import com.google.protobuf.FieldMask;
@@ -445,6 +457,139 @@ import javax.annotation.Generated;
  *       </td>
  *    </tr>
  *    <tr>
+ *      <td><p> CreateUserCreds</td>
+ *      <td><p> Create a user creds.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> createUserCreds(CreateUserCredsRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> createUserCreds(DatabaseName parent, UserCreds userCreds, String userCredsId)
+ *           <li><p> createUserCreds(String parent, UserCreds userCreds, String userCredsId)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> createUserCredsCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> GetUserCreds</td>
+ *      <td><p> Gets a user creds resource. Note that the returned resource does not contain the secret value itself.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> getUserCreds(GetUserCredsRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> getUserCreds(UserCredsName name)
+ *           <li><p> getUserCreds(String name)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> getUserCredsCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> ListUserCreds</td>
+ *      <td><p> List all user creds in the database. Note that the returned resource does not contain the secret value itself.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> listUserCreds(ListUserCredsRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> listUserCreds(DatabaseName parent)
+ *           <li><p> listUserCreds(String parent)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> listUserCredsCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> EnableUserCreds</td>
+ *      <td><p> Enables a user creds. No-op if the user creds are already enabled.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> enableUserCreds(EnableUserCredsRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> enableUserCreds(UserCredsName name)
+ *           <li><p> enableUserCreds(String name)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> enableUserCredsCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> DisableUserCreds</td>
+ *      <td><p> Disables a user creds. No-op if the user creds are already disabled.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> disableUserCreds(DisableUserCredsRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> disableUserCreds(UserCredsName name)
+ *           <li><p> disableUserCreds(String name)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> disableUserCredsCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> ResetUserPassword</td>
+ *      <td><p> Resets the password of a user creds.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> resetUserPassword(ResetUserPasswordRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> resetUserPassword(UserCredsName name)
+ *           <li><p> resetUserPassword(String name)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> resetUserPasswordCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> DeleteUserCreds</td>
+ *      <td><p> Deletes a user creds.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> deleteUserCreds(DeleteUserCredsRequest request)
+ *      </ul>
+ *      <p>"Flattened" method variants have converted the fields of the request object into function parameters to enable multiple ways to call the same method.</p>
+ *      <ul>
+ *           <li><p> deleteUserCreds(UserCredsName name)
+ *           <li><p> deleteUserCreds(String name)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> deleteUserCredsCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
  *      <td><p> GetBackup</td>
  *      <td><p> Gets information about a backup.</td>
  *      <td>
@@ -609,6 +754,23 @@ import javax.annotation.Generated;
  *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
  *      <ul>
  *           <li><p> deleteBackupScheduleCallable()
+ *      </ul>
+ *       </td>
+ *    </tr>
+ *    <tr>
+ *      <td><p> CloneDatabase</td>
+ *      <td><p> Creates a new database by cloning an existing one.
+ * <p>  The new database must be in the same cloud region or multi-region location as the existing database. This behaves similar to [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase] except instead of creating a new empty database, a new database is created with the database type, index configuration, and documents from an existing database.
+ * <p>  The [long-running operation][google.longrunning.Operation] can be used to track the progress of the clone, with the Operation's [metadata][google.longrunning.Operation.metadata] field type being the [CloneDatabaseMetadata][google.firestore.admin.v1.CloneDatabaseMetadata]. The [response][google.longrunning.Operation.response] type is the [Database][google.firestore.admin.v1.Database] if the clone was successful. The new database is not readable or writeable until the LRO has completed.</td>
+ *      <td>
+ *      <p>Request object method variants only take one parameter, a request object, which must be constructed before the call.</p>
+ *      <ul>
+ *           <li><p> cloneDatabaseAsync(CloneDatabaseRequest request)
+ *      </ul>
+ *      <p>Callable method variants take no parameters and return an immutable API callable object, which can be used to initiate calls to the service.</p>
+ *      <ul>
+ *           <li><p> cloneDatabaseOperationCallable()
+ *           <li><p> cloneDatabaseCallable()
  *      </ul>
  *       </td>
  *    </tr>
@@ -2350,7 +2512,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *     <p>This value should be 4-63 characters. Valid characters are /[a-z][0-9]-/ with first
    *     character a letter and the last a letter or a number. Must not be UUID-like
    *     /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.
-   *     <p>"(default)" database id is also valid.
+   *     <p>"(default)" database ID is also valid.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final OperationFuture<Database, CreateDatabaseMetadata> createDatabaseAsync(
@@ -2392,7 +2554,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *     <p>This value should be 4-63 characters. Valid characters are /[a-z][0-9]-/ with first
    *     character a letter and the last a letter or a number. Must not be UUID-like
    *     /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.
-   *     <p>"(default)" database id is also valid.
+   *     <p>"(default)" database ID is also valid.
    * @throws com.google.api.gax.rpc.ApiException if the remote call fails
    */
   public final OperationFuture<Database, CreateDatabaseMetadata> createDatabaseAsync(
@@ -2983,6 +3145,823 @@ public class FirestoreAdminClient implements BackgroundResource {
 
   // AUTO-GENERATED DOCUMENTATION AND METHOD.
   /**
+   * Create a user creds.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DatabaseName parent = DatabaseName.of("[PROJECT]", "[DATABASE]");
+   *   UserCreds userCreds = UserCreds.newBuilder().build();
+   *   String userCredsId = "userCredsId726775445";
+   *   UserCreds response = firestoreAdminClient.createUserCreds(parent, userCreds, userCredsId);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. A parent name of the form
+   *     `projects/{project_id}/databases/{database_id}`
+   * @param userCreds Required. The user creds to create.
+   * @param userCredsId Required. The ID to use for the user creds, which will become the final
+   *     component of the user creds's resource name.
+   *     <p>This value should be 4-63 characters. Valid characters are /[a-z][0-9]-/ with first
+   *     character a letter and the last a letter or a number. Must not be UUID-like
+   *     /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds createUserCreds(
+      DatabaseName parent, UserCreds userCreds, String userCredsId) {
+    CreateUserCredsRequest request =
+        CreateUserCredsRequest.newBuilder()
+            .setParent(parent == null ? null : parent.toString())
+            .setUserCreds(userCreds)
+            .setUserCredsId(userCredsId)
+            .build();
+    return createUserCreds(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a user creds.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String parent = DatabaseName.of("[PROJECT]", "[DATABASE]").toString();
+   *   UserCreds userCreds = UserCreds.newBuilder().build();
+   *   String userCredsId = "userCredsId726775445";
+   *   UserCreds response = firestoreAdminClient.createUserCreds(parent, userCreds, userCredsId);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. A parent name of the form
+   *     `projects/{project_id}/databases/{database_id}`
+   * @param userCreds Required. The user creds to create.
+   * @param userCredsId Required. The ID to use for the user creds, which will become the final
+   *     component of the user creds's resource name.
+   *     <p>This value should be 4-63 characters. Valid characters are /[a-z][0-9]-/ with first
+   *     character a letter and the last a letter or a number. Must not be UUID-like
+   *     /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds createUserCreds(String parent, UserCreds userCreds, String userCredsId) {
+    CreateUserCredsRequest request =
+        CreateUserCredsRequest.newBuilder()
+            .setParent(parent)
+            .setUserCreds(userCreds)
+            .setUserCredsId(userCredsId)
+            .build();
+    return createUserCreds(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a user creds.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   CreateUserCredsRequest request =
+   *       CreateUserCredsRequest.newBuilder()
+   *           .setParent(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .setUserCreds(UserCreds.newBuilder().build())
+   *           .setUserCredsId("userCredsId726775445")
+   *           .build();
+   *   UserCreds response = firestoreAdminClient.createUserCreds(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds createUserCreds(CreateUserCredsRequest request) {
+    return createUserCredsCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Create a user creds.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   CreateUserCredsRequest request =
+   *       CreateUserCredsRequest.newBuilder()
+   *           .setParent(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .setUserCreds(UserCreds.newBuilder().build())
+   *           .setUserCredsId("userCredsId726775445")
+   *           .build();
+   *   ApiFuture<UserCreds> future =
+   *       firestoreAdminClient.createUserCredsCallable().futureCall(request);
+   *   // Do something.
+   *   UserCreds response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<CreateUserCredsRequest, UserCreds> createUserCredsCallable() {
+    return stub.createUserCredsCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a user creds resource. Note that the returned resource does not contain the secret value
+   * itself.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+   *   UserCreds response = firestoreAdminClient.getUserCreds(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form
+   *     `projects/{project_id}/databases/{database_id}/userCreds/{user_creds_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds getUserCreds(UserCredsName name) {
+    GetUserCredsRequest request =
+        GetUserCredsRequest.newBuilder().setName(name == null ? null : name.toString()).build();
+    return getUserCreds(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a user creds resource. Note that the returned resource does not contain the secret value
+   * itself.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString();
+   *   UserCreds response = firestoreAdminClient.getUserCreds(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form
+   *     `projects/{project_id}/databases/{database_id}/userCreds/{user_creds_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds getUserCreds(String name) {
+    GetUserCredsRequest request = GetUserCredsRequest.newBuilder().setName(name).build();
+    return getUserCreds(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a user creds resource. Note that the returned resource does not contain the secret value
+   * itself.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   GetUserCredsRequest request =
+   *       GetUserCredsRequest.newBuilder()
+   *           .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+   *           .build();
+   *   UserCreds response = firestoreAdminClient.getUserCreds(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds getUserCreds(GetUserCredsRequest request) {
+    return getUserCredsCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Gets a user creds resource. Note that the returned resource does not contain the secret value
+   * itself.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   GetUserCredsRequest request =
+   *       GetUserCredsRequest.newBuilder()
+   *           .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+   *           .build();
+   *   ApiFuture<UserCreds> future = firestoreAdminClient.getUserCredsCallable().futureCall(request);
+   *   // Do something.
+   *   UserCreds response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<GetUserCredsRequest, UserCreds> getUserCredsCallable() {
+    return stub.getUserCredsCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List all user creds in the database. Note that the returned resource does not contain the
+   * secret value itself.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DatabaseName parent = DatabaseName.of("[PROJECT]", "[DATABASE]");
+   *   ListUserCredsResponse response = firestoreAdminClient.listUserCreds(parent);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. A parent database name of the form
+   *     `projects/{project_id}/databases/{database_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListUserCredsResponse listUserCreds(DatabaseName parent) {
+    ListUserCredsRequest request =
+        ListUserCredsRequest.newBuilder()
+            .setParent(parent == null ? null : parent.toString())
+            .build();
+    return listUserCreds(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List all user creds in the database. Note that the returned resource does not contain the
+   * secret value itself.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String parent = DatabaseName.of("[PROJECT]", "[DATABASE]").toString();
+   *   ListUserCredsResponse response = firestoreAdminClient.listUserCreds(parent);
+   * }
+   * }</pre>
+   *
+   * @param parent Required. A parent database name of the form
+   *     `projects/{project_id}/databases/{database_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListUserCredsResponse listUserCreds(String parent) {
+    ListUserCredsRequest request = ListUserCredsRequest.newBuilder().setParent(parent).build();
+    return listUserCreds(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List all user creds in the database. Note that the returned resource does not contain the
+   * secret value itself.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ListUserCredsRequest request =
+   *       ListUserCredsRequest.newBuilder()
+   *           .setParent(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .build();
+   *   ListUserCredsResponse response = firestoreAdminClient.listUserCreds(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final ListUserCredsResponse listUserCreds(ListUserCredsRequest request) {
+    return listUserCredsCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * List all user creds in the database. Note that the returned resource does not contain the
+   * secret value itself.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ListUserCredsRequest request =
+   *       ListUserCredsRequest.newBuilder()
+   *           .setParent(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+   *           .build();
+   *   ApiFuture<ListUserCredsResponse> future =
+   *       firestoreAdminClient.listUserCredsCallable().futureCall(request);
+   *   // Do something.
+   *   ListUserCredsResponse response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<ListUserCredsRequest, ListUserCredsResponse> listUserCredsCallable() {
+    return stub.listUserCredsCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables a user creds. No-op if the user creds are already enabled.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+   *   UserCreds response = firestoreAdminClient.enableUserCreds(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form
+   *     `projects/{project_id}/databases/{database_id}/userCreds/{user_creds_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds enableUserCreds(UserCredsName name) {
+    EnableUserCredsRequest request =
+        EnableUserCredsRequest.newBuilder().setName(name == null ? null : name.toString()).build();
+    return enableUserCreds(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables a user creds. No-op if the user creds are already enabled.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString();
+   *   UserCreds response = firestoreAdminClient.enableUserCreds(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form
+   *     `projects/{project_id}/databases/{database_id}/userCreds/{user_creds_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds enableUserCreds(String name) {
+    EnableUserCredsRequest request = EnableUserCredsRequest.newBuilder().setName(name).build();
+    return enableUserCreds(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables a user creds. No-op if the user creds are already enabled.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   EnableUserCredsRequest request =
+   *       EnableUserCredsRequest.newBuilder()
+   *           .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+   *           .build();
+   *   UserCreds response = firestoreAdminClient.enableUserCreds(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds enableUserCreds(EnableUserCredsRequest request) {
+    return enableUserCredsCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Enables a user creds. No-op if the user creds are already enabled.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   EnableUserCredsRequest request =
+   *       EnableUserCredsRequest.newBuilder()
+   *           .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+   *           .build();
+   *   ApiFuture<UserCreds> future =
+   *       firestoreAdminClient.enableUserCredsCallable().futureCall(request);
+   *   // Do something.
+   *   UserCreds response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<EnableUserCredsRequest, UserCreds> enableUserCredsCallable() {
+    return stub.enableUserCredsCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Disables a user creds. No-op if the user creds are already disabled.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+   *   UserCreds response = firestoreAdminClient.disableUserCreds(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form
+   *     `projects/{project_id}/databases/{database_id}/userCreds/{user_creds_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds disableUserCreds(UserCredsName name) {
+    DisableUserCredsRequest request =
+        DisableUserCredsRequest.newBuilder().setName(name == null ? null : name.toString()).build();
+    return disableUserCreds(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Disables a user creds. No-op if the user creds are already disabled.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString();
+   *   UserCreds response = firestoreAdminClient.disableUserCreds(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form
+   *     `projects/{project_id}/databases/{database_id}/userCreds/{user_creds_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds disableUserCreds(String name) {
+    DisableUserCredsRequest request = DisableUserCredsRequest.newBuilder().setName(name).build();
+    return disableUserCreds(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Disables a user creds. No-op if the user creds are already disabled.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DisableUserCredsRequest request =
+   *       DisableUserCredsRequest.newBuilder()
+   *           .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+   *           .build();
+   *   UserCreds response = firestoreAdminClient.disableUserCreds(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds disableUserCreds(DisableUserCredsRequest request) {
+    return disableUserCredsCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Disables a user creds. No-op if the user creds are already disabled.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DisableUserCredsRequest request =
+   *       DisableUserCredsRequest.newBuilder()
+   *           .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+   *           .build();
+   *   ApiFuture<UserCreds> future =
+   *       firestoreAdminClient.disableUserCredsCallable().futureCall(request);
+   *   // Do something.
+   *   UserCreds response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<DisableUserCredsRequest, UserCreds> disableUserCredsCallable() {
+    return stub.disableUserCredsCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resets the password of a user creds.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+   *   UserCreds response = firestoreAdminClient.resetUserPassword(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form
+   *     `projects/{project_id}/databases/{database_id}/userCreds/{user_creds_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds resetUserPassword(UserCredsName name) {
+    ResetUserPasswordRequest request =
+        ResetUserPasswordRequest.newBuilder()
+            .setName(name == null ? null : name.toString())
+            .build();
+    return resetUserPassword(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resets the password of a user creds.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString();
+   *   UserCreds response = firestoreAdminClient.resetUserPassword(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form
+   *     `projects/{project_id}/databases/{database_id}/userCreds/{user_creds_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds resetUserPassword(String name) {
+    ResetUserPasswordRequest request = ResetUserPasswordRequest.newBuilder().setName(name).build();
+    return resetUserPassword(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resets the password of a user creds.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ResetUserPasswordRequest request =
+   *       ResetUserPasswordRequest.newBuilder()
+   *           .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+   *           .build();
+   *   UserCreds response = firestoreAdminClient.resetUserPassword(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final UserCreds resetUserPassword(ResetUserPasswordRequest request) {
+    return resetUserPasswordCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Resets the password of a user creds.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   ResetUserPasswordRequest request =
+   *       ResetUserPasswordRequest.newBuilder()
+   *           .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+   *           .build();
+   *   ApiFuture<UserCreds> future =
+   *       firestoreAdminClient.resetUserPasswordCallable().futureCall(request);
+   *   // Do something.
+   *   UserCreds response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<ResetUserPasswordRequest, UserCreds> resetUserPasswordCallable() {
+    return stub.resetUserPasswordCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a user creds.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   UserCredsName name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]");
+   *   firestoreAdminClient.deleteUserCreds(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form
+   *     `projects/{project_id}/databases/{database_id}/userCreds/{user_creds_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteUserCreds(UserCredsName name) {
+    DeleteUserCredsRequest request =
+        DeleteUserCredsRequest.newBuilder().setName(name == null ? null : name.toString()).build();
+    deleteUserCreds(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a user creds.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   String name = UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString();
+   *   firestoreAdminClient.deleteUserCreds(name);
+   * }
+   * }</pre>
+   *
+   * @param name Required. A name of the form
+   *     `projects/{project_id}/databases/{database_id}/userCreds/{user_creds_id}`
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteUserCreds(String name) {
+    DeleteUserCredsRequest request = DeleteUserCredsRequest.newBuilder().setName(name).build();
+    deleteUserCreds(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a user creds.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DeleteUserCredsRequest request =
+   *       DeleteUserCredsRequest.newBuilder()
+   *           .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+   *           .build();
+   *   firestoreAdminClient.deleteUserCreds(request);
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final void deleteUserCreds(DeleteUserCredsRequest request) {
+    deleteUserCredsCallable().call(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Deletes a user creds.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   DeleteUserCredsRequest request =
+   *       DeleteUserCredsRequest.newBuilder()
+   *           .setName(UserCredsName.of("[PROJECT]", "[DATABASE]", "[USER_CREDS]").toString())
+   *           .build();
+   *   ApiFuture<Empty> future = firestoreAdminClient.deleteUserCredsCallable().futureCall(request);
+   *   // Do something.
+   *   future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<DeleteUserCredsRequest, Empty> deleteUserCredsCallable() {
+    return stub.deleteUserCredsCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
    * Gets information about a backup.
    *
    * <p>Sample code:
@@ -3168,6 +4147,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *   ListBackupsRequest request =
    *       ListBackupsRequest.newBuilder()
    *           .setParent(LocationName.of("[PROJECT]", "[LOCATION]").toString())
+   *           .setFilter("filter-1274492040")
    *           .build();
    *   ListBackupsResponse response = firestoreAdminClient.listBackups(request);
    * }
@@ -3196,6 +4176,7 @@ public class FirestoreAdminClient implements BackgroundResource {
    *   ListBackupsRequest request =
    *       ListBackupsRequest.newBuilder()
    *           .setParent(LocationName.of("[PROJECT]", "[LOCATION]").toString())
+   *           .setFilter("filter-1274492040")
    *           .build();
    *   ApiFuture<ListBackupsResponse> future =
    *       firestoreAdminClient.listBackupsCallable().futureCall(request);
@@ -3349,6 +4330,8 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setParent(ProjectName.of("[PROJECT]").toString())
    *           .setDatabaseId("databaseId1688905718")
    *           .setBackup(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+   *           .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+   *           .putAllTags(new HashMap<String, String>())
    *           .build();
    *   Database response = firestoreAdminClient.restoreDatabaseAsync(request).get();
    * }
@@ -3393,6 +4376,8 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setParent(ProjectName.of("[PROJECT]").toString())
    *           .setDatabaseId("databaseId1688905718")
    *           .setBackup(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+   *           .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+   *           .putAllTags(new HashMap<String, String>())
    *           .build();
    *   OperationFuture<Database, RestoreDatabaseMetadata> future =
    *       firestoreAdminClient.restoreDatabaseOperationCallable().futureCall(request);
@@ -3437,6 +4422,8 @@ public class FirestoreAdminClient implements BackgroundResource {
    *           .setParent(ProjectName.of("[PROJECT]").toString())
    *           .setDatabaseId("databaseId1688905718")
    *           .setBackup(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
+   *           .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+   *           .putAllTags(new HashMap<String, String>())
    *           .build();
    *   ApiFuture<Operation> future =
    *       firestoreAdminClient.restoreDatabaseCallable().futureCall(request);
@@ -4020,6 +5007,143 @@ public class FirestoreAdminClient implements BackgroundResource {
    */
   public final UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable() {
     return stub.deleteBackupScheduleCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new database by cloning an existing one.
+   *
+   * <p>The new database must be in the same cloud region or multi-region location as the existing
+   * database. This behaves similar to
+   * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase] except
+   * instead of creating a new empty database, a new database is created with the database type,
+   * index configuration, and documents from an existing database.
+   *
+   * <p>The [long-running operation][google.longrunning.Operation] can be used to track the progress
+   * of the clone, with the Operation's [metadata][google.longrunning.Operation.metadata] field type
+   * being the [CloneDatabaseMetadata][google.firestore.admin.v1.CloneDatabaseMetadata]. The
+   * [response][google.longrunning.Operation.response] type is the
+   * [Database][google.firestore.admin.v1.Database] if the clone was successful. The new database is
+   * not readable or writeable until the LRO has completed.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   CloneDatabaseRequest request =
+   *       CloneDatabaseRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .setDatabaseId("databaseId1688905718")
+   *           .setPitrSnapshot(PitrSnapshot.newBuilder().build())
+   *           .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+   *           .putAllTags(new HashMap<String, String>())
+   *           .build();
+   *   Database response = firestoreAdminClient.cloneDatabaseAsync(request).get();
+   * }
+   * }</pre>
+   *
+   * @param request The request object containing all of the parameters for the API call.
+   * @throws com.google.api.gax.rpc.ApiException if the remote call fails
+   */
+  public final OperationFuture<Database, CloneDatabaseMetadata> cloneDatabaseAsync(
+      CloneDatabaseRequest request) {
+    return cloneDatabaseOperationCallable().futureCall(request);
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new database by cloning an existing one.
+   *
+   * <p>The new database must be in the same cloud region or multi-region location as the existing
+   * database. This behaves similar to
+   * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase] except
+   * instead of creating a new empty database, a new database is created with the database type,
+   * index configuration, and documents from an existing database.
+   *
+   * <p>The [long-running operation][google.longrunning.Operation] can be used to track the progress
+   * of the clone, with the Operation's [metadata][google.longrunning.Operation.metadata] field type
+   * being the [CloneDatabaseMetadata][google.firestore.admin.v1.CloneDatabaseMetadata]. The
+   * [response][google.longrunning.Operation.response] type is the
+   * [Database][google.firestore.admin.v1.Database] if the clone was successful. The new database is
+   * not readable or writeable until the LRO has completed.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   CloneDatabaseRequest request =
+   *       CloneDatabaseRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .setDatabaseId("databaseId1688905718")
+   *           .setPitrSnapshot(PitrSnapshot.newBuilder().build())
+   *           .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+   *           .putAllTags(new HashMap<String, String>())
+   *           .build();
+   *   OperationFuture<Database, CloneDatabaseMetadata> future =
+   *       firestoreAdminClient.cloneDatabaseOperationCallable().futureCall(request);
+   *   // Do something.
+   *   Database response = future.get();
+   * }
+   * }</pre>
+   */
+  public final OperationCallable<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationCallable() {
+    return stub.cloneDatabaseOperationCallable();
+  }
+
+  // AUTO-GENERATED DOCUMENTATION AND METHOD.
+  /**
+   * Creates a new database by cloning an existing one.
+   *
+   * <p>The new database must be in the same cloud region or multi-region location as the existing
+   * database. This behaves similar to
+   * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase] except
+   * instead of creating a new empty database, a new database is created with the database type,
+   * index configuration, and documents from an existing database.
+   *
+   * <p>The [long-running operation][google.longrunning.Operation] can be used to track the progress
+   * of the clone, with the Operation's [metadata][google.longrunning.Operation.metadata] field type
+   * being the [CloneDatabaseMetadata][google.firestore.admin.v1.CloneDatabaseMetadata]. The
+   * [response][google.longrunning.Operation.response] type is the
+   * [Database][google.firestore.admin.v1.Database] if the clone was successful. The new database is
+   * not readable or writeable until the LRO has completed.
+   *
+   * <p>Sample code:
+   *
+   * <pre>{@code
+   * // This snippet has been automatically generated and should be regarded as a code template only.
+   * // It will require modifications to work:
+   * // - It may require correct/in-range values for request initialization.
+   * // - It may require specifying regional endpoints when creating the service client as shown in
+   * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+   * try (FirestoreAdminClient firestoreAdminClient = FirestoreAdminClient.create()) {
+   *   CloneDatabaseRequest request =
+   *       CloneDatabaseRequest.newBuilder()
+   *           .setParent(ProjectName.of("[PROJECT]").toString())
+   *           .setDatabaseId("databaseId1688905718")
+   *           .setPitrSnapshot(PitrSnapshot.newBuilder().build())
+   *           .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+   *           .putAllTags(new HashMap<String, String>())
+   *           .build();
+   *   ApiFuture<Operation> future =
+   *       firestoreAdminClient.cloneDatabaseCallable().futureCall(request);
+   *   // Do something.
+   *   Operation response = future.get();
+   * }
+   * }</pre>
+   */
+  public final UnaryCallable<CloneDatabaseRequest, Operation> cloneDatabaseCallable() {
+    return stub.cloneDatabaseCallable();
   }
 
   @Override

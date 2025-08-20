@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,19 @@ import com.google.api.core.BetaApi;
 import com.google.firestore.admin.v1.Backup;
 import com.google.firestore.admin.v1.BackupSchedule;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
+import com.google.firestore.admin.v1.CloneDatabaseRequest;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
+import com.google.firestore.admin.v1.CreateUserCredsRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DeleteBackupRequest;
 import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
 import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
+import com.google.firestore.admin.v1.DeleteUserCredsRequest;
+import com.google.firestore.admin.v1.DisableUserCredsRequest;
+import com.google.firestore.admin.v1.EnableUserCredsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.Field;
 import com.google.firestore.admin.v1.FirestoreAdminGrpc.FirestoreAdminImplBase;
@@ -36,6 +41,7 @@ import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
+import com.google.firestore.admin.v1.GetUserCredsRequest;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
 import com.google.firestore.admin.v1.ListBackupSchedulesRequest;
@@ -48,10 +54,14 @@ import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.ListUserCredsRequest;
+import com.google.firestore.admin.v1.ListUserCredsResponse;
+import com.google.firestore.admin.v1.ResetUserPasswordRequest;
 import com.google.firestore.admin.v1.RestoreDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
+import com.google.firestore.admin.v1.UserCreds;
 import com.google.longrunning.Operation;
 import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.Empty;
@@ -404,6 +414,153 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
   }
 
   @Override
+  public void createUserCreds(
+      CreateUserCredsRequest request, StreamObserver<UserCreds> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof UserCreds) {
+      requests.add(request);
+      responseObserver.onNext(((UserCreds) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method CreateUserCreds, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  UserCreds.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void getUserCreds(
+      GetUserCredsRequest request, StreamObserver<UserCreds> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof UserCreds) {
+      requests.add(request);
+      responseObserver.onNext(((UserCreds) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method GetUserCreds, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  UserCreds.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void listUserCreds(
+      ListUserCredsRequest request, StreamObserver<ListUserCredsResponse> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof ListUserCredsResponse) {
+      requests.add(request);
+      responseObserver.onNext(((ListUserCredsResponse) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method ListUserCreds, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  ListUserCredsResponse.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void enableUserCreds(
+      EnableUserCredsRequest request, StreamObserver<UserCreds> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof UserCreds) {
+      requests.add(request);
+      responseObserver.onNext(((UserCreds) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method EnableUserCreds, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  UserCreds.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void disableUserCreds(
+      DisableUserCredsRequest request, StreamObserver<UserCreds> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof UserCreds) {
+      requests.add(request);
+      responseObserver.onNext(((UserCreds) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method DisableUserCreds, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  UserCreds.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void resetUserPassword(
+      ResetUserPasswordRequest request, StreamObserver<UserCreds> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof UserCreds) {
+      requests.add(request);
+      responseObserver.onNext(((UserCreds) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method ResetUserPassword, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  UserCreds.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void deleteUserCreds(
+      DeleteUserCredsRequest request, StreamObserver<Empty> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof Empty) {
+      requests.add(request);
+      responseObserver.onNext(((Empty) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method DeleteUserCreds, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  Empty.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
   public void getBackup(GetBackupRequest request, StreamObserver<Backup> responseObserver) {
     Object response = responses.poll();
     if (response instanceof Backup) {
@@ -587,6 +744,27 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
                   "Unrecognized response type %s for method DeleteBackupSchedule, expected %s or %s",
                   response == null ? "null" : response.getClass().getName(),
                   Empty.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void cloneDatabase(
+      CloneDatabaseRequest request, StreamObserver<Operation> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof Operation) {
+      requests.add(request);
+      responseObserver.onNext(((Operation) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method CloneDatabase, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  Operation.class.getName(),
                   Exception.class.getName())));
     }
   }

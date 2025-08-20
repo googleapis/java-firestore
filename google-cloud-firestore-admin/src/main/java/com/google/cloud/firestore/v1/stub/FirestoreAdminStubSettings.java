@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,16 +58,22 @@ import com.google.firestore.admin.v1.BackupSchedule;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CloneDatabaseMetadata;
+import com.google.firestore.admin.v1.CloneDatabaseRequest;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
+import com.google.firestore.admin.v1.CreateUserCredsRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DeleteBackupRequest;
 import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
 import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
 import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
+import com.google.firestore.admin.v1.DeleteUserCredsRequest;
+import com.google.firestore.admin.v1.DisableUserCredsRequest;
+import com.google.firestore.admin.v1.EnableUserCredsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
@@ -78,6 +84,7 @@ import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
+import com.google.firestore.admin.v1.GetUserCredsRequest;
 import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
@@ -92,18 +99,22 @@ import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.ListUserCredsRequest;
+import com.google.firestore.admin.v1.ListUserCredsResponse;
+import com.google.firestore.admin.v1.ResetUserPasswordRequest;
 import com.google.firestore.admin.v1.RestoreDatabaseMetadata;
 import com.google.firestore.admin.v1.RestoreDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
+import com.google.firestore.admin.v1.UserCreds;
 import com.google.longrunning.Operation;
 import com.google.protobuf.Empty;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 import javax.annotation.Generated;
-import org.threeten.bp.Duration;
 
 // AUTO-GENERATED DOCUMENTATION AND CLASS.
 /**
@@ -120,7 +131,9 @@ import org.threeten.bp.Duration;
  * <p>The builder of this class is recursive, so contained classes are themselves builders. When
  * build() is called, the tree of builders is called to create the complete settings object.
  *
- * <p>For example, to set the total timeout of getIndex to 30 seconds:
+ * <p>For example, to set the
+ * [RetrySettings](https://cloud.google.com/java/docs/reference/gax/latest/com.google.api.gax.retrying.RetrySettings)
+ * of getIndex:
  *
  * <pre>{@code
  * // This snippet has been automatically generated and should be regarded as a code template only.
@@ -137,9 +150,46 @@ import org.threeten.bp.Duration;
  *             .getIndexSettings()
  *             .getRetrySettings()
  *             .toBuilder()
- *             .setTotalTimeout(Duration.ofSeconds(30))
+ *             .setInitialRetryDelayDuration(Duration.ofSeconds(1))
+ *             .setInitialRpcTimeoutDuration(Duration.ofSeconds(5))
+ *             .setMaxAttempts(5)
+ *             .setMaxRetryDelayDuration(Duration.ofSeconds(30))
+ *             .setMaxRpcTimeoutDuration(Duration.ofSeconds(60))
+ *             .setRetryDelayMultiplier(1.3)
+ *             .setRpcTimeoutMultiplier(1.5)
+ *             .setTotalTimeoutDuration(Duration.ofSeconds(300))
  *             .build());
  * FirestoreAdminStubSettings firestoreAdminSettings = firestoreAdminSettingsBuilder.build();
+ * }</pre>
+ *
+ * Please refer to the [Client Side Retry
+ * Guide](https://github.com/googleapis/google-cloud-java/blob/main/docs/client_retries.md) for
+ * additional support in setting retries.
+ *
+ * <p>To configure the RetrySettings of a Long Running Operation method, create an
+ * OperationTimedPollAlgorithm object and update the RPC's polling algorithm. For example, to
+ * configure the RetrySettings for createIndex:
+ *
+ * <pre>{@code
+ * // This snippet has been automatically generated and should be regarded as a code template only.
+ * // It will require modifications to work:
+ * // - It may require correct/in-range values for request initialization.
+ * // - It may require specifying regional endpoints when creating the service client as shown in
+ * // https://cloud.google.com/java/docs/setup#configure_endpoints_for_the_client_library
+ * FirestoreAdminStubSettings.Builder firestoreAdminSettingsBuilder =
+ *     FirestoreAdminStubSettings.newBuilder();
+ * TimedRetryAlgorithm timedRetryAlgorithm =
+ *     OperationalTimedPollAlgorithm.create(
+ *         RetrySettings.newBuilder()
+ *             .setInitialRetryDelayDuration(Duration.ofMillis(500))
+ *             .setRetryDelayMultiplier(1.5)
+ *             .setMaxRetryDelayDuration(Duration.ofMillis(5000))
+ *             .setTotalTimeoutDuration(Duration.ofHours(24))
+ *             .build());
+ * firestoreAdminSettingsBuilder
+ *     .createClusterOperationSettings()
+ *     .setPollingAlgorithm(timedRetryAlgorithm)
+ *     .build();
  * }</pre>
  */
 @Generated("by gapic-generator-java")
@@ -188,6 +238,14 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
   private final UnaryCallSettings<DeleteDatabaseRequest, Operation> deleteDatabaseSettings;
   private final OperationCallSettings<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
       deleteDatabaseOperationSettings;
+  private final UnaryCallSettings<CreateUserCredsRequest, UserCreds> createUserCredsSettings;
+  private final UnaryCallSettings<GetUserCredsRequest, UserCreds> getUserCredsSettings;
+  private final UnaryCallSettings<ListUserCredsRequest, ListUserCredsResponse>
+      listUserCredsSettings;
+  private final UnaryCallSettings<EnableUserCredsRequest, UserCreds> enableUserCredsSettings;
+  private final UnaryCallSettings<DisableUserCredsRequest, UserCreds> disableUserCredsSettings;
+  private final UnaryCallSettings<ResetUserPasswordRequest, UserCreds> resetUserPasswordSettings;
+  private final UnaryCallSettings<DeleteUserCredsRequest, Empty> deleteUserCredsSettings;
   private final UnaryCallSettings<GetBackupRequest, Backup> getBackupSettings;
   private final UnaryCallSettings<ListBackupsRequest, ListBackupsResponse> listBackupsSettings;
   private final UnaryCallSettings<DeleteBackupRequest, Empty> deleteBackupSettings;
@@ -203,6 +261,9 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
   private final UnaryCallSettings<UpdateBackupScheduleRequest, BackupSchedule>
       updateBackupScheduleSettings;
   private final UnaryCallSettings<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleSettings;
+  private final UnaryCallSettings<CloneDatabaseRequest, Operation> cloneDatabaseSettings;
+  private final OperationCallSettings<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationSettings;
 
   private static final PagedListDescriptor<ListIndexesRequest, ListIndexesResponse, Index>
       LIST_INDEXES_PAGE_STR_DESC =
@@ -234,9 +295,7 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
             @Override
             public Iterable<Index> extractResources(ListIndexesResponse payload) {
-              return payload.getIndexesList() == null
-                  ? ImmutableList.<Index>of()
-                  : payload.getIndexesList();
+              return payload.getIndexesList();
             }
           };
 
@@ -270,9 +329,7 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
             @Override
             public Iterable<Field> extractResources(ListFieldsResponse payload) {
-              return payload.getFieldsList() == null
-                  ? ImmutableList.<Field>of()
-                  : payload.getFieldsList();
+              return payload.getFieldsList();
             }
           };
 
@@ -437,6 +494,41 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     return deleteDatabaseOperationSettings;
   }
 
+  /** Returns the object with the settings used for calls to createUserCreds. */
+  public UnaryCallSettings<CreateUserCredsRequest, UserCreds> createUserCredsSettings() {
+    return createUserCredsSettings;
+  }
+
+  /** Returns the object with the settings used for calls to getUserCreds. */
+  public UnaryCallSettings<GetUserCredsRequest, UserCreds> getUserCredsSettings() {
+    return getUserCredsSettings;
+  }
+
+  /** Returns the object with the settings used for calls to listUserCreds. */
+  public UnaryCallSettings<ListUserCredsRequest, ListUserCredsResponse> listUserCredsSettings() {
+    return listUserCredsSettings;
+  }
+
+  /** Returns the object with the settings used for calls to enableUserCreds. */
+  public UnaryCallSettings<EnableUserCredsRequest, UserCreds> enableUserCredsSettings() {
+    return enableUserCredsSettings;
+  }
+
+  /** Returns the object with the settings used for calls to disableUserCreds. */
+  public UnaryCallSettings<DisableUserCredsRequest, UserCreds> disableUserCredsSettings() {
+    return disableUserCredsSettings;
+  }
+
+  /** Returns the object with the settings used for calls to resetUserPassword. */
+  public UnaryCallSettings<ResetUserPasswordRequest, UserCreds> resetUserPasswordSettings() {
+    return resetUserPasswordSettings;
+  }
+
+  /** Returns the object with the settings used for calls to deleteUserCreds. */
+  public UnaryCallSettings<DeleteUserCredsRequest, Empty> deleteUserCredsSettings() {
+    return deleteUserCredsSettings;
+  }
+
   /** Returns the object with the settings used for calls to getBackup. */
   public UnaryCallSettings<GetBackupRequest, Backup> getBackupSettings() {
     return getBackupSettings;
@@ -491,6 +583,17 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     return deleteBackupScheduleSettings;
   }
 
+  /** Returns the object with the settings used for calls to cloneDatabase. */
+  public UnaryCallSettings<CloneDatabaseRequest, Operation> cloneDatabaseSettings() {
+    return cloneDatabaseSettings;
+  }
+
+  /** Returns the object with the settings used for calls to cloneDatabase. */
+  public OperationCallSettings<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationSettings() {
+    return cloneDatabaseOperationSettings;
+  }
+
   public FirestoreAdminStub createStub() throws IOException {
     if (getTransportChannelProvider()
         .getTransportName()
@@ -505,15 +608,6 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     throw new UnsupportedOperationException(
         String.format(
             "Transport not supported: %s", getTransportChannelProvider().getTransportName()));
-  }
-
-  /** Returns the endpoint set by the user or the the service's default endpoint. */
-  @Override
-  public String getEndpoint() {
-    if (super.getEndpoint() != null) {
-      return super.getEndpoint();
-    }
-    return getDefaultEndpoint();
   }
 
   /** Returns the default service name. */
@@ -635,6 +729,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     updateDatabaseOperationSettings = settingsBuilder.updateDatabaseOperationSettings().build();
     deleteDatabaseSettings = settingsBuilder.deleteDatabaseSettings().build();
     deleteDatabaseOperationSettings = settingsBuilder.deleteDatabaseOperationSettings().build();
+    createUserCredsSettings = settingsBuilder.createUserCredsSettings().build();
+    getUserCredsSettings = settingsBuilder.getUserCredsSettings().build();
+    listUserCredsSettings = settingsBuilder.listUserCredsSettings().build();
+    enableUserCredsSettings = settingsBuilder.enableUserCredsSettings().build();
+    disableUserCredsSettings = settingsBuilder.disableUserCredsSettings().build();
+    resetUserPasswordSettings = settingsBuilder.resetUserPasswordSettings().build();
+    deleteUserCredsSettings = settingsBuilder.deleteUserCredsSettings().build();
     getBackupSettings = settingsBuilder.getBackupSettings().build();
     listBackupsSettings = settingsBuilder.listBackupsSettings().build();
     deleteBackupSettings = settingsBuilder.deleteBackupSettings().build();
@@ -645,6 +746,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     listBackupSchedulesSettings = settingsBuilder.listBackupSchedulesSettings().build();
     updateBackupScheduleSettings = settingsBuilder.updateBackupScheduleSettings().build();
     deleteBackupScheduleSettings = settingsBuilder.deleteBackupScheduleSettings().build();
+    cloneDatabaseSettings = settingsBuilder.cloneDatabaseSettings().build();
+    cloneDatabaseOperationSettings = settingsBuilder.cloneDatabaseOperationSettings().build();
   }
 
   /** Builder for FirestoreAdminStubSettings. */
@@ -698,6 +801,18 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     private final OperationCallSettings.Builder<
             DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
         deleteDatabaseOperationSettings;
+    private final UnaryCallSettings.Builder<CreateUserCredsRequest, UserCreds>
+        createUserCredsSettings;
+    private final UnaryCallSettings.Builder<GetUserCredsRequest, UserCreds> getUserCredsSettings;
+    private final UnaryCallSettings.Builder<ListUserCredsRequest, ListUserCredsResponse>
+        listUserCredsSettings;
+    private final UnaryCallSettings.Builder<EnableUserCredsRequest, UserCreds>
+        enableUserCredsSettings;
+    private final UnaryCallSettings.Builder<DisableUserCredsRequest, UserCreds>
+        disableUserCredsSettings;
+    private final UnaryCallSettings.Builder<ResetUserPasswordRequest, UserCreds>
+        resetUserPasswordSettings;
+    private final UnaryCallSettings.Builder<DeleteUserCredsRequest, Empty> deleteUserCredsSettings;
     private final UnaryCallSettings.Builder<GetBackupRequest, Backup> getBackupSettings;
     private final UnaryCallSettings.Builder<ListBackupsRequest, ListBackupsResponse>
         listBackupsSettings;
@@ -717,6 +832,10 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
         updateBackupScheduleSettings;
     private final UnaryCallSettings.Builder<DeleteBackupScheduleRequest, Empty>
         deleteBackupScheduleSettings;
+    private final UnaryCallSettings.Builder<CloneDatabaseRequest, Operation> cloneDatabaseSettings;
+    private final OperationCallSettings.Builder<
+            CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+        cloneDatabaseOperationSettings;
     private static final ImmutableMap<String, ImmutableSet<StatusCode.Code>>
         RETRYABLE_CODE_DEFINITIONS;
 
@@ -732,6 +851,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
                   StatusCode.Code.UNAVAILABLE,
                   StatusCode.Code.INTERNAL,
                   StatusCode.Code.DEADLINE_EXCEEDED)));
+      definitions.put(
+          "no_retry_2_codes", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
       definitions.put("no_retry_codes", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
       RETRYABLE_CODE_DEFINITIONS = definitions.build();
     }
@@ -743,23 +864,31 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       RetrySettings settings = null;
       settings =
           RetrySettings.newBuilder()
-              .setInitialRpcTimeout(Duration.ofMillis(60000L))
+              .setInitialRpcTimeoutDuration(Duration.ofMillis(60000L))
               .setRpcTimeoutMultiplier(1.0)
-              .setMaxRpcTimeout(Duration.ofMillis(60000L))
-              .setTotalTimeout(Duration.ofMillis(60000L))
+              .setMaxRpcTimeoutDuration(Duration.ofMillis(60000L))
+              .setTotalTimeoutDuration(Duration.ofMillis(60000L))
               .build();
       definitions.put("no_retry_1_params", settings);
       settings =
           RetrySettings.newBuilder()
-              .setInitialRetryDelay(Duration.ofMillis(100L))
+              .setInitialRetryDelayDuration(Duration.ofMillis(100L))
               .setRetryDelayMultiplier(1.3)
-              .setMaxRetryDelay(Duration.ofMillis(60000L))
-              .setInitialRpcTimeout(Duration.ofMillis(60000L))
+              .setMaxRetryDelayDuration(Duration.ofMillis(60000L))
+              .setInitialRpcTimeoutDuration(Duration.ofMillis(60000L))
               .setRpcTimeoutMultiplier(1.0)
-              .setMaxRpcTimeout(Duration.ofMillis(60000L))
-              .setTotalTimeout(Duration.ofMillis(60000L))
+              .setMaxRpcTimeoutDuration(Duration.ofMillis(60000L))
+              .setTotalTimeoutDuration(Duration.ofMillis(60000L))
               .build();
       definitions.put("retry_policy_0_params", settings);
+      settings =
+          RetrySettings.newBuilder()
+              .setInitialRpcTimeoutDuration(Duration.ofMillis(120000L))
+              .setRpcTimeoutMultiplier(1.0)
+              .setMaxRpcTimeoutDuration(Duration.ofMillis(120000L))
+              .setTotalTimeoutDuration(Duration.ofMillis(120000L))
+              .build();
+      definitions.put("no_retry_2_params", settings);
       settings = RetrySettings.newBuilder().setRpcTimeoutMultiplier(1.0).build();
       definitions.put("no_retry_params", settings);
       RETRY_PARAM_DEFINITIONS = definitions.build();
@@ -795,6 +924,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       updateDatabaseOperationSettings = OperationCallSettings.newBuilder();
       deleteDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       deleteDatabaseOperationSettings = OperationCallSettings.newBuilder();
+      createUserCredsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      getUserCredsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      listUserCredsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      enableUserCredsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      disableUserCredsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      resetUserPasswordSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      deleteUserCredsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       getBackupSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       listBackupsSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       deleteBackupSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
@@ -805,6 +941,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       listBackupSchedulesSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       updateBackupScheduleSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       deleteBackupScheduleSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      cloneDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      cloneDatabaseOperationSettings = OperationCallSettings.newBuilder();
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
@@ -823,6 +961,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               listDatabasesSettings,
               updateDatabaseSettings,
               deleteDatabaseSettings,
+              createUserCredsSettings,
+              getUserCredsSettings,
+              listUserCredsSettings,
+              enableUserCredsSettings,
+              disableUserCredsSettings,
+              resetUserPasswordSettings,
+              deleteUserCredsSettings,
               getBackupSettings,
               listBackupsSettings,
               deleteBackupSettings,
@@ -831,7 +976,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               getBackupScheduleSettings,
               listBackupSchedulesSettings,
               updateBackupScheduleSettings,
-              deleteBackupScheduleSettings);
+              deleteBackupScheduleSettings,
+              cloneDatabaseSettings);
       initDefaults(this);
     }
 
@@ -862,6 +1008,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       updateDatabaseOperationSettings = settings.updateDatabaseOperationSettings.toBuilder();
       deleteDatabaseSettings = settings.deleteDatabaseSettings.toBuilder();
       deleteDatabaseOperationSettings = settings.deleteDatabaseOperationSettings.toBuilder();
+      createUserCredsSettings = settings.createUserCredsSettings.toBuilder();
+      getUserCredsSettings = settings.getUserCredsSettings.toBuilder();
+      listUserCredsSettings = settings.listUserCredsSettings.toBuilder();
+      enableUserCredsSettings = settings.enableUserCredsSettings.toBuilder();
+      disableUserCredsSettings = settings.disableUserCredsSettings.toBuilder();
+      resetUserPasswordSettings = settings.resetUserPasswordSettings.toBuilder();
+      deleteUserCredsSettings = settings.deleteUserCredsSettings.toBuilder();
       getBackupSettings = settings.getBackupSettings.toBuilder();
       listBackupsSettings = settings.listBackupsSettings.toBuilder();
       deleteBackupSettings = settings.deleteBackupSettings.toBuilder();
@@ -872,6 +1025,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       listBackupSchedulesSettings = settings.listBackupSchedulesSettings.toBuilder();
       updateBackupScheduleSettings = settings.updateBackupScheduleSettings.toBuilder();
       deleteBackupScheduleSettings = settings.deleteBackupScheduleSettings.toBuilder();
+      cloneDatabaseSettings = settings.cloneDatabaseSettings.toBuilder();
+      cloneDatabaseOperationSettings = settings.cloneDatabaseOperationSettings.toBuilder();
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
@@ -890,6 +1045,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               listDatabasesSettings,
               updateDatabaseSettings,
               deleteDatabaseSettings,
+              createUserCredsSettings,
+              getUserCredsSettings,
+              listUserCredsSettings,
+              enableUserCredsSettings,
+              disableUserCredsSettings,
+              resetUserPasswordSettings,
+              deleteUserCredsSettings,
               getBackupSettings,
               listBackupsSettings,
               deleteBackupSettings,
@@ -898,7 +1060,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               getBackupScheduleSettings,
               listBackupSchedulesSettings,
               updateBackupScheduleSettings,
-              deleteBackupScheduleSettings);
+              deleteBackupScheduleSettings,
+              cloneDatabaseSettings);
     }
 
     private static Builder createDefault() {
@@ -978,8 +1141,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
       builder
           .createDatabaseSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_2_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_2_params"));
 
       builder
           .getDatabaseSettings()
@@ -1002,6 +1165,41 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
 
       builder
+          .createUserCredsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .getUserCredsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .listUserCredsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .enableUserCredsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .disableUserCredsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .resetUserPasswordSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .deleteUserCredsSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
           .getBackupSettings()
           .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
@@ -1018,8 +1216,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
 
       builder
           .restoreDatabaseSettings()
-          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
-          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_2_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_2_params"));
 
       builder
           .createBackupScheduleSettings()
@@ -1047,6 +1245,11 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
 
       builder
+          .cloneDatabaseSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_2_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_2_params"));
+
+      builder
           .createIndexOperationSettings()
           .setInitialCallSettings(
               UnaryCallSettings.<CreateIndexRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
@@ -1060,13 +1263,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setPollingAlgorithm(
               OperationTimedPollAlgorithm.create(
                   RetrySettings.newBuilder()
-                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setInitialRetryDelayDuration(Duration.ofMillis(5000L))
                       .setRetryDelayMultiplier(1.5)
-                      .setMaxRetryDelay(Duration.ofMillis(45000L))
-                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setMaxRetryDelayDuration(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeoutDuration(Duration.ZERO)
                       .setRpcTimeoutMultiplier(1.0)
-                      .setMaxRpcTimeout(Duration.ZERO)
-                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .setMaxRpcTimeoutDuration(Duration.ZERO)
+                      .setTotalTimeoutDuration(Duration.ofMillis(300000L))
                       .build()));
 
       builder
@@ -1083,13 +1286,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setPollingAlgorithm(
               OperationTimedPollAlgorithm.create(
                   RetrySettings.newBuilder()
-                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setInitialRetryDelayDuration(Duration.ofMillis(5000L))
                       .setRetryDelayMultiplier(1.5)
-                      .setMaxRetryDelay(Duration.ofMillis(45000L))
-                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setMaxRetryDelayDuration(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeoutDuration(Duration.ZERO)
                       .setRpcTimeoutMultiplier(1.0)
-                      .setMaxRpcTimeout(Duration.ZERO)
-                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .setMaxRpcTimeoutDuration(Duration.ZERO)
+                      .setTotalTimeoutDuration(Duration.ofMillis(300000L))
                       .build()));
 
       builder
@@ -1107,13 +1310,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setPollingAlgorithm(
               OperationTimedPollAlgorithm.create(
                   RetrySettings.newBuilder()
-                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setInitialRetryDelayDuration(Duration.ofMillis(5000L))
                       .setRetryDelayMultiplier(1.5)
-                      .setMaxRetryDelay(Duration.ofMillis(45000L))
-                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setMaxRetryDelayDuration(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeoutDuration(Duration.ZERO)
                       .setRpcTimeoutMultiplier(1.0)
-                      .setMaxRpcTimeout(Duration.ZERO)
-                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .setMaxRpcTimeoutDuration(Duration.ZERO)
+                      .setTotalTimeoutDuration(Duration.ofMillis(300000L))
                       .build()));
 
       builder
@@ -1131,13 +1334,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setPollingAlgorithm(
               OperationTimedPollAlgorithm.create(
                   RetrySettings.newBuilder()
-                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setInitialRetryDelayDuration(Duration.ofMillis(5000L))
                       .setRetryDelayMultiplier(1.5)
-                      .setMaxRetryDelay(Duration.ofMillis(45000L))
-                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setMaxRetryDelayDuration(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeoutDuration(Duration.ZERO)
                       .setRpcTimeoutMultiplier(1.0)
-                      .setMaxRpcTimeout(Duration.ZERO)
-                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .setMaxRpcTimeoutDuration(Duration.ZERO)
+                      .setTotalTimeoutDuration(Duration.ofMillis(300000L))
                       .build()));
 
       builder
@@ -1157,13 +1360,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setPollingAlgorithm(
               OperationTimedPollAlgorithm.create(
                   RetrySettings.newBuilder()
-                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setInitialRetryDelayDuration(Duration.ofMillis(5000L))
                       .setRetryDelayMultiplier(1.5)
-                      .setMaxRetryDelay(Duration.ofMillis(45000L))
-                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setMaxRetryDelayDuration(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeoutDuration(Duration.ZERO)
                       .setRpcTimeoutMultiplier(1.0)
-                      .setMaxRpcTimeout(Duration.ZERO)
-                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .setMaxRpcTimeoutDuration(Duration.ZERO)
+                      .setTotalTimeoutDuration(Duration.ofMillis(300000L))
                       .build()));
 
       builder
@@ -1171,8 +1374,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setInitialCallSettings(
               UnaryCallSettings
                   .<CreateDatabaseRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
-                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
-                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"))
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_2_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_2_params"))
                   .build())
           .setResponseTransformer(
               ProtoOperationTransformers.ResponseTransformer.create(Database.class))
@@ -1181,13 +1384,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setPollingAlgorithm(
               OperationTimedPollAlgorithm.create(
                   RetrySettings.newBuilder()
-                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setInitialRetryDelayDuration(Duration.ofMillis(5000L))
                       .setRetryDelayMultiplier(1.5)
-                      .setMaxRetryDelay(Duration.ofMillis(45000L))
-                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setMaxRetryDelayDuration(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeoutDuration(Duration.ZERO)
                       .setRpcTimeoutMultiplier(1.0)
-                      .setMaxRpcTimeout(Duration.ZERO)
-                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .setMaxRpcTimeoutDuration(Duration.ZERO)
+                      .setTotalTimeoutDuration(Duration.ofMillis(300000L))
                       .build()));
 
       builder
@@ -1205,13 +1408,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setPollingAlgorithm(
               OperationTimedPollAlgorithm.create(
                   RetrySettings.newBuilder()
-                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setInitialRetryDelayDuration(Duration.ofMillis(5000L))
                       .setRetryDelayMultiplier(1.5)
-                      .setMaxRetryDelay(Duration.ofMillis(45000L))
-                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setMaxRetryDelayDuration(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeoutDuration(Duration.ZERO)
                       .setRpcTimeoutMultiplier(1.0)
-                      .setMaxRpcTimeout(Duration.ZERO)
-                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .setMaxRpcTimeoutDuration(Duration.ZERO)
+                      .setTotalTimeoutDuration(Duration.ofMillis(300000L))
                       .build()));
 
       builder
@@ -1229,13 +1432,13 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setPollingAlgorithm(
               OperationTimedPollAlgorithm.create(
                   RetrySettings.newBuilder()
-                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setInitialRetryDelayDuration(Duration.ofMillis(5000L))
                       .setRetryDelayMultiplier(1.5)
-                      .setMaxRetryDelay(Duration.ofMillis(45000L))
-                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setMaxRetryDelayDuration(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeoutDuration(Duration.ZERO)
                       .setRpcTimeoutMultiplier(1.0)
-                      .setMaxRpcTimeout(Duration.ZERO)
-                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .setMaxRpcTimeoutDuration(Duration.ZERO)
+                      .setTotalTimeoutDuration(Duration.ofMillis(300000L))
                       .build()));
 
       builder
@@ -1243,8 +1446,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setInitialCallSettings(
               UnaryCallSettings
                   .<RestoreDatabaseRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
-                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
-                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"))
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_2_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_2_params"))
                   .build())
           .setResponseTransformer(
               ProtoOperationTransformers.ResponseTransformer.create(Database.class))
@@ -1253,13 +1456,37 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .setPollingAlgorithm(
               OperationTimedPollAlgorithm.create(
                   RetrySettings.newBuilder()
-                      .setInitialRetryDelay(Duration.ofMillis(5000L))
+                      .setInitialRetryDelayDuration(Duration.ofMillis(5000L))
                       .setRetryDelayMultiplier(1.5)
-                      .setMaxRetryDelay(Duration.ofMillis(45000L))
-                      .setInitialRpcTimeout(Duration.ZERO)
+                      .setMaxRetryDelayDuration(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeoutDuration(Duration.ZERO)
                       .setRpcTimeoutMultiplier(1.0)
-                      .setMaxRpcTimeout(Duration.ZERO)
-                      .setTotalTimeout(Duration.ofMillis(300000L))
+                      .setMaxRpcTimeoutDuration(Duration.ZERO)
+                      .setTotalTimeoutDuration(Duration.ofMillis(300000L))
+                      .build()));
+
+      builder
+          .cloneDatabaseOperationSettings()
+          .setInitialCallSettings(
+              UnaryCallSettings
+                  .<CloneDatabaseRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_2_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_2_params"))
+                  .build())
+          .setResponseTransformer(
+              ProtoOperationTransformers.ResponseTransformer.create(Database.class))
+          .setMetadataTransformer(
+              ProtoOperationTransformers.MetadataTransformer.create(CloneDatabaseMetadata.class))
+          .setPollingAlgorithm(
+              OperationTimedPollAlgorithm.create(
+                  RetrySettings.newBuilder()
+                      .setInitialRetryDelayDuration(Duration.ofMillis(5000L))
+                      .setRetryDelayMultiplier(1.5)
+                      .setMaxRetryDelayDuration(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeoutDuration(Duration.ZERO)
+                      .setRpcTimeoutMultiplier(1.0)
+                      .setMaxRpcTimeoutDuration(Duration.ZERO)
+                      .setTotalTimeoutDuration(Duration.ofMillis(300000L))
                       .build()));
 
       return builder;
@@ -1410,6 +1637,44 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       return deleteDatabaseOperationSettings;
     }
 
+    /** Returns the builder for the settings used for calls to createUserCreds. */
+    public UnaryCallSettings.Builder<CreateUserCredsRequest, UserCreds> createUserCredsSettings() {
+      return createUserCredsSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to getUserCreds. */
+    public UnaryCallSettings.Builder<GetUserCredsRequest, UserCreds> getUserCredsSettings() {
+      return getUserCredsSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to listUserCreds. */
+    public UnaryCallSettings.Builder<ListUserCredsRequest, ListUserCredsResponse>
+        listUserCredsSettings() {
+      return listUserCredsSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to enableUserCreds. */
+    public UnaryCallSettings.Builder<EnableUserCredsRequest, UserCreds> enableUserCredsSettings() {
+      return enableUserCredsSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to disableUserCreds. */
+    public UnaryCallSettings.Builder<DisableUserCredsRequest, UserCreds>
+        disableUserCredsSettings() {
+      return disableUserCredsSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to resetUserPassword. */
+    public UnaryCallSettings.Builder<ResetUserPasswordRequest, UserCreds>
+        resetUserPasswordSettings() {
+      return resetUserPasswordSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to deleteUserCreds. */
+    public UnaryCallSettings.Builder<DeleteUserCredsRequest, Empty> deleteUserCredsSettings() {
+      return deleteUserCredsSettings;
+    }
+
     /** Returns the builder for the settings used for calls to getBackup. */
     public UnaryCallSettings.Builder<GetBackupRequest, Backup> getBackupSettings() {
       return getBackupSettings;
@@ -1467,13 +1732,15 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       return deleteBackupScheduleSettings;
     }
 
-    /** Returns the endpoint set by the user or the the service's default endpoint. */
-    @Override
-    public String getEndpoint() {
-      if (super.getEndpoint() != null) {
-        return super.getEndpoint();
-      }
-      return getDefaultEndpoint();
+    /** Returns the builder for the settings used for calls to cloneDatabase. */
+    public UnaryCallSettings.Builder<CloneDatabaseRequest, Operation> cloneDatabaseSettings() {
+      return cloneDatabaseSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to cloneDatabase. */
+    public OperationCallSettings.Builder<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+        cloneDatabaseOperationSettings() {
+      return cloneDatabaseOperationSettings;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,22 +35,29 @@ import com.google.api.gax.rpc.ClientContext;
 import com.google.api.gax.rpc.OperationCallable;
 import com.google.api.gax.rpc.RequestParamsBuilder;
 import com.google.api.gax.rpc.UnaryCallable;
+import com.google.api.pathtemplate.PathTemplate;
 import com.google.common.collect.ImmutableMap;
 import com.google.firestore.admin.v1.Backup;
 import com.google.firestore.admin.v1.BackupSchedule;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CloneDatabaseMetadata;
+import com.google.firestore.admin.v1.CloneDatabaseRequest;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
 import com.google.firestore.admin.v1.CreateIndexRequest;
+import com.google.firestore.admin.v1.CreateUserCredsRequest;
 import com.google.firestore.admin.v1.Database;
 import com.google.firestore.admin.v1.DeleteBackupRequest;
 import com.google.firestore.admin.v1.DeleteBackupScheduleRequest;
 import com.google.firestore.admin.v1.DeleteDatabaseMetadata;
 import com.google.firestore.admin.v1.DeleteDatabaseRequest;
 import com.google.firestore.admin.v1.DeleteIndexRequest;
+import com.google.firestore.admin.v1.DeleteUserCredsRequest;
+import com.google.firestore.admin.v1.DisableUserCredsRequest;
+import com.google.firestore.admin.v1.EnableUserCredsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsMetadata;
 import com.google.firestore.admin.v1.ExportDocumentsRequest;
 import com.google.firestore.admin.v1.ExportDocumentsResponse;
@@ -61,6 +68,7 @@ import com.google.firestore.admin.v1.GetBackupScheduleRequest;
 import com.google.firestore.admin.v1.GetDatabaseRequest;
 import com.google.firestore.admin.v1.GetFieldRequest;
 import com.google.firestore.admin.v1.GetIndexRequest;
+import com.google.firestore.admin.v1.GetUserCredsRequest;
 import com.google.firestore.admin.v1.ImportDocumentsMetadata;
 import com.google.firestore.admin.v1.ImportDocumentsRequest;
 import com.google.firestore.admin.v1.Index;
@@ -75,12 +83,16 @@ import com.google.firestore.admin.v1.ListFieldsRequest;
 import com.google.firestore.admin.v1.ListFieldsResponse;
 import com.google.firestore.admin.v1.ListIndexesRequest;
 import com.google.firestore.admin.v1.ListIndexesResponse;
+import com.google.firestore.admin.v1.ListUserCredsRequest;
+import com.google.firestore.admin.v1.ListUserCredsResponse;
+import com.google.firestore.admin.v1.ResetUserPasswordRequest;
 import com.google.firestore.admin.v1.RestoreDatabaseMetadata;
 import com.google.firestore.admin.v1.RestoreDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
 import com.google.firestore.admin.v1.UpdateDatabaseMetadata;
 import com.google.firestore.admin.v1.UpdateDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateFieldRequest;
+import com.google.firestore.admin.v1.UserCreds;
 import com.google.longrunning.Operation;
 import com.google.protobuf.Empty;
 import com.google.protobuf.TypeRegistry;
@@ -116,6 +128,7 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
           .add(Index.getDescriptor())
           .add(CreateDatabaseMetadata.getDescriptor())
           .add(ExportDocumentsMetadata.getDescriptor())
+          .add(CloneDatabaseMetadata.getDescriptor())
           .add(IndexOperationMetadata.getDescriptor())
           .build();
 
@@ -685,6 +698,258 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                       HttpJsonOperationSnapshot.create(response))
               .build();
 
+  private static final ApiMethodDescriptor<CreateUserCredsRequest, UserCreds>
+      createUserCredsMethodDescriptor =
+          ApiMethodDescriptor.<CreateUserCredsRequest, UserCreds>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/CreateUserCreds")
+              .setHttpMethod("POST")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<CreateUserCredsRequest>newBuilder()
+                      .setPath(
+                          "/v1/{parent=projects/*/databases/*}/userCreds",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<CreateUserCredsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "parent", request.getParent());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<CreateUserCredsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(
+                                fields, "userCredsId", request.getUserCredsId());
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("userCreds", request.getUserCreds(), true))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<UserCreds>newBuilder()
+                      .setDefaultInstance(UserCreds.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<GetUserCredsRequest, UserCreds>
+      getUserCredsMethodDescriptor =
+          ApiMethodDescriptor.<GetUserCredsRequest, UserCreds>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/GetUserCreds")
+              .setHttpMethod("GET")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<GetUserCredsRequest>newBuilder()
+                      .setPath(
+                          "/v1/{name=projects/*/databases/*/userCreds/*}",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<GetUserCredsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "name", request.getName());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<GetUserCredsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(request -> null)
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<UserCreds>newBuilder()
+                      .setDefaultInstance(UserCreds.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<ListUserCredsRequest, ListUserCredsResponse>
+      listUserCredsMethodDescriptor =
+          ApiMethodDescriptor.<ListUserCredsRequest, ListUserCredsResponse>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/ListUserCreds")
+              .setHttpMethod("GET")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<ListUserCredsRequest>newBuilder()
+                      .setPath(
+                          "/v1/{parent=projects/*/databases/*}/userCreds",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<ListUserCredsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "parent", request.getParent());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<ListUserCredsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(request -> null)
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<ListUserCredsResponse>newBuilder()
+                      .setDefaultInstance(ListUserCredsResponse.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<EnableUserCredsRequest, UserCreds>
+      enableUserCredsMethodDescriptor =
+          ApiMethodDescriptor.<EnableUserCredsRequest, UserCreds>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/EnableUserCreds")
+              .setHttpMethod("POST")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<EnableUserCredsRequest>newBuilder()
+                      .setPath(
+                          "/v1/{name=projects/*/databases/*/userCreds/*}:enable",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<EnableUserCredsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "name", request.getName());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<EnableUserCredsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("*", request.toBuilder().clearName().build(), true))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<UserCreds>newBuilder()
+                      .setDefaultInstance(UserCreds.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<DisableUserCredsRequest, UserCreds>
+      disableUserCredsMethodDescriptor =
+          ApiMethodDescriptor.<DisableUserCredsRequest, UserCreds>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/DisableUserCreds")
+              .setHttpMethod("POST")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<DisableUserCredsRequest>newBuilder()
+                      .setPath(
+                          "/v1/{name=projects/*/databases/*/userCreds/*}:disable",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<DisableUserCredsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "name", request.getName());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<DisableUserCredsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("*", request.toBuilder().clearName().build(), true))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<UserCreds>newBuilder()
+                      .setDefaultInstance(UserCreds.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<ResetUserPasswordRequest, UserCreds>
+      resetUserPasswordMethodDescriptor =
+          ApiMethodDescriptor.<ResetUserPasswordRequest, UserCreds>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/ResetUserPassword")
+              .setHttpMethod("POST")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<ResetUserPasswordRequest>newBuilder()
+                      .setPath(
+                          "/v1/{name=projects/*/databases/*/userCreds/*}:resetPassword",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<ResetUserPasswordRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "name", request.getName());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<ResetUserPasswordRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("*", request.toBuilder().clearName().build(), true))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<UserCreds>newBuilder()
+                      .setDefaultInstance(UserCreds.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
+  private static final ApiMethodDescriptor<DeleteUserCredsRequest, Empty>
+      deleteUserCredsMethodDescriptor =
+          ApiMethodDescriptor.<DeleteUserCredsRequest, Empty>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/DeleteUserCreds")
+              .setHttpMethod("DELETE")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<DeleteUserCredsRequest>newBuilder()
+                      .setPath(
+                          "/v1/{name=projects/*/databases/*/userCreds/*}",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<DeleteUserCredsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "name", request.getName());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<DeleteUserCredsRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(request -> null)
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<Empty>newBuilder()
+                      .setDefaultInstance(Empty.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .build();
+
   private static final ApiMethodDescriptor<GetBackupRequest, Backup> getBackupMethodDescriptor =
       ApiMethodDescriptor.<GetBackupRequest, Backup>newBuilder()
           .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/GetBackup")
@@ -740,6 +1005,7 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                             Map<String, List<String>> fields = new HashMap<>();
                             ProtoRestSerializer<ListBackupsRequest> serializer =
                                 ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "filter", request.getFilter());
                             serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
@@ -1006,6 +1272,46 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                       .build())
               .build();
 
+  private static final ApiMethodDescriptor<CloneDatabaseRequest, Operation>
+      cloneDatabaseMethodDescriptor =
+          ApiMethodDescriptor.<CloneDatabaseRequest, Operation>newBuilder()
+              .setFullMethodName("google.firestore.admin.v1.FirestoreAdmin/CloneDatabase")
+              .setHttpMethod("POST")
+              .setType(ApiMethodDescriptor.MethodType.UNARY)
+              .setRequestFormatter(
+                  ProtoMessageRequestFormatter.<CloneDatabaseRequest>newBuilder()
+                      .setPath(
+                          "/v1/{parent=projects/*}/databases:clone",
+                          request -> {
+                            Map<String, String> fields = new HashMap<>();
+                            ProtoRestSerializer<CloneDatabaseRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putPathParam(fields, "parent", request.getParent());
+                            return fields;
+                          })
+                      .setQueryParamsExtractor(
+                          request -> {
+                            Map<String, List<String>> fields = new HashMap<>();
+                            ProtoRestSerializer<CloneDatabaseRequest> serializer =
+                                ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
+                            return fields;
+                          })
+                      .setRequestBodyExtractor(
+                          request ->
+                              ProtoRestSerializer.create()
+                                  .toBody("*", request.toBuilder().clearParent().build(), true))
+                      .build())
+              .setResponseParser(
+                  ProtoMessageResponseParser.<Operation>newBuilder()
+                      .setDefaultInstance(Operation.getDefaultInstance())
+                      .setDefaultTypeRegistry(typeRegistry)
+                      .build())
+              .setOperationSnapshotFactory(
+                  (CloneDatabaseRequest request, Operation response) ->
+                      HttpJsonOperationSnapshot.create(response))
+              .build();
+
   private final UnaryCallable<CreateIndexRequest, Operation> createIndexCallable;
   private final OperationCallable<CreateIndexRequest, Index, IndexOperationMetadata>
       createIndexOperationCallable;
@@ -1042,6 +1348,13 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   private final UnaryCallable<DeleteDatabaseRequest, Operation> deleteDatabaseCallable;
   private final OperationCallable<DeleteDatabaseRequest, Database, DeleteDatabaseMetadata>
       deleteDatabaseOperationCallable;
+  private final UnaryCallable<CreateUserCredsRequest, UserCreds> createUserCredsCallable;
+  private final UnaryCallable<GetUserCredsRequest, UserCreds> getUserCredsCallable;
+  private final UnaryCallable<ListUserCredsRequest, ListUserCredsResponse> listUserCredsCallable;
+  private final UnaryCallable<EnableUserCredsRequest, UserCreds> enableUserCredsCallable;
+  private final UnaryCallable<DisableUserCredsRequest, UserCreds> disableUserCredsCallable;
+  private final UnaryCallable<ResetUserPasswordRequest, UserCreds> resetUserPasswordCallable;
+  private final UnaryCallable<DeleteUserCredsRequest, Empty> deleteUserCredsCallable;
   private final UnaryCallable<GetBackupRequest, Backup> getBackupCallable;
   private final UnaryCallable<ListBackupsRequest, ListBackupsResponse> listBackupsCallable;
   private final UnaryCallable<DeleteBackupRequest, Empty> deleteBackupCallable;
@@ -1056,10 +1369,18 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   private final UnaryCallable<UpdateBackupScheduleRequest, BackupSchedule>
       updateBackupScheduleCallable;
   private final UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable;
+  private final UnaryCallable<CloneDatabaseRequest, Operation> cloneDatabaseCallable;
+  private final OperationCallable<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationCallable;
 
   private final BackgroundResource backgroundResources;
   private final HttpJsonOperationsStub httpJsonOperationsStub;
   private final HttpJsonStubCallableFactory callableFactory;
+
+  private static final PathTemplate CLONE_DATABASE_0_PATH_TEMPLATE =
+      PathTemplate.create("projects/{project_id=*}/**");
+  private static final PathTemplate CLONE_DATABASE_1_PATH_TEMPLATE =
+      PathTemplate.create("projects/*/databases/{database_id=*}/**");
 
   public static final HttpJsonFirestoreAdminStub create(FirestoreAdminStubSettings settings)
       throws IOException {
@@ -1294,6 +1615,84 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                   return builder.build();
                 })
             .build();
+    HttpJsonCallSettings<CreateUserCredsRequest, UserCreds> createUserCredsTransportSettings =
+        HttpJsonCallSettings.<CreateUserCredsRequest, UserCreds>newBuilder()
+            .setMethodDescriptor(createUserCredsMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("parent", String.valueOf(request.getParent()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<GetUserCredsRequest, UserCreds> getUserCredsTransportSettings =
+        HttpJsonCallSettings.<GetUserCredsRequest, UserCreds>newBuilder()
+            .setMethodDescriptor(getUserCredsMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<ListUserCredsRequest, ListUserCredsResponse>
+        listUserCredsTransportSettings =
+            HttpJsonCallSettings.<ListUserCredsRequest, ListUserCredsResponse>newBuilder()
+                .setMethodDescriptor(listUserCredsMethodDescriptor)
+                .setTypeRegistry(typeRegistry)
+                .setParamsExtractor(
+                    request -> {
+                      RequestParamsBuilder builder = RequestParamsBuilder.create();
+                      builder.add("parent", String.valueOf(request.getParent()));
+                      return builder.build();
+                    })
+                .build();
+    HttpJsonCallSettings<EnableUserCredsRequest, UserCreds> enableUserCredsTransportSettings =
+        HttpJsonCallSettings.<EnableUserCredsRequest, UserCreds>newBuilder()
+            .setMethodDescriptor(enableUserCredsMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<DisableUserCredsRequest, UserCreds> disableUserCredsTransportSettings =
+        HttpJsonCallSettings.<DisableUserCredsRequest, UserCreds>newBuilder()
+            .setMethodDescriptor(disableUserCredsMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<ResetUserPasswordRequest, UserCreds> resetUserPasswordTransportSettings =
+        HttpJsonCallSettings.<ResetUserPasswordRequest, UserCreds>newBuilder()
+            .setMethodDescriptor(resetUserPasswordMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
+    HttpJsonCallSettings<DeleteUserCredsRequest, Empty> deleteUserCredsTransportSettings =
+        HttpJsonCallSettings.<DeleteUserCredsRequest, Empty>newBuilder()
+            .setMethodDescriptor(deleteUserCredsMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  builder.add("name", String.valueOf(request.getName()));
+                  return builder.build();
+                })
+            .build();
     HttpJsonCallSettings<GetBackupRequest, Backup> getBackupTransportSettings =
         HttpJsonCallSettings.<GetBackupRequest, Backup>newBuilder()
             .setMethodDescriptor(getBackupMethodDescriptor)
@@ -1400,6 +1799,28 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
                   return builder.build();
                 })
             .build();
+    HttpJsonCallSettings<CloneDatabaseRequest, Operation> cloneDatabaseTransportSettings =
+        HttpJsonCallSettings.<CloneDatabaseRequest, Operation>newBuilder()
+            .setMethodDescriptor(cloneDatabaseMethodDescriptor)
+            .setTypeRegistry(typeRegistry)
+            .setParamsExtractor(
+                request -> {
+                  RequestParamsBuilder builder = RequestParamsBuilder.create();
+                  if (request.getPitrSnapshot() != null) {
+                    builder.add(
+                        request.getPitrSnapshot().getDatabase(),
+                        "project_id",
+                        CLONE_DATABASE_0_PATH_TEMPLATE);
+                  }
+                  if (request.getPitrSnapshot() != null) {
+                    builder.add(
+                        request.getPitrSnapshot().getDatabase(),
+                        "database_id",
+                        CLONE_DATABASE_1_PATH_TEMPLATE);
+                  }
+                  return builder.build();
+                })
+            .build();
 
     this.createIndexCallable =
         callableFactory.createUnaryCallable(
@@ -1502,6 +1923,29 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
             settings.deleteDatabaseOperationSettings(),
             clientContext,
             httpJsonOperationsStub);
+    this.createUserCredsCallable =
+        callableFactory.createUnaryCallable(
+            createUserCredsTransportSettings, settings.createUserCredsSettings(), clientContext);
+    this.getUserCredsCallable =
+        callableFactory.createUnaryCallable(
+            getUserCredsTransportSettings, settings.getUserCredsSettings(), clientContext);
+    this.listUserCredsCallable =
+        callableFactory.createUnaryCallable(
+            listUserCredsTransportSettings, settings.listUserCredsSettings(), clientContext);
+    this.enableUserCredsCallable =
+        callableFactory.createUnaryCallable(
+            enableUserCredsTransportSettings, settings.enableUserCredsSettings(), clientContext);
+    this.disableUserCredsCallable =
+        callableFactory.createUnaryCallable(
+            disableUserCredsTransportSettings, settings.disableUserCredsSettings(), clientContext);
+    this.resetUserPasswordCallable =
+        callableFactory.createUnaryCallable(
+            resetUserPasswordTransportSettings,
+            settings.resetUserPasswordSettings(),
+            clientContext);
+    this.deleteUserCredsCallable =
+        callableFactory.createUnaryCallable(
+            deleteUserCredsTransportSettings, settings.deleteUserCredsSettings(), clientContext);
     this.getBackupCallable =
         callableFactory.createUnaryCallable(
             getBackupTransportSettings, settings.getBackupSettings(), clientContext);
@@ -1545,6 +1989,15 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
             deleteBackupScheduleTransportSettings,
             settings.deleteBackupScheduleSettings(),
             clientContext);
+    this.cloneDatabaseCallable =
+        callableFactory.createUnaryCallable(
+            cloneDatabaseTransportSettings, settings.cloneDatabaseSettings(), clientContext);
+    this.cloneDatabaseOperationCallable =
+        callableFactory.createOperationCallable(
+            cloneDatabaseTransportSettings,
+            settings.cloneDatabaseOperationSettings(),
+            clientContext,
+            httpJsonOperationsStub);
 
     this.backgroundResources =
         new BackgroundResourceAggregation(clientContext.getBackgroundResources());
@@ -1568,6 +2021,13 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
     methodDescriptors.add(listDatabasesMethodDescriptor);
     methodDescriptors.add(updateDatabaseMethodDescriptor);
     methodDescriptors.add(deleteDatabaseMethodDescriptor);
+    methodDescriptors.add(createUserCredsMethodDescriptor);
+    methodDescriptors.add(getUserCredsMethodDescriptor);
+    methodDescriptors.add(listUserCredsMethodDescriptor);
+    methodDescriptors.add(enableUserCredsMethodDescriptor);
+    methodDescriptors.add(disableUserCredsMethodDescriptor);
+    methodDescriptors.add(resetUserPasswordMethodDescriptor);
+    methodDescriptors.add(deleteUserCredsMethodDescriptor);
     methodDescriptors.add(getBackupMethodDescriptor);
     methodDescriptors.add(listBackupsMethodDescriptor);
     methodDescriptors.add(deleteBackupMethodDescriptor);
@@ -1577,6 +2037,7 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
     methodDescriptors.add(listBackupSchedulesMethodDescriptor);
     methodDescriptors.add(updateBackupScheduleMethodDescriptor);
     methodDescriptors.add(deleteBackupScheduleMethodDescriptor);
+    methodDescriptors.add(cloneDatabaseMethodDescriptor);
     return methodDescriptors;
   }
 
@@ -1719,6 +2180,41 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   }
 
   @Override
+  public UnaryCallable<CreateUserCredsRequest, UserCreds> createUserCredsCallable() {
+    return createUserCredsCallable;
+  }
+
+  @Override
+  public UnaryCallable<GetUserCredsRequest, UserCreds> getUserCredsCallable() {
+    return getUserCredsCallable;
+  }
+
+  @Override
+  public UnaryCallable<ListUserCredsRequest, ListUserCredsResponse> listUserCredsCallable() {
+    return listUserCredsCallable;
+  }
+
+  @Override
+  public UnaryCallable<EnableUserCredsRequest, UserCreds> enableUserCredsCallable() {
+    return enableUserCredsCallable;
+  }
+
+  @Override
+  public UnaryCallable<DisableUserCredsRequest, UserCreds> disableUserCredsCallable() {
+    return disableUserCredsCallable;
+  }
+
+  @Override
+  public UnaryCallable<ResetUserPasswordRequest, UserCreds> resetUserPasswordCallable() {
+    return resetUserPasswordCallable;
+  }
+
+  @Override
+  public UnaryCallable<DeleteUserCredsRequest, Empty> deleteUserCredsCallable() {
+    return deleteUserCredsCallable;
+  }
+
+  @Override
   public UnaryCallable<GetBackupRequest, Backup> getBackupCallable() {
     return getBackupCallable;
   }
@@ -1768,6 +2264,17 @@ public class HttpJsonFirestoreAdminStub extends FirestoreAdminStub {
   @Override
   public UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable() {
     return deleteBackupScheduleCallable;
+  }
+
+  @Override
+  public UnaryCallable<CloneDatabaseRequest, Operation> cloneDatabaseCallable() {
+    return cloneDatabaseCallable;
+  }
+
+  @Override
+  public OperationCallable<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationCallable() {
+    return cloneDatabaseOperationCallable;
   }
 
   @Override
