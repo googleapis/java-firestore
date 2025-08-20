@@ -1414,8 +1414,8 @@ public class BulkWriterTest {
 
     for (int i = 0; i < numOps; i += 1) {
       responseStubber.put(
-              batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc" + i)),
-              successResponse(1));
+          batchWrite(set(LocalFirestoreHelper.SINGLE_FIELD_PROTO, "coll/doc" + i)),
+          successResponse(1));
     }
 
     responseStubber.initializeStub(batchWriteCapture, firestoreMock);
