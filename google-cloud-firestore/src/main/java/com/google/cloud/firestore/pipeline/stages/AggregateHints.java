@@ -22,7 +22,7 @@ public final class AggregateHints extends AbstractOptions<AggregateHints> {
     this(InternalOptions.EMPTY);
   }
 
-  public AggregateHints(InternalOptions options) {
+  AggregateHints(InternalOptions options) {
     super(options);
   }
 
