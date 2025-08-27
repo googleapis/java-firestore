@@ -22,7 +22,7 @@ public final class AggregateOptions extends AbstractOptions<AggregateOptions> {
     this(InternalOptions.EMPTY);
   }
 
-  public AggregateOptions(InternalOptions options) {
+  AggregateOptions(InternalOptions options) {
     super(options);
   }
 

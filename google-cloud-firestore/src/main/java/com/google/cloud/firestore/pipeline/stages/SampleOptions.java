@@ -22,7 +22,7 @@ public final class SampleOptions extends AbstractOptions<SampleOptions> {
     this(InternalOptions.EMPTY);
   }
 
-  public SampleOptions(InternalOptions options) {
+  SampleOptions(InternalOptions options) {
     super(options);
   }
 

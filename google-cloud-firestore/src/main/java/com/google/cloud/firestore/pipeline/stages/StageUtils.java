@@ -27,7 +27,7 @@ public final class StageUtils {
     return stage.toStageProto();
   }
 
-  @SuppressWarnings("ClassEscapesDefinedScope")
+  @SuppressWarnings("ReferencesHidden")
   @InternalApi
   public static ImmutableMap<String, Value> toMap(AbstractOptions<?> options) {
     return options.options.options;
