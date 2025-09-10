@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
  * }</pre>
  */
 @BetaApi
-public final class Field extends Expr implements Selectable {
+public final class Field extends Expression implements Selectable {
   public static final String DOCUMENT_ID = "__name__";
   private final FieldPath path;
   @Nullable private Pipeline pipeline; // Nullable

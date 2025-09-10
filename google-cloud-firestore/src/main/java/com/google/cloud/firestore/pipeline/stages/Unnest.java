@@ -17,10 +17,10 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.field;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.field;
 
-import com.google.cloud.firestore.pipeline.expressions.AliasedExpr;
-import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.AliasedExpression;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.common.collect.ImmutableList;
@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 
 public final class Unnest extends Stage {
 
-  private final Expr expr;
+  private final Expression expr;
   private final Field alias;
 
   public Unnest(@Nonnull Field field, @Nonnull String alias) {
@@ -46,9 +46,9 @@ public final class Unnest extends Stage {
 
   public Unnest(@Nonnull Selectable field) {
     super("unnest", InternalOptions.EMPTY);
-    if (field instanceof AliasedExpr) {
-      this.expr = ((AliasedExpr) field).getExpr();
-      this.alias = field(((AliasedExpr) field).getAlias());
+    if (field instanceof AliasedExpression) {
+      this.expr = ((AliasedExpression) field).getExpr();
+      this.alias = field(((AliasedExpression) field).getAlias());
     } else {
       this.expr = (Field) field;
       this.alias = (Field) field;

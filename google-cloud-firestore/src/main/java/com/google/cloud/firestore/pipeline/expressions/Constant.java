@@ -32,7 +32,7 @@ import java.util.Date;
 import java.util.Map;
 
 @BetaApi
-public final class Constant extends Expr {
+public final class Constant extends Expression {
 
   static final Constant NULL = new Constant(null);
 

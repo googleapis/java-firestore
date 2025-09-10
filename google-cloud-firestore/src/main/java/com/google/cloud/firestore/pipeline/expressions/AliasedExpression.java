@@ -20,13 +20,14 @@ import com.google.api.core.InternalApi;
 import com.google.firestore.v1.Value;
 
 @InternalApi
-public final class AliasedExpr<T extends Expr> extends Expr implements Selectable {
+public final class AliasedExpression<T extends Expression> extends Expression
+    implements Selectable {
 
   private final String alias;
   private final T expr;
 
   @InternalApi
-  AliasedExpr(T expr, String alias) {
+  AliasedExpression(T expr, String alias) {
     this.expr = expr;
     this.alias = alias;
   }
@@ -43,7 +44,7 @@ public final class AliasedExpr<T extends Expr> extends Expr implements Selectabl
 
   @Override
   public Selectable as(String alias) {
-    return new AliasedExpr<>(this.expr, alias);
+    return new AliasedExpression<>(this.expr, alias);
   }
 
   @Override

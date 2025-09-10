@@ -18,14 +18,14 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
-import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Value;
 import javax.annotation.Nonnull;
 
 public class ReplaceWith extends Stage {
 
-  private final Expr expr;
+  private final Expression expr;
   private final Mode mode;
 
   public enum Mode {
@@ -40,11 +40,11 @@ public class ReplaceWith extends Stage {
     }
   }
 
-  public ReplaceWith(@Nonnull Expr field) {
+  public ReplaceWith(@Nonnull Expression field) {
     this(field, Mode.FULL_REPLACE);
   }
 
-  public ReplaceWith(@Nonnull Expr expr, @Nonnull Mode mode) {
+  public ReplaceWith(@Nonnull Expression expr, @Nonnull Mode mode) {
     super("replace_with", InternalOptions.EMPTY);
     this.expr = expr;
     this.mode = mode;

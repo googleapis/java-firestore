@@ -22,7 +22,7 @@ import com.google.firestore.v1.Value;
 @InternalApi
 public final class FunctionUtils {
   @InternalApi
-  public static Value exprToValue(Expr expr) {
+  public static Value exprToValue(Expression expr) {
     return (expr == null ? Constant.NULL : expr).toProto();
   }
 

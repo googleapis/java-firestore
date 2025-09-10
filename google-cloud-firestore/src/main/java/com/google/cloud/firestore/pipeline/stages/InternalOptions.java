@@ -64,7 +64,7 @@ final class InternalOptions {
     ImmutableMap.Builder<String, Value> builder =
         ImmutableMap.builderWithExpectedSize(options.size() + value.toMap().size());
     builder.putAll(options);
-    for(ImmutableMap.Entry<String, Value> entry : value.toMap().entrySet()){
+    for (ImmutableMap.Entry<String, Value> entry : value.toMap().entrySet()) {
       builder.put(entry.getKey(), entry.getValue());
     }
 
