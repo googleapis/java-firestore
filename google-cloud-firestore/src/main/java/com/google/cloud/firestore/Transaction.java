@@ -142,13 +142,13 @@ public abstract class Transaction extends UpdateBuilder<Transaction> {
    */
   @Nonnull
   @BetaApi
-  public abstract ApiFuture<PipelineSnapshot> execute(@Nonnull Pipeline pipeline);
+  public abstract ApiFuture<Pipeline.Snapshot> execute(@Nonnull Pipeline pipeline);
 
   /**
    * @return The result of the aggregation.
    */
   @Nonnull
   @BetaApi
-  public abstract ApiFuture<PipelineSnapshot> execute(
+  public abstract ApiFuture<Pipeline.Snapshot> execute(
       @Nonnull Pipeline pipeline, @Nonnull PipelineExecuteOptions options);
 }

@@ -19,7 +19,7 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.cloud.firestore.PipelineUtils;
-import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.FunctionUtils;
 import com.google.common.collect.ImmutableMap;
@@ -77,7 +77,7 @@ abstract class AbstractOptions<T> {
     return self(options.with(key, Arrays.stream(values).map(PipelineUtils::encodeValue)::iterator));
   }
 
-  protected final T with(String key, List<? extends Expr> expressions) {
+  protected final T with(String key, List<? extends Expression> expressions) {
     return self(options.with(key, Lists.transform(expressions, FunctionUtils::exprToValue)));
   }
 
@@ -89,7 +89,7 @@ abstract class AbstractOptions<T> {
     return self(options.adding(subSection));
   }
 
-  public final T withSection(String key, GenericOptions subSection) {
+  public final T withSection(String key, RawOptions subSection) {
     return with(key, subSection);
   }
 

@@ -21,7 +21,7 @@ import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.expr
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.pipeline.expressions.AggregateFunction;
-import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -168,8 +168,8 @@ class UserDataConverter {
     } else if (sanitizedObject instanceof Blob) {
       Blob blob = (Blob) sanitizedObject;
       return Value.newBuilder().setBytesValue(blob.toByteString()).build();
-    } else if (sanitizedObject instanceof Expr) {
-      return exprToValue((Expr) sanitizedObject);
+    } else if (sanitizedObject instanceof Expression) {
+      return exprToValue((Expression) sanitizedObject);
     } else if (sanitizedObject instanceof AggregateFunction) {
       return aggregateFunctionToValue((AggregateFunction) sanitizedObject);
     } else if (sanitizedObject instanceof Value) {

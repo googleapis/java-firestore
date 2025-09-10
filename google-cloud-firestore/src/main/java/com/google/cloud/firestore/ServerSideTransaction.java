@@ -264,13 +264,13 @@ final class ServerSideTransaction extends Transaction {
 
   @Nonnull
   @Override
-  public ApiFuture<PipelineSnapshot> execute(@Nonnull Pipeline pipeline) {
+  public ApiFuture<Pipeline.Snapshot> execute(@Nonnull Pipeline pipeline) {
     return execute(pipeline, new PipelineExecuteOptions());
   }
 
   @Nonnull
   @Override
-  public ApiFuture<PipelineSnapshot> execute(
+  public ApiFuture<Pipeline.Snapshot> execute(
       @Nonnull Pipeline pipeline, @Nonnull PipelineExecuteOptions options) {
     try (TraceUtil.Scope ignored = transactionTraceContext.makeCurrent()) {
       return pipeline.execute(new PipelineExecuteOptions(), transactionId, null);

@@ -24,19 +24,19 @@ import java.util.stream.Collectors;
 @BetaApi
 public class AggregateFunction {
   private final String name;
-  private final ImmutableList<Expr> params;
+  private final ImmutableList<Expression> params;
 
-  private AggregateFunction(String name, Expr... params) {
+  private AggregateFunction(String name, Expression... params) {
     this.name = name;
     this.params = ImmutableList.copyOf(params);
   }
 
   private AggregateFunction(String name, String fieldName) {
-    this(name, Expr.field(fieldName));
+    this(name, Expression.field(fieldName));
   }
 
   @BetaApi
-  public static AggregateFunction generic(String name, Expr... expr) {
+  public static AggregateFunction generic(String name, Expression... expr) {
     return new AggregateFunction(name, expr);
   }
 
@@ -51,7 +51,7 @@ public class AggregateFunction {
   }
 
   @BetaApi
-  public static AggregateFunction count(Expr expression) {
+  public static AggregateFunction count(Expression expression) {
     return new AggregateFunction("count", expression);
   }
 
@@ -61,12 +61,12 @@ public class AggregateFunction {
   }
 
   @BetaApi
-  public static AggregateFunction countDistinct(Expr expression) {
+  public static AggregateFunction countDistinct(Expression expression) {
     return new AggregateFunction("count_distinct", expression);
   }
 
   @BetaApi
-  public static AggregateFunction countIf(BooleanExpr condition) {
+  public static AggregateFunction countIf(BooleanExpression condition) {
     return new AggregateFunction("count_if", condition);
   }
 
@@ -76,38 +76,38 @@ public class AggregateFunction {
   }
 
   @BetaApi
-  public static AggregateFunction sum(Expr expression) {
+  public static AggregateFunction sum(Expression expression) {
     return new AggregateFunction("sum", expression);
   }
 
   @BetaApi
-  public static AggregateFunction avg(String fieldName) {
-    return new AggregateFunction("avg", fieldName);
+  public static AggregateFunction average(String fieldName) {
+    return new AggregateFunction("average", fieldName);
   }
 
   @BetaApi
-  public static AggregateFunction avg(Expr expression) {
-    return new AggregateFunction("avg", expression);
+  public static AggregateFunction average(Expression expression) {
+    return new AggregateFunction("average", expression);
   }
 
   @BetaApi
   public static AggregateFunction minimum(String fieldName) {
-    return new AggregateFunction("min", fieldName);
+    return new AggregateFunction("minimum", fieldName);
   }
 
   @BetaApi
-  public static AggregateFunction minimum(Expr expression) {
-    return new AggregateFunction("min", expression);
+  public static AggregateFunction minimum(Expression expression) {
+    return new AggregateFunction("minimum", expression);
   }
 
   @BetaApi
   public static AggregateFunction maximum(String fieldName) {
-    return new AggregateFunction("max", fieldName);
+    return new AggregateFunction("maximum", fieldName);
   }
 
   @BetaApi
-  public static AggregateFunction maximum(Expr expression) {
-    return new AggregateFunction("max", expression);
+  public static AggregateFunction maximum(Expression expression) {
+    return new AggregateFunction("maximum", expression);
   }
 
   @BetaApi

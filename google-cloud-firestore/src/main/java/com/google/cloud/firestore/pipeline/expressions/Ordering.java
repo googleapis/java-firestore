@@ -27,10 +27,10 @@ import java.util.Locale;
 @BetaApi
 public final class Ordering {
 
-  private final Expr expr;
+  private final Expression expr;
   private final Ordering.Direction dir;
 
-  private Ordering(Expr expr, Ordering.Direction dir) {
+  private Ordering(Expression expr, Ordering.Direction dir) {
     this.expr = expr;
     this.dir = dir;
   }
@@ -58,17 +58,17 @@ public final class Ordering {
   }
 
   @BetaApi
-  public static Ordering ascending(Expr expr) {
+  public static Ordering ascending(Expression expr) {
     return new Ordering(expr, Direction.ASCENDING);
   }
 
   @BetaApi
-  public static Ordering descending(Expr expr) {
+  public static Ordering descending(Expression expr) {
     return new Ordering(expr, Direction.DESCENDING);
   }
 
   @InternalApi
-  public Expr getExpr() {
+  public Expression getExpr() {
     return expr;
   }
 

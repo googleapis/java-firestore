@@ -448,19 +448,20 @@ package com.google.cloud.firestore {
     method public com.google.cloud.firestore.Pipeline addFields(com.google.cloud.firestore.pipeline.expressions.Selectable...);
     method public com.google.cloud.firestore.Pipeline aggregate(com.google.cloud.firestore.pipeline.expressions.AliasedAggregate...);
     method public com.google.cloud.firestore.Pipeline aggregate(com.google.cloud.firestore.pipeline.stages.Aggregate);
+    method public com.google.cloud.firestore.Pipeline aggregate(com.google.cloud.firestore.pipeline.stages.Aggregate, com.google.cloud.firestore.pipeline.stages.AggregateOptions);
     method public com.google.cloud.firestore.Pipeline distinct(com.google.cloud.firestore.pipeline.expressions.Selectable...);
     method public com.google.cloud.firestore.Pipeline distinct(String...);
     method public ApiFuture<com.google.cloud.firestore.PipelineSnapshot> execute();
     method public void execute(ApiStreamObserver<com.google.cloud.firestore.PipelineResult>);
     method public ApiFuture<com.google.cloud.firestore.PipelineSnapshot> execute(com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions);
-    method public com.google.cloud.firestore.Pipeline findNearest(com.google.cloud.firestore.pipeline.expressions.Expr, double[], com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure, com.google.cloud.firestore.pipeline.stages.FindNearestOptions);
+    method public com.google.cloud.firestore.Pipeline findNearest(com.google.cloud.firestore.pipeline.expressions.Expression, double[], com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure, com.google.cloud.firestore.pipeline.stages.FindNearestOptions);
     method public com.google.cloud.firestore.Pipeline findNearest(String, double[], com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure, com.google.cloud.firestore.pipeline.stages.FindNearestOptions);
-    method public com.google.cloud.firestore.Pipeline genericStage(String, List<Object>, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public com.google.cloud.firestore.Pipeline genericStage(String, List<Object>, com.google.cloud.firestore.pipeline.stages.RawOptions);
     method public com.google.cloud.firestore.Pipeline limit(int);
     method public com.google.cloud.firestore.Pipeline offset(int);
     method public com.google.cloud.firestore.Pipeline removeFields(com.google.cloud.firestore.pipeline.expressions.Field...);
     method public com.google.cloud.firestore.Pipeline removeFields(String...);
-    method public com.google.cloud.firestore.Pipeline replaceWith(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public com.google.cloud.firestore.Pipeline replaceWith(com.google.cloud.firestore.pipeline.expressions.Expression);
     method public com.google.cloud.firestore.Pipeline replaceWith(String);
     method public com.google.cloud.firestore.Pipeline sample(com.google.cloud.firestore.pipeline.stages.Sample);
     method public com.google.cloud.firestore.Pipeline sample(int);
@@ -472,7 +473,7 @@ package com.google.cloud.firestore {
     method public com.google.cloud.firestore.Pipeline unnest(com.google.cloud.firestore.pipeline.expressions.Selectable);
     method public com.google.cloud.firestore.Pipeline unnest(String, String);
     method public com.google.cloud.firestore.Pipeline unnest(String, String, com.google.cloud.firestore.pipeline.stages.UnnestOptions);
-    method public com.google.cloud.firestore.Pipeline where(com.google.cloud.firestore.pipeline.expressions.BooleanExpr);
+    method public com.google.cloud.firestore.Pipeline where(com.google.cloud.firestore.pipeline.expressions.BooleanExpression);
   }
 
   public final class PipelineResult {
@@ -526,14 +527,14 @@ package com.google.cloud.firestore {
     ctor public PipelineUtils();
     method public static Value encodeValue(boolean);
     method public static Value encodeValue(com.google.cloud.firestore.pipeline.expressions.AggregateFunction);
-    method public static Value encodeValue(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static Value encodeValue(com.google.cloud.firestore.pipeline.expressions.Expression);
     method public static Value encodeValue(double);
     method public static Value encodeValue(long);
     method public static Value encodeValue(Map<String,Value>);
     method public static Value encodeValue(Object);
     method public static Value encodeValue(String);
-    method public static Map<String,com.google.cloud.firestore.pipeline.expressions.Expr> fieldNamesToMap(String...);
-    method public static Map<String,com.google.cloud.firestore.pipeline.expressions.Expr> selectablesToMap(com.google.cloud.firestore.pipeline.expressions.Selectable...);
+    method public static Map<String,com.google.cloud.firestore.pipeline.expressions.Expression> fieldNamesToMap(String...);
+    method public static Map<String,com.google.cloud.firestore.pipeline.expressions.Expression> selectablesToMap(com.google.cloud.firestore.pipeline.expressions.Selectable...);
   }
 
   public final class PlanSummary {
@@ -970,20 +971,20 @@ package com.google.cloud.firestore.pipeline.expressions {
 
   public class AggregateFunction {
     method public com.google.cloud.firestore.pipeline.expressions.AliasedAggregate as(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction avg(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction avg(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction count(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction average(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction average(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction count(com.google.cloud.firestore.pipeline.expressions.Expression);
     method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction count(String);
     method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction countAll();
-    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction countDistinct(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction countDistinct(com.google.cloud.firestore.pipeline.expressions.Expression);
     method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction countDistinct(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction countIf(com.google.cloud.firestore.pipeline.expressions.BooleanExpr);
-    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction generic(String, com.google.cloud.firestore.pipeline.expressions.Expr...);
-    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction maximum(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction countIf(com.google.cloud.firestore.pipeline.expressions.BooleanExpression);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction generic(String, com.google.cloud.firestore.pipeline.expressions.Expression...);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction maximum(com.google.cloud.firestore.pipeline.expressions.Expression);
     method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction maximum(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction minimum(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction minimum(com.google.cloud.firestore.pipeline.expressions.Expression);
     method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction minimum(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction sum(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction sum(com.google.cloud.firestore.pipeline.expressions.Expression);
     method public static com.google.cloud.firestore.pipeline.expressions.AggregateFunction sum(String);
   }
 
@@ -992,15 +993,15 @@ package com.google.cloud.firestore.pipeline.expressions {
     method public com.google.cloud.firestore.pipeline.expressions.AggregateFunction getExpr();
   }
 
-  public final class AliasedExpr<T extends com.google.cloud.firestore.pipeline.expressions.Expr> extends com.google.cloud.firestore.pipeline.expressions.Expr implements com.google.cloud.firestore.pipeline.expressions.Selectable {
+  public final class AliasedExpression<T extends com.google.cloud.firestore.pipeline.expressions.Expression> extends com.google.cloud.firestore.pipeline.expressions.Expression implements com.google.cloud.firestore.pipeline.expressions.Selectable {
     method public String getAlias();
     method public T getExpr();
   }
 
-  public class BooleanExpr extends com.google.cloud.firestore.pipeline.expressions.FunctionExpr {
+  public class BooleanExpression extends com.google.cloud.firestore.pipeline.expressions.FunctionExpression {
   }
 
-  public final class Constant extends com.google.cloud.firestore.pipeline.expressions.Expr {
+  public final class Constant extends com.google.cloud.firestore.pipeline.expressions.Expression {
     method public static com.google.cloud.firestore.pipeline.expressions.Constant nullValue();
     method public static com.google.cloud.firestore.pipeline.expressions.Constant of(Boolean);
     method public static com.google.cloud.firestore.pipeline.expressions.Constant of(byte[]);
@@ -1018,350 +1019,347 @@ package com.google.cloud.firestore.pipeline.expressions {
     method public static com.google.cloud.firestore.pipeline.expressions.Constant vector(double[]);
   }
 
-  public abstract class Expr {
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr abs();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr abs(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr abs(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr add(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr add(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr add(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr add(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr add(String, Number);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr and(com.google.cloud.firestore.pipeline.expressions.BooleanExpr, com.google.cloud.firestore.pipeline.expressions.BooleanExpr...);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr array(List<Object>);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr array(Object...);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayConcat(com.google.cloud.firestore.pipeline.expressions.Expr, Object...);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr arrayConcat(com.google.cloud.firestore.pipeline.expressions.Expr...);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayConcat(String, Object...);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContains(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContains(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContains(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContains(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContains(String, Object);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAll(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAll(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAll(com.google.cloud.firestore.pipeline.expressions.Expr, List<Object>);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAll(List<Object>);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAll(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAll(String, List<Object>);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAny(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAny(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAny(com.google.cloud.firestore.pipeline.expressions.Expr, List<Object>);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAny(List<Object>);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAny(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr arrayContainsAny(String, List<Object>);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr arrayGet(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayGet(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayGet(com.google.cloud.firestore.pipeline.expressions.Expr, int);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr arrayGet(int);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayGet(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayGet(String, int);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr arrayLength();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayLength(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayLength(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr arrayReverse();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayReverse(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr arrayReverse(String);
+  public abstract class Expression {
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression abs();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression abs(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression abs(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression add(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression add(com.google.cloud.firestore.pipeline.expressions.Expression, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression add(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression add(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression add(String, Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression and(com.google.cloud.firestore.pipeline.expressions.BooleanExpression, com.google.cloud.firestore.pipeline.expressions.BooleanExpression...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression array(List<Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression array(Object...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression arrayConcat(com.google.cloud.firestore.pipeline.expressions.Expression, Object...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression arrayConcat(com.google.cloud.firestore.pipeline.expressions.Expression...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression arrayConcat(String, Object...);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContains(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContains(com.google.cloud.firestore.pipeline.expressions.Expression, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContains(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContains(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContains(String, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContainsAll(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContainsAll(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContainsAll(com.google.cloud.firestore.pipeline.expressions.Expression, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContainsAll(List<Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContainsAll(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContainsAll(String, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContainsAny(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContainsAny(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContainsAny(com.google.cloud.firestore.pipeline.expressions.Expression, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContainsAny(List<Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContainsAny(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression arrayContainsAny(String, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression arrayGet(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression arrayGet(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression arrayGet(com.google.cloud.firestore.pipeline.expressions.Expression, int);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression arrayGet(int);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression arrayGet(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression arrayGet(String, int);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression arrayLength();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression arrayLength(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression arrayLength(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression arrayReverse();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression arrayReverse(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression arrayReverse(String);
     method public com.google.cloud.firestore.pipeline.expressions.Selectable as(String);
     method public final com.google.cloud.firestore.pipeline.expressions.Ordering ascending();
-    method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction avg();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr blob(byte[]);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr byteLength();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr byteLength(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr byteLength(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr ceil();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr ceil(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr ceil(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr charLength();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr charLength(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr charLength(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr collectionId();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr collectionId(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr collectionId(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr cond(com.google.cloud.firestore.pipeline.expressions.BooleanExpr, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr cond(com.google.cloud.firestore.pipeline.expressions.BooleanExpr, Object, Object);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr cond(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr cond(Object, Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr constant(Boolean);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(byte[]);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(com.google.cloud.firestore.Blob);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(com.google.cloud.firestore.DocumentReference);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(com.google.cloud.firestore.GeoPoint);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(com.google.cloud.firestore.VectorValue);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(Date);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(Number);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr constant(Timestamp);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr cosineDistance(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr cosineDistance(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr cosineDistance(com.google.cloud.firestore.pipeline.expressions.Expr, double[]);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr cosineDistance(double[]);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr cosineDistance(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr cosineDistance(String, double[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction average();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression blob(byte[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression byteLength();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression byteLength(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression byteLength(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression ceil();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression ceil(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression ceil(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression charLength();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression charLength(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression charLength(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression collectionId();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression collectionId(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression collectionId(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression conditional(com.google.cloud.firestore.pipeline.expressions.BooleanExpression, com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression conditional(com.google.cloud.firestore.pipeline.expressions.BooleanExpression, Object, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression conditional(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression conditional(Object, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression constant(Boolean);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression constant(byte[]);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression constant(com.google.cloud.firestore.Blob);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression constant(com.google.cloud.firestore.DocumentReference);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression constant(com.google.cloud.firestore.GeoPoint);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression constant(com.google.cloud.firestore.VectorValue);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression constant(Date);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression constant(Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression constant(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression constant(Timestamp);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression cosineDistance(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression cosineDistance(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression cosineDistance(com.google.cloud.firestore.pipeline.expressions.Expression, double[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression cosineDistance(double[]);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression cosineDistance(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression cosineDistance(String, double[]);
     method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction count();
     method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction countDistinct();
     method public final com.google.cloud.firestore.pipeline.expressions.Ordering descending();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr divide(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr divide(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr divide(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr divide(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr divide(String, Number);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr documentId();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr documentId(com.google.cloud.firestore.DocumentReference);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr documentId(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr documentId(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr dotProduct(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr dotProduct(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr dotProduct(com.google.cloud.firestore.pipeline.expressions.Expr, double[]);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr dotProduct(double[]);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr dotProduct(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr dotProduct(String, double[]);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr endsWith(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr endsWith(com.google.cloud.firestore.pipeline.expressions.Expr, String);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr endsWith(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr endsWith(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr endsWith(String, String);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eq(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eq(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr eq(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eq(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eq(String, Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eqAny(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eqAny(com.google.cloud.firestore.pipeline.expressions.Expr, List<Object>);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr eqAny(List<Object>);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eqAny(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr eqAny(String, List<Object>);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr euclideanDistance(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr euclideanDistance(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr euclideanDistance(com.google.cloud.firestore.pipeline.expressions.Expr, double[]);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr euclideanDistance(double[]);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr euclideanDistance(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr euclideanDistance(String, double[]);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr exists();
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr exists(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr exists(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr exp();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr exp(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr exp(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression divide(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression divide(com.google.cloud.firestore.pipeline.expressions.Expression, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression divide(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression divide(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression divide(String, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression documentId();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression documentId(com.google.cloud.firestore.DocumentReference);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression documentId(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression documentId(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression dotProduct(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression dotProduct(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression dotProduct(com.google.cloud.firestore.pipeline.expressions.Expression, double[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression dotProduct(double[]);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression dotProduct(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression dotProduct(String, double[]);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression endsWith(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression endsWith(com.google.cloud.firestore.pipeline.expressions.Expression, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression endsWith(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression endsWith(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression endsWith(String, String);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression equal(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression equal(com.google.cloud.firestore.pipeline.expressions.Expression, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression equal(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression equal(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression equal(String, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression equalAny(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression equalAny(com.google.cloud.firestore.pipeline.expressions.Expression, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression equalAny(List<Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression equalAny(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression equalAny(String, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression euclideanDistance(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression euclideanDistance(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression euclideanDistance(com.google.cloud.firestore.pipeline.expressions.Expression, double[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression euclideanDistance(double[]);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression euclideanDistance(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression euclideanDistance(String, double[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression exists();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression exists(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression exists(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression exp();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression exp(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression exp(String);
     method public static com.google.cloud.firestore.pipeline.expressions.Field field(com.google.cloud.firestore.FieldPath);
     method public static com.google.cloud.firestore.pipeline.expressions.Field field(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr floor();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr floor(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr floor(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr generic(String, com.google.cloud.firestore.pipeline.expressions.Expr...);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gt(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gt(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr gt(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gt(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gt(String, Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gte(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gte(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr gte(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gte(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr gte(String, Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr ifError(com.google.cloud.firestore.pipeline.expressions.BooleanExpr, com.google.cloud.firestore.pipeline.expressions.BooleanExpr);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr ifError(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr ifError(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr ifError(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr ifError(Object);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr isAbsent();
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isAbsent(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isAbsent(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr isError();
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isError(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNaN();
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNaN(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNaN(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNotNan();
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNotNan(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNotNan(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNotNull();
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNotNull(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNotNull(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNull();
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNull(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr isNull(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr length();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr length(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr length(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr like(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr like(com.google.cloud.firestore.pipeline.expressions.Expr, String);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr like(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr like(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr like(String, String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr ln();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr ln(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr ln(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr log(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr log(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr log(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr log(Number);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr log(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr log(String, Number);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr log10();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr log10(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr log10(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr logicalMaximum(com.google.cloud.firestore.pipeline.expressions.Expr, Object...);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr logicalMaximum(Object...);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr logicalMaximum(String, Object...);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr logicalMinimum(com.google.cloud.firestore.pipeline.expressions.Expr, Object...);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr logicalMinimum(Object...);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr logicalMinimum(String, Object...);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lt(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lt(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr lt(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lt(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lt(String, Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lte(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lte(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr lte(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lte(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr lte(String, Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr map(Map<String,Object>);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapGet(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapGet(com.google.cloud.firestore.pipeline.expressions.Expr, String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr mapGet(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapGet(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapGet(String, String);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapMerge(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapMerge(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr...);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr mapMerge(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr...);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapMerge(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapMerge(String, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr...);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr mapRemove(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapRemove(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapRemove(com.google.cloud.firestore.pipeline.expressions.Expr, String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr mapRemove(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapRemove(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mapRemove(String, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression floor();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression floor(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression floor(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression generic(String, com.google.cloud.firestore.pipeline.expressions.Expression...);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression greaterThan(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression greaterThan(com.google.cloud.firestore.pipeline.expressions.Expression, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression greaterThan(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression greaterThan(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression greaterThan(String, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression greaterThanOrEqual(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression greaterThanOrEqual(com.google.cloud.firestore.pipeline.expressions.Expression, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression greaterThanOrEqual(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression greaterThanOrEqual(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression greaterThanOrEqual(String, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression ifError(com.google.cloud.firestore.pipeline.expressions.BooleanExpression, com.google.cloud.firestore.pipeline.expressions.BooleanExpression);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression ifError(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression ifError(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression ifError(com.google.cloud.firestore.pipeline.expressions.Expression, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression ifError(Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression isAbsent();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression isAbsent(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression isAbsent(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression isError();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression isError(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression isNaN();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression isNaN(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression isNaN(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression isNotNaN();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression isNotNaN(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression isNotNaN(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression isNotNull();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression isNotNull(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression isNotNull(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression isNull();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression isNull(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression isNull(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression length();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression length(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression length(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression lessThan(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression lessThan(com.google.cloud.firestore.pipeline.expressions.Expression, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression lessThan(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression lessThan(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression lessThan(String, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression lessThanOrEqual(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression lessThanOrEqual(com.google.cloud.firestore.pipeline.expressions.Expression, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression lessThanOrEqual(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression lessThanOrEqual(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression lessThanOrEqual(String, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression like(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression like(com.google.cloud.firestore.pipeline.expressions.Expression, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression like(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression like(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression like(String, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression ln();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression ln(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression ln(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression log(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression log(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression log(com.google.cloud.firestore.pipeline.expressions.Expression, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression log(Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression log(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression log(String, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression log10();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression log10(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression log10(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression logicalMaximum(com.google.cloud.firestore.pipeline.expressions.Expression, Object...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression logicalMaximum(Object...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression logicalMaximum(String, Object...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression logicalMinimum(com.google.cloud.firestore.pipeline.expressions.Expression, Object...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression logicalMinimum(Object...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression logicalMinimum(String, Object...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression map(Map<String,Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mapGet(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mapGet(com.google.cloud.firestore.pipeline.expressions.Expression, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression mapGet(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mapGet(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mapGet(String, String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mapMerge(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mapMerge(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression mapMerge(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mapMerge(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mapMerge(String, com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression mapRemove(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mapRemove(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mapRemove(com.google.cloud.firestore.pipeline.expressions.Expression, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression mapRemove(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mapRemove(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mapRemove(String, String);
     method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction maximum();
     method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction minimum();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mod(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mod(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr mod(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mod(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr mod(String, Number);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr multiply(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr multiply(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr multiply(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr multiply(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr multiply(String, Number);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr neq(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr neq(com.google.cloud.firestore.pipeline.expressions.Expr, Object);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr neq(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr neq(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr neq(String, Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr not(com.google.cloud.firestore.pipeline.expressions.BooleanExpr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr notEqAny(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr notEqAny(com.google.cloud.firestore.pipeline.expressions.Expr, List<Object>);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr notEqAny(List<Object>);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr notEqAny(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr notEqAny(String, List<Object>);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr nullValue();
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr or(com.google.cloud.firestore.pipeline.expressions.BooleanExpr, com.google.cloud.firestore.pipeline.expressions.BooleanExpr...);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr pow(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr pow(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr pow(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr pow(Number);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr pow(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr pow(String, Number);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr rand();
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexContains(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexContains(com.google.cloud.firestore.pipeline.expressions.Expr, String);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexContains(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexContains(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexContains(String, String);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexMatch(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexMatch(com.google.cloud.firestore.pipeline.expressions.Expr, String);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexMatch(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexMatch(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr regexMatch(String, String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr round();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr round(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr round(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr roundToPrecision(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr roundToPrecision(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr roundToPrecision(com.google.cloud.firestore.pipeline.expressions.Expr, int);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr roundToPrecision(int);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr roundToPrecision(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr roundToPrecision(String, int);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr sqrt();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr sqrt(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr sqrt(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr startsWith(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr startsWith(com.google.cloud.firestore.pipeline.expressions.Expr, String);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr startsWith(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr startsWith(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr startsWith(String, String);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr strConcat(com.google.cloud.firestore.pipeline.expressions.Expr, Object...);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr strConcat(com.google.cloud.firestore.pipeline.expressions.Expr...);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr strConcat(String, Object...);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr strConcat(String...);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr strContains(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr strContains(com.google.cloud.firestore.pipeline.expressions.Expr, String);
-    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpr strContains(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr strContains(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr strContains(String, String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr strReverse();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr strReverse(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr strReverse(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr substring(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr substring(Object, Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr substring(String, int, int);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr subtract(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr subtract(com.google.cloud.firestore.pipeline.expressions.Expr, Number);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr subtract(Object);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr subtract(String, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr subtract(String, Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mod(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mod(com.google.cloud.firestore.pipeline.expressions.Expression, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression mod(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mod(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression mod(String, Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression multiply(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression multiply(com.google.cloud.firestore.pipeline.expressions.Expression, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression multiply(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression multiply(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression multiply(String, Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression not(com.google.cloud.firestore.pipeline.expressions.BooleanExpression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression notEqual(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression notEqual(com.google.cloud.firestore.pipeline.expressions.Expression, Object);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression notEqual(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression notEqual(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression notEqual(String, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression notEqualAny(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression notEqualAny(com.google.cloud.firestore.pipeline.expressions.Expression, List<Object>);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression notEqualAny(List<Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression notEqualAny(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression notEqualAny(String, List<Object>);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression nullValue();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression or(com.google.cloud.firestore.pipeline.expressions.BooleanExpression, com.google.cloud.firestore.pipeline.expressions.BooleanExpression...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression pow(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression pow(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression pow(com.google.cloud.firestore.pipeline.expressions.Expression, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression pow(Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression pow(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression pow(String, Number);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression rand();
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression regexContains(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression regexContains(com.google.cloud.firestore.pipeline.expressions.Expression, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression regexContains(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression regexContains(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression regexContains(String, String);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression regexMatch(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression regexMatch(com.google.cloud.firestore.pipeline.expressions.Expression, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression regexMatch(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression regexMatch(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression regexMatch(String, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression round();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression round(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression round(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression roundToPrecision(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression roundToPrecision(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression roundToPrecision(com.google.cloud.firestore.pipeline.expressions.Expression, int);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression roundToPrecision(int);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression roundToPrecision(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression roundToPrecision(String, int);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression sqrt();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression sqrt(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression sqrt(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression startsWith(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression startsWith(com.google.cloud.firestore.pipeline.expressions.Expression, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression startsWith(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression startsWith(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression startsWith(String, String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression stringConcat(com.google.cloud.firestore.pipeline.expressions.Expression, Object...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression stringConcat(com.google.cloud.firestore.pipeline.expressions.Expression...);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression stringConcat(String, Object...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression stringConcat(String...);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression stringContains(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression stringContains(com.google.cloud.firestore.pipeline.expressions.Expression, String);
+    method public final com.google.cloud.firestore.pipeline.expressions.BooleanExpression stringContains(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression stringContains(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression stringContains(String, String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression substring(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression substring(Object, Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression substring(String, int, int);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression subtract(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression subtract(com.google.cloud.firestore.pipeline.expressions.Expression, Number);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression subtract(Object);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression subtract(String, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression subtract(String, Number);
     method public final com.google.cloud.firestore.pipeline.expressions.AggregateFunction sum();
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampAdd(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampAdd(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampAdd(com.google.cloud.firestore.pipeline.expressions.Expr, String, long);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampAdd(String, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampAdd(String, long);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampAdd(String, String, long);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampSub(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampSub(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampSub(com.google.cloud.firestore.pipeline.expressions.Expr, String, long);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampSub(String, com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampSub(String, long);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampSub(String, String, long);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixMicros();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixMicros(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixMicros(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixMillis();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixMillis(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixMillis(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixSeconds();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixSeconds(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr timestampToUnixSeconds(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr toLower();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr toLower(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr toLower(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr toUpper();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr toUpper(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr toUpper(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr trim();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr trim(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr trim(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr unixMicrosToTimestamp();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr unixMicrosToTimestamp(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr unixMicrosToTimestamp(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr unixMillisToTimestamp();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr unixMillisToTimestamp(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr unixMillisToTimestamp(String);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr unixSecondsToTimestamp();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr unixSecondsToTimestamp(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr unixSecondsToTimestamp(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr vector(com.google.cloud.firestore.VectorValue);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr vector(double[]);
-    method public final com.google.cloud.firestore.pipeline.expressions.Expr vectorLength();
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr vectorLength(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Expr vectorLength(String);
-    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpr xor(com.google.cloud.firestore.pipeline.expressions.BooleanExpr, com.google.cloud.firestore.pipeline.expressions.BooleanExpr...);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression timestampAdd(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampAdd(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampAdd(com.google.cloud.firestore.pipeline.expressions.Expression, String, long);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampAdd(String, com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression timestampAdd(String, long);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampAdd(String, String, long);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression timestampSubtract(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampSubtract(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampSubtract(com.google.cloud.firestore.pipeline.expressions.Expression, String, long);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampSubtract(String, com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression timestampSubtract(String, long);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampSubtract(String, String, long);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression timestampToUnixMicros();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampToUnixMicros(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampToUnixMicros(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression timestampToUnixMillis();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampToUnixMillis(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampToUnixMillis(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression timestampToUnixSeconds();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampToUnixSeconds(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression timestampToUnixSeconds(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression toLower();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression toLower(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression toLower(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression toUpper();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression toUpper(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression toUpper(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression trim();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression trim(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression trim(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression unixMicrosToTimestamp();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression unixMicrosToTimestamp(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression unixMicrosToTimestamp(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression unixMillisToTimestamp();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression unixMillisToTimestamp(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression unixMillisToTimestamp(String);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression unixSecondsToTimestamp();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression unixSecondsToTimestamp(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression unixSecondsToTimestamp(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression vector(com.google.cloud.firestore.VectorValue);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression vector(double[]);
+    method public final com.google.cloud.firestore.pipeline.expressions.Expression vectorLength();
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression vectorLength(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Expression vectorLength(String);
+    method public static com.google.cloud.firestore.pipeline.expressions.BooleanExpression xor(com.google.cloud.firestore.pipeline.expressions.BooleanExpression, com.google.cloud.firestore.pipeline.expressions.BooleanExpression...);
   }
 
-  public final class Field extends com.google.cloud.firestore.pipeline.expressions.Expr implements com.google.cloud.firestore.pipeline.expressions.Selectable {
+  public final class Field extends com.google.cloud.firestore.pipeline.expressions.Expression implements com.google.cloud.firestore.pipeline.expressions.Selectable {
     method public boolean equals(Object);
     method public com.google.cloud.firestore.FieldPath getPath();
     method public int hashCode();
@@ -1371,7 +1369,7 @@ package com.google.cloud.firestore.pipeline.expressions {
     field public static final String DOCUMENT_ID = "__name__";
   }
 
-  public class FunctionExpr extends com.google.cloud.firestore.pipeline.expressions.Expr {
+  public class FunctionExpression extends com.google.cloud.firestore.pipeline.expressions.Expression {
     method public boolean equals(Object);
     method public int hashCode();
   }
@@ -1379,14 +1377,14 @@ package com.google.cloud.firestore.pipeline.expressions {
   public final class FunctionUtils {
     ctor public FunctionUtils();
     method public static Value aggregateFunctionToValue(com.google.cloud.firestore.pipeline.expressions.AggregateFunction);
-    method public static Value exprToValue(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static Value exprToValue(com.google.cloud.firestore.pipeline.expressions.Expression);
   }
 
   public final class Ordering {
-    method public static com.google.cloud.firestore.pipeline.expressions.Ordering ascending(com.google.cloud.firestore.pipeline.expressions.Expr);
-    method public static com.google.cloud.firestore.pipeline.expressions.Ordering descending(com.google.cloud.firestore.pipeline.expressions.Expr);
+    method public static com.google.cloud.firestore.pipeline.expressions.Ordering ascending(com.google.cloud.firestore.pipeline.expressions.Expression);
+    method public static com.google.cloud.firestore.pipeline.expressions.Ordering descending(com.google.cloud.firestore.pipeline.expressions.Expression);
     method public com.google.cloud.firestore.pipeline.expressions.Ordering.Direction getDir();
-    method public com.google.cloud.firestore.pipeline.expressions.Expr getExpr();
+    method public com.google.cloud.firestore.pipeline.expressions.Expression getExpr();
     method public Value toProto();
   }
 
@@ -1404,7 +1402,7 @@ package com.google.cloud.firestore.pipeline.expressions {
 package com.google.cloud.firestore.pipeline.stages {
 
   public final class AddFields extends com.google.cloud.firestore.pipeline.stages.Stage {
-    ctor public AddFields(Map<String,com.google.cloud.firestore.pipeline.expressions.Expr>);
+    ctor public AddFields(Map<String,com.google.cloud.firestore.pipeline.expressions.Expression>);
   }
 
   public final class Aggregate extends com.google.cloud.firestore.pipeline.stages.Stage {
@@ -1422,7 +1420,7 @@ package com.google.cloud.firestore.pipeline.stages {
     method public final com.google.cloud.firestore.pipeline.stages.AggregateHints with(String, long);
     method public final com.google.cloud.firestore.pipeline.stages.AggregateHints with(String, String);
     method public com.google.cloud.firestore.pipeline.stages.AggregateHints withForceStreamableEnabled();
-    method public final com.google.cloud.firestore.pipeline.stages.AggregateHints withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateHints withSection(String, com.google.cloud.firestore.pipeline.stages.RawOptions);
   }
 
   public final class AggregateOptions {
@@ -1433,7 +1431,7 @@ package com.google.cloud.firestore.pipeline.stages {
     method public final com.google.cloud.firestore.pipeline.stages.AggregateOptions with(String, long);
     method public final com.google.cloud.firestore.pipeline.stages.AggregateOptions with(String, String);
     method public com.google.cloud.firestore.pipeline.stages.AggregateOptions withHints(com.google.cloud.firestore.pipeline.stages.AggregateHints);
-    method public final com.google.cloud.firestore.pipeline.stages.AggregateOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public final com.google.cloud.firestore.pipeline.stages.AggregateOptions withSection(String, com.google.cloud.firestore.pipeline.stages.RawOptions);
   }
 
   public final class Collection extends com.google.cloud.firestore.pipeline.stages.Stage {
@@ -1454,7 +1452,7 @@ package com.google.cloud.firestore.pipeline.stages {
     method public final com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions with(String, long);
     method public final com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions with(String, String);
     method public com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions withHints(com.google.cloud.firestore.pipeline.stages.CollectionHints);
-    method public final com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions withSection(String, com.google.cloud.firestore.pipeline.stages.RawOptions);
   }
 
   public final class CollectionHints {
@@ -1466,7 +1464,7 @@ package com.google.cloud.firestore.pipeline.stages {
     method public final com.google.cloud.firestore.pipeline.stages.CollectionHints with(String, String);
     method public com.google.cloud.firestore.pipeline.stages.CollectionHints withForceIndex(String);
     method public com.google.cloud.firestore.pipeline.stages.CollectionHints withIgnoreIndexFields(String...);
-    method public final com.google.cloud.firestore.pipeline.stages.CollectionHints withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionHints withSection(String, com.google.cloud.firestore.pipeline.stages.RawOptions);
   }
 
   public final class CollectionOptions {
@@ -1477,7 +1475,7 @@ package com.google.cloud.firestore.pipeline.stages {
     method public final com.google.cloud.firestore.pipeline.stages.CollectionOptions with(String, long);
     method public final com.google.cloud.firestore.pipeline.stages.CollectionOptions with(String, String);
     method public com.google.cloud.firestore.pipeline.stages.CollectionOptions withHints(com.google.cloud.firestore.pipeline.stages.CollectionHints);
-    method public final com.google.cloud.firestore.pipeline.stages.CollectionOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public final com.google.cloud.firestore.pipeline.stages.CollectionOptions withSection(String, com.google.cloud.firestore.pipeline.stages.RawOptions);
   }
 
   public final class Database extends com.google.cloud.firestore.pipeline.stages.Stage {
@@ -1485,7 +1483,7 @@ package com.google.cloud.firestore.pipeline.stages {
   }
 
   public final class Distinct extends com.google.cloud.firestore.pipeline.stages.Stage {
-    ctor public Distinct(Map<String,com.google.cloud.firestore.pipeline.expressions.Expr>);
+    ctor public Distinct(Map<String,com.google.cloud.firestore.pipeline.expressions.Expression>);
   }
 
   public final class Documents extends com.google.cloud.firestore.pipeline.stages.Stage {
@@ -1500,7 +1498,7 @@ package com.google.cloud.firestore.pipeline.stages {
     method public final com.google.cloud.firestore.pipeline.stages.ExplainOptions with(String, long);
     method public final com.google.cloud.firestore.pipeline.stages.ExplainOptions with(String, String);
     method public com.google.cloud.firestore.pipeline.stages.ExplainOptions withExecutionMode(com.google.cloud.firestore.pipeline.stages.ExplainOptions.ExecutionMode);
-    method public final com.google.cloud.firestore.pipeline.stages.ExplainOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public final com.google.cloud.firestore.pipeline.stages.ExplainOptions withSection(String, com.google.cloud.firestore.pipeline.stages.RawOptions);
   }
 
   public static class ExplainOptions.ExecutionMode {
@@ -1510,7 +1508,7 @@ package com.google.cloud.firestore.pipeline.stages {
   }
 
   public final class FindNearest extends com.google.cloud.firestore.pipeline.stages.Stage {
-    ctor public FindNearest(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.VectorValue, com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure, com.google.cloud.firestore.pipeline.stages.FindNearestOptions);
+    ctor public FindNearest(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.VectorValue, com.google.cloud.firestore.pipeline.stages.FindNearest.DistanceMeasure, com.google.cloud.firestore.pipeline.stages.FindNearestOptions);
   }
 
   public static final class FindNearest.DistanceMeasure {
@@ -1530,27 +1528,27 @@ package com.google.cloud.firestore.pipeline.stages {
     method public com.google.cloud.firestore.pipeline.stages.FindNearestOptions withDistanceField(com.google.cloud.firestore.pipeline.expressions.Field);
     method public com.google.cloud.firestore.pipeline.stages.FindNearestOptions withDistanceField(String);
     method public com.google.cloud.firestore.pipeline.stages.FindNearestOptions withLimit(long);
-    method public final com.google.cloud.firestore.pipeline.stages.FindNearestOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public final com.google.cloud.firestore.pipeline.stages.FindNearestOptions withSection(String, com.google.cloud.firestore.pipeline.stages.RawOptions);
   }
 
   public final class GenericOptions {
     ctor public GenericOptions();
-    method public static com.google.cloud.firestore.pipeline.stages.GenericOptions of(String, boolean);
-    method public static com.google.cloud.firestore.pipeline.stages.GenericOptions of(String, com.google.cloud.firestore.pipeline.expressions.Field);
-    method public static com.google.cloud.firestore.pipeline.stages.GenericOptions of(String, double);
-    method public static com.google.cloud.firestore.pipeline.stages.GenericOptions of(String, long);
-    method public static com.google.cloud.firestore.pipeline.stages.GenericOptions of(String, String);
-    method protected com.google.cloud.firestore.pipeline.stages.GenericOptions self(com.google.cloud.firestore.pipeline.stages.InternalOptions);
-    method public final com.google.cloud.firestore.pipeline.stages.GenericOptions with(String, boolean);
-    method public final com.google.cloud.firestore.pipeline.stages.GenericOptions with(String, com.google.cloud.firestore.pipeline.expressions.Field);
-    method public final com.google.cloud.firestore.pipeline.stages.GenericOptions with(String, double);
-    method public final com.google.cloud.firestore.pipeline.stages.GenericOptions with(String, long);
-    method public final com.google.cloud.firestore.pipeline.stages.GenericOptions with(String, String);
-    method public final com.google.cloud.firestore.pipeline.stages.GenericOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public static com.google.cloud.firestore.pipeline.stages.RawOptions of(String, boolean);
+    method public static com.google.cloud.firestore.pipeline.stages.RawOptions of(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public static com.google.cloud.firestore.pipeline.stages.RawOptions of(String, double);
+    method public static com.google.cloud.firestore.pipeline.stages.RawOptions of(String, long);
+    method public static com.google.cloud.firestore.pipeline.stages.RawOptions of(String, String);
+    method protected com.google.cloud.firestore.pipeline.stages.RawOptions self(com.google.cloud.firestore.pipeline.stages.InternalOptions);
+    method public final com.google.cloud.firestore.pipeline.stages.RawOptions with(String, boolean);
+    method public final com.google.cloud.firestore.pipeline.stages.RawOptions with(String, com.google.cloud.firestore.pipeline.expressions.Field);
+    method public final com.google.cloud.firestore.pipeline.stages.RawOptions with(String, double);
+    method public final com.google.cloud.firestore.pipeline.stages.RawOptions with(String, long);
+    method public final com.google.cloud.firestore.pipeline.stages.RawOptions with(String, String);
+    method public final com.google.cloud.firestore.pipeline.stages.RawOptions withSection(String, com.google.cloud.firestore.pipeline.stages.RawOptions);
   }
 
   public final class GenericStage extends com.google.cloud.firestore.pipeline.stages.Stage {
-    ctor public GenericStage(String, List<Object>, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    ctor public GenericStage(String, List<Object>, com.google.cloud.firestore.pipeline.stages.RawOptions);
   }
 
   public final class Limit extends com.google.cloud.firestore.pipeline.stages.Stage {
@@ -1570,7 +1568,7 @@ package com.google.cloud.firestore.pipeline.stages {
     method public final com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions with(String, String);
     method public com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions withExplainOptions(com.google.cloud.firestore.pipeline.stages.ExplainOptions);
     method public com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions withIndexMode(String);
-    method public final com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public final com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions withSection(String, com.google.cloud.firestore.pipeline.stages.RawOptions);
   }
 
   public final class RemoveFields extends com.google.cloud.firestore.pipeline.stages.Stage {
@@ -1578,8 +1576,8 @@ package com.google.cloud.firestore.pipeline.stages {
   }
 
   public class ReplaceWith extends com.google.cloud.firestore.pipeline.stages.Stage {
-    ctor public ReplaceWith(com.google.cloud.firestore.pipeline.expressions.Expr);
-    ctor public ReplaceWith(com.google.cloud.firestore.pipeline.expressions.Expr, com.google.cloud.firestore.pipeline.stages.ReplaceWith.Mode);
+    ctor public ReplaceWith(com.google.cloud.firestore.pipeline.expressions.Expression);
+    ctor public ReplaceWith(com.google.cloud.firestore.pipeline.expressions.Expression, com.google.cloud.firestore.pipeline.stages.ReplaceWith.Mode);
   }
 
   public enum ReplaceWith.Mode {
@@ -1608,11 +1606,11 @@ package com.google.cloud.firestore.pipeline.stages {
     method public final com.google.cloud.firestore.pipeline.stages.SampleOptions with(String, double);
     method public final com.google.cloud.firestore.pipeline.stages.SampleOptions with(String, long);
     method public final com.google.cloud.firestore.pipeline.stages.SampleOptions with(String, String);
-    method public final com.google.cloud.firestore.pipeline.stages.SampleOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public final com.google.cloud.firestore.pipeline.stages.SampleOptions withSection(String, com.google.cloud.firestore.pipeline.stages.RawOptions);
   }
 
   public final class Select extends com.google.cloud.firestore.pipeline.stages.Stage {
-    ctor public Select(Map<String,com.google.cloud.firestore.pipeline.expressions.Expr>);
+    ctor public Select(Map<String,com.google.cloud.firestore.pipeline.expressions.Expression>);
   }
 
   public final class Sort extends com.google.cloud.firestore.pipeline.stages.Stage {
@@ -1647,11 +1645,11 @@ package com.google.cloud.firestore.pipeline.stages {
     method public final com.google.cloud.firestore.pipeline.stages.UnnestOptions with(String, long);
     method public final com.google.cloud.firestore.pipeline.stages.UnnestOptions with(String, String);
     method public com.google.cloud.firestore.pipeline.stages.UnnestOptions withIndexField(String);
-    method public final com.google.cloud.firestore.pipeline.stages.UnnestOptions withSection(String, com.google.cloud.firestore.pipeline.stages.GenericOptions);
+    method public final com.google.cloud.firestore.pipeline.stages.UnnestOptions withSection(String, com.google.cloud.firestore.pipeline.stages.RawOptions);
   }
 
   public final class Where extends com.google.cloud.firestore.pipeline.stages.Stage {
-    ctor public Where(com.google.cloud.firestore.pipeline.expressions.BooleanExpr);
+    ctor public Where(com.google.cloud.firestore.pipeline.expressions.BooleanExpression);
   }
 
 }

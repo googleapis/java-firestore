@@ -17,12 +17,11 @@
 package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.countAll;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.and;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.arrayContainsAny;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.eqAny;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.field;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.not;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.or;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.and;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayContainsAny;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.field;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.not;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.or;
 import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.aggregateFunctionToValue;
 import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.exprToValue;
 
@@ -34,9 +33,9 @@ import com.google.cloud.firestore.Query.LimitType;
 import com.google.cloud.firestore.Query.UnaryFilterInternal;
 import com.google.cloud.firestore.pipeline.expressions.AggregateFunction;
 import com.google.cloud.firestore.pipeline.expressions.AliasedAggregate;
-import com.google.cloud.firestore.pipeline.expressions.AliasedExpr;
-import com.google.cloud.firestore.pipeline.expressions.BooleanExpr;
-import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.AliasedExpression;
+import com.google.cloud.firestore.pipeline.expressions.BooleanExpression;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.common.collect.Lists;
@@ -56,7 +55,7 @@ public class PipelineUtils {
   }
 
   @InternalApi
-  public static Value encodeValue(Expr value) {
+  public static Value encodeValue(Expression value) {
     return exprToValue(value);
   }
 
@@ -93,35 +92,36 @@ public class PipelineUtils {
   }
 
   @InternalApi
-  static BooleanExpr toPipelineBooleanExpr(FilterInternal f) {
+  static BooleanExpression toPipelineBooleanExpr(FilterInternal f) {
     if (f instanceof ComparisonFilterInternal) {
       ComparisonFilterInternal comparisonFilter = (ComparisonFilterInternal) f;
       Field field = Field.ofServerPath(comparisonFilter.fieldReference.getFieldPath());
       Value value = comparisonFilter.value;
       switch (comparisonFilter.operator) {
         case LESS_THAN:
-          return and(field.exists(), field.lt(value));
+          return and(field.exists(), field.lessThan(value));
         case LESS_THAN_OR_EQUAL:
-          return and(field.exists(), field.lte(value));
+          return and(field.exists(), field.lessThanOrEqual(value));
         case GREATER_THAN:
-          return and(field.exists(), field.gt(value));
+          return and(field.exists(), field.greaterThan(value));
         case GREATER_THAN_OR_EQUAL:
-          return and(field.exists(), field.gte(value));
+          return and(field.exists(), field.greaterThanOrEqual(value));
         case EQUAL:
-          return and(field.exists(), field.eq(value));
+          return and(field.exists(), field.equal(value));
         case NOT_EQUAL:
-          return and(field.exists(), not(field.eq(value)));
+          return and(field.exists(), not(field.equal(value)));
         case ARRAY_CONTAINS:
           return and(field.exists(), field.arrayContains(value));
         case IN:
           List<Value> valuesList = value.getArrayValue().getValuesList();
-          return and(field.exists(), eqAny(field, Lists.newArrayList(valuesList)));
+          return and(field.exists(), Expression.equalAny(field, Lists.newArrayList(valuesList)));
         case ARRAY_CONTAINS_ANY:
           List<Value> valuesListAny = value.getArrayValue().getValuesList();
           return and(field.exists(), arrayContainsAny(field, Lists.newArrayList(valuesListAny)));
         case NOT_IN:
           List<Value> notInValues = value.getArrayValue().getValuesList();
-          return and(field.exists(), not(eqAny(field, Lists.newArrayList(notInValues))));
+          return and(
+              field.exists(), not(Expression.equalAny(field, Lists.newArrayList(notInValues))));
         default:
           // Handle OPERATOR_UNSPECIFIED and UNRECOGNIZED cases as needed
           throw new IllegalArgumentException("Unsupported operator: " + comparisonFilter.operator);
@@ -130,21 +130,21 @@ public class PipelineUtils {
       CompositeFilterInternal compositeFilter = (CompositeFilterInternal) f;
       switch (compositeFilter.getOperator()) {
         case AND:
-          List<BooleanExpr> conditions =
+          List<BooleanExpression> conditions =
               compositeFilter.getFilters().stream()
                   .map(PipelineUtils::toPipelineBooleanExpr)
                   .collect(Collectors.toList());
           return and(
               conditions.get(0),
-              conditions.subList(1, conditions.size()).toArray(new BooleanExpr[0]));
+              conditions.subList(1, conditions.size()).toArray(new BooleanExpression[0]));
         case OR:
-          List<BooleanExpr> orConditions =
+          List<BooleanExpression> orConditions =
               compositeFilter.getFilters().stream()
                   .map(PipelineUtils::toPipelineBooleanExpr)
                   .collect(Collectors.toList());
           return or(
               orConditions.get(0),
-              orConditions.subList(1, orConditions.size()).toArray(new BooleanExpr[0]));
+              orConditions.subList(1, orConditions.size()).toArray(new BooleanExpression[0]));
         default:
           // Handle OPERATOR_UNSPECIFIED and UNRECOGNIZED cases as needed
           throw new IllegalArgumentException(
@@ -196,7 +196,7 @@ public class PipelineUtils {
       case "count":
         return countAll().as(f.getAlias());
       case "average":
-        return Field.ofServerPath(fieldPath).avg().as(f.getAlias());
+        return Field.ofServerPath(fieldPath).average().as(f.getAlias());
       default:
         // Handle the 'else' case appropriately in your Java code
         throw new IllegalArgumentException("Unsupported operator: " + operator);
@@ -204,7 +204,7 @@ public class PipelineUtils {
   }
 
   @InternalApi
-  static BooleanExpr toPipelineExistsExpr(AggregateField f) {
+  static BooleanExpression toPipelineExistsExpr(AggregateField f) {
     String fieldPath = f.getFieldPath();
 
     if (fieldPath.isEmpty()) {
@@ -214,14 +214,14 @@ public class PipelineUtils {
   }
 
   @InternalApi
-  public static Map<String, Expr> selectablesToMap(Selectable... selectables) {
-    Map<String, Expr> projMap = new HashMap<>();
+  public static Map<String, Expression> selectablesToMap(Selectable... selectables) {
+    Map<String, Expression> projMap = new HashMap<>();
     for (Selectable proj : selectables) {
       if (proj instanceof Field) {
         Field fieldProj = (Field) proj;
         projMap.put(fieldProj.getPath().getEncodedPath(), fieldProj);
-      } else if (proj instanceof AliasedExpr) {
-        AliasedExpr aliasedExpr = (AliasedExpr) proj;
+      } else if (proj instanceof AliasedExpression) {
+        AliasedExpression aliasedExpr = (AliasedExpression) proj;
         projMap.put(aliasedExpr.getAlias(), aliasedExpr.getExpr());
       }
     }
@@ -229,8 +229,8 @@ public class PipelineUtils {
   }
 
   @InternalApi
-  public static Map<String, Expr> fieldNamesToMap(String... fields) {
-    Map<String, Expr> projMap = new HashMap<>();
+  public static Map<String, Expression> fieldNamesToMap(String... fields) {
+    Map<String, Expression> projMap = new HashMap<>();
     for (String field : fields) {
       projMap.put(field, field(field));
     }

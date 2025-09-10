@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-import static com.google.cloud.firestore.pipeline.expressions.Expr.field;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.field;
 
 import com.google.api.core.BetaApi;
 import com.google.cloud.firestore.pipeline.expressions.Field;

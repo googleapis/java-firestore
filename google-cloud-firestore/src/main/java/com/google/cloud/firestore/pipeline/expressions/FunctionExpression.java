@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @BetaApi
-public class FunctionExpr extends Expr {
+public class FunctionExpression extends Expression {
   private final String name;
-  private final List<Expr> params;
+  private final List<Expression> params;
 
-  FunctionExpr(String name, List<? extends Expr> params) {
+  FunctionExpression(String name, List<? extends Expression> params) {
     this.name = name;
     this.params = Collections.unmodifiableList(params);
   }
@@ -52,7 +52,7 @@ public class FunctionExpr extends Expr {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    FunctionExpr that = (FunctionExpr) o;
+    FunctionExpression that = (FunctionExpression) o;
     return Objects.equal(name, that.name) && Objects.equal(params, that.params);
   }
 

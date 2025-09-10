@@ -21,7 +21,7 @@ import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.VectorValue;
-import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Value;
 
@@ -49,13 +49,13 @@ public final class FindNearest extends Stage {
     }
   }
 
-  private final Expr property;
+  private final Expression property;
   private final VectorValue vector;
   private final DistanceMeasure distanceMeasure;
 
   @InternalApi
   public FindNearest(
-      Expr property,
+      Expression property,
       VectorValue vector,
       DistanceMeasure distanceMeasure,
       FindNearestOptions options) {

@@ -18,65 +18,60 @@ package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.it.ITQueryTest.map;
 import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
-import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.avg;
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.count;
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.countAll;
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.countDistinct;
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.countIf;
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.sum;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.add;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.and;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.array;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.arrayContains;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.arrayContainsAll;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.arrayContainsAny;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.arrayGet;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.arrayReverse;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.ceil;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.cond;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.constant;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.cosineDistance;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.dotProduct;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.endsWith;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.eq;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.eqAny;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.euclideanDistance;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.exp;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.field;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.floor;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.gt;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.ln;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.log;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.logicalMaximum;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.logicalMinimum;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.lt;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.mapMerge;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.mapRemove;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.neq;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.notEqAny;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.nullValue;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.or;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.pow;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.rand;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.regexMatch;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.round;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.sqrt;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.startsWith;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.strConcat;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.strContains;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.substr;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.subtract;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.timestampAdd;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.timestampSub;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.timestampToUnixMicros;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.timestampToUnixMillis;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.timestampToUnixSeconds;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.unixMicrosToTimestamp;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.unixMillisToTimestamp;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.unixSecondsToTimestamp;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.vector;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.vectorLength;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.xor;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.add;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.and;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.array;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayContains;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayContainsAll;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayContainsAny;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayGet;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayReverse;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.ceil;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.conditional;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.constant;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.cosineDistance;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.dotProduct;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.endsWith;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.equal;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.euclideanDistance;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.exp;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.field;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.floor;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.greaterThan;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.lessThan;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.ln;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.log;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.logicalMaximum;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.logicalMinimum;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.mapMerge;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.mapRemove;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.notEqual;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.nullValue;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.or;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.pow;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.rand;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.regexMatch;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.round;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.sqrt;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.startsWith;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.stringConcat;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.substring;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.subtract;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampAdd;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampToUnixMicros;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampToUnixMillis;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampToUnixSeconds;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.unixMicrosToTimestamp;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.unixMillisToTimestamp;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.unixSecondsToTimestamp;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.vector;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.vectorLength;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.xor;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assume.assumeFalse;
@@ -92,9 +87,8 @@ import com.google.cloud.firestore.GeoPoint;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.PipelineResult;
-import com.google.cloud.firestore.PipelineSnapshot;
-import com.google.cloud.firestore.pipeline.expressions.Constant;
-import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.AggregateFunction;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.cloud.firestore.pipeline.stages.AggregateHints;
@@ -104,8 +98,9 @@ import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
 import com.google.cloud.firestore.pipeline.stages.ExplainOptions;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
-import com.google.cloud.firestore.pipeline.stages.GenericOptions;
 import com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions;
+import com.google.cloud.firestore.pipeline.stages.RawOptions;
+import com.google.cloud.firestore.pipeline.stages.RawStage;
 import com.google.cloud.firestore.pipeline.stages.Sample;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
 import com.google.common.collect.ImmutableList;
@@ -366,8 +361,8 @@ public class ITPipelineTest extends ITBaseTest {
                 constant(refDate).as("date"),
                 constant(refGeoPoint).as("geoPoint"),
                 constant(com.google.cloud.firestore.Blob.fromBytes(refBytes)).as("bytes"),
-                Constant.vector(refVector).as("vector"),
-                Expr.map(refMap).as("map"),
+                vector(refVector).as("vector"),
+                Expression.map(refMap).as("map"),
                 array(refArray).as("array"));
 
     List<PipelineResult> results = pipeline.execute().get().getResults();
@@ -398,7 +393,7 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void testResultMetadata() throws Exception {
     Pipeline pipeline = firestore.pipeline().collection(collection.getPath());
-    PipelineSnapshot snapshot = pipeline.execute().get();
+    Pipeline.Snapshot snapshot = pipeline.execute().get();
     assertThat(snapshot.getExecutionTime()).isNotNull();
 
     for (PipelineResult result : snapshot.getResults()) {
@@ -407,7 +402,8 @@ public class ITPipelineTest extends ITBaseTest {
     }
 
     collection.document("book1").update("rating", 5.0).get();
-    snapshot = pipeline.where(eq("title", "The Hitchhiker's Guide to the Galaxy")).execute().get();
+    snapshot =
+        pipeline.where(equal("title", "The Hitchhiker's Guide to the Galaxy")).execute().get();
     for (PipelineResult result : snapshot.getResults()) {
       assertThat(result.getCreateTime()).isLessThan(result.getUpdateTime());
     }
@@ -417,9 +413,9 @@ public class ITPipelineTest extends ITBaseTest {
   public void testResultIsEqual() throws Exception {
     Pipeline pipeline =
         firestore.pipeline().collection(collection.getPath()).sort(field("title").ascending());
-    PipelineSnapshot snapshot1 = pipeline.limit(1).execute().get();
-    PipelineSnapshot snapshot2 = pipeline.limit(1).execute().get();
-    PipelineSnapshot snapshot3 = pipeline.offset(1).limit(1).execute().get();
+    Pipeline.Snapshot snapshot1 = pipeline.limit(1).execute().get();
+    Pipeline.Snapshot snapshot2 = pipeline.limit(1).execute().get();
+    Pipeline.Snapshot snapshot3 = pipeline.offset(1).limit(1).execute().get();
 
     assertThat(snapshot1.getResults()).hasSize(1);
     assertThat(snapshot2.getResults()).hasSize(1);
@@ -431,7 +427,7 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void testEmptyResultMetadata() throws Exception {
     Pipeline pipeline = firestore.pipeline().collection(collection.getPath()).limit(0);
-    PipelineSnapshot snapshot = pipeline.execute().get();
+    Pipeline.Snapshot snapshot = pipeline.execute().get();
     assertThat(snapshot.getResults()).isEmpty();
     assertThat(snapshot.getExecutionTime()).isNotNull();
     // Ensure execution time is recent, within a tolerance.
@@ -444,7 +440,7 @@ public class ITPipelineTest extends ITBaseTest {
   public void testAggregateResultMetadata() throws Exception {
     Pipeline pipeline =
         firestore.pipeline().collection(collection.getPath()).aggregate(countAll().as("count"));
-    PipelineSnapshot snapshot = pipeline.execute().get();
+    Pipeline.Snapshot snapshot = pipeline.execute().get();
     assertThat(snapshot.getResults()).hasSize(1);
     assertThat(snapshot.getExecutionTime()).isNotNull();
 
@@ -474,10 +470,10 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq("genre", "Science Fiction"))
+            .where(equal("genre", "Science Fiction"))
             .aggregate(
                 countAll().as("count"),
-                avg("rating").as("avg_rating"),
+                AggregateFunction.average("rating").as("avg_rating"),
                 field("rating").maximum().as("max_rating"))
             .execute()
             .get()
@@ -511,7 +507,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .aggregate(countIf(gt(field("rating"), 4.3)).as("count"))
+            .aggregate(countIf(Expression.greaterThan(field("rating"), 4.3)).as("count"))
             .execute()
             .get()
             .getResults();
@@ -526,7 +522,7 @@ public class ITPipelineTest extends ITBaseTest {
           firestore
               .pipeline()
               .createFrom(collection)
-              .where(lt("published", 1900))
+              .where(lessThan("published", 1900))
               .aggregate(Aggregate.withAccumulators().withGroups("genre"));
         });
   }
@@ -537,7 +533,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(lt("published", 1900))
+            .where(lessThan("published", 1900))
             .distinct(field("genre").toLower().as("lower_genre"))
             .execute()
             .get()
@@ -553,10 +549,11 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(lt("published", 1984))
+            .where(lessThan("published", 1984))
             .aggregate(
-                Aggregate.withAccumulators(avg("rating").as("avg_rating")).withGroups("genre"))
-            .where(gt("avg_rating", 4.3))
+                Aggregate.withAccumulators(AggregateFunction.average("rating").as("avg_rating"))
+                    .withGroups("genre"))
+            .where(greaterThan("avg_rating", 4.3))
             .execute()
             .get()
             .getResults();
@@ -623,10 +620,10 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .collection(collection.getPath())
-            .where(field("author").neq("Timestamp Author"))
+            .where(field("author").notEqual("Timestamp Author"))
             .addFields(
-                strConcat(field("author"), "_", field("title")).as("author_title"),
-                strConcat(field("title"), "_", field("author")).as("title_author"))
+                Expression.stringConcat(field("author"), "_", field("title")).as("author_title"),
+                Expression.stringConcat(field("title"), "_", field("author")).as("title_author"))
             .removeFields("title_author", "tags", "awards", "rating", "title", "embedding", "cost")
             .removeFields(field("published"), field("genre"), field("nestedField"))
             .sort(field("author_title").ascending())
@@ -679,7 +676,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(and(gt("rating", 4.5), eq("genre", "Science Fiction")))
+            .where(and(greaterThan("rating", 4.5), equal("genre", "Science Fiction")))
             .execute()
             .get()
             .getResults();
@@ -696,7 +693,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(or(eq("genre", "Romance"), eq("genre", "Dystopian")))
+            .where(or(equal("genre", "Romance"), equal("genre", "Dystopian")))
             .select("title")
             .execute()
             .get()
@@ -788,7 +785,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .createFrom(collection)
             .select(field("tags").arrayLength().as("tagsCount"))
-            .where(eq("tagsCount", 3))
+            .where(equal("tagsCount", 3))
             .execute()
             .get()
             .getResults();
@@ -823,7 +820,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .select(strConcat(field("author"), " - ", field("title")).as("bookInfo"))
+            .select(Expression.stringConcat(field("author"), " - ", field("title")).as("bookInfo"))
             .limit(1)
             .execute()
             .get()
@@ -884,7 +881,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .createFrom(collection)
             .select(field("title").charLength().as("titleLength"), field("title"))
-            .where(gt("titleLength", 21))
+            .where(greaterThan("titleLength", 21))
             .sort(field("titleLength").descending())
             .execute()
             .get()
@@ -906,8 +903,8 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .collection(collection.getPath())
-            .select(field("title").strReverse().as("reversed_title"), field("author"))
-            .where(field("author").eq("Douglas Adams"))
+            // .select(field("title").stringReverse().as("reversed_title"), field("author"))
+            .where(field("author").equal("Douglas Adams"))
             .execute()
             .get()
             .getResults();
@@ -920,7 +917,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .createFrom(collection)
             .select(field("title").charLength().as("title_length"), field("author"))
-            .where(field("author").eq("Douglas Adams"))
+            .where(field("author").equal("Douglas Adams"))
             .execute()
             .get()
             .getResults();
@@ -933,8 +930,8 @@ public class ITPipelineTest extends ITBaseTest {
             .createFrom(collection)
             .select(
                 field("author"),
-                field("title").strConcat("_银河系漫游指南").byteLength().as("title_byte_length"))
-            .where(field("author").eq("Douglas Adams"))
+                field("title").stringConcat("_银河系漫游指南").byteLength().as("title_byte_length"))
+            .where(field("author").equal("Douglas Adams"))
             .execute()
             .get()
             .getResults();
@@ -980,7 +977,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .addFields(strConcat(constant(" "), field("title"), constant(" ")).as("spacedTitle"))
+            .addFields(stringConcat(constant(" "), field("title"), constant(" ")).as("spacedTitle"))
             .select(field("spacedTitle").trim().as("trimmedTitle"), field("spacedTitle"))
             .limit(1)
             .execute()
@@ -1088,7 +1085,10 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .createFrom(collection)
             .where(
-                and(gt("rating", 4.2), field("rating").lte(4.5), neq("genre", "Science Fiction")))
+                and(
+                    greaterThan("rating", 4.2),
+                    field("rating").lessThanOrEqual(4.5),
+                    notEqual("genre", "Science Fiction")))
             .select("rating", "title")
             .sort(field("title").ascending())
             .execute()
@@ -1111,10 +1111,10 @@ public class ITPipelineTest extends ITBaseTest {
             .createFrom(collection)
             .where(
                 xor(
-                    eq("genre", "Romance"),
-                    eq("genre", "Dystopian"),
-                    eq("genre", "Fantasy"),
-                    eq("published", 1949)))
+                    equal("genre", "Romance"),
+                    equal("genre", "Dystopian"),
+                    equal("genre", "Fantasy"),
+                    equal("published", 1949)))
             .select("title")
             .execute()
             .get()
@@ -1129,7 +1129,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eqAny("genre", Lists.newArrayList("Romance", "Dystopian")))
+            .where(Expression.equalAny("genre", Lists.newArrayList("Romance", "Dystopian")))
             .select("title")
             .execute()
             .get()
@@ -1144,7 +1144,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(notEqAny("genre", Lists.newArrayList("Romance", "Dystopian")))
+            .where(Expression.notEqualAny("genre", Lists.newArrayList("Romance", "Dystopian")))
             .select("genre")
             .distinct("genre")
             .execute()
@@ -1166,9 +1166,10 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(field("title").neq("Timestamp Book"))
+            .where(field("title").notEqual("Timestamp Book"))
             .select(
-                cond(gt(field("published"), 1980), "Modern", "Classic").as("era"),
+                conditional(Expression.greaterThan(field("published"), 1980), "Modern", "Classic")
+                    .as("era"),
                 field("title"),
                 field("published"))
             .sort(field("published").ascending())
@@ -1190,7 +1191,9 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .createFrom(collection)
             .where(
-                or(and(gt("rating", 4.5), eq("genre", "Science Fiction")), lt("published", 1900)))
+                or(
+                    and(greaterThan("rating", 4.5), equal("genre", "Science Fiction")),
+                    lessThan("published", 1900)))
             .select("title")
             .sort(field("title").ascending())
             .execute()
@@ -1260,7 +1263,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(field("author").eq("Douglas Adams"))
+            .where(field("author").equal("Douglas Adams"))
             .select(
                 field("rating").logicalMaximum(4.5).as("max_rating"),
                 logicalMaximum(field("published"), 1900).as("max_published"))
@@ -1274,7 +1277,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(field("author").eq("Douglas Adams"))
+            .where(field("author").equal("Douglas Adams"))
             .select(
                 field("rating").logicalMinimum(4.5).as("min_rating"),
                 logicalMinimum(field("published"), 1900).as("min_published"))
@@ -1291,7 +1294,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .createFrom(collection)
             .select(field("awards").mapGet("hugo").as("hugoAward"), field("title"))
-            .where(eq("hugoAward", true))
+            .where(equal("hugoAward", true))
             .execute()
             .get()
             .getResults();
@@ -1309,10 +1312,11 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq("title", "Timestamp Book"))
+            .where(equal("title", "Timestamp Book"))
             .select(
                 timestampAdd(field("timestamp"), "day", 1).as("timestamp_plus_day"),
-                timestampSub(field("timestamp"), "hour", 1).as("timestamp_minus_hour"))
+                Expression.timestampSubtract(field("timestamp"), "hour", 1)
+                    .as("timestamp_minus_hour"))
             .execute()
             .get()
             .getResults();
@@ -1329,10 +1333,11 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq("title", "The Hitchhiker's Guide to the Galaxy"))
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
             .select(
                 arrayGet("tags", 1).as("second_tag"),
-                mapMerge(field("awards"), Expr.map(map("new_award", true))).as("merged_awards"))
+                mapMerge(field("awards"), Expression.map(map("new_award", true)))
+                    .as("merged_awards"))
             .execute()
             .get()
             .getResults();
@@ -1349,7 +1354,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq("title", "The Hitchhiker's Guide to the Galaxy"))
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
             .select(
                 arrayReverse("tags").as("reversed_tags"),
                 mapRemove(field("awards"), "nebula").as("removed_awards"))
@@ -1372,7 +1377,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq("title", "The Hitchhiker's Guide to the Galaxy"))
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
             .select(
                 ceil(field("rating")).as("ceil_rating"),
                 floor(field("rating")).as("floor_rating"),
@@ -1398,11 +1403,12 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq("title", "The Lord of the Rings"))
+            .where(equal("title", "The Lord of the Rings"))
             .select(
                 exp(field("rating")).as("exp_rating"),
                 ln(field("rating")).as("ln_rating"),
-                log(field("rating"), 10).as("log_rating"))
+                log(field("rating"), 10).as("log_rating"),
+                field("rating").log10().as("log10_rating"))
             .execute()
             .get()
             .getResults();
@@ -1410,6 +1416,248 @@ public class ITPipelineTest extends ITBaseTest {
     assertThat((Double) result.get("exp_rating")).isWithin(0.00001).of(109.94717);
     assertThat((Double) result.get("ln_rating")).isWithin(0.00001).of(1.54756);
     assertThat((Double) result.get("log_rating")).isWithin(0.00001).of(0.67209);
+    assertThat((Double) result.get("log10_rating")).isWithin(0.00001).of(0.67209);
+  }
+
+  @Test
+  public void testConcat() throws Exception {
+    // String concat
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(Expression.concat(field("author"), " ", field("title")).as("author_title"))
+            .execute()
+            .get()
+            .getResults();
+    Map<String, Object> result = data(results).get(0);
+    assertThat(result.get("author_title"))
+        .isEqualTo("Douglas Adams The Hitchhiker's Guide to the Galaxy");
+
+    // Array concat
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(Expression.concat(field("tags"), ImmutableList.of("newTag")).as("new_tags"))
+            .execute()
+            .get()
+            .getResults();
+    result = data(results).get(0);
+    assertThat((List<Object>) result.get("new_tags"))
+        .containsExactly("comedy", "space", "adventure", "newTag");
+
+    // Blob concat
+    byte[] bytes1 = new byte[] {1, 2};
+    byte[] bytes2 = new byte[] {3, 4};
+    byte[] expected = new byte[] {1, 2, 3, 4};
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .limit(1)
+            .select(
+                Expression.concat(
+                        constant(com.google.cloud.firestore.Blob.fromBytes(bytes1)),
+                        com.google.cloud.firestore.Blob.fromBytes(bytes2))
+                    .as("concatenated_blob"))
+            .execute()
+            .get()
+            .getResults();
+    result = data(results).get(0);
+    assertThat(((com.google.cloud.firestore.Blob) result.get("concatenated_blob")).toBytes())
+        .isEqualTo(expected);
+
+    // Mismatched types should result in null.
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(Expression.concat(field("title"), field("tags")).as("mismatched"))
+            .execute()
+            .get()
+            .getResults();
+    result = data(results).get(0);
+    assertThat(result.get("mismatched")).isNull();
+  }
+
+  @Test
+  public void testCurrentTimestamp() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .limit(1)
+            .select(Expression.currentTimestamp().as("now"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(results).hasSize(1);
+    Object nowValue = results.get(0).getData().get("now");
+    assertThat(nowValue).isInstanceOf(Timestamp.class);
+    Timestamp nowTimestamp = (Timestamp) nowValue;
+    // Check that the timestamp is recent (e.g., within the last 5 seconds)
+    long diff = new Date().getTime() - nowTimestamp.toDate().getTime();
+    assertThat(diff).isAtMost(5000L);
+  }
+
+  @Test
+  public void testErrorExpression() {
+    Exception exception =
+        assertThrows(
+            Exception.class,
+            () -> {
+              firestore
+                  .pipeline()
+                  .collection(collection.getPath())
+                  .select(Expression.error("test error").as("error"))
+                  .execute()
+                  .get();
+            });
+    assertThat(exception.getMessage()).contains("test error");
+  }
+
+  @Test
+  public void testIfAbsent() throws Exception {
+    // Case 1: Field is present, should return the field value.
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(field("rating").ifAbsent(0.0).as("rating_or_default"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results)).containsExactly(map("rating_or_default", 4.2));
+
+    // Case 2: Field is absent, should return the default value.
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(
+                Expression.ifAbsent(field("non_existent_field"), "default").as("field_or_default"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results)).containsExactly(map("field_or_default", "default"));
+
+    // Case 3: Field is present and null, should return null.
+    collection
+        .document("bookWithNull")
+        .set(map("title", "Book With Null", "optional_field", null))
+        .get();
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "Book With Null"))
+            .select(Expression.ifAbsent(field("optional_field"), "default").as("field_or_default"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(results.get(0).get("field_or_default")).isNull();
+    collection.document("bookWithNull").delete().get();
+
+    // Case 4: Test different overloads.
+    // ifAbsent(String, Any)
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "Dune"))
+            .select(Expression.ifAbsent("non_existent_field", "default_string").as("res"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results)).containsExactly(map("res", "default_string"));
+
+    // ifAbsent(String, Expression)
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "Dune"))
+            .select(Expression.ifAbsent("non_existent_field", field("author")).as("res"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results)).containsExactly(map("res", "Frank Herbert"));
+
+    // ifAbsent(Expression, Expression)
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "Dune"))
+            .select(Expression.ifAbsent(field("non_existent_field"), field("author")).as("res"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results)).containsExactly(map("res", "Frank Herbert"));
+  }
+
+  @Test
+  public void testJoin() throws Exception {
+    // Test join with a constant delimiter
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(Expression.join("tags", ", ").as("joined_tags"))
+            .execute()
+            .get()
+            .getResults();
+    Map<String, Object> result = data(results).get(0);
+    assertThat(result.get("joined_tags")).isEqualTo("comedy, space, adventure");
+
+    // Test join with an expression delimiter
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(Expression.join(field("tags"), constant(" | ")).as("joined_tags"))
+            .execute()
+            .get()
+            .getResults();
+    result = data(results).get(0);
+    assertThat(result.get("joined_tags")).isEqualTo("comedy | space | adventure");
+
+    // Test extension method
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(field("tags").join(" - ").as("joined_tags"))
+            .execute()
+            .get()
+            .getResults();
+    result = data(results).get(0);
+    assertThat(result.get("joined_tags")).isEqualTo("comedy - space - adventure");
+  }
+
+  @Test
+  public void testArraySum() throws Exception {
+    collection.document("book4").update("sales", ImmutableList.of(100, 200, 50)).get();
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Lord of the Rings"))
+            .select(Expression.arraySum("sales").as("totalSales"))
+            .limit(1)
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results)).containsExactly(map("totalSales", 350L));
   }
 
   @Test
@@ -1473,7 +1721,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .collection(collection.getPath())
             .limit(1)
-            .select(vectorLength(Constant.vector(new double[] {1.0, 2.0, 3.0})).as("vectorLength"))
+            .select(vectorLength(vector(new double[] {1.0, 2.0, 3.0})).as("vectorLength"))
             .execute()
             .get()
             .getResults();
@@ -1486,7 +1734,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(strContains(field("title"), "'s"))
+            .where(Expression.stringContains(field("title"), "'s"))
             .select("title")
             .sort(field("title").ascending())
             .execute()
@@ -1504,10 +1752,10 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq("title", "The Lord of the Rings"))
+            .where(equal("title", "The Lord of the Rings"))
             .select(
-                substr(field("title"), constant(9), constant(2)).as("of"),
-                substr("title", 16, 5).as("Rings"))
+                Expression.substring(field("title"), constant(9), constant(2)).as("of"),
+                substring("title", 16, 5).as("Rings"))
             .execute()
             .get()
             .getResults();
@@ -1523,10 +1771,9 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .collection(collection.getPath())
             .select(
-                cosineDistance(Constant.vector(sourceVector), targetVector).as("cosineDistance"),
-                dotProduct(Constant.vector(sourceVector), targetVector).as("dotProductDistance"),
-                euclideanDistance(Constant.vector(sourceVector), targetVector)
-                    .as("euclideanDistance"))
+                cosineDistance(vector(sourceVector), targetVector).as("cosineDistance"),
+                dotProduct(vector(sourceVector), targetVector).as("dotProductDistance"),
+                euclideanDistance(vector(sourceVector), targetVector).as("euclideanDistance"))
             .limit(1)
             .execute()
             .get()
@@ -1547,7 +1794,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq("awards.hugo", true))
+            .where(equal("awards.hugo", true))
             .select("title", "awards.hugo")
             .execute()
             .get()
@@ -1569,7 +1816,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq("awards.hugo", true))
+            .where(equal("awards.hugo", true))
             .select("title", "awards.hugo", Field.DOCUMENT_ID);
 
     firestore
@@ -1593,7 +1840,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq("foo", "bar"))
+            .where(equal("foo", "bar"))
             .select("title")
             .execute()
             .get()
@@ -1622,22 +1869,22 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
-  public void testGenericStage() throws Exception {
+  public void testRawStage() throws Exception {
     // can select fields
     List<PipelineResult> results =
         firestore
             .pipeline()
             .collection(collection.getPath())
-            // .select(field("title"), Expr.map(map("author", field("author"))).as("metadata"))
-            .genericStage(
-                "select",
-                Lists.newArrayList(
-                    map(
-                        "title",
-                        field("title"),
-                        "metadata",
-                        Expr.map(map("author", field("author"))))),
-                new GenericOptions())
+            // .select(field("title"), Expression.map(map("author",
+            // field("author"))).as("metadata"))
+            .rawStage(
+                RawStage.ofName("select")
+                    .withArguments(
+                        map(
+                            "title",
+                            field("title"),
+                            "metadata",
+                            Expression.map(map("author", field("author"))))))
             .sort(field("metadata.author").ascending())
             .limit(1)
             .execute()
@@ -1661,11 +1908,12 @@ public class ITPipelineTest extends ITBaseTest {
             .sort(field("author").ascending())
             .limit(1)
             .select("title", "author")
-            .genericStage(
-                "add_fields",
-                Lists.newArrayList(
-                    map("display", strConcat(field("title"), " - ", field("author")))),
-                new GenericOptions())
+            .rawStage(
+                RawStage.ofName("add_fields")
+                    .withArguments(
+                        map(
+                            "display",
+                            Expression.stringConcat(field("title"), " - ", field("author")))))
             .execute()
             .get()
             .getResults();
@@ -1686,8 +1934,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .collection(collection.getPath())
             .select("title", "author")
-            .genericStage(
-                "where", Lists.newArrayList(eq("author", "Douglas Adams")), new GenericOptions())
+            .rawStage(RawStage.ofName("where").withArguments(equal("author", "Douglas Adams")))
             .execute()
             .get()
             .getResults();
@@ -1702,12 +1949,11 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .collection(collection.getPath())
             .select("title", "author")
-            .genericStage(
-                "sort",
-                Lists.newArrayList(map("direction", "ascending", "expression", field("author"))),
-                new GenericOptions())
-            .genericStage("offset", Lists.newArrayList(3), new GenericOptions())
-            .genericStage("limit", Lists.newArrayList(1), new GenericOptions())
+            .rawStage(
+                RawStage.ofName("sort")
+                    .withArguments(map("direction", "ascending", "expression", field("author"))))
+            .rawStage(RawStage.ofName("offset").withArguments(3))
+            .rawStage(RawStage.ofName("limit").withArguments(1))
             .execute()
             .get()
             .getResults();
@@ -1722,10 +1968,10 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .collection(collection.getPath())
             .select("title", "author", "rating")
-            .genericStage(
-                "aggregate",
-                Lists.newArrayList(map("averageRating", avg("rating")), map()),
-                new GenericOptions())
+            .rawStage(
+                RawStage.ofName("aggregate")
+                    .withArguments(
+                        map("averageRating", AggregateFunction.average("rating")), map()))
             .execute()
             .get()
             .getResults();
@@ -1738,10 +1984,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .collection(collection.getPath())
             .select("title", "author", "rating")
-            .genericStage(
-                "distinct",
-                Lists.newArrayList(map("rating", field("rating"))),
-                new GenericOptions())
+            .rawStage(RawStage.ofName("distinct").withArguments(map("rating", field("rating"))))
             .sort(field("rating").descending())
             .execute()
             .get()
@@ -1762,15 +2005,16 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .collection(collection.getPath())
-            .genericStage(
-                "find_nearest",
-                Lists.newArrayList(
-                    field("embedding"),
-                    vector(new double[] {10.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}),
-                    "euclidean"),
-                new GenericOptions()
-                    .with("distance_field", field("computedDistance"))
-                    .with("limit", 2))
+            .rawStage(
+                RawStage.ofName("find_nearest")
+                    .withArguments(
+                        field("embedding"),
+                        vector(new double[] {10.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}),
+                        "euclidean")
+                    .withOptions(
+                        new RawOptions()
+                            .with("distance_field", field("computedDistance"))
+                            .with("limit", 2)))
             .select("title", "computedDistance")
             .execute()
             .get()
@@ -1791,7 +2035,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq("title", "The Hitchhiker's Guide to the Galaxy"))
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
             .replaceWith("awards")
             .execute()
             .get()
@@ -1802,8 +2046,10 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq("title", "The Hitchhiker's Guide to the Galaxy"))
-            .replaceWith(Expr.map(map("foo", "bar", "baz", Expr.map(map("title", field("title"))))))
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .replaceWith(
+                Expression.map(
+                    map("foo", "bar", "baz", Expression.map(map("title", field("title"))))))
             .execute()
             .get()
             .getResults();
@@ -1855,7 +2101,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq(field("title"), "The Hitchhiker's Guide to the Galaxy"))
+            .where(Expression.equal(field("title"), "The Hitchhiker's Guide to the Galaxy"))
             .unnest("tags", "tag")
             .execute()
             .get()
@@ -1870,7 +2116,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq(field("title"), "The Hitchhiker's Guide to the Galaxy"))
+            .where(Expression.equal(field("title"), "The Hitchhiker's Guide to the Galaxy"))
             .unnest("tags", "tag", new UnnestOptions().withIndexField("tagsIndex"))
             .execute()
             .get()
@@ -1888,7 +2134,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(eq(field("title"), "The Hitchhiker's Guide to the Galaxy"))
+            .where(Expression.equal(field("title"), "The Hitchhiker's Guide to the Galaxy"))
             .unnest(array(1L, 2L, 3L).as("copy"))
             .execute()
             .get()
@@ -1914,7 +2160,7 @@ public class ITPipelineTest extends ITBaseTest {
     Pipeline pipeline =
         firestore.pipeline().createFrom(paginationCollection.orderBy("order").limit(2));
 
-    PipelineSnapshot snapshot = pipeline.execute().get();
+    Pipeline.Snapshot snapshot = pipeline.execute().get();
     assertThat(data(snapshot.getResults())).containsExactly(map("order", 1L), map("order", 2L));
 
     PipelineResult lastResult = snapshot.getResults().get(snapshot.getResults().size() - 1);
@@ -1967,7 +2213,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .database()
-            .where(eq("randomId", randomId))
+            .where(equal("randomId", randomId))
             .sort(field("order").ascending())
             .execute()
             .get()
@@ -2010,7 +2256,7 @@ public class ITPipelineTest extends ITBaseTest {
         isRunningAgainstFirestoreEmulator(firestore));
     Pipeline pipeline =
         firestore.pipeline().createFrom(collection).sort(field("__name__").ascending());
-    PipelineSnapshot snapshot =
+    Pipeline.Snapshot snapshot =
         pipeline
             .execute(
                 new PipelineExecuteOptions()
@@ -2047,22 +2293,17 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .collection(
                 "/k",
-                new CollectionOptions()
-                    .withHints(new CollectionHints().withForceIndex("title")))
+                new CollectionOptions().withHints(new CollectionHints().withForceIndex("title")))
             .findNearest(
                 "topicVectors",
                 vector,
                 FindNearest.DistanceMeasure.COSINE,
-                new FindNearestOptions()
-                    .withLimit(10)
-                    .withDistanceField("distance"))
+                new FindNearestOptions().withLimit(10).withDistanceField("distance"))
             .aggregate(
-                Aggregate.withAccumulators(avg("rating").as("avg_rating"))
+                Aggregate.withAccumulators(AggregateFunction.average("rating").as("avg_rating"))
                     .withGroups("genre"),
-                        new AggregateOptions()
-                            .withHints(
-                                new AggregateHints()
-                                    .withForceStreamableEnabled()));
+                new AggregateOptions()
+                    .withHints(new AggregateHints().withForceStreamableEnabled()));
 
     pipeline.execute(opts).get();
   }
@@ -2079,7 +2320,7 @@ public class ITPipelineTest extends ITBaseTest {
               firestore
                   .pipeline()
                   .collection(collection.getPath())
-                  .genericStage("invalidStage", Lists.newArrayList(), new GenericOptions())
+                  .rawStage(RawStage.ofName("invalidStage"))
                   .execute()
                   .get();
             });

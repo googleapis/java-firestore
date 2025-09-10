@@ -14,27 +14,38 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore.pipeline.stages;
+package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.InternalApi;
-import com.google.cloud.firestore.PipelineUtils;
-import com.google.common.collect.Iterables;
 import com.google.firestore.v1.Value;
-import java.util.List;
 
 @InternalApi
-public final class GenericStage extends Stage {
+public final class AliasedExpression implements Selectable {
 
-  private List<Object> params;
+  private final String alias;
+  private final Expression expr;
 
   @InternalApi
-  public GenericStage(String name, List<Object> params, GenericOptions optionalParams) {
-    super(name, optionalParams.options);
-    this.params = params;
+  AliasedExpression(Expression expr, String alias) {
+    this.expr = expr;
+    this.alias = alias;
   }
 
-  @Override
-  Iterable<Value> toStageArgs() {
-    return Iterables.transform(params, PipelineUtils::encodeValue);
+  @InternalApi
+  public String getAlias() {
+    return alias;
+  }
+
+  @InternalApi
+  public Expression getExpr() {
+    return expr;
+  }
+
+  public Selectable as(String alias) {
+    return new AliasedExpression(this.expr, alias);
+  }
+
+  Value toProto() {
+    return expr.toProto();
   }
 }
