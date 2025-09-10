@@ -19,7 +19,7 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
-import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.firestore.v1.Value;
 import java.util.Collections;
 import java.util.Map;
@@ -27,10 +27,10 @@ import java.util.Map;
 @InternalApi
 public final class Select extends Stage {
 
-  private final Map<String, Expr> projections;
+  private final Map<String, Expression> projections;
 
   @InternalApi
-  public Select(Map<String, Expr> projections) {
+  public Select(Map<String, Expression> projections) {
     super("select", InternalOptions.EMPTY);
     this.projections = projections;
   }

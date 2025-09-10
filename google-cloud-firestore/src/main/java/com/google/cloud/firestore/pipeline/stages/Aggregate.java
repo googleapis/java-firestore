@@ -23,7 +23,7 @@ import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.PipelineUtils;
 import com.google.cloud.firestore.pipeline.expressions.AggregateFunction;
 import com.google.cloud.firestore.pipeline.expressions.AliasedAggregate;
-import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.firestore.v1.Value;
 import java.util.Arrays;
@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
 @BetaApi
 public final class Aggregate extends Stage {
 
-  private final Map<String, Expr> groups;
+  private final Map<String, Expression> groups;
   private final Map<String, AggregateFunction> accumulators;
 
   @BetaApi
@@ -65,7 +65,7 @@ public final class Aggregate extends Stage {
   }
 
   private Aggregate(
-      Map<String, Expr> groups,
+      Map<String, Expression> groups,
       Map<String, AggregateFunction> accumulators,
       AggregateOptions options) {
     super("aggregate", options.options);

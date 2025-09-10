@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.pipeline.expressions.Expr.field;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.field;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.BetaApi;
@@ -27,11 +27,13 @@ import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.ResponseObserver;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.pipeline.expressions.AggregateFunction;
 import com.google.cloud.firestore.pipeline.expressions.AliasedAggregate;
-import com.google.cloud.firestore.pipeline.expressions.AliasedExpr;
-import com.google.cloud.firestore.pipeline.expressions.BooleanExpr;
-import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.AliasedExpression;
+import com.google.cloud.firestore.pipeline.expressions.BooleanExpression;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Field;
+import com.google.cloud.firestore.pipeline.expressions.FunctionExpression;
 import com.google.cloud.firestore.pipeline.expressions.Ordering;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.cloud.firestore.pipeline.stages.AddFields;
@@ -97,14 +99,14 @@ import javax.annotation.Nullable;
  * Firestore firestore; // A valid firestore instance.
  *
  * // Example 1: Select specific fields and rename 'rating' to 'bookRating'
- * List<PipelineResult> results1 = firestore.pipeline()
+ * PipelineSnapshot results1 = firestore.pipeline()
  *     .collection("books")
- *     .select("title", "author", field("rating").as("bookRating"))
+ *     .select(field("title"), field("author"), field("rating").as("bookRating"))
  *     .execute()
  *     .get();
  *
  * // Example 2: Filter documents where 'genre' is "Science Fiction" and 'published' is after 1950
- * List<PipelineResult> results2 = firestore.pipeline()
+ * PipelineSnapshot results2 = firestore.pipeline()
  *     .collection("books")
  *     .where(and(eq("genre", "Science Fiction"), gt("published", 1950)))
  *     .execute()
@@ -117,7 +119,7 @@ import javax.annotation.Nullable;
  *     .get();
  *
  * // Example 3: Calculate the average rating of books published after 1980
- * List<PipelineResult> results3 = firestore.pipeline()
+ * PipelineSnapshot results3 = firestore.pipeline()
  *     .collection("books")
  *     .where(gt("published", 1980))
  *     .aggregate(avg("rating").as("averageRating"))
@@ -156,9 +158,8 @@ public final class Pipeline {
    *
    * <ul>
    *   <li>{@link Field}: References an existing document field.
-   *   <li>{@link Function}: Performs a calculation using functions like `add`, `multiply` with
-   *       assigned aliases using {@link
-   *       com.google.cloud.firestore.pipeline.expressions.Expr#as(String)}.
+   *   <li>{@link FunctionExpression}: Performs a calculation using functions like `add`, `multiply`
+   *       with assigned aliases using {@link Expression#as(String)}.
    * </ul>
    *
    * <p>Example:
@@ -232,8 +233,8 @@ public final class Pipeline {
    *
    * <ul>
    *   <li>{@link Field}: References an existing document field.
-   *   <li>{@link Function}: Represents the result of a function with an assigned alias name using
-   *       {@link com.google.cloud.firestore.pipeline.expressions.Expr#as(String)}
+   *   <li>{@link FunctionExpression}: Represents the result of a function with an assigned alias
+   *       name using {@link Expression#as(String)}
    * </ul>
    *
    * <p>If no selections are provided, the output of this stage is empty. Use {@link
@@ -287,18 +288,19 @@ public final class Pipeline {
 
   /**
    * Filters the documents from previous stages to only include those matching the specified {@link
-   * FilterCondition}.
+   * BooleanExpression}.
    *
    * <p>This stage allows you to apply conditions to the data, similar to a "WHERE" clause in SQL.
    * You can filter documents based on their field values, using implementions of {@link
-   * FilterCondition}, typically including but not limited to:
+   * BooleanExpression}, typically including but not limited to:
    *
    * <ul>
-   *   <li>field comparators: {@link Function#eq}, {@link Function#lt} (less than), {@link
-   *       Function#gt} (greater than), etc.
-   *   <li>logical operators: {@link Function#and}, {@link Function#or}, {@link Function#not}, etc.
-   *   <li>advanced functions: {@link Function#regexMatch(String, String)}, {@link
-   *       Function#arrayContains(Expr, Expr)}, etc.
+   *   <li>field comparators: {@link FunctionExpression#equal}, {@link FunctionExpression#lessThan}
+   *       (less than), {@link FunctionExpression#greaterThan} (greater than), etc.
+   *   <li>logical operators: {@link FunctionExpression#and}, {@link FunctionExpression#or}, {@link
+   *       FunctionExpression#not}, etc.
+   *   <li>advanced functions: {@link FunctionExpression#regexMatch(String, String)}, {@link
+   *       FunctionExpression#arrayContains(Expression, Expression)}, etc.
    * </ul>
    *
    * <p>Example:
@@ -308,16 +310,16 @@ public final class Pipeline {
    *   .where(
    *     and(
    *         gt("rating", 4.0),   // Filter for ratings greater than 4.0
-   *         field("genre").eq("Science Fiction") // Equivalent to gt("genre", "Science Fiction")
+   *         field("genre").eq("Science Fiction") // Equivalent to eq("genre", "Science Fiction")
    *     )
    *   );
    * }</pre>
    *
-   * @param condition The {@link FilterCondition} to apply.
+   * @param condition The {@link BooleanExpression} to apply.
    * @return A new Pipeline object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline where(BooleanExpr condition) {
+  public Pipeline where(BooleanExpression condition) {
     return append(new Where(condition));
   }
 
@@ -380,8 +382,8 @@ public final class Pipeline {
    * Performs aggregation operations on the documents from previous stages.
    *
    * <p>This stage allows you to calculate aggregate values over a set of documents. You define the
-   * aggregations to perform using {@link AliasedExpr} expressions which are typically results of
-   * calling {@link Expr#as(String)} on {@link Accumulator} instances.
+   * aggregations to perform using {@link AliasedExpression} expressions which are typically results
+   * of calling {@link Expression#as(String)} on {@link AggregateFunction} instances.
    *
    * <p>Example:
    *
@@ -394,8 +396,8 @@ public final class Pipeline {
    *     );
    * }</pre>
    *
-   * @param accumulators The {@link AliasedExpr} expressions, each wrapping an {@link Accumulator}
-   *     and provide a name for the accumulated results.
+   * @param accumulators The {@link AliasedExpression} expressions, each wrapping an {@link
+   *     AggregateFunction} and provide a name for the accumulated results.
    * @return A new Pipeline object with this stage appended to the stage list.
    */
   @BetaApi
@@ -415,9 +417,10 @@ public final class Pipeline {
    *       If no grouping fields are provided, a single group containing all documents is used. Not
    *       specifying groups is the same as putting the entire inputs into one group.
    *   <li>**Accumulators:** One or more accumulation operations to perform within each group. These
-   *       are defined using {@link AliasedExpr} expressions, which are typically created by calling
-   *       {@link Expr#as(String)} on {@link Accumulator} instances. Each aggregation calculates a
-   *       value (e.g., sum, average, count) based on the documents within its group.
+   *       are defined using {@link AliasedExpression} expressions, which are typically created by
+   *       calling {@link Expression#as(String)} on {@link AggregateFunction} instances. Each
+   *       aggregation calculates a value (e.g., sum, average, count) based on the documents within
+   *       its group.
    * </ul>
    *
    * <p>Example:
@@ -468,17 +471,17 @@ public final class Pipeline {
   }
 
   /**
-   * Returns a set of distinct {@link Expr} values from the inputs to this stage.
+   * Returns a set of distinct {@link Expression} values from the inputs to this stage.
    *
    * <p>This stage run through the results from previous stages to include only results with unique
-   * combinations of {@link Expr} values ({@link Field}, {@link Function}, etc).
+   * combinations of {@link Expression} values ({@link Field}, {@link FunctionExpression}, etc).
    *
    * <p>The parameters to this stage are defined using {@link Selectable} expressions, which can be:
    *
    * <ul>
    *   <li>{@link Field}: References an existing document field.
-   *   <li>{@link Function}: Represents the result of a function with an assigned alias name using
-   *       {@link com.google.cloud.firestore.pipeline.expressions.Expr#as(String)}
+   *   <li>{@link FunctionExpression}: Represents the result of a function with an assigned alias
+   *       name using {@link Expression#as(String)}
    * </ul>
    *
    * <p>Example:
@@ -548,7 +551,9 @@ public final class Pipeline {
    * // Find books with similar "topicVectors" to the given targetVector
    * firestore.pipeline().collection("books")
    *     .findNearest(
-   *        FindNearest.of(field("topicVectors"), targetVector, FindNearest.DistanceMeasure.COSINE),
+   *        field("topicVectors"),
+   *        targetVector,
+   *        FindNearest.DistanceMeasure.COSINE,
    *        new FindNearestOptions()
    *          .withLimit(10)
    *          .withDistanceField("distance"));
@@ -563,7 +568,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline findNearest(
-      Expr property,
+      Expression property,
       double[] vector,
       FindNearest.DistanceMeasure distanceMeasure,
       FindNearestOptions options) {
@@ -617,7 +622,7 @@ public final class Pipeline {
    * // }
    *
    * // Emit parents as document.
-   * firestore.pipeline().collection("people").replace("parents");
+   * firestore.pipeline().collection("people").replaceWith("parents");
    *
    * // Output
    * // {
@@ -652,7 +657,7 @@ public final class Pipeline {
    * // }
    *
    * // Emit parents as document.
-   * firestore.pipeline().collection("people").replace(field("parents"));
+   * firestore.pipeline().collection("people").replaceWith(field("parents"));
    *
    * // Output
    * // {
@@ -665,7 +670,7 @@ public final class Pipeline {
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline replaceWith(Expr expr) {
+  public Pipeline replaceWith(Expression expr) {
     return append(new ReplaceWith(expr));
   }
 
@@ -979,7 +984,7 @@ public final class Pipeline {
    * <p>Example:
    *
    * <pre>{@code
-   * ApiFuture<List<PipelineResult>> futureResults = firestore.pipeline().collection("books")
+   * ApiFuture<PipelineSnapshot> futureResults = firestore.pipeline().collection("books")
    *     .where(gt("rating", 4.5))
    *     .select("title", "author", "rating")
    *     .execute();
@@ -1187,7 +1192,7 @@ public final class Pipeline {
               Tracing.getTracer()
                   .getCurrentSpan()
                   .addAnnotation(
-                      "Firestore.Query: First response"); // Assuming Tracing class exists
+                      "Firestore.Pipeline: First response"); // Assuming Tracing class exists
             }
             if (response.getResultsCount() > 0) {
               numDocuments += response.getResultsCount();
@@ -1207,7 +1212,7 @@ public final class Pipeline {
 
           @Override
           public void onError(Throwable throwable) {
-            Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Query: Error");
+            Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Pipeline: Error");
             resultObserver.onError(throwable);
           }
 
@@ -1228,7 +1233,7 @@ public final class Pipeline {
           }
         };
 
-    logger.log(Level.INFO, "Sending pipeline request: " + request.getStructuredPipeline());
+    logger.log(Level.FINEST, "Sending pipeline request: " + request.getStructuredPipeline());
 
     rpcContext.streamRequest(request, observer, rpcContext.getClient().executePipelineCallable());
   }

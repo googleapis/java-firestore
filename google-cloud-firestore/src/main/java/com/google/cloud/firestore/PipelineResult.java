@@ -64,12 +64,12 @@ public final class PipelineResult {
     this.docRef = docRef;
     this.fields = fields;
     this.executionTime = executionTime;
-    if(updateTime != null && updateTime.equals(Timestamp.ofTimeMicroseconds(0))) {
+    if (updateTime != null && updateTime.equals(Timestamp.ofTimeMicroseconds(0))) {
       updateTime = null;
     }
     this.updateTime = updateTime;
 
-    if(createTime != null && createTime.equals(Timestamp.ofTimeMicroseconds(0))) {
+    if (createTime != null && createTime.equals(Timestamp.ofTimeMicroseconds(0))) {
       createTime = null;
     }
     this.createTime = createTime;

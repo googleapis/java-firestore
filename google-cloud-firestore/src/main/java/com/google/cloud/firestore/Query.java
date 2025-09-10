@@ -17,9 +17,8 @@
 package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.PipelineUtils.toPipelineBooleanExpr;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.and;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.eq;
-import static com.google.cloud.firestore.pipeline.expressions.Expr.or;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.and;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.or;
 import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 import static com.google.common.collect.Lists.reverse;
 import static com.google.firestore.v1.StructuredQuery.FieldFilter.Operator.ARRAY_CONTAINS;
@@ -43,7 +42,8 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.auto.value.AutoValue;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Query.QueryOptions.Builder;
-import com.google.cloud.firestore.pipeline.expressions.BooleanExpr;
+import com.google.cloud.firestore.pipeline.expressions.BooleanExpression;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Ordering;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
@@ -2190,7 +2190,7 @@ public class Query {
                   fields.get(0).exists(),
                   fields.subList(1, fields.size()).stream()
                       .map((Field field) -> field.exists())
-                      .toArray(BooleanExpr[]::new)));
+                      .toArray(BooleanExpression[]::new)));
     }
 
     // Cursors, Limit, Offset
@@ -2236,17 +2236,17 @@ public class Query {
     }
   }
 
-  private static BooleanExpr getCursorExclusiveCondition(
+  private static BooleanExpression getCursorExclusiveCondition(
       boolean isStart, Ordering ordering, Value value) {
     if (isStart && ordering.getDir() == Ordering.Direction.ASCENDING
         || !isStart && ordering.getDir() == Ordering.Direction.DESCENDING) {
-      return ordering.getExpr().gt(value);
+      return ordering.getExpr().greaterThan(value);
     } else {
-      return ordering.getExpr().lt(value);
+      return ordering.getExpr().lessThan(value);
     }
   }
 
-  private static BooleanExpr whereConditionsFromCursor(
+  private static BooleanExpression whereConditionsFromCursor(
       Cursor bound, List<Ordering> orderings, boolean isStart) {
     List<Value> boundPosition = bound.getValuesList();
     int size = boundPosition.size();
@@ -2255,10 +2255,11 @@ public class Query {
     }
 
     int last = size - 1;
-    BooleanExpr condition =
+    BooleanExpression condition =
         getCursorExclusiveCondition(isStart, orderings.get(last), boundPosition.get(last));
     if (isBoundInclusive(bound, isStart)) {
-      condition = or(condition, eq(orderings.get(last).getExpr(), boundPosition.get(last)));
+      condition =
+          or(condition, Expression.equal(orderings.get(last).getExpr(), boundPosition.get(last)));
     }
     for (int i = size - 2; i >= 0; i--) {
       final Ordering ordering = orderings.get(i);
@@ -2266,7 +2267,7 @@ public class Query {
       condition =
           or(
               getCursorExclusiveCondition(isStart, ordering, value),
-              and(ordering.getExpr().eq(value), condition));
+              and(ordering.getExpr().equal(value), condition));
     }
     return condition;
   }

@@ -16,7 +16,7 @@
 
 package com.google.cloud.firestore;
 
-import static com.google.cloud.firestore.pipeline.expressions.Expr.and;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.and;
 import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_ATTEMPT;
 import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_RUN_AGGREGATION_QUERY;
 
@@ -29,7 +29,7 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.pipeline.expressions.AliasedAggregate;
-import com.google.cloud.firestore.pipeline.expressions.BooleanExpr;
+import com.google.cloud.firestore.pipeline.expressions.BooleanExpression;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.v1.FirestoreSettings;
@@ -83,7 +83,7 @@ public class AggregateQuery {
   Pipeline pipeline() {
     Pipeline pipeline = getQuery().pipeline();
 
-    List<BooleanExpr> existsExprs =
+    List<BooleanExpression> existsExprs =
         this.aggregateFieldList.stream()
             .map(PipelineUtils::toPipelineExistsExpr)
             .filter(Objects::nonNull)
@@ -95,7 +95,7 @@ public class AggregateQuery {
           pipeline.where(
               and(
                   existsExprs.get(0),
-                  existsExprs.subList(1, existsExprs.size()).toArray(new BooleanExpr[0])));
+                  existsExprs.subList(1, existsExprs.size()).toArray(new BooleanExpression[0])));
     }
 
     return pipeline.aggregate(

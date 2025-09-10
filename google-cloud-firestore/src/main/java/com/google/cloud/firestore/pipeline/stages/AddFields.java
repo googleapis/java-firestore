@@ -19,7 +19,7 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
-import com.google.cloud.firestore.pipeline.expressions.Expr;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.firestore.v1.Value;
 import java.util.Collections;
 import java.util.Map;
@@ -27,10 +27,10 @@ import java.util.Map;
 @InternalApi
 public final class AddFields extends Stage {
 
-  private final Map<String, Expr> fields;
+  private final Map<String, Expression> fields;
 
   @InternalApi
-  public AddFields(Map<String, Expr> fields) {
+  public AddFields(Map<String, Expression> fields) {
     super("add_fields", InternalOptions.EMPTY);
     this.fields = fields;
   }

@@ -21,12 +21,12 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 @BetaApi
-public class BooleanExpr extends FunctionExpr {
-  BooleanExpr(String name, Expr... params) {
+public class BooleanExpression extends FunctionExpression {
+  BooleanExpression(String name, Expression... params) {
     super(name, Lists.newArrayList(params));
   }
 
-  BooleanExpr(String name, ImmutableList<Expr> params) {
+  BooleanExpression(String name, ImmutableList<Expression> params) {
     super(name, params);
   }
 }
