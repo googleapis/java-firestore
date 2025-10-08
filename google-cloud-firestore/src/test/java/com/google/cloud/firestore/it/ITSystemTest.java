@@ -25,6 +25,7 @@ import static com.google.cloud.firestore.LocalFirestoreHelper.FOO_MAP;
 import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
 import static com.google.cloud.firestore.LocalFirestoreHelper.fullPath;
 import static com.google.cloud.firestore.LocalFirestoreHelper.map;
+import static com.google.cloud.firestore.it.TestHelper.getLargestDocContent;
 import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
@@ -2310,5 +2311,134 @@ public class ITSystemTest extends ITBaseTest {
     assertThrows(
         FirestoreException.class,
         () -> collection.document().listCollections().iterator().hasNext());
+  }
+
+  @Test
+  public void testCanCRUDAndQueryLargeDocuments() throws Exception {
+    // Note, do not use the 'randomColl' because its format contanis the
+    // test name, and that makes it difficult to correctly calculate the
+    // largest number of bytes we can put in the document.
+    CollectionReference collRef = firestore.collection(LocalFirestoreHelper.autoId());
+    DocumentReference docRef = collRef.document();
+    Map<String, Object> data = getLargestDocContent();
+
+    // Set
+    docRef.set(data).get();
+
+    // Get
+    DocumentSnapshot snapshot = docRef.get().get();
+    assertEquals(data, snapshot.getData());
+
+    // Update
+    Map<String, Object> newData = getLargestDocContent();
+    docRef.update(newData).get();
+    snapshot = docRef.get().get();
+    assertEquals(newData, snapshot.getData());
+
+    // Query
+    QuerySnapshot querySnapshot = collRef.get().get();
+    assertEquals(querySnapshot.size(), 1);
+    assertEquals(newData, querySnapshot.getDocuments().get(0).getData());
+
+    // Delete
+    docRef.delete().get();
+    snapshot = docRef.get().get();
+    assertFalse(snapshot.exists());
+  }
+
+  @Test
+  public void testCanCRUDLargeDocumentsInsideTransaction() throws Exception {
+    // Note, do not use the 'randomColl' because its format contanis the
+    // test name, and that makes it difficult to correctly calculate the
+    // largest number of bytes we can put in the document.
+    CollectionReference collRef = firestore.collection(LocalFirestoreHelper.autoId());
+    DocumentReference docRef1 = collRef.document();
+    DocumentReference docRef2 = collRef.document();
+    DocumentReference docRef3 = collRef.document();
+    Map<String, Object> data = getLargestDocContent();
+    Map<String, Object> newData = getLargestDocContent();
+    docRef1.set(data).get();
+    docRef3.set(data).get();
+
+    collRef
+        .getFirestore()
+        .runTransaction(
+            transaction -> {
+              // Get and update
+              DocumentSnapshot snapshot = transaction.get(docRef1).get();
+              assertEquals(data, snapshot.getData());
+              transaction.update(docRef1, newData);
+
+              // Set
+              transaction.set(docRef2, data);
+
+              // Delete
+              transaction.delete(docRef3);
+              return null;
+            })
+        .get();
+
+    DocumentSnapshot snapshot = docRef1.get().get();
+    assertEquals(newData, snapshot.getData());
+
+    snapshot = docRef2.get().get();
+    assertEquals(data, snapshot.getData());
+
+    snapshot = docRef3.get().get();
+    assertFalse(snapshot.exists());
+  }
+
+  @Test
+  public void listenToLargeQuerySnapshot() throws Exception {
+    // Note, do not use the 'randomColl' because its format contanis the
+    // test name, and that makes it difficult to correctly calculate the
+    // largest number of bytes we can put in the document.
+    CollectionReference collRef = firestore.collection(LocalFirestoreHelper.autoId());
+    DocumentReference docRef = collRef.document();
+    Map<String, Object> data = getLargestDocContent();
+    docRef.set(data).get();
+
+    CountDownLatch latch = new CountDownLatch(1);
+    List<QuerySnapshot> querySnapshots = new ArrayList<>();
+    ListenerRegistration registration =
+        collRef.addSnapshotListener(
+            (value, error) -> {
+              querySnapshots.add(value);
+              latch.countDown();
+            });
+
+    latch.await();
+    registration.remove();
+
+    assertEquals(querySnapshots.size(), 1);
+    assertEquals(querySnapshots.get(0).getDocuments().size(), 1);
+    assertEquals(data, querySnapshots.get(0).getDocuments().get(0).getData());
+  }
+
+  @Test
+  public void listenToLargeDocumentSnapshot() throws Exception {
+    // Note, do not use the 'randomColl' because its format contanis the
+    // test name, and that makes it difficult to correctly calculate the
+    // largest number of bytes we can put in the document.
+    CollectionReference collRef = firestore.collection(LocalFirestoreHelper.autoId());
+    DocumentReference docRef = collRef.document();
+    Map<String, Object> data = getLargestDocContent();
+    docRef.set(data).get();
+
+    CountDownLatch latch = new CountDownLatch(1);
+    List<DocumentSnapshot> documentSnapshots = new ArrayList<>();
+
+    ListenerRegistration registration =
+        docRef.addSnapshotListener(
+            (value, error) -> {
+              documentSnapshots.add(value);
+              latch.countDown();
+            });
+
+    latch.await();
+    registration.remove();
+
+    assertEquals(documentSnapshots.size(), 1);
+    assertEquals(data, documentSnapshots.get(0).getData());
   }
 }
