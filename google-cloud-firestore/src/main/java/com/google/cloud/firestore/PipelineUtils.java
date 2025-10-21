@@ -21,6 +21,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.and;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayContainsAny;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.field;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.not;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.nullValue;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.or;
 import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.aggregateFunctionToValue;
 import static com.google.cloud.firestore.pipeline.expressions.FunctionUtils.exprToValue;
@@ -109,7 +110,7 @@ public class PipelineUtils {
         case EQUAL:
           return and(field.exists(), field.equal(value));
         case NOT_EQUAL:
-          return and(field.exists(), not(field.equal(value)));
+          return and(field.exists(), field.notEqual(value));
         case ARRAY_CONTAINS:
           return and(field.exists(), field.arrayContains(value));
         case IN:
@@ -155,13 +156,13 @@ public class PipelineUtils {
       Field field = Field.ofServerPath(unaryFilter.fieldReference.getFieldPath());
       switch (unaryFilter.getOperator()) {
         case IS_NAN:
-          return and(field.exists(), field.isNaN());
+          return and(field.exists(), field.equal(Double.NaN));
         case IS_NULL:
-          return and(field.exists(), field.isNull());
+          return and(field.exists(), field.equal(nullValue()));
         case IS_NOT_NAN:
-          return and(field.exists(), field.isNotNaN());
+          return and(field.exists(), field.notEqual(Double.NaN));
         case IS_NOT_NULL:
-          return and(field.exists(), field.isNotNull());
+          return and(field.exists(), field.notEqual(nullValue()));
         default:
           // Handle OPERATOR_UNSPECIFIED and UNRECOGNIZED cases as needed
           throw new IllegalArgumentException("Unsupported operator: " + unaryFilter.getOperator());
@@ -219,9 +220,17 @@ public class PipelineUtils {
     for (Selectable proj : selectables) {
       if (proj instanceof Field) {
         Field fieldProj = (Field) proj;
+        if (projMap.containsKey(fieldProj.getPath().getEncodedPath())) {
+          throw new IllegalArgumentException(
+              "Duplicate alias or field name: " + fieldProj.getPath().getEncodedPath());
+        }
         projMap.put(fieldProj.getPath().getEncodedPath(), fieldProj);
       } else if (proj instanceof AliasedExpression) {
         AliasedExpression aliasedExpr = (AliasedExpression) proj;
+        if (projMap.containsKey(aliasedExpr.getAlias())) {
+          throw new IllegalArgumentException(
+              "Duplicate alias or field name: " + aliasedExpr.getAlias());
+        }
         projMap.put(aliasedExpr.getAlias(), aliasedExpr.getExpr());
       }
     }

@@ -28,8 +28,8 @@ import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.firestore.v1.Value;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
 @BetaApi
@@ -52,11 +52,15 @@ public final class Aggregate extends Stage {
 
   @BetaApi
   public static Aggregate withAccumulators(AliasedAggregate... accumulators) {
-    return new Aggregate(
-        Collections.emptyMap(),
-        Arrays.stream(accumulators)
-            .collect(Collectors.toMap(AliasedAggregate::getAlias, AliasedAggregate::getExpr)),
-        new AggregateOptions());
+    Map<String, AggregateFunction> accumulatorMap = new HashMap<>();
+    for (AliasedAggregate accumulator : accumulators) {
+      if (accumulatorMap.containsKey(accumulator.getAlias())) {
+        throw new IllegalArgumentException(
+            "Duplicate alias or field name: " + accumulator.getAlias());
+      }
+      accumulatorMap.put(accumulator.getAlias(), accumulator.getExpr());
+    }
+    return new Aggregate(Collections.emptyMap(), accumulatorMap, new AggregateOptions());
   }
 
   @InternalApi

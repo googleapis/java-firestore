@@ -250,17 +250,6 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that throws an error.
-   *
-   * @param message The error message.
-   * @return A new {@link Expression} representing the error.
-   */
-  @BetaApi
-  public static Expression error(String message) {
-    return new FunctionExpression("error", ImmutableList.of(constant(message)));
-  }
-
-  /**
    * Creates an expression that returns a default value if an expression evaluates to an absent
    * value.
    *
@@ -1546,6 +1535,106 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that removes specified characters from the beginning and end of a string
+   * or blob.
+   *
+   * @param value The expression representing the string or blob to trim.
+   * @param characters The characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression trimValue(Expression value, String characters) {
+    return new FunctionExpression("trim", ImmutableList.of(value, constant(characters)));
+  }
+
+  /**
+   * Creates an expression that removes specified characters from the beginning and end of a string
+   * or blob.
+   *
+   * @param fieldName The name of the field containing the string or blob to trim.
+   * @param characters The characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression trimValue(String fieldName, String characters) {
+    return trimValue(field(fieldName), characters);
+  }
+
+  /**
+   * Creates an expression that removes specified characters from the beginning and end of a string
+   * or blob.
+   *
+   * @param value The expression representing the string or blob to trim.
+   * @param characters The expression representing the characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression trimValue(Expression value, Expression characters) {
+    return new FunctionExpression("trim", ImmutableList.of(value, characters));
+  }
+
+  /**
+   * Creates an expression that removes specified characters from the beginning and end of a string
+   * or blob.
+   *
+   * @param fieldName The name of the field containing the string or blob to trim.
+   * @param characters The expression representing the characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression trimValue(String fieldName, Expression characters) {
+    return trimValue(field(fieldName), characters);
+  }
+
+  /**
+   * Creates an expression that splits a string or blob by a delimiter.
+   *
+   * @param value The expression representing the string or blob to split.
+   * @param delimiter The delimiter to split by.
+   * @return A new {@link Expression} representing the split string or blob as an array.
+   */
+  @BetaApi
+  public static Expression split(Expression value, Expression delimiter) {
+    return new FunctionExpression("split", ImmutableList.of(value, delimiter));
+  }
+
+  /**
+   * Creates an expression that splits a string or blob by a delimiter.
+   *
+   * @param value The expression representing the string or blob to split.
+   * @param delimiter The delimiter to split by.
+   * @return A new {@link Expression} representing the split string or blob as an array.
+   */
+  @BetaApi
+  public static Expression split(Expression value, String delimiter) {
+    return split(value, constant(delimiter));
+  }
+
+  /**
+   * Creates an expression that splits a string or blob by a delimiter.
+   *
+   * @param fieldName The name of the field containing the string or blob to split.
+   * @param delimiter The delimiter to split by.
+   * @return A new {@link Expression} representing the split string or blob as an array.
+   */
+  @BetaApi
+  public static Expression split(String fieldName, Expression delimiter) {
+    return split(field(fieldName), delimiter);
+  }
+
+  /**
+   * Creates an expression that splits a string or blob by a delimiter.
+   *
+   * @param fieldName The name of the field containing the string or blob to split.
+   * @param delimiter The delimiter to split by.
+   * @return A new {@link Expression} representing the split string or blob as an array.
+   */
+  @BetaApi
+  public static Expression split(String fieldName, String delimiter) {
+    return split(field(fieldName), constant(delimiter));
+  }
+
+  /**
    * Creates an expression that concatenates string expressions together.
    *
    * @param firstString The expression representing the initial string value.
@@ -2516,6 +2605,145 @@ public abstract class Expression {
     return timestampSubtract(field(fieldName), constant(unit), constant(amount));
   }
 
+  /**
+   * Creates an expression that truncates a timestamp to a specified granularity.
+   *
+   * @param timestamp The timestamp expression.
+   * @param granularity The granularity to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public static Expression timestampTruncate(Expression timestamp, String granularity) {
+    return new FunctionExpression(
+        "timestamp_trunc", ImmutableList.of(timestamp, constant(granularity)));
+  }
+
+  /**
+   * Creates an expression that truncates a timestamp to a specified granularity.
+   *
+   * @param timestamp The timestamp expression.
+   * @param granularity The granularity expression to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public static Expression timestampTruncate(Expression timestamp, Expression granularity) {
+    return new FunctionExpression("timestamp_trunc", ImmutableList.of(timestamp, granularity));
+  }
+
+  /**
+   * Creates an expression that truncates a timestamp to a specified granularity.
+   *
+   * @param fieldName The name of the field containing the timestamp.
+   * @param granularity The granularity to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public static Expression timestampTruncate(String fieldName, String granularity) {
+    return timestampTruncate(field(fieldName), constant(granularity));
+  }
+
+  /**
+   * Creates an expression that truncates a timestamp to a specified granularity.
+   *
+   * @param fieldName The name of the field containing the timestamp.
+   * @param granularity The granularity expression to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public static Expression timestampTruncate(String fieldName, Expression granularity) {
+    return timestampTruncate(field(fieldName), granularity);
+  }
+
+  /**
+   * Creates an expression that truncates a timestamp to a specified granularity in a given
+   * timezone.
+   *
+   * @param timestamp The timestamp expression.
+   * @param granularity The granularity to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone to use for truncation. Valid values are from the TZ database
+   *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public static Expression timestampTruncate(
+      Expression timestamp, String granularity, String timezone) {
+    return new FunctionExpression(
+        "timestamp_trunc", ImmutableList.of(timestamp, constant(granularity), constant(timezone)));
+  }
+
+  /**
+   * Creates an expression that truncates a timestamp to a specified granularity in a given
+   * timezone.
+   *
+   * @param timestamp The timestamp expression.
+   * @param granularity The granularity expression to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone to use for truncation. Valid values are from the TZ database
+   *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public static Expression timestampTruncate(
+      Expression timestamp, Expression granularity, String timezone) {
+    return new FunctionExpression(
+        "timestamp_trunc", ImmutableList.of(timestamp, granularity, constant(timezone)));
+  }
+
+  /**
+   * Creates an expression that truncates a timestamp to a specified granularity in a given
+   * timezone.
+   *
+   * @param fieldName The name of the field containing the timestamp.
+   * @param granularity The granularity to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone to use for truncation. Valid values are from the TZ database
+   *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public static Expression timestampTruncate(
+      String fieldName, String granularity, String timezone) {
+    return timestampTruncate(field(fieldName), constant(granularity), timezone);
+  }
+
+  /**
+   * Creates an expression that truncates a timestamp to a specified granularity in a given
+   * timezone.
+   *
+   * @param fieldName The name of the field containing the timestamp.
+   * @param granularity The granularity expression to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone to use for truncation. Valid values are from the TZ database
+   *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public static Expression timestampTruncate(
+      String fieldName, Expression granularity, String timezone) {
+    return timestampTruncate(field(fieldName), granularity, timezone);
+  }
+
   // Conditional Functions
   /**
    * Creates a conditional expression that evaluates to a {@code thenExpr} expression if a condition
@@ -2770,6 +2998,30 @@ public abstract class Expression {
   @BetaApi
   public static BooleanExpression isNotNull(String fieldName) {
     return isNotNull(field(fieldName));
+  }
+
+  /**
+   * Creates an expression that returns a string indicating the type of the value this expression
+   * evaluates to.
+   *
+   * @param expr The expression to get the type of.
+   * @return A new {@link Expression} representing the type operation.
+   */
+  @BetaApi
+  public static Expression type(Expression expr) {
+    return new FunctionExpression("type", ImmutableList.of(expr));
+  }
+
+  /**
+   * Creates an expression that returns a string indicating the type of the value this field
+   * evaluates to.
+   *
+   * @param fieldName The name of the field to get the type of.
+   * @return A new {@link Expression} representing the type operation.
+   */
+  @BetaApi
+  public static Expression type(String fieldName) {
+    return type(field(fieldName));
   }
 
   // Numeric Operations
@@ -3126,18 +3378,6 @@ public abstract class Expression {
   @BetaApi
   public static Expression sqrt(String numericField) {
     return sqrt(field(numericField));
-  }
-
-  // String Operations
-  /**
-   * Creates an expression that return a pseudo-random number of type double in the range of [0, 1),
-   * inclusive of 0 and exclusive of 1.
-   *
-   * @return A new {@link Expression} representing the random number operation.
-   */
-  @BetaApi
-  public static Expression rand() {
-    return new FunctionExpression("rand", ImmutableList.of());
   }
 
   // Logical/Comparison Operations
@@ -3742,6 +3982,52 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that removes specified characters from the beginning and end of this
+   * string or blob expression.
+   *
+   * @param characters The characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public Expression trimValue(String characters) {
+    return trimValue(this, characters);
+  }
+
+  /**
+   * Creates an expression that removes specified characters from the beginning and end of this
+   * string or blob expression.
+   *
+   * @param characters The expression representing the characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public Expression trimValue(Expression characters) {
+    return trimValue(this, characters);
+  }
+
+  /**
+   * Creates an expression that splits this string or blob expression by a delimiter.
+   *
+   * @param delimiter The delimiter to split by.
+   * @return A new {@link Expression} representing the split string or blob as an array.
+   */
+  @BetaApi
+  public Expression split(Expression delimiter) {
+    return split(this, delimiter);
+  }
+
+  /**
+   * Creates an expression that splits this string or blob expression by a delimiter.
+   *
+   * @param delimiter The delimiter to split by.
+   * @return A new {@link Expression} representing the split string or blob as an array.
+   */
+  @BetaApi
+  public Expression split(String delimiter) {
+    return split(this, delimiter);
+  }
+
+  /**
    * Creates an expression that concatenates string expressions and string constants together.
    *
    * @param others The string expressions or string constants to concatenate.
@@ -4271,6 +4557,34 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that truncates this timestamp expression to a specified granularity.
+   *
+   * @param granularity The granularity to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public final Expression timestampTruncate(String granularity) {
+    return timestampTruncate(this, granularity);
+  }
+
+  /**
+   * Creates an expression that truncates this timestamp expression to a specified granularity.
+   *
+   * @param granularity The granularity expression to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public final Expression timestampTruncate(Expression granularity) {
+    return timestampTruncate(this, granularity);
+  }
+
+  /**
    * Creates an expression that checks if this expression evaluates to a name of the field that
    * exists.
    *
@@ -4334,5 +4648,16 @@ public abstract class Expression {
   @BetaApi
   public final Expression collectionId() {
     return collectionId(this);
+  }
+
+  /**
+   * Creates an expression that returns a string indicating the type of the value this expression
+   * evaluates to.
+   *
+   * @return A new {@link Expression} representing the type operation.
+   */
+  @BetaApi
+  public final Expression type() {
+    return type(this);
   }
 }

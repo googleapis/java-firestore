@@ -485,7 +485,7 @@ public class ITQueryToPipelineTest extends ITBaseTest {
     Query query1 = collRef.whereNotEqualTo("bar", Double.NaN).orderBy("foo");
     List<PipelineResult> snapshot =
         firestore.pipeline().createFrom(query1).execute().get().getResults();
-    verifyResults(snapshot, map("foo", 2L, "bar", 1L));
+    verifyResults(snapshot, map("foo", 2L, "bar", 1L), map("foo", 3L, "bar", "bar"));
   }
 
   @Test

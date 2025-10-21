@@ -32,6 +32,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayCo
 import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayGet;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayReverse;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.ceil;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.concat;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.conditional;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.constant;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.cosineDistance;
@@ -54,7 +55,6 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.notEqua
 import static com.google.cloud.firestore.pipeline.expressions.Expression.nullValue;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.or;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.pow;
-import static com.google.cloud.firestore.pipeline.expressions.Expression.rand;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.regexMatch;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.round;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.sqrt;
@@ -79,6 +79,7 @@ import static org.junit.Assume.assumeFalse;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
@@ -903,7 +904,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .collection(collection.getPath())
-            // .select(field("title").stringReverse().as("reversed_title"), field("author"))
+            .select(field("title").reverse().as("reversed_title"), field("author"))
             .where(field("author").equal("Douglas Adams"))
             .execute()
             .get()
@@ -990,6 +991,29 @@ public class ITPipelineTest extends ITBaseTest {
                 map(
                     "spacedTitle", " The Hitchhiker's Guide to the Galaxy ",
                     "trimmedTitle", "The Hitchhiker's Guide to the Galaxy")));
+  }
+
+  @Test
+  public void testTrimWithCharacters() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .addFields(concat(constant("_-"), field("title"), constant("-_")).as("paddedTitle"))
+            .select(field("paddedTitle").trimValue("_-").as("trimmedTitle"), field("paddedTitle"))
+            .limit(1)
+            .execute()
+            .get()
+            .getResults();
+
+    assertThat(data(results))
+        .isEqualTo(
+            Lists.newArrayList(
+                map(
+                    "paddedTitle",
+                    "_-The Hitchhiker's Guide to the Galaxy-_",
+                    "trimmedTitle",
+                    "The Hitchhiker's Guide to the Galaxy")));
   }
 
   @Test
@@ -1372,6 +1396,68 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
+  public void testTimestampTrunc() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "Timestamp Book"))
+            .select(
+                Expression.timestampTruncate(field("timestamp"), "year").as("trunc_year"),
+                Expression.timestampTruncate(field("timestamp"), "month").as("trunc_month"),
+                Expression.timestampTruncate(field("timestamp"), "day").as("trunc_day"),
+                Expression.timestampTruncate(field("timestamp"), "hour").as("trunc_hour"),
+                Expression.timestampTruncate(field("timestamp"), "minute").as("trunc_minute"),
+                Expression.timestampTruncate(field("timestamp"), "second").as("trunc_second"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(results).hasSize(1);
+    Map<String, Object> data = results.get(0).getData();
+    Date originalDate = (Date) bookDocs.get("book11").get("timestamp");
+    java.util.Calendar cal = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC"));
+    cal.setTime(originalDate);
+
+    cal.set(java.util.Calendar.MONTH, java.util.Calendar.JANUARY);
+    cal.set(java.util.Calendar.DAY_OF_MONTH, 1);
+    cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
+    cal.set(java.util.Calendar.MINUTE, 0);
+    cal.set(java.util.Calendar.SECOND, 0);
+    cal.set(java.util.Calendar.MILLISECOND, 0);
+    assertThat(data.get("trunc_year")).isEqualTo(Timestamp.of(cal.getTime()));
+
+    cal.setTime(originalDate);
+    cal.set(java.util.Calendar.DAY_OF_MONTH, 1);
+    cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
+    cal.set(java.util.Calendar.MINUTE, 0);
+    cal.set(java.util.Calendar.SECOND, 0);
+    cal.set(java.util.Calendar.MILLISECOND, 0);
+    assertThat(data.get("trunc_month")).isEqualTo(Timestamp.of(cal.getTime()));
+
+    cal.setTime(originalDate);
+    cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
+    cal.set(java.util.Calendar.MINUTE, 0);
+    cal.set(java.util.Calendar.SECOND, 0);
+    cal.set(java.util.Calendar.MILLISECOND, 0);
+    assertThat(data.get("trunc_day")).isEqualTo(Timestamp.of(cal.getTime()));
+
+    cal.setTime(originalDate);
+    cal.set(java.util.Calendar.MINUTE, 0);
+    cal.set(java.util.Calendar.SECOND, 0);
+    cal.set(java.util.Calendar.MILLISECOND, 0);
+    assertThat(data.get("trunc_hour")).isEqualTo(Timestamp.of(cal.getTime()));
+
+    cal.setTime(originalDate);
+    cal.set(java.util.Calendar.SECOND, 0);
+    cal.set(java.util.Calendar.MILLISECOND, 0);
+    assertThat(data.get("trunc_minute")).isEqualTo(Timestamp.of(cal.getTime()));
+
+    cal.setTime(originalDate);
+    cal.set(java.util.Calendar.MILLISECOND, 0);
+    assertThat(data.get("trunc_second")).isEqualTo(Timestamp.of(cal.getTime()));
+  }
+
+  @Test
   public void testMathExpressions() throws Exception {
     List<PipelineResult> results =
         firestore
@@ -1427,7 +1513,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .collection(collection.getPath())
             .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
-            .select(Expression.concat(field("author"), " ", field("title")).as("author_title"))
+            .select(concat(field("author"), " ", field("title")).as("author_title"))
             .execute()
             .get()
             .getResults();
@@ -1441,7 +1527,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .collection(collection.getPath())
             .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
-            .select(Expression.concat(field("tags"), ImmutableList.of("newTag")).as("new_tags"))
+            .select(concat(field("tags"), ImmutableList.of("newTag")).as("new_tags"))
             .execute()
             .get()
             .getResults();
@@ -1459,7 +1545,7 @@ public class ITPipelineTest extends ITBaseTest {
             .collection(collection.getPath())
             .limit(1)
             .select(
-                Expression.concat(
+                concat(
                         constant(com.google.cloud.firestore.Blob.fromBytes(bytes1)),
                         com.google.cloud.firestore.Blob.fromBytes(bytes2))
                     .as("concatenated_blob"))
@@ -1470,18 +1556,18 @@ public class ITPipelineTest extends ITBaseTest {
     assertThat(((com.google.cloud.firestore.Blob) result.get("concatenated_blob")).toBytes())
         .isEqualTo(expected);
 
-    // Mismatched types should result in null.
-    results =
-        firestore
-            .pipeline()
-            .collection(collection.getPath())
-            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
-            .select(Expression.concat(field("title"), field("tags")).as("mismatched"))
-            .execute()
-            .get()
-            .getResults();
-    result = data(results).get(0);
-    assertThat(result.get("mismatched")).isNull();
+    // Mismatched types should just fail.
+    assertThrows(
+        ExecutionException.class,
+        () ->
+            firestore
+                .pipeline()
+                .collection(collection.getPath())
+                .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+                .select(concat(field("title"), field("tags")).as("mismatched"))
+                .execute()
+                .get()
+                .getResults());
   }
 
   @Test
@@ -1502,22 +1588,6 @@ public class ITPipelineTest extends ITBaseTest {
     // Check that the timestamp is recent (e.g., within the last 5 seconds)
     long diff = new Date().getTime() - nowTimestamp.toDate().getTime();
     assertThat(diff).isAtMost(5000L);
-  }
-
-  @Test
-  public void testErrorExpression() {
-    Exception exception =
-        assertThrows(
-            Exception.class,
-            () -> {
-              firestore
-                  .pipeline()
-                  .collection(collection.getPath())
-                  .select(Expression.error("test error").as("error"))
-                  .execute()
-                  .get();
-            });
-    assertThat(exception.getMessage()).contains("test error");
   }
 
   @Test
@@ -1696,25 +1766,6 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
-  public void testRand() throws Exception {
-    List<PipelineResult> results =
-        firestore
-            .pipeline()
-            .collection(collection.getPath())
-            .limit(10)
-            .select(rand().as("result"))
-            .execute()
-            .get()
-            .getResults();
-    assertThat(results).hasSize(10);
-    for (PipelineResult result : results) {
-      Double randVal = (Double) result.getData().get("result");
-      assertThat(randVal).isAtLeast(0.0);
-      assertThat(randVal).isLessThan(1.0);
-    }
-  }
-
-  @Test
   public void testVectorLength() throws Exception {
     List<PipelineResult> results =
         firestore
@@ -1760,6 +1811,177 @@ public class ITPipelineTest extends ITBaseTest {
             .get()
             .getResults();
     assertThat(data(results)).isEqualTo(Lists.newArrayList(map("of", "of", "Rings", "Rings")));
+  }
+
+  @Test
+  public void testSplitStringByStringDelimiter() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(Expression.split(field("title"), " ").as("split_title"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results))
+        .containsExactly(
+            map(
+                "split_title",
+                ImmutableList.of("The", "Hitchhiker's", "Guide", "to", "the", "Galaxy")));
+
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(field("title").split(" ").as("split_title"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results))
+        .containsExactly(
+            map(
+                "split_title",
+                ImmutableList.of("The", "Hitchhiker's", "Guide", "to", "the", "Galaxy")));
+  }
+
+  @Test
+  public void testSplitStringByExpressionDelimiter() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(Expression.split(field("title"), constant(" ")).as("split_title"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results))
+        .containsExactly(
+            map(
+                "split_title",
+                ImmutableList.of("The", "Hitchhiker's", "Guide", "to", "the", "Galaxy")));
+
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(field("title").split(constant(" ")).as("split_title"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results))
+        .containsExactly(
+            map(
+                "split_title",
+                ImmutableList.of("The", "Hitchhiker's", "Guide", "to", "the", "Galaxy")));
+  }
+
+  @Test
+  public void testSplitBlobByByteArrayDelimiter() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .limit(1)
+            .addFields(
+                constant(Blob.fromBytes(new byte[] {0x01, 0x02, 0x03, 0x04, 0x01, 0x05}))
+                    .as("data"))
+            .select(
+                Expression.split(field("data"), constant(Blob.fromBytes(new byte[] {0x01})))
+                    .as("split_data"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results))
+        .containsExactly(
+            map(
+                "split_data",
+                ImmutableList.of(
+                    Blob.fromBytes(new byte[] {}),
+                    Blob.fromBytes(new byte[] {0x02, 0x03, 0x04}),
+                    Blob.fromBytes(new byte[] {0x05}))));
+
+    results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .limit(1)
+            .addFields(
+                constant(Blob.fromBytes(new byte[] {0x01, 0x02, 0x03, 0x04, 0x01, 0x05}))
+                    .as("data"))
+            .select(
+                field("data").split(constant(Blob.fromBytes(new byte[] {0x01}))).as("split_data"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results))
+        .containsExactly(
+            map(
+                "split_data",
+                ImmutableList.of(
+                    Blob.fromBytes(new byte[] {}),
+                    Blob.fromBytes(new byte[] {0x02, 0x03, 0x04}),
+                    Blob.fromBytes(new byte[] {0x05}))));
+  }
+
+  @Test
+  public void testSplitStringFieldByStringDelimiter() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(Expression.split("title", " ").as("split_title"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results))
+        .containsExactly(
+            map(
+                "split_title",
+                ImmutableList.of("The", "Hitchhiker's", "Guide", "to", "the", "Galaxy")));
+  }
+
+  @Test
+  public void testSplitStringFieldByExpressionDelimiter() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .select(Expression.split("title", constant(" ")).as("split_title"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results))
+        .containsExactly(
+            map(
+                "split_title",
+                ImmutableList.of("The", "Hitchhiker's", "Guide", "to", "the", "Galaxy")));
+  }
+
+  @Test
+  public void testSplitWithMismatchedTypesShouldFail() {
+    ExecutionException exception =
+        assertThrows(
+            ExecutionException.class,
+            () ->
+                firestore
+                    .pipeline()
+                    .collection(collection.getPath())
+                    .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+                    .select(
+                        Expression.split(
+                                field("title"), constant(Blob.fromBytes(new byte[] {0x01})))
+                            .as("mismatched_split"))
+                    .execute()
+                    .get());
+    assertThat(exception.getCause()).isInstanceOf(ApiException.class);
+    ApiException apiException = (ApiException) exception.getCause();
+    assertThat(apiException.getStatusCode().getCode()).isEqualTo(StatusCode.Code.INVALID_ARGUMENT);
   }
 
   @Test
@@ -2330,6 +2552,37 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
+  public void testType() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .limit(1)
+            .select(
+                Expression.type("title").as("string_type"),
+                Expression.type("published").as("number_type"),
+                Expression.type(field("awards").mapGet("hugo")).as("boolean_type"),
+                Expression.type(nullValue()).as("null_type"),
+                Expression.type("embedding").as("vector_type"))
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results))
+        .containsExactly(
+            map(
+                "string_type",
+                "string",
+                "number_type",
+                "int64",
+                "boolean_type",
+                "boolean",
+                "null_type",
+                "null",
+                "vector_type",
+                "vector"));
+  }
+
+  @Test
   public void testExplainWithError() {
     assumeFalse(
         "Explain with error is not supported against the emulator.",
@@ -2369,5 +2622,78 @@ public class ITPipelineTest extends ITBaseTest {
               });
       assertThat(exception.getMessage()).contains("Invalid CollectionReference");
     }
+  }
+
+  @Test
+  public void disallowDuplicateAliasesInAggregate() {
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+              firestore
+                  .pipeline()
+                  .collection(collection.getPath())
+                  .aggregate(countAll().as("dup"), AggregateFunction.average("rating").as("dup"));
+            });
+    assertThat(exception).hasMessageThat().contains("Duplicate alias or field name");
+  }
+
+  @Test
+  public void disallowDuplicateAliasesInSelect() {
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+              firestore
+                  .pipeline()
+                  .collection(collection.getPath())
+                  .select(field("title").as("dup"), field("author").as("dup"));
+            });
+    assertThat(exception).hasMessageThat().contains("Duplicate alias or field name");
+  }
+
+  @Test
+  public void disallowDuplicateAliasesInAddFields() {
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+              firestore
+                  .pipeline()
+                  .collection(collection.getPath())
+                  .addFields(field("title").as("dup"), field("author").as("dup"));
+            });
+    assertThat(exception).hasMessageThat().contains("Duplicate alias or field name");
+  }
+
+  @Test
+  public void disallowDuplicateAliasesInDistinct() {
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+              firestore
+                  .pipeline()
+                  .collection(collection.getPath())
+                  .distinct(field("genre").as("dup"), field("author").as("dup"));
+            });
+    assertThat(exception).hasMessageThat().contains("Duplicate alias or field name");
+  }
+
+  @Test
+  public void disallowDuplicateAliasesAcrossStages() {
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+              firestore
+                  .pipeline()
+                  .collection(collection.getPath())
+                  .select(field("title").as("title_dup"))
+                  .addFields(field("author").as("author_dup"))
+                  .distinct(field("genre").as("genre_dup"))
+                  .select(field("title_dup").as("final_dup"), field("author_dup").as("final_dup"));
+            });
+    assertThat(exception).hasMessageThat().contains("Duplicate alias or field name");
   }
 }

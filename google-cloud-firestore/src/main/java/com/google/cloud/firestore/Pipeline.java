@@ -1291,7 +1291,7 @@ public final class Pipeline {
           }
         };
 
-    logger.log(Level.INFO, "Sending pipeline request: " + request.getStructuredPipeline());
+    logger.log(Level.FINEST, "Sending pipeline request: " + request.getStructuredPipeline());
 
     rpcContext.streamRequest(request, observer, rpcContext.getClient().executePipelineCallable());
   }
