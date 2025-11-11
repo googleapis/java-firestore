@@ -23,11 +23,16 @@ import static com.google.cloud.firestore.pipeline.expressions.Ordering.*;
 import com.google.api.core.ApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 
+import com.google.cloud.firestore.ExplainMetrics;
+import com.google.cloud.firestore.ExplainOptions;
+import com.google.cloud.firestore.ExplainResults;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.Pipeline;
+import com.google.cloud.firestore.PlanSummary;
 import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.VectorValue;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
@@ -44,6 +49,18 @@ class PipelineSnippets {
 
   PipelineSnippets(Firestore firestore) {
     this.firestore = firestore;
+  }
+
+  void queryExplain() throws ExecutionException, InterruptedException {
+    // [START query_explain]
+    Query q = firestore.collection("cities")
+        .whereGreaterThan("population", 1);
+    ExplainOptions options = ExplainOptions.builder().build();
+
+    ExplainResults<QuerySnapshot> explainResults = q.explain(options).get();
+    ExplainMetrics metrics = explainResults.getMetrics();
+    PlanSummary planSummary = metrics.getPlanSummary();
+    // [END query_explain]
   }
 
   void pipelineConcepts() throws ExecutionException, InterruptedException {
