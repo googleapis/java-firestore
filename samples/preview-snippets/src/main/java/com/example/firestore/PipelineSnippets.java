@@ -23,20 +23,8 @@ import static com.google.cloud.firestore.pipeline.expressions.Ordering.*;
 import com.google.api.core.ApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
-import com.google.cloud.firestore.Pipeline;
-import com.google.cloud.firestore.Query;
-import com.google.cloud.firestore.VectorValue;
-import com.google.cloud.firestore.pipeline.stages.Aggregate;
-import com.google.cloud.firestore.pipeline.stages.FindNearest;
-import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
-import com.google.cloud.firestore.pipeline.stages.Sample;
-import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.Query;
@@ -1514,5 +1502,1450 @@ class PipelineSnippets {
             .get();
     // [END vector_length]
     System.out.println(result.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/getting-started/stages-expressions
+  void stagesExpressionsExample() throws ExecutionException, InterruptedException {
+    // [START stages_expressions_example]
+    com.google.cloud.firestore.pipeline.expressions.Expression trailing30Days =
+        constant(com.google.cloud.Timestamp.now().toProto().getSeconds() * 1000)
+            .unixMillisToTimestamp()
+            .timestampSubtract("day", 30);
+    Pipeline.Snapshot snapshot =
+        firestore
+            .pipeline()
+            .collection("productViews")
+            .where(field("viewedAt").greaterThan(trailing30Days))
+            .aggregate(countDistinct("productId").as("uniqueProductViews"))
+            .execute()
+            .get();
+    // [END stages_expressions_example]
+    System.out.println(snapshot.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/transformation/where
+  void createWhereData() {
+    // [START create_where_data]
+    firestore
+        .collection("cities")
+        .document("SF")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "San Francisco");
+                put("state", "CA");
+                put("country", "USA");
+                put("population", 870000);
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("LA")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Los Angeles");
+                put("state", "CA");
+                put("country", "USA");
+                put("population", 3970000);
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("NY")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "New York");
+                put("state", "NY");
+                put("country", "USA");
+                put("population", 8530000);
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("TOR")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Toronto");
+                put("state", null);
+                put("country", "Canada");
+                put("population", 2930000);
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("MEX")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Mexico City");
+                put("state", null);
+                put("country", "Mexico");
+                put("population", 9200000);
+              }
+            });
+    // [END create_where_data]
+  }
+
+  void whereEqualityExample() throws ExecutionException, InterruptedException {
+    // [START where_equality_example]
+    Pipeline.Snapshot cities =
+        firestore.pipeline().collection("cities").where(field("state").equal("CA")).execute().get();
+    // [END where_equality_example]
+    System.out.println(cities.getResults());
+  }
+
+  void whereMultipleStagesExample() throws ExecutionException, InterruptedException {
+    // [START where_multiple_stages]
+    Pipeline.Snapshot cities =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .where(field("location.country").equal("USA"))
+            .where(field("population").greaterThan(500000))
+            .execute()
+            .get();
+    // [END where_multiple_stages]
+    System.out.println(cities.getResults());
+  }
+
+  void whereComplexExample() throws ExecutionException, InterruptedException {
+    // [START where_complex]
+    Pipeline.Snapshot cities =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .where(
+                or(
+                    like(field("name"), "San%"),
+                    and(
+                        field("location.state").charLength().greaterThan(7),
+                        field("location.country").equal("USA"))))
+            .execute()
+            .get();
+    // [END where_complex]
+    System.out.println(cities.getResults());
+  }
+
+  void whereStageOrderExample() throws ExecutionException, InterruptedException {
+    // [START where_stage_order]
+    Pipeline.Snapshot cities =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .limit(10)
+            .where(field("location.country").equal("USA"))
+            .execute()
+            .get();
+    // [END where_stage_order]
+    System.out.println(cities.getResults());
+  }
+
+  void whereHavingExample() throws ExecutionException, InterruptedException {
+    // [START where_having_example]
+    Pipeline.Snapshot cities =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .aggregate(
+                Aggregate.withAccumulators(sum("population").as("totalPopulation"))
+                    .withGroups("location.state"))
+            .where(field("totalPopulation").greaterThan(10000000))
+            .execute()
+            .get();
+    // [END where_having_example]
+    System.out.println(cities.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/transformation/unnest
+  void unnestSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START unnest_syntax]
+    Pipeline.Snapshot userScore =
+        firestore
+            .pipeline()
+            .collection("users")
+            .unnest("scores", "userScore", new UnnestOptions().withIndexField("attempt"))
+            .execute()
+            .get();
+    // [END unnest_syntax]
+    System.out.println(userScore.getResults());
+  }
+
+  void unnestAliasIndexDataExample() {
+    // [START unnest_alias_index_data]
+    firestore
+        .collection("users")
+        .add(
+            new HashMap<String, Object>() {
+              {
+                put("name", "foo");
+                put("scores", Arrays.asList(5, 4));
+                put("userScore", 0);
+              }
+            });
+    firestore
+        .collection("users")
+        .add(
+            new HashMap<String, Object>() {
+              {
+                put("name", "bar");
+                put("scores", Arrays.asList(1, 3));
+                put("attempt", 5);
+              }
+            });
+    // [END unnest_alias_index_data]
+  }
+
+  void unnestAliasIndexExample() throws ExecutionException, InterruptedException {
+    // [START unnest_alias_index]
+    Pipeline.Snapshot userScore =
+        firestore
+            .pipeline()
+            .collection("users")
+            .unnest("scores", "userScore", new UnnestOptions().withIndexField("attempt"))
+            .execute()
+            .get();
+    // [END unnest_alias_index]
+    System.out.println(userScore.getResults());
+  }
+
+  void unnestNonArrayDataExample() {
+    // [START unnest_nonarray_data]
+    firestore
+        .collection("users")
+        .add(
+            new HashMap<String, Object>() {
+              {
+                put("name", "foo");
+                put("scores", 1);
+              }
+            });
+    firestore
+        .collection("users")
+        .add(
+            new HashMap<String, Object>() {
+              {
+                put("name", "bar");
+                put("scores", null);
+              }
+            });
+    firestore
+        .collection("users")
+        .add(
+            new HashMap<String, Object>() {
+              {
+                put("name", "qux");
+                put(
+                    "scores",
+                    new HashMap<String, Object>() {
+                      {
+                        put("backupScores", 1);
+                      }
+                    });
+              }
+            });
+    // [END unnest_nonarray_data]
+  }
+
+  void unnestNonArrayExample() throws ExecutionException, InterruptedException {
+    // [START unnest_nonarray]
+    Pipeline.Snapshot userScore =
+        firestore
+            .pipeline()
+            .collection("users")
+            .unnest("scores", "userScore", new UnnestOptions().withIndexField("attempt"))
+            .execute()
+            .get();
+    // [END unnest_nonarray]
+    System.out.println(userScore.getResults());
+  }
+
+  void unnestEmptyArrayDataExample() {
+    // [START unnest_empty_array_data]
+    firestore
+        .collection("users")
+        .add(
+            new HashMap<String, Object>() {
+              {
+                put("name", "foo");
+                put("scores", Arrays.asList(5, 4));
+              }
+            });
+    firestore
+        .collection("users")
+        .add(
+            new HashMap<String, Object>() {
+              {
+                put("name", "bar");
+                put("scores", Arrays.asList());
+              }
+            });
+    // [END unnest_empty_array_data]
+  }
+
+  void unnestEmptyArrayExample() throws ExecutionException, InterruptedException {
+    // [START unnest_empty_array]
+    Pipeline.Snapshot userScore =
+        firestore
+            .pipeline()
+            .collection("users")
+            .unnest("scores", "userScore", new UnnestOptions().withIndexField("attempt"))
+            .execute()
+            .get();
+    // [END unnest_empty_array]
+    System.out.println(userScore.getResults());
+  }
+
+  void unnestPreserveEmptyArrayExample() throws ExecutionException, InterruptedException {
+    // [START unnest_preserve_empty_array]
+    // Seems like the unnest method is missing:
+    // https://github.com/googleapis/java-firestore/blob/742fab6583c9a6f9c47cf0496124c3c9b05fe0ee/google-cloud-firestore/src/main/java/com/google/cloud/firestore/Pipeline.java#L995
+    // Pipeline.Snapshot userScore =
+    //     firestore
+    //         .pipeline()
+    //         .collection("users")
+    //         .unnest(
+    //             conditional(
+    //                 field("scores").equal(array()),
+    //                 array(field("scores")),
+    //                 field("scores")
+    //             ).as("userScore"),
+    //             new UnnestOptions().withIndexField("attempt"))
+    //         .execute()
+    //         .get();
+    // [END unnest_preserve_empty_array]
+    // System.out.println(userScore.getResults());
+  }
+
+  void unnestNestedDataExample() {
+    // [START unnest_nested_data]
+    firestore
+        .collection("users")
+        .add(
+            new HashMap<String, Object>() {
+              {
+                put("name", "foo");
+                put(
+                    "record",
+                    Arrays.asList(
+                        new HashMap<String, Object>() {
+                          {
+                            put("scores", Arrays.asList(5, 4));
+                            put("avg", 4.5);
+                          }
+                        },
+                        new HashMap<String, Object>() {
+                          {
+                            put("scores", Arrays.asList(1, 3));
+                            put("old_avg", 2);
+                          }
+                        }));
+              }
+            });
+    // [END unnest_nested_data]
+  }
+
+  void unnestNestedExample() throws ExecutionException, InterruptedException {
+    // [START unnest_nested]
+    Pipeline.Snapshot userScore =
+        firestore
+            .pipeline()
+            .collection("users")
+            .unnest("record", "record")
+            .unnest("record.scores", "userScore", new UnnestOptions().withIndexField("attempt"))
+            .execute()
+            .get();
+    // [END unnest_nested]
+    System.out.println(userScore.getResults());
+  }
+
+  // https://cloud.corp.google.com/firestore/docs/pipeline/stages/transformation/sample
+  void sampleSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START sample_syntax]
+    Pipeline.Snapshot sampled1 = firestore.pipeline().database().sample(50).execute().get();
+
+    Pipeline.Snapshot sampled2 =
+        firestore.pipeline().database().sample(Sample.withPercentage(0.5)).execute().get();
+    // [END sample_syntax]
+    System.out.println(sampled1.getResults());
+    System.out.println(sampled2.getResults());
+  }
+
+  void sampleDocumentsDataExample() {
+    // [START sample_documents_data]
+    firestore
+        .collection("cities")
+        .document("SF")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "San Francisco");
+                put("state", "California");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("NYC")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "New York City");
+                put("state", "New York");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("CHI")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Chicago");
+                put("state", "Illinois");
+              }
+            });
+    // [END sample_documents_data]
+  }
+
+  void sampleDocumentsExample() throws ExecutionException, InterruptedException {
+    // [START sample_documents]
+    Pipeline.Snapshot sampled =
+        firestore.pipeline().collection("cities").sample(1).execute().get();
+    // [END sample_documents]
+    System.out.println(sampled.getResults());
+  }
+
+  void sampleAllDocumentsExample() throws ExecutionException, InterruptedException {
+    // [START sample_all_documents]
+    Pipeline.Snapshot sampled =
+        firestore.pipeline().collection("cities").sample(5).execute().get();
+    // [END sample_all_documents]
+    System.out.println(sampled.getResults());
+  }
+
+  void samplePercentageDataExample() {
+    // [START sample_percentage_data]
+    firestore
+        .collection("cities")
+        .document("SF")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "San Francisco");
+                put("state", "California");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("NYC")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "New York City");
+                put("state", "New York");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("CHI")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Chicago");
+                put("state", "Illinois");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("ATL")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Atlanta");
+                put("state", "Georgia");
+              }
+            });
+    // [END sample_percentage_data]
+  }
+
+  void samplePercentageExample() throws ExecutionException, InterruptedException {
+    // [START sample_percentage]
+    Pipeline.Snapshot sampled =
+        firestore.pipeline().collection("cities").sample(Sample.withPercentage(0.5)).execute().get();
+    // [END sample_percentage]
+    System.out.println(sampled.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/transformation/sort
+  void sortSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START sort_syntax]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .sort(ascending(field("population")))
+            .execute()
+            .get();
+    // [END sort_syntax]
+    System.out.println(results.getResults());
+  }
+
+  void sortSyntaxExample2() throws ExecutionException, InterruptedException {
+    // [START sort_syntax_2]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .sort(ascending(charLength(field("name"))))
+            .execute()
+            .get();
+    // [END sort_syntax_2]
+    System.out.println(results.getResults());
+  }
+
+  void sortDocumentIDExample() throws ExecutionException, InterruptedException {
+    // [START sort_document_id]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .sort(ascending(field("country")), ascending(field("__name__")))
+            .execute()
+            .get();
+    // [END sort_document_id]
+    System.out.println(results.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/transformation/select
+  void selectSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START select_syntax]
+    Pipeline.Snapshot names =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .select(
+                stringConcat(field("name"), ", ", field("location.country")).as("name"),
+                field("population"))
+            .execute()
+            .get();
+    // [END select_syntax]
+    System.out.println(names.getResults());
+  }
+
+  void selectPositionDataExample() {
+    // [START select_position_data]
+    firestore
+        .collection("cities")
+        .document("SF")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "San Francisco");
+                put("population", 800000);
+                put(
+                    "location",
+                    new HashMap<String, Object>() {
+                      {
+                        put("country", "USA");
+                        put("state", "California");
+                      }
+                    });
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("TO")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Toronto");
+                put("population", 3000000);
+                put(
+                    "location",
+                    new HashMap<String, Object>() {
+                      {
+                        put("country", "Canada");
+                        put("province", "Ontario");
+                      }
+                    });
+              }
+            });
+    // [END select_position_data]
+  }
+
+  void selectPositionExample() throws ExecutionException, InterruptedException {
+    // [START select_position]
+    Pipeline.Snapshot names =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .where(field("location.country").equal("Canada"))
+            .select(
+                stringConcat(field("name"), ", ", field("location.country")).as("name"),
+                field("population"))
+            .execute()
+            .get();
+    // [END select_position]
+    System.out.println(names.getResults());
+  }
+
+  void selectBadPositionExample() throws ExecutionException, InterruptedException {
+    // [START select_bad_position]
+    Pipeline.Snapshot names =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .select(
+                stringConcat(field("name"), ", ", field("location.country")).as("name"),
+                field("population"))
+            .where(field("location.country").equal("Canada"))
+            .execute()
+            .get();
+    // [END select_bad_position]
+    System.out.println(names.getResults());
+  }
+
+  void selectNestedDataExample() {
+    // [START select_nested_data]
+    firestore
+        .collection("cities")
+        .document("SF")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "San Francisco");
+                put("population", 800000);
+                put(
+                    "location",
+                    new HashMap<String, Object>() {
+                      {
+                        put("country", "USA");
+                        put("state", "California");
+                      }
+                    });
+                put("landmarks", Arrays.asList("Golden Gate Bridge", "Alcatraz"));
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("TO")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Toronto");
+                put("population", 3000000);
+                put("province", "ON");
+                put(
+                    "location",
+                    new HashMap<String, Object>() {
+                      {
+                        put("country", "Canada");
+                        put("province", "Ontario");
+                      }
+                    });
+                put("landmarks", Arrays.asList("CN Tower", "Casa Loma"));
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("AT")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Atlantis");
+                put("population", null);
+              }
+            });
+    // [END select_nested_data]
+  }
+
+  void selectNestedExample() throws ExecutionException, InterruptedException {
+    // [START select_nested]
+    Pipeline.Snapshot locations =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .select(
+                field("name").as("city"),
+                field("location.country").as("country"),
+                arrayGet(field("landmarks"), 0).as("topLandmark"))
+            .execute()
+            .get();
+    // [END select_nested]
+    System.out.println(locations.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/transformation/remove_fields
+  void removeFieldsSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START remove_fields_syntax]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .removeFields("population", "location.state")
+            .execute()
+            .get();
+    // [END remove_fields_syntax]
+    System.out.println(results.getResults());
+  }
+
+  void removeFieldsNestedDataExample() {
+    // [START remove_fields_nested_data]
+    firestore
+        .collection("cities")
+        .document("SF")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "San Francisco");
+                put(
+                    "location",
+                    new HashMap<String, Object>() {
+                      {
+                        put("country", "USA");
+                        put("state", "California");
+                      }
+                    });
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("TO")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Toronto");
+                put(
+                    "location",
+                    new HashMap<String, Object>() {
+                      {
+                        put("country", "Canada");
+                        put("province", "Ontario");
+                      }
+                    });
+              }
+            });
+    // [END remove_fields_nested_data]
+  }
+
+  void removeFieldsNestedExample() throws ExecutionException, InterruptedException {
+    // [START remove_fields_nested]
+    Pipeline.Snapshot results =
+        firestore.pipeline().collection("cities").removeFields("location.state").execute().get();
+    // [END remove_fields_nested]
+    System.out.println(results.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/transformation/limit
+  void limitSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START limit_syntax]
+    Pipeline.Snapshot results = firestore.pipeline().collection("cities").limit(10).execute().get();
+    // [END limit_syntax]
+    System.out.println(results.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/transformation/find_nearest
+  void findNearestSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START find_nearest_syntax]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .findNearest(
+                "embedding",
+                new double[] {1.5, 2.345},
+                FindNearest.DistanceMeasure.EUCLIDEAN,
+                new FindNearestOptions())
+            .execute()
+            .get();
+    // [END find_nearest_syntax]
+    System.out.println(results.getResults());
+  }
+
+  void findNearestLimitExample() throws ExecutionException, InterruptedException {
+    // [START find_nearest_limit]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .findNearest(
+                "embedding",
+                new double[] {1.5, 2.345},
+                FindNearest.DistanceMeasure.EUCLIDEAN,
+                new FindNearestOptions().withLimit(10))
+            .execute()
+            .get();
+    // [END find_nearest_limit]
+    System.out.println(results.getResults());
+  }
+
+  void findNearestDistanceDataExample() {
+    // [START find_nearest_distance_data]
+    firestore
+        .collection("cities")
+        .document("SF")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "San Francisco");
+                put("embedding", Arrays.asList(1.0, -1.0));
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("TO")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Toronto");
+                put("embedding", Arrays.asList(5.0, -10.0));
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("AT")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Atlantis");
+                put("embedding", Arrays.asList(2.0, -4.0));
+              }
+            });
+    // [END find_nearest_distance_data]
+  }
+
+  void findNearestDistanceExample() throws ExecutionException, InterruptedException {
+    // [START find_nearest_distance]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .findNearest(
+                "embedding",
+                new double[] {1.3, 2.345},
+                FindNearest.DistanceMeasure.EUCLIDEAN,
+                new FindNearestOptions()
+                    .withDistanceField("computedDistance"))
+            .execute()
+            .get();
+    // [END find_nearest_distance]
+    System.out.println(results.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/transformation/offset
+  void offsetSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START offset_syntax]
+    Pipeline.Snapshot results =
+        firestore.pipeline().collection("cities").offset(10).execute().get();
+    // [END offset_syntax]
+    System.out.println(results.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/transformation/add_fields
+  void addFieldsSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START add_fields_syntax]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("users")
+            .addFields(stringConcat(field("firstName"), " ", field("lastName")).as("fullName"))
+            .execute()
+            .get();
+    // [END add_fields_syntax]
+    System.out.println(results.getResults());
+  }
+
+  void addFieldsOverlapExample() throws ExecutionException, InterruptedException {
+    // [START add_fields_overlap]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("users")
+            .addFields(abs(field("age")).as("age"))
+            .addFields(add(field("age"), 10).as("age"))
+            .execute()
+            .get();
+    // [END add_fields_overlap]
+    System.out.println(results.getResults());
+  }
+
+  void addFieldsNestingExample() throws ExecutionException, InterruptedException {
+    // [START add_fields_nesting]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("users")
+            .addFields(toLower(field("address.city")).as("address.city"))
+            .execute()
+            .get();
+    // [END add_fields_nesting]
+    System.out.println(results.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/input/collection
+  void collectionInputSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START collection_input_syntax]
+    Pipeline.Snapshot results =
+        firestore.pipeline().collection("cities/SF/departments").execute().get();
+    // [END collection_input_syntax]
+    System.out.println(results.getResults());
+  }
+
+  void collectionInputExampleData() {
+    // [START collection_input_data]
+    firestore
+        .collection("cities")
+        .document("SF")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "San Francisco");
+                put("state", "California");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("NYC")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "New York City");
+                put("state", "New York");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("CHI")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Chicago");
+                put("state", "Illinois");
+              }
+            });
+    firestore
+        .collection("states")
+        .document("CA")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "California");
+              }
+            });
+    // [END collection_input_data]
+  }
+
+  void collectionInputExample() throws ExecutionException, InterruptedException {
+    // [START collection_input]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .sort(ascending(field("name")))
+            .execute()
+            .get();
+    // [END collection_input]
+    System.out.println(results.getResults());
+  }
+
+  void subcollectionInputExampleData() {
+    // [START subcollection_input_data]
+    firestore
+        .collection("cities/SF/departments")
+        .document("building")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "SF Building Department");
+                put("employees", 750);
+              }
+            });
+    firestore
+        .collection("cities/NY/departments")
+        .document("building")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "NY Building Department");
+                put("employees", 1000);
+              }
+            });
+    firestore
+        .collection("cities/CHI/departments")
+        .document("building")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "CHI Building Department");
+                put("employees", 900);
+              }
+            });
+    firestore
+        .collection("cities/NY/departments")
+        .document("finance")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "NY Finance Department");
+                put("employees", 1200);
+              }
+            });
+    // [END subcollection_input_data]
+  }
+
+  void subcollectionInputExample() throws ExecutionException, InterruptedException {
+    // [START subcollection_input]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("cities/NY/departments")
+            .sort(ascending(field("employees")))
+            .execute()
+            .get();
+    // [END subcollection_input]
+    System.out.println(results.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/input/collection_group
+  void collectionGroupInputSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START collection_group_input_syntax]
+    Pipeline.Snapshot results = firestore.pipeline().collectionGroup("departments").execute().get();
+    // [END collection_group_input_syntax]
+    System.out.println(results.getResults());
+  }
+
+  void collectionGroupInputExampleData() {
+    // [START collection_group_data]
+    firestore
+        .collection("cities/SF/departments")
+        .document("building")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "SF Building Department");
+                put("employees", 750);
+              }
+            });
+    firestore
+        .collection("cities/NY/departments")
+        .document("building")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "NY Building Department");
+                put("employees", 1000);
+              }
+            });
+    firestore
+        .collection("cities/CHI/departments")
+        .document("building")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "CHI Building Department");
+                put("employees", 900);
+              }
+            });
+    firestore
+        .collection("cities/NY/departments")
+        .document("finance")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "NY Finance Department");
+                put("employees", 1200);
+              }
+            });
+    // [END collection_group_data]
+  }
+
+  void collectionGroupInputExample() throws ExecutionException, InterruptedException {
+    // [START collection_group_input]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collectionGroup("departments")
+            .sort(ascending(field("employees")))
+            .execute()
+            .get();
+    // [END collection_group_input]
+    System.out.println(results.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/input/database
+  void databaseInputSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START database_syntax]
+    Pipeline.Snapshot results = firestore.pipeline().database().execute().get();
+    // [END database_syntax]
+    System.out.println(results.getResults());
+  }
+
+  void databaseInputSyntaxExampleData() {
+    // [START database_input_data]
+    firestore
+        .collection("cities")
+        .document("SF")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "San Francisco");
+                put("state", "California");
+                put("population", 800000);
+              }
+            });
+    firestore
+        .collection("states")
+        .document("CA")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "California");
+                put("population", 39000000);
+              }
+            });
+    firestore
+        .collection("countries")
+        .document("USA")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "United States of America");
+                put("population", 340000000);
+              }
+            });
+    // [END database_input_data]
+  }
+
+  void databaseInputExample() throws ExecutionException, InterruptedException {
+    // [START database_input]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .database()
+            .sort(ascending(field("population")))
+            .execute()
+            .get();
+    // [END database_input]
+    System.out.println(results.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/input/documents
+  void documentInputSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START document_input_syntax]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .documents(
+                firestore.collection("cities").document("SF"),
+                firestore.collection("cities").document("NY"))
+            .execute()
+            .get();
+    // [END document_input_syntax]
+    System.out.println(results.getResults());
+  }
+
+  void documentInputExampleData() {
+    // [START document_input_data]
+    firestore
+        .collection("cities")
+        .document("SF")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "San Francisco");
+                put("state", "California");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("NYC")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "New York City");
+                put("state", "New York");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("CHI")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Chicago");
+                put("state", "Illinois");
+              }
+            });
+    // [END document_input_data]
+  }
+
+  void documentInputExample() throws ExecutionException, InterruptedException {
+    // [START document_input]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .documents(
+                firestore.collection("cities").document("SF"),
+                firestore.collection("cities").document("NYC"))
+            .sort(ascending(field("name")))
+            .execute()
+            .get();
+    // [END document_input]
+    System.out.println(results.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/transformation/union
+  void unionSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START union_syntax]
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection("cities/SF/restaurants")
+            .union(firestore.pipeline().collection("cities/NYC/restaurants"))
+            .execute()
+            .get();
+    // [END union_syntax]
+    System.out.println(results.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/transformation/aggregate
+  void aggregateSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START aggregate_syntax]
+    Pipeline.Snapshot cities =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .aggregate(
+                countAll().as("total"), average("population").as("averagePopulation"))
+            .execute()
+            .get();
+    // [END aggregate_syntax]
+    System.out.println(cities.getResults());
+  }
+
+  void aggregateGroupSyntax() throws ExecutionException, InterruptedException {
+    // [START aggregate_group_syntax]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collectionGroup("cities")
+            .aggregate(
+                Aggregate.withAccumulators(
+                        countAll().as("cities"), sum("population").as("totalPopulation"))
+                    .withGroups(field("location.state").as("state")))
+            .execute()
+            .get();
+    // [END aggregate_group_syntax]
+    System.out.println(result.getResults());
+  }
+
+  void aggregateExampleData() {
+    // [START aggregate_data]
+    firestore
+        .collection("cities")
+        .document("SF")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "San Francisco");
+                put("state", "CA");
+                put("country", "USA");
+                put("population", 870000);
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("LA")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Los Angeles");
+                put("state", "CA");
+                put("country", "USA");
+                put("population", 3970000);
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("NY")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "New York");
+                put("state", "NY");
+                put("country", "USA");
+                put("population", 8530000);
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("TOR")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Toronto");
+                put("state", null);
+                put("country", "Canada");
+                put("population", 2930000);
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("MEX")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Mexico City");
+                put("state", null);
+                put("country", "Mexico");
+                put("population", 9200000);
+              }
+            });
+    // [END aggregate_data]
+  }
+
+  void aggregateWithoutGroupExample() throws ExecutionException, InterruptedException {
+    // [START aggregate_without_group]
+    Pipeline.Snapshot cities =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .aggregate(
+                countAll().as("total"), average("population").as("averagePopulation"))
+            .execute()
+            .get();
+    // [END aggregate_without_group]
+    System.out.println(cities.getResults());
+  }
+
+  void aggregateGroupExample() throws ExecutionException, InterruptedException {
+    // [START aggregate_group_example]
+    Pipeline.Snapshot cities =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .aggregate(
+                Aggregate.withAccumulators(
+                        countAll().as("numberOfCities"), maximum("population").as("maxPopulation"))
+                    .withGroups("country", "state"))
+            .execute()
+            .get();
+    // [END aggregate_group_example]
+    System.out.println(cities.getResults());
+  }
+
+  void aggregateGroupComplexExample() throws ExecutionException, InterruptedException {
+    // [START aggregate_group_complex]
+    Pipeline.Snapshot cities =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .aggregate(
+                Aggregate.withAccumulators(sum("population").as("totalPopulation"))
+                    .withGroups(field("state").equal(null).as("stateIsNull")))
+            .execute()
+            .get();
+    // [END aggregate_group_complex]
+    System.out.println(cities.getResults());
+  }
+
+  // https://cloud.google.com/firestore/docs/pipeline/stages/transformation/distinct
+  void distinctSyntaxExample() throws ExecutionException, InterruptedException {
+    // [START distinct_syntax]
+    Pipeline.Snapshot cities1 =
+        firestore.pipeline().collection("cities").distinct("country").execute().get();
+
+    Pipeline.Snapshot cities2 =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .distinct(toLower(field("state")).as("normalizedState"), field("country"))
+            .execute()
+            .get();
+    // [END distinct_syntax]
+    System.out.println(cities1.getResults());
+    System.out.println(cities2.getResults());
+  }
+
+  void distinctExampleData() {
+    // [START distinct_data]
+    firestore
+        .collection("cities")
+        .document("SF")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "San Francisco");
+                put("state", "CA");
+                put("country", "USA");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("LA")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Los Angeles");
+                put("state", "CA");
+                put("country", "USA");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("NY")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "New York");
+                put("state", "NY");
+                put("country", "USA");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("TOR")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Toronto");
+                put("state", null);
+                put("country", "Canada");
+              }
+            });
+    firestore
+        .collection("cities")
+        .document("MEX")
+        .set(
+            new HashMap<String, Object>() {
+              {
+                put("name", "Mexico City");
+                put("state", null);
+                put("country", "Mexico");
+              }
+            });
+    // [END distinct_data]
+  }
+
+  void distinctExample() throws ExecutionException, InterruptedException {
+    // [START distinct_example]
+    Pipeline.Snapshot cities =
+        firestore.pipeline().collection("cities").distinct("country").execute().get();
+    // [END distinct_example]
+    System.out.println(cities.getResults());
+  }
+
+  void distinctExpressionsExample() throws ExecutionException, InterruptedException {
+    // [START distinct_expressions]
+    Pipeline.Snapshot cities =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .distinct(toLower(field("state")).as("normalizedState"), field("country"))
+            .execute()
+            .get();
+    // [END distinct_expressions]
+    System.out.println(cities.getResults());
   }
 }
