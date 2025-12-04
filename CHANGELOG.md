@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.33.5-rc1](https://github.com/googleapis/java-firestore/compare/v3.33.4...v3.33.5-rc1) (2025-12-04)
+
+
+### Bug Fixes
+
+* next release candidate ([bae8a1b](https://github.com/googleapis/java-firestore/commit/bae8a1bc36388699d882c34d0b0794b0fba99fc4))
+
 ## [3.33.4](https://github.com/googleapis/java-firestore/compare/v3.33.3...v3.33.4) (2025-11-13)
 
 
