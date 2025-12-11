@@ -446,12 +446,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                             Map<String, List<String>> fields = new HashMap<>();
                             ProtoRestSerializer<ExecutePipelineRequest> serializer =
                                 ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearDatabase().build(), false))
+                                  .toBody("*", request.toBuilder().clearDatabase().build(), true))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<ExecutePipelineResponse>newBuilder()
@@ -1097,7 +1098,8 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
   @Override
   public BidiStreamingCallable<ListenRequest, ListenResponse> listenCallable() {
     throw new UnsupportedOperationException(
-        "Not implemented: listenCallable(). REST transport is not implemented for this method yet.");
+        "Not implemented: listenCallable(). REST transport is not implemented for this method"
+            + " yet.");
   }
 
   @Override

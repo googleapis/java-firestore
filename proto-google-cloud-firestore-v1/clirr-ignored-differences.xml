@@ -161,49 +161,71 @@
     <className>com/google/firestore/v1/StructuredQuery$FindNearestOrBuilder</className>
     <method>boolean hasDistanceThreshold()</method>
   </difference>
+
+  <!-- The following 7006 exemptions are related to Protobuf 4.27.4+ runtime upgrade -->
   <difference>
-    <differenceType>7012</differenceType>
-    <className>com/google/firestore/v1/ValueOrBuilder</className>
-    <method>java.lang.String getFieldReferenceValue()</method>
+    <differenceType>7006</differenceType>
+    <className>com/google/firestore/v1/**</className>
+    <method>* getDefaultInstanceForType()</method>
+    <to>**</to>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/firestore/v1/**</className>
+    <method>* addRepeatedField(*)</method>
+    <to>**</to>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/firestore/v1/**</className>
+    <method>* clear()</method>
+    <to>**</to>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/firestore/v1/**</className>
+    <method>* clearField(*)</method>
+    <to>**</to>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/firestore/v1/**</className>
+    <method>* clearOneof(*)</method>
+    <to>**</to>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/firestore/v1/**</className>
+    <method>* clone()</method>
+    <to>**</to>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/firestore/v1/**</className>
+    <method>* mergeUnknownFields(*)</method>
+    <to>**</to>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/firestore/v1/**</className>
+    <method>* setField(*)</method>
+    <to>**</to>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/firestore/v1/**</className>
+    <method>* setRepeatedField(*)</method>
+    <to>**</to>
+  </difference>
+  <difference>
+    <differenceType>7006</differenceType>
+    <className>com/google/firestore/v1/**</className>
+    <method>* setUnknownFields(*)</method>
+    <to>**</to>
   </difference>
   <difference>
     <differenceType>7012</differenceType>
     <className>com/google/firestore/v1/ValueOrBuilder</className>
-    <method>com.google.protobuf.ByteString getFieldReferenceValueBytes()</method>
-  </difference>
-  <difference>
-    <differenceType>7012</differenceType>
-    <className>com/google/firestore/v1/ValueOrBuilder</className>
-    <method>com.google.firestore.v1.Function getFunctionValue()</method>
-  </difference>
-  <difference>
-    <differenceType>7012</differenceType>
-    <className>com/google/firestore/v1/ValueOrBuilder</className>
-    <method>com.google.firestore.v1.FunctionOrBuilder getFunctionValueOrBuilder()</method>
-  </difference>
-  <difference>
-    <differenceType>7012</differenceType>
-    <className>com/google/firestore/v1/ValueOrBuilder</className>
-    <method>com.google.firestore.v1.Pipeline getPipelineValue()</method>
-  </difference>
-  <difference>
-    <differenceType>7012</differenceType>
-    <className>com/google/firestore/v1/ValueOrBuilder</className>
-    <method>com.google.firestore.v1.PipelineOrBuilder getPipelineValueOrBuilder()</method>
-  </difference>
-  <difference>
-    <differenceType>7012</differenceType>
-    <className>com/google/firestore/v1/ValueOrBuilder</className>
-    <method>boolean hasFieldReferenceValue()</method>
-  </difference>
-  <difference>
-    <differenceType>7012</differenceType>
-    <className>com/google/firestore/v1/ValueOrBuilder</className>
-    <method>boolean hasFunctionValue()</method>
-  </difference>
-  <difference>
-    <differenceType>7012</differenceType>
-    <className>com/google/firestore/v1/ValueOrBuilder</className>
-    <method>boolean hasPipelineValue()</method>
+    <method>*</method>
   </difference>
 </differences>

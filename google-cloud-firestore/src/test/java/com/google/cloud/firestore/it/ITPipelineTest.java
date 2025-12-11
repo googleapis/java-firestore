@@ -139,6 +139,9 @@ public class ITPipelineTest extends ITBaseTest {
 
   @Before
   public void setup() throws Exception {
+    assumeFalse(
+        "This test suite only runs against the Enterprise edition.",
+        !getFirestoreEdition().equals(FirestoreEdition.ENTERPRISE));
     if (collection != null) {
       return;
     }
@@ -1244,7 +1247,9 @@ public class ITPipelineTest extends ITBaseTest {
                 field("rating").isNull().as("ratingIsNull"),
                 field("rating").isNaN().as("ratingIsNaN"),
                 arrayGet("title", 0).isError().as("isError"),
-                arrayGet("title", 0).ifError(constant("was error")).as("ifError"),
+                arrayGet("title", 0)
+                    .ifError(constant("was error"), constant("was not error"))
+                    .as("ifError"),
                 field("foo").isAbsent().as("isAbsent"),
                 field("title").isNotNull().as("titleIsNotNull"),
                 field("cost").isNotNaN().as("costIsNotNan"),
@@ -1263,9 +1268,9 @@ public class ITPipelineTest extends ITBaseTest {
                     "ratingIsNaN",
                     false,
                     "isError",
-                    true,
+                    false,
                     "ifError",
-                    "was error",
+                    "was not error",
                     "isAbsent",
                     true,
                     "titleIsNotNull",
@@ -2557,6 +2562,7 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .collection(collection.getPath())
+            .where(field("author").equal("Douglas Adams"))
             .limit(1)
             .select(
                 Expression.type("title").as("string_type"),

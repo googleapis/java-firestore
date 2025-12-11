@@ -656,7 +656,8 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
       responseObserver.onError(
           new IllegalArgumentException(
               String.format(
-                  "Unrecognized response type %s for method CreateBackupSchedule, expected %s or %s",
+                  "Unrecognized response type %s for method CreateBackupSchedule, expected %s or"
+                      + " %s",
                   response == null ? "null" : response.getClass().getName(),
                   BackupSchedule.class.getName(),
                   Exception.class.getName())));
@@ -720,7 +721,8 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
       responseObserver.onError(
           new IllegalArgumentException(
               String.format(
-                  "Unrecognized response type %s for method UpdateBackupSchedule, expected %s or %s",
+                  "Unrecognized response type %s for method UpdateBackupSchedule, expected %s or"
+                      + " %s",
                   response == null ? "null" : response.getClass().getName(),
                   BackupSchedule.class.getName(),
                   Exception.class.getName())));
@@ -741,7 +743,8 @@ public class MockFirestoreAdminImpl extends FirestoreAdminImplBase {
       responseObserver.onError(
           new IllegalArgumentException(
               String.format(
-                  "Unrecognized response type %s for method DeleteBackupSchedule, expected %s or %s",
+                  "Unrecognized response type %s for method DeleteBackupSchedule, expected %s or"
+                      + " %s",
                   response == null ? "null" : response.getClass().getName(),
                   Empty.class.getName(),
                   Exception.class.getName())));

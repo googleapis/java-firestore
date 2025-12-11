@@ -16,31 +16,31 @@
 
 package com.google.cloud.firestore.it;
 
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_BATCH_COMMIT;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_BULK_WRITER_COMMIT;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_COL_REF_LIST_DOCUMENTS;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_CREATE;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_DELETE;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_GET;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_LIST_COLLECTIONS;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_SET;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_DOC_REF_UPDATE;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_PARTITION_QUERY;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_QUERY_GET;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_BEGIN;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_COMMIT;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_GET_DOCUMENTS;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_GET_QUERY;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_ROLLBACK;
-import static com.google.cloud.firestore.telemetry.TraceUtil.SPAN_NAME_TRANSACTION_RUN;
-import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_BATCH_COMMIT;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_BULK_WRITER_COMMIT;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_COL_REF_LIST_DOCUMENTS;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_DOC_REF_CREATE;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_DOC_REF_DELETE;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_DOC_REF_GET;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_DOC_REF_LIST_COLLECTIONS;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_DOC_REF_SET;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_DOC_REF_UPDATE;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_PARTITION_QUERY;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_QUERY_GET;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_TRANSACTION_BEGIN;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_TRANSACTION_COMMIT;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_TRANSACTION_GET_DOCUMENTS;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_TRANSACTION_GET_QUERY;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_TRANSACTION_ROLLBACK;
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.METHOD_NAME_TRANSACTION_RUN;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import com.google.api.gax.rpc.NotFoundException;
 import com.google.cloud.firestore.BulkWriter;
@@ -264,12 +264,16 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
   // Required to set custom-root span
   private static OpenTelemetrySdk openTelemetrySdk;
 
+  private static boolean isNightlyTesting;
   private static String projectId;
 
   private static Firestore firestore;
 
   @BeforeClass
   public static void setup() throws IOException {
+    String jobType = System.getenv("GITHUB_ENV_VAR_KOKORO_JOB_TYPE");
+    isNightlyTesting = jobType != null && jobType.equalsIgnoreCase("nightly");
+
     projectId = FirestoreOptions.getDefaultProjectId();
     logger.info("projectId:" + projectId);
 
@@ -286,8 +290,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
   @Before
   public void before() throws Exception {
     // Set up OTel SDK
-    Resource resource =
-        Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
+    Resource resource = Resource.getDefault();
 
     if (isUsingGlobalOpenTelemetrySDK()) {
       GlobalOpenTelemetry.resetForTest();
@@ -315,20 +318,13 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Initialize the Firestore DB w/ the OTel SDK. Ideally we'd do this is the @BeforeAll method
     // but because gRPC traces need to be deterministically force-flushed, firestore.shutdown()
     // must be called in @After for each test.
-    FirestoreOptions.Builder optionsBuilder;
-    if (isUsingGlobalOpenTelemetrySDK()) {
+    FirestoreOptions.Builder optionsBuilder = FirestoreOptions.newBuilder();
+    if (!isUsingGlobalOpenTelemetrySDK()) {
       optionsBuilder =
-          FirestoreOptions.newBuilder()
-              .setOpenTelemetryOptions(
-                  FirestoreOpenTelemetryOptions.newBuilder().setTracingEnabled(true).build());
-    } else {
-      optionsBuilder =
-          FirestoreOptions.newBuilder()
-              .setOpenTelemetryOptions(
-                  FirestoreOpenTelemetryOptions.newBuilder()
-                      .setOpenTelemetry(openTelemetrySdk)
-                      .setTracingEnabled(true)
-                      .build());
+          optionsBuilder.setOpenTelemetryOptions(
+              FirestoreOpenTelemetryOptions.newBuilder()
+                  .setOpenTelemetry(openTelemetrySdk)
+                  .build());
     }
 
     String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
@@ -366,6 +362,9 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     customSpanContext = getNewSpanContext();
     assertNotNull(customSpanContext);
     assertNull(retrievedTrace);
+
+    // We only perform end-to-end tracing tests on a nightly basis.
+    assumeTrue(isNightlyTesting);
   }
 
   @After
@@ -556,18 +555,18 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Contains exact path
     assertTrue(
         traceCont.containsCallStack(
-            rootSpanName, SPAN_NAME_QUERY_GET, grpcSpanName(RUN_QUERY_RPC_NAME)));
+            rootSpanName, METHOD_NAME_QUERY_GET, grpcSpanName(RUN_QUERY_RPC_NAME)));
 
     // Top-level mismatch
-    assertFalse(traceCont.containsCallStack(SPAN_NAME_QUERY_GET, RUN_QUERY_RPC_NAME));
+    assertFalse(traceCont.containsCallStack(METHOD_NAME_QUERY_GET, RUN_QUERY_RPC_NAME));
 
     // Mid-level match
-    assertFalse(traceCont.containsCallStack(rootSpanName, SPAN_NAME_QUERY_GET));
+    assertFalse(traceCont.containsCallStack(rootSpanName, METHOD_NAME_QUERY_GET));
 
     // Leaf-level mismatch/missing
     assertFalse(
         traceCont.containsCallStack(
-            rootSpanName, SPAN_NAME_QUERY_GET, RUN_AGGREGATION_QUERY_RPC_NAME));
+            rootSpanName, METHOD_NAME_QUERY_GET, RUN_AGGREGATION_QUERY_RPC_NAME));
   }
 
   @Test
@@ -618,7 +617,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_BULK_WRITER_COMMIT,
+        METHOD_NAME_BULK_WRITER_COMMIT,
         grpcSpanName(BATCH_WRITE_RPC_NAME));
   }
 
@@ -640,8 +639,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_PARTITION_QUERY,
-        grpcSpanName(SPAN_NAME_PARTITION_QUERY));
+        METHOD_NAME_PARTITION_QUERY,
+        grpcSpanName(METHOD_NAME_PARTITION_QUERY));
   }
 
   @Test
@@ -661,7 +660,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_COL_REF_LIST_DOCUMENTS,
+        METHOD_NAME_COL_REF_LIST_DOCUMENTS,
         grpcSpanName(LIST_DOCUMENTS_RPC_NAME));
   }
 
@@ -682,8 +681,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_CREATE,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_CREATE,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -704,8 +703,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_CREATE,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_CREATE,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -726,8 +725,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_SET,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_SET,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -752,8 +751,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_SET,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_SET,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -774,8 +773,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_SET,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_SET,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -796,8 +795,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_SET,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_SET,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -822,8 +821,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_UPDATE,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_UPDATE,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -848,8 +847,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_UPDATE,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_UPDATE,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -870,8 +869,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_UPDATE,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_UPDATE,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -896,8 +895,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_UPDATE,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_UPDATE,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -922,8 +921,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_UPDATE,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_UPDATE,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -948,8 +947,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_UPDATE,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_UPDATE,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -970,8 +969,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_DELETE,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_DELETE,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -992,8 +991,8 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_DELETE,
-        SPAN_NAME_BATCH_COMMIT,
+        METHOD_NAME_DOC_REF_DELETE,
+        METHOD_NAME_BATCH_COMMIT,
         grpcSpanName(COMMIT_RPC_NAME));
   }
 
@@ -1014,7 +1013,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_GET,
+        METHOD_NAME_DOC_REF_GET,
         grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
   }
 
@@ -1035,7 +1034,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_GET,
+        METHOD_NAME_DOC_REF_GET,
         grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
   }
 
@@ -1056,7 +1055,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     // Read and validate traces
     fetchAndValidateTrace(
         customSpanContext.getTraceId(),
-        SPAN_NAME_DOC_REF_LIST_COLLECTIONS,
+        METHOD_NAME_DOC_REF_LIST_COLLECTIONS,
         grpcSpanName(LIST_COLLECTIONS_RPC_NAME));
   }
 
@@ -1096,7 +1095,7 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     fetchAndValidateTrace(
-        customSpanContext.getTraceId(), SPAN_NAME_QUERY_GET, grpcSpanName(RUN_QUERY_RPC_NAME));
+        customSpanContext.getTraceId(), METHOD_NAME_QUERY_GET, grpcSpanName(RUN_QUERY_RPC_NAME));
   }
 
   @Test
@@ -1141,28 +1140,28 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
         /* numExpectedSpans= */ 11,
         Arrays.asList(
             Arrays.asList(
-                SPAN_NAME_TRANSACTION_RUN,
-                SPAN_NAME_TRANSACTION_BEGIN,
+                METHOD_NAME_TRANSACTION_RUN,
+                METHOD_NAME_TRANSACTION_BEGIN,
                 grpcSpanName(BEGIN_TRANSACTION_RPC_NAME)),
             Arrays.asList(
-                SPAN_NAME_TRANSACTION_RUN,
-                SPAN_NAME_TRANSACTION_BEGIN,
+                METHOD_NAME_TRANSACTION_RUN,
+                METHOD_NAME_TRANSACTION_BEGIN,
                 grpcSpanName(BEGIN_TRANSACTION_RPC_NAME)),
             Arrays.asList(
-                SPAN_NAME_TRANSACTION_RUN,
-                SPAN_NAME_TRANSACTION_GET_QUERY,
+                METHOD_NAME_TRANSACTION_RUN,
+                METHOD_NAME_TRANSACTION_GET_QUERY,
                 grpcSpanName(RUN_QUERY_RPC_NAME)),
             Arrays.asList(
-                SPAN_NAME_TRANSACTION_RUN,
-                SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
+                METHOD_NAME_TRANSACTION_RUN,
+                METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
                 grpcSpanName(RUN_AGGREGATION_QUERY_RPC_NAME)),
             Arrays.asList(
-                SPAN_NAME_TRANSACTION_RUN,
-                SPAN_NAME_TRANSACTION_GET_DOCUMENTS,
+                METHOD_NAME_TRANSACTION_RUN,
+                METHOD_NAME_TRANSACTION_GET_DOCUMENTS,
                 grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME)),
             Arrays.asList(
-                SPAN_NAME_TRANSACTION_RUN,
-                SPAN_NAME_TRANSACTION_COMMIT,
+                METHOD_NAME_TRANSACTION_RUN,
+                METHOD_NAME_TRANSACTION_COMMIT,
                 grpcSpanName(COMMIT_RPC_NAME))));
   }
 
@@ -1196,12 +1195,12 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
         /* numExpectedSpans= */ 5,
         Arrays.asList(
             Arrays.asList(
-                SPAN_NAME_TRANSACTION_RUN,
-                SPAN_NAME_TRANSACTION_BEGIN,
+                METHOD_NAME_TRANSACTION_RUN,
+                METHOD_NAME_TRANSACTION_BEGIN,
                 grpcSpanName(BEGIN_TRANSACTION_RPC_NAME)),
             Arrays.asList(
-                SPAN_NAME_TRANSACTION_RUN,
-                SPAN_NAME_TRANSACTION_ROLLBACK,
+                METHOD_NAME_TRANSACTION_RUN,
+                METHOD_NAME_TRANSACTION_ROLLBACK,
                 grpcSpanName(ROLLBACK_RPC_NAME))));
   }
 
@@ -1225,6 +1224,6 @@ public abstract class ITE2ETracingTest extends ITBaseTest {
     waitForTracesToComplete();
 
     fetchAndValidateTrace(
-        customSpanContext.getTraceId(), SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        customSpanContext.getTraceId(), METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 }

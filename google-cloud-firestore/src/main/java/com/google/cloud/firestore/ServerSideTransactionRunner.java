@@ -26,6 +26,9 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.ExponentialRetryAlgorithm;
 import com.google.api.gax.retrying.TimedAttemptSettings;
 import com.google.api.gax.rpc.ApiException;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
+import com.google.cloud.firestore.telemetry.TelemetryConstants;
+import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.cloud.firestore.telemetry.TraceUtil.Span;
@@ -59,6 +62,7 @@ final class ServerSideTransactionRunner<T> {
   private int attemptsRemaining;
   private Span runTransactionSpan;
   private TraceUtil.Context runTransactionContext;
+  private MetricsContext metricsContext;
 
   /**
    * @param firestore The active Firestore instance
@@ -85,6 +89,11 @@ final class ServerSideTransactionRunner<T> {
         new ExponentialRetryAlgorithm(
             firestore.getOptions().getRetrySettings(), CurrentMillisClock.getDefaultClock());
     this.nextBackoffAttempt = backoffAlgorithm.createFirstAttempt();
+    this.metricsContext =
+        firestore
+            .getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(TelemetryConstants.METHOD_NAME_TRANSACTION_RUN);
   }
 
   @Nonnull
@@ -93,7 +102,14 @@ final class ServerSideTransactionRunner<T> {
   }
 
   ApiFuture<T> run() {
-    runTransactionSpan = getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_RUN);
+    ApiFuture<T> result = runInternally();
+    metricsContext.recordLatencyAtFuture(MetricType.TRANSACTION_LATENCY, result);
+    metricsContext.recordCounterAtFuture(MetricType.TRANSACTION_ATTEMPT_COUNT, result);
+    return result;
+  }
+
+  ApiFuture<T> runInternally() {
+    runTransactionSpan = getTraceUtil().startSpan(TelemetryConstants.METHOD_NAME_TRANSACTION_RUN);
     runTransactionSpan.setAttribute(
         ATTRIBUTE_KEY_TRANSACTION_TYPE, transactionOptions.getType().name());
     runTransactionSpan.setAttribute(
@@ -102,6 +118,7 @@ final class ServerSideTransactionRunner<T> {
     try (Scope ignored = runTransactionSpan.makeCurrent()) {
       runTransactionContext = getTraceUtil().currentContext();
       --attemptsRemaining;
+      metricsContext.incrementCounter();
       ApiFuture<T> result =
           ApiFutures.catchingAsync(
               ApiFutures.transformAsync(
@@ -119,7 +136,8 @@ final class ServerSideTransactionRunner<T> {
 
   ApiFuture<ServerSideTransaction> begin() {
     TraceUtil.Span span =
-        getTraceUtil().startSpan(TraceUtil.SPAN_NAME_TRANSACTION_BEGIN, runTransactionContext);
+        getTraceUtil()
+            .startSpan(TelemetryConstants.METHOD_NAME_TRANSACTION_BEGIN, runTransactionContext);
     try (Scope ignored = span.makeCurrent()) {
       ServerSideTransaction previousTransaction = this.transaction;
       this.transaction = null;
@@ -235,7 +253,7 @@ final class ServerSideTransactionRunner<T> {
         getTraceUtil()
             .currentSpan()
             .addEvent("Initiating transaction retry. Attempts remaining: " + attemptsRemaining);
-        return run();
+        return runInternally();
       } else {
         final FirestoreException firestoreException =
             FirestoreException.forApiException(

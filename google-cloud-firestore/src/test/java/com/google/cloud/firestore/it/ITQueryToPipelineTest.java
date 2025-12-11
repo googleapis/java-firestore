@@ -18,6 +18,7 @@ package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.it.ITQueryTest.map;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeTrue;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -57,7 +58,11 @@ public class ITQueryToPipelineTest extends ITBaseTest {
   }
 
   @Before
-  public void setup() throws Exception {}
+  public void setup() throws Exception {
+    assumeTrue(
+        "This test suite only runs against the Enterprise edition.",
+        getFirestoreEdition().equals(FirestoreEdition.ENTERPRISE));
+  }
 
   private Object normalizeNumbers(Object value) {
     if (value instanceof Number) {

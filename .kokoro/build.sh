@@ -48,11 +48,16 @@ set +e
 case ${JOB_TYPE} in
 test)
     echo "SUREFIRE_JVM_OPT: ${SUREFIRE_JVM_OPT}"
-    mvn test -B -ntp -Dclirr.skip=true -Denforcer.skip=true ${SUREFIRE_JVM_OPT}
+    if [[ "${JAVA_VERSION}" == "17" ]]; then
+      # Activate the runTestsWithJava17 profile inside google-cloud-firestore
+      mvn test -B -ntp -Dclirr.skip=true -Denforcer.skip=true ${SUREFIRE_JVM_OPT} -DrunTestsWithJava17=true
+    else
+      mvn test -B -ntp -Dclirr.skip=true -Denforcer.skip=true ${SUREFIRE_JVM_OPT}
+    fi
     RETURN_CODE=$?
     ;;
 lint)
-    mvn com.coveo:fmt-maven-plugin:check -B -ntp && mvn -pl google-cloud-firestore spotless:check -B -ntp
+    mvn com.spotify.fmt:fmt-maven-plugin:check -B -ntp && mvn -pl google-cloud-firestore spotless:check -B -ntp
     RETURN_CODE=$?
     ;;
 javadoc)

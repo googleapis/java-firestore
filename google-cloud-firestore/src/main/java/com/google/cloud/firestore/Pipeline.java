@@ -17,6 +17,8 @@
 package com.google.cloud.firestore;
 
 import static com.google.cloud.firestore.pipeline.expressions.Expression.field;
+import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_DOC_COUNT;
+import static com.google.cloud.firestore.telemetry.TraceUtil.ATTRIBUTE_KEY_IS_TRANSACTIONAL;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.BetaApi;
@@ -57,6 +59,11 @@ import com.google.cloud.firestore.pipeline.stages.Union;
 import com.google.cloud.firestore.pipeline.stages.Unnest;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
 import com.google.cloud.firestore.pipeline.stages.Where;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
+import com.google.cloud.firestore.telemetry.TelemetryConstants;
+import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
+import com.google.cloud.firestore.telemetry.TraceUtil;
+import com.google.cloud.firestore.telemetry.TraceUtil.Scope;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -66,8 +73,6 @@ import com.google.firestore.v1.ExecutePipelineResponse;
 import com.google.firestore.v1.StructuredPipeline;
 import com.google.firestore.v1.Value;
 import com.google.protobuf.ByteString;
-import io.opencensus.trace.AttributeValue;
-import io.opencensus.trace.Tracing;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -684,6 +689,7 @@ public final class Pipeline {
    * //  "parents": {
    * //    "father": "John Doe Sr.",
    * //    "mother": "Jane Doe"
+   * //   }
    * // }
    *
    * // Emit parents as document.
@@ -719,6 +725,7 @@ public final class Pipeline {
    * //  "parents": {
    * //    "father": "John Doe Sr.",
    * //    "mother": "Jane Doe"
+   * //  }
    * // }
    *
    * // Emit parents as document.
@@ -731,7 +738,7 @@ public final class Pipeline {
    * // }
    * }</pre>
    *
-   * @param field The {@link Selectable} field containing the nested map.
+   * @param expr The {@link Expression} field containing the nested map.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
   @BetaApi
@@ -1061,6 +1068,10 @@ public final class Pipeline {
     return execute(options, null, null);
   }
 
+  MetricsContext createMetricsContext(String methodName) {
+    return rpcContext.getFirestore().getOptions().getMetricsUtil().createMetricsContext(methodName);
+  }
+
   /**
    * Executes this pipeline, providing results to the given {@link ApiStreamObserver} as they become
    * available.
@@ -1108,6 +1119,9 @@ public final class Pipeline {
    */
   @BetaApi
   public void execute(ApiStreamObserver<PipelineResult> observer) {
+    MetricsContext metricsContext =
+        createMetricsContext(TelemetryConstants.METHOD_NAME_EXECUTE_PIPELINE_EXECUTE);
+
     executeInternal(
         new PipelineExecuteOptions(),
         null,
@@ -1127,47 +1141,67 @@ public final class Pipeline {
           public void onCompleted() {
             observer.onCompleted();
           }
-        });
+        },
+        metricsContext);
   }
 
   ApiFuture<Snapshot> execute(
       @Nonnull PipelineExecuteOptions options,
       @Nullable final ByteString transactionId,
       @Nullable com.google.protobuf.Timestamp readTime) {
-    SettableApiFuture<Snapshot> futureResult = SettableApiFuture.create();
+    TraceUtil.Span span =
+        rpcContext
+            .getFirestore()
+            .getOptions()
+            .getTraceUtil()
+            .startSpan(TelemetryConstants.METHOD_NAME_PIPELINE_EXECUTE);
 
-    executeInternal(
-        options,
-        transactionId,
-        readTime,
-        new PipelineResultObserver() {
-          final List<PipelineResult> results = new ArrayList<>();
+    MetricsContext metricsContext =
+        createMetricsContext(TelemetryConstants.METHOD_NAME_EXECUTE_PIPELINE_EXECUTE);
 
-          @Override
-          public void onCompleted() {
-            futureResult.set(
-                new Snapshot(Pipeline.this, results, getExecutionTime(), getExplainStats()));
-          }
+    try (Scope ignored = span.makeCurrent()) {
+      SettableApiFuture<Snapshot> futureResult = SettableApiFuture.create();
 
-          @Override
-          public void onNext(PipelineResult result) {
-            results.add(result);
-          }
+      executeInternal(
+          options,
+          transactionId,
+          readTime,
+          new PipelineResultObserver() {
+            final List<PipelineResult> results = new ArrayList<>();
 
-          @Override
-          public void onError(Throwable t) {
-            futureResult.setException(t);
-          }
-        });
+            @Override
+            public void onCompleted() {
+              futureResult.set(
+                  new Snapshot(Pipeline.this, results, getExecutionTime(), getExplainStats()));
+            }
 
-    return futureResult;
+            @Override
+            public void onNext(PipelineResult result) {
+              results.add(result);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+              futureResult.setException(t);
+            }
+          },
+          metricsContext);
+
+      span.endAtFuture(futureResult);
+      return futureResult;
+    } catch (Exception error) {
+      span.end(error);
+      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
+      throw error;
+    }
   }
 
   void executeInternal(
       @Nonnull PipelineExecuteOptions options,
       @Nullable final ByteString transactionId,
       @Nullable com.google.protobuf.Timestamp readTime,
-      PipelineResultObserver observer) {
+      PipelineResultObserver observer,
+      MetricsContext metricsContext) {
     ExecutePipelineRequest.Builder request =
         ExecutePipelineRequest.newBuilder()
             .setDatabase(rpcContext.getDatabaseName())
@@ -1204,7 +1238,8 @@ public final class Pipeline {
           public void onError(Throwable t) {
             observer.onError(t);
           }
-        });
+        },
+        metricsContext);
   }
 
   @InternalApi
@@ -1220,13 +1255,27 @@ public final class Pipeline {
   }
 
   private void pipelineInternalStream(
-      ExecutePipelineRequest request, PipelineResultObserver resultObserver) {
+      ExecutePipelineRequest request,
+      PipelineResultObserver resultObserver,
+      MetricsContext metricsContext) {
+    TraceUtil traceUtil = rpcContext.getFirestore().getOptions().getTraceUtil();
+
+    // To reduce the size of traces, we only register one event for every 100 responses
+    // that we receive from the server.
+    final int NUM_RESPONSES_PER_TRACE_EVENT = 100;
+
+    TraceUtil.Span currentSpan = traceUtil.currentSpan();
+    currentSpan.addEvent(
+        TelemetryConstants.METHOD_NAME_EXECUTE_PIPELINE,
+        new ImmutableMap.Builder<String, Object>()
+            .put(ATTRIBUTE_KEY_IS_TRANSACTIONAL, request.hasTransaction())
+            .build());
+
     ResponseObserver<ExecutePipelineResponse> observer =
         new ResponseObserver<ExecutePipelineResponse>() {
           Timestamp executionTime = null;
           boolean firstResponse = false;
           int numDocuments = 0;
-          int docCounterPerTraceUpdate = 0;
           boolean hasCompleted = false;
 
           @Override
@@ -1236,6 +1285,13 @@ public final class Pipeline {
 
           @Override
           public void onResponse(ExecutePipelineResponse response) {
+            if (!firstResponse) {
+              firstResponse = true;
+              currentSpan.addEvent(
+                  TelemetryConstants.METHOD_NAME_EXECUTE_PIPELINE + ": First Response");
+              metricsContext.recordLatency(MetricType.FIRST_RESPONSE_LATENCY);
+            }
+
             if (response.hasExplainStats()) {
               resultObserver.setExplainStats(
                   new ExplainStats(response.getExplainStats().getData()));
@@ -1245,21 +1301,14 @@ public final class Pipeline {
               executionTime = Timestamp.fromProto(response.getExecutionTime());
             }
 
-            if (!firstResponse) {
-              firstResponse = true;
-              Tracing.getTracer()
-                  .getCurrentSpan()
-                  .addAnnotation(
-                      "Firestore.Pipeline: First response"); // Assuming Tracing class exists
-            }
             if (response.getResultsCount() > 0) {
               numDocuments += response.getResultsCount();
-              docCounterPerTraceUpdate += response.getResultsCount();
-              if (numDocuments > 100) {
-                Tracing.getTracer()
-                    .getCurrentSpan()
-                    .addAnnotation("Firestore.Pipeline: Received " + numDocuments + " results");
-                docCounterPerTraceUpdate = 0;
+              if (numDocuments % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
+                currentSpan.addEvent(
+                    TelemetryConstants.METHOD_NAME_EXECUTE_PIPELINE
+                        + ": Received "
+                        + numDocuments
+                        + " results");
               }
 
               for (Document doc : response.getResultsList()) {
@@ -1270,7 +1319,10 @@ public final class Pipeline {
 
           @Override
           public void onError(Throwable throwable) {
-            Tracing.getTracer().getCurrentSpan().addAnnotation("Firestore.Pipeline: Error");
+            currentSpan.addEvent(
+                TelemetryConstants.METHOD_NAME_EXECUTE_PIPELINE + ": Error",
+                ImmutableMap.of("error.message", throwable.toString()));
+            metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, throwable);
             resultObserver.onError(throwable);
           }
 
@@ -1281,12 +1333,11 @@ public final class Pipeline {
             }
             hasCompleted = true;
 
-            Tracing.getTracer()
-                .getCurrentSpan()
-                .addAnnotation(
-                    "Firestore.ExecutePipeline: Completed",
-                    ImmutableMap.of(
-                        "numDocuments", AttributeValue.longAttributeValue(numDocuments)));
+            metricsContext.recordLatency(MetricType.END_TO_END_LATENCY);
+
+            currentSpan.addEvent(
+                TelemetryConstants.METHOD_NAME_EXECUTE_PIPELINE + ": Completed",
+                ImmutableMap.of(ATTRIBUTE_KEY_DOC_COUNT, numDocuments));
             resultObserver.onCompleted(executionTime);
           }
         };

@@ -59,7 +59,12 @@ public class ITQueryAggregationsTest extends ITBaseTest {
 
   public static AggregateQuerySnapshot verifyPipelineReturnsSameResult(AggregateQuery query)
       throws ExecutionException, InterruptedException {
+
     AggregateQuerySnapshot snapshot = query.get().get();
+
+    if (getFirestoreEdition() != FirestoreEdition.ENTERPRISE) {
+      return snapshot;
+    }
 
     List<PipelineResult> pipelineResults =
         query.getQuery().getFirestore().pipeline().createFrom(query).execute().get().getResults();
@@ -133,7 +138,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void aggregateErrorMessageIfIndexIsMissing() throws Exception {
     assumeFalse(
-        "Skip this test when running against the emulator because it does not require composite index creation.",
+        "Skip this test when running against the emulator because it does not require composite"
+            + " index creation.",
         isRunningAgainstFirestoreEmulator(firestore));
 
     CollectionReference collection = testCollectionWithDocs(testDocs1);

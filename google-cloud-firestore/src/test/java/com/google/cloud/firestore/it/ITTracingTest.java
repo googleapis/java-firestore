@@ -16,8 +16,8 @@
 
 package com.google.cloud.firestore.it;
 
+import static com.google.cloud.firestore.telemetry.TelemetryConstants.*;
 import static com.google.cloud.firestore.telemetry.TraceUtil.*;
-import static io.opentelemetry.semconv.resource.attributes.ResourceAttributes.SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -108,8 +108,7 @@ public abstract class ITTracingTest {
   public void before() {
     inMemorySpanExporter = InMemorySpanExporter.create();
 
-    Resource resource =
-        Resource.getDefault().merge(Resource.builder().put(SERVICE_NAME, "Sparky").build());
+    Resource resource = Resource.getDefault();
     SpanProcessor inMemorySpanProcessor = SimpleSpanProcessor.create(inMemorySpanExporter);
     FirestoreOptions.Builder optionsBuilder = FirestoreOptions.newBuilder();
     FirestoreOpenTelemetryOptions.Builder otelOptionsBuilder =
@@ -126,11 +125,11 @@ public abstract class ITTracingTest {
     if (isUsingGlobalOpenTelemetrySDK()) {
       GlobalOpenTelemetry.resetForTest();
       openTelemetrySdk = openTelemetrySdkBuilder.buildAndRegisterGlobal();
-      optionsBuilder.setOpenTelemetryOptions(otelOptionsBuilder.setTracingEnabled(true).build());
+      optionsBuilder.setOpenTelemetryOptions(otelOptionsBuilder.build());
     } else {
       openTelemetrySdk = openTelemetrySdkBuilder.build();
       optionsBuilder.setOpenTelemetryOptions(
-          otelOptionsBuilder.setTracingEnabled(true).setOpenTelemetry(openTelemetrySdk).build());
+          otelOptionsBuilder.setOpenTelemetry(openTelemetrySdk).build());
     }
 
     String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
@@ -163,7 +162,8 @@ public abstract class ITTracingTest {
   public void after() throws Exception {
     Preconditions.checkNotNull(
         firestore,
-        "Error instantiating Firestore. Check that the service account credentials were properly set.");
+        "Error instantiating Firestore. Check that the service account credentials were properly"
+            + " set.");
     firestore.shutdown();
     inMemorySpanExporter.reset();
   }
@@ -370,8 +370,8 @@ public abstract class ITTracingTest {
     List<SpanData> spans = inMemorySpanExporter.getFinishedSpanItems();
     buildSpanMaps(spans);
     assertEquals(2, spans.size());
-    SpanData getSpan = getSpanByName(SPAN_NAME_AGGREGATION_QUERY_GET);
-    SpanData grpcSpan = getGrpcSpanByName(SPAN_NAME_RUN_AGGREGATION_QUERY);
+    SpanData getSpan = getSpanByName(METHOD_NAME_AGGREGATION_QUERY_GET);
+    SpanData grpcSpan = getGrpcSpanByName(METHOD_NAME_RUN_AGGREGATION_QUERY);
     assertNotNull(getSpan);
     assertNotNull(grpcSpan);
     assertEquals(grpcSpan.getParentSpanId(), getSpan.getSpanId());
@@ -399,7 +399,7 @@ public abstract class ITTracingTest {
 
     List<SpanData> spans = prepareSpans();
     assertEquals(2, spans.size());
-    assertSpanHierarchy(SPAN_NAME_BULK_WRITER_COMMIT, grpcSpanName(BATCH_WRITE_RPC_NAME));
+    assertSpanHierarchy(METHOD_NAME_BULK_WRITER_COMMIT, grpcSpanName(BATCH_WRITE_RPC_NAME));
   }
 
   @Test
@@ -409,7 +409,7 @@ public abstract class ITTracingTest {
 
     List<SpanData> spans = prepareSpans();
     assertEquals(2, spans.size());
-    assertSpanHierarchy(SPAN_NAME_PARTITION_QUERY, grpcSpanName(SPAN_NAME_PARTITION_QUERY));
+    assertSpanHierarchy(METHOD_NAME_PARTITION_QUERY, grpcSpanName(METHOD_NAME_PARTITION_QUERY));
   }
 
   @Test
@@ -418,7 +418,7 @@ public abstract class ITTracingTest {
 
     List<SpanData> spans = prepareSpans();
     assertEquals(2, spans.size());
-    assertSpanHierarchy(SPAN_NAME_COL_REF_LIST_DOCUMENTS, grpcSpanName(LIST_DOCUMENTS_RPC_NAME));
+    assertSpanHierarchy(METHOD_NAME_COL_REF_LIST_DOCUMENTS, grpcSpanName(LIST_DOCUMENTS_RPC_NAME));
   }
 
   @Test
@@ -428,7 +428,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_CREATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_CREATE, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -438,7 +438,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_CREATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_CREATE, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -448,7 +448,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_SET, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -462,7 +462,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_SET, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -472,7 +472,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_SET, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -482,7 +482,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_SET, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_SET, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -496,7 +496,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_UPDATE, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -510,7 +510,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_UPDATE, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -520,7 +520,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_UPDATE, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -534,7 +534,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_UPDATE, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -548,7 +548,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_UPDATE, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -562,7 +562,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_UPDATE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_UPDATE, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -572,7 +572,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_DELETE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_DELETE, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -582,7 +582,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(3, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_DELETE, SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_DOC_REF_DELETE, METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
   }
 
   @Test
@@ -591,7 +591,7 @@ public abstract class ITTracingTest {
 
     List<SpanData> spans = prepareSpans();
     assertEquals(2, spans.size());
-    assertSpanHierarchy(SPAN_NAME_DOC_REF_GET, grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
+    assertSpanHierarchy(METHOD_NAME_DOC_REF_GET, grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
   }
 
   @Test
@@ -600,7 +600,7 @@ public abstract class ITTracingTest {
 
     List<SpanData> spans = prepareSpans();
     assertEquals(2, spans.size());
-    assertSpanHierarchy(SPAN_NAME_DOC_REF_GET, grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
+    assertSpanHierarchy(METHOD_NAME_DOC_REF_GET, grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
   }
 
   @Test
@@ -610,7 +610,7 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(2, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_DOC_REF_LIST_COLLECTIONS, grpcSpanName(LIST_COLLECTIONS_RPC_NAME));
+        METHOD_NAME_DOC_REF_LIST_COLLECTIONS, grpcSpanName(LIST_COLLECTIONS_RPC_NAME));
   }
 
   @Test
@@ -635,8 +635,8 @@ public abstract class ITTracingTest {
     firestore.collection("col").whereEqualTo("foo", "my_non_existent_value").get().get();
     List<SpanData> spans = prepareSpans();
     assertEquals(2, spans.size());
-    assertSpanHierarchy(SPAN_NAME_QUERY_GET, grpcSpanName(RUN_QUERY_RPC_NAME));
-    SpanData span = getSpanByName(SPAN_NAME_QUERY_GET);
+    assertSpanHierarchy(METHOD_NAME_QUERY_GET, grpcSpanName(RUN_QUERY_RPC_NAME));
+    SpanData span = getSpanByName(METHOD_NAME_QUERY_GET);
     assertTrue(
         hasEvent(
             span,
@@ -692,32 +692,33 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(11, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_TRANSACTION_RUN,
-        SPAN_NAME_TRANSACTION_BEGIN,
+        METHOD_NAME_TRANSACTION_RUN,
+        METHOD_NAME_TRANSACTION_BEGIN,
         grpcSpanName(BEGIN_TRANSACTION_RPC_NAME));
     assertSpanHierarchy(
-        SPAN_NAME_TRANSACTION_RUN,
-        SPAN_NAME_TRANSACTION_GET_QUERY,
+        METHOD_NAME_TRANSACTION_RUN,
+        METHOD_NAME_TRANSACTION_GET_QUERY,
         grpcSpanName(RUN_QUERY_RPC_NAME));
     assertSpanHierarchy(
-        SPAN_NAME_TRANSACTION_RUN,
-        SPAN_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
+        METHOD_NAME_TRANSACTION_RUN,
+        METHOD_NAME_TRANSACTION_GET_AGGREGATION_QUERY,
         grpcSpanName(RUN_AGGREGATION_QUERY_RPC_NAME));
     assertSpanHierarchy(
-        SPAN_NAME_TRANSACTION_RUN,
-        SPAN_NAME_TRANSACTION_GET_DOCUMENTS,
+        METHOD_NAME_TRANSACTION_RUN,
+        METHOD_NAME_TRANSACTION_GET_DOCUMENTS,
         grpcSpanName(BATCH_GET_DOCUMENTS_RPC_NAME));
     assertSpanHierarchy(
-        SPAN_NAME_TRANSACTION_RUN, SPAN_NAME_TRANSACTION_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+        METHOD_NAME_TRANSACTION_RUN, METHOD_NAME_TRANSACTION_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
 
-    Attributes commitAttributes = getSpanByName(SPAN_NAME_TRANSACTION_COMMIT).getAttributes();
+    Attributes commitAttributes = getSpanByName(METHOD_NAME_TRANSACTION_COMMIT).getAttributes();
     assertEquals(
         2L,
         commitAttributes
             .get(AttributeKey.longKey("gcp.firestore." + ATTRIBUTE_KEY_DOC_COUNT))
             .longValue());
 
-    Attributes runTransactionAttributes = getSpanByName(SPAN_NAME_TRANSACTION_RUN).getAttributes();
+    Attributes runTransactionAttributes =
+        getSpanByName(METHOD_NAME_TRANSACTION_RUN).getAttributes();
     assertEquals(
         5L,
         runTransactionAttributes
@@ -759,13 +760,15 @@ public abstract class ITTracingTest {
     List<SpanData> spans = prepareSpans();
     assertEquals(5, spans.size());
     assertSpanHierarchy(
-        SPAN_NAME_TRANSACTION_RUN,
-        SPAN_NAME_TRANSACTION_BEGIN,
+        METHOD_NAME_TRANSACTION_RUN,
+        METHOD_NAME_TRANSACTION_BEGIN,
         grpcSpanName(BEGIN_TRANSACTION_RPC_NAME));
     assertSpanHierarchy(
-        SPAN_NAME_TRANSACTION_RUN, SPAN_NAME_TRANSACTION_ROLLBACK, grpcSpanName(ROLLBACK_RPC_NAME));
+        METHOD_NAME_TRANSACTION_RUN,
+        METHOD_NAME_TRANSACTION_ROLLBACK,
+        grpcSpanName(ROLLBACK_RPC_NAME));
 
-    SpanData runTransactionSpanData = getSpanByName(SPAN_NAME_TRANSACTION_RUN);
+    SpanData runTransactionSpanData = getSpanByName(METHOD_NAME_TRANSACTION_RUN);
     assertEquals(StatusCode.ERROR, runTransactionSpanData.getStatus().getStatusCode());
     assertEquals(1, runTransactionSpanData.getEvents().size());
     assertEquals(
@@ -802,16 +805,16 @@ public abstract class ITTracingTest {
 
     List<SpanData> spans = prepareSpans();
     assertEquals(2, spans.size());
-    assertSpanHierarchy(SPAN_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
+    assertSpanHierarchy(METHOD_NAME_BATCH_COMMIT, grpcSpanName(COMMIT_RPC_NAME));
     assertEquals(
         false,
-        getSpanByName(SPAN_NAME_BATCH_COMMIT)
+        getSpanByName(METHOD_NAME_BATCH_COMMIT)
             .getAttributes()
             .get(AttributeKey.booleanKey("gcp.firestore." + ATTRIBUTE_KEY_IS_TRANSACTIONAL))
             .booleanValue());
     assertEquals(
         3L,
-        getSpanByName(SPAN_NAME_BATCH_COMMIT)
+        getSpanByName(METHOD_NAME_BATCH_COMMIT)
             .getAttributes()
             .get(AttributeKey.longKey("gcp.firestore." + ATTRIBUTE_KEY_DOC_COUNT))
             .longValue());

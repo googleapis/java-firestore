@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
  * <p>Field references are used to access document field values in expressions and to specify fields
  * for sorting, filtering, and projecting data in Firestore pipelines.
  *
- * <p>You can create a `Field` instance using the static {@link #of(String)} method:
+ * <p>You can create a `Field` instance using the static {@link #field(String)} method:
  *
  * <pre>{@code
  * // Create a Field instance for the 'name' field

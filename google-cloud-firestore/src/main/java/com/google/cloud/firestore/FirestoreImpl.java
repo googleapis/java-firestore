@@ -16,12 +16,14 @@
 
 package com.google.cloud.firestore;
 
+import static com.google.api.gax.util.TimeConversionUtils.toThreetenDuration;
 import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 
 import com.google.api.core.ApiClock;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.BetaApi;
 import com.google.api.core.NanoClock;
+import com.google.api.core.ObsoleteApi;
 import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.api.gax.rpc.BidiStreamObserver;
@@ -33,6 +35,9 @@ import com.google.api.gax.rpc.StreamController;
 import com.google.api.gax.rpc.UnaryCallable;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.spi.v1.FirestoreRpc;
+import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
+import com.google.cloud.firestore.telemetry.TelemetryConstants;
+import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
 import com.google.cloud.firestore.telemetry.TraceUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -50,7 +55,6 @@ import java.util.Map;
 import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.threeten.bp.Duration;
 
 /**
  * Main implementation of the Firestore client. This is the entry point for all Firestore
@@ -228,6 +232,14 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     // that we receive from the server.
     final int NUM_RESPONSES_PER_TRACE_EVENT = 100;
 
+    MetricsContext metricsContext =
+        getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(
+                transactionId == null
+                    ? TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS_GET_ALL
+                    : TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS_TRANSACTIONAL);
+
     ResponseObserver<BatchGetDocumentsResponse> responseObserver =
         new ResponseObserver<BatchGetDocumentsResponse>() {
           int numResponses = 0;
@@ -238,7 +250,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             getTraceUtil()
                 .currentSpan()
                 .addEvent(
-                    TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": Start",
+                    TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS + ": Start",
                     new ImmutableMap.Builder<String, Object>()
                         .put(ATTRIBUTE_KEY_DOC_COUNT, documentReferences.length)
                         .put(ATTRIBUTE_KEY_IS_TRANSACTIONAL, transactionId != null)
@@ -254,12 +266,15 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             if (numResponses == 1) {
               getTraceUtil()
                   .currentSpan()
-                  .addEvent(TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS + ": First response received");
+                  .addEvent(
+                      TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS
+                          + ": First response received");
+              metricsContext.recordLatency(MetricType.FIRST_RESPONSE_LATENCY);
             } else if (numResponses % NUM_RESPONSES_PER_TRACE_EVENT == 0) {
               getTraceUtil()
                   .currentSpan()
                   .addEvent(
-                      TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS
+                      TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS
                           + ": Received "
                           + numResponses
                           + " responses");
@@ -299,6 +314,7 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
           @Override
           public void onError(Throwable throwable) {
             getTraceUtil().currentSpan().end(throwable);
+            metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, throwable);
             apiStreamObserver.onError(throwable);
           }
 
@@ -309,11 +325,12 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
             getTraceUtil()
                 .currentSpan()
                 .addEvent(
-                    TraceUtil.SPAN_NAME_BATCH_GET_DOCUMENTS
+                    TelemetryConstants.METHOD_NAME_BATCH_GET_DOCUMENTS
                         + ": Completed with "
                         + numResponses
                         + " responses.",
                     Collections.singletonMap(ATTRIBUTE_KEY_NUM_RESPONSES, numResponses));
+            metricsContext.recordLatency(MetricType.END_TO_END_LATENCY);
             apiStreamObserver.onCompleted();
           }
         };
@@ -435,16 +452,30 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
       @Nonnull final Transaction.AsyncFunction<T> updateFunction,
       @Nonnull TransactionOptions transactionOptions) {
 
-    if (transactionOptions.getReadTime() != null) {
-      // READ_ONLY transactions with readTime have no retry, nor transaction state, so we don't need
-      // a runner.
-      return updateFunction.updateCallback(
-          new ReadTimeTransaction(this, transactionOptions.getReadTime()));
-    } else {
-      // For READ_ONLY transactions without readTime, there is still strong consistency applied,
-      // that cannot be tracked client side.
-      return new ServerSideTransactionRunner<>(this, updateFunction, transactionOptions).run();
+    MetricsContext metricsContext =
+        getOptions()
+            .getMetricsUtil()
+            .createMetricsContext(TelemetryConstants.METHOD_NAME_RUN_TRANSACTION);
+    ApiFuture<T> result;
+
+    try {
+      if (transactionOptions.getReadTime() != null) {
+        // READ_ONLY transactions with readTime have no retry, nor transaction state, so we don't
+        // need a runner.
+        result =
+            updateFunction.updateCallback(
+                new ReadTimeTransaction(this, transactionOptions.getReadTime()));
+      } else {
+        // For READ_ONLY transactions without readTime, there is still strong consistency applied,
+        // that cannot be tracked client side.
+        result = new ServerSideTransactionRunner<>(this, updateFunction, transactionOptions).run();
+      }
+      metricsContext.recordLatencyAtFuture(MetricType.END_TO_END_LATENCY, result);
+    } catch (Exception error) {
+      metricsContext.recordLatency(MetricType.END_TO_END_LATENCY, error);
+      throw error;
     }
+    return result;
   }
 
   @Nonnull
@@ -478,9 +509,16 @@ class FirestoreImpl implements Firestore, FirestoreRpcContext<FirestoreImpl> {
     return firestoreClient;
   }
 
+  /** This method is obsolete. Use {@link #getTotalRequestTimeoutDuration()} instead. */
+  @ObsoleteApi("Use getTotalRequestTimeoutDuration() instead")
   @Override
-  public Duration getTotalRequestTimeout() {
-    return firestoreOptions.getRetrySettings().getTotalTimeout();
+  public org.threeten.bp.Duration getTotalRequestTimeout() {
+    return toThreetenDuration(getTotalRequestTimeoutDuration());
+  }
+
+  @Override
+  public java.time.Duration getTotalRequestTimeoutDuration() {
+    return firestoreOptions.getRetrySettings().getTotalTimeoutDuration();
   }
 
   @Override

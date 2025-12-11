@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>google-cloud-firestore</artifactId>
-  <version>99.99.0-PRIVATEPREVIEW</version><!-- {x-version-update:google-cloud-firestore:current} -->
+  <version>3.33.4</version><!-- {x-version-update:google-cloud-firestore:current} -->
   <packaging>jar</packaging>
   <name>Google Cloud Firestore</name>
   <url>https://github.com/googleapis/java-firestore</url>
@@ -12,11 +12,11 @@
   <parent>
     <groupId>com.google.cloud</groupId>
     <artifactId>google-cloud-firestore-parent</artifactId>
-    <version>99.99.0-PRIVATEPREVIEW</version><!-- {x-version-update:google-cloud-firestore:current} -->
+    <version>3.33.4</version><!-- {x-version-update:google-cloud-firestore:current} -->
   </parent>
   <properties>
     <site.installationModule>google-cloud-firestore</site.installationModule>
-    <opentelemetry.version>1.41.0</opentelemetry.version>
+    <opentelemetry.version>1.52.0</opentelemetry.version>
   </properties>
   <dependencies>
     <dependency>
@@ -119,6 +119,28 @@
       <groupId>io.opentelemetry.instrumentation</groupId>
       <artifactId>opentelemetry-grpc-1.6</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk-metrics</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.cloud.opentelemetry</groupId>
+      <artifactId>exporter-metrics</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>io.opentelemetry.semconv</groupId>
+          <artifactId>opentelemetry-semconv</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.google.re2j</groupId>
+          <artifactId>re2j</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <!-- END OpenTelemetry -->
 
     <!-- Test dependencies -->
@@ -177,26 +199,14 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.15.0</version>
+      <version>3.18.0</version>
       <scope>test</scope>
     </dependency>
     <!-- OpenTelemetry -->
     <dependency>
       <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-sdk</artifactId>
-      <version>${opentelemetry.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk-testing</artifactId>
       <version>${opentelemetry.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-semconv</artifactId>
-      <version>1.30.1-alpha</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -214,7 +224,7 @@
     <dependency>
       <groupId>com.google.cloud.opentelemetry</groupId>
       <artifactId>exporter-trace</artifactId>
-      <version>0.31.0</version>
+      <version>0.36.0</version>
       <scope>test</scope>
     </dependency>
     <!-- END OpenTelemetry -->
@@ -222,27 +232,18 @@
     <dependency>
       <groupId>com.google.api.grpc</groupId>
       <artifactId>proto-google-cloud-trace-v1</artifactId>
-      <version>2.47.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.cloud.opentelemetry</groupId>
-      <artifactId>exporter-trace</artifactId>
-      <version>0.31.0</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- END OpenTelemetry -->
-    <!-- Cloud Ops -->
-    <dependency>
-      <groupId>com.google.api.grpc</groupId>
-      <artifactId>proto-google-cloud-trace-v1</artifactId>
-      <version>2.47.0</version>
+      <version>2.68.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-trace</artifactId>
-      <version>2.47.0</version>
+      <version>2.68.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.http-client</groupId>
+      <artifactId>google-http-client</artifactId>
       <scope>test</scope>
     </dependency>
     <!-- END Cloud Ops -->
@@ -290,7 +291,7 @@
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>2.43.0</version>
+        <version>2.45.0</version>
         <configuration>
           <kotlin>
             <includes>
@@ -365,6 +366,55 @@
           <artifactId>javax.annotation-api</artifactId>
         </dependency>
       </dependencies>
+    </profile>
+    <profile>
+      <!-- JDK17 set up for tests in src/test-jdk17 -->
+      <id>java17-test</id>
+      <activation>
+        <!-- Activate the tests only on CI unit(17) tests using flag -->
+        <property>
+          <name>runTestsWithJava17</name>
+          <value>true</value>
+        </property>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>add-test-source</id>
+                <phase>generate-test-sources</phase>
+                <goals>
+                  <goal>add-test-source</goal>
+                </goals>
+                <configuration>
+                  <sources>
+                    <source>src/test-jdk17/java</source>
+                  </sources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <inherited>true</inherited>
+            <configuration>
+              <!-- Enable Java 17 for all sources so that Intellij picks the right language level -->
+              <source>17</source>
+              <release>17</release>
+              <compilerArgs>
+                <arg>-parameters</arg>
+                <arg>--add-opens=java.base/java.lang=ALL-UNNAMED</arg>
+                <arg>--add-opens=java.base/java.util=ALL-UNNAMED</arg>
+              </compilerArgs>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>
