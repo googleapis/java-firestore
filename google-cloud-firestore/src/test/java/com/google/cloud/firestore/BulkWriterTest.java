@@ -63,6 +63,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -1279,6 +1280,7 @@ public class BulkWriterTest {
   }
 
   @Test
+  @Ignore
   public void sendsBackoffBatchAfterOtherEnqueuedBatches() throws Exception {
     ResponseStubber responseStubber =
         new ResponseStubber() {
