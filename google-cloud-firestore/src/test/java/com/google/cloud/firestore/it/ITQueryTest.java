@@ -329,7 +329,8 @@ public class ITQueryTest extends ITBaseTest {
   public void orQueriesWithNotIn()
       throws ExecutionException, InterruptedException, TimeoutException {
     assumeTrue(
-        "Skip this test when running against production because it requires composite index creation.",
+        "Skip this test when running against production because it requires composite index"
+            + " creation.",
         isRunningAgainstFirestoreEmulator(firestore));
     Map<String, Map<String, Object>> testDocs =
         map(

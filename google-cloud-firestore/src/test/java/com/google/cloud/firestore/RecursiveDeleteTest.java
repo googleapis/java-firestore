@@ -73,7 +73,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;

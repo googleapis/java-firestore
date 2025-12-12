@@ -75,7 +75,8 @@ public final class Aggregate extends Stage {
     super("aggregate", options.options);
     if (accumulators.isEmpty()) {
       throw new IllegalArgumentException(
-          "Must specify at least one accumulator for aggregate() stage. There is a distinct() stage if only distinct group values are needed.");
+          "Must specify at least one accumulator for aggregate() stage. There is a distinct() stage"
+              + " if only distinct group values are needed.");
     }
 
     this.groups = groups;

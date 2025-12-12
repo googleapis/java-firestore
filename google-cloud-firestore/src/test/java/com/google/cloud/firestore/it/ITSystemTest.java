@@ -908,7 +908,8 @@ public class ITSystemTest extends ITBaseTest {
   public void partitionedQuery() throws Exception {
     // Partitioned queries are not supported in the emulator.
     assumeFalse(
-        "Skip this test when running against the Firestore emulator because it does not support partitioned queries.",
+        "Skip this test when running against the Firestore emulator because it does not support"
+            + " partitioned queries.",
         isRunningAgainstFirestoreEmulator(firestore));
 
     int documentCount = 2 * 128 + 127; // Minimum partition size is 128.
@@ -941,7 +942,8 @@ public class ITSystemTest extends ITBaseTest {
   public void partitionedQuery_future() throws Exception {
     // Partitioned queries are not supported in the emulator.
     assumeFalse(
-        "Skip this test when running against the Firestore emulator because it does not support partitioned queries.",
+        "Skip this test when running against the Firestore emulator because it does not support"
+            + " partitioned queries.",
         isRunningAgainstFirestoreEmulator(firestore));
 
     int documentCount = 2 * 128 + 127; // Minimum partition size is 128.
@@ -974,7 +976,8 @@ public class ITSystemTest extends ITBaseTest {
   public void emptyPartitionedQuery() throws Exception {
     // Partitioned queries are not supported in the emulator.
     assumeFalse(
-        "Skip this test when running against the Firestore emulator because it does not support partitioned queries.",
+        "Skip this test when running against the Firestore emulator because it does not support"
+            + " partitioned queries.",
         isRunningAgainstFirestoreEmulator(firestore));
 
     StreamConsumer<QueryPartition> consumer = new StreamConsumer<>();

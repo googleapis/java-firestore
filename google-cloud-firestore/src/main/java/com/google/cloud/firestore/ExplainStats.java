@@ -53,7 +53,8 @@ public final class ExplainStats {
       return explainStatsData.unpack(StringValue.class);
     } catch (InvalidProtocolBufferException e) {
       throw new RuntimeException(
-          "Unable to decode explain stats. Did you request an output format that returns a string value, such as 'text' or 'json'?",
+          "Unable to decode explain stats. Did you request an output format that returns a string"
+              + " value, such as 'text' or 'json'?",
           e);
     }
   }

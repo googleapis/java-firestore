@@ -78,7 +78,8 @@ public final class PipelineSource {
   public Pipeline collection(@Nonnull CollectionReference ref) {
     if (!this.rpcContext.getFirestore().equals(ref.getFirestore())) {
       throw new IllegalArgumentException(
-          "Invalid CollectionReference. The Firestore instance of the CollectionReference must match the Firestore instance of the PipelineSource.");
+          "Invalid CollectionReference. The Firestore instance of the CollectionReference must"
+              + " match the Firestore instance of the PipelineSource.");
     }
 
     return collection(ref.getPath(), new CollectionOptions());

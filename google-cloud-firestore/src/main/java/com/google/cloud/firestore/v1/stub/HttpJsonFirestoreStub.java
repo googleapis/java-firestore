@@ -111,6 +111,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                             serializer.putQueryParam(fields, "readTime", request.getReadTime());
                             serializer.putQueryParam(
                                 fields, "transaction", request.getTransaction());
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(request -> null)
@@ -157,6 +158,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                                 fields, "showMissing", request.getShowMissing());
                             serializer.putQueryParam(
                                 fields, "transaction", request.getTransaction());
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(request -> null)
@@ -195,12 +197,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                                 fields, "currentDocument", request.getCurrentDocument());
                             serializer.putQueryParam(fields, "mask", request.getMask());
                             serializer.putQueryParam(fields, "updateMask", request.getUpdateMask());
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("document", request.getDocument(), false))
+                                  .toBody("document", request.getDocument(), true))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<Document>newBuilder()
@@ -233,6 +236,7 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                                 ProtoRestSerializer.create();
                             serializer.putQueryParam(
                                 fields, "currentDocument", request.getCurrentDocument());
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(request -> null)
@@ -266,12 +270,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                             Map<String, List<String>> fields = new HashMap<>();
                             ProtoRestSerializer<BatchGetDocumentsRequest> serializer =
                                 ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearDatabase().build(), false))
+                                  .toBody("*", request.toBuilder().clearDatabase().build(), true))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<BatchGetDocumentsResponse>newBuilder()
@@ -302,12 +307,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                             Map<String, List<String>> fields = new HashMap<>();
                             ProtoRestSerializer<BeginTransactionRequest> serializer =
                                 ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearDatabase().build(), false))
+                                  .toBody("*", request.toBuilder().clearDatabase().build(), true))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<BeginTransactionResponse>newBuilder()
@@ -337,12 +343,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                         Map<String, List<String>> fields = new HashMap<>();
                         ProtoRestSerializer<CommitRequest> serializer =
                             ProtoRestSerializer.create();
+                        serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                         return fields;
                       })
                   .setRequestBodyExtractor(
                       request ->
                           ProtoRestSerializer.create()
-                              .toBody("*", request.toBuilder().clearDatabase().build(), false))
+                              .toBody("*", request.toBuilder().clearDatabase().build(), true))
                   .build())
           .setResponseParser(
               ProtoMessageResponseParser.<CommitResponse>newBuilder()
@@ -372,12 +379,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                         Map<String, List<String>> fields = new HashMap<>();
                         ProtoRestSerializer<RollbackRequest> serializer =
                             ProtoRestSerializer.create();
+                        serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                         return fields;
                       })
                   .setRequestBodyExtractor(
                       request ->
                           ProtoRestSerializer.create()
-                              .toBody("*", request.toBuilder().clearDatabase().build(), false))
+                              .toBody("*", request.toBuilder().clearDatabase().build(), true))
                   .build())
           .setResponseParser(
               ProtoMessageResponseParser.<Empty>newBuilder()
@@ -410,12 +418,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                             Map<String, List<String>> fields = new HashMap<>();
                             ProtoRestSerializer<RunQueryRequest> serializer =
                                 ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearParent().build(), false))
+                                  .toBody("*", request.toBuilder().clearParent().build(), true))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<RunQueryResponse>newBuilder()
@@ -485,12 +494,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                             Map<String, List<String>> fields = new HashMap<>();
                             ProtoRestSerializer<RunAggregationQueryRequest> serializer =
                                 ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearParent().build(), false))
+                                  .toBody("*", request.toBuilder().clearParent().build(), true))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<RunAggregationQueryResponse>newBuilder()
@@ -523,12 +533,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                             Map<String, List<String>> fields = new HashMap<>();
                             ProtoRestSerializer<PartitionQueryRequest> serializer =
                                 ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearParent().build(), false))
+                                  .toBody("*", request.toBuilder().clearParent().build(), true))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<PartitionQueryResponse>newBuilder()
@@ -561,12 +572,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                             Map<String, List<String>> fields = new HashMap<>();
                             ProtoRestSerializer<ListCollectionIdsRequest> serializer =
                                 ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearParent().build(), false))
+                                  .toBody("*", request.toBuilder().clearParent().build(), true))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<ListCollectionIdsResponse>newBuilder()
@@ -597,12 +609,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                             Map<String, List<String>> fields = new HashMap<>();
                             ProtoRestSerializer<BatchWriteRequest> serializer =
                                 ProtoRestSerializer.create();
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("*", request.toBuilder().clearDatabase().build(), false))
+                                  .toBody("*", request.toBuilder().clearDatabase().build(), true))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<BatchWriteResponse>newBuilder()
@@ -637,12 +650,13 @@ public class HttpJsonFirestoreStub extends FirestoreStub {
                                 ProtoRestSerializer.create();
                             serializer.putQueryParam(fields, "documentId", request.getDocumentId());
                             serializer.putQueryParam(fields, "mask", request.getMask());
+                            serializer.putQueryParam(fields, "$alt", "json;enum-encoding=int");
                             return fields;
                           })
                       .setRequestBodyExtractor(
                           request ->
                               ProtoRestSerializer.create()
-                                  .toBody("document", request.getDocument(), false))
+                                  .toBody("document", request.getDocument(), true))
                       .build())
               .setResponseParser(
                   ProtoMessageResponseParser.<Document>newBuilder()

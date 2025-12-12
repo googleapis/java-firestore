@@ -618,7 +618,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
                   StatusCode.Code.UNAVAILABLE,
                   StatusCode.Code.INTERNAL,
                   StatusCode.Code.DEADLINE_EXCEEDED)));
-      definitions.put("no_retry_codes", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
       definitions.put(
           "no_retry_3_codes", ImmutableSet.copyOf(Lists.<StatusCode.Code>newArrayList()));
       definitions.put(
@@ -677,8 +676,6 @@ public class FirestoreStubSettings extends StubSettings<FirestoreStubSettings> {
               .setTotalTimeoutDuration(Duration.ofMillis(300000L))
               .build();
       definitions.put("retry_policy_1_params", settings);
-      settings = RetrySettings.newBuilder().setRpcTimeoutMultiplier(1.0).build();
-      definitions.put("no_retry_params", settings);
       settings =
           RetrySettings.newBuilder()
               .setInitialRpcTimeoutDuration(Duration.ofMillis(86400000L))

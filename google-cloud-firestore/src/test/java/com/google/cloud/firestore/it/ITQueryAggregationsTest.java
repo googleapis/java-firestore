@@ -101,7 +101,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void allowsAliasesForLongestFieldNames() throws Exception {
     assumeFalse(
-        "Skip this test when running against the Firestore emulator because it does not support long field names.",
+        "Skip this test when running against the Firestore emulator because it does not support"
+            + " long field names.",
         isRunningAgainstFirestoreEmulator(firestore));
 
     // The longest field name allowed is 1499 characters long.

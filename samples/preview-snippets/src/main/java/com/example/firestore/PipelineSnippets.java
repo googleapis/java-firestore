@@ -22,18 +22,15 @@ import static com.google.cloud.firestore.pipeline.expressions.Ordering.*;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.gax.rpc.ApiStreamObserver;
-
 import com.google.cloud.firestore.ExplainMetrics;
 import com.google.cloud.firestore.ExplainOptions;
 import com.google.cloud.firestore.ExplainResults;
-import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.PlanSummary;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.VectorValue;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
@@ -41,7 +38,6 @@ import com.google.cloud.firestore.pipeline.stages.Sample;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 class PipelineSnippets {
@@ -53,8 +49,7 @@ class PipelineSnippets {
 
   void queryExplain() throws ExecutionException, InterruptedException {
     // [START query_explain]
-    Query q = firestore.collection("cities")
-        .whereGreaterThan("population", 1);
+    Query q = firestore.collection("cities").whereGreaterThan("population", 1);
     ExplainOptions options = ExplainOptions.builder().build();
 
     ExplainResults<QuerySnapshot> explainResults = q.explain(options).get();
@@ -124,10 +119,12 @@ class PipelineSnippets {
   void inputStages() throws ExecutionException, InterruptedException {
     // [START input_stages]
     // Return all restaurants in San Francisco
-    Pipeline.Snapshot results1 = firestore.pipeline().collection("cities/sf/restaurants").execute().get();
+    Pipeline.Snapshot results1 =
+        firestore.pipeline().collection("cities/sf/restaurants").execute().get();
 
     // Return all restaurants
-    Pipeline.Snapshot results2 = firestore.pipeline().collectionGroup("restaurants").execute().get();
+    Pipeline.Snapshot results2 =
+        firestore.pipeline().collectionGroup("restaurants").execute().get();
 
     // Return all documents across all collections in the database (the entire database)
     Pipeline.Snapshot results3 = firestore.pipeline().database().execute().get();
@@ -275,7 +272,12 @@ class PipelineSnippets {
   void sparseIndexes() throws ExecutionException, InterruptedException {
     // [START sparse_index_example]
     Pipeline.Snapshot results =
-        firestore.pipeline().collection("books").where(field("category").like("%fantasy%")).execute().get();
+        firestore
+            .pipeline()
+            .collection("books")
+            .where(field("category").like("%fantasy%"))
+            .execute()
+            .get();
     // [END sparse_index_example]
     System.out.println(results.getResults());
   }
@@ -531,9 +533,7 @@ class PipelineSnippets {
         firestore
             .pipeline()
             .database()
-            .unnest(
-                "arrayField", "unnestedArrayField",
-                new UnnestOptions().withIndexField("index"))
+            .unnest("arrayField", "unnestedArrayField", new UnnestOptions().withIndexField("index"))
             .execute()
             .get();
     // [END unnest_stage]
@@ -551,9 +551,7 @@ class PipelineSnippets {
         firestore
             .pipeline()
             .database()
-            .unnest(
-                "neighbors", "unnestedNeighbors",
-                new UnnestOptions().withIndexField("index"))
+            .unnest("neighbors", "unnestedNeighbors", new UnnestOptions().withIndexField("index"))
             .execute()
             .get();
 
@@ -575,7 +573,12 @@ class PipelineSnippets {
 
     // Number of books with nonnull `ratings` field
     Pipeline.Snapshot countField =
-        firestore.pipeline().collection("books").aggregate(count("ratings").as("count")).execute().get();
+        firestore
+            .pipeline()
+            .collection("books")
+            .aggregate(count("ratings").as("count"))
+            .execute()
+            .get();
     // [END count_function]
     System.out.println(countAll.getResults());
     System.out.println(countField.getResults());
@@ -1328,8 +1331,9 @@ class PipelineSnippets {
             .pipeline()
             .collection("books")
             .where(startsWith(field("title"), "The "))
-            .select(substring(field("title"), constant(4), field("title").charLength())
-            .as("titleWithoutLeadingThe"))
+            .select(
+                substring(field("title"), constant(4), field("title").charLength())
+                    .as("titleWithoutLeadingThe"))
             .execute()
             .get();
     // [END substr_function]
@@ -1927,16 +1931,14 @@ class PipelineSnippets {
 
   void sampleDocumentsExample() throws ExecutionException, InterruptedException {
     // [START sample_documents]
-    Pipeline.Snapshot sampled =
-        firestore.pipeline().collection("cities").sample(1).execute().get();
+    Pipeline.Snapshot sampled = firestore.pipeline().collection("cities").sample(1).execute().get();
     // [END sample_documents]
     System.out.println(sampled.getResults());
   }
 
   void sampleAllDocumentsExample() throws ExecutionException, InterruptedException {
     // [START sample_all_documents]
-    Pipeline.Snapshot sampled =
-        firestore.pipeline().collection("cities").sample(5).execute().get();
+    Pipeline.Snapshot sampled = firestore.pipeline().collection("cities").sample(5).execute().get();
     // [END sample_all_documents]
     System.out.println(sampled.getResults());
   }
@@ -1989,7 +1991,12 @@ class PipelineSnippets {
   void samplePercentageExample() throws ExecutionException, InterruptedException {
     // [START sample_percentage]
     Pipeline.Snapshot sampled =
-        firestore.pipeline().collection("cities").sample(Sample.withPercentage(0.5)).execute().get();
+        firestore
+            .pipeline()
+            .collection("cities")
+            .sample(Sample.withPercentage(0.5))
+            .execute()
+            .get();
     // [END sample_percentage]
     System.out.println(sampled.getResults());
   }
@@ -2342,8 +2349,7 @@ class PipelineSnippets {
                 "embedding",
                 new double[] {1.3, 2.345},
                 FindNearest.DistanceMeasure.EUCLIDEAN,
-                new FindNearestOptions()
-                    .withDistanceField("computedDistance"))
+                new FindNearestOptions().withDistanceField("computedDistance"))
             .execute()
             .get();
     // [END find_nearest_distance]
@@ -2456,12 +2462,7 @@ class PipelineSnippets {
   void collectionInputExample() throws ExecutionException, InterruptedException {
     // [START collection_input]
     Pipeline.Snapshot results =
-        firestore
-            .pipeline()
-            .collection("cities")
-            .sort(ascending(field("name")))
-            .execute()
-            .get();
+        firestore.pipeline().collection("cities").sort(ascending(field("name"))).execute().get();
     // [END collection_input]
     System.out.println(results.getResults());
   }
@@ -2637,12 +2638,7 @@ class PipelineSnippets {
   void databaseInputExample() throws ExecutionException, InterruptedException {
     // [START database_input]
     Pipeline.Snapshot results =
-        firestore
-            .pipeline()
-            .database()
-            .sort(ascending(field("population")))
-            .execute()
-            .get();
+        firestore.pipeline().database().sort(ascending(field("population"))).execute().get();
     // [END database_input]
     System.out.println(results.getResults());
   }
@@ -2733,8 +2729,7 @@ class PipelineSnippets {
         firestore
             .pipeline()
             .collection("cities")
-            .aggregate(
-                countAll().as("total"), average("population").as("averagePopulation"))
+            .aggregate(countAll().as("total"), average("population").as("averagePopulation"))
             .execute()
             .get();
     // [END aggregate_syntax]
@@ -2828,8 +2823,7 @@ class PipelineSnippets {
         firestore
             .pipeline()
             .collection("cities")
-            .aggregate(
-                countAll().as("total"), average("population").as("averagePopulation"))
+            .aggregate(countAll().as("total"), average("population").as("averagePopulation"))
             .execute()
             .get();
     // [END aggregate_without_group]
