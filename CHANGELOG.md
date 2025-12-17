@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.35.0-rc1](https://github.com/googleapis/java-firestore/compare/v3.34.0...v3.35.0-rc1) (2025-12-16)
+
+
+### Features
+
+* feat: update with latest from main (#2277) (https://github.com/googleapis/java-firestore/commit/a6acb23af086652af09de11b76ba8c658b3bb387)
+* feat: Upgrade protobuf gen code to 4.33 (#2278) (https://github.com/googleapis/java-firestore/commit/74626a66a880039de62eb9a4411947457ccb36ee)
+
+### Dependencies
+
+* deps: update sdk-platform-java-config to 3.55.0-rc1 (#2276) (https://github.com/googleapis/java-firestore/commit/62744c841d6b7665d2bd61cb0ac1b5062ffc309e) 
+* fix(deps): update the Java code generator (gapic-generator-java) to 2.65.0-rc1
+
+
 ## [3.33.4](https://github.com/googleapis/java-firestore/compare/v3.33.3...v3.33.4) (2025-11-13)
 
 
