@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.35.0](https://github.com/googleapis/java-firestore/compare/v3.34.0...v3.35.0) (2025-12-18)
+
+
+### Features
+
+* Adding gcp resource name span attribute ([#2260](https://github.com/googleapis/java-firestore/issues/2260)) ([926fd8c](https://github.com/googleapis/java-firestore/commit/926fd8c393dfd91f532b61bdf2a50ed8d19d3618))
+
 ## [3.34.0](https://github.com/googleapis/java-firestore/compare/v3.33.4...v3.34.0) (2025-12-12)
 
 
