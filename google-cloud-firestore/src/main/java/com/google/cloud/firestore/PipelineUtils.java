@@ -30,7 +30,6 @@ import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.Query.ComparisonFilterInternal;
 import com.google.cloud.firestore.Query.CompositeFilterInternal;
 import com.google.cloud.firestore.Query.FilterInternal;
-import com.google.cloud.firestore.Query.LimitType;
 import com.google.cloud.firestore.Query.UnaryFilterInternal;
 import com.google.cloud.firestore.pipeline.expressions.AggregateFunction;
 import com.google.cloud.firestore.pipeline.expressions.AliasedAggregate;
@@ -40,7 +39,6 @@ import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.common.collect.Lists;
-import com.google.firestore.v1.Cursor;
 import com.google.firestore.v1.MapValue;
 import com.google.firestore.v1.Value;
 import java.util.HashMap;
@@ -171,18 +169,6 @@ public class PipelineUtils {
       // Handle other FilterInternal types as needed
       throw new IllegalArgumentException("Unsupported filter type: " + f.getClass().getName());
     }
-  }
-
-  @InternalApi
-  static Pipeline toPaginatedPipeline(
-      Pipeline pipeline,
-      Cursor start,
-      Cursor end,
-      Integer limit,
-      LimitType limitType,
-      Integer offset) {
-    throw new UnsupportedOperationException(
-        "Converting to pagination pipeline is not support yet.");
   }
 
   @InternalApi

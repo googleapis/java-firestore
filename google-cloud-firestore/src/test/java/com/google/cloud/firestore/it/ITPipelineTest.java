@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore.it;
 
+import static com.google.cloud.firestore.FieldValue.vector;
 import static com.google.cloud.firestore.it.ITQueryTest.map;
 import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.count;
@@ -69,7 +70,6 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.timesta
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixMicrosToTimestamp;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixMillisToTimestamp;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixSecondsToTimestamp;
-import static com.google.cloud.firestore.pipeline.expressions.Expression.vector;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.vectorLength;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.xor;
 import static com.google.common.truth.Truth.assertThat;
@@ -160,7 +160,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("hugo", true, "nebula", false))
                     .put(
                         "embedding",
-                        FieldValue.vector(
+                        vector(
                             new double[] {10.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
@@ -175,7 +175,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("none", true))
                     .put(
                         "embedding",
-                        FieldValue.vector(
+                        vector(
                             new double[] {1.0, 10.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
@@ -190,7 +190,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("nobel", true, "nebula", false))
                     .put(
                         "embedding",
-                        FieldValue.vector(
+                        vector(
                             new double[] {1.0, 1.0, 10.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
@@ -206,7 +206,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("cost", Double.NaN)
                     .put(
                         "embedding",
-                        FieldValue.vector(
+                        vector(
                             new double[] {1.0, 1.0, 1.0, 10.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
@@ -221,7 +221,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("arthur c. clarke", true, "booker prize", false))
                     .put(
                         "embedding",
-                        FieldValue.vector(
+                        vector(
                             new double[] {1.0, 1.0, 1.0, 1.0, 10.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
@@ -236,7 +236,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("none", true))
                     .put(
                         "embedding",
-                        FieldValue.vector(
+                        vector(
                             new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 10.0, 1.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
@@ -251,7 +251,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("pulitzer", true))
                     .put(
                         "embedding",
-                        FieldValue.vector(
+                        vector(
                             new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 10.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
@@ -266,7 +266,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("prometheus", true))
                     .put(
                         "embedding",
-                        FieldValue.vector(
+                        vector(
                             new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 10.0, 1.0, 1.0}))
                     .build())
             .put(
@@ -281,7 +281,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("none", true))
                     .put(
                         "embedding",
-                        FieldValue.vector(
+                        vector(
                             new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 10.0, 1.0}))
                     .build())
             .put(
@@ -296,7 +296,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("hugo", true, "nebula", true))
                     .put(
                         "embedding",
-                        FieldValue.vector(
+                        vector(
                             new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 10.0}))
                     .build())
             .put(
@@ -337,7 +337,7 @@ public class ITPipelineTest extends ITBaseTest {
             "bytes",
             com.google.cloud.firestore.Blob.fromBytes(refBytes),
             "vector",
-            FieldValue.vector(refVector));
+            vector(refVector));
 
     List<Object> refArray =
         Lists.newArrayList(
@@ -349,7 +349,7 @@ public class ITPipelineTest extends ITBaseTest {
             refGeoPoint,
             Timestamp.of(refDate),
             com.google.cloud.firestore.Blob.fromBytes(refBytes),
-            FieldValue.vector(refVector));
+            vector(refVector));
 
     Pipeline pipeline =
         firestore
@@ -365,7 +365,7 @@ public class ITPipelineTest extends ITBaseTest {
                 constant(refDate).as("date"),
                 constant(refGeoPoint).as("geoPoint"),
                 constant(com.google.cloud.firestore.Blob.fromBytes(refBytes)).as("bytes"),
-                vector(refVector).as("vector"),
+                constant(vector(refVector)).as("vector"),
                 Expression.map(refMap).as("map"),
                 array(refArray).as("array"));
 
@@ -381,7 +381,7 @@ public class ITPipelineTest extends ITBaseTest {
     assertThat(data.get("timestamp")).isEqualTo(refTimestamp);
     assertThat(data.get("date")).isEqualTo(Timestamp.of(refDate));
     assertThat(data.get("bytes")).isEqualTo(com.google.cloud.firestore.Blob.fromBytes(refBytes));
-    assertThat(data.get("vector")).isEqualTo(FieldValue.vector(refVector));
+    assertThat(data.get("vector")).isEqualTo(vector(refVector));
     assertThat(stringOfOrderedKeyValues((Map<String, Object>) data.get("map")))
         .isEqualTo(stringOfOrderedKeyValues(refMap));
     assertThat(data.get("array").toString()).isEqualTo(refArray.toString());
@@ -1171,7 +1171,8 @@ public class ITPipelineTest extends ITBaseTest {
         firestore
             .pipeline()
             .createFrom(collection)
-            .where(Expression.notEqualAny("genre", Lists.newArrayList("Romance", "Dystopian")))
+            .where(
+                Expression.notEqualAny("genre", Lists.newArrayList("Romance", "Dystopian", null)))
             .select("genre")
             .distinct("genre")
             .execute()
@@ -1244,15 +1245,15 @@ public class ITPipelineTest extends ITBaseTest {
             .sort(field("rating").descending())
             .limit(1)
             .select(
-                field("rating").isNull().as("ratingIsNull"),
-                field("rating").isNaN().as("ratingIsNaN"),
+                field("rating").equal(nullValue()).as("ratingIsNull"),
+                field("rating").equal(Double.NaN).as("ratingIsNaN"),
                 arrayGet("title", 0).isError().as("isError"),
                 arrayGet("title", 0)
                     .ifError(constant("was error"), constant("was not error"))
                     .as("ifError"),
                 field("foo").isAbsent().as("isAbsent"),
-                field("title").isNotNull().as("titleIsNotNull"),
-                field("cost").isNotNaN().as("costIsNotNan"),
+                field("title").notEqual(nullValue()).as("titleIsNotNull"),
+                field("cost").notEqual(Double.NaN).as("costIsNotNan"),
                 field("fooBarBaz").exists().as("fooBarBazExists"),
                 field("title").exists().as("titleExists"))
             .execute()
@@ -1777,7 +1778,7 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .collection(collection.getPath())
             .limit(1)
-            .select(vectorLength(vector(new double[] {1.0, 2.0, 3.0})).as("vectorLength"))
+            .select(vectorLength(constant(vector(new double[] {1.0, 2.0, 3.0}))).as("vectorLength"))
             .execute()
             .get()
             .getResults();
@@ -1998,9 +1999,9 @@ public class ITPipelineTest extends ITBaseTest {
             .pipeline()
             .collection(collection.getPath())
             .select(
-                cosineDistance(vector(sourceVector), targetVector).as("cosineDistance"),
-                dotProduct(vector(sourceVector), targetVector).as("dotProductDistance"),
-                euclideanDistance(vector(sourceVector), targetVector).as("euclideanDistance"))
+                cosineDistance(constant(vector(sourceVector)), targetVector).as("cosineDistance"),
+                dotProduct(constant(vector(sourceVector)), targetVector).as("dotProductDistance"),
+                euclideanDistance(constant(vector(sourceVector)), targetVector).as("euclideanDistance"))
             .limit(1)
             .execute()
             .get()
@@ -2236,7 +2237,7 @@ public class ITPipelineTest extends ITBaseTest {
                 RawStage.ofName("find_nearest")
                     .withArguments(
                         field("embedding"),
-                        vector(new double[] {10.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}),
+                        constant(vector(new double[] {10.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0})),
                         "euclidean")
                     .withOptions(
                         new RawOptions()
@@ -2530,9 +2531,9 @@ public class ITPipelineTest extends ITBaseTest {
                 Aggregate.withAccumulators(AggregateFunction.average("rating").as("avg_rating"))
                     .withGroups("genre"),
                 new AggregateOptions()
-                    .withHints(new AggregateHints().withForceStreamableEnabled()));
+                    .withHints(new AggregateHints().with("test_option", "test_value")));
 
-    pipeline.execute(opts).get();
+    assertThrows(ExecutionException.class, () -> pipeline.execute(opts).get());
   }
 
   @Test

@@ -906,6 +906,9 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void partitionedQuery() throws Exception {
+    assumeFalse(
+        "Partitioned query is not supported with enterprise yet",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     // Partitioned queries are not supported in the emulator.
     assumeFalse(
         "Skip this test when running against the Firestore emulator because it does not support partitioned queries.",
@@ -939,6 +942,9 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void partitionedQuery_future() throws Exception {
+    assumeFalse(
+        "Partitioned query is not supported with enterprise yet",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     // Partitioned queries are not supported in the emulator.
     assumeFalse(
         "Skip this test when running against the Firestore emulator because it does not support partitioned queries.",
@@ -972,6 +978,9 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void emptyPartitionedQuery() throws Exception {
+    assumeFalse(
+        "Partitioned query is not supported with enterprise yet",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     // Partitioned queries are not supported in the emulator.
     assumeFalse(
         "Skip this test when running against the Firestore emulator because it does not support partitioned queries.",
@@ -1770,13 +1779,37 @@ public class ITSystemTest extends ITBaseTest {
     setDocument("h", map("zip", null));
 
     QuerySnapshot querySnapshot = randomColl.whereNotEqualTo("zip", 98101).get().get();
-    assertEquals(asList("a", "b", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+    switch (getFirestoreEdition()) {
+      case STANDARD:
+        assertEquals(asList("a", "b", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+        break;
+      case ENTERPRISE:
+        assertThat(querySnapshotToIds(querySnapshot))
+            .containsExactlyElementsIn(asList("a", "b", "d", "e", "f", "g", "h"));
+        break;
+    }
 
     querySnapshot = randomColl.whereNotEqualTo("zip", Double.NaN).get().get();
-    assertEquals(asList("b", "c", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+    switch (getFirestoreEdition()) {
+      case STANDARD:
+        assertEquals(asList("b", "c", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+        break;
+      case ENTERPRISE:
+        assertThat(querySnapshotToIds(querySnapshot))
+            .containsExactlyElementsIn(asList("b", "c", "d", "e", "f", "g", "h"));
+        break;
+    }
 
     querySnapshot = randomColl.whereNotEqualTo("zip", null).get().get();
-    assertEquals(asList("a", "b", "c", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+    switch (getFirestoreEdition()) {
+      case STANDARD:
+        assertEquals(asList("a", "b", "c", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+        break;
+      case ENTERPRISE:
+        assertThat(querySnapshotToIds(querySnapshot))
+            .containsExactlyElementsIn(asList("a", "b", "c", "d", "e", "f", "g"));
+        break;
+    }
   }
 
   @Test
@@ -1897,10 +1930,14 @@ public class ITSystemTest extends ITBaseTest {
         ALL_SUPPORTED_TYPES_OBJECT, documentSnapshots.get(1).toObject(AllSupportedTypes.class));
     assertNotEquals(
         ALL_SUPPORTED_TYPES_OBJECT, documentSnapshots.get(2).toObject(AllSupportedTypes.class));
-    assertEquals(ref1.getId(), documentSnapshots.get(0).getId());
-    assertEquals(ref2.getId(), documentSnapshots.get(1).getId());
-    assertEquals(ref3.getId(), documentSnapshots.get(2).getId());
+
     assertEquals(3, documentSnapshots.size());
+    // Only standard edition returns the documents in the order of the request.
+    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
+      assertEquals(ref1.getId(), documentSnapshots.get(0).getId());
+      assertEquals(ref2.getId(), documentSnapshots.get(1).getId());
+      assertEquals(ref3.getId(), documentSnapshots.get(2).getId());
+    }
   }
 
   @Test

@@ -80,21 +80,40 @@ public class ITQueryTest extends ITBaseTest {
   public static void checkResultContainsDocumentsInOrder(
       Query query, FirestoreEdition edition, String... docs)
       throws ExecutionException, InterruptedException {
-    QuerySnapshot snapshot = query.get().get();
-    List<String> result =
-        snapshot.getDocuments().stream()
-            .map(queryDocumentSnapshot -> queryDocumentSnapshot.getReference().getId())
-            .collect(Collectors.toList());
-    assertThat(result).isEqualTo(Arrays.asList(docs));
+    switch (edition) {
+      case STANDARD:
+        {
+          QuerySnapshot snapshot = query.get().get();
+          List<String> result =
+              snapshot.getDocuments().stream()
+                  .map(queryDocumentSnapshot -> queryDocumentSnapshot.getReference().getId())
+                  .collect(Collectors.toList());
+          assertThat(result).isEqualTo(Arrays.asList(docs));
 
-    if (edition == FirestoreEdition.ENTERPRISE) {
-      List<PipelineResult> pipelineResults =
-          query.getFirestore().pipeline().createFrom(query).execute().get().getResults();
-      result =
-          pipelineResults.stream()
-              .map(pipelineResult -> Objects.requireNonNull(pipelineResult.getReference()).getId())
-              .collect(Collectors.toList());
-      assertThat(result).isEqualTo(Arrays.asList(docs));
+          break;
+        }
+      case ENTERPRISE:
+        {
+          QuerySnapshot snapshot = query.get().get();
+          List<String> result =
+              snapshot.getDocuments().stream()
+                  .map(queryDocumentSnapshot -> queryDocumentSnapshot.getReference().getId())
+                  .collect(Collectors.toList());
+          // Implicit orderby is not enforced with enterprise
+          assertThat(result).containsExactlyElementsIn(Arrays.asList(docs));
+
+          List<PipelineResult> pipelineResults =
+              query.getFirestore().pipeline().createFrom(query).execute().get().getResults();
+          result =
+              pipelineResults.stream()
+                  .map(
+                      pipelineResult ->
+                          Objects.requireNonNull(pipelineResult.getReference()).getId())
+                  .collect(Collectors.toList());
+          assertThat(result).containsExactlyElementsIn(Arrays.asList(docs));
+
+          break;
+        }
     }
   }
 
@@ -1203,7 +1222,16 @@ public class ITQueryTest extends ITBaseTest {
     latch.await();
     registration.remove();
 
-    assertEquals(queryOrder, Arrays.asList("a", "d", "e", "f", "g", "b", "c"));
-    assertEquals(queryOrder, listenerOrder);
+    switch (getFirestoreEdition()) {
+      case STANDARD:
+        assertEquals(queryOrder, Arrays.asList("a", "d", "e", "f", "g", "b", "c"));
+        assertEquals(queryOrder, listenerOrder);
+        break;
+      case ENTERPRISE:
+        assertThat(queryOrder)
+            .containsExactlyElementsIn(Arrays.asList("a", "d", "e", "f", "g", "c", "b"));
+        assertEquals(listenerOrder, Arrays.asList("a", "d", "e", "f", "g", "b", "c"));
+        break;
+    }
   }
 }

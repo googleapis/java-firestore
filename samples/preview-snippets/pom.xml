@@ -33,8 +33,7 @@
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>google-cloud-firestore-bom</artifactId>
-        <!-- Tell the application to use the private preview BOM of cloud SDK -->
-        <version>99.99.0-PRIVATEPREVIEW</version>
+        <version>3.33.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

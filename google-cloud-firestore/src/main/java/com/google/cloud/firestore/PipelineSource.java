@@ -25,6 +25,7 @@ import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
 import com.google.cloud.firestore.pipeline.stages.Database;
 import com.google.cloud.firestore.pipeline.stages.Documents;
 import com.google.common.base.Preconditions;
+import java.util.Arrays;
 import javax.annotation.Nonnull;
 
 /**
@@ -135,6 +136,24 @@ public final class PipelineSource {
   @BetaApi
   public Pipeline documents(DocumentReference... docs) {
     return new Pipeline(this.rpcContext, Documents.of(docs));
+  }
+
+  /**
+   * Creates a new {@link Pipeline} that operates on a specific set of Firestore documents.
+   *
+   * @param docs The {@link DocumentReference} instances representing the documents to include in
+   *     the pipeline.
+   * @return A new {@code Pipeline} instance targeting the specified documents.
+   */
+  @Nonnull
+  @BetaApi
+  public Pipeline documents(String... docs) {
+    return new Pipeline(
+        this.rpcContext,
+        Documents.of(
+            Arrays.stream(docs)
+                .map(d -> this.rpcContext.getFirestore().document(d))
+                .toArray(DocumentReference[]::new)));
   }
 
   /**

@@ -145,14 +145,18 @@ public abstract class Transaction extends UpdateBuilder<Transaction> {
   public abstract ApiFuture<AggregateQuerySnapshot> get(@Nonnull AggregateQuery query);
 
   /**
-   * @return The result of the aggregation.
+   * Executes the provided pipeline within the transaction context.
+   *
+   * @return The result of the execution.
    */
   @Nonnull
   @BetaApi
   public abstract ApiFuture<Pipeline.Snapshot> execute(@Nonnull Pipeline pipeline);
 
   /**
-   * @return The result of the aggregation.
+   * Executes the provided pipeline with specified options, within the transaction context.
+   *
+   * @return The result of the execution.
    */
   @Nonnull
   @BetaApi

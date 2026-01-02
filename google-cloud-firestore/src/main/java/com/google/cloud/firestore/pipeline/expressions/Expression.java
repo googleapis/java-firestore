@@ -188,28 +188,6 @@ public abstract class Expression {
     return Constant.NULL;
   }
 
-  /**
-   * Create a vector constant for a {@code double[]} value.
-   *
-   * @param value The {@code double[]} value.
-   * @return An {@link Expression} constant instance.
-   */
-  @BetaApi
-  public static Expression vector(double[] value) {
-    return new Constant(FieldValue.vector(value));
-  }
-
-  /**
-   * Create a vector constant for a {@link VectorValue} value.
-   *
-   * @param value The {@link VectorValue} value.
-   * @return An {@link Expression} constant instance.
-   */
-  @BetaApi
-  public static Expression vector(VectorValue value) {
-    return new Constant(value);
-  }
-
   // Field Reference
   /**
    * Creates a {@link Field} instance representing the field at the given path.
@@ -356,7 +334,7 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the generic function.
    */
   @BetaApi
-  public static Expression generic(String name, Expression... expr) {
+  public static Expression rawExpression(String name, Expression... expr) {
     return new FunctionExpression(name, ImmutableList.copyOf(expr));
   }
 
@@ -374,7 +352,7 @@ public abstract class Expression {
     ImmutableList.Builder<Expression> builder = ImmutableList.builder();
     builder.add(condition);
     builder.add(conditions);
-    return new BooleanExpression("and", builder.build());
+    return new BooleanFunctionExpression("and", builder.build());
   }
 
   /**
@@ -389,7 +367,7 @@ public abstract class Expression {
     ImmutableList.Builder<Expression> builder = ImmutableList.builder();
     builder.add(condition);
     builder.add(conditions);
-    return new BooleanExpression("or", builder.build());
+    return new BooleanFunctionExpression("or", builder.build());
   }
 
   /**
@@ -405,7 +383,7 @@ public abstract class Expression {
     ImmutableList.Builder<Expression> builder = ImmutableList.builder();
     builder.add(condition);
     builder.add(conditions);
-    return new BooleanExpression("xor", builder.build());
+    return new BooleanFunctionExpression("xor", builder.build());
   }
 
   /**
@@ -416,7 +394,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression not(BooleanExpression condition) {
-    return new BooleanExpression("not", condition);
+    return new BooleanFunctionExpression("not", condition);
   }
 
   // Arithmetic Operators
@@ -674,7 +652,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression equal(Expression left, Expression right) {
-    return new BooleanExpression("equal", left, right);
+    return new BooleanFunctionExpression("equal", left, right);
   }
 
   /**
@@ -686,7 +664,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression equal(Expression left, Object right) {
-    return new BooleanExpression("equal", left, toExprOrConstant(right));
+    return new BooleanFunctionExpression("equal", left, toExprOrConstant(right));
   }
 
   /**
@@ -722,7 +700,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression notEqual(Expression left, Expression right) {
-    return new BooleanExpression("not_equal", left, right);
+    return new BooleanFunctionExpression("not_equal", left, right);
   }
 
   /**
@@ -734,7 +712,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression notEqual(Expression left, Object right) {
-    return new BooleanExpression("not_equal", left, toExprOrConstant(right));
+    return new BooleanFunctionExpression("not_equal", left, toExprOrConstant(right));
   }
 
   /**
@@ -771,7 +749,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression greaterThan(Expression left, Expression right) {
-    return new BooleanExpression("greater_than", left, right);
+    return new BooleanFunctionExpression("greater_than", left, right);
   }
 
   /**
@@ -783,7 +761,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression greaterThan(Expression left, Object right) {
-    return new BooleanExpression("greater_than", left, toExprOrConstant(right));
+    return new BooleanFunctionExpression("greater_than", left, toExprOrConstant(right));
   }
 
   /**
@@ -820,7 +798,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression greaterThanOrEqual(Expression left, Expression right) {
-    return new BooleanExpression("greater_than_or_equal", left, right);
+    return new BooleanFunctionExpression("greater_than_or_equal", left, right);
   }
 
   /**
@@ -833,7 +811,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression greaterThanOrEqual(Expression left, Object right) {
-    return new BooleanExpression("greater_than_or_equal", left, toExprOrConstant(right));
+    return new BooleanFunctionExpression("greater_than_or_equal", left, toExprOrConstant(right));
   }
 
   /**
@@ -869,7 +847,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression lessThan(Expression left, Expression right) {
-    return new BooleanExpression("less_than", left, right);
+    return new BooleanFunctionExpression("less_than", left, right);
   }
 
   /**
@@ -881,7 +859,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression lessThan(Expression left, Object right) {
-    return new BooleanExpression("less_than", left, toExprOrConstant(right));
+    return new BooleanFunctionExpression("less_than", left, toExprOrConstant(right));
   }
 
   /**
@@ -918,7 +896,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression lessThanOrEqual(Expression left, Expression right) {
-    return new BooleanExpression("less_than_or_equal", left, right);
+    return new BooleanFunctionExpression("less_than_or_equal", left, right);
   }
 
   /**
@@ -930,7 +908,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression lessThanOrEqual(Expression left, Object right) {
-    return new BooleanExpression("less_than_or_equal", left, toExprOrConstant(right));
+    return new BooleanFunctionExpression("less_than_or_equal", left, toExprOrConstant(right));
   }
 
   /**
@@ -967,7 +945,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression equalAny(Expression expression, List<Object> values) {
-    return new BooleanExpression(
+    return new BooleanFunctionExpression(
         "equal_any",
         expression,
         new FunctionExpression("array", toArrayOfExprOrConstant(values.toArray())));
@@ -984,7 +962,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression equalAny(Expression expression, Expression arrayExpression) {
-    return new BooleanExpression("equal_any", expression, arrayExpression);
+    return new BooleanFunctionExpression("equal_any", expression, arrayExpression);
   }
 
   /**
@@ -1026,7 +1004,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression notEqualAny(Expression expression, List<Object> values) {
-    return new BooleanExpression(
+    return new BooleanFunctionExpression(
         "not_equal_any",
         expression,
         new FunctionExpression("array", toArrayOfExprOrConstant(values.toArray())));
@@ -1043,7 +1021,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression notEqualAny(Expression expression, Expression arrayExpression) {
-    return new BooleanExpression("not_equal_any", expression, arrayExpression);
+    return new BooleanFunctionExpression("not_equal_any", expression, arrayExpression);
   }
 
   /**
@@ -1153,7 +1131,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression like(Expression string, Expression pattern) {
-    return new BooleanExpression("like", string, pattern);
+    return new BooleanFunctionExpression("like", string, pattern);
   }
 
   /**
@@ -1205,7 +1183,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression regexContains(Expression string, Expression pattern) {
-    return new BooleanExpression("regex_contains", string, pattern);
+    return new BooleanFunctionExpression("regex_contains", string, pattern);
   }
 
   /**
@@ -1259,7 +1237,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression regexMatch(Expression string, Expression pattern) {
-    return new BooleanExpression("regex_match", string, pattern);
+    return new BooleanFunctionExpression("regex_match", string, pattern);
   }
 
   /**
@@ -1307,7 +1285,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression stringContains(Expression string, Expression substring) {
-    return new BooleanExpression("string_contains", string, substring);
+    return new BooleanFunctionExpression("string_contains", string, substring);
   }
 
   /**
@@ -1355,7 +1333,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression startsWith(Expression string, Expression prefix) {
-    return new BooleanExpression("starts_with", string, prefix);
+    return new BooleanFunctionExpression("starts_with", string, prefix);
   }
 
   /**
@@ -1403,7 +1381,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression endsWith(Expression string, Expression suffix) {
-    return new BooleanExpression("ends_with", string, suffix);
+    return new BooleanFunctionExpression("ends_with", string, suffix);
   }
 
   /**
@@ -1952,7 +1930,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression arrayContains(Expression array, Expression element) {
-    return new BooleanExpression("array_contains", array, element);
+    return new BooleanFunctionExpression("array_contains", array, element);
   }
 
   /**
@@ -2012,7 +1990,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression arrayContainsAll(Expression array, Expression arrayExpression) {
-    return new BooleanExpression("array_contains_all", array, arrayExpression);
+    return new BooleanFunctionExpression("array_contains_all", array, arrayExpression);
   }
 
   /**
@@ -2049,7 +2027,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression arrayContainsAny(Expression array, List<Object> values) {
-    return new BooleanExpression("array_contains_any", array, array(values));
+    return new BooleanFunctionExpression("array_contains_any", array, array(values));
   }
 
   /**
@@ -2061,7 +2039,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression arrayContainsAny(Expression array, Expression arrayExpression) {
-    return new BooleanExpression("array_contains_any", array, arrayExpression);
+    return new BooleanFunctionExpression("array_contains_any", array, arrayExpression);
   }
 
   /**
@@ -2203,7 +2181,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static Expression cosineDistance(Expression vector1, double[] vector2) {
-    return cosineDistance(vector1, vector(vector2));
+    return cosineDistance(vector1, constant(FieldValue.vector(vector2)));
   }
 
   /**
@@ -2227,7 +2205,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static Expression cosineDistance(String vectorFieldName, double[] vector) {
-    return cosineDistance(field(vectorFieldName), vector(vector));
+    return cosineDistance(field(vectorFieldName), constant(FieldValue.vector(vector)));
   }
 
   /**
@@ -2251,7 +2229,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static Expression dotProduct(Expression vector1, double[] vector2) {
-    return dotProduct(vector1, vector(vector2));
+    return dotProduct(vector1, constant(FieldValue.vector(vector2)));
   }
 
   /**
@@ -2275,7 +2253,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static Expression dotProduct(String vectorFieldName, double[] vector) {
-    return dotProduct(field(vectorFieldName), vector(vector));
+    return dotProduct(field(vectorFieldName), constant(FieldValue.vector(vector)));
   }
 
   /**
@@ -2299,7 +2277,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static Expression euclideanDistance(Expression vector1, double[] vector2) {
-    return euclideanDistance(vector1, vector(vector2));
+    return euclideanDistance(vector1, constant(FieldValue.vector(vector2)));
   }
 
   /**
@@ -2323,7 +2301,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static Expression euclideanDistance(String vectorFieldName, double[] vector) {
-    return euclideanDistance(field(vectorFieldName), vector(vector));
+    return euclideanDistance(field(vectorFieldName), constant(FieldValue.vector(vector)));
   }
 
   /**
@@ -2804,7 +2782,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression ifError(BooleanExpression tryExpr, BooleanExpression catchExpr) {
-    return new BooleanExpression("if_error", tryExpr, catchExpr);
+    return new BooleanFunctionExpression("if_error", tryExpr, catchExpr);
   }
 
   /**
@@ -2828,7 +2806,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression isError(Expression expr) {
-    return new BooleanExpression("is_error", expr);
+    return new BooleanFunctionExpression("is_error", expr);
   }
 
   // Other Utility Functions
@@ -2896,7 +2874,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression exists(Expression value) {
-    return new BooleanExpression("exists", value);
+    return new BooleanFunctionExpression("exists", value);
   }
 
   /**
@@ -2919,7 +2897,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression isAbsent(Expression value) {
-    return new BooleanExpression("is_absent", value);
+    return new BooleanFunctionExpression("is_absent", value);
   }
 
   /**
@@ -2941,8 +2919,8 @@ public abstract class Expression {
    * @return A new {@link BooleanExpression} representing the isNan operation.
    */
   @BetaApi
-  public static BooleanExpression isNaN(Expression value) {
-    return new BooleanExpression("is_nan", value);
+  static BooleanExpression isNaN(Expression value) {
+    return new BooleanFunctionExpression("is_nan", value);
   }
 
   /**
@@ -2952,7 +2930,7 @@ public abstract class Expression {
    * @return A new {@link BooleanExpression} representing the isNan operation.
    */
   @BetaApi
-  public static BooleanExpression isNaN(String fieldName) {
+  static BooleanExpression isNaN(String fieldName) {
     return isNaN(field(fieldName));
   }
 
@@ -2963,8 +2941,8 @@ public abstract class Expression {
    * @return A new {@link BooleanExpression} representing the isNull operation.
    */
   @BetaApi
-  public static BooleanExpression isNull(Expression value) {
-    return new BooleanExpression("is_null", value);
+  static BooleanExpression isNull(Expression value) {
+    return new BooleanFunctionExpression("is_null", value);
   }
 
   /**
@@ -2974,7 +2952,7 @@ public abstract class Expression {
    * @return A new {@link BooleanExpression} representing the isNull operation.
    */
   @BetaApi
-  public static BooleanExpression isNull(String fieldName) {
+  static BooleanExpression isNull(String fieldName) {
     return isNull(field(fieldName));
   }
 
@@ -2985,8 +2963,8 @@ public abstract class Expression {
    * @return A new {@link BooleanExpression} representing the isNotNull operation.
    */
   @BetaApi
-  public static BooleanExpression isNotNull(Expression value) {
-    return new BooleanExpression("is_not_null", value);
+  static BooleanExpression isNotNull(Expression value) {
+    return new BooleanFunctionExpression("is_not_null", value);
   }
 
   /**
@@ -2996,7 +2974,7 @@ public abstract class Expression {
    * @return A new {@link BooleanExpression} representing the isNotNull operation.
    */
   @BetaApi
-  public static BooleanExpression isNotNull(String fieldName) {
+  static BooleanExpression isNotNull(String fieldName) {
     return isNotNull(field(fieldName));
   }
 
@@ -3389,7 +3367,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static BooleanExpression isNotNaN(Expression expr) {
-    return new BooleanExpression("is_not_nan", expr);
+    return new BooleanFunctionExpression("is_not_nan", expr);
   }
 
   /**
