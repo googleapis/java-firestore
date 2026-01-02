@@ -30,8 +30,4 @@ public final class AggregateHints extends AbstractOptions<AggregateHints> {
   AggregateHints self(InternalOptions options) {
     return new AggregateHints(options);
   }
-
-  public AggregateHints withForceStreamableEnabled() {
-    return with("force_streamable", true);
-  }
 }

@@ -18,16 +18,20 @@ package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.BetaApi;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 @BetaApi
-public class BooleanExpression extends FunctionExpression {
-  BooleanExpression(String name, Expression... params) {
-    super(name, Lists.newArrayList(params));
-  }
+public abstract class BooleanExpression extends Expression {
+  BooleanExpression() {}
 
-  BooleanExpression(String name, ImmutableList<Expression> params) {
-    super(name, params);
+  /**
+   * Creates an aggregation that counts the number of stage inputs where the this boolean expression
+   * evaluates to true.
+   *
+   * @return A new {@link AggregateFunction} representing the count aggregation.
+   */
+  @BetaApi
+  public AggregateFunction countIf() {
+    return AggregateFunction.countIf(this);
   }
 
   /**
@@ -88,6 +92,6 @@ public class BooleanExpression extends FunctionExpression {
    * @return A new [BooleanExpression] representing the raw function.
    */
   public static BooleanExpression rawFunction(String name, Expression... params) {
-    return new BooleanExpression(name, params);
+    return new BooleanFunctionExpression(name, ImmutableList.copyOf(params));
   }
 }

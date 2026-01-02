@@ -109,24 +109,26 @@ import javax.annotation.Nullable;
  *     .execute()
  *     .get();
  *
- * // Example 2: Filter documents where 'genre' is "Science Fiction" and 'published' is after 1950
+ * // Example 2: Filter documents where 'genre' is "Science Fiction" and
+ * // 'published' is after 1950
  * Snapshot results2 = firestore.pipeline()
  *     .collection("books")
- *     .where(and(eq("genre", "Science Fiction"), gt("published", 1950)))
+ *     .where(and(equal("genre", "Science Fiction"), greaterThan("published", 1950)))
  *     .execute()
  *     .get();
- * // Same as above but using methods on expressions as opposed to static functions.
+ * // Same as above but using methods on expressions as opposed to static
+ * // functions.
  * results2 = firestore.pipeline()
  *     .collection("books")
- *     .where(and(field("genre").eq("Science Fiction"), field("published").gt(1950)))
+ *     .where(and(field("genre").equal("Science Fiction"), field("published").greaterThan(1950)))
  *     .execute()
  *     .get();
  *
  * // Example 3: Calculate the average rating of books published after 1980
  * Snapshot results3 = firestore.pipeline()
  *     .collection("books")
- *     .where(gt("published", 1980))
- *     .aggregate(avg("rating").as("averageRating"))
+ *     .where(greaterThan("published", 1980))
+ *     .aggregate(average("rating").as("averageRating"))
  *     .execute()
  *     .get();
  * }</pre>
@@ -236,18 +238,27 @@ public final class Pipeline {
    *
    * <pre>{@code
    * firestore.pipeline().collection("books")
-   *   .addFields(
-   *     field("rating").as("bookRating"), // Rename 'rating' to 'bookRating'
-   *     add(5, field("quantity")).as("totalCost")  // Calculate 'totalCost'
-   *   );
+   *     .addFields(
+   *         field("rating").as("bookRating"), // Rename 'rating' to 'bookRating'
+   *         add(5, field("quantity")).as("totalCost") // Calculate 'totalCost'
+   *     );
    * }</pre>
    *
-   * @param fields The fields to add to the documents, specified as {@link Selectable} expressions.
+   * @param field The field to add to the documents, specified as {@link Selectable} expressions.
+   * @param additionalFields The additional fields to add to the documents, specified as {@link
+   *     Selectable} expressions.
    * @return A new Pipeline object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline addFields(Selectable... fields) {
-    return append(new AddFields(PipelineUtils.selectablesToMap(fields)));
+  public Pipeline addFields(Selectable field, Selectable... additionalFields) {
+    return append(
+        new AddFields(
+            PipelineUtils.selectablesToMap(
+                ImmutableList.<Selectable>builder()
+                    .add(field)
+                    .add(additionalFields)
+                    .build()
+                    .toArray(new Selectable[0]))));
   }
 
   /**
@@ -257,20 +268,21 @@ public final class Pipeline {
    *
    * <pre>{@code
    * firestore.pipeline().collection("books")
-   *   .removeFields(
-   *     "rating", "cost"
-   *   );
+   *     .removeFields(
+   *         "rating", "cost");
    * }</pre>
    *
-   * @param fields The fields to remove.
+   * @param field The fields to remove.
+   * @param additionalFields The additional fields to remove.
    * @return A new Pipeline object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline removeFields(String... fields) {
+  public Pipeline removeFields(String field, String... additionalFields) {
     return append(
         new RemoveFields(
             ImmutableList.<Field>builder()
-                .addAll(Arrays.stream(fields).map(f -> Field.ofUserPath(f)).iterator())
+                .add(Field.ofUserPath(field))
+                .addAll(Arrays.stream(additionalFields).map(f -> Field.ofUserPath(f)).iterator())
                 .build()));
   }
 
@@ -281,19 +293,22 @@ public final class Pipeline {
    *
    * <pre>{@code
    * firestore.pipeline().collection("books")
-   *   .removeFields(
-   *     field("rating"), field("cost")
-   *   );
+   *     .removeFields(
+   *         field("rating"), field("cost"));
    * }</pre>
    *
-   * @param fields The fields to remove.
+   * @param field The field to remove.
+   * @param additionalFields The additional fields to remove.
    * @return A new Pipeline object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline removeFields(Field... fields) {
+  public Pipeline removeFields(Field field, Field... additionalFields) {
     return append(
         new RemoveFields(
-            ImmutableList.<Field>builder().addAll(Arrays.stream(fields).iterator()).build()));
+            ImmutableList.<Field>builder()
+                .add(field)
+                .addAll(Arrays.stream(additionalFields).iterator())
+                .build()));
   }
 
   /**
@@ -308,8 +323,8 @@ public final class Pipeline {
    * </ul>
    *
    * <p>If no selections are provided, the output of this stage is empty. Use {@link
-   * com.google.cloud.firestore.Pipeline#addFields(Selectable...)} instead if only additions are
-   * desired.
+   * com.google.cloud.firestore.Pipeline#addFields(Selectable, Selectable...)} instead if only
+   * additions are desired.
    *
    * <p>Example:
    *
@@ -321,39 +336,55 @@ public final class Pipeline {
    *   );
    * }</pre>
    *
-   * @param selections The fields to include in the output documents, specified as {@link
-   *     Selectable} expressions.
+   * @param selection The field to include in the output documents, specified as {@link Selectable}
+   *     expressions.
+   * @param additionalSelections The additional fields to include in the output documents,
    * @return A new Pipeline object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline select(Selectable... selections) {
-    return append(new Select(PipelineUtils.selectablesToMap(selections)));
+  public Pipeline select(Selectable selection, Selectable... additionalSelections) {
+    return append(
+        new Select(
+            PipelineUtils.selectablesToMap(
+                ImmutableList.<Selectable>builder()
+                    .add(selection)
+                    .add(additionalSelections)
+                    .build()
+                    .toArray(new Selectable[0]))));
   }
 
   /**
    * Selects a set of fields from the outputs of previous stages.
    *
    * <p>If no selections are provided, the output of this stage is empty. Use {@link
-   * com.google.cloud.firestore.Pipeline#addFields(Selectable...)} instead if only additions are
-   * desired.
+   * com.google.cloud.firestore.Pipeline#addFields(Selectable, Selectable...)} instead if only
+   * additions are desired.
    *
    * <p>Example:
    *
    * <pre>{@code
    * firestore.collection("books")
-   *   .select("name", "address");
+   *     .select("name", "address");
    *
    * // The above is a shorthand of this:
    * firestore.pipeline().collection("books")
-   *    .select(field("name"), field("address"));
+   *     .select(field("name"), field("address"));
    * }</pre>
    *
-   * @param fields The name of the fields to include in the output documents.
+   * @param field The name of the field to include in the output documents.
+   * @param additionalFields The additional fields to include in the output documents.
    * @return A new Pipeline object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline select(String... fields) {
-    return append(new Select(PipelineUtils.fieldNamesToMap(fields)));
+  public Pipeline select(String field, String... additionalFields) {
+    return append(
+        new Select(
+            PipelineUtils.fieldNamesToMap(
+                ImmutableList.<String>builder()
+                    .add(field)
+                    .add(additionalFields)
+                    .build()
+                    .toArray(new String[0]))));
   }
 
   /**
@@ -461,9 +492,8 @@ public final class Pipeline {
    * // Calculate the average rating and the total number of books
    * firestore.pipeline().collection("books")
    *     .aggregate(
-   *         field("rating").avg().as("averageRating"),
-   *         countAll().as("totalBooks")
-   *     );
+   *         field("rating").average().as("averageRating"),
+   *         countAll().as("totalBooks"));
    * }</pre>
    *
    * @param accumulators The {@link AliasedExpression} expressions, each wrapping an {@link
@@ -498,10 +528,10 @@ public final class Pipeline {
    * <pre>{@code
    * // Calculate the average rating for each genre.
    * firestore.pipeline().collection("books")
-   *   .aggregate(
-   *     Aggregate
-   *       .withAccumulators(avg("rating").as("avg_rating"))
-   *       .withGroups("genre"));
+   *     .aggregate(
+   *         Aggregate
+   *             .withAccumulators(average("rating").as("avg_rating"))
+   *             .withGroups("genre"));
    * }</pre>
    *
    * @param aggregate An {@link Aggregate} object that specifies the grouping fields (if any) and
@@ -855,42 +885,6 @@ public final class Pipeline {
     return append(new Unnest(field(fieldName), alias));
   }
 
-  // /**
-  //  * Produces a document for each element in array found in previous stage document.
-  //  *
-  //  * <p>For each previous stage document, this stage will emit zero or more augmented documents.
-  //  * The input array found in the specified by {@code Selectable} expression parameter, will for
-  //  * each input array element produce an augmented document. The input array element will augment
-  //  * the previous stage document by assigning the {@code Selectable} alias the element value.
-  //  *
-  //  * <p>Example:
-  //  *
-  //  * <pre>{@code
-  //  * // Input:
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tags": [ "comedy", "space",
-  // "adventure" ], ... }
-  //  *
-  //  * // Emit a book document for each tag of the book.
-  //  * firestore.pipeline().collection("books")
-  //  *     .unnest(field("tags").as("tag"));
-  //  *
-  //  * // Output:
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tag": "comedy", "tags": [ "comedy",
-  // "space", "adventure" ], ... }
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tag": "space", "tags": [ "comedy",
-  // "space", "adventure" ], ... }
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tag": "adventure", "tags": [
-  // "comedy", "space", "adventure" ], ... }
-  //  * }</pre>
-  //  *
-  //  * @param field The expression that evaluates to the input array.
-  //  * @return A new {@code Pipeline} object with this stage appended to the stage list.
-  //  */
-  // @BetaApi
-  // public Pipeline unnest(Selectable field) {
-  //   return append(new Unnest(field));
-  // }
-
   /**
    * Produces a document for each element in array found in previous stage document.
    *
@@ -964,42 +958,42 @@ public final class Pipeline {
     return append(new Unnest(expr));
   }
 
-  // /**
-  //  * Produces a document for each element in array found in previous stage document.
-  //  *
-  //  * <p>For each previous stage document, this stage will emit zero or more augmented documents.
-  //  * The input array found in the specified by {@code Selectable} expression parameter, will for
-  //  * each input array element produce an augmented document. The input array element will augment
-  //  * the previous stage document by assigning the {@code Selectable} alias the element value.
-  //  *
-  //  * <p>Example:
-  //  *
-  //  * <pre>{@code
-  //  * // Input:
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tags": [ "comedy", "space",
-  // "adventure" ], ... }
-  //  *
-  //  * // Emit a book document for each tag of the book.
-  //  * firestore.pipeline().collection("books")
-  //  *     .unnest(field("tags").as("tag"), UnnestOptions.indexField("tagIndex"));
-  //  *
-  //  * // Output:
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 0, "tag": "comedy",
-  // "tags": [ "comedy", "space", "adventure" ], ... }
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 1, "tag": "space", "tags":
-  // [ "comedy", "space", "adventure" ], ... }
-  //  * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 2, "tag": "adventure",
-  // "tags": [ "comedy", "space", "adventure" ], ... }
-  //  * }</pre>
-  //  *
-  //  * @param field The expression that evaluates to the input array.
-  //  * @param options The {@code UnnestOptions} options.
-  //  * @return A new {@code Pipeline} object with this stage appended to the stage list.
-  //  */
-  // @BetaApi
-  // public Pipeline unnest(Selectable field, UnnestOptions options) {
-  //   return append(new Unnest(field, options));
-  // }
+  /**
+   * Produces a document for each element in array found in previous stage document.
+   *
+   * <p>For each previous stage document, this stage will emit zero or more augmented documents. The
+   * input array found in the specified by {@code Selectable} expression parameter, will for each
+   * input array element produce an augmented document. The input array element will augment the
+   * previous stage document by assigning the {@code Selectable} alias the element value.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Input:
+   * // { "title": "The Hitchhiker's Guide to the Galaxy", "tags": [ "comedy", "space",
+   * "adventure" ], ... }
+   *
+   * // Emit a book document for each tag of the book.
+   * firestore.pipeline().collection("books")
+   *     .unnest(field("tags").as("tag"), UnnestOptions.indexField("tagIndex"));
+   *
+   * // Output:
+   * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 0, "tag": "comedy",
+   * "tags": [ "comedy", "space", "adventure" ], ... }
+   * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 1, "tag": "space", "tags":
+   * [ "comedy", "space", "adventure" ], ... }
+   * // { "title": "The Hitchhiker's Guide to the Galaxy", "tagIndex": 2, "tag": "adventure",
+   * "tags": [ "comedy", "space", "adventure" ], ... }
+   * }</pre>
+   *
+   * @param field The expression that evaluates to the input array.
+   * @param options The {@code UnnestOptions} options.
+   * @return A new {@code Pipeline} object with this stage appended to the stage list.
+   */
+  @BetaApi
+  public Pipeline unnest(Selectable field, UnnestOptions options) {
+    return append(new Unnest(field, options));
+  }
 
   /**
    * Adds a generic stage to the pipeline.

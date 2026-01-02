@@ -17,24 +17,36 @@
 package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.InternalApi;
+import com.google.firestore.v1.Value;
 
 @InternalApi
-public class AliasedAggregate {
-  private final String alias;
-  private final AggregateFunction expr;
+class BooleanField extends BooleanExpression {
+  private final Field field;
 
-  AliasedAggregate(String alias, AggregateFunction expr) {
-    this.alias = alias;
-    this.expr = expr;
+  BooleanField(Field field) {
+    this.field = field;
   }
 
-  @InternalApi
-  public String getAlias() {
-    return alias;
+  @Override
+  Value toProto() {
+    return field.toProto();
   }
 
-  @InternalApi
-  public AggregateFunction getExpr() {
-    return expr;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null) return false;
+    if (o instanceof BooleanField) {
+      return field.equals(((BooleanField) o).field);
+    }
+    if (o instanceof Field) {
+      return field.equals(o);
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    return field.hashCode();
   }
 }

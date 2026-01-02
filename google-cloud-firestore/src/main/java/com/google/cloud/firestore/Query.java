@@ -2040,11 +2040,15 @@ public class Query extends StreamableQuery<QuerySnapshot> {
     // Projections
     if (this.options.getFieldProjections() != null
         && !this.options.getFieldProjections().isEmpty()) {
-      ppl =
-          ppl.select(
-              this.options.getFieldProjections().stream()
-                  .map(fieldReference -> Field.ofServerPath(fieldReference.getFieldPath()))
-                  .toArray(Selectable[]::new));
+      Selectable[] fields =
+          this.options.getFieldProjections().stream()
+              .map(fieldReference -> Field.ofServerPath(fieldReference.getFieldPath()))
+              .toArray(Selectable[]::new);
+      if (fields.length > 0) {
+        ppl = ppl.select(fields[0], Arrays.copyOfRange(fields, 1, fields.length));
+      } else {
+        ppl = ppl.select(fields[0]);
+      }
     }
 
     // Orders
