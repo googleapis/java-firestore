@@ -81,7 +81,6 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.GeoPoint;
@@ -160,8 +159,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("hugo", true, "nebula", false))
                     .put(
                         "embedding",
-                        vector(
-                            new double[] {10.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
+                        vector(new double[] {10.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
                 "book2",
@@ -175,8 +173,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("none", true))
                     .put(
                         "embedding",
-                        vector(
-                            new double[] {1.0, 10.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
+                        vector(new double[] {1.0, 10.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
                 "book3",
@@ -190,8 +187,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("nobel", true, "nebula", false))
                     .put(
                         "embedding",
-                        vector(
-                            new double[] {1.0, 1.0, 10.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
+                        vector(new double[] {1.0, 1.0, 10.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
                 "book4",
@@ -206,8 +202,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("cost", Double.NaN)
                     .put(
                         "embedding",
-                        vector(
-                            new double[] {1.0, 1.0, 1.0, 10.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
+                        vector(new double[] {1.0, 1.0, 1.0, 10.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
                 "book5",
@@ -221,8 +216,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("arthur c. clarke", true, "booker prize", false))
                     .put(
                         "embedding",
-                        vector(
-                            new double[] {1.0, 1.0, 1.0, 1.0, 10.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
+                        vector(new double[] {1.0, 1.0, 1.0, 1.0, 10.0, 1.0, 1.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
                 "book6",
@@ -236,8 +230,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("none", true))
                     .put(
                         "embedding",
-                        vector(
-                            new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 10.0, 1.0, 1.0, 1.0, 1.0}))
+                        vector(new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 10.0, 1.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
                 "book7",
@@ -251,8 +244,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("pulitzer", true))
                     .put(
                         "embedding",
-                        vector(
-                            new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 10.0, 1.0, 1.0, 1.0}))
+                        vector(new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 10.0, 1.0, 1.0, 1.0}))
                     .build())
             .put(
                 "book8",
@@ -266,8 +258,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("prometheus", true))
                     .put(
                         "embedding",
-                        vector(
-                            new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 10.0, 1.0, 1.0}))
+                        vector(new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 10.0, 1.0, 1.0}))
                     .build())
             .put(
                 "book9",
@@ -281,8 +272,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("none", true))
                     .put(
                         "embedding",
-                        vector(
-                            new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 10.0, 1.0}))
+                        vector(new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 10.0, 1.0}))
                     .build())
             .put(
                 "book10",
@@ -296,8 +286,7 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("awards", ImmutableMap.of("hugo", true, "nebula", true))
                     .put(
                         "embedding",
-                        vector(
-                            new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 10.0}))
+                        vector(new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 10.0}))
                     .build())
             .put(
                 "book11",
@@ -2001,7 +1990,8 @@ public class ITPipelineTest extends ITBaseTest {
             .select(
                 cosineDistance(constant(vector(sourceVector)), targetVector).as("cosineDistance"),
                 dotProduct(constant(vector(sourceVector)), targetVector).as("dotProductDistance"),
-                euclideanDistance(constant(vector(sourceVector)), targetVector).as("euclideanDistance"))
+                euclideanDistance(constant(vector(sourceVector)), targetVector)
+                    .as("euclideanDistance"))
             .limit(1)
             .execute()
             .get()
@@ -2237,7 +2227,9 @@ public class ITPipelineTest extends ITBaseTest {
                 RawStage.ofName("find_nearest")
                     .withArguments(
                         field("embedding"),
-                        constant(vector(new double[] {10.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0})),
+                        constant(
+                            vector(
+                                new double[] {10.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0})),
                         "euclidean")
                     .withOptions(
                         new RawOptions()
