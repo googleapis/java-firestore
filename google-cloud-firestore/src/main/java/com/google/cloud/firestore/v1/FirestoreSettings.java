@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,8 @@ import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.CreateDocumentRequest;
 import com.google.firestore.v1.DeleteDocumentRequest;
 import com.google.firestore.v1.Document;
+import com.google.firestore.v1.ExecutePipelineRequest;
+import com.google.firestore.v1.ExecutePipelineResponse;
 import com.google.firestore.v1.GetDocumentRequest;
 import com.google.firestore.v1.ListCollectionIdsRequest;
 import com.google.firestore.v1.ListCollectionIdsResponse;
@@ -166,6 +168,12 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
   /** Returns the object with the settings used for calls to runQuery. */
   public ServerStreamingCallSettings<RunQueryRequest, RunQueryResponse> runQuerySettings() {
     return ((FirestoreStubSettings) getStubSettings()).runQuerySettings();
+  }
+
+  /** Returns the object with the settings used for calls to executePipeline. */
+  public ServerStreamingCallSettings<ExecutePipelineRequest, ExecutePipelineResponse>
+      executePipelineSettings() {
+    return ((FirestoreStubSettings) getStubSettings()).executePipelineSettings();
   }
 
   /** Returns the object with the settings used for calls to runAggregationQuery. */
@@ -367,6 +375,12 @@ public class FirestoreSettings extends ClientSettings<FirestoreSettings> {
     public ServerStreamingCallSettings.Builder<RunQueryRequest, RunQueryResponse>
         runQuerySettings() {
       return getStubSettingsBuilder().runQuerySettings();
+    }
+
+    /** Returns the builder for the settings used for calls to executePipeline. */
+    public ServerStreamingCallSettings.Builder<ExecutePipelineRequest, ExecutePipelineResponse>
+        executePipelineSettings() {
+      return getStubSettingsBuilder().executePipelineSettings();
     }
 
     /** Returns the builder for the settings used for calls to runAggregationQuery. */
