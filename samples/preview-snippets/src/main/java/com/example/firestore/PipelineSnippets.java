@@ -51,6 +51,29 @@ class PipelineSnippets {
     this.firestore = firestore;
   }
 
+  public void typeAndGenericFunctions() {
+    // [START type_function]
+    Expression typeOfField = field("rating").type();
+    // [END type_function]
+
+    // [START concat_function]
+    Expression displayString = constant("Author ID: ").concat(field("authorId"));
+    // [END concat_function]
+
+    // [START length_function]
+    Expression tagsCount = field("tags").length();
+    // [END length_function]
+
+    // [START reverse_function]
+    Expression reversedTags = field("tags").reverse();
+    // [END reverse_function]
+
+    System.out.println(typeOfField);
+    System.out.println(displayString);
+    System.out.println(tagsCount);
+    System.out.println(reversedTags);
+  }
+
   void queryExplain() throws ExecutionException, InterruptedException {
     // [START query_explain]
     Query q = firestore.collection("cities")
