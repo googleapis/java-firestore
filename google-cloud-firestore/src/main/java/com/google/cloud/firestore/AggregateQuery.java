@@ -90,22 +90,6 @@ public class AggregateQuery {
 
   Pipeline pipeline() {
     Pipeline pipeline = getQuery().pipeline();
-
-    List<BooleanExpression> existsExprs =
-        this.aggregateFieldList.stream()
-            .map(PipelineUtils::toPipelineExistsExpr)
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
-    if (existsExprs.size() == 1) {
-      pipeline = pipeline.where(existsExprs.get(0));
-    } else if (existsExprs.size() > 1) {
-      pipeline =
-          pipeline.where(
-              and(
-                  existsExprs.get(0),
-                  existsExprs.subList(1, existsExprs.size()).toArray(new BooleanExpression[0])));
-    }
-
     return pipeline.aggregate(
         this.aggregateFieldList.stream()
             .map(PipelineUtils::toPipelineAggregatorTarget)
