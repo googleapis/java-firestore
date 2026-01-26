@@ -178,6 +178,16 @@
         <version>3.35.2-SNAPSHOT</version><!-- {x-version-update:grpc-google-cloud-firestore-v1:current} -->
       </dependency>
 
+     <!-- opentelemetry is downgraded from 1.52.0 to 1.51.0 in protobuf 4.33.2, use dependency management to enforce
+      the version -->
+     <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-bom</artifactId>
+        <version>1.52.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+     </dependency>
+
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>google-cloud-shared-dependencies</artifactId>
