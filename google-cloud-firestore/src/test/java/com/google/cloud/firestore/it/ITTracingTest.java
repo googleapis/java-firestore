@@ -409,7 +409,8 @@ public abstract class ITTracingTest {
   @Test
   public void partitionQuery() throws Exception {
     assumeTrue(
-        "Skip this test when running against enterprise because it does not support partition query",
+        "Skip this test when running against enterprise because it does not support partition"
+            + " query",
         getFirestoreEdition() != FirestoreEdition.ENTERPRISE);
 
     CollectionGroup collectionGroup = firestore.collectionGroup("col");
@@ -618,7 +619,8 @@ public abstract class ITTracingTest {
   @Test
   public void docListCollections() throws Exception {
     assumeTrue(
-        "Skip this test when running against enterprise because it does not support listCollections",
+        "Skip this test when running against enterprise because it does not support"
+            + " listCollections",
         getFirestoreEdition() != FirestoreEdition.ENTERPRISE);
 
     firestore.collection("col").document("doc0").listCollections();
