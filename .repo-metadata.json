@@ -10,6 +10,9 @@
   "repo": "googleapis/java-firestore",
   "repo_short": "java-firestore",
   "distribution_name": "com.google.cloud:google-cloud-firestore",
+  "library_path_overrides": {
+    "FirestoreAdminClient": "google-cloud-firestore-admin"
+  },
   "api_id": "firestore.googleapis.com",
   "library_type": "GAPIC_COMBO",
   "requires_billing": true,
