@@ -100,8 +100,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void allowsAliasesForLongestFieldNames() throws Exception {
     assumeFalse(
-        "Skip this test when running against the Firestore emulator or enterprise backend because they do not support"
-            + " long field names.",
+        "Skip this test when running against the Firestore emulator or enterprise backend because"
+            + " they do not support long field names.",
         isRunningAgainstFirestoreEmulator(firestore)
             || getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
 
@@ -139,8 +139,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void aggregateErrorMessageIfIndexIsMissing() throws Exception {
     assumeFalse(
-        "Skip this test when running against emulator or Enterprise because they do not require composite"
-            + " index creation.",
+        "Skip this test when running against emulator or Enterprise because they do not require"
+            + " composite index creation.",
         isRunningAgainstFirestoreEmulator(firestore)
             || getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
 
@@ -250,7 +250,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void canPerformMaxAggregations() throws Exception {
     assumeTrue(
-        "Skip this test when running against standard prod because it requires composite index creation.",
+        "Skip this test when running against standard prod because it requires composite index"
+            + " creation.",
         isRunningAgainstFirestoreEmulator(firestore)
             || getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     CollectionReference collection = testCollectionWithDocs(testDocs1);
@@ -379,7 +380,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void performsAggregationsWhenNaNExistsForSomeFieldValues() throws Exception {
     assumeTrue(
-        "Skip this test when running against standard prod because it requires composite index creation.",
+        "Skip this test when running against standard prod because it requires composite index"
+            + " creation.",
         isRunningAgainstFirestoreEmulator(firestore)
             || getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     Map<String, Map<String, Object>> testDocs =
@@ -943,7 +945,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void aggregatesWithDocumentReferenceCursors() throws Exception {
     assumeTrue(
-        "Skip this test when running against standard prod because it requires composite index creation.",
+        "Skip this test when running against standard prod because it requires composite index"
+            + " creation.",
         isRunningAgainstFirestoreEmulator(firestore)
             || getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     Map<String, Map<String, Object>> testDocs =
@@ -1056,7 +1059,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void aggregateNoFilterExplicitOrderByDocumentReferenceCursor() throws Exception {
     assumeTrue(
-        "Skip this test when running against standard prod because it requires composite index creation.",
+        "Skip this test when running against standard prod because it requires composite index"
+            + " creation.",
         isRunningAgainstFirestoreEmulator(firestore)
             || getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     CollectionReference collection = addTwoDocsForCursorTesting();
@@ -1072,7 +1076,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void aggregateNoFilterNoOrderByDocumentReferenceCursor() throws Exception {
     assumeTrue(
-        "Skip this test when running against standard prod because it requires composite index creation.",
+        "Skip this test when running against standard prod because it requires composite index"
+            + " creation.",
         isRunningAgainstFirestoreEmulator(firestore)
             || getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     CollectionReference collection = addTwoDocsForCursorTesting();
@@ -1084,7 +1089,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void aggregateNoFilterExplicitOrderByDocumentSnapshotCursor() throws Exception {
     assumeTrue(
-        "Skip this test when running against standard prod because it requires composite index creation.",
+        "Skip this test when running against standard prod because it requires composite index"
+            + " creation.",
         isRunningAgainstFirestoreEmulator(firestore)
             || getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     CollectionReference collection = addTwoDocsForCursorTesting();
@@ -1125,7 +1131,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void aggregateEqualityFilterExplicitOrderByDocumentReferenceCursor() throws Exception {
     assumeTrue(
-        "Skip this test when running against standard prod because it requires composite index creation.",
+        "Skip this test when running against standard prod because it requires composite index"
+            + " creation.",
         isRunningAgainstFirestoreEmulator(firestore)
             || getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     CollectionReference collection = addTwoDocsForCursorTesting();
@@ -1157,7 +1164,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void aggregateEqualityFilterNoOrderByDocumentSnapshotReference() throws Exception {
     assumeTrue(
-        "Skip this test when running against standard prod because it requires composite index creation.",
+        "Skip this test when running against standard prod because it requires composite index"
+            + " creation.",
         isRunningAgainstFirestoreEmulator(firestore)
             || getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     CollectionReference collection = addTwoDocsForCursorTesting();
@@ -1182,7 +1190,8 @@ public class ITQueryAggregationsTest extends ITBaseTest {
   @Test
   public void aggregateInequalityFilterNoOrderByDocumentSnapshotReference2() throws Exception {
     assumeTrue(
-        "Skip this test when running against standard prod because it requires composite index creation.",
+        "Skip this test when running against standard prod because it requires composite index"
+            + " creation.",
         isRunningAgainstFirestoreEmulator(firestore)
             || getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     CollectionReference collection = addTwoDocsForCursorTesting();

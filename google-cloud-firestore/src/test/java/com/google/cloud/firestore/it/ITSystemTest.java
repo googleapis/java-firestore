@@ -1146,7 +1146,8 @@ public class ITSystemTest extends ITBaseTest {
   @Test
   public void listCollections() throws Exception {
     assumeTrue(
-        "Skip this test when running against enterprise because it does not support listCollections",
+        "Skip this test when running against enterprise because it does not support"
+            + " listCollections",
         getFirestoreEdition() != FirestoreEdition.ENTERPRISE);
 
     // We test with 21 collections since 20 collections are by default returned in a single paged
