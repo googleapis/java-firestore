@@ -1,5 +1,47 @@
 # Changelog
 
+## [3.35.1](https://github.com/googleapis/java-firestore/compare/v3.35.0...v3.35.1) (2026-01-19)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.55.1 ([#2285](https://github.com/googleapis/java-firestore/issues/2285)) ([d3f8129](https://github.com/googleapis/java-firestore/commit/d3f8129f4121bac753ccd59600077d80d4dc5fa9))
+
+## [3.35.0](https://github.com/googleapis/java-firestore/compare/v3.34.0...v3.35.0) (2026-01-15)
+
+
+### Features
+
+* Adding gcp resource name span attribute ([#2260](https://github.com/googleapis/java-firestore/issues/2260)) ([926fd8c](https://github.com/googleapis/java-firestore/commit/926fd8c393dfd91f532b61bdf2a50ed8d19d3618))
+* Pipelines enters public preview ([#2272](https://github.com/googleapis/java-firestore/issues/2272)) ([6e30a6c](https://github.com/googleapis/java-firestore/commit/6e30a6c11efe5d428607bfd78f82ba7b49497bd9))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.65.1 ([1573a6f](https://github.com/googleapis/java-firestore/commit/1573a6f8b7d08e6670f26e2fe1af730700000aac))
+
+## [3.34.0](https://github.com/googleapis/java-firestore/compare/v3.33.4...v3.34.0) (2025-12-12)
+
+
+### Features
+
+* Publish the pipelines API to the stable branch ([2cab2e0](https://github.com/googleapis/java-firestore/commit/2cab2e02e5884f3efd9b0f2e212e14ef0d82d855))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.64.2 ([2cab2e0](https://github.com/googleapis/java-firestore/commit/2cab2e02e5884f3efd9b0f2e212e14ef0d82d855))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.54.2 ([#2270](https://github.com/googleapis/java-firestore/issues/2270)) ([05188e3](https://github.com/googleapis/java-firestore/commit/05188e3e779968e67861fcd69d64ae17cfb6cd0b))
+
+
+### Documentation
+
+* Minor api documentation changes ([2cab2e0](https://github.com/googleapis/java-firestore/commit/2cab2e02e5884f3efd9b0f2e212e14ef0d82d855))
+
 ## [3.33.4](https://github.com/googleapis/java-firestore/compare/v3.33.3...v3.33.4) (2025-11-13)
 
 

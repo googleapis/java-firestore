@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.CreateDocumentRequest;
 import com.google.firestore.v1.DeleteDocumentRequest;
 import com.google.firestore.v1.Document;
+import com.google.firestore.v1.ExecutePipelineRequest;
+import com.google.firestore.v1.ExecutePipelineResponse;
 import com.google.firestore.v1.FirestoreGrpc.FirestoreImplBase;
 import com.google.firestore.v1.GetDocumentRequest;
 import com.google.firestore.v1.ListCollectionIdsRequest;
@@ -269,6 +271,27 @@ public class MockFirestoreImpl extends FirestoreImplBase {
                   "Unrecognized response type %s for method RunQuery, expected %s or %s",
                   response == null ? "null" : response.getClass().getName(),
                   RunQueryResponse.class.getName(),
+                  Exception.class.getName())));
+    }
+  }
+
+  @Override
+  public void executePipeline(
+      ExecutePipelineRequest request, StreamObserver<ExecutePipelineResponse> responseObserver) {
+    Object response = responses.poll();
+    if (response instanceof ExecutePipelineResponse) {
+      requests.add(request);
+      responseObserver.onNext(((ExecutePipelineResponse) response));
+      responseObserver.onCompleted();
+    } else if (response instanceof Exception) {
+      responseObserver.onError(((Exception) response));
+    } else {
+      responseObserver.onError(
+          new IllegalArgumentException(
+              String.format(
+                  "Unrecognized response type %s for method ExecutePipeline, expected %s or %s",
+                  response == null ? "null" : response.getClass().getName(),
+                  ExecutePipelineResponse.class.getName(),
                   Exception.class.getName())));
     }
   }
