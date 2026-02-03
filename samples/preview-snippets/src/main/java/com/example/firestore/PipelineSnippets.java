@@ -1260,28 +1260,24 @@ class PipelineSnippets {
   void regexFindFunction() throws ExecutionException, InterruptedException {
     // [START regex_find]
     Pipeline.Snapshot result =
-      firestore
-        .pipeline()
-        .collection("documents")
-        .select(
-          regexFind(field("email"), "@[A-Za-z0-9.-]+").as("domain")
-        )
-        .execute()
-        .get();
+        firestore
+            .pipeline()
+            .collection("documents")
+            .select(regexFind(field("email"), "@[A-Za-z0-9.-]+").as("domain"))
+            .execute()
+            .get();
     // [END regex_find]
   }
 
   void regexFindAllFunction() throws ExecutionException, InterruptedException {
     // [START regex_find_all]
     Pipeline.Snapshot result =
-      firestore
-        .pipeline()
-        .collection("documents")
-        .select(
-          regexFindAll(field("comment"), "@[A-Za-z0-9_]+").as("mentions")
-        )
-        .execute()
-        .get();
+        firestore
+            .pipeline()
+            .collection("documents")
+            .select(regexFindAll(field("comment"), "@[A-Za-z0-9_]+").as("mentions"))
+            .execute()
+            .get();
     // [END regex_find_all]
   }
 
