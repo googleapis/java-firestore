@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.36.1](https://github.com/googleapis/java-firestore/compare/v3.36.0...v3.36.1) (2026-02-04)
+
+
+### Bug Fixes
+
+* Correct FirestoreAdminClient source link in documentation ([#2304](https://github.com/googleapis/java-firestore/issues/2304)) ([1f66dca](https://github.com/googleapis/java-firestore/commit/1f66dcaa3e936d77505383173ec2c2a1821bcce5))
+* Set max retry at 5 for executePipeline ([#2307](https://github.com/googleapis/java-firestore/issues/2307)) ([acb37fe](https://github.com/googleapis/java-firestore/commit/acb37fe918cd9c6ef1a671551c1d1789bfa36934))
+* Setup CI against enterprise ([#2299](https://github.com/googleapis/java-firestore/issues/2299)) ([510ff73](https://github.com/googleapis/java-firestore/commit/510ff732d471f07f39d3d7074de2e7317663d556))
+
 ## [3.36.0](https://github.com/googleapis/java-firestore/compare/v3.35.1...v3.36.0) (2026-01-27)
 
 
