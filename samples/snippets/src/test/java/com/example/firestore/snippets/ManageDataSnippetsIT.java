@@ -28,7 +28,6 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
-
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
