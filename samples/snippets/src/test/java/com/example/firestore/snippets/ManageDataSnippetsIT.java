@@ -29,6 +29,7 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.junit.AfterClass;
@@ -157,7 +158,8 @@ public class ManageDataSnippetsIT extends BaseIntegrationTest {
   @Test
   public void testDeleteCollection() throws Exception {
     // Create collection and document to be deleted
-    Map<String, Object> docData = Map.of("name", "Los Angeles");
+    Map<String, Object> docData = new HashMap<>();
+    docData.put("name", "Los Angeles");
     ApiFuture<WriteResult> future = db.collection("usa-cities").document("LA").set(docData);
     future.get();
 
