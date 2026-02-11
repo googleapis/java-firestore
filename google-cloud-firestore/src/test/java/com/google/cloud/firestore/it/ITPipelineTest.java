@@ -95,14 +95,24 @@ import com.google.cloud.firestore.pipeline.stages.AggregateHints;
 import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
 import com.google.cloud.firestore.pipeline.stages.CollectionHints;
 import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
+import com.google.cloud.firestore.pipeline.stages.ConflictResolution;
+import com.google.cloud.firestore.pipeline.stages.Delete;
+import com.google.cloud.firestore.pipeline.stages.DeleteOptions;
+import com.google.cloud.firestore.pipeline.stages.DeleteReturn;
 import com.google.cloud.firestore.pipeline.stages.ExplainOptions;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
+import com.google.cloud.firestore.pipeline.stages.Insert;
+import com.google.cloud.firestore.pipeline.stages.InsertOptions;
+import com.google.cloud.firestore.pipeline.stages.InsertReturn;
 import com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions;
 import com.google.cloud.firestore.pipeline.stages.RawOptions;
 import com.google.cloud.firestore.pipeline.stages.RawStage;
 import com.google.cloud.firestore.pipeline.stages.Sample;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
+import com.google.cloud.firestore.pipeline.stages.Upsert;
+import com.google.cloud.firestore.pipeline.stages.UpsertOptions;
+import com.google.cloud.firestore.pipeline.stages.UpsertReturn;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -2315,6 +2325,79 @@ public class ITPipelineTest extends ITBaseTest {
             .getResults();
 
     assertThat(results).hasSize(22);
+  }
+
+  @Test
+  public void testDelete() throws Exception {
+    firestore
+        .pipeline()
+        .collection(collection)
+        .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+        .delete()
+        .execute()
+        .get();
+
+    firestore
+        .pipeline()
+        .collection(collection)
+        .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+        .delete(
+            new Delete().withReturns(DeleteReturn.DOCUMENT_ID),
+            new DeleteOptions().withTransactional(true))
+        .execute()
+        .get();
+  }
+
+  @Test
+  public void testUpsert() throws Exception {
+    firestore
+        .pipeline()
+        .collection(collection)
+        .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+        .upsert()
+        .execute()
+        .get();
+
+    firestore
+        .pipeline()
+        .collection(collection)
+        .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+        .upsert(collection)
+        .execute()
+        .get();
+
+    firestore
+        .pipeline()
+        .collection(collection)
+        .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+        .upsert(
+            new Upsert().withReturns(UpsertReturn.DOCUMENT_ID),
+            new UpsertOptions()
+                .withConflictResolution(ConflictResolution.MERGE)
+                .withTransactional(true))
+        .execute()
+        .get();
+  }
+
+  @Test
+  public void testInsert() throws Exception {
+    firestore
+        .pipeline()
+        .collection(collection)
+        .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+        .insert(collection)
+        .execute()
+        .get();
+
+    firestore
+        .pipeline()
+        .collection(collection)
+        .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+        .insert(
+            new Insert().withReturns(InsertReturn.DOCUMENT_ID),
+            new InsertOptions().withTransactional(true))
+        .execute()
+        .get();
   }
 
   @Test
