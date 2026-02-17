@@ -1315,9 +1315,6 @@ public abstract class Expression {
    * <p>This expression uses the [RE2](https://github.com/google/re2/wiki/Syntax) regular expression
    * syntax.
    *
-   * <p>```kotlin // Extract all mentions from a lower-cased comment regexFindAll(field("comment"),
-   * "@[A-Za-z0-9_]+") ```
-   *
    * @param string The expression representing the string to search.
    * @param pattern The regular expression to search for.
    * @return A new {@link Expression} that evaluates to a list of matched substrings.
@@ -4004,8 +4001,8 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that evaluates to a list of all substrings in a string expression that
-   * match a specified regular expression.
+   * Creates an expression that returns the first substring of a string expression that matches a
+   * specified regular expression.
    *
    * <p>This expression uses the [RE2](https://github.com/google/re2/wiki/Syntax) regular expression
    * syntax.
