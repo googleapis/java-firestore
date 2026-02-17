@@ -1267,6 +1267,7 @@ class PipelineSnippets {
             .execute()
             .get();
     // [END regex_find]
+    System.out.println(result.getResults());
   }
 
   void regexFindAllFunction() throws ExecutionException, InterruptedException {
@@ -1279,6 +1280,7 @@ class PipelineSnippets {
             .execute()
             .get();
     // [END regex_find_all]
+    System.out.println(result.getResults());
   }
 
   void regexMatchFunction() throws ExecutionException, InterruptedException {
