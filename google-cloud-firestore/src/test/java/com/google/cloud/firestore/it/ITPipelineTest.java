@@ -2747,4 +2747,296 @@ public class ITPipelineTest extends ITBaseTest {
             });
     assertThat(exception).hasMessageThat().contains("Duplicate alias or field name");
   }
+
+  @Test
+  public void testSubquery() throws Exception {
+      Map<String, Map<String, Object>> testDocs = map(
+              "doc1", map("a", 1),
+              "doc2", map("a", 2));
+
+      for (Map.Entry<String, Map<String, Object>> doc : testDocs.entrySet()) {
+          com.google.cloud.firestore.DocumentReference docRef = collection.document(doc.getKey());
+          docRef.set(doc.getValue()).get(5, java.util.concurrent.TimeUnit.SECONDS);
+          docRef.collection("some_subcollection").document("sub1").set(map("b", 1)).get(5,
+                  java.util.concurrent.TimeUnit.SECONDS);
+      }
+
+      // We mock a subcollection test query where we retrieve these items
+      Pipeline sub = Pipeline.subcollection("some_subcollection")
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.variable("p").as("sub_p"));
+
+      List<PipelineResult> results = firestore
+              .pipeline()
+              .collection(collection.getPath())
+              .define(com.google.cloud.firestore.pipeline.expressions.Expression.variable("parentDoc").as("p"))
+              .select(sub.toArrayExpression().as("sub_docs"))
+              .limit(1)
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(data(results)).containsExactly(
+              map("sub_docs", java.util.Collections.singletonList(map("b", 1L))));
+  }
+
+  @Test
+  public void testSubqueryToScalar() throws Exception {
+      Map<String, Map<String, Object>> testDocs = map(
+              "doc1", map("a", 1),
+              "doc2", map("a", 2));
+
+      for (Map.Entry<String, Map<String, Object>> doc : testDocs.entrySet()) {
+          com.google.cloud.firestore.DocumentReference docRef = collection.document(doc.getKey());
+          docRef.set(doc.getValue()).get(5, java.util.concurrent.TimeUnit.SECONDS);
+          docRef.collection("some_subcollection").document("sub1").set(map("b", 1)).get(5,
+                  java.util.concurrent.TimeUnit.SECONDS);
+      }
+
+      Pipeline sub = Pipeline.subcollection("some_subcollection")
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.variable("p").as("sub_p"));
+
+      List<PipelineResult> results = firestore
+              .pipeline()
+              .collection(collection.getPath())
+              .define(com.google.cloud.firestore.pipeline.expressions.Expression.variable("parentDoc").as("p"))
+              .select(sub.toScalarExpression().as("sub_doc_scalar"))
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(data(results)).containsExactly(
+              map("sub_doc_scalar", map("b", 1L)));
+  }
+
+  @Test
+  public void testSubqueryWithCorrelatedField() throws Exception {
+      Map<String, Map<String, Object>> testDocs = map(
+              "doc1", map("a", 1),
+              "doc2", map("a", 2));
+
+      for (Map.Entry<String, Map<String, Object>> doc : testDocs.entrySet()) {
+          collection.document(doc.getKey()).set(doc.getValue()).get(5, java.util.concurrent.TimeUnit.SECONDS);
+      }
+
+      Pipeline sub = Pipeline.subcollection("some_subcollection")
+              // Using field access on a variable simulating a correlated query
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.field(
+                      com.google.cloud.firestore.pipeline.expressions.Expression.variable("p"), "a").as("parent_a"));
+
+      List<PipelineResult> results = firestore
+              .pipeline()
+              .collection(collection.getPath())
+              .define(com.google.cloud.firestore.pipeline.expressions.Expression.currentDocument().as("p"))
+              .select(sub.toArrayExpression().as("sub_docs"))
+              .limit(2)
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(data(results)).containsExactly(
+              map("sub_docs", java.util.Collections.emptyList()),
+              map("sub_docs", java.util.Collections.emptyList()));
+  }
+
+  @Test
+  public void testMultipleArraySubqueries() throws Exception {
+      Map<String, Map<String, Object>> testDocs = map(
+              "book1", map("title", "Book 1"));
+
+      for (Map.Entry<String, Map<String, Object>> doc : testDocs.entrySet()) {
+          com.google.cloud.firestore.DocumentReference docRef = collection.document(doc.getKey());
+          docRef.set(doc.getValue()).get(5, java.util.concurrent.TimeUnit.SECONDS);
+          docRef.collection("reviews").document("rev1").set(map("rating", 5)).get(5,
+                  java.util.concurrent.TimeUnit.SECONDS);
+          docRef.collection("authors").document("auth1").set(map("name", "Author 1")).get(5,
+                  java.util.concurrent.TimeUnit.SECONDS);
+      }
+
+      Pipeline reviewsSub = Pipeline.subcollection("reviews")
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.variable("p").as("sub_p"));
+      Pipeline authorsSub = Pipeline.subcollection("authors")
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.variable("p").as("sub_auth"));
+
+      List<PipelineResult> results = firestore
+              .pipeline()
+              .collection(collection.getPath())
+              .define(com.google.cloud.firestore.pipeline.expressions.Expression.variable("parentDoc").as("p"))
+              .addFields(
+                      reviewsSub.toArrayExpression().as("reviews_data"),
+                      authorsSub.toArrayExpression().as("authors_data"))
+              .select(
+                      com.google.cloud.firestore.pipeline.expressions.Expression.field("title").as("title"),
+                      com.google.cloud.firestore.pipeline.expressions.Expression.field("reviews_data")
+                              .as("reviews_data"),
+                      com.google.cloud.firestore.pipeline.expressions.Expression.field("authors_data")
+                              .as("authors_data"))
+              .limit(1)
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(data(results)).containsExactly(
+              map(
+                      "title", "Book 1",
+                      "reviews_data", java.util.Collections.singletonList(map("rating", 5L)),
+                      "authors_data", java.util.Collections.singletonList(map("name", "Author 1"))));
+  }
+
+  @Test
+  public void testScopeBridgingExplicitFieldBinding() throws Exception {
+      Map<String, Map<String, Object>> testDocs = map(
+              "doc1", map("id", "123"));
+
+      for (Map.Entry<String, Map<String, Object>> doc : testDocs.entrySet()) {
+          com.google.cloud.firestore.DocumentReference docRef = collection.document(doc.getKey());
+          docRef.set(doc.getValue()).get(5, java.util.concurrent.TimeUnit.SECONDS);
+          docRef.collection("some_subcollection").document("sub1").set(map("parent_id", "123")).get(5,
+                  java.util.concurrent.TimeUnit.SECONDS);
+          docRef.collection("some_subcollection").document("sub2").set(map("parent_id", "999")).get(5,
+                  java.util.concurrent.TimeUnit.SECONDS);
+      }
+
+      Pipeline sub = Pipeline.subcollection("some_subcollection")
+              .where(com.google.cloud.firestore.pipeline.expressions.Expression.field("parent_id").equal(
+                      com.google.cloud.firestore.pipeline.expressions.Expression.variable("rid")))
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.field("parent_id").as("matched_id"));
+
+      List<PipelineResult> results = firestore
+              .pipeline()
+              .collection(collection.getPath())
+              .define(com.google.cloud.firestore.pipeline.expressions.Expression.field("id").as("rid"))
+              .addFields(sub.toArrayExpression().as("sub_docs"))
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.field("sub_docs").as("sub_docs"))
+              .limit(1)
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(data(results)).containsExactly(
+              map("sub_docs", java.util.Collections.singletonList(map("matched_id", "123"))));
+  }
+
+  @Test
+  public void testArraySubqueryInWhereStage() throws Exception {
+      Map<String, Map<String, Object>> testDocs = map(
+              "doc1", map("id", "1"),
+              "doc2", map("id", "2"));
+
+      for (Map.Entry<String, Map<String, Object>> doc : testDocs.entrySet()) {
+          com.google.cloud.firestore.DocumentReference docRef = collection.document(doc.getKey());
+          docRef.set(doc.getValue()).get(5, java.util.concurrent.TimeUnit.SECONDS);
+          // Only doc1 has a subcollection with value 'target_val'
+          if ("doc1".equals(doc.getKey())) {
+              docRef.collection("some_subcollection").document("sub1").set(map("val", "target_val")).get(5,
+                      java.util.concurrent.TimeUnit.SECONDS);
+          } else {
+              docRef.collection("some_subcollection").document("sub1").set(map("val", "other_val")).get(5,
+                      java.util.concurrent.TimeUnit.SECONDS);
+          }
+      }
+
+      Pipeline sub = Pipeline.subcollection("some_subcollection")
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.field("val").as("val"));
+
+      // Find documents where the subquery array contains a specific map
+      // Note: testing a standard equality against an array here based on
+      // array_contains expression limits
+      List<PipelineResult> results = firestore
+              .pipeline()
+              .collection(collection.getPath())
+              .where(sub.toArrayExpression().arrayContains(map("val", "target_val")))
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.field("id").as("matched_doc_id"))
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(data(results)).containsExactly(
+              map("matched_doc_id", "1"));
+  }
+
+  @Test
+  public void testSingleLookupScalarSubquery() throws Exception {
+      Map<String, Map<String, Object>> testDocs = map(
+              "doc1", map("ref_id", "user123"));
+
+      for (Map.Entry<String, Map<String, Object>> doc : testDocs.entrySet()) {
+          com.google.cloud.firestore.DocumentReference docRef = collection.document(doc.getKey());
+          docRef.set(doc.getValue()).get(5, java.util.concurrent.TimeUnit.SECONDS);
+          docRef.collection("users").document("user123").set(map("name", "Alice")).get(5,
+                  java.util.concurrent.TimeUnit.SECONDS);
+      }
+
+      Pipeline userProfileSub = Pipeline.subcollection("users")
+              .where(com.google.cloud.firestore.pipeline.expressions.Expression.field("name")
+                      .equal(com.google.cloud.firestore.pipeline.expressions.Expression.variable("uname")))
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.currentDocument().as("profile"));
+
+      List<PipelineResult> results = firestore
+              .pipeline()
+              .collection(collection.getPath())
+              .define(com.google.cloud.firestore.pipeline.expressions.Expression.constant("Alice").as("uname"))
+              .select(userProfileSub.toScalarExpression().as("user_info"))
+              .limit(1)
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(data(results)).containsExactly(
+              map("user_info", map("name", "Alice")));
+  }
+
+  @Test
+  public void testMissingSubcollectionReturnsEmptyArray() throws Exception {
+      Map<String, Map<String, Object>> testDocs = map(
+              "doc1", map("id", "no_subcollection_here"));
+
+      for (Map.Entry<String, Map<String, Object>> doc : testDocs.entrySet()) {
+          collection.document(doc.getKey()).set(doc.getValue()).get(5, java.util.concurrent.TimeUnit.SECONDS);
+          // Notably NO subcollections are added
+      }
+
+      Pipeline missingSub = Pipeline.subcollection("does_not_exist")
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.variable("p").as("sub_p"));
+
+      List<PipelineResult> results = firestore
+              .pipeline()
+              .collection(collection.getPath())
+              .define(com.google.cloud.firestore.pipeline.expressions.Expression.variable("parentDoc").as("p"))
+              .select(missingSub.toArrayExpression().as("missing_data"))
+              .limit(1)
+              .execute()
+              .get()
+              .getResults();
+
+      // Ensure it's not null and evaluates properly to an empty array []
+      assertThat(data(results)).containsExactly(
+              map("missing_data", java.util.Collections.emptyList()));
+  }
+
+  @Test
+  public void testZeroResultScalarReturnsNull() throws Exception {
+      Map<String, Map<String, Object>> testDocs = map(
+              "doc1", map("has_data", true));
+
+      for (Map.Entry<String, Map<String, Object>> doc : testDocs.entrySet()) {
+          collection.document(doc.getKey()).set(doc.getValue()).get(5, java.util.concurrent.TimeUnit.SECONDS);
+      }
+
+      Pipeline emptyScalar = Pipeline.subcollection("empty_sub")
+              .where(com.google.cloud.firestore.pipeline.expressions.Expression.field("nonexistent").equal(1L))
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.currentDocument().as("data"));
+
+      List<PipelineResult> results = firestore
+              .pipeline()
+              .collection(collection.getPath())
+              .select(emptyScalar.toScalarExpression().as("result_data"))
+              .limit(1)
+              .execute()
+              .get()
+              .getResults();
+
+      // Expecting result_data field to gracefully produce null
+      assertThat(data(results)).containsExactly(
+              java.util.Collections.singletonMap("result_data", null));
+  }
 }

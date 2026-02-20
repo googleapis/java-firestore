@@ -598,5 +598,56 @@ public interface ValueOrBuilder
    */
   com.google.firestore.v1.PipelineOrBuilder getPipelineValueOrBuilder();
 
+  /**
+   *
+   *
+   * <pre>
+   * Pointer to a variable defined elsewhere in a pipeline.
+   *
+   * **Requires:**
+   *
+   * * Not allowed to be used when writing documents.
+   * </pre>
+   *
+   * <code>string variable_reference_value = 22;</code>
+   *
+   * @return Whether the variableReferenceValue field is set.
+   */
+  boolean hasVariableReferenceValue();
+
+  /**
+   *
+   *
+   * <pre>
+   * Pointer to a variable defined elsewhere in a pipeline.
+   *
+   * **Requires:**
+   *
+   * * Not allowed to be used when writing documents.
+   * </pre>
+   *
+   * <code>string variable_reference_value = 22;</code>
+   *
+   * @return The variableReferenceValue.
+   */
+  java.lang.String getVariableReferenceValue();
+
+  /**
+   *
+   *
+   * <pre>
+   * Pointer to a variable defined elsewhere in a pipeline.
+   *
+   * **Requires:**
+   *
+   * * Not allowed to be used when writing documents.
+   * </pre>
+   *
+   * <code>string variable_reference_value = 22;</code>
+   *
+   * @return The bytes for variableReferenceValue.
+   */
+  com.google.protobuf.ByteString getVariableReferenceValueBytes();
+
   com.google.firestore.v1.Value.ValueTypeCase getValueTypeCase();
 }

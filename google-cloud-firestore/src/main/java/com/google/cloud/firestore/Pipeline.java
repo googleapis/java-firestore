@@ -41,6 +41,7 @@ import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.cloud.firestore.pipeline.stages.AddFields;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
+import com.google.cloud.firestore.pipeline.stages.DefineStage;
 import com.google.cloud.firestore.pipeline.stages.Distinct;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
@@ -55,6 +56,7 @@ import com.google.cloud.firestore.pipeline.stages.Select;
 import com.google.cloud.firestore.pipeline.stages.Sort;
 import com.google.cloud.firestore.pipeline.stages.Stage;
 import com.google.cloud.firestore.pipeline.stages.StageUtils;
+import com.google.cloud.firestore.pipeline.stages.SubcollectionSource;
 import com.google.cloud.firestore.pipeline.stages.Union;
 import com.google.cloud.firestore.pipeline.stages.Unnest;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
@@ -259,6 +261,51 @@ public final class Pipeline {
                     .add(additionalFields)
                     .build()
                     .toArray(new Selectable[0]))));
+  }
+
+  /**
+   * Initializes a pipeline scoped to a subcollection.
+   *
+   * @param path The path of the subcollection.
+   * @return A new {@code Pipeline} instance scoped to the subcollection.
+   */
+  @BetaApi
+  public static Pipeline subcollection(String path) {
+    return new Pipeline(null, new SubcollectionSource(path));
+  }
+
+  /**
+   * Adds new fields or redefines existing fields in the output documents by
+   * evaluating given expressions.
+   *
+   * @param expressions The expressions to define or redefine fields using
+   *                    {@link AliasedExpression}.
+   * @return A new Pipeline object with this stage appended to the stage list.
+   */
+  @BetaApi
+  public Pipeline define(Selectable... expressions) {
+    return append(
+        new DefineStage(PipelineUtils.selectablesToMap(expressions)));
+  }
+
+  /**
+   * Converts the pipeline into an array expression.
+   *
+   * @return A new {@link Expression} representing the pipeline as an array.
+   */
+  @BetaApi
+  public Expression toArrayExpression() {
+    return Expression.rawExpression("array", Expression.pipeline(this));
+  }
+
+  /**
+   * Converts the pipeline into a scalar expression.
+   *
+   * @return A new {@link Expression} representing the pipeline as a scalar.
+   */
+  @BetaApi
+  public Expression toScalarExpression() {
+    return Expression.rawExpression("scalar", Expression.pipeline(this));
   }
 
   /**

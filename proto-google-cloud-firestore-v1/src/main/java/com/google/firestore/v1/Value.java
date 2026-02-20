@@ -989,6 +989,90 @@ public final class Value extends com.google.protobuf.GeneratedMessage
     return com.google.firestore.v1.Pipeline.getDefaultInstance();
   }
 
+  public static final int VARIABLE_REFERENCE_VALUE_FIELD_NUMBER = 22;
+
+  /**
+   *
+   *
+   * <pre>
+   * Pointer to a variable defined elsewhere in a pipeline.
+   *
+   * **Requires:**
+   *
+   * * Not allowed to be used when writing documents.
+   * </pre>
+   *
+   * <code>string variable_reference_value = 22;</code>
+   *
+   * @return Whether the variableReferenceValue field is set.
+   */
+  public boolean hasVariableReferenceValue() {
+    return valueTypeCase_ == 22;
+  }
+
+  /**
+   *
+   *
+   * <pre>
+   * Pointer to a variable defined elsewhere in a pipeline.
+   *
+   * **Requires:**
+   *
+   * * Not allowed to be used when writing documents.
+   * </pre>
+   *
+   * <code>string variable_reference_value = 22;</code>
+   *
+   * @return The variableReferenceValue.
+   */
+  public java.lang.String getVariableReferenceValue() {
+    java.lang.Object ref = "";
+    if (valueTypeCase_ == 22) {
+      ref = valueType_;
+    }
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      if (valueTypeCase_ == 22) {
+        valueType_ = s;
+      }
+      return s;
+    }
+  }
+
+  /**
+   *
+   *
+   * <pre>
+   * Pointer to a variable defined elsewhere in a pipeline.
+   *
+   * **Requires:**
+   *
+   * * Not allowed to be used when writing documents.
+   * </pre>
+   *
+   * <code>string variable_reference_value = 22;</code>
+   *
+   * @return The bytes for variableReferenceValue.
+   */
+  public com.google.protobuf.ByteString getVariableReferenceValueBytes() {
+    java.lang.Object ref = "";
+    if (valueTypeCase_ == 22) {
+      ref = valueType_;
+    }
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+      if (valueTypeCase_ == 22) {
+        valueType_ = b;
+      }
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -1044,6 +1128,9 @@ public final class Value extends com.google.protobuf.GeneratedMessage
     }
     if (valueTypeCase_ == 21) {
       output.writeMessage(21, (com.google.firestore.v1.Pipeline) valueType_);
+    }
+    if (valueTypeCase_ == 22) {
+      com.google.protobuf.GeneratedMessage.writeString(output, 22, valueType_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -1118,6 +1205,9 @@ public final class Value extends com.google.protobuf.GeneratedMessage
           com.google.protobuf.CodedOutputStream.computeMessageSize(
               21, (com.google.firestore.v1.Pipeline) valueType_);
     }
+    if (valueTypeCase_ == 22) {
+      size += com.google.protobuf.GeneratedMessage.computeStringSize(22, valueType_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -1177,6 +1267,10 @@ public final class Value extends com.google.protobuf.GeneratedMessage
         break;
       case 21:
         if (!getPipelineValue().equals(other.getPipelineValue())) return false;
+        break;
+      case 22:
+        if (!getVariableReferenceValue().equals(other.getVariableReferenceValue()))
+          return false;
         break;
       case 0:
       default:
@@ -1471,6 +1565,9 @@ public final class Value extends com.google.protobuf.GeneratedMessage
       }
       if (valueTypeCase_ == 21 && pipelineValueBuilder_ != null) {
         result.valueType_ = pipelineValueBuilder_.build();
+      }
+      if (valueTypeCase_ == 22) {
+        result.valueType_ = this.valueType_;
       }
     }
 
@@ -4052,6 +4149,165 @@ public final class Value extends com.google.protobuf.GeneratedMessage
       valueTypeCase_ = 21;
       onChanged();
       return pipelineValueBuilder_;
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Pointer to a variable defined elsewhere in a pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     * </pre>
+     *
+     * <code>string variable_reference_value = 22;</code>
+     *
+     * @return Whether the variableReferenceValue field is set.
+     */
+    public boolean hasVariableReferenceValue() {
+      return valueTypeCase_ == 22;
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Pointer to a variable defined elsewhere in a pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     * </pre>
+     *
+     * <code>string variable_reference_value = 22;</code>
+     *
+     * @return The variableReferenceValue.
+     */
+    public java.lang.String getVariableReferenceValue() {
+      java.lang.Object ref = "";
+      if (valueTypeCase_ == 22) {
+        ref = valueType_;
+      }
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (valueTypeCase_ == 22) {
+          valueType_ = s;
+        }
+        return s;
+      }
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Pointer to a variable defined elsewhere in a pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     * </pre>
+     *
+     * <code>string variable_reference_value = 22;</code>
+     *
+     * @return The bytes for variableReferenceValue.
+     */
+    public com.google.protobuf.ByteString getVariableReferenceValueBytes() {
+      java.lang.Object ref = "";
+      if (valueTypeCase_ == 22) {
+        ref = valueType_;
+      }
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        if (valueTypeCase_ == 22) {
+          valueType_ = b;
+        }
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Pointer to a variable defined elsewhere in a pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     * </pre>
+     *
+     * <code>string variable_reference_value = 22;</code>
+     *
+     * @param value The variableReferenceValue to set.
+     * @return This builder for chaining.
+     */
+    public Builder setVariableReferenceValue(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      valueTypeCase_ = 22;
+      valueType_ = value;
+      onChanged();
+      return this;
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Pointer to a variable defined elsewhere in a pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     * </pre>
+     *
+     * <code>string variable_reference_value = 22;</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearVariableReferenceValue() {
+      if (valueTypeCase_ == 22) {
+        valueTypeCase_ = 0;
+        valueType_ = null;
+        onChanged();
+      }
+      return this;
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Pointer to a variable defined elsewhere in a pipeline.
+     *
+     * **Requires:**
+     *
+     * * Not allowed to be used when writing documents.
+     * </pre>
+     *
+     * <code>string variable_reference_value = 22;</code>
+     *
+     * @param value The bytes for variableReferenceValue to set.
+     * @return This builder for chaining.
+     */
+    public Builder setVariableReferenceValueBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      valueTypeCase_ = 22;
+      valueType_ = value;
+      onChanged();
+      return this;
     }
 
     // @@protoc_insertion_point(builder_scope:google.firestore.v1.Value)

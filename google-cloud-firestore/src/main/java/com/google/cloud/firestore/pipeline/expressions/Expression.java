@@ -24,6 +24,7 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.GeoPoint;
+import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.VectorValue;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Value;
@@ -226,6 +227,7 @@ public abstract class Expression {
   public static Expression currentTimestamp() {
     return new FunctionExpression("current_timestamp", ImmutableList.of());
   }
+
 
   /**
    * Creates an expression that returns a default value if an expression evaluates to an absent
@@ -4796,4 +4798,86 @@ public abstract class Expression {
   public final Expression type() {
     return type(this);
   }
+
+  /**
+   * Creates an expression that represents the current document being processed.
+   *
+   * @return An {@link Expression} representing the current document.
+   */
+  @BetaApi
+  public static Expression currentDocument() {
+    return new FunctionExpression("current_document", ImmutableList.of());
+  }
+
+  /**
+   * Creates an expression that retrieves the value of a variable bound via
+   * pipeline definitions.
+   *
+   * @param name The name of the variable to retrieve.
+   * @return An {@link Expression} representing the variable's value.
+   */
+  @BetaApi
+  public static Expression variable(String name) {
+    return new Variable(name);
+  }
+
+  /**
+   * Accesses a field/property of the expression (useful when the expression
+   * evaluates to a Map or Document).
+   *
+   * @param expression The expression evaluating to a map/document.
+   * @param key        The key of the field to access.
+   * @return An {@link Expression} representing the value of the field.
+   */
+  @BetaApi
+  public static Expression field(Expression expression, String key) {
+    return new FunctionExpression("field", ImmutableList.of(expression, constant(key)));
+  }
+
+  /**
+   * Creates an expression that evaluates to the provided pipeline.
+   *
+   * @param pipeline The pipeline to use as an expression.
+   * @return A new {@link Expression} representing the pipeline value.
+   */
+  @InternalApi
+  public static Expression pipeline(Pipeline pipeline) {
+    return new PipelineValueExpression(pipeline);
+  }
+
+  /**
+   * Internal expression representing a variable reference.
+   *
+   * <p>
+   * This evaluates to the value of a variable defined in a pipeline context.
+   */
+  static class Variable extends Expression {
+    private final String name;
+
+    Variable(String name) {
+      this.name = name;
+    }
+
+    @Override
+    public Value toProto() {
+      return Value.newBuilder().setVariableReferenceValue(name).build();
+    }
+  }
+
+  /**
+   * Internal expression representing a pipeline value.
+   */
+  static class PipelineValueExpression extends Expression {
+    private final Pipeline pipeline;
+
+    PipelineValueExpression(Pipeline pipeline) {
+      this.pipeline = pipeline;
+    }
+
+    @Override
+    public Value toProto() {
+      return pipeline.toProtoValue();
+    }
+  }
+
 }
