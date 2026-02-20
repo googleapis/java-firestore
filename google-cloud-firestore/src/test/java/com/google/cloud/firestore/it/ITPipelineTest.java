@@ -17,6 +17,7 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.FieldValue.vector;
+import static com.google.cloud.firestore.LocalFirestoreHelper.query;
 import static com.google.cloud.firestore.it.ITQueryTest.map;
 import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.count;
@@ -50,8 +51,12 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.ln;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.log;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.logicalMaximum;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.logicalMinimum;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.mapEntries;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.mapKeys;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.mapMerge;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.mapRemove;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.mapSet;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.mapValues;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.notEqual;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.nullValue;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.or;
@@ -81,6 +86,7 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.GeoPoint;
@@ -106,7 +112,9 @@ import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -1376,7 +1384,185 @@ public class ITPipelineTest extends ITBaseTest {
                 map("hugoAward", true, "title", "The Hitchhiker's Guide to the Galaxy"),
                 map("hugoAward", true, "title", "Dune")));
   }
+@Test
+  public void testMapSet() throws Exception {
+    Map<String, Object> docData = new HashMap<>();
+    docData.put("existingField", ImmutableMap.of("foo", 1L));
 
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .replaceWith(Expression.map(docData))
+            .limit(1)
+            .select(
+                Expression.mapSet("existingField", "bar", 2).as("modifiedField"),
+                Expression.mapSet(constant(ImmutableMap.of()), "a", 1).as("simple"),
+                Expression.mapSet(constant(ImmutableMap.of("a", 1)), "b", 2).as("add"),
+                Expression.mapSet(constant(ImmutableMap.of("a", 1)), "a", 2).as("overwrite"),
+                Expression.mapSet(constant(ImmutableMap.of("a", 1, "b", 2)), "a", 3, "c", 4).as("multi"),
+                Expression.mapSet(constant(ImmutableMap.of("a", 1)), "a", field("non_existent")).as("remove"),
+                Expression.mapSet(constant(ImmutableMap.of("a", 1)), "b", null).as("setNull"),
+                Expression.mapSet(constant(ImmutableMap.of("a", ImmutableMap.of("b", 1))), "a.b", 2).as("setDotted"),
+                Expression.mapSet(constant(ImmutableMap.of()), "", "empty").as("setEmptyKey"),
+                Expression.mapSet(constant(ImmutableMap.of("a", 1)), "b", Expression.add(constant(1), constant(2))).as("setExprVal"),
+                Expression.mapSet(constant(ImmutableMap.of()), "obj", constant(ImmutableMap.of("hidden", true))).as("setNestedMap"),
+                Expression.mapSet(constant(ImmutableMap.of()), "~!@#$%^&*()_+", "special").as("setSpecialChars"),
+
+                field("existingField").mapSet("instanceKey", 100).as("instanceSetField"),
+                constant(ImmutableMap.of("x", 1)).mapSet(constant("y"), constant(2)).as("instanceSetConstant")
+            )
+            .execute()
+            .get();
+
+    List<PipelineResult> resultList = results.getResults();
+    assertThat(resultList).isNotEmpty();
+    Map<String, Object> data = resultList.get(0).getData();
+
+    assertThat((Map<?, ?>) data.get("modifiedField")).containsExactly("foo", 1L, "bar", 2L);
+    assertThat((Map<?, ?>) data.get("simple")).containsExactly("a", 1L);
+    assertThat((Map<?, ?>) data.get("add")).containsExactly("a", 1L, "b", 2L);
+    assertThat((Map<?, ?>) data.get("overwrite")).containsExactly("a", 2L);
+    assertThat((Map<?, ?>) data.get("multi")).containsExactly("a", 3L, "b", 2L, "c", 4L);
+    assertThat((Map<?, ?>) data.get("remove")).isEmpty();
+    assertThat((Map<?, ?>) data.get("setNull")).containsExactly("a", 1L, "b", null);
+    
+    Map<?, ?> setDotted = (Map<?, ?>) data.get("setDotted");
+    assertThat(setDotted).containsEntry("a.b", 2L);
+    assertThat((Map<?, ?>) setDotted.get("a")).containsExactly("b", 1L);
+
+    assertThat((Map<?, ?>) data.get("setEmptyKey")).containsExactly("", "empty");
+    assertThat((Map<?, ?>) data.get("setExprVal")).containsExactly("a", 1L, "b", 3L);
+    assertThat((Map<?, ?>) data.get("setNestedMap")).isEqualTo(ImmutableMap.of("obj", ImmutableMap.of("hidden", true)));
+    assertThat((Map<?, ?>) data.get("setSpecialChars")).containsExactly("~!@#$%^&*()_+", "special");
+
+    assertThat((Map<?, ?>) data.get("instanceSetField")).containsExactly("foo", 1L, "instanceKey", 100L);
+    assertThat((Map<?, ?>) data.get("instanceSetConstant")).containsExactly("x", 1L, "y", 2L);
+  }
+
+  @Test
+  public void testMapKeys() throws Exception {
+    Map<String, Object> docData = new HashMap<>();
+    docData.put("existingField", ImmutableMap.of("foo", 1L));
+
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .replaceWith(Expression.map(docData))
+            .limit(1)
+            .select(
+                Expression.mapKeys("existingField").as("existingKeys"),
+                Expression.mapKeys(constant(ImmutableMap.of("a", 1, "b", 2))).as("keys"),
+                Expression.mapKeys(constant(ImmutableMap.of())).as("empty_keys"),
+                Expression.mapKeys(constant(ImmutableMap.of("a", ImmutableMap.of("nested", true)))).as("nested_keys"),
+
+                field("existingField").mapKeys().as("instanceExistingKeys"),
+                constant(ImmutableMap.of("x", 10, "y", 20)).mapKeys().as("instanceKeys")
+            )
+            .execute()
+            .get();
+
+    List<PipelineResult> resultList = results.getResults();
+    assertThat(resultList).isNotEmpty();
+    Map<String, Object> data = resultList.get(0).getData();
+
+    assertThat((List<?>) data.get("existingKeys")).containsExactly("foo");
+    assertThat((List<?>) data.get("keys")).containsExactly("a", "b"); 
+    assertThat((List<?>) data.get("empty_keys")).isEmpty();
+    assertThat((List<?>) data.get("nested_keys")).containsExactly("a");
+
+    assertThat((List<?>) data.get("instanceExistingKeys")).containsExactly("foo");
+    assertThat((List<?>) data.get("instanceKeys")).containsExactly("x", "y");
+  }
+
+  @Test
+  public void testMapValues() throws Exception {
+    Map<String, Object> docData = new HashMap<>();
+    docData.put("existingField", ImmutableMap.of("foo", 1L));
+
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .replaceWith(Expression.map(docData))
+            .limit(1)
+            .select(
+                Expression.mapValues("existingField").as("existingValues"),
+                Expression.mapValues(constant(ImmutableMap.of("a", 1, "b", 2))).as("values"),
+                Expression.mapValues(constant(ImmutableMap.of())).as("empty_values"),
+                Expression.mapValues(constant(ImmutableMap.of("a", ImmutableMap.of("nested", true)))).as("nested_values"),
+
+                field("existingField").mapValues().as("instanceExistingValues"),
+                constant(ImmutableMap.of("x", 10, "y", 20)).mapValues().as("instanceValues")
+            )
+            .execute()
+            .get();
+
+    List<PipelineResult> resultList = results.getResults();
+    assertThat(resultList).isNotEmpty();
+    Map<String, Object> data = resultList.get(0).getData();
+
+    assertThat((List<?>) data.get("existingValues")).containsExactly(1L);
+    assertThat((List<?>) data.get("values")).containsExactly(1L, 2L);
+    assertThat((List<?>) data.get("empty_values")).isEmpty();
+    assertThat((List<?>) data.get("nested_values")).containsExactly(ImmutableMap.of("nested", true));
+
+    assertThat((List<?>) data.get("instanceExistingValues")).containsExactly(1L);
+    assertThat((List<?>) data.get("instanceValues")).containsExactly(10L, 20L);
+  }
+
+  @Test
+  public void testMapEntries() throws Exception {
+    Map<String, Object> docData = new HashMap<>();
+    docData.put("existingField", ImmutableMap.of("foo", 1L));
+
+    Pipeline.Snapshot results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .replaceWith(Expression.map(docData))
+            .limit(1)
+            .select(
+                Expression.mapEntries("existingField").as("existingEntries"),
+                Expression.mapEntries(constant(ImmutableMap.of("a", 1, "b", 2))).as("entries"),
+                Expression.mapEntries(constant(ImmutableMap.of())).as("empty_entries"),
+                Expression.mapEntries(constant(ImmutableMap.of("a", ImmutableMap.of("nested", true)))).as("nested_entries"),
+
+                field("existingField").mapEntries().as("instanceExistingEntries"),
+                constant(ImmutableMap.of("x", 10, "y", 20)).mapEntries().as("instanceEntries")
+            )
+            .execute()
+            .get();
+
+    List<PipelineResult> resultList = results.getResults();
+    assertThat(resultList).isNotEmpty();
+    Map<String, Object> data = resultList.get(0).getData();
+
+    assertThat((List<?>) data.get("existingEntries"))
+        .containsExactly(ImmutableMap.of("k", "foo", "v", 1L));
+
+    @SuppressWarnings("unchecked")
+    List<Map<String, Object>> entries = (List<Map<String, Object>>) data.get("entries");
+    assertThat(entries).hasSize(2);
+    
+    // Map entry order is not guaranteed, so we check containment instead of strict ordering
+    assertThat(entries).contains(ImmutableMap.of("k", "a", "v", 1L));
+    assertThat(entries).contains(ImmutableMap.of("k", "b", "v", 2L));
+
+    assertThat((List<?>) data.get("empty_entries")).isEmpty();
+    assertThat((List<?>) data.get("nested_entries"))
+        .containsExactly(ImmutableMap.of("k", "a", "v", ImmutableMap.of("nested", true)));
+
+    assertThat((List<?>) data.get("instanceExistingEntries"))
+        .containsExactly(ImmutableMap.of("k", "foo", "v", 1L));
+
+    @SuppressWarnings("unchecked")
+    List<Map<String, Object>> instanceEntries = (List<Map<String, Object>>) data.get("instanceEntries");
+    assertThat(instanceEntries).hasSize(2);
+    assertThat(instanceEntries).contains(ImmutableMap.of("k", "x", "v", 10L));
+    assertThat(instanceEntries).contains(ImmutableMap.of("k", "y", "v", 20L));
+  }
   @Test
   public void testDataManipulationExpressions() throws Exception {
     List<PipelineResult> results =
@@ -2747,4 +2933,5 @@ public class ITPipelineTest extends ITBaseTest {
             });
     assertThat(exception).hasMessageThat().contains("Duplicate alias or field name");
   }
+
 }

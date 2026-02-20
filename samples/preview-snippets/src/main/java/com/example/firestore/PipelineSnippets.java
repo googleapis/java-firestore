@@ -1177,6 +1177,19 @@ class PipelineSnippets {
     System.out.println(result.getResults());
   }
 
+  void mapSetFunction() throws ExecutionException, InterruptedException {
+    // [START map_get]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(mapSet(field("awards"), "pulitzer").as("awards"))
+            .execute()
+            .get();
+    // [END map_get]
+    System.out.println(result.getResults());
+  }
+
   void byteLengthFunction() throws ExecutionException, InterruptedException {
     // [START byte_length]
     Pipeline.Snapshot result =
