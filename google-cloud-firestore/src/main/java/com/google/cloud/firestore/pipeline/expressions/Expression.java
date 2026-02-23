@@ -179,17 +179,6 @@ public abstract class Expression {
   }
 
   /**
-   * Create a constant for an arbitrary value (e.g. Map, List).
-   *
-   * @param value The value.
-   * @return A new {@link Expression} constant instance.
-   */
-  @BetaApi
-  public static Expression constant(Object value) {
-    return new Constant(value);
-  }
-
-  /**
    * Constant for a null value.
    *
    * @return An {@link Expression} constant instance.

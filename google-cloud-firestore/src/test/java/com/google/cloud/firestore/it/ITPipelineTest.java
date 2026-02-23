@@ -1397,20 +1397,20 @@ public class ITPipelineTest extends ITBaseTest {
             .limit(1)
             .select(
                 Expression.mapSet("existingField", "bar", 2).as("modifiedField"),
-                Expression.mapSet(constant(ImmutableMap.of()), "a", 1).as("simple"),
-                Expression.mapSet(constant(ImmutableMap.of("a", 1)), "b", 2).as("add"),
-                Expression.mapSet(constant(ImmutableMap.of("a", 1)), "a", 2).as("overwrite"),
-                Expression.mapSet(constant(ImmutableMap.of("a", 1, "b", 2)), "a", 3, "c", 4).as("multi"),
-                Expression.mapSet(constant(ImmutableMap.of("a", 1)), "a", field("non_existent")).as("remove"),
-                Expression.mapSet(constant(ImmutableMap.of("a", 1)), "b", null).as("setNull"),
-                Expression.mapSet(constant(ImmutableMap.of("a", ImmutableMap.of("b", 1))), "a.b", 2).as("setDotted"),
-                Expression.mapSet(constant(ImmutableMap.of()), "", "empty").as("setEmptyKey"),
-                Expression.mapSet(constant(ImmutableMap.of("a", 1)), "b", Expression.add(constant(1), constant(2))).as("setExprVal"),
-                Expression.mapSet(constant(ImmutableMap.of()), "obj", constant(ImmutableMap.of("hidden", true))).as("setNestedMap"),
-                Expression.mapSet(constant(ImmutableMap.of()), "~!@#$%^&*()_+", "special").as("setSpecialChars"),
+                Expression.mapSet(Expression.map(ImmutableMap.of()), "a", 1).as("simple"),
+                Expression.mapSet(Expression.map(ImmutableMap.of("a", 1)), "b", 2).as("add"),
+                Expression.mapSet(Expression.map(ImmutableMap.of("a", 1)), "a", 2).as("overwrite"),
+                Expression.mapSet(Expression.map(ImmutableMap.of("a", 1, "b", 2)), "a", 3, "c", 4).as("multi"),
+                Expression.mapSet(Expression.map(ImmutableMap.of("a", 1)), "a", field("non_existent")).as("remove"),
+                Expression.mapSet(Expression.map(ImmutableMap.of("a", 1)), "b", null).as("setNull"),
+                Expression.mapSet(Expression.map(ImmutableMap.of("a", ImmutableMap.of("b", 1))), "a.b", 2).as("setDotted"),
+                Expression.mapSet(Expression.map(ImmutableMap.of()), "", "empty").as("setEmptyKey"),
+                Expression.mapSet(Expression.map(ImmutableMap.of("a", 1)), "b", Expression.add(constant(1), constant(2))).as("setExprVal"),
+                Expression.mapSet(Expression.map(ImmutableMap.of()), "obj", ImmutableMap.of("hidden", true)).as("setNestedMap"),
+                Expression.mapSet(Expression.map(ImmutableMap.of()), "~!@#$%^&*()_+", "special").as("setSpecialChars"),
 
                 field("existingField").mapSet("instanceKey", 100).as("instanceSetField"),
-                constant(ImmutableMap.of("x", 1)).mapSet(constant("y"), constant(2)).as("instanceSetConstant")
+                Expression.map(ImmutableMap.of("x", 1)).mapSet(constant("y"), constant(2)).as("instanceSetConstant")
             )
             .execute()
             .get();
@@ -1453,12 +1453,12 @@ public class ITPipelineTest extends ITBaseTest {
             .limit(1)
             .select(
                 Expression.mapKeys("existingField").as("existingKeys"),
-                Expression.mapKeys(constant(ImmutableMap.of("a", 1, "b", 2))).as("keys"),
-                Expression.mapKeys(constant(ImmutableMap.of())).as("empty_keys"),
-                Expression.mapKeys(constant(ImmutableMap.of("a", ImmutableMap.of("nested", true)))).as("nested_keys"),
+                Expression.mapKeys(Expression.map(ImmutableMap.of("a", 1, "b", 2))).as("keys"),
+                Expression.mapKeys(Expression.map(ImmutableMap.of())).as("empty_keys"),
+                Expression.mapKeys(Expression.map(ImmutableMap.of("a", ImmutableMap.of("nested", true)))).as("nested_keys"),
 
                 field("existingField").mapKeys().as("instanceExistingKeys"),
-                constant(ImmutableMap.of("x", 10, "y", 20)).mapKeys().as("instanceKeys")
+                Expression.map(ImmutableMap.of("x", 10, "y", 20)).mapKeys().as("instanceKeys")
             )
             .execute()
             .get();
@@ -1489,12 +1489,12 @@ public class ITPipelineTest extends ITBaseTest {
             .limit(1)
             .select(
                 Expression.mapValues("existingField").as("existingValues"),
-                Expression.mapValues(constant(ImmutableMap.of("a", 1, "b", 2))).as("values"),
-                Expression.mapValues(constant(ImmutableMap.of())).as("empty_values"),
-                Expression.mapValues(constant(ImmutableMap.of("a", ImmutableMap.of("nested", true)))).as("nested_values"),
+                Expression.mapValues(Expression.map(ImmutableMap.of("a", 1, "b", 2))).as("values"),
+                Expression.mapValues(Expression.map(ImmutableMap.of())).as("empty_values"),
+                Expression.mapValues(Expression.map(ImmutableMap.of("a", ImmutableMap.of("nested", true)))).as("nested_values"),
 
                 field("existingField").mapValues().as("instanceExistingValues"),
-                constant(ImmutableMap.of("x", 10, "y", 20)).mapValues().as("instanceValues")
+                Expression.map(ImmutableMap.of("x", 10, "y", 20)).mapValues().as("instanceValues")
             )
             .execute()
             .get();
@@ -1525,12 +1525,12 @@ public class ITPipelineTest extends ITBaseTest {
             .limit(1)
             .select(
                 Expression.mapEntries("existingField").as("existingEntries"),
-                Expression.mapEntries(constant(ImmutableMap.of("a", 1, "b", 2))).as("entries"),
-                Expression.mapEntries(constant(ImmutableMap.of())).as("empty_entries"),
-                Expression.mapEntries(constant(ImmutableMap.of("a", ImmutableMap.of("nested", true)))).as("nested_entries"),
+                Expression.mapEntries(Expression.map(ImmutableMap.of("a", 1, "b", 2))).as("entries"),
+                Expression.mapEntries(Expression.map(ImmutableMap.of())).as("empty_entries"),
+                Expression.mapEntries(Expression.map(ImmutableMap.of("a", ImmutableMap.of("nested", true)))).as("nested_entries"),
 
                 field("existingField").mapEntries().as("instanceExistingEntries"),
-                constant(ImmutableMap.of("x", 10, "y", 20)).mapEntries().as("instanceEntries")
+                Expression.map(ImmutableMap.of("x", 10, "y", 20)).mapEntries().as("instanceEntries")
             )
             .execute()
             .get();
