@@ -1947,7 +1947,8 @@ public class ITSystemTest extends ITBaseTest {
     if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
       assertEquals(asList("a", "b", "d", "e"), querySnapshotToIds(query.get().get()));
     } else {
-      assertThat(querySnapshotToIds(query.get().get())).containsExactlyElementsIn(asList("a", "b", "d", "e"));
+      assertThat(querySnapshotToIds(query.get().get()))
+          .containsExactlyElementsIn(asList("a", "b", "d", "e"));
     }
   }
 
