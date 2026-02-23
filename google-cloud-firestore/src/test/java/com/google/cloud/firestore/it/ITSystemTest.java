@@ -1944,13 +1944,7 @@ public class ITSystemTest extends ITBaseTest {
 
     Query query = randomColl.whereArrayContainsAny("array", Arrays.<Object>asList(42, 43));
 
-    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
-      assertEquals(asList("a", "b", "d", "e"), querySnapshotToIds(query.get().get()));
-    } else {
-      // TODO: Currently rejected because of mixed type setup, backend will change the behavior; and
-      // this test will fail by then.
-      assertThrows(ExecutionException.class, () -> querySnapshotToIds(query.get().get()));
-    }
+    assertEquals(asList("a", "b", "d", "e"), querySnapshotToIds(query.get().get()));
   }
 
   @Test
