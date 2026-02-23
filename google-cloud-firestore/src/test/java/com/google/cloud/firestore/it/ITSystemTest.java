@@ -1944,7 +1944,11 @@ public class ITSystemTest extends ITBaseTest {
 
     Query query = randomColl.whereArrayContainsAny("array", Arrays.<Object>asList(42, 43));
 
-    assertEquals(asList("a", "b", "d", "e"), querySnapshotToIds(query.get().get()));
+    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
+      assertEquals(asList("a", "b", "d", "e"), querySnapshotToIds(query.get().get()));
+    } else {
+      assertThat(querySnapshotToIds(query.get().get())).containsExactlyElementsIn(asList("a", "b", "d", "e"));
+    }
   }
 
   @Test
