@@ -278,6 +278,11 @@ public final class Pipeline {
    * Adds new fields or redefines existing fields in the output documents by
    * evaluating given expressions.
    *
+   * <p>
+   * This stage is useful for binding a value to a variable for internal reuse
+   * within the pipeline
+   * body (accessed via the {@link Expression#variable(String)} function).
+   *
    * @param expressions The expressions to define or redefine fields using
    *                    {@link AliasedExpression}.
    * @return A new Pipeline object with this stage appended to the stage list.
@@ -1383,7 +1388,8 @@ public final class Pipeline {
           }
         };
 
-    logger.log(Level.FINEST, "Sending pipeline request: " + request.getStructuredPipeline());
+    // logger.log(Level.FINEST, "Sending pipeline request: " +
+    // request.getStructuredPipeline());
 
     rpcContext.streamRequest(request, observer, rpcContext.getClient().executePipelineCallable());
   }

@@ -16,6 +16,8 @@
 
 package com.google.cloud.firestore.it;
 
+import java.util.UUID;
+
 import static com.google.cloud.firestore.FieldValue.vector;
 import static com.google.cloud.firestore.it.ITQueryTest.map;
 import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
@@ -2761,14 +2763,17 @@ public class ITPipelineTest extends ITBaseTest {
                   java.util.concurrent.TimeUnit.SECONDS);
       }
 
-      // We mock a subcollection test query where we retrieve these items
-      Pipeline sub = Pipeline.subcollection("some_subcollection")
-              .select(com.google.cloud.firestore.pipeline.expressions.Expression.variable("p").as("sub_p"));
+      // Use absolute path for subquery test
+      Pipeline sub = firestore.pipeline().collection(
+              collection.document("doc1").collection("some_subcollection").getPath())
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.field("b").as("b"),
+                      com.google.cloud.firestore.pipeline.expressions.Expression.field("__name__").as("__name__"))
+              .removeFields("__name__");
 
       List<PipelineResult> results = firestore
               .pipeline()
               .collection(collection.getPath())
-              .define(com.google.cloud.firestore.pipeline.expressions.Expression.variable("parentDoc").as("p"))
+
               .select(sub.toArrayExpression().as("sub_docs"))
               .limit(1)
               .execute()
@@ -2792,13 +2797,14 @@ public class ITPipelineTest extends ITBaseTest {
                   java.util.concurrent.TimeUnit.SECONDS);
       }
 
-      Pipeline sub = Pipeline.subcollection("some_subcollection")
+      Pipeline sub = firestore.pipeline().collection(
+              collection.document("doc1").collection("some_subcollection").getPath())
               .select(com.google.cloud.firestore.pipeline.expressions.Expression.variable("p").as("sub_p"));
 
       List<PipelineResult> results = firestore
               .pipeline()
               .collection(collection.getPath())
-              .define(com.google.cloud.firestore.pipeline.expressions.Expression.variable("parentDoc").as("p"))
+              .define(com.google.cloud.firestore.pipeline.expressions.Expression.currentDocument().as("p"))
               .select(sub.toScalarExpression().as("sub_doc_scalar"))
               .execute()
               .get()
@@ -2818,7 +2824,8 @@ public class ITPipelineTest extends ITBaseTest {
           collection.document(doc.getKey()).set(doc.getValue()).get(5, java.util.concurrent.TimeUnit.SECONDS);
       }
 
-      Pipeline sub = Pipeline.subcollection("some_subcollection")
+      Pipeline sub = firestore.pipeline().collection(
+              collection.document("doc1").collection("some_subcollection").getPath())
               // Using field access on a variable simulating a correlated query
               .select(com.google.cloud.firestore.pipeline.expressions.Expression.field(
                       com.google.cloud.firestore.pipeline.expressions.Expression.variable("p"), "a").as("parent_a"));
@@ -2840,8 +2847,9 @@ public class ITPipelineTest extends ITBaseTest {
 
   @Test
   public void testMultipleArraySubqueries() throws Exception {
+      String bookId = "book_" + UUID.randomUUID().toString();
       Map<String, Map<String, Object>> testDocs = map(
-              "book1", map("title", "Book 1"));
+              bookId, map("title", "Book 1"));
 
       for (Map.Entry<String, Map<String, Object>> doc : testDocs.entrySet()) {
           com.google.cloud.firestore.DocumentReference docRef = collection.document(doc.getKey());
@@ -2852,15 +2860,22 @@ public class ITPipelineTest extends ITBaseTest {
                   java.util.concurrent.TimeUnit.SECONDS);
       }
 
-      Pipeline reviewsSub = Pipeline.subcollection("reviews")
-              .select(com.google.cloud.firestore.pipeline.expressions.Expression.variable("p").as("sub_p"));
-      Pipeline authorsSub = Pipeline.subcollection("authors")
-              .select(com.google.cloud.firestore.pipeline.expressions.Expression.variable("p").as("sub_auth"));
+      Pipeline reviewsSub = firestore.pipeline().collection(
+              collection.document(bookId).collection("reviews").getPath())
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.field("rating").as("rating"),
+                      com.google.cloud.firestore.pipeline.expressions.Expression.field("__name__").as("__name__"))
+              .removeFields("__name__");
+      Pipeline authorsSub = firestore.pipeline().collection(
+              collection.document(bookId).collection("authors").getPath())
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.field("name").as("name"),
+                      com.google.cloud.firestore.pipeline.expressions.Expression.field("__name__").as("__name__"))
+              .removeFields("__name__");
 
       List<PipelineResult> results = firestore
               .pipeline()
               .collection(collection.getPath())
-              .define(com.google.cloud.firestore.pipeline.expressions.Expression.variable("parentDoc").as("p"))
+              .where(com.google.cloud.firestore.pipeline.expressions.Expression.field("title").equal("Book 1"))
+
               .addFields(
                       reviewsSub.toArrayExpression().as("reviews_data"),
                       authorsSub.toArrayExpression().as("authors_data"))
@@ -2896,7 +2911,8 @@ public class ITPipelineTest extends ITBaseTest {
                   java.util.concurrent.TimeUnit.SECONDS);
       }
 
-      Pipeline sub = Pipeline.subcollection("some_subcollection")
+      Pipeline sub = firestore.pipeline().collection(
+              collection.document("doc1").collection("some_subcollection").getPath())
               .where(com.google.cloud.firestore.pipeline.expressions.Expression.field("parent_id").equal(
                       com.google.cloud.firestore.pipeline.expressions.Expression.variable("rid")))
               .select(com.google.cloud.firestore.pipeline.expressions.Expression.field("parent_id").as("matched_id"));
@@ -2918,6 +2934,7 @@ public class ITPipelineTest extends ITBaseTest {
 
   @Test
   public void testArraySubqueryInWhereStage() throws Exception {
+      String subCollName = "subchk_" + UUID.randomUUID().toString();
       Map<String, Map<String, Object>> testDocs = map(
               "doc1", map("id", "1"),
               "doc2", map("id", "2"));
@@ -2927,20 +2944,23 @@ public class ITPipelineTest extends ITBaseTest {
           docRef.set(doc.getValue()).get(5, java.util.concurrent.TimeUnit.SECONDS);
           // Only doc1 has a subcollection with value 'target_val'
           if ("doc1".equals(doc.getKey())) {
-              docRef.collection("some_subcollection").document("sub1").set(map("val", "target_val")).get(5,
+              docRef.collection(subCollName).document("sub1").set(map("val", "target_val", "parent_id", "1")).get(5,
                       java.util.concurrent.TimeUnit.SECONDS);
+                      
+
           } else {
-              docRef.collection("some_subcollection").document("sub1").set(map("val", "other_val")).get(5,
+              docRef.collection(subCollName).document("sub1").set(map("val", "other_val", "parent_id", "2")).get(5,
                       java.util.concurrent.TimeUnit.SECONDS);
           }
+
       }
 
-      Pipeline sub = Pipeline.subcollection("some_subcollection")
+      Pipeline sub = firestore.pipeline().collectionGroup(subCollName)
+              .where(com.google.cloud.firestore.pipeline.expressions.Expression.field("parent_id")
+                      .equal(com.google.cloud.firestore.pipeline.expressions.Expression.variable("pid")))
               .select(com.google.cloud.firestore.pipeline.expressions.Expression.field("val").as("val"));
 
-      // Find documents where the subquery array contains a specific map
-      // Note: testing a standard equality against an array here based on
-      // array_contains expression limits
+      // Find documents where the subquery array contains a specific value
       List<PipelineResult> results = firestore
               .pipeline()
               .collection(collection.getPath())
@@ -2966,7 +2986,8 @@ public class ITPipelineTest extends ITBaseTest {
                   java.util.concurrent.TimeUnit.SECONDS);
       }
 
-      Pipeline userProfileSub = Pipeline.subcollection("users")
+      Pipeline userProfileSub = firestore.pipeline()
+              .collection(collection.document("doc1").collection("users").getPath())
               .where(com.google.cloud.firestore.pipeline.expressions.Expression.field("name")
                       .equal(com.google.cloud.firestore.pipeline.expressions.Expression.variable("uname")))
               .select(com.google.cloud.firestore.pipeline.expressions.Expression.currentDocument().as("profile"));
@@ -2995,15 +3016,20 @@ public class ITPipelineTest extends ITBaseTest {
           // Notably NO subcollections are added
       }
 
-      Pipeline missingSub = Pipeline.subcollection("does_not_exist")
+      Pipeline missingSub = firestore.pipeline()
+              .collection(collection.document("doc1").collection("does_not_exist").getPath())
               .select(com.google.cloud.firestore.pipeline.expressions.Expression.variable("p").as("sub_p"));
+
+                      
+                      
 
       List<PipelineResult> results = firestore
               .pipeline()
               .collection(collection.getPath())
-              .define(com.google.cloud.firestore.pipeline.expressions.Expression.variable("parentDoc").as("p"))
+              .define(com.google.cloud.firestore.pipeline.expressions.Expression.currentDocument().as("p"))
               .select(missingSub.toArrayExpression().as("missing_data"))
               .limit(1)
+                      
               .execute()
               .get()
               .getResults();
@@ -3022,8 +3048,11 @@ public class ITPipelineTest extends ITBaseTest {
           collection.document(doc.getKey()).set(doc.getValue()).get(5, java.util.concurrent.TimeUnit.SECONDS);
       }
 
-      Pipeline emptyScalar = Pipeline.subcollection("empty_sub")
+      Pipeline emptyScalar = firestore.pipeline()
+              .collection(collection.document("doc1").collection("empty_sub").getPath(
+                      ))
               .where(com.google.cloud.firestore.pipeline.expressions.Expression.field("nonexistent").equal(1L))
+
               .select(com.google.cloud.firestore.pipeline.expressions.Expression.currentDocument().as("data"));
 
       List<PipelineResult> results = firestore
