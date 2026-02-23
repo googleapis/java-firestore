@@ -78,6 +78,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assume.assumeFalse;
 
+import org.junit.Ignore;
 import com.google.api.gax.rpc.ApiException;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.cloud.Timestamp;
@@ -2773,7 +2774,6 @@ public class ITPipelineTest extends ITBaseTest {
       List<PipelineResult> results = firestore
               .pipeline()
               .collection(collection.getPath())
-
               .select(sub.toArrayExpression().as("sub_docs"))
               .limit(1)
               .execute()
@@ -2946,7 +2946,7 @@ public class ITPipelineTest extends ITBaseTest {
           if ("doc1".equals(doc.getKey())) {
               docRef.collection(subCollName).document("sub1").set(map("val", "target_val", "parent_id", "1")).get(5,
                       java.util.concurrent.TimeUnit.SECONDS);
-                      
+
 
           } else {
               docRef.collection(subCollName).document("sub1").set(map("val", "other_val", "parent_id", "2")).get(5,
@@ -2990,10 +2990,11 @@ public class ITPipelineTest extends ITBaseTest {
               .collection(collection.document("doc1").collection("users").getPath())
               .where(com.google.cloud.firestore.pipeline.expressions.Expression.field("name")
                       .equal(com.google.cloud.firestore.pipeline.expressions.Expression.variable("uname")))
-              .select(com.google.cloud.firestore.pipeline.expressions.Expression.currentDocument().as("profile"));
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.field("name").as("name"));
 
       List<PipelineResult> results = firestore
               .pipeline()
+
               .collection(collection.getPath())
               .define(com.google.cloud.firestore.pipeline.expressions.Expression.constant("Alice").as("uname"))
               .select(userProfileSub.toScalarExpression().as("user_info"))
@@ -3003,9 +3004,10 @@ public class ITPipelineTest extends ITBaseTest {
               .getResults();
 
       assertThat(data(results)).containsExactly(
-              map("user_info", map("name", "Alice")));
+              map("user_info", "Alice"));
   }
 
+  @Ignore("Pending for backend support")
   @Test
   public void testMissingSubcollectionReturnsEmptyArray() throws Exception {
       Map<String, Map<String, Object>> testDocs = map(
@@ -3016,20 +3018,19 @@ public class ITPipelineTest extends ITBaseTest {
           // Notably NO subcollections are added
       }
 
-      Pipeline missingSub = firestore.pipeline()
-              .collection(collection.document("doc1").collection("does_not_exist").getPath())
+      Pipeline missingSub = Pipeline.subcollection("does_not_exist")
               .select(com.google.cloud.firestore.pipeline.expressions.Expression.variable("p").as("sub_p"));
 
-                      
-                      
+
+
 
       List<PipelineResult> results = firestore
               .pipeline()
               .collection(collection.getPath())
-              .define(com.google.cloud.firestore.pipeline.expressions.Expression.currentDocument().as("p"))
+              .define(com.google.cloud.firestore.pipeline.expressions.Expression.variable("parentDoc").as("p"))
               .select(missingSub.toArrayExpression().as("missing_data"))
               .limit(1)
-                      
+
               .execute()
               .get()
               .getResults();
