@@ -1959,9 +1959,9 @@ public abstract class Expression {
    * Creates an expression that returns a new map with the specified entries added or updated.
    *
    * <ul>
-   *  <li>Only performs shallow updates to the map.</li>
-   *  <li>Setting a value to {@code null} will retain the key with a {@code null} value. To remove a
-   *      key entirely, use {@code mapRemove}.</li>
+   *   <li>Only performs shallow updates to the map.
+   *   <li>Setting a value to {@code null} will retain the key with a {@code null} value. To remove
+   *       a key entirely, use {@code mapRemove}.
    * </ul>
    *
    * @param mapExpr The expression representing the map.
@@ -1983,11 +1983,11 @@ public abstract class Expression {
 
   /**
    * Creates an expression that returns a new map with the specified entries added or updated.
-   * 
+   *
    * <ul>
-   *  <li>Only performs shallow updates to the map.</li>
-   *  <li>Setting a value to {@code null} will retain the key with a {@code null} value. To remove a
-   *      key entirely, use {@code mapRemove}.</li>
+   *   <li>Only performs shallow updates to the map.
+   *   <li>Setting a value to {@code null} will retain the key with a {@code null} value. To remove
+   *       a key entirely, use {@code mapRemove}.
    * </ul>
    *
    * @param mapField The map field to set entries in.
@@ -2008,11 +2008,11 @@ public abstract class Expression {
 
   /**
    * Creates an expression that returns a new map with the specified entries added or updated.
-   * 
+   *
    * <ul>
-   *  <li>Only performs shallow updates to the map.</li>
-   *  <li>Setting a value to {@code null} will retain the key with a {@code null} value. To remove a
-   *      key entirely, use {@code mapRemove}.</li>
+   *   <li>Only performs shallow updates to the map.
+   *   <li>Setting a value to {@code null} will retain the key with a {@code null} value. To remove
+   *       a key entirely, use {@code mapRemove}.
    * </ul>
    *
    * @param mapField The map field to set entries in.
@@ -2029,11 +2029,11 @@ public abstract class Expression {
 
   /**
    * Creates an expression that returns a new map with the specified entries added or updated.
-   * 
+   *
    * <ul>
-   *  <li>Only performs shallow updates to the map.</li>
-   *  <li>Setting a value to {@code null} will retain the key with a {@code null} value. To remove a
-   *      key entirely, use {@code mapRemove}.</li>
+   *   <li>Only performs shallow updates to the map.
+   *   <li>Setting a value to {@code null} will retain the key with a {@code null} value. To remove
+   *       a key entirely, use {@code mapRemove}.
    * </ul>
    *
    * @param mapField The map field to set entries in.
@@ -2047,7 +2047,7 @@ public abstract class Expression {
       String mapField, String key, Object value, Object... moreKeyValues) {
     return mapSet(field(mapField), key, value, moreKeyValues);
   }
-  
+
   /**
    * Creates an expression that returns the keys of a map.
    *
@@ -4603,8 +4603,8 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that returns the entries of this map expression as an array of maps, where
-   * each map contains a "k" property for the key and a "v" property for the value.
+   * Creates an expression that returns the entries of this map expression as an array of maps,
+   * where each map contains a "k" property for the key and a "v" property for the value.
    *
    * <p>While the backend generally preserves insertion order, relying on the order of the output
    * array is not guaranteed and should be avoided.
