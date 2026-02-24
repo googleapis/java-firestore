@@ -2888,7 +2888,7 @@ public class ITPipelineTest extends ITBaseTest {
       Pipeline sub = firestore.pipeline().collection(
               collection.document("doc1").collection("some_subcollection").getPath())
               // Using field access on a variable simulating a correlated query
-              .select(com.google.cloud.firestore.pipeline.expressions.Expression.field(
+              .select(com.google.cloud.firestore.pipeline.expressions.Expression.getField(
                       com.google.cloud.firestore.pipeline.expressions.Expression.variable("p"), "a").as("parent_a"));
 
       List<PipelineResult> results = firestore

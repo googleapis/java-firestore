@@ -218,6 +218,7 @@ public abstract class Expression {
     return Field.ofUserPath(fieldPath.toString());
   }
 
+
   /**
    * Creates an expression that returns the current timestamp.
    *
@@ -4810,8 +4811,8 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that retrieves the value of a variable bound via
-   * pipeline definitions.
+   * Creates an expression that retrieves the value of a variable bound via {@link
+   * Pipeline#define(AliasedExpression, AliasedExpression...)}.
    *
    * @param name The name of the variable to retrieve.
    * @return An {@link Expression} representing the variable's value.
@@ -4819,19 +4820,6 @@ public abstract class Expression {
   @BetaApi
   public static Expression variable(String name) {
     return new Variable(name);
-  }
-
-  /**
-   * Accesses a field/property of the expression (useful when the expression
-   * evaluates to a Map or Document).
-   *
-   * @param expression The expression evaluating to a map/document.
-   * @param key        The key of the field to access.
-   * @return An {@link Expression} representing the value of the field.
-   */
-  @BetaApi
-  public static Expression field(Expression expression, String key) {
-    return new FunctionExpression("field", ImmutableList.of(expression, constant(key)));
   }
 
   /**
@@ -4843,6 +4831,82 @@ public abstract class Expression {
   @InternalApi
   public static Expression pipeline(Pipeline pipeline) {
     return new PipelineValueExpression(pipeline);
+  }
+
+  /**
+   * Accesses a field/property of the expression (useful when the expression
+   * evaluates to a Map or
+   * Document).
+   *
+   * @param key The key of the field to access.
+   * @return An {@link Expression} representing the value of the field.
+   */
+  @BetaApi
+  public Expression getField(String key) {
+    return new FunctionExpression("field", ImmutableList.of(this, constant(key)));
+  }
+
+  /**
+   * Retrieves the value of a specific field from the document evaluated by this
+   * expression.
+   *
+   * @param keyExpression The expression evaluating to the key to access.
+   * @return A new {@link Expression} representing the field value.
+   */
+  @BetaApi
+  public Expression getField(Expression keyExpression) {
+    return new FunctionExpression("field", ImmutableList.of(this, keyExpression));
+  }
+
+  /**
+   * Accesses a field/property of a document field using the provided {@code key}.
+   *
+   * @param fieldName The field name of the map or document field.
+   * @param key       The key of the field to access.
+   * @return An {@link Expression} representing the value of the field.
+   */
+  @BetaApi
+  public static Expression getField(String fieldName, String key) {
+    return field(fieldName).getField(key);
+  }
+
+  /**
+   * Accesses a field/property of the expression using the provided
+   * {@code keyExpression}.
+   *
+   * @param expression    The expression evaluating to a Map or Document.
+   * @param keyExpression The expression evaluating to the key.
+   * @return A new {@link Expression} representing the value of the field.
+   */
+  @BetaApi
+  public static Expression getField(Expression expression, Expression keyExpression) {
+    return expression.getField(keyExpression);
+  }
+
+  /**
+   * Accesses a field/property of a document field using the provided
+   * {@code keyExpression}.
+   *
+   * @param fieldName     The field name of the map or document field.
+   * @param keyExpression The expression evaluating to the key.
+   * @return A new {@link Expression} representing the value of the field.
+   */
+  @BetaApi
+  public static Expression getField(String fieldName, Expression keyExpression) {
+    return field(fieldName).getField(keyExpression);
+  }
+
+  /**
+   * Accesses a field/property of the expression (useful when the expression
+   * evaluates to a Map or Document).
+   *
+   * @param expression The expression evaluating to a map/document.
+   * @param key        The key of the field to access.
+   * @return An {@link Expression} representing the value of the field.
+   */
+  @BetaApi
+  public static Expression getField(Expression expression, String key) {
+    return new FunctionExpression("field", ImmutableList.of(expression, constant(key)));
   }
 
   /**
