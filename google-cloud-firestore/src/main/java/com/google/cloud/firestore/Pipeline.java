@@ -283,14 +283,22 @@ public final class Pipeline {
    * within the pipeline
    * body (accessed via the {@link Expression#variable(String)} function).
    *
-   * @param expressions The expressions to define or redefine fields using
-   *                    {@link AliasedExpression}.
+   * @param expression            The expression to define using
+   *                              {@link AliasedExpression}.
+   * @param additionalExpressions Additional expressions to define using
+   *                              {@link AliasedExpression}.
    * @return A new Pipeline object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline define(Selectable... expressions) {
+  public Pipeline define(AliasedExpression expression, AliasedExpression... additionalExpressions) {
     return append(
-        new DefineStage(PipelineUtils.selectablesToMap(expressions)));
+        new DefineStage(
+            PipelineUtils.selectablesToMap(
+                ImmutableList.<AliasedExpression>builder()
+                    .add(expression)
+                    .add(additionalExpressions)
+                    .build()
+                    .toArray(new AliasedExpression[0]))));
   }
 
   /**

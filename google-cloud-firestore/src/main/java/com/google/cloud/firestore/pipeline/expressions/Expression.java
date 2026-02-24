@@ -4338,7 +4338,7 @@ public abstract class Expression {
    *     expression and associates it with the provided alias.
    */
   @BetaApi
-  public Selectable as(String alias) {
+  public AliasedExpression as(String alias) {
     return new AliasedExpression(this, alias);
   }
 
