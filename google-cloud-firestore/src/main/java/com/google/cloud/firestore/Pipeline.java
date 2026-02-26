@@ -1274,6 +1274,9 @@ public final class Pipeline {
    */
   @BetaApi
   public void execute(ApiStreamObserver<PipelineResult> observer) {
+    if (this.rpcContext == null) {
+      throw new IllegalStateException("Cannot execute a relative subcollection pipeline directly");
+    }
     MetricsContext metricsContext =
         createMetricsContext(TelemetryConstants.METHOD_NAME_EXECUTE_PIPELINE_EXECUTE);
 
@@ -1304,6 +1307,10 @@ public final class Pipeline {
       @Nonnull PipelineExecuteOptions options,
       @Nullable final ByteString transactionId,
       @Nullable com.google.protobuf.Timestamp readTime) {
+    if (this.rpcContext == null) {
+      throw new IllegalStateException("Cannot execute a relative subcollection pipeline directly");
+    }
+
     TraceUtil.Span span =
         rpcContext
             .getFirestore()

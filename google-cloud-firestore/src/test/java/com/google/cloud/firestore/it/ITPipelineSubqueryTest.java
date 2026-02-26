@@ -1192,4 +1192,167 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
       assertThat(data(results)).containsExactly(
               map("title", "1984", "reviews", Collections.emptyList()));
   }
+
+  @Test
+  public void test3LevelDeepJoin() throws Exception {
+          String publishersCollName = "publishers_" + UUID.randomUUID().toString();
+          String booksCollName = "books_" + UUID.randomUUID().toString();
+          String reviewsCollName = "reviews_" + UUID.randomUUID().toString();
+
+          firestore.collection(publishersCollName).document("p1")
+                          .set(map("publisherId", "pub1", "name", "Penguin")).get(5, TimeUnit.SECONDS);
+
+          firestore.collection(booksCollName).document("b1")
+                          .set(map("bookId", "book1", "publisherId", "pub1", "title", "1984")).get(5, TimeUnit.SECONDS);
+
+          firestore.collection(reviewsCollName).document("r1")
+                          .set(map("bookId", "book1", "reviewer", "Alice")).get(5, TimeUnit.SECONDS);
+
+          // reviews need to know if the publisher is Penguin
+          Pipeline reviewsSub = firestore.pipeline().collection(reviewsCollName)
+                          .where(and(
+                                          equal("bookId", variable("book_id")),
+                                          equal(variable("pub_name"), "Penguin") // accessing top-level pub_name
+                          ))
+                          .select(field("reviewer").as("reviewer"));
+
+          Pipeline booksSub = firestore.pipeline().collection(booksCollName)
+                          .where(equal("publisherId", variable("pub_id")))
+                          .define(field("bookId").as("book_id"))
+                          .addFields(reviewsSub.toArrayExpression().as("reviews"))
+                          .select("title", "reviews");
+
+          List<PipelineResult> results = firestore.pipeline().collection(publishersCollName)
+                          .where(equal("publisherId", "pub1"))
+                          .define(field("publisherId").as("pub_id"), field("name").as("pub_name"))
+                          .addFields(booksSub.toArrayExpression().as("books"))
+                          .select("name", "books")
+                          .execute()
+                          .get()
+                          .getResults();
+
+          assertThat(data(results)).containsExactly(
+                          map("name", "Penguin", "books", ImmutableList.of(
+                                          map("title", "1984", "reviews", ImmutableList.of("Alice")))));
+  }
+
+  @Test
+  public void testDeepAggregation() throws Exception {
+          String outerColl = "outer_agg_" + UUID.randomUUID().toString();
+          String innerColl = "inner_agg_" + UUID.randomUUID().toString();
+
+          firestore.collection(outerColl).document("doc1")
+                          .set(map("id", "1")).get(5, TimeUnit.SECONDS);
+          firestore.collection(outerColl).document("doc2")
+                          .set(map("id", "2")).get(5, TimeUnit.SECONDS);
+
+          firestore.collection(innerColl).document("i1")
+                          .set(map("outer_id", "1", "score", 10)).get(5, TimeUnit.SECONDS);
+          firestore.collection(innerColl).document("i2")
+                          .set(map("outer_id", "2", "score", 20)).get(5, TimeUnit.SECONDS);
+
+          // subquery calculates the score for the outer doc
+          Pipeline innerSub = firestore.pipeline().collection(innerColl)
+                          .where(equal("outer_id", variable("oid")))
+                          .aggregate(AggregateFunction.average("score").as("s"));
+
+          List<PipelineResult> results = firestore.pipeline().collection(outerColl)
+                          .define(field("id").as("oid"))
+                          .addFields(innerSub.toScalarExpression().as("doc_score"))
+                          // Now we aggregate over the calculated subquery results
+                          .aggregate(AggregateFunction.sum("doc_score").as("total_score"))
+                          .execute()
+                          .get()
+                          .getResults();
+
+          assertThat(data(results)).containsExactly(
+                          map("total_score", 30.0));
+  }
+
+  @Test
+  public void testPipelineStageLimit() throws Exception {
+          String collName = "depth_" + UUID.randomUUID().toString();
+          firestore.collection(collName).document("doc1")
+                          .set(map("val", "hello")).get(5, TimeUnit.SECONDS);
+
+          // Create a nested pipeline of depth 20
+          Pipeline currentSubquery = firestore.pipeline().collection(collName)
+                          .limit(1)
+                          .select(field("val").as("val"));
+
+          for (int i = 0; i < 19; i++) {
+                  currentSubquery = firestore.pipeline().collection(collName)
+                                  .limit(1)
+                                  .addFields(currentSubquery.toArrayExpression().as("nested_" + i))
+                                  .select("nested_" + i);
+          }
+
+          List<PipelineResult> results = currentSubquery.execute().get().getResults();
+          assertThat(data(results)).isNotEmpty();
+  }
+
+  @Ignore("Pending backend support")
+  @Test
+  public void testStandardSubcollectionQuery() throws Exception {
+          String collName = "subcoll_test_" + UUID.randomUUID().toString();
+
+          firestore.collection(collName).document("doc1")
+                          .set(map("title", "1984")).get(5, TimeUnit.SECONDS);
+
+          firestore.collection(collName).document("doc1").collection("reviews").document("r1")
+                          .set(map("reviewer", "Alice")).get(5, TimeUnit.SECONDS);
+
+          Pipeline reviewsSub = Pipeline.subcollection("reviews")
+                          .select(field("reviewer").as("reviewer"));
+
+          List<PipelineResult> results = firestore.pipeline().collection(collName)
+                          .where(equal("title", "1984"))
+                          .addFields(reviewsSub.toArrayExpression().as("reviews"))
+                          .select("title", "reviews")
+                          .execute()
+                          .get()
+                          .getResults();
+
+          assertThat(data(results)).containsExactly(
+                          map("title", "1984", "reviews", ImmutableList.of(
+                                          map("reviewer", "Alice"))));
+  }
+
+  @Ignore("Pending backend support")
+  @Test
+  public void testMissingSubcollection() throws Exception {
+          String collName = "subcoll_missing_" + UUID.randomUUID().toString();
+
+          firestore.collection(collName).document("doc1")
+                          .set(map("id", "no_subcollection_here")).get(5, TimeUnit.SECONDS);
+
+          // Notably NO subcollections are added to doc1
+
+          Pipeline missingSub = Pipeline.subcollection("does_not_exist")
+                          .select(variable("p").as("sub_p"));
+
+          List<PipelineResult> results = firestore.pipeline().collection(collName)
+                          .define(variable("parentDoc").as("p"))
+                          .select(missingSub.toArrayExpression().as("missing_data"))
+                          .limit(1)
+                          .execute()
+                          .get()
+                          .getResults();
+
+          // Ensure it's not null and evaluates properly to an empty array []
+          assertThat(data(results)).containsExactly(
+                          map("missing_data", Collections.emptyList()));
+  }
+
+  @Test
+  public void testDirectExecutionOfSubcollectionPipeline() throws Exception {
+          Pipeline sub = Pipeline.subcollection("reviews");
+
+          IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+                  // Attempting to execute a relative subcollection pipeline directly should fail
+                  sub.execute();
+          });
+
+          assertThat(exception).hasMessageThat().contains("Cannot execute a relative subcollection pipeline directly");
+  }
 }
