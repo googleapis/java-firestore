@@ -218,7 +218,6 @@ public abstract class Expression {
     return Field.ofUserPath(fieldPath.toString());
   }
 
-
   /**
    * Creates an expression that returns the current timestamp.
    *
@@ -228,7 +227,6 @@ public abstract class Expression {
   public static Expression currentTimestamp() {
     return new FunctionExpression("current_timestamp", ImmutableList.of());
   }
-
 
   /**
    * Creates an expression that returns a default value if an expression evaluates to an absent
@@ -4834,8 +4832,7 @@ public abstract class Expression {
   }
 
   /**
-   * Accesses a field/property of the expression (useful when the expression
-   * evaluates to a Map or
+   * Accesses a field/property of the expression (useful when the expression evaluates to a Map or
    * Document).
    *
    * @param key The key of the field to access.
@@ -4847,8 +4844,7 @@ public abstract class Expression {
   }
 
   /**
-   * Retrieves the value of a specific field from the document evaluated by this
-   * expression.
+   * Retrieves the value of a specific field from the document evaluated by this expression.
    *
    * @param keyExpression The expression evaluating to the key to access.
    * @return A new {@link Expression} representing the field value.
@@ -4862,7 +4858,7 @@ public abstract class Expression {
    * Accesses a field/property of a document field using the provided {@code key}.
    *
    * @param fieldName The field name of the map or document field.
-   * @param key       The key of the field to access.
+   * @param key The key of the field to access.
    * @return An {@link Expression} representing the value of the field.
    */
   @BetaApi
@@ -4871,10 +4867,9 @@ public abstract class Expression {
   }
 
   /**
-   * Accesses a field/property of the expression using the provided
-   * {@code keyExpression}.
+   * Accesses a field/property of the expression using the provided {@code keyExpression}.
    *
-   * @param expression    The expression evaluating to a Map or Document.
+   * @param expression The expression evaluating to a Map or Document.
    * @param keyExpression The expression evaluating to the key.
    * @return A new {@link Expression} representing the value of the field.
    */
@@ -4884,10 +4879,9 @@ public abstract class Expression {
   }
 
   /**
-   * Accesses a field/property of a document field using the provided
-   * {@code keyExpression}.
+   * Accesses a field/property of a document field using the provided {@code keyExpression}.
    *
-   * @param fieldName     The field name of the map or document field.
+   * @param fieldName The field name of the map or document field.
    * @param keyExpression The expression evaluating to the key.
    * @return A new {@link Expression} representing the value of the field.
    */
@@ -4897,11 +4891,11 @@ public abstract class Expression {
   }
 
   /**
-   * Accesses a field/property of the expression (useful when the expression
-   * evaluates to a Map or Document).
+   * Accesses a field/property of the expression (useful when the expression evaluates to a Map or
+   * Document).
    *
    * @param expression The expression evaluating to a map/document.
-   * @param key        The key of the field to access.
+   * @param key The key of the field to access.
    * @return An {@link Expression} representing the value of the field.
    */
   @BetaApi
@@ -4912,8 +4906,7 @@ public abstract class Expression {
   /**
    * Internal expression representing a variable reference.
    *
-   * <p>
-   * This evaluates to the value of a variable defined in a pipeline context.
+   * <p>This evaluates to the value of a variable defined in a pipeline context.
    */
   static class Variable extends Expression {
     private final String name;
@@ -4928,9 +4921,7 @@ public abstract class Expression {
     }
   }
 
-  /**
-   * Internal expression representing a pipeline value.
-   */
+  /** Internal expression representing a pipeline value. */
   static class PipelineValueExpression extends Expression {
     private final Pipeline pipeline;
 
@@ -4943,5 +4934,4 @@ public abstract class Expression {
       return pipeline.toProtoValue();
     }
   }
-
 }

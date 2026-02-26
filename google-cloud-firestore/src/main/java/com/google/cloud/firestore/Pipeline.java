@@ -275,23 +275,18 @@ public final class Pipeline {
   }
 
   /**
-   * Defines one or more variables in the pipeline's scope. `define` is used to
-   * bind a value to a
+   * Defines one or more variables in the pipeline's scope. `define` is used to bind a value to a
    * variable for internal reuse within the pipeline body (accessed via the {@link
    * Expression#variable(String)} function).
    *
-   * <p>
-   * This stage is useful for declaring reusable values or intermediate
-   * calculations that can be
-   * referenced multiple times in later parts of the pipeline, improving
-   * readability and maintainability.
+   * <p>This stage is useful for declaring reusable values or intermediate calculations that can be
+   * referenced multiple times in later parts of the pipeline, improving readability and
+   * maintainability.
    *
-   * <p>
-   * Each variable is defined using an {@link AliasedExpression}, which pairs an
-   * expression with a name (alias).
+   * <p>Each variable is defined using an {@link AliasedExpression}, which pairs an expression with
+   * a name (alias).
    *
-   * <p>
-   * Example:
+   * <p>Example:
    *
    * <pre>{@code
    * firestore.pipeline().collection("products")
@@ -302,10 +297,8 @@ public final class Pipeline {
    *     .select(field("name"), variable("newStock"));
    * }</pre>
    *
-   * @param expression            The expression to define using
-   *                              {@link AliasedExpression}.
-   * @param additionalExpressions Additional expressions to define using
-   *                              {@link AliasedExpression}.
+   * @param expression The expression to define using {@link AliasedExpression}.
+   * @param additionalExpressions Additional expressions to define using {@link AliasedExpression}.
    * @return A new Pipeline object with this stage appended to the stage list.
    */
   @BetaApi
@@ -331,28 +324,19 @@ public final class Pipeline {
   }
 
   /**
-   * Converts this Pipeline into an expression that evaluates to a single scalar
-   * result. Used for
-   * 1:1 lookups or Aggregations when the subquery is expected to return a single
-   * value or object.
+   * Converts this Pipeline into an expression that evaluates to a single scalar result. Used for
+   * 1:1 lookups or Aggregations when the subquery is expected to return a single value or object.
    *
-   * <p>
-   * <b>Runtime Validation:</b> The runtime will validate that the result set
-   * contains exactly
-   * one item. It throws a runtime error if the result has more than one item, and
-   * evaluates to
+   * <p><b>Runtime Validation:</b> The runtime will validate that the result set contains exactly
+   * one item. It throws a runtime error if the result has more than one item, and evaluates to
    * {@code null} if the pipeline has zero results.
    *
-   * <p>
-   * <b>Result Unwrapping:</b> For simpler access, scalar subqueries producing a
-   * single field
-   * automatically unwrap that value to the top level, ignoring the inner alias.
-   * If the subquery
+   * <p><b>Result Unwrapping:</b> For simpler access, scalar subqueries producing a single field
+   * automatically unwrap that value to the top level, ignoring the inner alias. If the subquery
    * returns multiple fields, they are preserved as a map.
    *
-   * <p>
-   * <b>Example 1: Single field unwrapping</b>
-   * 
+   * <p><b>Example 1: Single field unwrapping</b>
+   *
    * <pre>{@code
    * // Calculate average rating for each restaurant using a subquery
    * db.pipeline().collection("restaurants")
@@ -367,11 +351,8 @@ public final class Pipeline {
    *             .as("average_rating"))
    * }</pre>
    *
-   * <p>
-   * <i>The result set is unwrapped twice: from {@code "average_rating": [{
-   * "value": 4.5 }]}
-   * to {@code "average_rating": { "value": 4.5 }}, and finally to
-   * {@code "average_rating": 4.5}.</i>
+   * <p><i>The result set is unwrapped twice: from {@code "average_rating": [{ "value": 4.5 }]} to
+   * {@code "average_rating": { "value": 4.5 }}, and finally to {@code "average_rating": 4.5}.</i>
    *
    * <pre>{@code
    * // Output Document:
@@ -391,9 +372,8 @@ public final class Pipeline {
    * ]
    * }</pre>
    *
-   * <p>
-   * <b>Example 2: Multiple fields (Map)</b>
-   * 
+   * <p><b>Example 2: Multiple fields (Map)</b>
+   *
    * <pre>{@code
    * // For each restaurant, calculate review statistics (average rating AND total
    * // count)
@@ -409,8 +389,7 @@ public final class Pipeline {
    *             .as("stats"))
    * }</pre>
    *
-   * <p>
-   * <i>When the subquery produces multiple fields, they are wrapped in a map:</i>
+   * <p><i>When the subquery produces multiple fields, they are wrapped in a map:</i>
    *
    * <pre>{@code
    * // Output Document:

@@ -39,7 +39,10 @@ public final class DefineStage extends Stage {
   Iterable<Value> toStageArgs() {
     java.util.Map<String, Value> converted = new java.util.HashMap<>();
     for (Map.Entry<String, Expression> entry : expressions.entrySet()) {
-      converted.put(entry.getKey(), com.google.cloud.firestore.pipeline.expressions.FunctionUtils.exprToValue(entry.getValue()));
+      converted.put(
+          entry.getKey(),
+          com.google.cloud.firestore.pipeline.expressions.FunctionUtils.exprToValue(
+              entry.getValue()));
     }
     return Collections.singletonList(encodeValue(converted));
   }
