@@ -1121,12 +1121,12 @@ public class ITPipelineTest extends ITBaseTest {
         .isEqualTo(
             Lists.newArrayList(
                 map(
-                    "replacedAll", "ThX HitchhikXr's GuidX to thX Galaxy",
-                    "replacedAllStatic", "ThX HitchhikXr's GuidX to thX Galaxy",
-                "replacedMultipleBytes", Blob.fromBytes(new byte[] {0x01, 0x03, 0x03})
-            )
-            )
-        );
+                    "replacedAll",
+                    "ThX HitchhikXr's GuidX to thX Galaxy",
+                    "replacedAllStatic",
+                    "ThX HitchhikXr's GuidX to thX Galaxy",
+                    "replacedMultipleBytes",
+                    Blob.fromBytes(new byte[] {0x01, 0x03, 0x03}))));
   }
 
   @Test
@@ -1150,11 +1150,13 @@ public class ITPipelineTest extends ITBaseTest {
     assertThat(data(results))
         .isEqualTo(
             Lists.newArrayList(
-                map("replacedOne", "ThX Hitchhiker's Guide to the Galaxy",
-                "replacedOneStatic", "ThX Hitchhiker's Guide to the Galaxy",
-                "replacedOneByte", Blob.fromBytes(new byte[] {0x01, 0x03, 0x02}))
-        )
-    );
+                map(
+                    "replacedOne",
+                    "ThX Hitchhiker's Guide to the Galaxy",
+                    "replacedOneStatic",
+                    "ThX Hitchhiker's Guide to the Galaxy",
+                    "replacedOneByte",
+                    Blob.fromBytes(new byte[] {0x01, 0x03, 0x02}))));
   }
 
   @Test
