@@ -48,9 +48,9 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.greater
 import static com.google.cloud.firestore.pipeline.expressions.Expression.lessThan;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.ln;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.log;
-import static com.google.cloud.firestore.pipeline.expressions.Expression.ltrim;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.logicalMaximum;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.logicalMinimum;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.ltrim;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.mapMerge;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.mapRemove;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.notEqual;
@@ -1019,13 +1019,12 @@ public class ITPipelineTest extends ITBaseTest {
             .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
             .addFields(constant(" The Hitchhiker's Guide to the Galaxy ").as("spacedTitle"))
             .addFields(constant("\"alice\"").as("userNameWithQuotes"))
-            .addFields(constant(Blob.fromBytes(new byte[] {0x00, 0x01, 0x02, 0x00, 0x00})).as("bytes"))
+            .addFields(
+                constant(Blob.fromBytes(new byte[] {0x00, 0x01, 0x02, 0x00, 0x00})).as("bytes"))
             .select(
                 ltrim("spacedTitle").as("ltrimmedTitle"),
                 field("userNameWithQuotes").ltrimValue("\"").as("userName"),
-                field("bytes")
-                    .ltrimValue(constant(Blob.fromBytes(new byte[] {0x00})))
-                    .as("bytes"))
+                field("bytes").ltrimValue(constant(Blob.fromBytes(new byte[] {0x00}))).as("bytes"))
             .limit(1)
             .execute()
             .get()
@@ -1049,13 +1048,12 @@ public class ITPipelineTest extends ITBaseTest {
             .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
             .addFields(constant(" The Hitchhiker's Guide to the Galaxy ").as("spacedTitle"))
             .addFields(constant("\"alice\"").as("userNameWithQuotes"))
-            .addFields(constant(Blob.fromBytes(new byte[] {0x00, 0x01, 0x02, 0x00, 0x00})).as("bytes"))
+            .addFields(
+                constant(Blob.fromBytes(new byte[] {0x00, 0x01, 0x02, 0x00, 0x00})).as("bytes"))
             .select(
                 rtrim("spacedTitle").as("rtrimmedTitle"),
                 field("userNameWithQuotes").rtrimValue("\"").as("userName"),
-                field("bytes")
-                    .rtrimValue(constant(Blob.fromBytes(new byte[] {0x00})))
-                    .as("bytes"))
+                field("bytes").rtrimValue(constant(Blob.fromBytes(new byte[] {0x00}))).as("bytes"))
             .limit(1)
             .execute()
             .get()
@@ -1110,8 +1108,11 @@ public class ITPipelineTest extends ITBaseTest {
             .select(
                 field("title").stringReplaceAll("e", "X").as("replacedAll"),
                 Expression.stringReplaceAll(field("title"), "e", "X").as("replacedAllStatic"),
-                field("bytes").stringReplaceAll(constant(Blob.fromBytes(new byte[] {0x02})), constant(Blob.fromBytes(new byte[] {0x03}))).as("replacedMultipleBytes")
-            )
+                field("bytes")
+                    .stringReplaceAll(
+                        constant(Blob.fromBytes(new byte[] {0x02})),
+                        constant(Blob.fromBytes(new byte[] {0x03})))
+                    .as("replacedMultipleBytes"))
             .limit(1)
             .execute()
             .get()
@@ -1140,8 +1141,11 @@ public class ITPipelineTest extends ITBaseTest {
             .select(
                 field("title").stringReplaceOne("e", "X").as("replacedOne"),
                 Expression.stringReplaceOne("title", "e", "X").as("replacedOneStatic"),
-                field("bytes").stringReplaceOne(constant(Blob.fromBytes(new byte[] {0x02})), constant(Blob.fromBytes(new byte[] {0x03}))).as("replacedOneByte")
-            )
+                field("bytes")
+                    .stringReplaceOne(
+                        constant(Blob.fromBytes(new byte[] {0x02})),
+                        constant(Blob.fromBytes(new byte[] {0x03})))
+                    .as("replacedOneByte"))
             .limit(1)
             .execute()
             .get()
@@ -1180,7 +1184,8 @@ public class ITPipelineTest extends ITBaseTest {
 
     assertThat(data(results))
         .isEqualTo(
-            Lists.newArrayList(map("indexOfGuide", 17L, "indexOfGuideStatic", 17L, "indexOfByte", 1L)));
+            Lists.newArrayList(
+                map("indexOfGuide", 17L, "indexOfGuideStatic", 17L, "indexOfByte", 1L)));
   }
 
   @Test

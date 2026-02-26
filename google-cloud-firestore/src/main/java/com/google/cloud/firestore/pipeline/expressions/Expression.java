@@ -1715,8 +1715,7 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes specified characters from the beginning of a string
-   * or blob.
+   * Creates an expression that removes specified characters from the beginning of a string or blob.
    *
    * @param value The expression representing the string or blob to trim.
    * @param characters The characters to remove.
@@ -1728,8 +1727,7 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes specified characters from the beginning of a string
-   * or blob.
+   * Creates an expression that removes specified characters from the beginning of a string or blob.
    *
    * @param fieldName The name of the field containing the string or blob to trim.
    * @param characters The characters to remove.
@@ -1741,8 +1739,7 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes specified characters from the beginning of a string
-   * or blob.
+   * Creates an expression that removes specified characters from the beginning of a string or blob.
    *
    * @param value The expression representing the string or blob to trim.
    * @param characters The expression representing the characters to remove.
@@ -1754,8 +1751,7 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes specified characters from the beginning of a string
-   * or blob.
+   * Creates an expression that removes specified characters from the beginning of a string or blob.
    *
    * @param fieldName The name of the field containing the string or blob to trim.
    * @param characters The expression representing the characters to remove.
@@ -1789,8 +1785,7 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes specified characters from the end of a string
-   * or blob.
+   * Creates an expression that removes specified characters from the end of a string or blob.
    *
    * @param value The expression representing the string or blob to trim.
    * @param characters The characters to remove.
@@ -1802,8 +1797,7 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes specified characters from the end of a string
-   * or blob.
+   * Creates an expression that removes specified characters from the end of a string or blob.
    *
    * @param fieldName The name of the field containing the string or blob to trim.
    * @param characters The characters to remove.
@@ -1815,8 +1809,7 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes specified characters from the end of a string
-   * or blob.
+   * Creates an expression that removes specified characters from the end of a string or blob.
    *
    * @param value The expression representing the string or blob to trim.
    * @param characters The expression representing the characters to remove.
@@ -1828,8 +1821,7 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes specified characters from the end of a string
-   * or blob.
+   * Creates an expression that removes specified characters from the end of a string or blob.
    *
    * @param fieldName The name of the field containing the string or blob to trim.
    * @param characters The expression representing the characters to remove.
@@ -4496,8 +4488,9 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes whitespace from the beginning of this string or blob expression.
-   * 
+   * Creates an expression that removes whitespace from the beginning of this string or blob
+   * expression.
+   *
    * @return A new {@link Expression} representing the trimmed string or blob.
    */
   @BetaApi
@@ -4506,8 +4499,9 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes the specified set of characters from the beginning of this string or blob expression.
-   * 
+   * Creates an expression that removes the specified set of characters from the beginning of this
+   * string or blob expression.
+   *
    * @param characters The characters to remove.
    * @return A new {@link Expression} representing the trimmed string or blob.
    */
@@ -4517,8 +4511,9 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes the specified characters or bytes from the beginning of this string or blob expression.
-   * 
+   * Creates an expression that removes the specified characters or bytes from the beginning of this
+   * string or blob expression.
+   *
    * @param characters The expression representing the characters or bytes to remove.
    * @return A new {@link Expression} representing the trimmed string or blob.
    */
@@ -4527,9 +4522,9 @@ public abstract class Expression {
     return ltrimValue(this, characters);
   }
 
-    /**
+  /**
    * Creates an expression that removes whitespace from the end of this string or blob expression.
-   * 
+   *
    * @return A new {@link Expression} representing the trimmed string or blob.
    */
   @BetaApi
@@ -4538,8 +4533,9 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes the specified set of characters from the end of this string or blob expression.
-   * 
+   * Creates an expression that removes the specified set of characters from the end of this string
+   * or blob expression.
+   *
    * @param characters The characters to remove.
    * @return A new {@link Expression} representing the trimmed string or blob.
    */
@@ -4549,8 +4545,9 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes the specified characters or bytes from the end of this string or blob expression.
-   * 
+   * Creates an expression that removes the specified characters or bytes from the end of this
+   * string or blob expression.
+   *
    * @param characters The expression representing the characters or bytes to remove.
    * @return A new {@link Expression} representing the trimmed string or blob.
    */
