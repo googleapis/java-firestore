@@ -90,6 +90,7 @@ public final class Value extends com.google.protobuf.GeneratedMessage
     FIELD_REFERENCE_VALUE(19),
     FUNCTION_VALUE(20),
     PIPELINE_VALUE(21),
+    VARIABLE_REFERENCE_VALUE(22),
     VALUETYPE_NOT_SET(0);
     private final int value;
 
@@ -137,6 +138,8 @@ public final class Value extends com.google.protobuf.GeneratedMessage
           return FUNCTION_VALUE;
         case 21:
           return PIPELINE_VALUE;
+        case 22:
+          return VARIABLE_REFERENCE_VALUE;
         case 0:
           return VALUETYPE_NOT_SET;
         default:
@@ -1658,6 +1661,12 @@ public final class Value extends com.google.protobuf.GeneratedMessage
         case PIPELINE_VALUE:
           {
             mergePipelineValue(other.getPipelineValue());
+            break;
+          }
+          case VARIABLE_REFERENCE_VALUE: {
+            valueTypeCase_ = 22;
+            valueType_ = other.valueType_;
+            onChanged();
             break;
           }
         case VALUETYPE_NOT_SET:
