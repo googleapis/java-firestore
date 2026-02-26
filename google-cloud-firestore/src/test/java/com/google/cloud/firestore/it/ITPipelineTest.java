@@ -1022,9 +1022,9 @@ public class ITPipelineTest extends ITBaseTest {
             .addFields(constant(Blob.fromBytes(new byte[] {0x00, 0x01, 0x02, 0x00, 0x00})).as("bytes"))
             .select(
                 ltrim("spacedTitle").as("ltrimmedTitle"),
-                field("userNameWithQuotes").ltrim("\"").as("userName"),
+                field("userNameWithQuotes").ltrimValue("\"").as("userName"),
                 field("bytes")
-                    .ltrim(constant(Blob.fromBytes(new byte[] {0x00})))
+                    .ltrimValue(constant(Blob.fromBytes(new byte[] {0x00})))
                     .as("bytes"))
             .limit(1)
             .execute()
@@ -1052,9 +1052,9 @@ public class ITPipelineTest extends ITBaseTest {
             .addFields(constant(Blob.fromBytes(new byte[] {0x00, 0x01, 0x02, 0x00, 0x00})).as("bytes"))
             .select(
                 rtrim("spacedTitle").as("rtrimmedTitle"),
-                field("userNameWithQuotes").rtrim("\"").as("userName"),
+                field("userNameWithQuotes").rtrimValue("\"").as("userName"),
                 field("bytes")
-                    .rtrim(constant(Blob.fromBytes(new byte[] {0x00})))
+                    .rtrimValue(constant(Blob.fromBytes(new byte[] {0x00})))
                     .as("bytes"))
             .limit(1)
             .execute()
