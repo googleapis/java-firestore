@@ -37,7 +37,6 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.concat;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.conditional;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.constant;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.cosineDistance;
-import static com.google.cloud.firestore.pipeline.expressions.Expression.currentDocument;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.dotProduct;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.endsWith;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.equal;
@@ -45,7 +44,6 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.euclide
 import static com.google.cloud.firestore.pipeline.expressions.Expression.exp;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.field;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.floor;
-import static com.google.cloud.firestore.pipeline.expressions.Expression.getField;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.greaterThan;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.lessThan;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.ln;
@@ -72,7 +70,6 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.timesta
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixMicrosToTimestamp;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixMillisToTimestamp;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixSecondsToTimestamp;
-import static com.google.cloud.firestore.pipeline.expressions.Expression.variable;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.vectorLength;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.xor;
 import static com.google.common.truth.Truth.assertThat;
@@ -84,7 +81,6 @@ import com.google.api.gax.rpc.StatusCode;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.GeoPoint;
@@ -110,17 +106,14 @@ import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -2754,5 +2747,4 @@ public class ITPipelineTest extends ITBaseTest {
             });
     assertThat(exception).hasMessageThat().contains("Duplicate alias or field name");
   }
-
 }
