@@ -2772,7 +2772,6 @@ public class ITPipelineTest extends ITBaseTest {
           .get(5, TimeUnit.SECONDS);
     }
 
-    // Use absolute path for subquery test
     Pipeline sub =
         firestore
             .pipeline()
@@ -3164,5 +3163,141 @@ public class ITPipelineTest extends ITBaseTest {
 
     // Expecting result_data field to gracefully produce null
     assertThat(data(results)).containsExactly(Collections.singletonMap("result_data", null));
+  }
+
+  @Test
+  public void testArraySubqueryJoinAndEmptyResult() throws Exception {
+      String reviewsCollName = "book_reviews_" + UUID.randomUUID().toString();
+      Map<String, Map<String, Object>> reviewsDocs = map(
+              "r1", map("bookTitle", "The Hitchhiker's Guide to the Galaxy", "reviewer", "Alice"),
+              "r2", map("bookTitle", "The Hitchhiker's Guide to the Galaxy", "reviewer", "Bob"));
+
+      for (Map.Entry<String, Map<String, Object>> doc : reviewsDocs.entrySet()) {
+          firestore.collection(reviewsCollName).document(doc.getKey()).set(doc.getValue()).get(5, TimeUnit.SECONDS);
+      }
+
+      Pipeline reviewsSub = firestore.pipeline().collection(reviewsCollName)
+              .where(equal("bookTitle", variable("book_title")))
+              .select(field("reviewer").as("reviewer"))
+              .sort(field("reviewer").ascending());
+
+      List<PipelineResult> results = firestore.pipeline().collection(collection.getPath())
+              .where(or(
+                      equal("title", "The Hitchhiker's Guide to the Galaxy"),
+                      equal("title", "Pride and Prejudice")))
+              .define(field("title").as("book_title"))
+              .addFields(reviewsSub.toArrayExpression().as("reviews_data"))
+              .select("title", "reviews_data")
+              .sort(field("title").descending())
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(data(results)).containsExactly(
+              map(
+                      "title", "The Hitchhiker's Guide to the Galaxy",
+                      "reviews_data", ImmutableList.of("Alice", "Bob")),
+              map(
+                      "title", "Pride and Prejudice",
+                      "reviews_data", Collections.emptyList()))
+              .inOrder();
+  }
+
+  @Test
+  public void testMultipleArraySubqueriesOnBooks() throws Exception {
+      String reviewsCollName = "reviews_multi_" + UUID.randomUUID().toString();
+      String authorsCollName = "authors_multi_" + UUID.randomUUID().toString();
+
+      firestore.collection(reviewsCollName).document("r1")
+              .set(map("bookTitle", "1984", "rating", 5)).get(5, TimeUnit.SECONDS);
+
+      firestore.collection(authorsCollName).document("a1")
+              .set(map("authorName", "George Orwell", "nationality", "British")).get(5, TimeUnit.SECONDS);
+
+      Pipeline reviewsSub = firestore.pipeline().collection(reviewsCollName)
+              .where(equal("bookTitle", variable("book_title")))
+              .select(field("rating").as("rating"));
+
+      Pipeline authorsSub = firestore.pipeline().collection(authorsCollName)
+              .where(equal("authorName", variable("author_name")))
+              .select(field("nationality").as("nationality"));
+
+      List<PipelineResult> results = firestore.pipeline().collection(collection.getPath())
+              .where(equal("title", "1984"))
+              .define(
+                      field("title").as("book_title"),
+                      field("author").as("author_name"))
+              .addFields(
+                      reviewsSub.toArrayExpression().as("reviews_data"),
+                      authorsSub.toArrayExpression().as("authors_data"))
+              .select("title", "reviews_data", "authors_data")
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(data(results)).containsExactly(
+              map(
+                      "title", "1984",
+                      "reviews_data", Collections.singletonList(5L),
+                      "authors_data", Collections.singletonList("British")));
+  }
+
+  @Test
+  public void testArraySubqueryJoinMultipleFieldsPreservesMap() throws Exception {
+      String reviewsCollName = "reviews_map_" + UUID.randomUUID().toString();
+
+      firestore.collection(reviewsCollName).document("r1")
+              .set(map("bookTitle", "1984", "reviewer", "Alice", "rating", 5)).get(5, TimeUnit.SECONDS);
+
+      firestore.collection(reviewsCollName).document("r2")
+              .set(map("bookTitle", "1984", "reviewer", "Bob", "rating", 4)).get(5, TimeUnit.SECONDS);
+
+      Pipeline reviewsSub = firestore.pipeline().collection(reviewsCollName)
+              .where(equal("bookTitle", variable("book_title")))
+              .select(field("reviewer").as("reviewer"), field("rating").as("rating"))
+              .sort(field("reviewer").ascending());
+
+      List<PipelineResult> results = firestore.pipeline().collection(collection.getPath())
+              .where(equal("title", "1984"))
+              .define(field("title").as("book_title"))
+              .addFields(reviewsSub.toArrayExpression().as("reviews_data"))
+              .select("title", "reviews_data")
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(data(results)).containsExactly(
+              map(
+                      "title", "1984",
+                      "reviews_data", ImmutableList.of(
+                              map("reviewer", "Alice", "rating", 5L),
+                              map("reviewer", "Bob", "rating", 4L))));
+  }
+
+  @Test
+  public void testArraySubqueryInWhereStageOnBooks() throws Exception {
+      String reviewsCollName = "reviews_where_" + UUID.randomUUID().toString();
+
+      firestore.collection(reviewsCollName).document("r1")
+              .set(map("bookTitle", "Dune", "reviewer", "Paul")).get(5, TimeUnit.SECONDS);
+
+      firestore.collection(reviewsCollName).document("r2")
+              .set(map("bookTitle", "Foundation", "reviewer", "Hari")).get(5, TimeUnit.SECONDS);
+
+      Pipeline reviewsSub = firestore.pipeline().collection(reviewsCollName)
+              .where(equal("bookTitle", variable("book_title")))
+              .select(field("reviewer").as("reviewer"));
+
+      List<PipelineResult> results = firestore.pipeline().collection(collection.getPath())
+              .where(or(equal("title", "Dune"), equal("title", "The Great Gatsby")))
+              .define(field("title").as("book_title"))
+              .where(reviewsSub.toArrayExpression().arrayContains("Paul"))
+              .select("title")
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(data(results)).containsExactly(
+              map("title", "Dune"));
   }
 }
