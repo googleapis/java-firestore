@@ -4332,7 +4332,8 @@ public abstract class Expression {
    * names to calculated values.
    *
    * @param alias The alias to assign to this expression.
-   * @return A new {@link AliasedExpression} that wraps this expression and associates it with the provided alias.
+   * @return A new {@link AliasedExpression} that wraps this expression and associates it with the
+   *     provided alias.
    */
   @BetaApi
   public AliasedExpression as(String alias) {
