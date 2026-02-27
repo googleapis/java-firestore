@@ -2278,7 +2278,7 @@ public abstract class Expression {
   /**
    * Creates an expression that returns the first n elements of an array.
    *
-   * @param array The expression representing the array.
+   * @param arrayFieldName The field name of the array.
    * @param n The Expression evaluates to the number of elements to return.
    * @return A new {@link Expression} representing the first n elements of the array.
    */
@@ -2348,7 +2348,7 @@ public abstract class Expression {
   /**
    * Creates an expression that returns the last n elements of an array.
    *
-   * @param array The expression representing the array.
+   * @param arrayFieldName The field name of the array.
    * @param n The Expression evaluates to the number of elements to return.
    * @return A new {@link Expression} representing the last n elements of the array.
    */
@@ -2382,8 +2382,11 @@ public abstract class Expression {
   /**
    * Creates an expression that returns the n minimum values of an array.
    *
+   * <p>Note: Returns the n smallest non-null elements in the array, in ascending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
    * @param array The expression representing the array.
-   * @param n The number of elements to return.
+   * @param n The Expression evaluates to the number of elements to return.
    * @return A new {@link Expression} representing the n minimum values of the array.
    */
   @BetaApi
@@ -2394,8 +2397,11 @@ public abstract class Expression {
   /**
    * Creates an expression that returns the n minimum values of an array.
    *
+   * <p>Note: Returns the n smallest non-null elements in the array, in ascending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
    * @param array The expression representing the array.
-   * @param n The Expression evaluates to the number of elements to return.
+   * @param n The number of elements to return.
    * @return A new {@link Expression} representing the n minimum values of the array.
    */
   @BetaApi
@@ -2405,6 +2411,9 @@ public abstract class Expression {
 
   /**
    * Creates an expression that returns the n minimum values of an array.
+   *
+   * <p>Note: Returns the n smallest non-null elements in the array, in ascending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
    *
    * @param arrayFieldName The field name of the array.
    * @param n The number of elements to return.
@@ -2418,7 +2427,10 @@ public abstract class Expression {
   /**
    * Creates an expression that returns the n minimum values of an array.
    *
-   * @param array The expression representing the array.
+   * <p>Note: Returns the n smallest non-null elements in the array, in ascending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param arrayFieldName The field name of the array.
    * @param n The Expression evaluates to the number of elements to return.
    * @return A new {@link Expression} representing the n minimum values of the array.
    */
@@ -2452,8 +2464,11 @@ public abstract class Expression {
   /**
    * Creates an expression that returns the n maximum values of an array.
    *
+   * <p>Note: Returns the n largest non-null elements in the array, in descending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
    * @param array The expression representing the array.
-   * @param n The number of elements to return.
+   * @param n The Expression evaluates to the number of elements to return.
    * @return A new {@link Expression} representing the n maximum values of the array.
    */
   @BetaApi
@@ -2464,8 +2479,11 @@ public abstract class Expression {
   /**
    * Creates an expression that returns the n maximum values of an array.
    *
+   * <p>Note: Returns the n largest non-null elements in the array, in descending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
    * @param array The expression representing the array.
-   * @param n The Expression evaluates to the number of elements to return.
+   * @param n The number of elements to return.
    * @return A new {@link Expression} representing the n maximum values of the array.
    */
   @BetaApi
@@ -2475,6 +2493,9 @@ public abstract class Expression {
 
   /**
    * Creates an expression that returns the n maximum values of an array.
+   *
+   * <p>Note: Returns the n largest non-null elements in the array, in descending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
    *
    * @param arrayFieldName The field name of the array.
    * @param n The number of elements to return.
@@ -2487,6 +2508,9 @@ public abstract class Expression {
 
   /**
    * Creates an expression that returns the n maximum values of an array.
+   *
+   * <p>Note: Returns the n largest non-null elements in the array, in descending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
    *
    * @param arrayFieldName The field name of the array.
    * @param n The Expression evaluates to the number of elements to return.
@@ -4850,7 +4874,7 @@ public abstract class Expression {
   /**
    * Returns the first n elements of an array.
    *
-   * @param n The number of elements to return.
+   * @param n The Expression evaluates to the number of elements to return.
    * @return A new {@link Expression} representing the first n elements of the array.
    */
   @BetaApi
@@ -4882,7 +4906,7 @@ public abstract class Expression {
   /**
    * Returns the last n elements of an array.
    *
-   * @param n The number of elements to return.
+   * @param n The Expression evaluates to the number of elements to return.
    * @return A new {@link Expression} representing the last n elements of the array.
    */
   @BetaApi
@@ -4903,6 +4927,9 @@ public abstract class Expression {
   /**
    * Returns the n minimum values of an array.
    *
+   * <p>Note: Returns the n smallest non-null elements in the array, in ascending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
    * @param n The number of elements to return.
    * @return A new {@link Expression} representing the n minimum values of the array.
    */
@@ -4914,7 +4941,10 @@ public abstract class Expression {
   /**
    * Returns the n minimum values of an array.
    *
-   * @param n The number of elements to return.
+   * <p>Note: Returns the n smallest non-null elements in the array, in ascending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param n The Expression evaluates to the number of elements to return.
    * @return A new {@link Expression} representing the n minimum values of the array.
    */
   @BetaApi
@@ -4935,6 +4965,9 @@ public abstract class Expression {
   /**
    * Returns the n maximum values of an array.
    *
+   * <p>Note: Returns the n largest non-null elements in the array, in descending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
    * @param n The number of elements to return.
    * @return A new {@link Expression} representing the n maximum values of the array.
    */
@@ -4946,7 +4979,10 @@ public abstract class Expression {
   /**
    * Returns the n maximum values of an array.
    *
-   * @param n The number of elements to return.
+   * <p>Note: Returns the n largest non-null elements in the array, in descending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param n The Expression evaluates to the number of elements to return.
    * @return A new {@link Expression} representing the n maximum values of the array.
    */
   @BetaApi
