@@ -924,6 +924,149 @@ class PipelineSnippets {
     System.out.println(result.getResults());
   }
 
+  void arrayFirstFunction() throws ExecutionException, InterruptedException {
+    // [START array_first]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(arrayFirst(field("genre")).as("firstGenre"))
+            .execute()
+            .get();
+    // [END array_first]
+    System.out.println(result.getResults());
+  }
+
+  void arrayFirstNFunction() throws ExecutionException, InterruptedException {
+    // [START array_first_n]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(arrayFirstN(field("genre"), 2).as("firstTwoGenres"))
+            .execute()
+            .get();
+    // [END array_first_n]
+    System.out.println(result.getResults());
+  }
+
+  void arrayLastFunction() throws ExecutionException, InterruptedException {
+    // [START array_last]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(arrayLast(field("genre")).as("lastGenre"))
+            .execute()
+            .get();
+    // [END array_last]
+    System.out.println(result.getResults());
+  }
+
+  void arrayLastNFunction() throws ExecutionException, InterruptedException {
+    // [START array_last_n]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(arrayLastN(field("genre"), 2).as("lastTwoGenres"))
+            .execute()
+            .get();
+    // [END array_last_n]
+    System.out.println(result.getResults());
+  }
+
+  void arrayMinimumFunction() throws ExecutionException, InterruptedException {
+    // [START array_minimum]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(arrayMinimum(field("genre")).as("minimumGenre"))
+            .execute()
+            .get();
+    // [END array_minimum]
+    System.out.println(result.getResults());
+  }
+
+  void arrayMinimumNFunction() throws ExecutionException, InterruptedException {
+    // [START array_minimum_n]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(arrayMinimumN(field("genre"), 2).as("minimumTwoGenres"))
+            .execute()
+            .get();
+    // [END array_minimum_n]
+    System.out.println(result.getResults());
+  }
+
+  void arrayMaximumFunction() throws ExecutionException, InterruptedException {
+    // [START array_maximum]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(arrayMaximum(field("genre")).as("maximumGenre"))
+            .execute()
+            .get();
+    // [END array_maximum]
+    System.out.println(result.getResults());
+  }
+
+  void arrayMaximumNFunction() throws ExecutionException, InterruptedException {
+    // [START array_maximum_n]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(arrayMaximumN(field("genre"), 2).as("maximumTwoGenres"))
+            .execute()
+            .get();
+    // [END array_maximum_n]
+    System.out.println(result.getResults());
+  }
+
+  void arrayIndexOfFunction() throws ExecutionException, InterruptedException {
+    // [START array_index_of]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(arrayIndexOf(field("genre"), "fantasy").as("genreIndex"))
+            .execute()
+            .get();
+    // [END array_index_of]
+    System.out.println(result.getResults());
+  }
+
+  void arrayLastIndexOfFunction() throws ExecutionException, InterruptedException {
+    // [START array_last_index_of]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(arrayLastIndexOf(field("genre"), "fantasy").as("genreIndex"))
+            .execute()
+            .get();
+    // [END array_last_index_of]
+    System.out.println(result.getResults());
+  }
+
+  void arrayIndexOfAllFunction() throws ExecutionException, InterruptedException {
+    // [START array_index_of_all]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(arrayIndexOfAll(field("genre"), "fantasy").as("genreIndex"))
+            .execute()
+            .get();
+    // [END array_index_of_all]
+    System.out.println(result.getResults());
+  }
+
   void arrayReverseFunction() throws ExecutionException, InterruptedException {
     // [START array_reverse]
     Pipeline.Snapshot result =
