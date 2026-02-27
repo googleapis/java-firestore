@@ -950,7 +950,7 @@ class PipelineSnippets {
     System.out.println(result.getResults());
   }
 
-    void arrayLastFunction() throws ExecutionException, InterruptedException {
+  void arrayLastFunction() throws ExecutionException, InterruptedException {
     // [START array_last]
     Pipeline.Snapshot result =
         firestore
@@ -1027,7 +1027,7 @@ class PipelineSnippets {
     // [END array_maximum_n]
     System.out.println(result.getResults());
   }
-  
+
   void arrayIndexOfFunction() throws ExecutionException, InterruptedException {
     // [START array_index_of]
     Pipeline.Snapshot result =
@@ -1053,7 +1053,7 @@ class PipelineSnippets {
     // [END array_last_index_of]
     System.out.println(result.getResults());
   }
-  
+
   void arrayIndexOfAllFunction() throws ExecutionException, InterruptedException {
     // [START array_index_of_all]
     Pipeline.Snapshot result =
