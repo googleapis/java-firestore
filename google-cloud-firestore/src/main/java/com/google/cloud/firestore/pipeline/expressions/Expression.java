@@ -1693,7 +1693,8 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes whitespace from the beginning of a string or byte array.
+   * Creates an expression that removes whitespace from the beginning of a string
+   * or blob.
    *
    * @param value The expression representing the string or blob to trim.
    * @return A new {@link Expression} representing the trimmed string or blob.
@@ -1704,9 +1705,10 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes leading and trailing whitespace from a string field.
+   * Creates an expression that removes whitespace from the beginning of a string
+   * or blob.
    *
-   * @param fieldName The name of the field containing the string to trim.
+   * @param fieldName The name of the field containing the string or blob to trim.
    * @return A new {@link Expression} representing the trimmed string.
    */
   @BetaApi
@@ -1829,7 +1831,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static Expression rtrimValue(String fieldName, Expression characters) {
-    return trimValue(field(fieldName), characters);
+    return rtrimValue(field(fieldName), characters);
   }
 
   /**
@@ -4495,7 +4497,7 @@ public abstract class Expression {
    */
   @BetaApi
   public Expression ltrim() {
-    return ltrimValue(this);
+    return ltrim(this);
   }
 
   /**
