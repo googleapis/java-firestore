@@ -1019,6 +1019,7 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
     assertThat(data(results)).containsExactly(map("total_score", 30.0));
   }
 
+  @Ignore("Pending backend support")
   @Test
   public void testPipelineStageLimit() throws Exception {
     String collName = "depth_" + UUID.randomUUID().toString();

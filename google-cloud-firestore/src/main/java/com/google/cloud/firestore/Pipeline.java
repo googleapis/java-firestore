@@ -37,6 +37,7 @@ import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.FunctionExpression;
 import com.google.cloud.firestore.pipeline.expressions.Ordering;
+import com.google.cloud.firestore.pipeline.expressions.PipelineValueExpression;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.cloud.firestore.pipeline.stages.AddFields;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
@@ -320,7 +321,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Expression toArrayExpression() {
-    return Expression.rawExpression("array", Expression.pipeline(this));
+    return Expression.rawExpression("array", new PipelineValueExpression(this));
   }
 
   /**
@@ -419,7 +420,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Expression toScalarExpression() {
-    return Expression.rawExpression("scalar", Expression.pipeline(this));
+    return Expression.rawExpression("scalar", new PipelineValueExpression(this));
   }
 
   /**
@@ -1504,7 +1505,7 @@ public final class Pipeline {
           }
         };
 
-    logger.log(Level.FINEST, "Sending pipeline request: " + request.getStructuredPipeline());
+    logger.log(Level.SEVERE, "Sending pipeline request:\n" + request);
 
     rpcContext.streamRequest(request, observer, rpcContext.getClient().executePipelineCallable());
   }

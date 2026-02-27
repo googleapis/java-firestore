@@ -4821,17 +4821,6 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that evaluates to the provided pipeline.
-   *
-   * @param pipeline The pipeline to use as an expression.
-   * @return A new {@link Expression} representing the pipeline value.
-   */
-  @InternalApi
-  public static Expression pipeline(Pipeline pipeline) {
-    return new PipelineValueExpression(pipeline);
-  }
-
-  /**
    * Accesses a field/property of the expression (useful when the expression evaluates to a Map or
    * Document).
    *
@@ -4918,20 +4907,6 @@ public abstract class Expression {
     @Override
     public Value toProto() {
       return Value.newBuilder().setVariableReferenceValue(name).build();
-    }
-  }
-
-  /** Internal expression representing a pipeline value. */
-  static class PipelineValueExpression extends Expression {
-    private final Pipeline pipeline;
-
-    PipelineValueExpression(Pipeline pipeline) {
-      this.pipeline = pipeline;
-    }
-
-    @Override
-    public Value toProto() {
-      return pipeline.toProtoValue();
     }
   }
 }
