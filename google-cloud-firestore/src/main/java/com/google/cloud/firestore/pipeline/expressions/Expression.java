@@ -1990,7 +1990,7 @@ public abstract class Expression {
    *       a key entirely, use {@code mapRemove}.
    * </ul>
    *
-   * @param mapField The map field to set entries in.
+   * @param mapExpr The map field to set entries in.
    * @param key The key to set.
    * @param value The value to set.
    * @param moreKeyValues Additional key-value pairs to set.
@@ -2051,7 +2051,7 @@ public abstract class Expression {
   /**
    * Creates an expression that returns the keys of a map.
    *
-   * @param mapExpr The map expression to get the keys of.
+   * @param mapExpr The expression representing the map to get the keys of.
    * @return A new {@link Expression} representing the keys of the map.
    */
   @BetaApi
