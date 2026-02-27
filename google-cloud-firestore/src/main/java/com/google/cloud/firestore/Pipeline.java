@@ -42,7 +42,7 @@ import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.cloud.firestore.pipeline.stages.AddFields;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
-import com.google.cloud.firestore.pipeline.stages.DefineStage;
+import com.google.cloud.firestore.pipeline.stages.Define;
 import com.google.cloud.firestore.pipeline.stages.Distinct;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
@@ -57,7 +57,7 @@ import com.google.cloud.firestore.pipeline.stages.Select;
 import com.google.cloud.firestore.pipeline.stages.Sort;
 import com.google.cloud.firestore.pipeline.stages.Stage;
 import com.google.cloud.firestore.pipeline.stages.StageUtils;
-import com.google.cloud.firestore.pipeline.stages.SubcollectionSource;
+import com.google.cloud.firestore.pipeline.stages.Subcollection;
 import com.google.cloud.firestore.pipeline.stages.Union;
 import com.google.cloud.firestore.pipeline.stages.Unnest;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
@@ -267,12 +267,33 @@ public final class Pipeline {
   /**
    * Initializes a pipeline scoped to a subcollection.
    *
+   * <p>
+   * This method allows you to start a new pipeline that operates on a
+   * subcollection of the current
+   * document. It is intended to be used as a subquery.
+   *
+   * <p>
+   * <b>Note:</b> A pipeline created with `subcollection` cannot be executed
+   * directly using {@link #execute()}. It must be used within a parent pipeline
+   * (e.g., in {@link #addFields(AliasedExpression...)}).
+   *
+   * <p>
+   * Example:
+   *
+   * <pre>{@code
+   * firestore.pipeline().collection("books")
+   *     .addFields(
+   *         Pipeline.subcollection("reviews")
+   *             .aggregate(AggregateFunction.average("rating").as("avg_rating"))
+   *             .toScalarExpression().as("average_rating"));
+   * }</pre>
+   *
    * @param path The path of the subcollection.
    * @return A new {@code Pipeline} instance scoped to the subcollection.
    */
   @BetaApi
   public static Pipeline subcollection(String path) {
-    return new Pipeline(null, new SubcollectionSource(path));
+    return new Pipeline(null, new Subcollection(path));
   }
 
   /**
@@ -305,7 +326,7 @@ public final class Pipeline {
   @BetaApi
   public Pipeline define(AliasedExpression expression, AliasedExpression... additionalExpressions) {
     return append(
-        new DefineStage(
+        new Define(
             PipelineUtils.selectablesToMap(
                 ImmutableList.<AliasedExpression>builder()
                     .add(expression)
@@ -317,11 +338,18 @@ public final class Pipeline {
   /**
    * Converts the pipeline into an array expression.
    *
+   * <p>
+   * <b>Result Unwrapping:</b> For simpler access, subqueries producing a single
+   * field
+   * automatically unwrap that value. If the subquery returns multiple fields,
+   * they are preserved as a
+   * map.
+   *
    * @return A new {@link Expression} representing the pipeline as an array.
    */
   @BetaApi
   public Expression toArrayExpression() {
-    return Expression.rawExpression("array", new PipelineValueExpression(this));
+    return new FunctionExpression("array", ImmutableList.of(new PipelineValueExpression(this)));
   }
 
   /**
@@ -420,7 +448,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Expression toScalarExpression() {
-    return Expression.rawExpression("scalar", new PipelineValueExpression(this));
+    return new FunctionExpression("scalar", ImmutableList.of(new PipelineValueExpression(this)));
   }
 
   /**
@@ -1505,7 +1533,7 @@ public final class Pipeline {
           }
         };
 
-    logger.log(Level.SEVERE, "Sending pipeline request:\n" + request);
+    logger.log(Level.FINEST, "Sending pipeline request: " + request.getStructuredPipeline());
 
     rpcContext.streamRequest(request, observer, rpcContext.getClient().executePipelineCallable());
   }

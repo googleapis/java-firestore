@@ -4801,6 +4801,22 @@ public abstract class Expression {
   /**
    * Creates an expression that represents the current document being processed.
    *
+   * <p>
+   * This expression is useful when you need to access the entire document as a
+   * map, or pass the
+   * document itself to a function or subquery.
+   *
+   * <p>
+   * Example:
+   *
+   * <pre>{@code
+   * // Define the current document as a variable "doc"
+   * firestore.pipeline().collection("books")
+   *     .define(currentDocument().as("doc"))
+   *     // Access a field from the defined document variable
+   *     .select(variable("doc").getField("title"));
+   * }</pre>
+   *
    * @return An {@link Expression} representing the current document.
    */
   @BetaApi
@@ -4812,6 +4828,16 @@ public abstract class Expression {
    * Creates an expression that retrieves the value of a variable bound via {@link
    * Pipeline#define(AliasedExpression, AliasedExpression...)}.
    *
+   * <p>
+   * Example:
+   *
+   * <pre>{@code
+   * // Define a variable "discountedPrice" and use it in a filter
+   * firestore.pipeline().collection("products")
+   *     .define(field("price").multiply(0.9).as("discountedPrice"))
+   *     .where(variable("discountedPrice").lessThan(100));
+   * }</pre>
+   *
    * @param name The name of the variable to retrieve.
    * @return An {@link Expression} representing the variable's value.
    */
@@ -4821,8 +4847,8 @@ public abstract class Expression {
   }
 
   /**
-   * Accesses a field/property of the expression (useful when the expression evaluates to a Map or
-   * Document).
+   * Accesses a field/property of the expression that evaluates to a Map or
+   * Document.
    *
    * @param key The key of the field to access.
    * @return An {@link Expression} representing the value of the field.
@@ -4880,11 +4906,11 @@ public abstract class Expression {
   }
 
   /**
-   * Accesses a field/property of the expression (useful when the expression evaluates to a Map or
-   * Document).
+   * Accesses a field/property of the expression that evaluates to a Map or
+   * Document.
    *
    * @param expression The expression evaluating to a map/document.
-   * @param key The key of the field to access.
+   * @param key        The key of the field to access.
    * @return An {@link Expression} representing the value of the field.
    */
   @BetaApi
@@ -4892,21 +4918,5 @@ public abstract class Expression {
     return new FunctionExpression("field", ImmutableList.of(expression, constant(key)));
   }
 
-  /**
-   * Internal expression representing a variable reference.
-   *
-   * <p>This evaluates to the value of a variable defined in a pipeline context.
-   */
-  static class Variable extends Expression {
-    private final String name;
 
-    Variable(String name) {
-      this.name = name;
-    }
-
-    @Override
-    public Value toProto() {
-      return Value.newBuilder().setVariableReferenceValue(name).build();
-    }
-  }
 }

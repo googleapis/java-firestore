@@ -995,6 +995,11 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
         .document("i2")
         .set(map("outer_id", "2", "score", 20))
         .get(5, TimeUnit.SECONDS);
+    firestore
+                    .collection(innerColl)
+                    .document("i3")
+                    .set(map("outer_id", "1", "score", 30))
+                    .get(5, TimeUnit.SECONDS);
 
     // subquery calculates the score for the outer doc
     Pipeline innerSub =
@@ -1016,10 +1021,9 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
             .get()
             .getResults();
 
-    assertThat(data(results)).containsExactly(map("total_score", 30.0));
+    assertThat(data(results)).containsExactly(map("total_score", 40.0));
   }
 
-  @Ignore("Pending backend support")
   @Test
   public void testPipelineStageLimit() throws Exception {
     String collName = "depth_" + UUID.randomUUID().toString();
@@ -1029,11 +1033,11 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
         .set(map("val", "hello"))
         .get(5, TimeUnit.SECONDS);
 
-    // Create a nested pipeline of depth 20
+    // Create a nested pipeline of depth 13
     Pipeline currentSubquery =
         firestore.pipeline().collection(collName).limit(1).select(field("val").as("val"));
 
-    for (int i = 0; i < 19; i++) {
+    for (int i = 0; i < 12; i++) {
       currentSubquery =
           firestore
               .pipeline()

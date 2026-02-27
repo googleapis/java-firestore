@@ -19,22 +19,24 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.firestore.v1.Value;
 import java.util.Collections;
+import java.util.Map;
 
 @InternalApi
-public final class SubcollectionSource extends Stage {
+public final class Define extends Stage {
 
-  private final String path;
+  private final Map<String, Expression> expressions;
 
   @InternalApi
-  public SubcollectionSource(String path) {
-    super("from", InternalOptions.EMPTY);
-    this.path = path;
+  public Define(Map<String, Expression> expressions) {
+    super("let", InternalOptions.EMPTY);
+    this.expressions = expressions;
   }
 
   @Override
   Iterable<Value> toStageArgs() {
-    return Collections.singletonList(encodeValue(path));
+    return Collections.singletonList(encodeValue(expressions));
   }
 }
