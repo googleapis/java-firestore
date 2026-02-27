@@ -1693,8 +1693,7 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes whitespace from the beginning of a string
-   * or blob.
+   * Creates an expression that removes whitespace from the beginning of a string or blob.
    *
    * @param value The expression representing the string or blob to trim.
    * @return A new {@link Expression} representing the trimmed string or blob.
@@ -1705,8 +1704,7 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes whitespace from the beginning of a string
-   * or blob.
+   * Creates an expression that removes whitespace from the beginning of a string or blob.
    *
    * @param fieldName The name of the field containing the string or blob to trim.
    * @return A new {@link Expression} representing the trimmed string.
