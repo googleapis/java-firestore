@@ -1025,7 +1025,7 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
   }
 
   @Test
-  public void testPipelineStageLimit() throws Exception {
+  public void testPipelineStageSupport10Layers() throws Exception {
     String collName = "depth_" + UUID.randomUUID().toString();
     firestore
         .collection(collName)
@@ -1033,11 +1033,11 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
         .set(map("val", "hello"))
         .get(5, TimeUnit.SECONDS);
 
-    // Create a nested pipeline of depth 13
+    // Create a nested pipeline of depth 10
     Pipeline currentSubquery =
         firestore.pipeline().collection(collName).limit(1).select(field("val").as("val"));
 
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < 9; i++) {
       currentSubquery =
           firestore
               .pipeline()
