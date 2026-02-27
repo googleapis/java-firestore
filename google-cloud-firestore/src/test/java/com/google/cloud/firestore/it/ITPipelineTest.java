@@ -90,6 +90,7 @@ import com.google.cloud.firestore.PipelineResult;
 import com.google.cloud.firestore.pipeline.expressions.AggregateFunction;
 import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Field;
+import com.google.cloud.firestore.pipeline.expressions.Type;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.cloud.firestore.pipeline.stages.AggregateHints;
 import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
@@ -2631,6 +2632,89 @@ public class ITPipelineTest extends ITBaseTest {
                 "null",
                 "vector_type",
                 "vector"));
+  }
+
+  @Test
+  public void testIsType() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .replaceWith(
+                Expression.map(
+                    map(
+                        "int",
+                        1,
+                        "float",
+                        1.1,
+                        "str",
+                        "a string",
+                        "bool",
+                        true,
+                        "null",
+                        null,
+                        "geoPoint",
+                        new GeoPoint(0.1, 0.2),
+                        "timestamp",
+                        Timestamp.ofTimeSecondsAndNanos(123456, 0),
+                        "bytes",
+                        com.google.cloud.firestore.Blob.fromBytes(new byte[] {1, 2, 3}),
+                        "docRef",
+                        collection.document("bar"),
+                        "vector",
+                        vector(new double[] {1.0, 2.0, 3.0}),
+                        "map",
+                        Expression.map(map("numberK", 1, "stringK", "a string")),
+                        "array",
+                        array(1, 2, true))))
+            .select(
+                Expression.isType("int", Type.INT64).as("isInt64"),
+                Expression.isType("int", Type.NUMBER).as("isInt64IsNumber"),
+                Expression.isType("int", Type.DECIMAL128).as("isInt64IsDecimal128"),
+                Expression.isType("float", Type.FLOAT64).as("isFloat64"),
+                Expression.isType("float", Type.NUMBER).as("isFloat64IsNumber"),
+                Expression.isType("float", Type.DECIMAL128).as("isFloat64IsDecimal128"),
+                Expression.isType("str", Type.STRING).as("isStr"),
+                Expression.isType("str", Type.INT64).as("isStrNum"),
+                Expression.isType("int", Type.STRING).as("isNumStr"),
+                Expression.isType("bool", Type.BOOLEAN).as("isBool"),
+                Expression.isType("null", Type.NULL).as("isNull"),
+                Expression.isType("geoPoint", Type.GEO_POINT).as("isGeoPoint"),
+                Expression.isType("timestamp", Type.TIMESTAMP).as("isTimestamp"),
+                Expression.isType("bytes", Type.BYTES).as("isBytes"),
+                Expression.isType("docRef", Type.REFERENCE).as("isDocRef"),
+                Expression.isType("vector", Type.VECTOR).as("isVector"),
+                Expression.isType("map", Type.MAP).as("isMap"),
+                Expression.isType("array", Type.ARRAY).as("isArray"),
+                Expression.isType(constant(1), Type.INT64).as("exprIsInt64"),
+                field("int").isType(Type.INT64).as("staticIsInt64"))
+            .limit(1)
+            .execute()
+            .get()
+            .getResults();
+    assertThat(data(results))
+        .containsExactly(
+            map(
+                "isInt64", true,
+                "isInt64IsNumber", true,
+                "isInt64IsDecimal128", false,
+                "isFloat64", true,
+                "isFloat64IsNumber", true,
+                "isFloat64IsDecimal128", false,
+                "isStr", true,
+                "isStrNum", false,
+                "isNumStr", false,
+                "isBool", true,
+                "isNull", true,
+                "isGeoPoint", true,
+                "isTimestamp", true,
+                "isBytes", true,
+                "isDocRef", true,
+                "isVector", true,
+                "isMap", true,
+                "isArray", true,
+                "exprIsInt64", true,
+                "staticIsInt64", true));
   }
 
   @Test
