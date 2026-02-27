@@ -996,10 +996,10 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
         .set(map("outer_id", "2", "score", 20))
         .get(5, TimeUnit.SECONDS);
     firestore
-                    .collection(innerColl)
-                    .document("i3")
-                    .set(map("outer_id", "1", "score", 30))
-                    .get(5, TimeUnit.SECONDS);
+        .collection(innerColl)
+        .document("i3")
+        .set(map("outer_id", "1", "score", 30))
+        .get(5, TimeUnit.SECONDS);
 
     // subquery calculates the score for the outer doc
     Pipeline innerSub =

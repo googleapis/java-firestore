@@ -267,18 +267,13 @@ public final class Pipeline {
   /**
    * Initializes a pipeline scoped to a subcollection.
    *
-   * <p>
-   * This method allows you to start a new pipeline that operates on a
-   * subcollection of the current
-   * document. It is intended to be used as a subquery.
+   * <p>This method allows you to start a new pipeline that operates on a subcollection of the
+   * current document. It is intended to be used as a subquery.
    *
-   * <p>
-   * <b>Note:</b> A pipeline created with `subcollection` cannot be executed
-   * directly using {@link #execute()}. It must be used within a parent pipeline
-   * (e.g., in {@link #addFields(AliasedExpression...)}).
+   * <p><b>Note:</b> A pipeline created with `subcollection` cannot be executed directly using
+   * {@link #execute()}. It must be used within a parent pipeline.
    *
-   * <p>
-   * Example:
+   * <p>Example:
    *
    * <pre>{@code
    * firestore.pipeline().collection("books")
@@ -338,12 +333,67 @@ public final class Pipeline {
   /**
    * Converts the pipeline into an array expression.
    *
-   * <p>
-   * <b>Result Unwrapping:</b> For simpler access, subqueries producing a single
-   * field
-   * automatically unwrap that value. If the subquery returns multiple fields,
-   * they are preserved as a
-   * map.
+   * <p><b>Result Unwrapping:</b> For simpler access, subqueries producing a single field
+   * automatically unwrap that value to the top level, ignoring the inner alias. If the subquery
+   * returns multiple fields, they are preserved as a map.
+   *
+   * <p><b>Example 1: Single field unwrapping</b>
+   *
+   * <pre>{@code
+   * // Get a list of all reviewer names for each book
+   * db.pipeline().collection("books")
+   *     .define(field("id").as("book_id"))
+   *     .addFields(
+   *         db.pipeline().collection("reviews")
+   *             .where(field("book_id").equal(variable("book_id")))
+   *             .select(field("reviewer").as("name"))
+   *             .toArrayExpression()
+   *             .as("reviewers"))
+   * }</pre>
+   *
+   * <p><i>The result set is unwrapped from {@code "reviewers": [{ "name": "Alice" }, { "name":
+   * "Bob" }]} to {@code "reviewers": ["Alice", "Bob"]}.</i>
+   *
+   * <pre>{@code
+   * // Output Document:
+   * [
+   *   {
+   *     "id": "1",
+   *     "title": "1984",
+   *     "reviewers": ["Alice", "Bob"]
+   *   }
+   * ]
+   * }</pre>
+   *
+   * <p><b>Example 2: Multiple fields (Map)</b>
+   *
+   * <pre>{@code
+   * // Get a list of reviews (reviewer and rating) for each book
+   * db.pipeline().collection("books")
+   *     .define(field("id").as("book_id"))
+   *     .addFields(
+   *         db.pipeline().collection("reviews")
+   *             .where(field("book_id").equal(variable("book_id")))
+   *             .select(field("reviewer"), field("rating"))
+   *             .toArrayExpression()
+   *             .as("reviews"))
+   * }</pre>
+   *
+   * <p><i>When the subquery produces multiple fields, they are kept as objects in the array:</i>
+   *
+   * <pre>{@code
+   * // Output Document:
+   * [
+   *   {
+   *     "id": "1",
+   *     "title": "1984",
+   *     "reviews": [
+   *       { "reviewer": "Alice", "rating": 5 },
+   *       { "reviewer": "Bob", "rating": 4 }
+   *     ]
+   *   }
+   * ]
+   * }</pre>
    *
    * @return A new {@link Expression} representing the pipeline as an array.
    */
@@ -360,7 +410,7 @@ public final class Pipeline {
    * one item. It throws a runtime error if the result has more than one item, and evaluates to
    * {@code null} if the pipeline has zero results.
    *
-   * <p><b>Result Unwrapping:</b> For simpler access, scalar subqueries producing a single field
+   * <p><b>Result Unwrapping:</b> For simpler access, subqueries producing a single field
    * automatically unwrap that value to the top level, ignoring the inner alias. If the subquery
    * returns multiple fields, they are preserved as a map.
    *

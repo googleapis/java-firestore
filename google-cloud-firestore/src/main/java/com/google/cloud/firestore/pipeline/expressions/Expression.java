@@ -4801,13 +4801,10 @@ public abstract class Expression {
   /**
    * Creates an expression that represents the current document being processed.
    *
-   * <p>
-   * This expression is useful when you need to access the entire document as a
-   * map, or pass the
+   * <p>This expression is useful when you need to access the entire document as a map, or pass the
    * document itself to a function or subquery.
    *
-   * <p>
-   * Example:
+   * <p>Example:
    *
    * <pre>{@code
    * // Define the current document as a variable "doc"
@@ -4828,8 +4825,7 @@ public abstract class Expression {
    * Creates an expression that retrieves the value of a variable bound via {@link
    * Pipeline#define(AliasedExpression, AliasedExpression...)}.
    *
-   * <p>
-   * Example:
+   * <p>Example:
    *
    * <pre>{@code
    * // Define a variable "discountedPrice" and use it in a filter
@@ -4847,8 +4843,7 @@ public abstract class Expression {
   }
 
   /**
-   * Accesses a field/property of the expression that evaluates to a Map or
-   * Document.
+   * Accesses a field/property of the expression that evaluates to a Map or Document.
    *
    * @param key The key of the field to access.
    * @return An {@link Expression} representing the value of the field.
@@ -4906,17 +4901,14 @@ public abstract class Expression {
   }
 
   /**
-   * Accesses a field/property of the expression that evaluates to a Map or
-   * Document.
+   * Accesses a field/property of the expression that evaluates to a Map or Document.
    *
    * @param expression The expression evaluating to a map/document.
-   * @param key        The key of the field to access.
+   * @param key The key of the field to access.
    * @return An {@link Expression} representing the value of the field.
    */
   @BetaApi
   public static Expression getField(Expression expression, String key) {
     return new FunctionExpression("field", ImmutableList.of(expression, constant(key)));
   }
-
-
 }
