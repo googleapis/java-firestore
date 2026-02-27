@@ -3130,6 +3130,16 @@ public abstract class Expression {
     return type(field(fieldName));
   }
 
+  @BetaApi
+  public static BooleanExpression isType(Expression expr, Type type) {
+    return new BooleanFunctionExpression("is_type", ImmutableList.of(expr, constant(type.name().toLowerCase())));
+  }
+
+  @BetaApi
+  public static BooleanExpression isType(String fieldName, Type type) {
+    return new BooleanFunctionExpression("is_type", ImmutableList.of(field(fieldName), constant(type.name().toLowerCase())));
+  }
+
   // Numeric Operations
   /**
    * Creates an expression that rounds {@code numericExpr} to nearest integer.
@@ -4796,4 +4806,7 @@ public abstract class Expression {
   public final Expression type() {
     return type(this);
   }
+
+  @BetaApi
+  public final Expression isType(Type type) { return isType(this, type); }
 }

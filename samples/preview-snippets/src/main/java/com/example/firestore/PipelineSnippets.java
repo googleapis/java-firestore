@@ -31,6 +31,7 @@ import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.PlanSummary;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.pipeline.expressions.Type;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
@@ -1547,6 +1548,19 @@ class PipelineSnippets {
             .select(vectorLength(field("embedding")).as("vectorLength"))
             .execute()
             .get();
+    // [END vector_length]
+    System.out.println(result.getResults());
+  }
+
+  void isTypeFunction() throws ExecutionException, InterruptedException {
+    // [START vector_length]
+    Pipeline.Snapshot result =
+            firestore
+                    .pipeline()
+                    .collection("books")
+                    .select(field("rating").isType(Type.INT64).as("isRatingInt64"))
+                    .execute()
+                    .get();
     // [END vector_length]
     System.out.println(result.getResults());
   }
