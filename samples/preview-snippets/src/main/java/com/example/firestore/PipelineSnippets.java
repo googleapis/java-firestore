@@ -1555,12 +1555,12 @@ class PipelineSnippets {
   void isTypeFunction() throws ExecutionException, InterruptedException {
     // [START vector_length]
     Pipeline.Snapshot result =
-            firestore
-                    .pipeline()
-                    .collection("books")
-                    .select(field("rating").isType(Type.INT64).as("isRatingInt64"))
-                    .execute()
-                    .get();
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(field("rating").isType(Type.INT64).as("isRatingInt64"))
+            .execute()
+            .get();
     // [END vector_length]
     System.out.println(result.getResults());
   }
