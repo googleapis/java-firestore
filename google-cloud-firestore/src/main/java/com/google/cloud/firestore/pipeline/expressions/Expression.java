@@ -3130,12 +3130,26 @@ public abstract class Expression {
     return type(field(fieldName));
   }
 
+  /**
+   * Creates an expression that checks if the result of this expression is of the given type.
+   *
+   * @param expr The expression to check the type of.
+   * @param type The type to check for.
+   * @return A new {@link BooleanExpression} that evaluates to true if the expression's result is of the given type, false otherwise.
+   */
   @BetaApi
   public static BooleanExpression isType(Expression expr, Type type) {
     return new BooleanFunctionExpression(
         "is_type", ImmutableList.of(expr, constant(type.name().toLowerCase())));
   }
 
+  /**
+   * Creates an expression that checks if the result of this expression is of the given type.
+   *
+   * @param fieldName The name of the field to check the type of.
+   * @param type The type to check for.
+   * @return A new {@link BooleanExpression} that evaluates to true if the expression's result is of the given type, false otherwise.
+   */
   @BetaApi
   public static BooleanExpression isType(String fieldName, Type type) {
     return new BooleanFunctionExpression(
@@ -4809,6 +4823,12 @@ public abstract class Expression {
     return type(this);
   }
 
+  /**
+   * Creates an expression that checks if the result of this expression is of the given type.
+   *
+   * @param type The type to check for.
+   * @return A new {@link BooleanExpression} that evaluates to true if the expression's result is of the given type, false otherwise.
+   */
   @BetaApi
   public final Expression isType(Type type) {
     return isType(this, type);
