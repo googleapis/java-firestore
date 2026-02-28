@@ -186,6 +186,30 @@ public class FirestoreTest {
   }
 
   @Test
+  public void maximumEquals() {
+    FieldValue maximum1 = FieldValue.maximum(42);
+    FieldValue maximum2 = FieldValue.maximum(42);
+    FieldValue maximum3 = FieldValue.maximum(42.0);
+    FieldValue maximum4 = FieldValue.maximum(42.0);
+    assertEquals(maximum1, maximum2);
+    assertEquals(maximum3, maximum4);
+    assertNotEquals(maximum1, maximum3);
+    assertNotEquals(maximum2, maximum4);
+  }
+
+  @Test
+  public void minimumEquals() {
+    FieldValue minimum1 = FieldValue.minimum(42);
+    FieldValue minimum2 = FieldValue.minimum(42);
+    FieldValue minimum3 = FieldValue.minimum(42.0);
+    FieldValue minimum4 = FieldValue.minimum(42.0);
+    assertEquals(minimum1, minimum2);
+    assertEquals(minimum3, minimum4);
+    assertNotEquals(minimum1, minimum3);
+    assertNotEquals(minimum2, minimum4);
+  }
+
+  @Test
   public void arrayUnionWithPojo() throws ExecutionException, InterruptedException {
     doReturn(commitResponse(1, 0))
         .when(firestoreMock)
