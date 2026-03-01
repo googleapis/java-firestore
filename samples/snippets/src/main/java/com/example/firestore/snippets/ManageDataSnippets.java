@@ -24,7 +24,6 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.TransactionOptions;
@@ -304,27 +303,16 @@ class ManageDataSnippets {
   }
 
   // [START firestore_data_delete_collection]
-  /**
-   * Delete a collection in batches to avoid out-of-memory errors. Batch size may be tuned based on
-   * document size (atmost 1MB) and application requirements.
-   */
-  void deleteCollection(CollectionReference collection, int batchSize) {
+  /** Delete a collection and all its subcollections. */
+  void deleteCollection(CollectionReference collection) {
+    Firestore db = collection.getFirestore();
+
+    ApiFuture<Void> future = db.recursiveDelete(collection);
     try {
-      // retrieve a small batch of documents to avoid out-of-memory errors
-      ApiFuture<QuerySnapshot> future = collection.limit(batchSize).get();
-      int deleted = 0;
-      // future.get() blocks on document retrieval
-      List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-      for (QueryDocumentSnapshot document : documents) {
-        document.getReference().delete();
-        ++deleted;
-      }
-      if (deleted >= batchSize) {
-        // retrieve and delete another batch
-        deleteCollection(collection, batchSize);
-      }
+      future.get();
+      System.out.println("Collection and all its subcollections deleted successfully.");
     } catch (Exception e) {
-      System.err.println("Error deleting collection : " + e.getMessage());
+      System.err.println("Error deleting collection recursively : " + e.getMessage());
     }
   }
 
