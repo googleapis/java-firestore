@@ -3227,7 +3227,7 @@ public abstract class Expression {
    * Creates an expression that truncates {@code numericExpr} to an integer.
    *
    * @param numericExpr An expression that returns number when evaluated.
-   * @return A new {@link Expression} representing an integer result from the trunc operation.
+   * @return A new {@link Expression} representing the trunc operation.
    */
   @BetaApi
   public static Expression trunc(Expression numericExpr) {
@@ -3238,7 +3238,7 @@ public abstract class Expression {
    * Creates an expression that truncates {@code numericField} to an integer.
    *
    * @param numericField Name of field that returns number when evaluated.
-   * @return A new {@link Expression} representing an integer result from the trunc operation.
+   * @return A new {@link Expression} representing the trunc operation.
    */
   @BetaApi
   public static Expression trunc(String numericField) {
@@ -3777,7 +3777,7 @@ public abstract class Expression {
   /**
    * Creates an expression that truncates this numeric expression to an integer.
    *
-   * @return A new {@link Expression} representing an integer result from the trunc operation.
+   * @return A new {@link Expression} representing the trunc operation.
    */
   @BetaApi
   public final Expression trunc() {
