@@ -608,6 +608,30 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
+  public void testFirstAndLastAccumulatorsWithInstanceMethod() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(field("published").greaterThan(0))
+            .sort(field("published").ascending())
+            .aggregate(
+                field("rating").first().as("firstBookRating"),
+                field("title").first().as("firstBookTitle"),
+                field("rating").last().as("lastBookRating"),
+                field("title").last().as("lastBookTitle"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    assertThat(result.get("firstBookRating")).isEqualTo(4.5);
+    assertThat(result.get("firstBookTitle")).isEqualTo("Pride and Prejudice");
+    assertThat(result.get("lastBookRating")).isEqualTo(4.1);
+    assertThat(result.get("lastBookTitle")).isEqualTo("The Handmaid's Tale");
+  }
+
+  @Test
   public void testArrayAggAccumulators() throws Exception {
     List<PipelineResult> results =
         firestore
@@ -627,6 +651,25 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
+  public void testArrayAggAccumulatorsWithInstanceMethod() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(field("published").greaterThan(0))
+            .sort(field("published").ascending())
+            .aggregate(field("rating").arrayAgg().as("allRatings"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    assertThat((List<?>) result.get("allRatings"))
+        .containsExactly(4.5, 4.3, 4.0, 4.2, 4.7, 4.2, 4.6, 4.3, 4.2, 4.1)
+        .inOrder();
+  }
+
+  @Test
   public void testArrayAggDistinctAccumulators() throws Exception {
     List<PipelineResult> results =
         firestore
@@ -634,6 +677,26 @@ public class ITPipelineTest extends ITBaseTest {
             .createFrom(collection)
             .where(field("published").greaterThan(0))
             .aggregate(arrayAggDistinct("rating").as("allDistinctRatings"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    List<?> distinctRatings = (List<?>) result.get("allDistinctRatings");
+    List<Double> sortedRatings =
+        distinctRatings.stream().map(o -> (Double) o).sorted().collect(Collectors.toList());
+
+    assertThat(sortedRatings).containsExactly(4.0, 4.1, 4.2, 4.3, 4.5, 4.6, 4.7).inOrder();
+  }
+
+  @Test
+  public void testArrayAggDistinctAccumulatorsWithInstanceMethod() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(field("published").greaterThan(0))
+            .aggregate(field("rating").arrayAggDistinct().as("allDistinctRatings"))
             .execute()
             .get()
             .getResults();
