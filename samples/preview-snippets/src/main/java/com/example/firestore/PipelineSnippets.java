@@ -714,7 +714,7 @@ class PipelineSnippets {
             .get();
     // [END array_agg_distinct_function]
     System.out.println(result.getResults());
-  }  
+  }
 
   void addFunction() throws ExecutionException, InterruptedException {
     // [START add_function]
