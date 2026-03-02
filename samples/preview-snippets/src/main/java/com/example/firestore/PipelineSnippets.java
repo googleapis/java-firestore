@@ -662,6 +662,60 @@ class PipelineSnippets {
     System.out.println(result.getResults());
   }
 
+  void firstFunction() throws ExecutionException, InterruptedException {
+    // [START first_function]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .sort(field("population").ascending())
+            .aggregate(first("name").as("smallestCity"))
+            .execute()
+            .get();
+    // [END first_function]
+    System.out.println(result.getResults());
+  }
+
+  void lastFunction() throws ExecutionException, InterruptedException {
+    // [START last_function]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .sort(field("population").ascending())
+            .aggregate(last("name").as("largestCity"))
+            .execute()
+            .get();
+    // [END last_function]
+    System.out.println(result.getResults());
+  }
+
+  void arrayAggFunction() throws ExecutionException, InterruptedException {
+    // [START array_agg_function]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .aggregate(arrayAgg("name").as("allCities"))
+            .execute()
+            .get();
+    // [END array_agg_function]
+    System.out.println(result.getResults());
+  }
+
+  void arrayAggDistinctFunction() throws ExecutionException, InterruptedException {
+    // [START array_agg_distinct_function]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("cities")
+            .aggregate(arrayAggDistinct("country").as("allDistinctCountries"))
+            .execute()
+            .get();
+    // [END array_agg_distinct_function]
+    System.out.println(result.getResults());
+  }  
+
   void addFunction() throws ExecutionException, InterruptedException {
     // [START add_function]
     Pipeline.Snapshot result =
