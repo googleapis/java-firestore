@@ -770,6 +770,33 @@ class PipelineSnippets {
     System.out.println(result.getResults());
   }
 
+  void truncFunction() throws ExecutionException, InterruptedException {
+    // [START trunc_function]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .select(trunc(divide(field("ratings"), field("soldBooks"))).as("avgRatingInt"))
+            .execute()
+            .get();
+    // [END trunc_function]
+    System.out.println(result.getResults());
+  }
+
+  void randFunction() throws ExecutionException, InterruptedException {
+    // [START rand_function]
+    Pipeline.Snapshot result =
+        firestore
+            .pipeline()
+            .collection("books")
+            .addFields(rand().as("rand"))
+            .where(field("rand").lessThan(0.01))
+            .execute()
+            .get();
+    // [END rand_function]
+    System.out.println(result.getResults());
+  }
+
   void powFunction() throws ExecutionException, InterruptedException {
     // [START pow_function]
     double googleplexLat = 37.4221;
