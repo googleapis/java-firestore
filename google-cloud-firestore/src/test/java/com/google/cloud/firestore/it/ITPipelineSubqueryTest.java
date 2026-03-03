@@ -1136,4 +1136,22 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
         .hasMessageThat()
         .contains("Cannot execute a relative subcollection pipeline directly");
   }
+
+  @Ignore("Pending backend support")
+  @Test
+  public void testUnionWithSubqueryThrows() throws Exception {
+      IllegalArgumentException e = assertThrows(
+              IllegalArgumentException.class,
+              () -> {
+                  firestore
+                          .pipeline()
+                          .collection(collection.getPath())
+                          .union(Pipeline.subcollection("subcollection"));
+              });
+
+      assertThat(e)
+              .hasMessageThat()
+              .contains(
+                      "Union only supports combining root pipelines, doesn't support relative scope Pipeline like relative subcollection pipeline");
+  }
 }
