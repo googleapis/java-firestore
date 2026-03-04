@@ -96,9 +96,6 @@ import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
 import com.google.cloud.firestore.pipeline.stages.CollectionHints;
 import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
 import com.google.cloud.firestore.pipeline.stages.ConflictResolution;
-import com.google.cloud.firestore.pipeline.stages.Delete;
-import com.google.cloud.firestore.pipeline.stages.DeleteOptions;
-import com.google.cloud.firestore.pipeline.stages.DeleteReturn;
 import com.google.cloud.firestore.pipeline.stages.ExplainOptions;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
@@ -110,9 +107,6 @@ import com.google.cloud.firestore.pipeline.stages.RawOptions;
 import com.google.cloud.firestore.pipeline.stages.RawStage;
 import com.google.cloud.firestore.pipeline.stages.Sample;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
-import com.google.cloud.firestore.pipeline.stages.Update;
-import com.google.cloud.firestore.pipeline.stages.UpdateOptions;
-import com.google.cloud.firestore.pipeline.stages.UpdateReturn;
 import com.google.cloud.firestore.pipeline.stages.Upsert;
 import com.google.cloud.firestore.pipeline.stages.UpsertOptions;
 import com.google.cloud.firestore.pipeline.stages.UpsertReturn;
@@ -2332,14 +2326,15 @@ public class ITPipelineTest extends ITBaseTest {
 
   @Test
   public void testDelete() throws Exception {
-    List<PipelineResult> results = firestore
-        .pipeline()
-        .collection(collection)
-        .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
-        .delete()
-        .execute()
-        .get()
-        .getResults();
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection)
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .delete()
+            .execute()
+            .get()
+            .getResults();
   }
 
   @Test
