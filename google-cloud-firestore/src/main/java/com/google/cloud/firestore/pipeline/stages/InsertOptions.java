@@ -16,10 +16,10 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-import com.google.api.core.BetaApi;
+import com.google.api.core.InternalApi;
 
 /** Options for an Insert pipeline stage. */
-@BetaApi
+@InternalApi
 public class InsertOptions extends WriteOptions<InsertOptions> {
 
   /** Creates a new, empty `InsertOptions` object. */

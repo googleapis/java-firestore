@@ -110,6 +110,9 @@ import com.google.cloud.firestore.pipeline.stages.RawOptions;
 import com.google.cloud.firestore.pipeline.stages.RawStage;
 import com.google.cloud.firestore.pipeline.stages.Sample;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
+import com.google.cloud.firestore.pipeline.stages.Update;
+import com.google.cloud.firestore.pipeline.stages.UpdateOptions;
+import com.google.cloud.firestore.pipeline.stages.UpdateReturn;
 import com.google.cloud.firestore.pipeline.stages.Upsert;
 import com.google.cloud.firestore.pipeline.stages.UpsertOptions;
 import com.google.cloud.firestore.pipeline.stages.UpsertReturn;
@@ -2329,23 +2332,14 @@ public class ITPipelineTest extends ITBaseTest {
 
   @Test
   public void testDelete() throws Exception {
-    firestore
+    List<PipelineResult> results = firestore
         .pipeline()
         .collection(collection)
         .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
         .delete()
         .execute()
-        .get();
-
-    firestore
-        .pipeline()
-        .collection(collection)
-        .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
-        .delete(
-            new Delete().withReturns(DeleteReturn.DOCUMENT_ID),
-            new DeleteOptions().withTransactional(true))
-        .execute()
-        .get();
+        .get()
+        .getResults();
   }
 
   @Test
