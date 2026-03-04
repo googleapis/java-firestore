@@ -16,7 +16,10 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
+import com.google.api.core.InternalApi;
+
 /** Defines the return value options for an Upsert pipeline stage. */
+@InternalApi
 public enum UpsertReturn {
   EMPTY("EMPTY"),
   DOCUMENT_ID("DOCUMENT_ID");

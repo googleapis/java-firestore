@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,19 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
 
-/** Options for a Delete pipeline stage. */
+/** Defines the return value options for an Update pipeline stage. */
 @InternalApi
-public class DeleteOptions extends WriteOptions<DeleteOptions> {
+public enum UpdateReturn {
+  EMPTY("EMPTY"),
+  DOCUMENT_ID("DOCUMENT_ID");
 
-  /** Creates a new, empty `DeleteOptions` object. */
-  public DeleteOptions() {
-    super(InternalOptions.EMPTY);
+  private final String value;
+
+  UpdateReturn(String value) {
+    this.value = value;
   }
 
-  DeleteOptions(InternalOptions options) {
-    super(options);
-  }
-
-  @Override
-  DeleteOptions self(InternalOptions options) {
-    return new DeleteOptions(options);
+  public String getValue() {
+    return value;
   }
 }

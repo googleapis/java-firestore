@@ -46,12 +46,12 @@ public final class Delete extends Stage {
     return new Delete(path.startsWith("/") ? path : "/" + path, InternalOptions.EMPTY);
   }
 
-  @BetaApi
+  @InternalApi
   public Delete withOptions(DeleteOptions options) {
     return new Delete(path, this.options.adding(options));
   }
 
-  @BetaApi
+  @InternalApi
   public Delete withReturns(DeleteReturn returns) {
     return new Delete(
         path, this.options.with("returns", PipelineUtils.encodeValue(returns.getValue())));

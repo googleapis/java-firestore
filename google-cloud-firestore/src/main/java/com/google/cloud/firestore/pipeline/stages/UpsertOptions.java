@@ -16,10 +16,10 @@
 
 package com.google.cloud.firestore.pipeline.stages;
 
-import com.google.api.core.BetaApi;
+import com.google.api.core.InternalApi;
 
 /** Options for an Upsert pipeline stage. */
-@BetaApi
+@InternalApi
 public class UpsertOptions extends WriteOptions<UpsertOptions> {
 
   /** Creates a new, empty `UpsertOptions` object. */
@@ -42,7 +42,7 @@ public class UpsertOptions extends WriteOptions<UpsertOptions> {
    * @param conflictResolution The conflict resolution strategy.
    * @return A new options object with the conflict resolution set.
    */
-  @BetaApi
+  @InternalApi
   public UpsertOptions withConflictResolution(ConflictResolution conflictResolution) {
     return with("conflict_resolution", conflictResolution.getValue());
   }
