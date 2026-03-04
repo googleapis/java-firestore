@@ -19,10 +19,14 @@ package com.google.cloud.firestore.it;
 import static com.google.cloud.firestore.FieldValue.vector;
 import static com.google.cloud.firestore.it.ITQueryTest.map;
 import static com.google.cloud.firestore.it.TestHelper.isRunningAgainstFirestoreEmulator;
+import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.arrayAgg;
+import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.arrayAggDistinct;
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.count;
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.countAll;
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.countDistinct;
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.countIf;
+import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.first;
+import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.last;
 import static com.google.cloud.firestore.pipeline.expressions.AggregateFunction.sum;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.add;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.and;
@@ -56,6 +60,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.notEqua
 import static com.google.cloud.firestore.pipeline.expressions.Expression.nullValue;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.or;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.pow;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.rand;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.regexMatch;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.round;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.sqrt;
@@ -67,6 +72,8 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.timesta
 import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampToUnixMicros;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampToUnixMillis;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampToUnixSeconds;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.trunc;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.truncToPrecision;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixMicrosToTimestamp;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixMillisToTimestamp;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixSecondsToTimestamp;
@@ -580,6 +587,132 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
+  public void testFirstAndLastAccumulators() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(field("published").greaterThan(0))
+            .sort(field("published").ascending())
+            .aggregate(
+                first("rating").as("firstBookRating"),
+                first("title").as("firstBookTitle"),
+                last("rating").as("lastBookRating"),
+                last("title").as("lastBookTitle"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    assertThat(result.get("firstBookRating")).isEqualTo(4.5);
+    assertThat(result.get("firstBookTitle")).isEqualTo("Pride and Prejudice");
+    assertThat(result.get("lastBookRating")).isEqualTo(4.1);
+    assertThat(result.get("lastBookTitle")).isEqualTo("The Handmaid's Tale");
+  }
+
+  @Test
+  public void testFirstAndLastAccumulatorsWithInstanceMethod() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(field("published").greaterThan(0))
+            .sort(field("published").ascending())
+            .aggregate(
+                field("rating").first().as("firstBookRating"),
+                field("title").first().as("firstBookTitle"),
+                field("rating").last().as("lastBookRating"),
+                field("title").last().as("lastBookTitle"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    assertThat(result.get("firstBookRating")).isEqualTo(4.5);
+    assertThat(result.get("firstBookTitle")).isEqualTo("Pride and Prejudice");
+    assertThat(result.get("lastBookRating")).isEqualTo(4.1);
+    assertThat(result.get("lastBookTitle")).isEqualTo("The Handmaid's Tale");
+  }
+
+  @Test
+  public void testArrayAggAccumulators() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(field("published").greaterThan(0))
+            .sort(field("published").ascending())
+            .aggregate(arrayAgg("rating").as("allRatings"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    assertThat((List<?>) result.get("allRatings"))
+        .containsExactly(4.5, 4.3, 4.0, 4.2, 4.7, 4.2, 4.6, 4.3, 4.2, 4.1)
+        .inOrder();
+  }
+
+  @Test
+  public void testArrayAggAccumulatorsWithInstanceMethod() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(field("published").greaterThan(0))
+            .sort(field("published").ascending())
+            .aggregate(field("rating").arrayAgg().as("allRatings"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    assertThat((List<?>) result.get("allRatings"))
+        .containsExactly(4.5, 4.3, 4.0, 4.2, 4.7, 4.2, 4.6, 4.3, 4.2, 4.1)
+        .inOrder();
+  }
+
+  @Test
+  public void testArrayAggDistinctAccumulators() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(field("published").greaterThan(0))
+            .aggregate(arrayAggDistinct("rating").as("allDistinctRatings"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    List<?> distinctRatings = (List<?>) result.get("allDistinctRatings");
+    List<Double> sortedRatings =
+        distinctRatings.stream().map(o -> (Double) o).sorted().collect(Collectors.toList());
+
+    assertThat(sortedRatings).containsExactly(4.0, 4.1, 4.2, 4.3, 4.5, 4.6, 4.7).inOrder();
+  }
+
+  @Test
+  public void testArrayAggDistinctAccumulatorsWithInstanceMethod() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(field("published").greaterThan(0))
+            .aggregate(field("rating").arrayAggDistinct().as("allDistinctRatings"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    List<?> distinctRatings = (List<?>) result.get("allDistinctRatings");
+    List<Double> sortedRatings =
+        distinctRatings.stream().map(o -> (Double) o).sorted().collect(Collectors.toList());
+
+    assertThat(sortedRatings).containsExactly(4.0, 4.1, 4.2, 4.3, 4.5, 4.6, 4.7).inOrder();
+  }
+
+  @Test
   public void selectSpecificFields() throws Exception {
     List<PipelineResult> results =
         firestore
@@ -1047,6 +1180,56 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
+  public void testRegexFind() throws Exception {
+    assumeFalse(
+        "Regexes are not supported against the emulator",
+        isRunningAgainstFirestoreEmulator(firestore));
+
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .select(field("title").regexFind("^\\w+").as("firstWordInTitle"))
+            .sort(field("firstWordInTitle").ascending())
+            .limit(3)
+            .execute()
+            .get()
+            .getResults();
+
+    assertThat(data(results))
+        .isEqualTo(
+            Lists.newArrayList(
+                map("firstWordInTitle", "1984"),
+                map("firstWordInTitle", "Crime"),
+                map("firstWordInTitle", "Dune")));
+  }
+
+  @Test
+  public void testRegexFindAll() throws Exception {
+    assumeFalse(
+        "Regexes are not supported against the emulator",
+        isRunningAgainstFirestoreEmulator(firestore));
+
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .select(field("title").regexFindAll("\\w+").as("wordsInTitle"))
+            .sort(field("wordsInTitle").ascending())
+            .limit(3)
+            .execute()
+            .get()
+            .getResults();
+
+    assertThat(data(results))
+        .isEqualTo(
+            Lists.newArrayList(
+                map("wordsInTitle", Lists.newArrayList("1984")),
+                map("wordsInTitle", Lists.newArrayList("Crime", "and", "Punishment")),
+                map("wordsInTitle", Lists.newArrayList("Dune"))));
+  }
+
+  @Test
   public void testRegexMatches() throws Exception {
     assumeFalse(
         "LIKE is not supported against the emulator.",
@@ -1500,6 +1683,131 @@ public class ITPipelineTest extends ITBaseTest {
     assertThat((Double) result.get("ln_rating")).isWithin(0.00001).of(1.54756);
     assertThat((Double) result.get("log_rating")).isWithin(0.00001).of(0.67209);
     assertThat((Double) result.get("log10_rating")).isWithin(0.00001).of(0.67209);
+  }
+
+  @Test
+  public void testRand() throws Exception {
+    assumeFalse(
+        "Rand is not supported against the emulator.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .select(rand().as("randomNumber"))
+            .limit(1)
+            .execute()
+            .get()
+            .getResults();
+
+    assertThat(results).hasSize(1);
+    Object randomNumber = results.get(0).getData().get("randomNumber");
+    assertThat(randomNumber).isInstanceOf(Double.class);
+    assertThat((Double) randomNumber).isAtLeast(0.0);
+    assertThat((Double) randomNumber).isLessThan(1.0);
+  }
+
+  @Test
+  public void testTrunc() throws Exception {
+    assumeFalse(
+        "Trunc is not supported against the emulator.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(field("title").equal("Pride and Prejudice"))
+            .limit(1)
+            .select(trunc("rating").as("truncatedRating"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    assertThat(result.get("truncatedRating")).isEqualTo(4.0);
+  }
+
+  @Test
+  public void testTruncWithInstanceMethod() throws Exception {
+    assumeFalse(
+        "Trunc is not supported against the emulator.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(field("title").equal("Pride and Prejudice"))
+            .limit(1)
+            .select(field("rating").trunc().as("truncatedRating"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    assertThat(result.get("truncatedRating")).isEqualTo(4.0);
+  }
+
+  @Test
+  public void testTruncToPrecision() throws Exception {
+    assumeFalse(
+        "Trunc is not supported against the emulator.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .limit(1)
+            .select(
+                truncToPrecision(constant(4.123456), 0).as("p0"),
+                truncToPrecision(constant(4.123456), 1).as("p1"),
+                truncToPrecision(constant(4.123456), 2).as("p2"),
+                truncToPrecision(constant(4.123456), 4).as("p4"))
+            .execute()
+            .get()
+            .getResults();
+
+    assertThat(data(results))
+        .isEqualTo(
+            Lists.newArrayList(
+                map(
+                    "p0", 4.0,
+                    "p1", 4.1,
+                    "p2", 4.12,
+                    "p4", 4.1234)));
+  }
+
+  @Test
+  public void testTruncToPrecisionWithInstanceMethod() throws Exception {
+    assumeFalse(
+        "Trunc is not supported against the emulator.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .limit(1)
+            .select(
+                constant(4.123456).truncToPrecision(0).as("p0"),
+                constant(4.123456).truncToPrecision(1).as("p1"),
+                constant(4.123456).truncToPrecision(constant(2)).as("p2"),
+                constant(4.123456).truncToPrecision(4).as("p4"))
+            .execute()
+            .get()
+            .getResults();
+
+    assertThat(data(results))
+        .isEqualTo(
+            Lists.newArrayList(
+                map(
+                    "p0", 4.0,
+                    "p1", 4.1,
+                    "p2", 4.12,
+                    "p4", 4.1234)));
   }
 
   @Test

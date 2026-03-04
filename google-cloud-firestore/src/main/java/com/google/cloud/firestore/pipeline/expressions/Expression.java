@@ -1229,6 +1229,134 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that returns the first substring of a string expression that matches a
+   * specified regular expression.
+   *
+   * <p>This expression uses the [RE2](https://github.com/google/re2/wiki/Syntax) regular expression
+   * syntax.
+   *
+   * @param string The expression representing the string to search.
+   * @param pattern The regular expression to search for.
+   * @return A new {@link Expression} representing the regular expression find function.
+   */
+  @BetaApi
+  public static Expression regexFind(Expression string, Expression pattern) {
+    return new FunctionExpression("regex_find", ImmutableList.of(string, pattern));
+  }
+
+  /**
+   * Creates an expression that returns the first substring of a string expression that matches a
+   * specified regular expression.
+   *
+   * <p>This expression uses the [RE2](https://github.com/google/re2/wiki/Syntax) regular expression
+   * syntax.
+   *
+   * @param string The expression representing the string to search.
+   * @param pattern The regular expression to search for.
+   * @return A new {@link Expression} representing the regular expression find function.
+   */
+  @BetaApi
+  public static Expression regexFind(Expression string, String pattern) {
+    return regexFind(string, constant(pattern));
+  }
+
+  /**
+   * Creates an expression that returns the first substring of a string field that matches a
+   * specified regular expression.
+   *
+   * <p>This expression uses the [RE2](https://github.com/google/re2/wiki/Syntax) regular expression
+   * syntax.
+   *
+   * @param fieldName The name of the field containing the string to search.
+   * @param pattern The regular expression to search for.
+   * @return A new {@link Expression} representing the regular expression find function.
+   */
+  @BetaApi
+  public static Expression regexFind(String fieldName, Expression pattern) {
+    return regexFind(field(fieldName), pattern);
+  }
+
+  /**
+   * Creates an expression that returns the first substring of a string field that matches a
+   * specified regular expression.
+   *
+   * <p>This expression uses the [RE2](https://github.com/google/re2/wiki/Syntax) regular expression
+   * syntax.
+   *
+   * @param fieldName The name of the field containing the string to search.
+   * @param pattern The regular expression to search for.
+   * @return A new {@link Expression} representing the regular expression find function.
+   */
+  @BetaApi
+  public static Expression regexFind(String fieldName, String pattern) {
+    return regexFind(field(fieldName), constant(pattern));
+  }
+
+  /**
+   * Creates an expression that evaluates to a list of all substrings in a string expression that
+   * match a specified regular expression.
+   *
+   * <p>This expression uses the [RE2](https://github.com/google/re2/wiki/Syntax) regular expression
+   * syntax.
+   *
+   * @param string The expression representing the string to search.
+   * @param pattern The regular expression to search for.
+   * @return A new {@link Expression} that evaluates to a list of matched substrings.
+   */
+  @BetaApi
+  public static Expression regexFindAll(Expression string, Expression pattern) {
+    return new FunctionExpression("regex_find_all", ImmutableList.of(string, pattern));
+  }
+
+  /**
+   * Creates an expression that evaluates to a list of all substrings in a string expression that
+   * match a specified regular expression.
+   *
+   * <p>This expression uses the [RE2](https://github.com/google/re2/wiki/Syntax) regular expression
+   * syntax.
+   *
+   * @param string The expression representing the string to search.
+   * @param pattern The regular expression to search for.
+   * @return A new {@link Expression} that evaluates to a list of matched substrings.
+   */
+  @BetaApi
+  public static Expression regexFindAll(Expression string, String pattern) {
+    return regexFindAll(string, constant(pattern));
+  }
+
+  /**
+   * Creates an expression that evaluates to a list of all substrings in a string field that match a
+   * specified regular expression.
+   *
+   * <p>This expression uses the [RE2](https://github.com/google/re2/wiki/Syntax) regular expression
+   * syntax.
+   *
+   * @param fieldName The name of the field containing the string to search.
+   * @param pattern The regular expression to search for.
+   * @return A new {@link Expression} that evaluates to a list of matched substrings.
+   */
+  @BetaApi
+  public static Expression regexFindAll(String fieldName, Expression pattern) {
+    return regexFindAll(field(fieldName), pattern);
+  }
+
+  /**
+   * Creates an expression that evaluates to a list of all substrings in a string field that match a
+   * specified regular expression.
+   *
+   * <p>This expression uses the [RE2](https://github.com/google/re2/wiki/Syntax) regular expression
+   * syntax.
+   *
+   * @param fieldName The name of the field containing the string to search.
+   * @param pattern The regular expression to search for.
+   * @return A new {@link Expression} that evaluates to a list of matched substrings.
+   */
+  @BetaApi
+  public static Expression regexFindAll(String fieldName, String pattern) {
+    return regexFindAll(field(fieldName), constant(pattern));
+  }
+
+  /**
    * Creates an expression that checks if a string field matches a specified regular expression.
    *
    * @param string The expression representing the string to match against.
@@ -3086,6 +3214,94 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that returns a random double between 0.0 and 1.0 but not including 1.0.
+   *
+   * @return A new {@link Expression} representing a random double result from the rand operation.
+   */
+  @BetaApi
+  public static Expression rand() {
+    return new FunctionExpression("rand", ImmutableList.of());
+  }
+
+  /**
+   * Creates an expression that truncates {@code numericExpr} to an integer.
+   *
+   * @param numericExpr An expression that returns number when evaluated.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public static Expression trunc(Expression numericExpr) {
+    return new FunctionExpression("trunc", ImmutableList.of(numericExpr));
+  }
+
+  /**
+   * Creates an expression that truncates {@code numericField} to an integer.
+   *
+   * @param numericField Name of field that returns number when evaluated.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public static Expression trunc(String numericField) {
+    return trunc(field(numericField));
+  }
+
+  /**
+   * Creates an expression that truncates {@code numericExpr} to {@code decimalPlace} decimal places
+   * if {@code decimalPlace} is positive, truncates digits to the left of the decimal point if
+   * {@code decimalPlace} is negative.
+   *
+   * @param numericExpr An expression that returns number when evaluated.
+   * @param decimalPlace The number of decimal places to truncate.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public static Expression truncToPrecision(Expression numericExpr, int decimalPlace) {
+    return new FunctionExpression("trunc", ImmutableList.of(numericExpr, constant(decimalPlace)));
+  }
+
+  /**
+   * Creates an expression that truncates {@code numericField} to {@code decimalPlace} decimal
+   * places if {@code decimalPlace} is positive, truncates digits to the left of the decimal point
+   * if {@code decimalPlace} is negative.
+   *
+   * @param numericField Name of field that returns number when evaluated.
+   * @param decimalPlace The number of decimal places to truncate.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public static Expression truncToPrecision(String numericField, int decimalPlace) {
+    return truncToPrecision(field(numericField), decimalPlace);
+  }
+
+  /**
+   * Creates an expression that truncates {@code numericExpr} to {@code decimalPlace} decimal places
+   * if {@code decimalPlace} is positive, truncates digits to the left of the decimal point if
+   * {@code decimalPlace} is negative.
+   *
+   * @param numericExpr An expression that returns number when evaluated.
+   * @param decimalPlace The number of decimal places to truncate.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public static Expression truncToPrecision(Expression numericExpr, Expression decimalPlace) {
+    return new FunctionExpression("trunc", ImmutableList.of(numericExpr, decimalPlace));
+  }
+
+  /**
+   * Creates an expression that truncates {@code numericField} to {@code decimalPlace} decimal
+   * places if {@code decimalPlace} is positive, truncates digits to the left of the decimal point
+   * if {@code decimalPlace} is negative.
+   *
+   * @param numericField Name of field that returns number when evaluated.
+   * @param decimalPlace The number of decimal places to truncate.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public static Expression truncToPrecision(String numericField, Expression decimalPlace) {
+    return truncToPrecision(field(numericField), decimalPlace);
+  }
+
+  /**
    * Creates an expression that returns the smallest integer that isn't less than {@code
    * numericExpr}.
    *
@@ -3559,6 +3775,42 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that truncates this numeric expression to an integer.
+   *
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public final Expression trunc() {
+    return trunc(this);
+  }
+
+  /**
+   * Creates an expression that truncates this numeric expression to {@code decimalPlace} decimal
+   * places if {@code decimalPlace} is positive, truncates digits to the left of the decimal point
+   * if {@code decimalPlace} is negative.
+   *
+   * @param decimalPlace The number of decimal places to truncate.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public final Expression truncToPrecision(int decimalPlace) {
+    return truncToPrecision(this, decimalPlace);
+  }
+
+  /**
+   * Creates an expression that truncates this numeric expression to {@code decimalPlace} decimal
+   * places if {@code decimalPlace} is positive, truncates digits to the left of the decimal point
+   * if {@code decimalPlace} is negative.
+   *
+   * @param decimalPlace The number of decimal places to truncate.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public final Expression truncToPrecision(Expression decimalPlace) {
+    return truncToPrecision(this, decimalPlace);
+  }
+
+  /**
    * Creates an expression that returns the smallest integer that isn't less than this numeric
    * expression.
    *
@@ -3873,6 +4125,36 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that returns the first substring of a string expression that matches a
+   * specified regular expression.
+   *
+   * <p>This expression uses the [RE2](https://github.com/google/re2/wiki/Syntax) regular expression
+   * syntax.
+   *
+   * @param pattern The regular expression to search for.
+   * @return A new {@link Expression} representing the regular expression find function.
+   */
+  @BetaApi
+  public final Expression regexFind(Object pattern) {
+    return regexFind(this, toExprOrConstant(pattern));
+  }
+
+  /**
+   * Creates an expression that evaluates to a list of all substrings in a string expression that
+   * match a specified regular expression.
+   *
+   * <p>This expression uses the [RE2](https://github.com/google/re2/wiki/Syntax) regular expression
+   * syntax.
+   *
+   * @param pattern The regular expression to search for.
+   * @return A new {@link Expression} that evaluates to a list of matched substrings.
+   */
+  @BetaApi
+  public final Expression regexFindAll(Object pattern) {
+    return regexFindAll(this, toExprOrConstant(pattern));
+  }
+
+  /**
    * Creates an expression that checks if this string expression matches a specified regular
    * expression.
    *
@@ -4146,6 +4428,56 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an aggregation that finds the first value of this expression across multiple stage
+   * inputs.
+   *
+   * @return A new {@link AggregateFunction} representing the first aggregation.
+   */
+  @BetaApi
+  public final AggregateFunction first() {
+    return AggregateFunction.first(this);
+  }
+
+  /**
+   * Creates an aggregation that finds the last value of this expression across multiple stage
+   * inputs.
+   *
+   * @return A new {@link AggregateFunction} representing the last aggregation.
+   */
+  @BetaApi
+  public final AggregateFunction last() {
+    return AggregateFunction.last(this);
+  }
+
+  /**
+   * Creates an aggregation that collects all values of this expression across multiple stage inputs
+   * into an array.
+   *
+   * <p>If the expression resolves to an absent value, it is converted to `null`. The order of
+   * elements in the output array is not stable and shouldn't be relied upon.
+   *
+   * @return A new {@link AggregateFunction} representing the array_agg aggregation.
+   */
+  @BetaApi
+  public final AggregateFunction arrayAgg() {
+    return AggregateFunction.arrayAgg(this);
+  }
+
+  /**
+   * Creates an aggregation that collects all distinct values of this expression across multiple
+   * stage inputs into an array.
+   *
+   * <p>If the expression resolves to an absent value, it is converted to `null`. The order of
+   * elements in the output array is not stable and shouldn't be relied upon.
+   *
+   * @return A new {@link AggregateFunction} representing the array_agg_distinct aggregation.
+   */
+  @BetaApi
+  public final AggregateFunction arrayAggDistinct() {
+    return AggregateFunction.arrayAggDistinct(this);
+  }
+
+  /**
    * Create an {@link Ordering} that sorts documents in ascending order based on value of this
    * expression
    *
@@ -4174,11 +4506,11 @@ public abstract class Expression {
    * names to calculated values.
    *
    * @param alias The alias to assign to this expression.
-   * @return A new {@link Selectable} (typically an {@link AliasedExpression}) that wraps this
-   *     expression and associates it with the provided alias.
+   * @return A new {@link AliasedExpression} that wraps this expression and associates it with the
+   *     provided alias.
    */
   @BetaApi
-  public Selectable as(String alias) {
+  public AliasedExpression as(String alias) {
     return new AliasedExpression(this, alias);
   }
 
