@@ -789,7 +789,7 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
         firestore
             .pipeline()
             .collection(reviewsCollName)
-            .where(equal("authorName", variable("doc").mapGet("author")))
+            .where(equal("authorName", variable("doc").getField("author")))
             .select(field("reviewer").as("reviewer"));
 
     List<PipelineResult> results =
@@ -891,7 +891,7 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
         firestore
             .pipeline()
             .collection(reviewsCollName)
-            .where(equal("bookId", variable("doc").mapGet("does_not_exist")))
+            .where(equal("bookId", variable("doc").getField("does_not_exist")))
             .select(field("reviewer").as("reviewer"));
 
     List<PipelineResult> results =
