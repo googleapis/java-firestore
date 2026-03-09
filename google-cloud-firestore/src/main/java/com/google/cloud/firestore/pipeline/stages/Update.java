@@ -27,40 +27,40 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 @InternalApi
-public final class Insert extends Stage {
+public final class Update extends Stage {
 
   @Nullable private final String path;
 
-  private Insert(@Nullable String path, InternalOptions options) {
-    super("insert", options);
+  private Update(@Nullable String path, InternalOptions options) {
+    super("update", options);
     this.path = path;
   }
 
   @BetaApi
-  public Insert() {
+  public Update() {
     this(null, InternalOptions.EMPTY);
   }
 
   @BetaApi
-  public static Insert withCollection(CollectionReference target) {
+  public static Update withCollection(CollectionReference target) {
     String path = target.getPath();
-    return new Insert(path.startsWith("/") ? path : "/" + path, InternalOptions.EMPTY);
+    return new Update(path.startsWith("/") ? path : "/" + path, InternalOptions.EMPTY);
   }
 
   @InternalApi
-  public Insert withOptions(InsertOptions options) {
-    return new Insert(path, this.options.adding(options));
+  public Update withOptions(UpdateOptions options) {
+    return new Update(path, this.options.adding(options));
   }
 
   @InternalApi
-  public Insert withReturns(InsertReturn returns) {
-    return new Insert(
+  public Update withReturns(UpdateReturn returns) {
+    return new Update(
         path, this.options.with("returns", PipelineUtils.encodeValue(returns.getValue())));
   }
 
   @BetaApi
-  public Insert withTransformations(Selectable... transformations) {
-    return new Insert(
+  public Update withTransformations(Selectable... transformations) {
+    return new Update(
         path,
         this.options.with(
             "transformations",

@@ -96,9 +96,6 @@ import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
 import com.google.cloud.firestore.pipeline.stages.CollectionHints;
 import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
 import com.google.cloud.firestore.pipeline.stages.ConflictResolution;
-import com.google.cloud.firestore.pipeline.stages.Delete;
-import com.google.cloud.firestore.pipeline.stages.DeleteOptions;
-import com.google.cloud.firestore.pipeline.stages.DeleteReturn;
 import com.google.cloud.firestore.pipeline.stages.ExplainOptions;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
@@ -2329,23 +2326,15 @@ public class ITPipelineTest extends ITBaseTest {
 
   @Test
   public void testDelete() throws Exception {
-    firestore
-        .pipeline()
-        .collection(collection)
-        .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
-        .delete()
-        .execute()
-        .get();
-
-    firestore
-        .pipeline()
-        .collection(collection)
-        .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
-        .delete(
-            new Delete().withReturns(DeleteReturn.DOCUMENT_ID),
-            new DeleteOptions().withTransactional(true))
-        .execute()
-        .get();
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection)
+            .where(equal("title", "The Hitchhiker's Guide to the Galaxy"))
+            .delete()
+            .execute()
+            .get()
+            .getResults();
   }
 
   @Test

@@ -62,6 +62,8 @@ import com.google.cloud.firestore.pipeline.stages.StageUtils;
 import com.google.cloud.firestore.pipeline.stages.Union;
 import com.google.cloud.firestore.pipeline.stages.Unnest;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
+import com.google.cloud.firestore.pipeline.stages.Update;
+import com.google.cloud.firestore.pipeline.stages.UpdateOptions;
 import com.google.cloud.firestore.pipeline.stages.Upsert;
 import com.google.cloud.firestore.pipeline.stages.UpsertOptions;
 import com.google.cloud.firestore.pipeline.stages.Where;
@@ -1029,7 +1031,7 @@ public final class Pipeline {
    * @param options The {@code DeleteOptions} to apply to the stage.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
-  @BetaApi
+  @InternalApi
   public Pipeline delete(Delete deleteStage, DeleteOptions options) {
     return append(deleteStage.withOptions(options));
   }
@@ -1052,7 +1054,7 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline upsert(CollectionReference target) {
-    return append(Upsert.withCollection(target));
+    return append(Update.withCollection(target));
   }
 
   /**
@@ -1062,9 +1064,42 @@ public final class Pipeline {
    * @param options The {@code UpsertOptions} to apply to the stage.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
-  @BetaApi
+  @InternalApi
   public Pipeline upsert(Upsert upsertStage, UpsertOptions options) {
     return append(upsertStage.withOptions(options));
+  }
+
+  /**
+   * Performs an update operation using documents from previous stages.
+   *
+   * @return A new {@code Pipeline} object with this stage appended to the stage list.
+   */
+  @BetaApi
+  public Pipeline update() {
+    return append(new Update());
+  }
+
+  /**
+   * Performs an update operation using documents from previous stages.
+   *
+   * @param target The collection to upsert to.
+   * @return A new {@code Pipeline} object with this stage appended to the stage list.
+   */
+  @BetaApi
+  public Pipeline update(CollectionReference target) {
+    return append(Update.withCollection(target));
+  }
+
+  /**
+   * Performs an update operation using documents from previous stages.
+   *
+   * @param update The {@code Update} stage to append.
+   * @param options The {@code UpdateOptions} to apply to the stage.
+   * @return A new {@code Pipeline} object with this stage appended to the stage list.
+   */
+  @InternalApi
+  public Pipeline update(Update updateStage, UpdateOptions options) {
+    return append(updateStage.withOptions(options));
   }
 
   /**
@@ -1095,7 +1130,7 @@ public final class Pipeline {
    * @param options The {@code InsertOptions} to apply to the stage.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
-  @BetaApi
+  @InternalApi
   public Pipeline insert(Insert insertStage, InsertOptions options) {
     return append(insertStage.withOptions(options));
   }
