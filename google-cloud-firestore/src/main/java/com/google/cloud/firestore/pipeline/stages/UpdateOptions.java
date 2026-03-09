@@ -18,21 +18,32 @@ package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.InternalApi;
 
-/** Options for a Delete pipeline stage. */
+/** Options for an Update pipeline stage. */
 @InternalApi
-public class DeleteOptions extends WriteOptions<DeleteOptions> {
+public class UpdateOptions extends WriteOptions<UpdateOptions> {
 
-  /** Creates a new, empty `DeleteOptions` object. */
-  public DeleteOptions() {
+  /** Creates a new, empty `UpdateOptions` object. */
+  public UpdateOptions() {
     super(InternalOptions.EMPTY);
   }
 
-  DeleteOptions(InternalOptions options) {
+  UpdateOptions(InternalOptions options) {
     super(options);
   }
 
   @Override
-  DeleteOptions self(InternalOptions options) {
-    return new DeleteOptions(options);
+  UpdateOptions self(InternalOptions options) {
+    return new UpdateOptions(options);
+  }
+
+  /**
+   * Sets the conflict resolution strategy.
+   *
+   * @param conflictResolution The conflict resolution strategy.
+   * @return A new options object with the conflict resolution set.
+   */
+  @InternalApi
+  public UpdateOptions withConflictResolution(ConflictResolution conflictResolution) {
+    return with("conflict_resolution", conflictResolution.getValue());
   }
 }

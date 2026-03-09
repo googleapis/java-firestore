@@ -47,12 +47,12 @@ public final class Insert extends Stage {
     return new Insert(path.startsWith("/") ? path : "/" + path, InternalOptions.EMPTY);
   }
 
-  @BetaApi
+  @InternalApi
   public Insert withOptions(InsertOptions options) {
     return new Insert(path, this.options.adding(options));
   }
 
-  @BetaApi
+  @InternalApi
   public Insert withReturns(InsertReturn returns) {
     return new Insert(
         path, this.options.with("returns", PipelineUtils.encodeValue(returns.getValue())));

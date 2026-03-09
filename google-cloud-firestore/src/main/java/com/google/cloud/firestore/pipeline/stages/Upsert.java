@@ -47,12 +47,12 @@ public final class Upsert extends Stage {
     return new Upsert(path.startsWith("/") ? path : "/" + path, InternalOptions.EMPTY);
   }
 
-  @BetaApi
+  @InternalApi
   public Upsert withOptions(UpsertOptions options) {
     return new Upsert(path, this.options.adding(options));
   }
 
-  @BetaApi
+  @InternalApi
   public Upsert withReturns(UpsertReturn returns) {
     return new Upsert(
         path, this.options.with("returns", PipelineUtils.encodeValue(returns.getValue())));
