@@ -66,6 +66,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
   private final TransportChannelProvider channelProvider;
   private final CredentialsProvider credentialsProvider;
   private final String emulatorHost;
+  private final boolean alwaysUseImplicitOrderBy;
   private final transient @Nonnull FirestoreOpenTelemetryOptions openTelemetryOptions;
   private final transient @Nonnull com.google.cloud.firestore.telemetry.TraceUtil traceUtil;
   private final transient @Nonnull com.google.cloud.firestore.telemetry.MetricsUtil metricsUtil;
@@ -144,6 +145,10 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     return emulatorHost;
   }
 
+  public boolean isAlwaysUseImplicitOrderBy() {
+    return alwaysUseImplicitOrderBy;
+  }
+
   @Nonnull
   com.google.cloud.firestore.telemetry.TraceUtil getTraceUtil() {
     return traceUtil;
@@ -166,6 +171,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
     @Nullable private TransportChannelProvider channelProvider = null;
     @Nullable private CredentialsProvider credentialsProvider = null;
     @Nullable private String emulatorHost = null;
+    private boolean alwaysUseImplicitOrderBy = false;
     @Nullable private FirestoreOpenTelemetryOptions openTelemetryOptions = null;
 
     private Builder() {}
@@ -176,6 +182,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
       this.channelProvider = options.channelProvider;
       this.credentialsProvider = options.credentialsProvider;
       this.emulatorHost = options.emulatorHost;
+      this.alwaysUseImplicitOrderBy = options.alwaysUseImplicitOrderBy;
       this.openTelemetryOptions = options.openTelemetryOptions;
     }
 
@@ -232,6 +239,22 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
      */
     public Builder setEmulatorHost(@Nonnull String emulatorHost) {
       this.emulatorHost = emulatorHost;
+      return this;
+    }
+
+    /**
+     * Sets whether to always use implicit order bys (e.g., for inequality queries).
+     *
+     * <p>By default, the SDK only sends explicit order bys and relies on the backend to append
+     * implicit order bys (unless cursors are involved). However, enterprise edition does not
+     * enforce implicit order bys because it does not back all queries with an index. This option
+     * allows enterprise users to opt-in to always forcing the SDK to append the implicit order by
+     * clauses to the request to mimic the standard edition behavior.
+     *
+     * @param alwaysUseImplicitOrderBy Whether to always use implicit order bys.
+     */
+    public Builder setAlwaysUseImplicitOrderBy(boolean alwaysUseImplicitOrderBy) {
+      this.alwaysUseImplicitOrderBy = alwaysUseImplicitOrderBy;
       return this;
     }
 
@@ -380,6 +403,7 @@ public final class FirestoreOptions extends ServiceOptions<Firestore, FirestoreO
             : GrpcTransportOptions.setUpCredentialsProvider(this);
 
     this.emulatorHost = builder.emulatorHost;
+    this.alwaysUseImplicitOrderBy = builder.alwaysUseImplicitOrderBy;
   }
 
   private static class FirestoreDefaults implements ServiceDefaults<Firestore, FirestoreOptions> {
