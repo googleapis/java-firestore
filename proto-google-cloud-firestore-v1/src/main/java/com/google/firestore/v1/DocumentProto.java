@@ -93,7 +93,8 @@ public final class DocumentProto extends com.google.protobuf.GeneratedFile {
 
   static {
     java.lang.String[] descriptorData = {
-      "\n\"google/firestore/v1/document.proto\022\023go"
+      "\n"
+          + "\"google/firestore/v1/document.proto\022\023go"
           + "ogle.firestore.v1\032\037google/api/field_beha"
           + "vior.proto\032\034google/protobuf/struct.proto"
           + "\032\037google/protobuf/timestamp.proto\032\030google/type/latlng.proto\"\200\002\n"

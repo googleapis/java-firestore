@@ -1149,6 +1149,7 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
     assertThat(e)
         .hasMessageThat()
         .contains(
-            "Union only supports combining root pipelines, doesn't support relative scope Pipeline like relative subcollection pipeline");
+            "Union only supports combining root pipelines, doesn't support relative scope Pipeline"
+                + " like relative subcollection pipeline");
   }
 }
