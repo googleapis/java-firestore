@@ -1,6 +1,6 @@
-gapic_generator_version: 2.66.1
-googleapis_commitish: 5b2aa2c08c23f26d6e8abe65377077c624878d12
-libraries_bom_version: 26.75.0
+gapic_generator_version: 2.67.0
+googleapis_commitish: 798823426715215eccca4d7e7ee4c814843045d7
+libraries_bom_version: 26.77.0
 libraries:
   - api_shortname: firestore
     name_pretty: Cloud Firestore
@@ -12,7 +12,7 @@ libraries:
     repo: googleapis/java-firestore
     repo_short: java-firestore
     distribution_name: com.google.cloud:google-cloud-firestore
-    codeowner_team: '@googleapis/api-firestore @googleapis/firestore-dpe'
+    codeowner_team: '@googleapis/firestore-team'
     api_id: firestore.googleapis.com
     library_type: GAPIC_COMBO
     api_description: is a fully-managed NoSQL document database for mobile, web, and server development from Firebase and Google Cloud Platform.  It's backed by a multi-region replicated database that ensures once data is committed, it's durable even in the face of unexpected disasters. Not only that, but despite being a distributed database, it's also strongly consistent and offers seamless integration with other Firebase and Google Cloud Platform products, including Google Cloud Functions.
