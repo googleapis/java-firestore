@@ -57,7 +57,6 @@ import com.google.cloud.firestore.pipeline.stages.Select;
 import com.google.cloud.firestore.pipeline.stages.Sort;
 import com.google.cloud.firestore.pipeline.stages.Stage;
 import com.google.cloud.firestore.pipeline.stages.StageUtils;
-import com.google.cloud.firestore.pipeline.stages.Subcollection;
 import com.google.cloud.firestore.pipeline.stages.Union;
 import com.google.cloud.firestore.pipeline.stages.Unnest;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
@@ -262,33 +261,6 @@ public final class Pipeline {
                     .add(additionalFields)
                     .build()
                     .toArray(new Selectable[0]))));
-  }
-
-  /**
-   * Initializes a pipeline scoped to a subcollection.
-   *
-   * <p>This method allows you to start a new pipeline that operates on a subcollection of the
-   * current document. It is intended to be used as a subquery.
-   *
-   * <p><b>Note:</b> A pipeline created with `subcollection` cannot be executed directly using
-   * {@link #execute()}. It must be used within a parent pipeline.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * firestore.pipeline().collection("books")
-   *     .addFields(
-   *         Pipeline.subcollection("reviews")
-   *             .aggregate(AggregateFunction.average("rating").as("avg_rating"))
-   *             .toScalarExpression().as("average_rating"));
-   * }</pre>
-   *
-   * @param path The path of the subcollection.
-   * @return A new {@code Pipeline} instance scoped to the subcollection.
-   */
-  @BetaApi
-  public static Pipeline subcollection(String path) {
-    return new Pipeline(null, new Subcollection(path));
   }
 
   /**
@@ -1085,6 +1057,10 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline union(Pipeline other) {
+    if (other.rpcContext == null) {
+      throw new IllegalArgumentException(
+          "Union only supports combining root pipelines, doesn't support relative scope Pipeline like relative subcollection pipeline");
+    }
     return append(new Union(other));
   }
 

@@ -33,6 +33,7 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.PipelineResult;
+import com.google.cloud.firestore.PipelineSource;
 import com.google.cloud.firestore.pipeline.expressions.AggregateFunction;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -46,7 +47,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -1051,7 +1051,6 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
     assertThat(data(results)).isNotEmpty();
   }
 
-  @Ignore("Pending backend support")
   @Test
   public void testStandardSubcollectionQuery() throws Exception {
     String collName = "subcoll_test_" + UUID.randomUUID().toString();
@@ -1071,7 +1070,7 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
         .get(5, TimeUnit.SECONDS);
 
     Pipeline reviewsSub =
-        Pipeline.subcollection("reviews").select(field("reviewer").as("reviewer"));
+        PipelineSource.subcollection("reviews").select(field("reviewer").as("reviewer"));
 
     List<PipelineResult> results =
         firestore
@@ -1085,11 +1084,9 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
             .getResults();
 
     assertThat(data(results))
-        .containsExactly(
-            map("title", "1984", "reviews", ImmutableList.of(map("reviewer", "Alice"))));
+        .containsExactly(map("title", "1984", "reviews", ImmutableList.of("Alice")));
   }
 
-  @Ignore("Pending backend support")
   @Test
   public void testMissingSubcollection() throws Exception {
     String collName = "subcoll_missing_" + UUID.randomUUID().toString();
@@ -1103,13 +1100,13 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
     // Notably NO subcollections are added to doc1
 
     Pipeline missingSub =
-        Pipeline.subcollection("does_not_exist").select(variable("p").as("sub_p"));
+        PipelineSource.subcollection("does_not_exist").select(variable("p").as("sub_p"));
 
     List<PipelineResult> results =
         firestore
             .pipeline()
             .collection(collName)
-            .define(variable("parentDoc").as("p"))
+            .define(currentDocument().as("p"))
             .select(missingSub.toArrayExpression().as("missing_data"))
             .limit(1)
             .execute()
@@ -1122,7 +1119,7 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
 
   @Test
   public void testDirectExecutionOfSubcollectionPipeline() throws Exception {
-    Pipeline sub = Pipeline.subcollection("reviews");
+    Pipeline sub = PipelineSource.subcollection("reviews");
 
     IllegalStateException exception =
         assertThrows(
@@ -1137,21 +1134,21 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
         .contains("Cannot execute a relative subcollection pipeline directly");
   }
 
-  @Ignore("Pending backend support")
   @Test
   public void testUnionWithSubqueryThrows() throws Exception {
-      IllegalArgumentException e = assertThrows(
-              IllegalArgumentException.class,
-              () -> {
-                  firestore
-                          .pipeline()
-                          .collection(collection.getPath())
-                          .union(Pipeline.subcollection("subcollection"));
-              });
+    IllegalArgumentException e =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+              firestore
+                  .pipeline()
+                  .collection(collection.getPath())
+                  .union(PipelineSource.subcollection("subcollection"));
+            });
 
-      assertThat(e)
-              .hasMessageThat()
-              .contains(
-                      "Union only supports combining root pipelines, doesn't support relative scope Pipeline like relative subcollection pipeline");
+    assertThat(e)
+        .hasMessageThat()
+        .contains(
+            "Union only supports combining root pipelines, doesn't support relative scope Pipeline like relative subcollection pipeline");
   }
 }
