@@ -2396,6 +2396,459 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that returns the first element of an array.
+   *
+   * @param array The expression representing the array.
+   * @return A new {@link Expression} representing the first element of the array.
+   */
+  @BetaApi
+  public static Expression arrayFirst(Expression array) {
+    return new FunctionExpression("array_first", ImmutableList.of(array));
+  }
+
+  /**
+   * Creates an expression that returns the first element of an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @return A new {@link Expression} representing the first element of the array.
+   */
+  @BetaApi
+  public static Expression arrayFirst(String arrayFieldName) {
+    return arrayFirst(field(arrayFieldName));
+  }
+
+  /**
+   * Creates an expression that returns the first n elements of an array.
+   *
+   * @param array The expression representing the array.
+   * @param n The Expression evaluates to the number of elements to return.
+   * @return A new {@link Expression} representing the first n elements of the array.
+   */
+  @BetaApi
+  public static Expression arrayFirstN(Expression array, Expression n) {
+    return new FunctionExpression("array_first_n", ImmutableList.of(array, n));
+  }
+
+  /**
+   * Creates an expression that returns the first n elements of an array.
+   *
+   * @param array The expression representing the array.
+   * @param n The number of elements to return.
+   * @return A new {@link Expression} representing the first n elements of the array.
+   */
+  @BetaApi
+  public static Expression arrayFirstN(Expression array, int n) {
+    return arrayFirstN(array, constant(n));
+  }
+
+  /**
+   * Creates an expression that returns the first n elements of an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param n The number of elements to return.
+   * @return A new {@link Expression} representing the first n elements of the array.
+   */
+  @BetaApi
+  public static Expression arrayFirstN(String arrayFieldName, int n) {
+    return arrayFirstN(field(arrayFieldName), constant(n));
+  }
+
+  /**
+   * Creates an expression that returns the first n elements of an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param n The Expression evaluates to the number of elements to return.
+   * @return A new {@link Expression} representing the first n elements of the array.
+   */
+  @BetaApi
+  public static Expression arrayFirstN(String arrayFieldName, Expression n) {
+    return arrayFirstN(field(arrayFieldName), n);
+  }
+
+  /**
+   * Creates an expression that returns the last element of an array.
+   *
+   * @param array The expression representing the array.
+   * @return A new {@link Expression} representing the last element of the array.
+   */
+  @BetaApi
+  public static Expression arrayLast(Expression array) {
+    return new FunctionExpression("array_last", ImmutableList.of(array));
+  }
+
+  /**
+   * Creates an expression that returns the last element of an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @return A new {@link Expression} representing the last element of the array.
+   */
+  @BetaApi
+  public static Expression arrayLast(String arrayFieldName) {
+    return arrayLast(field(arrayFieldName));
+  }
+
+  /**
+   * Creates an expression that returns the last n elements of an array.
+   *
+   * @param array The expression representing the array.
+   * @param n The Expression evaluates to the number of elements to return.
+   * @return A new {@link Expression} representing the last n elements of the array.
+   */
+  @BetaApi
+  public static Expression arrayLastN(Expression array, Expression n) {
+    return new FunctionExpression("array_last_n", ImmutableList.of(array, n));
+  }
+
+  /**
+   * Creates an expression that returns the last n elements of an array.
+   *
+   * @param array The expression representing the array.
+   * @param n The number of elements to return.
+   * @return A new {@link Expression} representing the last n elements of the array.
+   */
+  @BetaApi
+  public static Expression arrayLastN(Expression array, int n) {
+    return arrayLastN(array, constant(n));
+  }
+
+  /**
+   * Creates an expression that returns the last n elements of an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param n The number of elements to return.
+   * @return A new {@link Expression} representing the last n elements of the array.
+   */
+  @BetaApi
+  public static Expression arrayLastN(String arrayFieldName, int n) {
+    return arrayLastN(field(arrayFieldName), n);
+  }
+
+  /**
+   * Creates an expression that returns the last n elements of an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param n The Expression evaluates to the number of elements to return.
+   * @return A new {@link Expression} representing the last n elements of the array.
+   */
+  @BetaApi
+  public static Expression arrayLastN(String arrayFieldName, Expression n) {
+    return arrayLastN(field(arrayFieldName), n);
+  }
+
+  /**
+   * Creates an expression that returns the minimum value of an array.
+   *
+   * @param array The expression representing the array.
+   * @return A new {@link Expression} representing the minimum value of the array.
+   */
+  @BetaApi
+  public static Expression arrayMinimum(Expression array) {
+    return new FunctionExpression("minimum", ImmutableList.of(array));
+  }
+
+  /**
+   * Creates an expression that returns the minimum value of an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @return A new {@link Expression} representing the minimum value of the array.
+   */
+  @BetaApi
+  public static Expression arrayMinimum(String arrayFieldName) {
+    return arrayMinimum(field(arrayFieldName));
+  }
+
+  /**
+   * Creates an expression that returns the n minimum values of an array.
+   *
+   * <p>Note: Returns the n smallest non-null elements in the array, in ascending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param array The expression representing the array.
+   * @param n The Expression evaluates to the number of elements to return.
+   * @return A new {@link Expression} representing the n minimum values of the array.
+   */
+  @BetaApi
+  public static Expression arrayMinimumN(Expression array, Expression n) {
+    return new FunctionExpression("minimum_n", ImmutableList.of(array, n));
+  }
+
+  /**
+   * Creates an expression that returns the n minimum values of an array.
+   *
+   * <p>Note: Returns the n smallest non-null elements in the array, in ascending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param array The expression representing the array.
+   * @param n The number of elements to return.
+   * @return A new {@link Expression} representing the n minimum values of the array.
+   */
+  @BetaApi
+  public static Expression arrayMinimumN(Expression array, int n) {
+    return arrayMinimumN(array, constant(n));
+  }
+
+  /**
+   * Creates an expression that returns the n minimum values of an array.
+   *
+   * <p>Note: Returns the n smallest non-null elements in the array, in ascending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param n The number of elements to return.
+   * @return A new {@link Expression} representing the n minimum values of the array.
+   */
+  @BetaApi
+  public static Expression arrayMinimumN(String arrayFieldName, int n) {
+    return arrayMinimumN(field(arrayFieldName), n);
+  }
+
+  /**
+   * Creates an expression that returns the n minimum values of an array.
+   *
+   * <p>Note: Returns the n smallest non-null elements in the array, in ascending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param n The Expression evaluates to the number of elements to return.
+   * @return A new {@link Expression} representing the n minimum values of the array.
+   */
+  @BetaApi
+  public static Expression arrayMinimumN(String arrayFieldName, Expression n) {
+    return arrayMinimumN(field(arrayFieldName), n);
+  }
+
+  /**
+   * Creates an expression that returns the maximum value of an array.
+   *
+   * @param array The expression representing the array.
+   * @return A new {@link Expression} representing the maximum value of the array.
+   */
+  @BetaApi
+  public static Expression arrayMaximum(Expression array) {
+    return new FunctionExpression("maximum", ImmutableList.of(array));
+  }
+
+  /**
+   * Creates an expression that returns the maximum value of an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @return A new {@link Expression} representing the maximum value of the array.
+   */
+  @BetaApi
+  public static Expression arrayMaximum(String arrayFieldName) {
+    return arrayMaximum(field(arrayFieldName));
+  }
+
+  /**
+   * Creates an expression that returns the n maximum values of an array.
+   *
+   * <p>Note: Returns the n largest non-null elements in the array, in descending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param array The expression representing the array.
+   * @param n The Expression evaluates to the number of elements to return.
+   * @return A new {@link Expression} representing the n maximum values of the array.
+   */
+  @BetaApi
+  public static Expression arrayMaximumN(Expression array, Expression n) {
+    return new FunctionExpression("maximum_n", ImmutableList.of(array, n));
+  }
+
+  /**
+   * Creates an expression that returns the n maximum values of an array.
+   *
+   * <p>Note: Returns the n largest non-null elements in the array, in descending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param array The expression representing the array.
+   * @param n The number of elements to return.
+   * @return A new {@link Expression} representing the n maximum values of the array.
+   */
+  @BetaApi
+  public static Expression arrayMaximumN(Expression array, int n) {
+    return arrayMaximumN(array, constant(n));
+  }
+
+  /**
+   * Creates an expression that returns the n maximum values of an array.
+   *
+   * <p>Note: Returns the n largest non-null elements in the array, in descending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param n The number of elements to return.
+   * @return A new {@link Expression} representing the n maximum values of the array.
+   */
+  @BetaApi
+  public static Expression arrayMaximumN(String arrayFieldName, int n) {
+    return arrayMaximumN(field(arrayFieldName), n);
+  }
+
+  /**
+   * Creates an expression that returns the n maximum values of an array.
+   *
+   * <p>Note: Returns the n largest non-null elements in the array, in descending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param n The Expression evaluates to the number of elements to return.
+   * @return A new {@link Expression} representing the n maximum values of the array.
+   */
+  @BetaApi
+  public static Expression arrayMaximumN(String arrayFieldName, Expression n) {
+    return arrayMaximumN(field(arrayFieldName), n);
+  }
+
+  /**
+   * Creates an expression that returns the index of the first occurrence of a value in an array.
+   *
+   * @param array The expression representing the array.
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the index.
+   */
+  @BetaApi
+  public static Expression arrayIndexOf(Expression array, Expression value) {
+    return new FunctionExpression(
+        "array_index_of",
+        ImmutableList.of(array, toExprOrConstant(value), toExprOrConstant("first")));
+  }
+
+  /**
+   * Creates an expression that returns the index of the first occurrence of a value in an array.
+   *
+   * @param array The expression representing the array.
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the index.
+   */
+  @BetaApi
+  public static Expression arrayIndexOf(Expression array, Object value) {
+    return arrayIndexOf(array, toExprOrConstant(value));
+  }
+
+  /**
+   * Creates an expression that returns the index of the first occurrence of a value in an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the index.
+   */
+  @BetaApi
+  public static Expression arrayIndexOf(String arrayFieldName, Object value) {
+    return arrayIndexOf(field(arrayFieldName), value);
+  }
+
+  /**
+   * Creates an expression that returns the index of the first occurrence of a value in an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the index.
+   */
+  @BetaApi
+  public static Expression arrayIndexOf(String arrayFieldName, Expression value) {
+    return arrayIndexOf(field(arrayFieldName), value);
+  }
+
+  /**
+   * Creates an expression that returns the index of the last occurrence of a value in an array.
+   *
+   * @param array The expression representing the array.
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the last index.
+   */
+  @BetaApi
+  public static Expression arrayLastIndexOf(Expression array, Expression value) {
+    return new FunctionExpression(
+        "array_index_of",
+        ImmutableList.of(array, toExprOrConstant(value), toExprOrConstant("last")));
+  }
+
+  /**
+   * Creates an expression that returns the index of the last occurrence of a value in an array.
+   *
+   * @param array The expression representing the array.
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the last index.
+   */
+  @BetaApi
+  public static Expression arrayLastIndexOf(Expression array, Object value) {
+    return arrayLastIndexOf(array, toExprOrConstant(value));
+  }
+
+  /**
+   * Creates an expression that returns the index of the last occurrence of a value in an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the last index.
+   */
+  @BetaApi
+  public static Expression arrayLastIndexOf(String arrayFieldName, Object value) {
+    return arrayLastIndexOf(field(arrayFieldName), value);
+  }
+
+  /**
+   * Creates an expression that returns the index of the last occurrence of a value in an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the last index.
+   */
+  @BetaApi
+  public static Expression arrayLastIndexOf(String arrayFieldName, Expression value) {
+    return arrayLastIndexOf(field(arrayFieldName), value);
+  }
+
+  /**
+   * Creates an expression that returns all indices of a value in an array.
+   *
+   * @param array The expression representing the array.
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the indices.
+   */
+  @BetaApi
+  public static Expression arrayIndexOfAll(Expression array, Expression value) {
+    return new FunctionExpression(
+        "array_index_of_all", ImmutableList.of(array, toExprOrConstant(value)));
+  }
+
+  /**
+   * Creates an expression that returns all indices of a value in an array.
+   *
+   * @param array The expression representing the array.
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the indices.
+   */
+  @BetaApi
+  public static Expression arrayIndexOfAll(Expression array, Object value) {
+    return arrayIndexOfAll(array, toExprOrConstant(value));
+  }
+
+  /**
+   * Creates an expression that returns all indices of a value in an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the indices.
+   */
+  @BetaApi
+  public static Expression arrayIndexOfAll(String arrayFieldName, Object value) {
+    return arrayIndexOfAll(field(arrayFieldName), toExprOrConstant(value));
+  }
+
+  /**
+   * Creates an expression that returns all indices of a value in an array.
+   *
+   * @param arrayFieldName The field name of the array.
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the indices.
+   */
+  @BetaApi
+  public static Expression arrayIndexOfAll(String arrayFieldName, Expression value) {
+    return arrayIndexOfAll(field(arrayFieldName), value);
+  }
+
+  /**
    * Creates an expression that returns an element from an array at a specified index.
    *
    * @param array The expression representing the array.
@@ -3392,6 +3845,94 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that returns a random double between 0.0 and 1.0 but not including 1.0.
+   *
+   * @return A new {@link Expression} representing a random double result from the rand operation.
+   */
+  @BetaApi
+  public static Expression rand() {
+    return new FunctionExpression("rand", ImmutableList.of());
+  }
+
+  /**
+   * Creates an expression that truncates {@code numericExpr} to an integer.
+   *
+   * @param numericExpr An expression that returns number when evaluated.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public static Expression trunc(Expression numericExpr) {
+    return new FunctionExpression("trunc", ImmutableList.of(numericExpr));
+  }
+
+  /**
+   * Creates an expression that truncates {@code numericField} to an integer.
+   *
+   * @param numericField Name of field that returns number when evaluated.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public static Expression trunc(String numericField) {
+    return trunc(field(numericField));
+  }
+
+  /**
+   * Creates an expression that truncates {@code numericExpr} to {@code decimalPlace} decimal places
+   * if {@code decimalPlace} is positive, truncates digits to the left of the decimal point if
+   * {@code decimalPlace} is negative.
+   *
+   * @param numericExpr An expression that returns number when evaluated.
+   * @param decimalPlace The number of decimal places to truncate.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public static Expression truncToPrecision(Expression numericExpr, int decimalPlace) {
+    return new FunctionExpression("trunc", ImmutableList.of(numericExpr, constant(decimalPlace)));
+  }
+
+  /**
+   * Creates an expression that truncates {@code numericField} to {@code decimalPlace} decimal
+   * places if {@code decimalPlace} is positive, truncates digits to the left of the decimal point
+   * if {@code decimalPlace} is negative.
+   *
+   * @param numericField Name of field that returns number when evaluated.
+   * @param decimalPlace The number of decimal places to truncate.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public static Expression truncToPrecision(String numericField, int decimalPlace) {
+    return truncToPrecision(field(numericField), decimalPlace);
+  }
+
+  /**
+   * Creates an expression that truncates {@code numericExpr} to {@code decimalPlace} decimal places
+   * if {@code decimalPlace} is positive, truncates digits to the left of the decimal point if
+   * {@code decimalPlace} is negative.
+   *
+   * @param numericExpr An expression that returns number when evaluated.
+   * @param decimalPlace The number of decimal places to truncate.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public static Expression truncToPrecision(Expression numericExpr, Expression decimalPlace) {
+    return new FunctionExpression("trunc", ImmutableList.of(numericExpr, decimalPlace));
+  }
+
+  /**
+   * Creates an expression that truncates {@code numericField} to {@code decimalPlace} decimal
+   * places if {@code decimalPlace} is positive, truncates digits to the left of the decimal point
+   * if {@code decimalPlace} is negative.
+   *
+   * @param numericField Name of field that returns number when evaluated.
+   * @param decimalPlace The number of decimal places to truncate.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public static Expression truncToPrecision(String numericField, Expression decimalPlace) {
+    return truncToPrecision(field(numericField), decimalPlace);
+  }
+
+  /**
    * Creates an expression that returns the smallest integer that isn't less than {@code
    * numericExpr}.
    *
@@ -3862,6 +4403,42 @@ public abstract class Expression {
   @BetaApi
   public final Expression roundToPrecision(Expression decimalPlace) {
     return roundToPrecision(this, decimalPlace);
+  }
+
+  /**
+   * Creates an expression that truncates this numeric expression to an integer.
+   *
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public final Expression trunc() {
+    return trunc(this);
+  }
+
+  /**
+   * Creates an expression that truncates this numeric expression to {@code decimalPlace} decimal
+   * places if {@code decimalPlace} is positive, truncates digits to the left of the decimal point
+   * if {@code decimalPlace} is negative.
+   *
+   * @param decimalPlace The number of decimal places to truncate.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public final Expression truncToPrecision(int decimalPlace) {
+    return truncToPrecision(this, decimalPlace);
+  }
+
+  /**
+   * Creates an expression that truncates this numeric expression to {@code decimalPlace} decimal
+   * places if {@code decimalPlace} is positive, truncates digits to the left of the decimal point
+   * if {@code decimalPlace} is negative.
+   *
+   * @param decimalPlace The number of decimal places to truncate.
+   * @return A new {@link Expression} representing the trunc operation.
+   */
+  @BetaApi
+  public final Expression truncToPrecision(Expression decimalPlace) {
+    return truncToPrecision(this, decimalPlace);
   }
 
   /**
@@ -4482,6 +5059,56 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an aggregation that finds the first value of this expression across multiple stage
+   * inputs.
+   *
+   * @return A new {@link AggregateFunction} representing the first aggregation.
+   */
+  @BetaApi
+  public final AggregateFunction first() {
+    return AggregateFunction.first(this);
+  }
+
+  /**
+   * Creates an aggregation that finds the last value of this expression across multiple stage
+   * inputs.
+   *
+   * @return A new {@link AggregateFunction} representing the last aggregation.
+   */
+  @BetaApi
+  public final AggregateFunction last() {
+    return AggregateFunction.last(this);
+  }
+
+  /**
+   * Creates an aggregation that collects all values of this expression across multiple stage inputs
+   * into an array.
+   *
+   * <p>If the expression resolves to an absent value, it is converted to `null`. The order of
+   * elements in the output array is not stable and shouldn't be relied upon.
+   *
+   * @return A new {@link AggregateFunction} representing the array_agg aggregation.
+   */
+  @BetaApi
+  public final AggregateFunction arrayAgg() {
+    return AggregateFunction.arrayAgg(this);
+  }
+
+  /**
+   * Creates an aggregation that collects all distinct values of this expression across multiple
+   * stage inputs into an array.
+   *
+   * <p>If the expression resolves to an absent value, it is converted to `null`. The order of
+   * elements in the output array is not stable and shouldn't be relied upon.
+   *
+   * @return A new {@link AggregateFunction} representing the array_agg_distinct aggregation.
+   */
+  @BetaApi
+  public final AggregateFunction arrayAggDistinct() {
+    return AggregateFunction.arrayAggDistinct(this);
+  }
+
+  /**
    * Create an {@link Ordering} that sorts documents in ascending order based on value of this
    * expression
    *
@@ -4510,11 +5137,11 @@ public abstract class Expression {
    * names to calculated values.
    *
    * @param alias The alias to assign to this expression.
-   * @return A new {@link Selectable} (typically an {@link AliasedExpression}) that wraps this
-   *     expression and associates it with the provided alias.
+   * @return A new {@link AliasedExpression} that wraps this expression and associates it with the
+   *     provided alias.
    */
   @BetaApi
-  public Selectable as(String alias) {
+  public AliasedExpression as(String alias) {
     return new AliasedExpression(this, alias);
   }
 
@@ -4647,6 +5274,212 @@ public abstract class Expression {
   @BetaApi
   public final Expression arrayConcat(Expression... otherArrays) {
     return arrayConcat(this, otherArrays);
+  }
+
+  /**
+   * Returns the first element of an array.
+   *
+   * @return A new {@link Expression} representing the first element of the array.
+   */
+  @BetaApi
+  public final Expression arrayFirst() {
+    return arrayFirst(this);
+  }
+
+  /**
+   * Returns the first n elements of an array.
+   *
+   * @param n The number of elements to return.
+   * @return A new {@link Expression} representing the first n elements of the array.
+   */
+  @BetaApi
+  public final Expression arrayFirstN(int n) {
+    return arrayFirstN(this, n);
+  }
+
+  /**
+   * Returns the first n elements of an array.
+   *
+   * @param n The Expression evaluates to the number of elements to return.
+   * @return A new {@link Expression} representing the first n elements of the array.
+   */
+  @BetaApi
+  public final Expression arrayFirstN(Expression n) {
+    return arrayFirstN(this, n);
+  }
+
+  /**
+   * Returns the last element of an array.
+   *
+   * @return A new {@link Expression} representing the last element of the array.
+   */
+  @BetaApi
+  public final Expression arrayLast() {
+    return arrayLast(this);
+  }
+
+  /**
+   * Returns the last n elements of an array.
+   *
+   * @param n The number of elements to return.
+   * @return A new {@link Expression} representing the last n elements of the array.
+   */
+  @BetaApi
+  public final Expression arrayLastN(int n) {
+    return arrayLastN(this, n);
+  }
+
+  /**
+   * Returns the last n elements of an array.
+   *
+   * @param n The Expression evaluates to the number of elements to return.
+   * @return A new {@link Expression} representing the last n elements of the array.
+   */
+  @BetaApi
+  public final Expression arrayLastN(Expression n) {
+    return arrayLastN(this, n);
+  }
+
+  /**
+   * Returns the minimum value of an array.
+   *
+   * @return A new {@link Expression} representing the minimum value of the array.
+   */
+  @BetaApi
+  public final Expression arrayMinimum() {
+    return arrayMinimum(this);
+  }
+
+  /**
+   * Returns the n minimum values of an array.
+   *
+   * <p>Note: Returns the n smallest non-null elements in the array, in ascending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param n The number of elements to return.
+   * @return A new {@link Expression} representing the n minimum values of the array.
+   */
+  @BetaApi
+  public final Expression arrayMinimumN(int n) {
+    return arrayMinimumN(this, n);
+  }
+
+  /**
+   * Returns the n minimum values of an array.
+   *
+   * <p>Note: Returns the n smallest non-null elements in the array, in ascending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param n The Expression evaluates to the number of elements to return.
+   * @return A new {@link Expression} representing the n minimum values of the array.
+   */
+  @BetaApi
+  public final Expression arrayMinimumN(Expression n) {
+    return arrayMinimumN(this, n);
+  }
+
+  /**
+   * Returns the maximum value of an array.
+   *
+   * @return A new {@link Expression} representing the maximum value of the array.
+   */
+  @BetaApi
+  public final Expression arrayMaximum() {
+    return arrayMaximum(this);
+  }
+
+  /**
+   * Returns the n maximum values of an array.
+   *
+   * <p>Note: Returns the n largest non-null elements in the array, in descending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param n The number of elements to return.
+   * @return A new {@link Expression} representing the n maximum values of the array.
+   */
+  @BetaApi
+  public final Expression arrayMaximumN(int n) {
+    return arrayMaximumN(this, n);
+  }
+
+  /**
+   * Returns the n maximum values of an array.
+   *
+   * <p>Note: Returns the n largest non-null elements in the array, in descending order. This does
+   * not use a stable sort, meaning the order of equivalent elements is undefined.
+   *
+   * @param n The Expression evaluates to the number of elements to return.
+   * @return A new {@link Expression} representing the n maximum values of the array.
+   */
+  @BetaApi
+  public final Expression arrayMaximumN(Expression n) {
+    return arrayMaximumN(this, n);
+  }
+
+  /**
+   * Returns the index of the first occurrence of a value in an array.
+   *
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the index.
+   */
+  @BetaApi
+  public final Expression arrayIndexOf(Object value) {
+    return arrayIndexOf(this, value);
+  }
+
+  /**
+   * Returns the index of the first occurrence of a value in an array.
+   *
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the index.
+   */
+  @BetaApi
+  public final Expression arrayIndexOf(Expression value) {
+    return arrayIndexOf(this, value);
+  }
+
+  /**
+   * Returns the index of the last occurrence of a value in an array.
+   *
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the last index.
+   */
+  @BetaApi
+  public final Expression arrayLastIndexOf(Object value) {
+    return arrayLastIndexOf(this, value);
+  }
+
+  /**
+   * Returns the index of the last occurrence of a value in an array.
+   *
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the last index.
+   */
+  @BetaApi
+  public final Expression arrayLastIndexOf(Expression value) {
+    return arrayLastIndexOf(this, value);
+  }
+
+  /**
+   * Returns all indices of a value in an array.
+   *
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the indices.
+   */
+  @BetaApi
+  public final Expression arrayIndexOfAll(Object value) {
+    return arrayIndexOfAll(this, value);
+  }
+
+  /**
+   * Returns all indices of a value in an array.
+   *
+   * @param value The value to search for.
+   * @return A new {@link Expression} representing the indices.
+   */
+  @BetaApi
+  public final Expression arrayIndexOfAll(Expression value) {
+    return arrayIndexOfAll(this, value);
   }
 
   /**
