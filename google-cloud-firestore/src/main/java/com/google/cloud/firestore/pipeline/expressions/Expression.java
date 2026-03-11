@@ -1763,7 +1763,7 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes whitespace from the end of a string or byte array.
+   * Creates an expression that removes whitespace from the end of a string or blob.
    *
    * @param value The expression representing the string or blob to trim.
    * @return A new {@link Expression} representing the trimmed string or blob.
@@ -1774,7 +1774,7 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that removes trailing whitespace from a string or byte field.
+   * Creates an expression that removes whitespace from the end of a string or blob.
    *
    * @param fieldName The name of the field containing the string to trim.
    * @return A new {@link Expression} representing the trimmed string.
@@ -1833,11 +1833,11 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that repeats a string or byte array a specified number of times.
+   * Creates an expression that repeats a string or blob a specified number of times.
    *
-   * @param value The expression representing the string or byte array to repeat.
-   * @param repetitions The number of times to repeat the string or byte array.
-   * @return A new {@link Expression} representing the repeated string or byte array.
+   * @param value The expression representing the string or blob to repeat.
+   * @param repetitions The number of times to repeat the string or blob.
+   * @return A new {@link Expression} representing the repeated string or blob.
    */
   @BetaApi
   public static Expression stringRepeat(Expression value, Number repetitions) {
@@ -1845,11 +1845,11 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that repeats a string or byte array a specified number of times.
+   * Creates an expression that repeats a string or blob a specified number of times.
    *
-   * @param fieldName The name of the field containing the string or byte array to repeat.
-   * @param repetitions The number of times to repeat the string or byte array.
-   * @return A new {@link Expression} representing the repeated string or byte array.
+   * @param fieldName The name of the field containing the string or blob to repeat.
+   * @param repetitions The number of times to repeat the string or blob.
+   * @return A new {@link Expression} representing the repeated string or blob.
    */
   @BetaApi
   public static Expression stringRepeat(String fieldName, Number repetitions) {
@@ -1857,11 +1857,11 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that repeats a string or byte array a specified number of times.
+   * Creates an expression that repeats a string or blob a specified number of times.
    *
-   * @param value The expression representing the string or byte array to repeat.
+   * @param value The expression representing the string or blob to repeat.
    * @param repetitions The expression representing the number of times to repeat.
-   * @return A new {@link Expression} representing the repeated string or byte array.
+   * @return A new {@link Expression} representing the repeated string or blob.
    */
   @BetaApi
   public static Expression stringRepeat(Expression value, Expression repetitions) {
@@ -1869,11 +1869,11 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that repeats a string or byte array a specified number of times.
+   * Creates an expression that repeats a string or blob a specified number of times.
    *
-   * @param fieldName The name of the field containing the string or byte array to repeat.
+   * @param fieldName The name of the field containing the string or blob to repeat.
    * @param repetitions The expression representing the number of times to repeat.
-   * @return A new {@link Expression} representing the repeated string or byte array.
+   * @return A new {@link Expression} representing the repeated string or blob.
    */
   @BetaApi
   public static Expression stringRepeat(String fieldName, Expression repetitions) {
@@ -1883,7 +1883,7 @@ public abstract class Expression {
   /**
    * Creates an expression that replaces all occurrences of a substring or byte sequence.
    *
-   * @param value The expression representing the input string or byte array.
+   * @param value The expression representing the input string or blob.
    * @param find The match pattern.
    * @param replacement The replacement string/bytes.
    * @return A new {@link Expression} representing the replaced value.
@@ -1897,7 +1897,7 @@ public abstract class Expression {
   /**
    * Creates an expression that replaces all occurrences of a substring or byte sequence.
    *
-   * @param fieldName The name of the field containing the input string or byte array.
+   * @param fieldName The name of the field containing the input string or blob.
    * @param find The match pattern.
    * @param replacement The replacement string/bytes.
    * @return A new {@link Expression} representing the replaced value.
@@ -1910,7 +1910,7 @@ public abstract class Expression {
   /**
    * Creates an expression that replaces all occurrences of a substring or byte sequence.
    *
-   * @param value The expression representing the input string or byte array.
+   * @param value The expression representing the input string or blob.
    * @param find The expression representing the match pattern.
    * @param replacement The expression representing the replacement value.
    * @return A new {@link Expression} representing the replaced value.
@@ -1924,7 +1924,7 @@ public abstract class Expression {
   /**
    * Creates an expression that replaces all occurrences of a substring or byte sequence.
    *
-   * @param fieldName The name of the field containing the input string or byte array.
+   * @param fieldName The name of the field containing the input string or blob.
    * @param find The expression representing the match pattern.
    * @param replacement The expression representing the replacement value.
    * @return A new {@link Expression} representing the replaced value.
@@ -1938,7 +1938,7 @@ public abstract class Expression {
   /**
    * Creates an expression that replaces the first occurrence of a substring or byte sequence.
    *
-   * @param value The expression representing the input string or byte array.
+   * @param value The expression representing the input string or blob.
    * @param find The match pattern.
    * @param replacement The replacement string/bytes.
    * @return A new {@link Expression} representing the replaced value.
@@ -1952,7 +1952,7 @@ public abstract class Expression {
   /**
    * Creates an expression that replaces the first occurrence of a substring or byte sequence.
    *
-   * @param fieldName The name of the field containing the input string or byte array.
+   * @param fieldName The name of the field containing the input string or blob.
    * @param find The match pattern.
    * @param replacement The replacement string/bytes.
    * @return A new {@link Expression} representing the replaced value.
@@ -1965,7 +1965,7 @@ public abstract class Expression {
   /**
    * Creates an expression that replaces the first occurrence of a substring or byte sequence.
    *
-   * @param value The expression representing the input string or byte array.
+   * @param value The expression representing the input string or blob.
    * @param find The expression representing the match pattern.
    * @param replacement The expression representing the replacement value.
    * @return A new {@link Expression} representing the replaced value.
@@ -1979,7 +1979,7 @@ public abstract class Expression {
   /**
    * Creates an expression that replaces the first occurrence of a substring or byte sequence.
    *
-   * @param fieldName The name of the field containing the input string or byte array.
+   * @param fieldName The name of the field containing the input string or blob.
    * @param find The expression representing the match pattern.
    * @param replacement The expression representing the replacement value.
    * @return A new {@link Expression} representing the replaced value.
@@ -1993,7 +1993,7 @@ public abstract class Expression {
   /**
    * Creates an expression that returns the index of the first occurrence of a substring or bytes.
    *
-   * @param value The expression representing the input string or byte array.
+   * @param value The expression representing the input string or blob.
    * @param search The search pattern.
    * @return A new {@link Expression} representing the index.
    */
@@ -2005,7 +2005,7 @@ public abstract class Expression {
   /**
    * Creates an expression that returns the index of the first occurrence of a substring or bytes.
    *
-   * @param fieldName The name of the field containing the input string or byte array.
+   * @param fieldName The name of the field containing the input string or blob.
    * @param search The search pattern.
    * @return A new {@link Expression} representing the index.
    */
@@ -2017,7 +2017,7 @@ public abstract class Expression {
   /**
    * Creates an expression that returns the index of the first occurrence of a substring or bytes.
    *
-   * @param value The expression representing the input string or byte array.
+   * @param value The expression representing the input string or blob.
    * @param search The expression representing the search pattern.
    * @return A new {@link Expression} representing the index.
    */
@@ -2029,7 +2029,7 @@ public abstract class Expression {
   /**
    * Creates an expression that returns the index of the first occurrence of a substring or bytes.
    *
-   * @param fieldName The name of the field containing the input string or byte array.
+   * @param fieldName The name of the field containing the input string or blob.
    * @param search The expression representing the search pattern.
    * @return A new {@link Expression} representing the index.
    */
@@ -4557,10 +4557,10 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that repeats a string or byte array a specified number of times.
+   * Creates an expression that repeats a string or blob a specified number of times.
    *
-   * @param repetitions The number of times to repeat the string or byte array.
-   * @return A new {@link Expression} representing the repeated string or byte array.
+   * @param repetitions The number of times to repeat the string or blob.
+   * @return A new {@link Expression} representing the repeated string or blob.
    */
   @BetaApi
   public Expression stringRepeat(Number repetitions) {
@@ -4568,10 +4568,10 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that repeats a string or byte array a specified number of times.
+   * Creates an expression that repeats a string or blob a specified number of times.
    *
    * @param repetitions The expression representing the number of times to repeat.
-   * @return A new {@link Expression} representing the repeated string or byte array.
+   * @return A new {@link Expression} representing the repeated string or blob.
    */
   @BetaApi
   public Expression stringRepeat(Expression repetitions) {
