@@ -26,7 +26,10 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.WriteResult;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.junit.AfterClass;
@@ -153,6 +156,24 @@ public class ManageDataSnippetsIT extends BaseIntegrationTest {
   }
 
   @Test
+  public void testDeleteCollection() throws Exception {
+    // Create collection and document to be deleted
+    Map<String, Object> docData = new HashMap<>();
+    docData.put("name", "Los Angeles");
+    ApiFuture<WriteResult> future = db.collection("usa-cities").document("LA").set(docData);
+    future.get();
+
+    // Delete collection
+    manageDataSnippets.deleteCollection(db.collection("usa-cities"));
+
+    // Verify collection is deleted by trying to read from it
+    CollectionReference collectionReference = db.collection("usa-cities");
+    collectionReference.limit(1);
+    QuerySnapshot snapshot = collectionReference.get().get();
+    assertTrue(snapshot.isEmpty());
+  }
+
+  @Test
   public void testSimpleTransaction() throws Exception {
     DocumentReference docRef = db.collection("cities").document("SF");
     ApiFuture<Void> future = manageDataSnippets.runSimpleTransaction();
@@ -208,8 +229,8 @@ public class ManageDataSnippetsIT extends BaseIntegrationTest {
 
   @AfterClass
   public static void tearDown() throws Exception {
-    manageDataSnippets.deleteCollection(db.collection("cities"), 10);
-    manageDataSnippets.deleteCollection(db.collection("users"), 10);
+    deleteCollection(db, "cities");
+    deleteCollection(db, "users");
     manageDataSnippets.close();
   }
 }

@@ -83,6 +83,16 @@ public class BaseIntegrationTest {
     }
   }
 
+  protected static void deleteCollection(Firestore db, String collectionName) throws Exception {
+    ApiFuture<Void> future = db.recursiveDelete(db.collection(collectionName));
+    try {
+      future.get();
+      System.out.println("Collection and all its subcollections deleted successfully.");
+    } catch (Exception e) {
+      System.err.println("Error deleting collection recursively : " + e.getMessage());
+    }
+  }
+
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
     db.close();
