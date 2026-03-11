@@ -2050,7 +2050,7 @@ public abstract class Expression {
 
   /**
    * Creates an expression that returns the keys of a map.
-   * 
+   *
    * <p>While the backend generally preserves insertion order, relying on the order of the output
    * array is not guaranteed and should be avoided.
    *
@@ -2064,7 +2064,7 @@ public abstract class Expression {
 
   /**
    * Creates an expression that returns the keys of a map.
-   * 
+   *
    * <p>While the backend generally preserves insertion order, relying on the order of the output
    * array is not guaranteed and should be avoided.
    *
@@ -2092,7 +2092,7 @@ public abstract class Expression {
 
   /**
    * Creates an expression that returns the values of a map.
-   * 
+   *
    * <p>While the backend generally preserves insertion order, relying on the order of the output
    * array is not guaranteed and should be avoided.
    *
@@ -2121,7 +2121,7 @@ public abstract class Expression {
 
   /**
    * Creates an expression that returns the entries of a map as an array of maps.
-   * 
+   *
    * <p>While the backend generally preserves insertion order, relying on the order of the output
    * array is not guaranteed and should be avoided.
    *
