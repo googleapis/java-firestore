@@ -874,30 +874,15 @@ public class ITPipelineTest extends ITBaseTest {
 
   @Test
   public void selectWithSwitchOn() throws Exception {
-    // supports basic switch
     List<PipelineResult> results =
-        firestore
-            .pipeline()
-            .createFrom(collection)
-            .limit(1)
-            .replaceWith(Expression.map(map("value", 1)))
-            .select(
-                switchOn(equal(field("value"), 1), constant("one"), constant("NA")).as("result1"),
-                switchOn(equal(field("value"), 2), constant("two"), constant("NA")).as("result2"))
-            .execute()
-            .get()
-            .getResults();
-
-    assertThat(data(results)).isEqualTo(Lists.newArrayList(map("result1", "one", "result2", "NA")));
-
-    // supports multi-branch switch
-    results =
         firestore
             .pipeline()
             .createFrom(collection)
             .limit(1)
             .replaceWith(Expression.map(map("value", 2)))
             .select(
+                switchOn(equal(field("value"), 2), constant("two"), constant("NA")).as("result1"),
+                switchOn(equal(field("value"), 3), constant("three"), constant("NA")).as("result2"),
                 switchOn(
                         equal(field("value"), 1),
                         constant("one"),
@@ -906,12 +891,12 @@ public class ITPipelineTest extends ITBaseTest {
                         equal(field("value"), 3),
                         constant("three"),
                         constant("default"))
-                    .as("result"))
+                    .as("result3"))
             .execute()
             .get()
             .getResults();
-
-    assertThat(data(results)).isEqualTo(Lists.newArrayList(map("result", "two")));
+    assertThat(data(results))
+        .isEqualTo(Lists.newArrayList(map("result1", "two", "result2", "NA", "result3", "two")));
 
     // throws if no match and no default
     ExecutionException exception =
