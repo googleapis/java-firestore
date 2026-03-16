@@ -90,7 +90,6 @@ import com.google.cloud.firestore.PipelineResult;
 import com.google.cloud.firestore.pipeline.expressions.AggregateFunction;
 import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Field;
-import com.google.cloud.firestore.pipeline.expressions.Type;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.cloud.firestore.pipeline.stages.AggregateHints;
 import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
@@ -2668,26 +2667,26 @@ public class ITPipelineTest extends ITBaseTest {
                         "array",
                         array(1, 2, true))))
             .select(
-                Expression.isType("int", Type.INT64).as("isInt64"),
-                Expression.isType("int", Type.NUMBER).as("isInt64IsNumber"),
-                Expression.isType("int", Type.DECIMAL128).as("isInt64IsDecimal128"),
-                Expression.isType("float", Type.FLOAT64).as("isFloat64"),
-                Expression.isType("float", Type.NUMBER).as("isFloat64IsNumber"),
-                Expression.isType("float", Type.DECIMAL128).as("isFloat64IsDecimal128"),
-                Expression.isType("str", Type.STRING).as("isStr"),
-                Expression.isType("str", Type.INT64).as("isStrNum"),
-                Expression.isType("int", Type.STRING).as("isNumStr"),
-                Expression.isType("bool", Type.BOOLEAN).as("isBool"),
-                Expression.isType("null", Type.NULL).as("isNull"),
-                Expression.isType("geoPoint", Type.GEO_POINT).as("isGeoPoint"),
-                Expression.isType("timestamp", Type.TIMESTAMP).as("isTimestamp"),
-                Expression.isType("bytes", Type.BYTES).as("isBytes"),
-                Expression.isType("docRef", Type.REFERENCE).as("isDocRef"),
-                Expression.isType("vector", Type.VECTOR).as("isVector"),
-                Expression.isType("map", Type.MAP).as("isMap"),
-                Expression.isType("array", Type.ARRAY).as("isArray"),
-                Expression.isType(constant(1), Type.INT64).as("exprIsInt64"),
-                field("int").isType(Type.INT64).as("staticIsInt64"))
+                Expression.isType("int", "int64").as("isInt64"),
+                Expression.isType("int", "number").as("isInt64IsNumber"),
+                Expression.isType("int", "decimal128").as("isInt64IsDecimal128"),
+                Expression.isType("float", "float64").as("isFloat64"),
+                Expression.isType("float", "number").as("isFloat64IsNumber"),
+                Expression.isType("float", "decimal128").as("isFloat64IsDecimal128"),
+                Expression.isType("str", "string").as("isStr"),
+                Expression.isType("str", "int64").as("isStrNum"),
+                Expression.isType("int", "string").as("isNumStr"),
+                Expression.isType("bool", "boolean").as("isBool"),
+                Expression.isType("null", "null").as("isNull"),
+                Expression.isType("geoPoint", "geo_point").as("isGeoPoint"),
+                Expression.isType("timestamp", "timestamp").as("isTimestamp"),
+                Expression.isType("bytes", "bytes").as("isBytes"),
+                Expression.isType("docRef", "reference").as("isDocRef"),
+                Expression.isType("vector", "vector").as("isVector"),
+                Expression.isType("map", "map").as("isMap"),
+                Expression.isType("array", "array").as("isArray"),
+                Expression.isType(constant(1), "int64").as("exprIsInt64"),
+                field("int").isType("int64").as("staticIsInt64"))
             .limit(1)
             .execute()
             .get()
