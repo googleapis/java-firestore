@@ -3134,8 +3134,8 @@ public abstract class Expression {
    * Creates an expression that checks if the result of an expression is of the given type.
    *
    * <p>Supported values for {@code type} are: "null", "array", "boolean", "bytes", "timestamp",
-   * "geo_point", "number", "int32", "int64", "float64", "decimal128", "map", "reference",
-   * "string", "vector", "max_key", "min_key", "object_id", "regex", and "request_timestamp".
+   * "geo_point", "number", "int32", "int64", "float64", "decimal128", "map", "reference", "string",
+   * "vector", "max_key", "min_key", "object_id", "regex", and "request_timestamp".
    *
    * @param expr The expression to check the type of.
    * @param type The type to check for.
@@ -3151,8 +3151,8 @@ public abstract class Expression {
    * Creates an expression that checks if the value of a field is of the given type.
    *
    * <p>Supported values for {@code type} are: "null", "array", "boolean", "bytes", "timestamp",
-   * "geo_point", "number", "int32", "int64", "float64", "decimal128", "map", "reference",
-   * "string", "vector", "max_key", "min_key", "object_id", "regex", and "request_timestamp".
+   * "geo_point", "number", "int32", "int64", "float64", "decimal128", "map", "reference", "string",
+   * "vector", "max_key", "min_key", "object_id", "regex", and "request_timestamp".
    *
    * @param fieldName The name of the field to check the type of.
    * @param type The type to check for.
@@ -4836,8 +4836,8 @@ public abstract class Expression {
    * Creates an expression that checks if the result of this expression is of the given type.
    *
    * <p>Supported values for {@code type} are: "null", "array", "boolean", "bytes", "timestamp",
-   * "geo_point", "number", "int32", "int64", "float64", "decimal128", "map", "reference",
-   * "string", "vector", "max_key", "min_key", "object_id", "regex", and "request_timestamp".
+   * "geo_point", "number", "int32", "int64", "float64", "decimal128", "map", "reference", "string",
+   * "vector", "max_key", "min_key", "object_id", "regex", and "request_timestamp".
    *
    * @param type The type to check for.
    * @return A new {@link BooleanExpression} that evaluates to true if the expression's result is of
