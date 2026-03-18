@@ -897,8 +897,10 @@ public class ITPipelineTest extends ITBaseTest {
             .getResults();
     assertThat(data(results))
         .isEqualTo(Lists.newArrayList(map("result1", "two", "result2", "NA", "result3", "two")));
+  }
 
-    // throws if no match and no default
+  @Test
+  public void testSwitchOnWithNoDefaultValue() throws Exception {
     ExecutionException exception =
         assertThrows(
             ExecutionException.class,
