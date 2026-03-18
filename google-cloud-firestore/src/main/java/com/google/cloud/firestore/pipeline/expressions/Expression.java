@@ -2050,6 +2050,83 @@ public abstract class Expression {
   }
 
   /**
+   * Filters an array expression based on a predicate.
+   *
+   * @param array The expression representing the array to filter.
+   * @param alias The alias for the current element in the filter expression.
+   * @param filter The predicate expression used to filter the elements.
+   * @return A new {@link Expression} representing the filtered array.
+   */
+  @BetaApi
+  public static Expression arrayFilter(Expression array, String alias, Expression filter) {
+    return new FunctionExpression("array_filter", ImmutableList.of(array, constant(alias), filter));
+  }
+
+  /**
+   * Filters an array field based on a predicate.
+   *
+   * @param arrayFieldName The field name of the array to filter.
+   * @param alias The alias for the current element in the filter expression.
+   * @param filter The predicate expression used to filter the elements.
+   * @return A new {@link Expression} representing the filtered array.
+   */
+  @BetaApi
+  public static Expression arrayFilter(String arrayFieldName, String alias, Expression filter) {
+    return arrayFilter(field(arrayFieldName), alias, filter);
+  }
+
+  /**
+   * Creates an expression that returns a slice of an array.
+   *
+   * @param array The expression representing the array to slice.
+   * @param offset The starting index.
+   * @param length The number of elements to return.
+   * @return A new {@link Expression} representing the array slice.
+   */
+  @BetaApi
+  public static Expression arraySlice(Expression array, Object offset, Object length) {
+    return new FunctionExpression(
+        "array_slice", ImmutableList.of(array, toExprOrConstant(offset), toExprOrConstant(length)));
+  }
+
+  /**
+   * Creates an expression that returns a slice of an array to its end.
+   *
+   * @param array The expression representing the array to slice.
+   * @param offset The starting index.
+   * @return A new {@link Expression} representing the array slice.
+   */
+  @BetaApi
+  public static Expression arraySlice(Expression array, Object offset) {
+    return new FunctionExpression("array_slice", ImmutableList.of(array, toExprOrConstant(offset)));
+  }
+
+  /**
+   * Creates an expression that returns a slice of an array.
+   *
+   * @param arrayFieldName The field name of the array to slice.
+   * @param offset The starting index.
+   * @param length The number of elements to return.
+   * @return A new {@link Expression} representing the array slice.
+   */
+  @BetaApi
+  public static Expression arraySlice(String arrayFieldName, Object offset, Object length) {
+    return arraySlice(field(arrayFieldName), offset, length);
+  }
+
+  /**
+   * Creates an expression that returns a slice of an array to its end.
+   *
+   * @param arrayFieldName The field name of the array to slice.
+   * @param offset The starting index.
+   * @return A new {@link Expression} representing the array slice.
+   */
+  @BetaApi
+  public static Expression arraySlice(String arrayFieldName, Object offset) {
+    return arraySlice(field(arrayFieldName), offset);
+  }
+
+  /**
    * Creates an expression that checks if an array contains a specified element.
    *
    * @param array The expression representing the array.
@@ -5238,6 +5315,41 @@ public abstract class Expression {
   @BetaApi
   public final Expression arrayReverse() {
     return arrayReverse(this);
+  }
+
+  /**
+   * Filters this array based on a predicate.
+   *
+   * @param alias The alias for the current element in the filter expression.
+   * @param filter The predicate expression used to filter the elements.
+   * @return A new {@link Expression} representing the filtered array.
+   */
+  @BetaApi
+  public final Expression arrayFilter(String alias, Expression filter) {
+    return arrayFilter(this, alias, filter);
+  }
+
+  /**
+   * Returns a slice of this array.
+   *
+   * @param offset The starting index.
+   * @param length The number of elements to return.
+   * @return A new {@link Expression} representing the array slice.
+   */
+  @BetaApi
+  public final Expression arraySlice(Object offset, Object length) {
+    return arraySlice(this, offset, length);
+  }
+
+  /**
+   * Returns a slice of this array to its end.
+   *
+   * @param offset The starting index.
+   * @return A new {@link Expression} representing the array slice.
+   */
+  @BetaApi
+  public final Expression arraySlice(Object offset) {
+    return arraySlice(this, offset);
   }
 
   /**
