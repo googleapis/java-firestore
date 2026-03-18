@@ -383,7 +383,6 @@ public abstract class Expression {
     ImmutableList.Builder<Expression> builder = ImmutableList.builder();
     builder.add(condition);
     builder.add(conditions);
-    System.out.println("nor: " + builder.build());
     return new BooleanFunctionExpression("nor", builder.build());
   }
 
