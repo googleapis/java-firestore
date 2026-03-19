@@ -900,7 +900,7 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
-  public void testSwitchOnWithNoDefaultValue() throws Exception {
+  public void testSwitchOnWithNoDefaultValueAndNoMatchingCondition() throws Exception {
     ExecutionException exception =
         assertThrows(
             ExecutionException.class,
