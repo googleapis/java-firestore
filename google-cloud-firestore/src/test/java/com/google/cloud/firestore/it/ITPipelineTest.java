@@ -80,14 +80,14 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.stringC
 import static com.google.cloud.firestore.pipeline.expressions.Expression.substring;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.subtract;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampAdd;
-import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampTruncate;
-import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampTruncateWithTimezone;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampDiff;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampExtract;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampExtractWithTimezone;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampToUnixMicros;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampToUnixMillis;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampToUnixSeconds;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampTruncate;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.timestampTruncateWithTimezone;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.trunc;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.truncToPrecision;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixMicrosToTimestamp;
@@ -2249,10 +2249,18 @@ public class ITPipelineTest extends ITBaseTest {
             .collection(collection.getPath())
             .where(equal("title", "Timestamp Book"))
             .select(
-                timestampTruncateWithTimezone(field("timestamp"), "year", "America/Los_Angeles").as("st_str_str"),
-                field("timestamp").timestampTruncateWithTimezone("month", "America/Los_Angeles").as("fl_str_str"),
-                timestampTruncateWithTimezone(field("timestamp"), constant("day"), constant("America/Los_Angeles")).as("st_expr_expr"),
-                field("timestamp").timestampTruncateWithTimezone(constant("hour"), constant("America/Los_Angeles")).as("fl_expr_expr"))
+                timestampTruncateWithTimezone(field("timestamp"), "year", "America/Los_Angeles")
+                    .as("st_str_str"),
+                field("timestamp")
+                    .timestampTruncateWithTimezone("month", "America/Los_Angeles")
+                    .as("fl_str_str"),
+                timestampTruncateWithTimezone(
+                        field("timestamp"), constant("day"), constant("America/Los_Angeles"))
+                    .as("st_expr_expr"),
+                field("timestamp")
+                    .timestampTruncateWithTimezone(
+                        constant("hour"), constant("America/Los_Angeles"))
+                    .as("fl_expr_expr"))
             .execute()
             .get()
             .getResults();
@@ -2260,7 +2268,8 @@ public class ITPipelineTest extends ITBaseTest {
     assertThat(results).hasSize(1);
     Map<String, Object> data = results.get(0).getData();
     Date originalDate = (Date) bookDocs.get("book11").get("timestamp");
-    java.util.Calendar cal = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("America/Los_Angeles"));
+    java.util.Calendar cal =
+        java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("America/Los_Angeles"));
 
     cal.setTime(originalDate);
     cal.set(java.util.Calendar.MONTH, java.util.Calendar.JANUARY);
@@ -2356,9 +2365,15 @@ public class ITPipelineTest extends ITBaseTest {
                     ImmutableMap.of("ts", Timestamp.ofTimeSecondsAndNanos(1741437296, 123456789))))
             .select(
                 timestampExtractWithTimezone("ts", "hour", "America/Los_Angeles").as("st_str_str"),
-                field("ts").timestampExtractWithTimezone("hour", "America/Los_Angeles").as("fl_str_str"),
-                timestampExtractWithTimezone(field("ts"), constant("hour"), constant("America/Los_Angeles")).as("st_expr_expr"),
-                field("ts").timestampExtractWithTimezone(constant("hour"), constant("America/Los_Angeles")).as("fl_expr_expr"))
+                field("ts")
+                    .timestampExtractWithTimezone("hour", "America/Los_Angeles")
+                    .as("fl_str_str"),
+                timestampExtractWithTimezone(
+                        field("ts"), constant("hour"), constant("America/Los_Angeles"))
+                    .as("st_expr_expr"),
+                field("ts")
+                    .timestampExtractWithTimezone(constant("hour"), constant("America/Los_Angeles"))
+                    .as("fl_expr_expr"))
             .execute()
             .get()
             .getResults();

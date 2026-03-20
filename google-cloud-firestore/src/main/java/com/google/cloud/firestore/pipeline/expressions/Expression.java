@@ -3519,12 +3519,13 @@ public abstract class Expression {
    *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
    *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
    * @param timezone The timezone expression to use for extraction.Valid values are from the TZ
-   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC"
-   *     if not specified.
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if
+   *     not specified.
    * @return A new {@link Expression} representing the extracted part.
    */
   @BetaApi
-  public static Expression timestampExtractWithTimezone(Expression timestamp, Expression part, Expression timezone) {
+  public static Expression timestampExtractWithTimezone(
+      Expression timestamp, Expression part, Expression timezone) {
     return new FunctionExpression("timestamp_extract", ImmutableList.of(timestamp, part, timezone));
   }
 
@@ -3536,13 +3537,13 @@ public abstract class Expression {
    *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
    *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
    *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
-   * @param timezone The timezone to use for extraction.Valid values are from the TZ database
-   *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not
-   *     specified.
+   * @param timezone The timezone to use for extraction.Valid values are from the TZ database (e.g.,
+   *     "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not specified.
    * @return A new {@link Expression} representing the extracted part.
    */
   @BetaApi
-  public static Expression timestampExtractWithTimezone(Expression timestamp, Expression part, String timezone) {
+  public static Expression timestampExtractWithTimezone(
+      Expression timestamp, Expression part, String timezone) {
     return timestampExtractWithTimezone(timestamp, part, constant(timezone));
   }
 
@@ -3554,13 +3555,13 @@ public abstract class Expression {
    *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
    *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
    *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
-   * @param timezone The timezone to use for extraction.Valid values are from the TZ database
-   *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not
-   *     specified.
+   * @param timezone The timezone to use for extraction.Valid values are from the TZ database (e.g.,
+   *     "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not specified.
    * @return A new {@link Expression} representing the extracted part.
    */
   @BetaApi
-  public static Expression timestampExtractWithTimezone(Expression timestamp, String part, String timezone) {
+  public static Expression timestampExtractWithTimezone(
+      Expression timestamp, String part, String timezone) {
     return timestampExtractWithTimezone(timestamp, constant(part), constant(timezone));
   }
 
@@ -3572,13 +3573,13 @@ public abstract class Expression {
    *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
    *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
    *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
-   * @param timezone The timezone to use for extraction.Valid values are from the TZ database
-   *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not
-   *     specified.
+   * @param timezone The timezone to use for extraction.Valid values are from the TZ database (e.g.,
+   *     "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not specified.
    * @return A new {@link Expression} representing the extracted part.
    */
   @BetaApi
-  public static Expression timestampExtractWithTimezone(String fieldName, Expression part, String timezone) {
+  public static Expression timestampExtractWithTimezone(
+      String fieldName, Expression part, String timezone) {
     return timestampExtractWithTimezone(field(fieldName), part, constant(timezone));
   }
 
@@ -3590,13 +3591,13 @@ public abstract class Expression {
    *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
    *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
    *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
-   * @param timezone The timezone to use for extraction.Valid values are from the TZ database
-   *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not
-   *     specified.
+   * @param timezone The timezone to use for extraction.Valid values are from the TZ database (e.g.,
+   *     "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not specified.
    * @return A new {@link Expression} representing the extracted part.
    */
   @BetaApi
-  public static Expression timestampExtractWithTimezone(String fieldName, String part, String timezone) {
+  public static Expression timestampExtractWithTimezone(
+      String fieldName, String part, String timezone) {
     return timestampExtractWithTimezone(field(fieldName), constant(part), constant(timezone));
   }
 
@@ -3609,12 +3610,13 @@ public abstract class Expression {
    *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
    *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
    * @param timezone The timezone expression to use for extraction.Valid values are from the TZ
-   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC"
-   *     if not specified.
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if
+   *     not specified.
    * @return A new {@link Expression} representing the extracted part.
    */
   @BetaApi
-  public static Expression timestampExtractWithTimezone(Expression timestamp, String part, Expression timezone) {
+  public static Expression timestampExtractWithTimezone(
+      Expression timestamp, String part, Expression timezone) {
     return timestampExtractWithTimezone(timestamp, constant(part), timezone);
   }
 
@@ -3627,12 +3629,13 @@ public abstract class Expression {
    *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
    *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
    * @param timezone The timezone expression to use for extraction.Valid values are from the TZ
-   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC"
-   *     if not specified.
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if
+   *     not specified.
    * @return A new {@link Expression} representing the extracted part.
    */
   @BetaApi
-  public static Expression timestampExtractWithTimezone(String fieldName, Expression part, Expression timezone) {
+  public static Expression timestampExtractWithTimezone(
+      String fieldName, Expression part, Expression timezone) {
     return timestampExtractWithTimezone(field(fieldName), part, timezone);
   }
 
@@ -3645,12 +3648,13 @@ public abstract class Expression {
    *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
    *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
    * @param timezone The timezone expression to use for extraction.Valid values are from the TZ
-   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC"
-   *     if not specified.
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if
+   *     not specified.
    * @return A new {@link Expression} representing the extracted part.
    */
   @BetaApi
-  public static Expression timestampExtractWithTimezone(String fieldName, String part, Expression timezone) {
+  public static Expression timestampExtractWithTimezone(
+      String fieldName, String part, Expression timezone) {
     return timestampExtractWithTimezone(field(fieldName), constant(part), timezone);
   }
 
@@ -5969,7 +5973,8 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the truncated timestamp.
    */
   @BetaApi
-  public final Expression timestampTruncateWithTimezone(Expression granularity, Expression timezone) {
+  public final Expression timestampTruncateWithTimezone(
+      Expression granularity, Expression timezone) {
     return timestampTruncateWithTimezone(this, granularity, timezone);
   }
 
@@ -6015,10 +6020,10 @@ public abstract class Expression {
   /**
    * Creates an expression that extracts a specified part from this timestamp expression.
    *
-   * @param part The part to extract. Valid values are "microsecond",
-   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
-   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
-   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param part The part to extract. Valid values are "microsecond", "millisecond", "second",
+   *     "minute", "hour", "dayofweek", "day", "dayofyear", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
    * @return A new {@link Expression} representing the extracted part.
    */
   @BetaApi
@@ -6029,10 +6034,10 @@ public abstract class Expression {
   /**
    * Creates an expression that extracts a specified part from this timestamp expression.
    *
-   * @param part The part to extract. Valid values are "microsecond",
-   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
-   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
-   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param part The part to extract. Valid values are "microsecond", "millisecond", "second",
+   *     "minute", "hour", "dayofweek", "day", "dayofyear", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
    * @return A new {@link Expression} representing the extracted part.
    */
   @BetaApi
@@ -6041,13 +6046,13 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that extracts a specified part from this timestamp expression in 
-   * a given timezone.
+   * Creates an expression that extracts a specified part from this timestamp expression in a given
+   * timezone.
    *
-   * @param part The part to extract. Valid values are "microsecond",
-   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
-   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
-   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param part The part to extract. Valid values are "microsecond", "millisecond", "second",
+   *     "minute", "hour", "dayofweek", "day", "dayofyear", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
    * @param timezone The timezone to use for extraction. Valid values are from the TZ database
    *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not
    *     specified.
@@ -6059,13 +6064,13 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that extracts a specified part from this timestamp expression in 
-   * a given timezone.
+   * Creates an expression that extracts a specified part from this timestamp expression in a given
+   * timezone.
    *
-   * @param part The part to extract. Valid values are "microsecond",
-   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
-   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
-   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param part The part to extract. Valid values are "microsecond", "millisecond", "second",
+   *     "minute", "hour", "dayofweek", "day", "dayofyear", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
    * @param timezone The timezone to use for extraction. Valid values are from the TZ database
    *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not
    *     specified.
@@ -6077,13 +6082,13 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that extracts a specified part from this timestamp expression in 
-   * a given timezone.
+   * Creates an expression that extracts a specified part from this timestamp expression in a given
+   * timezone.
    *
-   * @param part The part to extract. Valid values are "microsecond",
-   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
-   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
-   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param part The part to extract. Valid values are "microsecond", "millisecond", "second",
+   *     "minute", "hour", "dayofweek", "day", "dayofyear", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
    * @param timezone The timezone expression to use for extraction. Valid values are from the TZ
    *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if
    *     not specified.
@@ -6095,13 +6100,13 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that extracts a specified part from this timestamp expression in 
-   * a given timezone.
+   * Creates an expression that extracts a specified part from this timestamp expression in a given
+   * timezone.
    *
-   * @param part The part to extract. Valid values are "microsecond",
-   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
-   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
-   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param part The part to extract. Valid values are "microsecond", "millisecond", "second",
+   *     "minute", "hour", "dayofweek", "day", "dayofyear", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
    * @param timezone The timezone expression to use for extraction. Valid values are from the TZ
    *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if
    *     not specified.
