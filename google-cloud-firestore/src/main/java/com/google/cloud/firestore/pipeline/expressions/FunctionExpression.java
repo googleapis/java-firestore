@@ -18,9 +18,7 @@ package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
-import com.google.common.base.Objects;
 import com.google.firestore.v1.Value;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -3419,7 +3419,8 @@ public abstract class Expression {
    */
   @BetaApi
   public static Expression geoDistance(Field field, GeoPoint location) {
-    return new FunctionExpression("geo_distance", java.util.Arrays.asList(field, constant(location)));
+    return new FunctionExpression(
+        "geo_distance", java.util.Arrays.asList(field, constant(location)));
   }
 
   /**

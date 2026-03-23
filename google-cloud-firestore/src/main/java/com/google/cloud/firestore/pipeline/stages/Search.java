@@ -53,7 +53,8 @@ public final class Search extends Stage {
     }
 
     /**
-     * Search will fall back to the un-enhanced, user provided query, if the query enhancement fails.
+     * Search will fall back to the un-enhanced, user provided query, if the query enhancement
+     * fails.
      */
     public static final QueryEnhancement PREFERRED = new QueryEnhancement("preferred");
 
@@ -131,8 +132,7 @@ public final class Search extends Stage {
     allOrderings[0] = order;
     System.arraycopy(additionalOrderings, 0, allOrderings, 1, additionalOrderings.length);
     return new Search(
-        options.with(
-            "sort", Lists.transform(Arrays.asList(allOrderings), Ordering::toProto)));
+        options.with("sort", Lists.transform(Arrays.asList(allOrderings), Ordering::toProto)));
   }
 
   /** Specify the maximum number of documents to return from the Search stage. */
