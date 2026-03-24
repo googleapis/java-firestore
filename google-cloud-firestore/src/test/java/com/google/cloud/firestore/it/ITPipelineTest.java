@@ -1406,68 +1406,103 @@ public class ITPipelineTest extends ITBaseTest {
 
   @Test
   public void testArrayFilter() throws Exception {
-      List<PipelineResult> results = firestore
-              .pipeline()
-              .createFrom(collection)
-              .where(equal("title", "The Lord of the Rings"))
-              .select(
-                      field("tags").arrayFilter("tag",
-                              notEqual(variable("tag"), "magic")).as("notMagicTags"),
-                      arrayFilter("tags", "tag", notEqual(variable("tag"), "epic")).as("notEpicTags"),
-                      arrayFilter("tags", "tag", equal(variable("tag"), "fantasy")).as("noMatchingTags"))
-              .execute()
-              .get()
-              .getResults();
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(equal("title", "The Lord of the Rings"))
+            .select(
+                field("tags")
+                    .arrayFilter("tag", notEqual(variable("tag"), "magic"))
+                    .as("notMagicTags"),
+                arrayFilter("tags", "tag", notEqual(field("tag"), "epic")).as("notEpicTags"),
+                arrayFilter("tags", "tag", equal(field("tag"), "fantasy")).as("noMatchingTags"))
+            .execute()
+            .get()
+            .getResults();
 
-      Map<String, Object> result = data(results).get(0);
-      assertThat((List<?>) result.get("notMagicTags")).containsExactly("adventure", "epic").inOrder();
-      assertThat((List<?>) result.get("notEpicTags")).containsExactly("adventure", "magic").inOrder();
-      assertThat((List<?>) result.get("noMatchingTags")).isEmpty();
+    Map<String, Object> result = data(results).get(0);
+    assertThat((List<?>) result.get("notMagicTags")).containsExactly("adventure", "epic").inOrder();
+    assertThat((List<?>) result.get("notEpicTags")).containsExactly("adventure", "magic").inOrder();
+    assertThat((List<?>) result.get("noMatchingTags")).isEmpty();
   }
 
   @Test
   public void testArrayFilterWithMixedTypesAndNulls() throws Exception {
-      List<PipelineResult> results = firestore
-              .pipeline()
-              .createFrom(collection)
-              .limit(1)
-              .replaceWith(
-                      Expression.map(
-                              ImmutableMap.of(
-                                      "arr",
-                                      ImmutableList.of(1, "foo", null, 20.0, "bar", 30, "40", null))))
-              .select(
-                      field("arr")
-                              .arrayFilter("element", greaterThan(variable("element"), 10))
-                              .alias("filtered"))
-              .execute()
-              .get()
-              .getResults();
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .limit(1)
+            .replaceWith(
+                Expression.map(
+                    ImmutableMap.of(
+                        "arr", ImmutableList.of(1, "foo", Expression.nullValue(), 20.0, "bar", 30, "40", Expression.nullValue()))))
+            .select(
+                field("arr")
+                    .arrayFilter("element", greaterThan(field("element"), 10))
+                    .as("filtered"))
+            .execute()
+            .get()
+            .getResults();
 
-      Map<String, Object> result = data(results).get(0);
-      assertThat((List<?>) result.get("filtered")).containsExactly("bar", "40").inOrder();
+    Map<String, Object> result = data(results).get(0);
+    assertThat((List<?>) result.get("filtered")).containsExactly(20.0, 30).inOrder();
   }
 
   @Test
   public void testArraySlice() throws Exception {
-      List<PipelineResult> results = firestore
-              .pipeline()
-              .createFrom(collection)
-              .where(equal("title", "The Lord of the Rings"))
-              .select(
-                      field("tags").arraySlice(1).as("instanceMethodSlice"),
-                      arraySlice("tags", 1, 1).as("staticMethodSlice"),
-                      field("tags").arraySlice(1).as("instanceMethodSliceToEnd"),
-                      arraySlice("tags", 1, 1).as("staticMethodSliceToEnd"))
-              .execute()
-              .get()
-              .getResults();
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .where(equal("title", "The Lord of the Rings"))
+            .select(
+                field("tags").arraySlice(1).as("instanceMethodSlice"),
+                arraySlice("tags", 1, 1).as("staticMethodSlice"),
+                field("tags").arraySlice(1).as("instanceMethodSliceToEnd"),
+                arraySlice("tags", 1, 1).as("staticMethodSliceToEnd"),
+                field("tags").arraySlice(1, 10).as("overflowLength"),
+                field("tags").arraySlice(10).as("overflowOffset"),
+                field("tags").arraySlice(-1).as("negativeOffset"),
+                field("tags").arraySlice(-1, 1).as("negativeOffsetLength"),
+                field("tags").arraySlice(-10).as("negativeOffsetOverflow"))
+            .execute()
+            .get()
+            .getResults();
 
-      Map<String, Object> result = data(results).get(0);
-      assertThat((List<?>) result.get("instanceMethodSlice")).containsExactly("magic", "epic").inOrder();
-      assertThat((List<?>) result.get("staticMethodSlice")).containsExactly("magic").inOrder();
-      assertThat((List<?>) result.get("instanceMethodSliceToEnd")).containsExactly("epic", "fantasy").inOrder();
-      assertThat((List<?>) result.get("staticMethodSliceToEnd")).containsExactly("epic", "fantasy").inOrder();
+    Map<String, Object> result = data(results).get(0);
+    assertThat((List<?>) result.get("instanceMethodSlice"))
+        .containsExactly("magic", "epic")
+        .inOrder();
+    assertThat((List<?>) result.get("staticMethodSlice")).containsExactly("magic").inOrder();
+    assertThat((List<?>) result.get("instanceMethodSliceToEnd"))
+        .containsExactly("epic", "fantasy")
+        .inOrder();
+    assertThat((List<?>) result.get("staticMethodSliceToEnd"))
+        .containsExactly("epic", "fantasy")
+        .inOrder();
+    assertThat((List<?>) result.get("overflowLength")).containsExactly("epic", "fantasy").inOrder();
+    assertThat((List<?>) result.get("overflowOffset")).isEmpty();
+    assertThat((List<?>) result.get("negativeOffset")).containsExactly("fantasy").inOrder();
+    assertThat((List<?>) result.get("negativeOffsetLength")).containsExactly("fantasy").inOrder();
+    assertThat((List<?>) result.get("negativeOffsetOverflow")).containsExactly("fantasy").inOrder();
+  }
+
+  @Test
+  public void arraySliceThrowsErrorForNegativeLength() throws Exception {
+    ExecutionException exception =
+            assertThrows(
+                    ExecutionException.class,
+                    () ->
+                            firestore
+                                    .pipeline()
+                                    .createFrom(collection)
+                                    .where(equal("title", "The Lord of the Rings"))
+                                    .select(arraySlice("tags", 1, -1).as("negativeLengthSlice"))
+                                    .execute()
+                                    .get());
+    assertThat(exception).hasMessageThat().contains("length must be non-negative");
   }
 
   @Test

@@ -2093,11 +2093,11 @@ public abstract class Expression {
    *
    * @param array The expression representing the array to filter.
    * @param alias The alias for the current element in the filter expression.
-   * @param filter The predicate expression used to filter the elements.
+   * @param filter The predicate boolean expression used to filter the elements.
    * @return A new {@link Expression} representing the filtered array.
    */
   @BetaApi
-  public static Expression arrayFilter(Expression array, String alias, Expression filter) {
+  public static Expression arrayFilter(Expression array, String alias, BooleanExpression filter) {
     return new FunctionExpression("array_filter", ImmutableList.of(array, constant(alias), filter));
   }
 
@@ -2106,11 +2106,12 @@ public abstract class Expression {
    *
    * @param arrayFieldName The field name of the array to filter.
    * @param alias The alias for the current element in the filter expression.
-   * @param filter The predicate expression used to filter the elements.
+   * @param filter The predicate boolean expression used to filter the elements.
    * @return A new {@link Expression} representing the filtered array.
    */
   @BetaApi
-  public static Expression arrayFilter(String arrayFieldName, String alias, Expression filter) {
+  public static Expression arrayFilter(
+      String arrayFieldName, String alias, BooleanExpression filter) {
     return arrayFilter(field(arrayFieldName), alias, filter);
   }
 
@@ -5360,11 +5361,11 @@ public abstract class Expression {
    * Filters this array based on a predicate.
    *
    * @param alias The alias for the current element in the filter expression.
-   * @param filter The predicate expression used to filter the elements.
+   * @param filter The predicate boolean expression used to filter the elements.
    * @return A new {@link Expression} representing the filtered array.
    */
   @BetaApi
-  public final Expression arrayFilter(String alias, Expression filter) {
+  public final Expression arrayFilter(String alias, BooleanExpression filter) {
     return arrayFilter(this, alias, filter);
   }
 
