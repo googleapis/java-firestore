@@ -1331,7 +1331,8 @@ public final class Pipeline {
   @BetaApi
   public void execute(ApiStreamObserver<PipelineResult> observer) {
     if (this.rpcContext == null) {
-      throw new IllegalStateException("Cannot execute a relative subcollection pipeline directly");
+      throw new IllegalStateException(
+          "This pipeline was created without a database (e.g., as a subcollection pipeline) and cannot be executed directly. It can only be used as part of another pipeline.");
     }
     MetricsContext metricsContext =
         createMetricsContext(TelemetryConstants.METHOD_NAME_EXECUTE_PIPELINE_EXECUTE);
@@ -1364,7 +1365,8 @@ public final class Pipeline {
       @Nullable final ByteString transactionId,
       @Nullable com.google.protobuf.Timestamp readTime) {
     if (this.rpcContext == null) {
-      throw new IllegalStateException("Cannot execute a relative subcollection pipeline directly");
+      throw new IllegalStateException(
+          "This pipeline was created without a database (e.g., as a subcollection pipeline) and cannot be executed directly. It can only be used as part of another pipeline.");
     }
 
     TraceUtil.Span span =
