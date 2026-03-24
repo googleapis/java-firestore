@@ -278,6 +278,95 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that returns the {@code elseExpression} argument if {@code ifExpr} is
+   * null or absent, else return the result of the {@code ifExpr} argument evaluation.
+   *
+   * @param ifExpr The expression to check for null or absence.
+   * @param elseExpression The expression that will be evaluated and returned if {@code ifExpr} is
+   *     null or absent.
+   * @return A new {@link Expression} representing the ifNull operation.
+   */
+  @BetaApi
+  public static Expression ifNull(Expression ifExpr, Expression elseExpression) {
+    return new FunctionExpression("if_null", ImmutableList.of(ifExpr, elseExpression));
+  }
+
+  /**
+   * Creates an expression that returns the {@code elseValue} argument if {@code ifExpr} is null or
+   * absent, else return the result of the {@code ifExpr} argument evaluation.
+   *
+   * @param ifExpr The expression to check for null or absence.
+   * @param elseValue The value that will be returned if {@code ifExpr} evaluates to a null or
+   *     absent value.
+   * @return A new {@link Expression} representing the ifNull operation.
+   */
+  @BetaApi
+  public static Expression ifNull(Expression ifExpr, Object elseValue) {
+    return ifNull(ifExpr, toExprOrConstant(elseValue));
+  }
+
+  /**
+   * Creates an expression that returns the {@code elseExpression} argument if {@code ifFieldName}
+   * is null or absent, else return the value of the field.
+   *
+   * @param ifFieldName The field name to check for null or absence.
+   * @param elseExpression The expression that will be evaluated and returned if {@code ifFieldName}
+   *     is null or absent.
+   * @return A new {@link Expression} representing the ifNull operation.
+   */
+  @BetaApi
+  public static Expression ifNull(String ifFieldName, Expression elseExpression) {
+    return ifNull(field(ifFieldName), elseExpression);
+  }
+
+  /**
+   * Creates an expression that returns the {@code elseValue} argument if {@code ifFieldName} is
+   * null or absent, else return the value of the field.
+   *
+   * @param ifFieldName The field name to check for null or absence.
+   * @param elseValue The value that will be returned if {@code ifFieldName} is null or absent.
+   * @return A new {@link Expression} representing the ifNull operation.
+   */
+  @BetaApi
+  public static Expression ifNull(String ifFieldName, Object elseValue) {
+    return ifNull(field(ifFieldName), toExprOrConstant(elseValue));
+  }
+
+  /**
+   * Returns the first non-null, non-absent argument, without evaluating the rest of the arguments.
+   * When all arguments are null or absent, returns the last argument.
+   *
+   * @param first The first expression to check for null.
+   * @param second The fallback expression or value if the first one is null.
+   * @param others Optional additional expressions to check if previous ones are null.
+   * @return A new {@link Expression} representing the coalesce operation.
+   */
+  @BetaApi
+  public static Expression coalesce(Expression first, Object second, Object... others) {
+    ImmutableList.Builder<Expression> args = ImmutableList.builder();
+    args.add(first);
+    args.add(toExprOrConstant(second));
+    for (Object other : others) {
+      args.add(toExprOrConstant(other));
+    }
+    return new FunctionExpression("coalesce", args.build());
+  }
+
+  /**
+   * Returns the first non-null, non-absent argument, without evaluating the rest of the arguments.
+   * When all arguments are null or absent, returns the last argument.
+   *
+   * @param firstFieldName The name of the first field to check for null.
+   * @param second The fallback expression or value if the first one is null.
+   * @param others Optional additional expressions to check if previous ones are null.
+   * @return A new {@link Expression} representing the coalesce operation.
+   */
+  @BetaApi
+  public static Expression coalesce(String firstFieldName, Object second, Object... others) {
+    return coalesce(field(firstFieldName), second, others);
+  }
+
+  /**
    * Creates an expression that joins the elements of an array into a string.
    *
    * @param arrayExpression The expression representing the array.
@@ -4204,6 +4293,32 @@ public abstract class Expression {
   @BetaApi
   public Expression ifAbsent(Object elseValue) {
     return Expression.ifAbsent(this, elseValue);
+  }
+
+  /**
+   * Creates an expression that returns the {@code elseValue} argument if this expression is null or
+   * absent, else return the result of this expression.
+   *
+   * @param elseValue The value that will be returned if this expression evaluates to a null or
+   *     absent value.
+   * @return A new {@link Expression} representing the ifNull operation.
+   */
+  @BetaApi
+  public Expression ifNull(Object elseValue) {
+    return Expression.ifNull(this, elseValue);
+  }
+
+  /**
+   * Returns the first non-null, non-absent argument, without evaluating the rest of the arguments.
+   * When all arguments are null or absent, returns the last argument.
+   *
+   * @param second The next expression or literal to evaluate.
+   * @param others Additional expressions or literals to evaluate.
+   * @return A new {@link Expression} representing the coalesce operation.
+   */
+  @BetaApi
+  public Expression coalesce(Object second, Object... others) {
+    return Expression.coalesce(this, second, others);
   }
 
   /**
