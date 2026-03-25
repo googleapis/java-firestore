@@ -27,6 +27,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.lessTha
 import static com.google.cloud.firestore.pipeline.expressions.Expression.score;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.snippet;
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assume.assumeFalse;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.GeoPoint;
@@ -138,11 +139,15 @@ public class ITPipelineSearchTest extends ITBaseTest {
 
   @Override
   public void primeBackend() throws Exception {
-    // Disable priming as it uses Watch/Listen, which is not supported by the 'enterprise' database.
+    // Disable priming as it uses Watch/Listen
   }
 
   @Before
   public void setupRestaurantDocs() throws Exception {
+    assumeFalse(
+            "This test suite only runs against the Enterprise edition.",
+            !getFirestoreEdition().equals(FirestoreEdition.ENTERPRISE));
+
     restaurantsCollection =
         firestore.collection("SearchIntegrationTests-" + LocalFirestoreHelper.autoId());
 
