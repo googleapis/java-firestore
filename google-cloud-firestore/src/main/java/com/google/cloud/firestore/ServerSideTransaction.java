@@ -279,7 +279,7 @@ final class ServerSideTransaction extends Transaction {
   public ApiFuture<Pipeline.Snapshot> execute(
       @Nonnull Pipeline pipeline, @Nonnull PipelineExecuteOptions options) {
     try (TraceUtil.Scope ignored = transactionTraceContext.makeCurrent()) {
-      return pipeline.execute(new PipelineExecuteOptions(), transactionId, null);
+      return pipeline.execute(options, transactionId, null);
     }
   }
 }
