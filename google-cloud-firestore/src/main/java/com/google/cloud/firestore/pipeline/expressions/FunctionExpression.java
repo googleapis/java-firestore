@@ -32,6 +32,7 @@ public class FunctionExpression extends Expression {
     this(name, params, java.util.Collections.emptyMap());
   }
 
+  @InternalApi
   FunctionExpression(
       String name, List<? extends Expression> params, java.util.Map<String, Value> options) {
     this.name = name;
