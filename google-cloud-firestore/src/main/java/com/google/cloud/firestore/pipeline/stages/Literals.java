@@ -46,7 +46,8 @@ public final class Literals extends Stage {
   }
 
   private Value encodeLiteralMap(Map<?, ?> map) {
-    com.google.firestore.v1.MapValue.Builder mapValue = com.google.firestore.v1.MapValue.newBuilder();
+    com.google.firestore.v1.MapValue.Builder mapValue =
+        com.google.firestore.v1.MapValue.newBuilder();
     for (Map.Entry<?, ?> entry : map.entrySet()) {
       String key = String.valueOf(entry.getKey());
       Object v = entry.getValue();

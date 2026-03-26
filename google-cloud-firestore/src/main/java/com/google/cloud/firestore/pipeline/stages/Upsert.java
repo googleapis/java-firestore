@@ -17,7 +17,6 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.BetaApi;
-import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.PipelineUtils;
 import com.google.cloud.firestore.pipeline.expressions.Expression;
@@ -56,7 +55,8 @@ public final class Upsert extends Stage {
 
   @BetaApi
   public Upsert withIdExpression(Expression idExpr) {
-    return new Upsert(this.transformations, this.options.with("document_id", PipelineUtils.encodeValue(idExpr)));
+    return new Upsert(
+        this.transformations, this.options.with("document_id", PipelineUtils.encodeValue(idExpr)));
   }
 
   @BetaApi

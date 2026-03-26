@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,10 @@
 package com.google.cloud.firestore.pipeline.stages;
 
 import com.google.api.core.BetaApi;
-import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.PipelineUtils;
 import com.google.cloud.firestore.pipeline.expressions.Expression;
-import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.firestore.v1.Value;
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Nullable;
 
 @BetaApi
 public final class Insert extends Stage {

@@ -61,7 +61,6 @@ import com.google.cloud.firestore.pipeline.stages.Union;
 import com.google.cloud.firestore.pipeline.stages.Unnest;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
 import com.google.cloud.firestore.pipeline.stages.Update;
-import com.google.cloud.firestore.pipeline.stages.Upsert;
 import com.google.cloud.firestore.pipeline.stages.Where;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
@@ -1002,6 +1001,18 @@ public final class Pipeline {
   /**
    * Performs a delete operation on documents from previous stages.
    *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Delete all documents in the "logs" collection where "status" is "archived"
+   * firestore.pipeline()
+   *     .collection("logs")
+   *     .where(field("status").equal("archived"))
+   *     .delete()
+   *     .execute()
+   *     .get();
+   * }</pre>
+   *
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
   @BetaApi
@@ -1010,39 +1021,36 @@ public final class Pipeline {
   }
 
   /**
-   * Performs an upsert operation using documents from previous stages.
-   *
-   * @return A new {@code Pipeline} object with this stage appended to the stage list.
-   */
-  @BetaApi
-  public Pipeline upsert() {
-    return append(new Upsert());
-  }
-
-  /**
-   * Performs an upsert operation using documents from previous stages.
-   *
-   * @param target The collection to upsert to.
-   * @return A new {@code Pipeline} object with this stage appended to the stage list.
-   */
-  @BetaApi
-  public Pipeline upsert(CollectionReference target) {
-    return append(new Upsert().withCollection(target));
-  }
-
-  /**
-   * Performs an upsert operation using documents from previous stages.
-   *
-   * @param upsertStage The {@code Upsert} stage to append.
-   * @return A new {@code Pipeline} object with this stage appended to the stage list.
-   */
-  @InternalApi
-  public Pipeline upsert(Upsert upsertStage) {
-    return append(upsertStage);
-  }
-
-  /**
    * Performs an update operation using documents from previous stages.
+   *
+   * <p>This method updates the documents in place based on the data flowing through the pipeline.
+   * To specify transformations, use {@link #update(Selectable...)}.
+   *
+   * <p>Example 1: Update a collection's schema by adding a new field and removing an old one.
+   *
+   * <pre>{@code
+   * firestore.pipeline()
+   *     .collection("books")
+   *     .addFields(constant("Fiction").as("genre"))
+   *     .removeFields("old_genre")
+   *     .update()
+   *     .execute()
+   *     .get();
+   * }</pre>
+   *
+   * <p>Example 2: Update documents in place with data from literals.
+   *
+   * <pre>{@code
+   * Map<String, Object> updateData = new HashMap<>();
+   * updateData.put("__name__", firestore.collection("books").document("book1"));
+   * updateData.put("status", "Updated");
+   *
+   * firestore.pipeline()
+   *     .literals(updateData)
+   *     .update()
+   *     .execute()
+   *     .get();
+   * }</pre>
    *
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
@@ -1052,7 +1060,20 @@ public final class Pipeline {
   }
 
   /**
-   * Performs an update operation using documents from previous stages.
+   * Performs an update operation using documents from previous stages with specified
+   * transformations.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Update the "status" field to "Discounted" for all books where price > 50
+   * firestore.pipeline()
+   *     .collection("books")
+   *     .where(field("price").greaterThan(50))
+   *     .update(constant("Discounted").as("status"))
+   *     .execute()
+   *     .get();
+   * }</pre>
    *
    * @param transformations The transformations to apply.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
@@ -1063,18 +1084,50 @@ public final class Pipeline {
   }
 
   /**
-   * Performs an update operation using documents from previous stages.
+   * Performs an update operation using an {@link Update} stage.
+   *
+   * <p>This method allows you to use a pre-configured {@link Update} stage.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * Update updateStage = new Update().withTransformations(constant("Updated").as("status"));
+   *
+   * firestore.pipeline()
+   *     .collection("books")
+   *     .where(field("title").equal("The Hitchhiker's Guide to the Galaxy"))
+   *     .update(updateStage)
+   *     .execute()
+   *     .get();
+   * }</pre>
    *
    * @param update The {@code Update} stage to append.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
-  @InternalApi
+  @BetaApi
   public Pipeline update(Update update) {
     return append(update);
   }
 
   /**
    * Performs an insert operation using documents from previous stages.
+   *
+   * <p>The documents must include a valid {@code __name__} field specifying the document reference
+   * to insert. If the document already exists, the operation will fail.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * Map<String, Object> book = new HashMap<>();
+   * book.put("__name__", firestore.collection("books").document("newBook"));
+   * book.put("title", "New Book");
+   *
+   * firestore.pipeline()
+   *     .literals(book)
+   *     .insert()
+   *     .execute()
+   *     .get();
+   * }</pre>
    *
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
@@ -1084,7 +1137,26 @@ public final class Pipeline {
   }
 
   /**
-   * Performs an insert operation using documents from previous stages.
+   * Performs an insert operation using documents from previous stages into a specified target
+   * collection.
+   *
+   * <p>If documents have an ID (or expression evaluation for ID), they will use it. Otherwise,
+   * auto-generated IDs will be used if applicable (depending on the source).
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * CollectionReference backupCol = firestore.collection("books_backup");
+   *
+   * Map<String, Object> book = new HashMap<>();
+   * book.put("title", "New Book");
+   *
+   * firestore.pipeline()
+   *     .literals(book)
+   *     .insert(backupCol)
+   *     .execute()
+   *     .get();
+   * }</pre>
    *
    * @param target The collection to insert to.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
@@ -1095,12 +1167,32 @@ public final class Pipeline {
   }
 
   /**
-   * Performs an insert operation using documents from previous stages.
+   * Performs an insert operation using an {@link Insert} stage.
+   *
+   * <p>This method allows you to use a pre-configured {@link Insert} stage.
+   *
+   * <p>Example: Use a pre-configured {@link Insert} stage with a target collection and ID
+   * expression, reading from literals.
+   *
+   * <pre>{@code
+   * CollectionReference targetCol = firestore.collection("books_backup");
+   * Insert insertStage = new Insert().withCollection(targetCol).withIdExpression(field("custom_id"));
+   *
+   * Map<String, Object> book = new HashMap<>();
+   * book.put("custom_id", "book1");
+   * book.put("title", "Book 1");
+   *
+   * firestore.pipeline()
+   *     .literals(book)
+   *     .insert(insertStage)
+   *     .execute()
+   *     .get();
+   * }</pre>
    *
    * @param insertStage The {@code Insert} stage to append.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
-  @InternalApi
+  @BetaApi
   public Pipeline insert(Insert insertStage) {
     return append(insertStage);
   }
@@ -1446,7 +1538,7 @@ public final class Pipeline {
           }
         };
 
-    logger.log(Level.WARNING, "Sending pipeline request: " + request.getStructuredPipeline());
+    logger.log(Level.FINEST, "Sending pipeline request: " + request.getStructuredPipeline());
 
     rpcContext.streamRequest(request, observer, rpcContext.getClient().executePipelineCallable());
   }

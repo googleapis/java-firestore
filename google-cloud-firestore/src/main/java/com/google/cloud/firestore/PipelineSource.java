@@ -159,8 +159,21 @@ public final class PipelineSource {
   }
 
   /**
-   * Creates a new {@link Pipeline} that operates on a static set of documents
-   * represented as Maps.
+   * Creates a new {@link Pipeline} that operates on a static set of documents represented as Maps.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * Map<String, Object> doc1 = new HashMap<>();
+   * doc1.put("title", "Book 1");
+   * Map<String, Object> doc2 = new HashMap<>();
+   * doc2.put("title", "Book 2");
+   *
+   * Snapshot snapshot = firestore.pipeline()
+   *     .literals(doc1, doc2)
+   *     .execute()
+   *     .get();
+   * }</pre>
    *
    * @param data The Maps representing documents to include in the pipeline.
    * @return A new {@code Pipeline} instance with a literals source.

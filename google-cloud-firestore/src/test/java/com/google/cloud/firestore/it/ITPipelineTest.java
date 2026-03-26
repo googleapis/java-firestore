@@ -68,6 +68,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.logical
 import static com.google.cloud.firestore.pipeline.expressions.Expression.ltrim;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.mapMerge;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.mapRemove;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.multiply;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.nor;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.notEqual;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.nullValue;
@@ -135,7 +136,6 @@ import com.google.cloud.firestore.pipeline.stages.RawOptions;
 import com.google.cloud.firestore.pipeline.stages.RawStage;
 import com.google.cloud.firestore.pipeline.stages.Sample;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
-import com.google.cloud.firestore.pipeline.stages.Upsert;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -4435,192 +4435,210 @@ public class ITPipelineTest extends ITBaseTest {
 
   @Test
   public void testInsertWithIdExpression() throws Exception {
-      CollectionReference targetCol = firestore.collection(LocalFirestoreHelper.autoId());
+    CollectionReference targetCol = firestore.collection(LocalFirestoreHelper.autoId());
 
-      java.util.Map<String, Object> book = new java.util.HashMap<>();
-      book.put("title", "The Hitchhiker's Guide to the Galaxy");
-      book.put("doc_id", "book1");
+    java.util.Map<String, Object> book = new java.util.HashMap<>();
+    book.put("title", "The Hitchhiker's Guide to the Galaxy");
+    book.put("doc_id", "book1");
 
+    if ("NIGHTLY".equals(getTargetBackend())) {
       firestore
-              .pipeline()
-              .literals(book)
-              .insert(new Insert().withCollection(targetCol).withIdExpression(field("doc_id")))
-              .execute()
-              .get();
+          .pipeline()
+          .literals(book)
+          .insert(new Insert().withCollection(targetCol).withIdExpression(field("doc_id")))
+          .execute()
+          .get();
 
       DocumentSnapshot doc = targetCol.document("book1").get().get();
       assertThat(doc.exists()).isTrue();
       assertThat(doc.get("title")).isEqualTo("The Hitchhiker's Guide to the Galaxy");
+    } else {
+      assertThrows(
+          ExecutionException.class,
+          () -> {
+            firestore
+                .pipeline()
+                .literals(book)
+                .insert(new Insert().withCollection(targetCol).withIdExpression(field("doc_id")))
+                .execute()
+                .get();
+          });
+    }
   }
 
   @Test
   public void testInsertToExistingDocumentFails() throws Exception {
-      CollectionReference targetCol = firestore.collection(LocalFirestoreHelper.autoId());
-      targetCol.document("book1").set(map("title", "Existing")).get();
+    CollectionReference targetCol = firestore.collection(LocalFirestoreHelper.autoId());
+    targetCol.document("book1").set(map("title", "Existing")).get();
 
-      java.util.Map<String, Object> book = new java.util.HashMap<>();
-      book.put("title", "Duplicate");
-      book.put("__name__", targetCol.document("book1"));
+    java.util.Map<String, Object> book = new java.util.HashMap<>();
+    book.put("title", "Duplicate");
+    book.put("__name__", targetCol.document("book1"));
 
-      assertThrows(
-              ExecutionException.class,
-              () -> {
-                  firestore
-                          .pipeline()
-                          .literals(book)
-                          .insert(targetCol)
-                          .execute()
-                          .get();
-              });
+    assertThrows(
+        ExecutionException.class,
+        () -> {
+          firestore.pipeline().literals(book).insert(targetCol).execute().get();
+        });
   }
 
   @Test
   public void testDeleteMultipleDocuments() throws Exception {
     CollectionReference dmlCol = testCollectionWithDocs(bookDocs);
-    List<PipelineResult> results =
-        firestore
-            .pipeline()
-            .collection(dmlCol.getPath())
-                    .where(equal(field("genre"), "Science Fiction"))
-            .delete()
-            .execute()
-            .get()
-            .getResults();
+    if ("NIGHTLY".equals(getTargetBackend())) {
+      List<PipelineResult> results =
+          firestore
+              .pipeline()
+              .collection(dmlCol.getPath())
+              .where(equal(field("genre"), "Science Fiction"))
+              .delete()
+              .execute()
+              .get()
+              .getResults();
 
-    assertThat(results).hasSize(1);
-    assertThat(results.get(0).getData().get("documents_modified")).isEqualTo(2L);
-    assertThat(dmlCol.document("book1").get().get().exists()).isFalse();
-    assertThat(dmlCol.document("book10").get().get().exists()).isFalse();
+      assertThat(results).hasSize(1);
+      assertThat(results.get(0).getData().get("documents_modified")).isEqualTo(2L);
+      assertThat(dmlCol.document("book1").get().get().exists()).isFalse();
+      assertThat(dmlCol.document("book10").get().get().exists()).isFalse();
+    } else {
+      assertThrows(
+          ExecutionException.class,
+          () -> {
+            firestore
+                .pipeline()
+                .collection(dmlCol.getPath())
+                .where(equal(field("genre"), "Science Fiction"))
+                .delete()
+                .execute()
+                .get();
+          });
+    }
   }
 
   @Test
   public void testUpdateMultipleDocuments() throws Exception {
     CollectionReference dmlCol = testCollectionWithDocs(bookDocs);
-    List<PipelineResult> results =
-        firestore
-            .pipeline()
-            .collection(dmlCol.getPath())
-                    .where(equal(field("genre"), "Science Fiction"))
-                    .update(constant("Updated").as("status"))
-            .execute()
-            .get()
-            .getResults();
+    if ("NIGHTLY".equals(getTargetBackend())) {
+      List<PipelineResult> results =
+          firestore
+              .pipeline()
+              .collection(dmlCol.getPath())
+              .where(equal(field("genre"), "Science Fiction"))
+              .removeFields("awards")
+              .update(constant("Updated").as("status"))
+              .execute()
+              .get()
+              .getResults();
 
-    assertThat(results).hasSize(1);
-    assertThat(results.get(0).getData().get("documents_modified")).isEqualTo(2L);
-    assertThat(dmlCol.document("book1").get().get().get("status")).isEqualTo("Updated");
-    assertThat(dmlCol.document("book10").get().get().get("status")).isEqualTo("Updated");
+      assertThat(results).hasSize(1);
+      assertThat(results.get(0).getData().get("documents_modified")).isEqualTo(2L);
+      assertThat(dmlCol.document("book1").get().get().get("status")).isEqualTo("Updated");
+      assertThat(dmlCol.document("book1").get().get().get("awards")).isNull();
+
+      assertThat(dmlCol.document("book10").get().get().get("status")).isEqualTo("Updated");
+      assertThat(dmlCol.document("book10").get().get().get("awards")).isNull();
+    } else {
+      assertThrows(
+          ExecutionException.class,
+          () -> {
+            firestore
+                .pipeline()
+                .collection(dmlCol.getPath())
+                .where(equal(field("genre"), "Science Fiction"))
+                .removeFields("awards")
+                .update(constant("Updated").as("status"))
+                .execute()
+                .get();
+          });
+    }
   }
 
   @Test
   public void testUpdateWithExpressions() throws Exception {
     CollectionReference dmlCol = testCollectionWithDocs(bookDocs);
-    List<PipelineResult> results =
+    if ("NIGHTLY".equals(getTargetBackend())) {
+      List<PipelineResult> results =
+          firestore
+              .pipeline()
+              .collection(dmlCol.getPath())
+              .where(equal(field("__name__").documentId(), "book1"))
+              .update(
+                  com.google.cloud.firestore.pipeline.expressions.Expression.add(
+                          field("rating"), constant(1.0))
+                      .as("rating"))
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(results).hasSize(1);
+      DocumentSnapshot doc = dmlCol.document("book1").get().get();
+      assertThat(doc.get("rating")).isEqualTo(5.2);
+    } else {
+      assertThrows(
+          ExecutionException.class,
+          () -> {
             firestore
-                    .pipeline()
-                    .collection(dmlCol.getPath())
-                    .where(equal(field("__name__").documentId(), "book1"))
-                    .update(Expression.add(field("rating"), constant(1.0)).as("rating"))
-                    .execute()
-                    .get()
-                    .getResults();
+                .pipeline()
+                .collection(dmlCol.getPath())
+                .where(equal(field("__name__").documentId(), "book1"))
+                .update(
+                    com.google.cloud.firestore.pipeline.expressions.Expression.add(
+                            field("rating"), constant(1.0))
+                        .as("rating"))
+                .execute()
+                .get();
+          });
+    }
+  }
 
-    assertThat(results).hasSize(1);
-    DocumentSnapshot doc = dmlCol.document("book1").get().get();
-    assertThat(doc.get("rating")).isEqualTo(5.2);
-}
-
-@Test
-public void testUpdateNonExistingDocumentModifiesZeroDocuments() throws Exception {
+  @Test
+  public void testUpdateNonExistingDocumentModifiesZeroDocuments() throws Exception {
     CollectionReference dmlCol = firestore.collection(LocalFirestoreHelper.autoId());
 
     java.util.Map<String, Object> book = new java.util.HashMap<>();
     book.put("title", "Non Existing");
     book.put("__name__", dmlCol.document("nonExisting"));
 
-    List<PipelineResult> results =
-        firestore
-            .pipeline()
-            .literals(book)
-            .update()
-            .execute()
-            .get()
-            .getResults();
+    if ("NIGHTLY".equals(getTargetBackend())) {
+      List<PipelineResult> results =
+          firestore.pipeline().literals(book).update().execute().get().getResults();
 
-    assertThat(results).hasSize(1);
-    assertThat(results.get(0).getData().get("documents_modified")).isEqualTo(0L);
-}
+      assertThat(results).hasSize(1);
+      assertThat(results.get(0).getData().get("documents_modified")).isEqualTo(0L);
+    } else {
+      assertThrows(
+          ExecutionException.class,
+          () -> {
+            firestore.pipeline().literals(book).update().execute().get();
+          });
+    }
+  }
 
-@Test
-public void testUpsertInPlaceReadingFromCollection() throws Exception {
-    assumeFalse(
-        "Transactions are not supported against the emulator.",
-        isRunningAgainstFirestoreEmulator(firestore));
-    CollectionReference dmlCol = testCollectionWithDocs(bookDocs);
-
-    firestore.runTransaction(
-        transaction -> {
-          transaction.execute(
-              firestore
-                  .pipeline()
-                  .collection(dmlCol.getPath())
-                  .where(equal(field("__name__").documentId(), "book3"))
-                  .upsert(new Upsert().withTransformations(constant("Updated").as("status")))
-          ).get();
-          return "done";
-        }
-    ).get();
-
-    DocumentSnapshot doc = dmlCol.document("book3").get().get();
-    assertThat(doc.get("status")).isEqualTo("Updated");
-}
-
-@Test
-public void testUpsertToNewCollectionReadingFromCollection() throws Exception {
-    assumeFalse(
-        "Transactions are not supported against the emulator.",
-        isRunningAgainstFirestoreEmulator(firestore));
-    CollectionReference dmlCol = testCollectionWithDocs(bookDocs);
-    CollectionReference targetCol = firestore.collection(LocalFirestoreHelper.autoId());
-
-    firestore.runTransaction(
-        transaction -> {
-          transaction.execute(
-              firestore
-                  .pipeline()
-                  .collection(dmlCol.getPath())
-                  .where(equal(field("__name__").documentId(), "book1"))
-                  .upsert(new Upsert().withCollection(targetCol).withTransformations(constant("Copied").as("status")))
-          ).get();
-          return "done";
-        }
-    ).get();
-
-    DocumentSnapshot doc = targetCol.document("book1").get().get();
-    assertThat(doc.exists()).isTrue();
-    assertThat(doc.get("status")).isEqualTo("Copied");
-    assertThat(dmlCol.document("book1").get().get().exists()).isTrue();
-}
-
-
-
-@Test
-public void testLiteralsStage() throws Exception {
+  @Test
+  public void testLiteralsStage() throws Exception {
     java.util.Map<String, Object> data1 = new java.util.HashMap<>();
     data1.put("foo", "bar");
     java.util.Map<String, Object> data2 = new java.util.HashMap<>();
     data2.put("baz", "qux");
 
-    List<PipelineResult> results = firestore
-            .pipeline()
-            .literals(data1, data2)
-            .execute()
-            .get()
-            .getResults();
+    List<PipelineResult> results =
+        firestore.pipeline().literals(data1, data2).execute().get().getResults();
 
     assertThat(results).hasSize(2);
     assertThat(results.get(0).getData()).isEqualTo(data1);
     assertThat(results.get(1).getData()).isEqualTo(data2);
   }
-}
 
+  @Test
+  public void testLiteralsWithExpressions() throws Exception {
+    java.util.Map<String, Object> data = new java.util.HashMap<>();
+    data.put("base", 10);
+    data.put("doubled", multiply(constant(10), constant(2)));
+
+    List<PipelineResult> results = firestore.pipeline().literals(data).execute().get().getResults();
+
+    assertThat(results).hasSize(1);
+    assertThat(results.get(0).getData().get("base")).isEqualTo(10L);
+    assertThat(results.get(0).getData().get("doubled")).isEqualTo(20L);
+  }
+}
