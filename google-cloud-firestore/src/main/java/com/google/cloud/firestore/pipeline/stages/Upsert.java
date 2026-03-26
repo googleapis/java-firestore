@@ -20,20 +20,23 @@ import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.PipelineUtils;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.firestore.v1.Value;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Nullable;
 
-@InternalApi
+@BetaApi
 public final class Upsert extends Stage {
 
-  @Nullable private final String path;
+  @Nullable private final Selectable[] transformations;
 
-  private Upsert(@Nullable String path, InternalOptions options) {
+  private Upsert(@Nullable Selectable[] transformations, InternalOptions options) {
     super("upsert", options);
-    this.path = path;
+    this.transformations = transformations;
   }
 
   @BetaApi
@@ -42,36 +45,37 @@ public final class Upsert extends Stage {
   }
 
   @BetaApi
-  public static Upsert withCollection(CollectionReference target) {
+  public Upsert withCollection(CollectionReference target) {
     String path = target.getPath();
-    return new Upsert(path.startsWith("/") ? path : "/" + path, InternalOptions.EMPTY);
-  }
-
-  @InternalApi
-  public Upsert withOptions(UpsertOptions options) {
-    return new Upsert(path, this.options.adding(options));
-  }
-
-  @InternalApi
-  public Upsert withReturns(UpsertReturn returns) {
+    String normalizedPath = path.startsWith("/") ? path : "/" + path;
     return new Upsert(
-        path, this.options.with("returns", PipelineUtils.encodeValue(returns.getValue())));
+        this.transformations,
+        this.options.with(
+            "collection", Value.newBuilder().setReferenceValue(normalizedPath).build()));
+  }
+
+  @BetaApi
+  public Upsert withIdExpression(Expression idExpr) {
+    return new Upsert(this.transformations, this.options.with("document_id", PipelineUtils.encodeValue(idExpr)));
   }
 
   @BetaApi
   public Upsert withTransformations(Selectable... transformations) {
-    return new Upsert(
-        path,
-        this.options.with(
-            "transformations",
-            PipelineUtils.encodeValue(PipelineUtils.selectablesToMap(transformations))));
+    return new Upsert(transformations, this.options);
   }
 
   @Override
   Iterable<Value> toStageArgs() {
     List<Value> args = new ArrayList<>();
-    if (path != null) {
-      args.add(Value.newBuilder().setReferenceValue(path).build());
+    if (transformations != null && transformations.length > 0) {
+      Map<String, Expression> map = PipelineUtils.selectablesToMap(transformations);
+      Map<String, Value> encodedMap = new HashMap<>();
+      for (Map.Entry<String, Expression> entry : map.entrySet()) {
+        encodedMap.put(entry.getKey(), PipelineUtils.encodeValue(entry.getValue()));
+      }
+      args.add(PipelineUtils.encodeValue(encodedMap));
+    } else {
+      args.add(PipelineUtils.encodeValue(new HashMap<String, Value>()));
     }
     return args;
   }

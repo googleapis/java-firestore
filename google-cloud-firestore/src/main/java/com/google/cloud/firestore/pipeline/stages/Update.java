@@ -43,18 +43,6 @@ public final class Update extends Stage {
     this(null, InternalOptions.EMPTY);
   }
 
-  @InternalApi
-  public Update withOptions(UpdateOptions options) {
-    return new Update(transformations, this.options.adding(options));
-  }
-
-  @InternalApi
-  public Update withReturns(UpdateReturn returns) {
-    return new Update(
-        transformations,
-        this.options.with("returns", PipelineUtils.encodeValue(returns.getValue())));
-  }
-
   @BetaApi
   public Update withTransformations(Selectable... transformations) {
     return new Update(transformations, this.options);

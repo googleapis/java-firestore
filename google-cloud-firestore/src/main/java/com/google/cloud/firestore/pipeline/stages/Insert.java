@@ -20,59 +20,41 @@ import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.PipelineUtils;
+import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.firestore.v1.Value;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
 
-@InternalApi
+@BetaApi
 public final class Insert extends Stage {
 
-  @Nullable private final String path;
-
-  private Insert(@Nullable String path, InternalOptions options) {
+  private Insert(InternalOptions options) {
     super("insert", options);
-    this.path = path;
   }
 
   @BetaApi
   public Insert() {
-    this(null, InternalOptions.EMPTY);
+    this(InternalOptions.EMPTY);
   }
 
   @BetaApi
-  public static Insert withCollection(CollectionReference target) {
+  public Insert withCollection(CollectionReference target) {
     String path = target.getPath();
-    return new Insert(path.startsWith("/") ? path : "/" + path, InternalOptions.EMPTY);
-  }
-
-  @InternalApi
-  public Insert withOptions(InsertOptions options) {
-    return new Insert(path, this.options.adding(options));
-  }
-
-  @InternalApi
-  public Insert withReturns(InsertReturn returns) {
+    String normalizedPath = path.startsWith("/") ? path : "/" + path;
     return new Insert(
-        path, this.options.with("returns", PipelineUtils.encodeValue(returns.getValue())));
+        this.options.with(
+            "collection", Value.newBuilder().setReferenceValue(normalizedPath).build()));
   }
 
   @BetaApi
-  public Insert withTransformations(Selectable... transformations) {
-    return new Insert(
-        path,
-        this.options.with(
-            "transformations",
-            PipelineUtils.encodeValue(PipelineUtils.selectablesToMap(transformations))));
+  public Insert withIdExpression(Expression idExpr) {
+    return new Insert(this.options.with("document_id", PipelineUtils.encodeValue(idExpr)));
   }
 
   @Override
   Iterable<Value> toStageArgs() {
-    List<Value> args = new ArrayList<>();
-    if (path != null) {
-      args.add(Value.newBuilder().setReferenceValue(path).build());
-    }
-    return args;
+    return java.util.Collections.emptyList();
   }
 }

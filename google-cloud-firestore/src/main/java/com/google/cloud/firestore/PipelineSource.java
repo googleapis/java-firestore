@@ -24,6 +24,7 @@ import com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions;
 import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
 import com.google.cloud.firestore.pipeline.stages.Database;
 import com.google.cloud.firestore.pipeline.stages.Documents;
+import com.google.cloud.firestore.pipeline.stages.Literals;
 import com.google.common.base.Preconditions;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
@@ -155,6 +156,19 @@ public final class PipelineSource {
             Arrays.stream(docs)
                 .map(d -> this.rpcContext.getFirestore().document(d))
                 .toArray(DocumentReference[]::new)));
+  }
+
+  /**
+   * Creates a new {@link Pipeline} that operates on a static set of documents
+   * represented as Maps.
+   *
+   * @param data The Maps representing documents to include in the pipeline.
+   * @return A new {@code Pipeline} instance with a literals source.
+   */
+  @Nonnull
+  @BetaApi
+  public final Pipeline literals(java.util.Map<String, Object>... data) {
+    return new Pipeline(this.rpcContext, new Literals(data));
   }
 
   /**

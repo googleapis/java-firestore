@@ -42,12 +42,10 @@ import com.google.cloud.firestore.pipeline.stages.AddFields;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
 import com.google.cloud.firestore.pipeline.stages.Delete;
-import com.google.cloud.firestore.pipeline.stages.DeleteOptions;
 import com.google.cloud.firestore.pipeline.stages.Distinct;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
 import com.google.cloud.firestore.pipeline.stages.Insert;
-import com.google.cloud.firestore.pipeline.stages.InsertOptions;
 import com.google.cloud.firestore.pipeline.stages.Limit;
 import com.google.cloud.firestore.pipeline.stages.Offset;
 import com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions;
@@ -63,9 +61,7 @@ import com.google.cloud.firestore.pipeline.stages.Union;
 import com.google.cloud.firestore.pipeline.stages.Unnest;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
 import com.google.cloud.firestore.pipeline.stages.Update;
-import com.google.cloud.firestore.pipeline.stages.UpdateOptions;
 import com.google.cloud.firestore.pipeline.stages.Upsert;
-import com.google.cloud.firestore.pipeline.stages.UpsertOptions;
 import com.google.cloud.firestore.pipeline.stages.Where;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
@@ -1014,29 +1010,6 @@ public final class Pipeline {
   }
 
   /**
-   * Performs a delete operation on documents from previous stages.
-   *
-   * @param target The collection to delete from.
-   * @return A new {@code Pipeline} object with this stage appended to the stage list.
-   */
-  @BetaApi
-  public Pipeline delete(CollectionReference target) {
-    return append(Delete.withCollection(target));
-  }
-
-  /**
-   * Performs a delete operation on documents from previous stages.
-   *
-   * @param deleteStage The {@code Delete} stage to append.
-   * @param options The {@code DeleteOptions} to apply to the stage.
-   * @return A new {@code Pipeline} object with this stage appended to the stage list.
-   */
-  @InternalApi
-  public Pipeline delete(Delete deleteStage, DeleteOptions options) {
-    return append(deleteStage.withOptions(options));
-  }
-
-  /**
    * Performs an upsert operation using documents from previous stages.
    *
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
@@ -1054,19 +1027,18 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline upsert(CollectionReference target) {
-    return append(Upsert.withCollection(target));
+    return append(new Upsert().withCollection(target));
   }
 
   /**
    * Performs an upsert operation using documents from previous stages.
    *
    * @param upsertStage The {@code Upsert} stage to append.
-   * @param options The {@code UpsertOptions} to apply to the stage.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
   @InternalApi
-  public Pipeline upsert(Upsert upsertStage, UpsertOptions options) {
-    return append(upsertStage.withOptions(options));
+  public Pipeline upsert(Upsert upsertStage) {
+    return append(upsertStage);
   }
 
   /**
@@ -1094,12 +1066,11 @@ public final class Pipeline {
    * Performs an update operation using documents from previous stages.
    *
    * @param update The {@code Update} stage to append.
-   * @param options The {@code UpdateOptions} to apply to the stage.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
   @InternalApi
-  public Pipeline update(Update updateStage, UpdateOptions options) {
-    return append(updateStage.withOptions(options));
+  public Pipeline update(Update update) {
+    return append(update);
   }
 
   /**
@@ -1120,19 +1091,18 @@ public final class Pipeline {
    */
   @BetaApi
   public Pipeline insert(CollectionReference target) {
-    return append(Insert.withCollection(target));
+    return append(new Insert().withCollection(target));
   }
 
   /**
    * Performs an insert operation using documents from previous stages.
    *
    * @param insertStage The {@code Insert} stage to append.
-   * @param options The {@code InsertOptions} to apply to the stage.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
   @InternalApi
-  public Pipeline insert(Insert insertStage, InsertOptions options) {
-    return append(insertStage.withOptions(options));
+  public Pipeline insert(Insert insertStage) {
+    return append(insertStage);
   }
 
   /**
@@ -1476,7 +1446,7 @@ public final class Pipeline {
           }
         };
 
-    logger.log(Level.FINEST, "Sending pipeline request: " + request.getStructuredPipeline());
+    logger.log(Level.WARNING, "Sending pipeline request: " + request.getStructuredPipeline());
 
     rpcContext.streamRequest(request, observer, rpcContext.getClient().executePipelineCallable());
   }

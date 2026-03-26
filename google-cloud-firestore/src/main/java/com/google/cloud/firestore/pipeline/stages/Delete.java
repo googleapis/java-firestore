@@ -27,42 +27,17 @@ import javax.annotation.Nullable;
 
 @InternalApi
 public final class Delete extends Stage {
-
-  @Nullable private final String path;
-
-  private Delete(@Nullable String path, InternalOptions options) {
+  private Delete(InternalOptions options) {
     super("delete", options);
-    this.path = path;
   }
 
   @BetaApi
   public Delete() {
-    this(null, InternalOptions.EMPTY);
-  }
-
-  @BetaApi
-  public static Delete withCollection(CollectionReference target) {
-    String path = target.getPath();
-    return new Delete(path.startsWith("/") ? path : "/" + path, InternalOptions.EMPTY);
-  }
-
-  @InternalApi
-  public Delete withOptions(DeleteOptions options) {
-    return new Delete(path, this.options.adding(options));
-  }
-
-  @InternalApi
-  public Delete withReturns(DeleteReturn returns) {
-    return new Delete(
-        path, this.options.with("returns", PipelineUtils.encodeValue(returns.getValue())));
+    this(InternalOptions.EMPTY);
   }
 
   @Override
   Iterable<Value> toStageArgs() {
-    List<Value> args = new ArrayList<>();
-    if (path != null) {
-      args.add(Value.newBuilder().setReferenceValue(path).build());
-    }
-    return args;
+    return new ArrayList<>();
   }
 }
