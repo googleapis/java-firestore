@@ -278,13 +278,13 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that returns a default value if an expression evaluates to a null value.
+   * Creates an expression that returns a default value if an expression evaluates to null.
    *
    * <p>Note: This function provides a fallback for both absent and explicit null values. In
    * contrast, {@link ifAbsent} only triggers for missing fields.
    *
-   * @param ifExpr The expression to check for null.
-   * @param elseExpression The expression that will be evaluated and returned if ifExpr is null.
+   * @param ifExpr The expression to check.
+   * @param elseExpression The default value.
    * @return A new {@link Expression} representing the ifNull operation.
    */
   @BetaApi
@@ -293,13 +293,13 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that returns a default value if an expression evaluates to a null value.
+   * Creates an expression that returns a default value if an expression evaluates to null.
    *
    * <p>Note: This function provides a fallback for both absent and explicit null values. In
    * contrast, {@link ifAbsent} only triggers for missing fields.
    *
-   * @param ifExpr The expression to check for null.
-   * @param elseValue The value that will be returned if {@code ifExpr} evaluates to a null value.
+   * @param ifExpr The expression to check.
+   * @param elseValue The default value.
    * @return A new {@link Expression} representing the ifNull operation.
    */
   @BetaApi
@@ -313,8 +313,8 @@ public abstract class Expression {
    * <p>Note: This function provides a fallback for both absent and explicit null values. In
    * contrast, {@link ifAbsent} only triggers for missing fields.
    *
-   * @param ifFieldName The name of the field to check for null.
-   * @param elseExpression The expression that will be evaluated and returned if the field is null.
+   * @param ifFieldName The field to check.
+   * @param elseExpression The default value.
    * @return A new {@link Expression} representing the ifNull operation.
    */
   @BetaApi
@@ -328,8 +328,8 @@ public abstract class Expression {
    * <p>Note: This function provides a fallback for both absent and explicit null values. In
    * contrast, {@link ifAbsent} only triggers for missing fields.
    *
-   * @param ifFieldName The name of the field to check for null.
-   * @param elseValue The value that will be returned if the field is null.
+   * @param ifFieldName The field to check.
+   * @param elseValue The default value.
    * @return A new {@link Expression} representing the ifNull operation.
    */
   @BetaApi
@@ -4301,14 +4301,12 @@ public abstract class Expression {
   }
 
   /**
-   * Creates an expression that returns the elseValue argument if this expression is null, else
-   * return the result of this expression.
+   * Creates an expression that returns a default value if this expression evaluates null.
    *
    * <p>Note: This function provides a fallback for both absent and explicit null values. In
    * contrast, {@link ifAbsent} only triggers for missing fields.
    *
-   * @param elseValue The value that will be returned if this expression evaluates to a null or
-   *     absent value.
+   * @param elseValue The default value.
    * @return A new {@link Expression} representing the ifNull operation.
    */
   @BetaApi
