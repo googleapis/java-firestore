@@ -31,7 +31,6 @@ import static org.junit.Assume.assumeFalse;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.GeoPoint;
-import com.google.cloud.firestore.LocalFirestoreHelper;
 import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.PipelineResult;
 import com.google.cloud.firestore.WriteBatch;
@@ -145,8 +144,8 @@ public class ITPipelineSearchTest extends ITBaseTest {
   @Before
   public void setupRestaurantDocs() throws Exception {
     assumeFalse(
-            "This test suite only runs against the Enterprise edition.",
-            !getFirestoreEdition().equals(FirestoreEdition.ENTERPRISE));
+        "This test suite only runs against the Enterprise edition.",
+        !getFirestoreEdition().equals(FirestoreEdition.ENTERPRISE));
 
     restaurantsCollection = firestore.collection("SearchIntegrationTests");
 
@@ -232,7 +231,6 @@ public class ITPipelineSearchTest extends ITBaseTest {
     assertResultIds(snapshot, "solTacos");
   }
 
-
   @Test
   public void conjunctionOfTextSearchPredicates() throws Exception {
     Pipeline pipeline =
@@ -240,10 +238,10 @@ public class ITPipelineSearchTest extends ITBaseTest {
             .pipeline()
             .collection(restaurantsCollection.getId())
             .search(
-                Search.withQuery(
-                        and(documentMatches("waffles"), documentMatches("diner")))
-  // TODO(search) switch back to field matches when supported by the backend
-  //                      and(field("menu").matches("waffles"), field("description").matches("diner")))
+                Search.withQuery(and(documentMatches("waffles"), documentMatches("diner")))
+                    // TODO(search) switch back to field matches when supported by the backend
+                    //                      and(field("menu").matches("waffles"),
+                    // field("description").matches("diner")))
                     .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
 
     Pipeline.Snapshot snapshot = pipeline.execute().get();
@@ -273,22 +271,22 @@ public class ITPipelineSearchTest extends ITBaseTest {
   @Test
   public void negateMatch() throws Exception {
     Pipeline pipeline =
-            firestore
-                    .pipeline()
-                    .collection(restaurantsCollection.getId())
-                    .search(
-                            Search.withQuery(documentMatches("-waffles"))
-                                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+        firestore
+            .pipeline()
+            .collection(restaurantsCollection.getId())
+            .search(
+                Search.withQuery(documentMatches("-waffles"))
+                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
 
     Pipeline.Snapshot snapshot = pipeline.execute().get();
     assertResultIds(
-            snapshot,
-            "eastsideTacos",
-            "solTacos",
-            "peakBurgers",
-            "mileHighCatch",
-            "lotusBlossomThai",
-            "sunnySideUp");
+        snapshot,
+        "eastsideTacos",
+        "solTacos",
+        "peakBurgers",
+        "mileHighCatch",
+        "lotusBlossomThai",
+        "sunnySideUp");
   }
 
   @Test
@@ -320,19 +318,20 @@ public class ITPipelineSearchTest extends ITBaseTest {
   }
 
   // TODO(search) enable when rquery supports field paths
-  //@Test
-  //public void rquerySupportsFieldPaths() throws Exception {
+  // @Test
+  // public void rquerySupportsFieldPaths() throws Exception {
   //  Pipeline pipeline =
   //      firestore
   //          .pipeline()
   //          .collection(restaurantsCollection.getId())
   //          .search(
-  //              Search.withQuery("menu:(waffles OR pancakes) AND description:\"breakfast all day\"")
+  //              Search.withQuery("menu:(waffles OR pancakes) AND description:\"breakfast all
+  // day\"")
   //                  .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
   //
   //  Pipeline.Snapshot snapshot = pipeline.execute().get();
   //  assertResultIds(snapshot, "sunnySideUp");
-  //}
+  // }
 
   @Test
   public void conjunctionOfRqueryAndExpression() throws Exception {
@@ -384,26 +383,26 @@ public class ITPipelineSearchTest extends ITBaseTest {
   // }
 
   // add fields
-   @Test
-   public void addFields_topicalityScoreAndSnippet() throws Exception {
-     Pipeline pipeline =
-             firestore
-                     .pipeline()
-                     .collection(restaurantsCollection.getId())
-                     .search(
-                             Search.withQuery(documentMatches("waffles"))
-                                     .withAddFields(
-                                             score().as("searchScore"), snippet("menu", "waffles").as("snippet"))
-                                     .withQueryEnhancement(Search.QueryEnhancement.DISABLED))
-                     .select("name", "searchScore", "snippet");
+  @Test
+  public void addFields_topicalityScoreAndSnippet() throws Exception {
+    Pipeline pipeline =
+        firestore
+            .pipeline()
+            .collection(restaurantsCollection.getId())
+            .search(
+                Search.withQuery(documentMatches("waffles"))
+                    .withAddFields(
+                        score().as("searchScore"), snippet("menu", "waffles").as("snippet"))
+                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED))
+            .select("name", "searchScore", "snippet");
 
-     Pipeline.Snapshot snapshot = pipeline.execute().get();
-     assertThat(snapshot.getResults()).hasSize(1);
-     PipelineResult result = snapshot.getResults().get(0);
-     assertThat(result.getData().get("name")).isEqualTo("The Golden Waffle");
-     assertThat((Double) result.getData().get("searchScore")).isGreaterThan(0.0);
-     assertThat(((String) result.getData().get("snippet")).length()).isGreaterThan(0);
-   }
+    Pipeline.Snapshot snapshot = pipeline.execute().get();
+    assertThat(snapshot.getResults()).hasSize(1);
+    PipelineResult result = snapshot.getResults().get(0);
+    assertThat(result.getData().get("name")).isEqualTo("The Golden Waffle");
+    assertThat((Double) result.getData().get("searchScore")).isGreaterThan(0.0);
+    assertThat(((String) result.getData().get("snippet")).length()).isGreaterThan(0);
+  }
 
   // select
   @Test
@@ -457,7 +456,7 @@ public class ITPipelineSearchTest extends ITBaseTest {
             .pipeline()
             .collection(restaurantsCollection.getId())
             .search(
-                    Search.withQuery(constant(true))
+                Search.withQuery(constant(true))
                     .withSort(
                         field("location").geoDistance(new GeoPoint(39.6985, -105.024)).ascending())
                     .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
@@ -476,7 +475,8 @@ public class ITPipelineSearchTest extends ITBaseTest {
   //           .search(
   //               Search.withQuery(field("menu").matches("tacos OR chicken"))
   //                   .withSort(
-  //                       field("location").geoDistance(new GeoPoint(39.6985, -105.024)).ascending(),
+  //                       field("location").geoDistance(new GeoPoint(39.6985,
+  // -105.024)).ascending(),
   //                       score().descending())
   //                   .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
   //
