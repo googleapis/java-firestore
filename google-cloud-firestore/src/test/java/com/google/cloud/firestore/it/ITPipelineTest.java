@@ -2692,6 +2692,10 @@ public class ITPipelineTest extends ITBaseTest {
 
   @Test
   public void testCoalesce() throws Exception {
+    assumeFalse(
+        "Coalesce is not supported against the emulator.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
     List<PipelineResult> results =
         firestore
             .pipeline()
