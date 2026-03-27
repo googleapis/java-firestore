@@ -31,11 +31,11 @@ import javax.annotation.Nullable;
 @InternalApi
 public final class Update extends Stage {
 
-  @Nullable private final Selectable[] transformations;
+  @Nullable private final Selectable[] transformedFields;
 
-  private Update(@Nullable Selectable[] transformations, InternalOptions options) {
+  private Update(@Nullable Selectable[] transformedFields, InternalOptions options) {
     super("update", options);
-    this.transformations = transformations;
+    this.transformedFields = transformedFields;
   }
 
   @BetaApi
@@ -44,15 +44,15 @@ public final class Update extends Stage {
   }
 
   @BetaApi
-  public Update withTransformations(Selectable... transformations) {
-    return new Update(transformations, this.options);
+  public Update withTransformedFields(Selectable... transformedFields) {
+    return new Update(transformedFields, this.options);
   }
 
   @Override
   Iterable<Value> toStageArgs() {
     List<Value> args = new ArrayList<>();
-    if (transformations != null && transformations.length > 0) {
-      Map<String, Expression> map = PipelineUtils.selectablesToMap(transformations);
+    if (transformedFields != null && transformedFields.length > 0) {
+      Map<String, Expression> map = PipelineUtils.selectablesToMap(transformedFields);
       Map<String, Value> encodedMap = new HashMap<>();
       for (Map.Entry<String, Expression> entry : map.entrySet()) {
         encodedMap.put(entry.getKey(), PipelineUtils.encodeValue(entry.getValue()));

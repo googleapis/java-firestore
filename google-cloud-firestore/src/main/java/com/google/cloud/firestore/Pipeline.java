@@ -45,7 +45,6 @@ import com.google.cloud.firestore.pipeline.stages.Delete;
 import com.google.cloud.firestore.pipeline.stages.Distinct;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
-import com.google.cloud.firestore.pipeline.stages.Insert;
 import com.google.cloud.firestore.pipeline.stages.Limit;
 import com.google.cloud.firestore.pipeline.stages.Offset;
 import com.google.cloud.firestore.pipeline.stages.PipelineExecuteOptions;
@@ -1075,12 +1074,12 @@ public final class Pipeline {
    *     .get();
    * }</pre>
    *
-   * @param transformations The transformations to apply.
+   * @param transformedFields The transformations to apply.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
   @BetaApi
-  public Pipeline update(Selectable... transformations) {
-    return append(new Update().withTransformations(transformations));
+  public Pipeline update(Selectable... transformedFields) {
+    return append(new Update().withTransformedFields(transformedFields));
   }
 
   /**
@@ -1091,7 +1090,7 @@ public final class Pipeline {
    * <p>Example:
    *
    * <pre>{@code
-   * Update updateStage = new Update().withTransformations(constant("Updated").as("status"));
+   * Update updateStage = new Update().withTransformedFields(constant("Updated").as("status"));
    *
    * firestore.pipeline()
    *     .collection("books")
@@ -1110,95 +1109,8 @@ public final class Pipeline {
   }
 
   /**
-   * Performs an insert operation using documents from previous stages.
-   *
-   * <p>The documents must include a valid {@code __name__} field specifying the document reference
-   * to insert. If the document already exists, the operation will fail.
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * Map<String, Object> book = new HashMap<>();
-   * book.put("__name__", firestore.collection("books").document("newBook"));
-   * book.put("title", "New Book");
-   *
-   * firestore.pipeline()
-   *     .literals(book)
-   *     .insert()
-   *     .execute()
-   *     .get();
-   * }</pre>
-   *
-   * @return A new {@code Pipeline} object with this stage appended to the stage list.
-   */
-  @BetaApi
-  public Pipeline insert() {
-    return append(new Insert());
-  }
-
-  /**
-   * Performs an insert operation using documents from previous stages into a specified target
-   * collection.
-   *
-   * <p>If documents have an ID (or expression evaluation for ID), they will use it. Otherwise,
-   * auto-generated IDs will be used if applicable (depending on the source).
-   *
-   * <p>Example:
-   *
-   * <pre>{@code
-   * CollectionReference backupCol = firestore.collection("books_backup");
-   *
-   * Map<String, Object> book = new HashMap<>();
-   * book.put("title", "New Book");
-   *
-   * firestore.pipeline()
-   *     .literals(book)
-   *     .insert(backupCol)
-   *     .execute()
-   *     .get();
-   * }</pre>
-   *
-   * @param target The collection to insert to.
-   * @return A new {@code Pipeline} object with this stage appended to the stage list.
-   */
-  @BetaApi
-  public Pipeline insert(CollectionReference target) {
-    return append(new Insert().withCollection(target));
-  }
-
-  /**
-   * Performs an insert operation using an {@link Insert} stage.
-   *
-   * <p>This method allows you to use a pre-configured {@link Insert} stage.
-   *
-   * <p>Example: Use a pre-configured {@link Insert} stage with a target collection and ID
-   * expression, reading from literals.
-   *
-   * <pre>{@code
-   * CollectionReference targetCol = firestore.collection("books_backup");
-   * Insert insertStage = new Insert().withCollection(targetCol).withIdExpression(field("custom_id"));
-   *
-   * Map<String, Object> book = new HashMap<>();
-   * book.put("custom_id", "book1");
-   * book.put("title", "Book 1");
-   *
-   * firestore.pipeline()
-   *     .literals(book)
-   *     .insert(insertStage)
-   *     .execute()
-   *     .get();
-   * }</pre>
-   *
-   * @param insertStage The {@code Insert} stage to append.
-   * @return A new {@code Pipeline} object with this stage appended to the stage list.
-   */
-  @BetaApi
-  public Pipeline insert(Insert insertStage) {
-    return append(insertStage);
-  }
-
-  /**
-   * Adds a generic stage to the pipeline.
+   * Performs an insert operation using documents from previous stages. Adds a generic stage to the
+   * pipeline.
    *
    * <p>This method provides a flexible way to extend the pipeline's functionality by adding custom
    * stages. Each generic stage is defined by a unique `name` and a set of `params` that control its
