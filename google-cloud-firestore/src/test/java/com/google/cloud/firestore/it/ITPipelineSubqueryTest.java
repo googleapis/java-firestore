@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore.it;
 
-import static com.google.cloud.firestore.FieldValue.vector;
 import static com.google.cloud.firestore.it.ITQueryTest.map;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.and;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.constant;
@@ -36,9 +35,7 @@ import com.google.cloud.firestore.PipelineResult;
 import com.google.cloud.firestore.PipelineSource;
 import com.google.cloud.firestore.pipeline.expressions.AggregateFunction;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
