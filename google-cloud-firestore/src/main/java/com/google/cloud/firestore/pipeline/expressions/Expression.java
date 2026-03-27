@@ -7080,7 +7080,7 @@ public abstract class Expression {
    */
   @BetaApi
   public Expression getField(String key) {
-    return new FunctionExpression("field", ImmutableList.of(this, constant(key)));
+    return new FunctionExpression("get_field", ImmutableList.of(this, constant(key)));
   }
 
   /**
@@ -7091,7 +7091,7 @@ public abstract class Expression {
    */
   @BetaApi
   public Expression getField(Expression keyExpression) {
-    return new FunctionExpression("field", ImmutableList.of(this, keyExpression));
+    return new FunctionExpression("get_field", ImmutableList.of(this, keyExpression));
   }
 
   /**
@@ -7139,7 +7139,7 @@ public abstract class Expression {
    */
   @BetaApi
   public static Expression getField(Expression expression, String key) {
-    return new FunctionExpression("field", ImmutableList.of(expression, constant(key)));
+    return new FunctionExpression("get_field", ImmutableList.of(expression, constant(key)));
   }
 
   /**
