@@ -24,6 +24,7 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.GeoPoint;
+import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.VectorValue;
 import com.google.common.collect.ImmutableList;
 import com.google.firestore.v1.Value;
@@ -3700,6 +3701,41 @@ public abstract class Expression {
     return type(field(fieldName));
   }
 
+  /**
+   * Creates an expression that checks if the result of an expression is of the given type.
+   *
+   * <p>Supported values for {@code type} are: "null", "array", "boolean", "bytes", "timestamp",
+   * "geo_point", "number", "int32", "int64", "float64", "decimal128", "map", "reference", "string",
+   * "vector", "max_key", "min_key", "object_id", "regex", and "request_timestamp".
+   *
+   * @param expr The expression to check the type of.
+   * @param type The type to check for.
+   * @return A new {@link BooleanExpression} that evaluates to true if the expression's result is of
+   *     the given type, false otherwise.
+   */
+  @BetaApi
+  public static BooleanExpression isType(Expression expr, String type) {
+    return new BooleanFunctionExpression("is_type", ImmutableList.of(expr, constant(type)));
+  }
+
+  /**
+   * Creates an expression that checks if the value of a field is of the given type.
+   *
+   * <p>Supported values for {@code type} are: "null", "array", "boolean", "bytes", "timestamp",
+   * "geo_point", "number", "int32", "int64", "float64", "decimal128", "map", "reference", "string",
+   * "vector", "max_key", "min_key", "object_id", "regex", and "request_timestamp".
+   *
+   * @param fieldName The name of the field to check the type of.
+   * @param type The type to check for.
+   * @return A new {@link BooleanExpression} that evaluates to true if the expression's result is of
+   *     the given type, false otherwise.
+   */
+  @BetaApi
+  public static BooleanExpression isType(String fieldName, String type) {
+    return new BooleanFunctionExpression(
+        "is_type", ImmutableList.of(field(fieldName), constant(type)));
+  }
+
   // Numeric Operations
   /**
    * Creates an expression that rounds {@code numericExpr} to nearest integer.
@@ -5780,5 +5816,135 @@ public abstract class Expression {
   @BetaApi
   public final Expression type() {
     return type(this);
+  }
+
+  /**
+   * Creates an expression that represents the current document being processed.
+   *
+   * <p>This expression is useful when you need to access the entire document as a map, or pass the
+   * document itself to a function or subquery.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Define the current document as a variable "doc"
+   * firestore.pipeline().collection("books")
+   *     .define(currentDocument().as("doc"))
+   *     // Access a field from the defined document variable
+   *     .select(variable("doc").getField("title"));
+   * }</pre>
+   *
+   * @return An {@link Expression} representing the current document.
+   */
+  @BetaApi
+  public static Expression currentDocument() {
+    return new FunctionExpression("current_document", ImmutableList.of());
+  }
+
+  /**
+   * Creates an expression that retrieves the value of a variable bound via {@link
+   * Pipeline#define(AliasedExpression, AliasedExpression...)}.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Define a variable "discountedPrice" and use it in a filter
+   * firestore.pipeline().collection("products")
+   *     .define(field("price").multiply(0.9).as("discountedPrice"))
+   *     .where(variable("discountedPrice").lessThan(100));
+   * }</pre>
+   *
+   * @param name The name of the variable to retrieve.
+   * @return An {@link Expression} representing the variable's value.
+   */
+  @BetaApi
+  public static Expression variable(String name) {
+    return new Variable(name);
+  }
+
+  /**
+   * Accesses a field/property of the expression that evaluates to a Map or Document.
+   *
+   * @param key The key of the field to access.
+   * @return An {@link Expression} representing the value of the field.
+   */
+  @BetaApi
+  public Expression getField(String key) {
+    return new FunctionExpression("field", ImmutableList.of(this, constant(key)));
+  }
+
+  /**
+   * Retrieves the value of a specific field from the document evaluated by this expression.
+   *
+   * @param keyExpression The expression evaluating to the key to access.
+   * @return A new {@link Expression} representing the field value.
+   */
+  @BetaApi
+  public Expression getField(Expression keyExpression) {
+    return new FunctionExpression("field", ImmutableList.of(this, keyExpression));
+  }
+
+  /**
+   * Accesses a field/property of a document field using the provided {@code key}.
+   *
+   * @param fieldName The field name of the map or document field.
+   * @param key The key of the field to access.
+   * @return An {@link Expression} representing the value of the field.
+   */
+  @BetaApi
+  public static Expression getField(String fieldName, String key) {
+    return field(fieldName).getField(key);
+  }
+
+  /**
+   * Accesses a field/property of the expression using the provided {@code keyExpression}.
+   *
+   * @param expression The expression evaluating to a Map or Document.
+   * @param keyExpression The expression evaluating to the key.
+   * @return A new {@link Expression} representing the value of the field.
+   */
+  @BetaApi
+  public static Expression getField(Expression expression, Expression keyExpression) {
+    return expression.getField(keyExpression);
+  }
+
+  /**
+   * Accesses a field/property of a document field using the provided {@code keyExpression}.
+   *
+   * @param fieldName The field name of the map or document field.
+   * @param keyExpression The expression evaluating to the key.
+   * @return A new {@link Expression} representing the value of the field.
+   */
+  @BetaApi
+  public static Expression getField(String fieldName, Expression keyExpression) {
+    return field(fieldName).getField(keyExpression);
+  }
+
+  /**
+   * Accesses a field/property of the expression that evaluates to a Map or Document.
+   *
+   * @param expression The expression evaluating to a map/document.
+   * @param key The key of the field to access.
+   * @return An {@link Expression} representing the value of the field.
+   */
+  @BetaApi
+  public static Expression getField(Expression expression, String key) {
+    return new FunctionExpression("field", ImmutableList.of(expression, constant(key)));
+  }
+
+  /**
+   * Creates an expression that checks if the result of this expression is of the given type.
+   *
+   * <p>Supported values for {@code type} are: "null", "array", "boolean", "bytes", "timestamp",
+   * "geo_point", "number", "int32", "int64", "float64", "decimal128", "map", "reference", "string",
+   * "vector", "max_key", "min_key", "object_id", "regex", and "request_timestamp".
+   *
+   * @param type The type to check for.
+   * @return A new {@link BooleanExpression} that evaluates to true if the expression's result is of
+   *     the given type, false otherwise.
+   */
+  @BetaApi
+  public final BooleanExpression isType(String type) {
+    return isType(this, type);
   }
 }
