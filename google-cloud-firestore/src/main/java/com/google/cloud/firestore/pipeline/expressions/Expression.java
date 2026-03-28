@@ -1732,6 +1732,352 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that removes whitespace from the beginning of a string or blob.
+   *
+   * @param value The expression representing the string or blob to trim.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression ltrim(Expression value) {
+    return new FunctionExpression("ltrim", ImmutableList.of(value));
+  }
+
+  /**
+   * Creates an expression that removes whitespace from the beginning of a string or blob.
+   *
+   * @param fieldName The name of the field containing the string or blob to trim.
+   * @return A new {@link Expression} representing the trimmed string.
+   */
+  @BetaApi
+  public static Expression ltrim(String fieldName) {
+    return ltrim(field(fieldName));
+  }
+
+  /**
+   * Creates an expression that removes specified characters from the beginning of a string or blob.
+   *
+   * @param value The expression representing the string or blob to trim.
+   * @param characters The characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression ltrimValue(Expression value, String characters) {
+    return new FunctionExpression("ltrim", ImmutableList.of(value, constant(characters)));
+  }
+
+  /**
+   * Creates an expression that removes specified characters from the beginning of a string or blob.
+   *
+   * @param fieldName The name of the field containing the string or blob to trim.
+   * @param characters The characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression ltrimValue(String fieldName, String characters) {
+    return ltrimValue(field(fieldName), characters);
+  }
+
+  /**
+   * Creates an expression that removes specified characters from the beginning of a string or blob.
+   *
+   * @param value The expression representing the string or blob to trim.
+   * @param characters The expression representing the characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression ltrimValue(Expression value, Expression characters) {
+    return new FunctionExpression("ltrim", ImmutableList.of(value, characters));
+  }
+
+  /**
+   * Creates an expression that removes specified characters from the beginning of a string or blob.
+   *
+   * @param fieldName The name of the field containing the string or blob to trim.
+   * @param characters The expression representing the characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression ltrimValue(String fieldName, Expression characters) {
+    return ltrimValue(field(fieldName), characters);
+  }
+
+  /**
+   * Creates an expression that removes whitespace from the end of a string or blob.
+   *
+   * @param value The expression representing the string or blob to trim.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression rtrim(Expression value) {
+    return new FunctionExpression("rtrim", ImmutableList.of(value));
+  }
+
+  /**
+   * Creates an expression that removes whitespace from the end of a string or blob.
+   *
+   * @param fieldName The name of the field containing the string to trim.
+   * @return A new {@link Expression} representing the trimmed string.
+   */
+  @BetaApi
+  public static Expression rtrim(String fieldName) {
+    return rtrim(field(fieldName));
+  }
+
+  /**
+   * Creates an expression that removes specified characters from the end of a string or blob.
+   *
+   * @param value The expression representing the string or blob to trim.
+   * @param characters The characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression rtrimValue(Expression value, String characters) {
+    return new FunctionExpression("rtrim", ImmutableList.of(value, constant(characters)));
+  }
+
+  /**
+   * Creates an expression that removes specified characters from the end of a string or blob.
+   *
+   * @param fieldName The name of the field containing the string or blob to trim.
+   * @param characters The characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression rtrimValue(String fieldName, String characters) {
+    return rtrimValue(field(fieldName), characters);
+  }
+
+  /**
+   * Creates an expression that removes specified characters from the end of a string or blob.
+   *
+   * @param value The expression representing the string or blob to trim.
+   * @param characters The expression representing the characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression rtrimValue(Expression value, Expression characters) {
+    return new FunctionExpression("rtrim", ImmutableList.of(value, characters));
+  }
+
+  /**
+   * Creates an expression that removes specified characters from the end of a string or blob.
+   *
+   * @param fieldName The name of the field containing the string or blob to trim.
+   * @param characters The expression representing the characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public static Expression rtrimValue(String fieldName, Expression characters) {
+    return rtrimValue(field(fieldName), characters);
+  }
+
+  /**
+   * Creates an expression that repeats a string or blob a specified number of times.
+   *
+   * @param value The expression representing the string or blob to repeat.
+   * @param repetitions The number of times to repeat the string or blob.
+   * @return A new {@link Expression} representing the repeated string or blob.
+   */
+  @BetaApi
+  public static Expression stringRepeat(Expression value, Number repetitions) {
+    return new FunctionExpression("string_repeat", ImmutableList.of(value, constant(repetitions)));
+  }
+
+  /**
+   * Creates an expression that repeats a string or blob a specified number of times.
+   *
+   * @param fieldName The name of the field containing the string or blob to repeat.
+   * @param repetitions The number of times to repeat the string or blob.
+   * @return A new {@link Expression} representing the repeated string or blob.
+   */
+  @BetaApi
+  public static Expression stringRepeat(String fieldName, Number repetitions) {
+    return stringRepeat(field(fieldName), repetitions);
+  }
+
+  /**
+   * Creates an expression that repeats a string or blob a specified number of times.
+   *
+   * @param value The expression representing the string or blob to repeat.
+   * @param repetitions The expression representing the number of times to repeat.
+   * @return A new {@link Expression} representing the repeated string or blob.
+   */
+  @BetaApi
+  public static Expression stringRepeat(Expression value, Expression repetitions) {
+    return new FunctionExpression("string_repeat", ImmutableList.of(value, repetitions));
+  }
+
+  /**
+   * Creates an expression that repeats a string or blob a specified number of times.
+   *
+   * @param fieldName The name of the field containing the string or blob to repeat.
+   * @param repetitions The expression representing the number of times to repeat.
+   * @return A new {@link Expression} representing the repeated string or blob.
+   */
+  @BetaApi
+  public static Expression stringRepeat(String fieldName, Expression repetitions) {
+    return stringRepeat(field(fieldName), repetitions);
+  }
+
+  /**
+   * Creates an expression that replaces all occurrences of a substring or byte sequence.
+   *
+   * @param value The expression representing the input string or blob.
+   * @param find The match pattern.
+   * @param replacement The replacement string/bytes.
+   * @return A new {@link Expression} representing the replaced value.
+   */
+  @BetaApi
+  public static Expression stringReplaceAll(Expression value, String find, String replacement) {
+    return new FunctionExpression(
+        "string_replace_all", ImmutableList.of(value, constant(find), constant(replacement)));
+  }
+
+  /**
+   * Creates an expression that replaces all occurrences of a substring or byte sequence.
+   *
+   * @param fieldName The name of the field containing the input string or blob.
+   * @param find The match pattern.
+   * @param replacement The replacement string/bytes.
+   * @return A new {@link Expression} representing the replaced value.
+   */
+  @BetaApi
+  public static Expression stringReplaceAll(String fieldName, String find, String replacement) {
+    return stringReplaceAll(field(fieldName), find, replacement);
+  }
+
+  /**
+   * Creates an expression that replaces all occurrences of a substring or byte sequence.
+   *
+   * @param value The expression representing the input string or blob.
+   * @param find The expression representing the match pattern.
+   * @param replacement The expression representing the replacement value.
+   * @return A new {@link Expression} representing the replaced value.
+   */
+  @BetaApi
+  public static Expression stringReplaceAll(
+      Expression value, Expression find, Expression replacement) {
+    return new FunctionExpression("string_replace_all", ImmutableList.of(value, find, replacement));
+  }
+
+  /**
+   * Creates an expression that replaces all occurrences of a substring or byte sequence.
+   *
+   * @param fieldName The name of the field containing the input string or blob.
+   * @param find The expression representing the match pattern.
+   * @param replacement The expression representing the replacement value.
+   * @return A new {@link Expression} representing the replaced value.
+   */
+  @BetaApi
+  public static Expression stringReplaceAll(
+      String fieldName, Expression find, Expression replacement) {
+    return stringReplaceAll(field(fieldName), find, replacement);
+  }
+
+  /**
+   * Creates an expression that replaces the first occurrence of a substring or byte sequence.
+   *
+   * @param value The expression representing the input string or blob.
+   * @param find The match pattern.
+   * @param replacement The replacement string/bytes.
+   * @return A new {@link Expression} representing the replaced value.
+   */
+  @BetaApi
+  public static Expression stringReplaceOne(Expression value, String find, String replacement) {
+    return new FunctionExpression(
+        "string_replace_one", ImmutableList.of(value, constant(find), constant(replacement)));
+  }
+
+  /**
+   * Creates an expression that replaces the first occurrence of a substring or byte sequence.
+   *
+   * @param fieldName The name of the field containing the input string or blob.
+   * @param find The match pattern.
+   * @param replacement The replacement string/bytes.
+   * @return A new {@link Expression} representing the replaced value.
+   */
+  @BetaApi
+  public static Expression stringReplaceOne(String fieldName, String find, String replacement) {
+    return stringReplaceOne(field(fieldName), find, replacement);
+  }
+
+  /**
+   * Creates an expression that replaces the first occurrence of a substring or byte sequence.
+   *
+   * @param value The expression representing the input string or blob.
+   * @param find The expression representing the match pattern.
+   * @param replacement The expression representing the replacement value.
+   * @return A new {@link Expression} representing the replaced value.
+   */
+  @BetaApi
+  public static Expression stringReplaceOne(
+      Expression value, Expression find, Expression replacement) {
+    return new FunctionExpression("string_replace_one", ImmutableList.of(value, find, replacement));
+  }
+
+  /**
+   * Creates an expression that replaces the first occurrence of a substring or byte sequence.
+   *
+   * @param fieldName The name of the field containing the input string or blob.
+   * @param find The expression representing the match pattern.
+   * @param replacement The expression representing the replacement value.
+   * @return A new {@link Expression} representing the replaced value.
+   */
+  @BetaApi
+  public static Expression stringReplaceOne(
+      String fieldName, Expression find, Expression replacement) {
+    return stringReplaceOne(field(fieldName), find, replacement);
+  }
+
+  /**
+   * Creates an expression that returns the index of the first occurrence of a substring or bytes.
+   *
+   * @param value The expression representing the input string or blob.
+   * @param search The search pattern.
+   * @return A new {@link Expression} representing the index.
+   */
+  @BetaApi
+  public static Expression stringIndexOf(Expression value, String search) {
+    return new FunctionExpression("string_index_of", ImmutableList.of(value, constant(search)));
+  }
+
+  /**
+   * Creates an expression that returns the index of the first occurrence of a substring or bytes.
+   *
+   * @param fieldName The name of the field containing the input string or blob.
+   * @param search The search pattern.
+   * @return A new {@link Expression} representing the index.
+   */
+  @BetaApi
+  public static Expression stringIndexOf(String fieldName, String search) {
+    return stringIndexOf(field(fieldName), search);
+  }
+
+  /**
+   * Creates an expression that returns the index of the first occurrence of a substring or bytes.
+   *
+   * @param value The expression representing the input string or blob.
+   * @param search The expression representing the search pattern.
+   * @return A new {@link Expression} representing the index.
+   */
+  @BetaApi
+  public static Expression stringIndexOf(Expression value, Expression search) {
+    return new FunctionExpression("string_index_of", ImmutableList.of(value, search));
+  }
+
+  /**
+   * Creates an expression that returns the index of the first occurrence of a substring or bytes.
+   *
+   * @param fieldName The name of the field containing the input string or blob.
+   * @param search The expression representing the search pattern.
+   * @return A new {@link Expression} representing the index.
+   */
+  @BetaApi
+  public static Expression stringIndexOf(String fieldName, Expression search) {
+    return stringIndexOf(field(fieldName), search);
+  }
+
+  /**
    * Creates an expression that splits a string or blob by a delimiter.
    *
    * @param value The expression representing the string or blob to split.
@@ -1992,6 +2338,184 @@ public abstract class Expression {
   @BetaApi
   public static Expression mapRemove(String mapField, String key) {
     return mapRemove(field(mapField), key);
+  }
+
+  /**
+   * Creates an expression that returns a new map with the specified entries added or updated.
+   *
+   * <ul>
+   *   <li>Only performs shallow updates to the map.
+   *   <li>Setting a value to {@code null} will retain the key with a {@code null} value. To remove
+   *       a key entirely, use {@code mapRemove}.
+   * </ul>
+   *
+   * @param mapExpr The expression representing the map.
+   * @param key The key to set. Must be an expression representing a string.
+   * @param value The value to set.
+   * @param moreKeyValues Additional key-value pairs to set.
+   * @return A new {@link Expression} representing the map with the entries set.
+   */
+  @BetaApi
+  public static Expression mapSet(
+      Expression mapExpr, Expression key, Expression value, Expression... moreKeyValues) {
+    ImmutableList.Builder<Expression> builder = ImmutableList.builder();
+    builder.add(mapExpr);
+    builder.add(key);
+    builder.add(value);
+    builder.add(moreKeyValues);
+    return new FunctionExpression("map_set", builder.build());
+  }
+
+  /**
+   * Creates an expression that returns a new map with the specified entries added or updated.
+   *
+   * <ul>
+   *   <li>Only performs shallow updates to the map.
+   *   <li>Setting a value to {@code null} will retain the key with a {@code null} value. To remove
+   *       a key entirely, use {@code mapRemove}.
+   * </ul>
+   *
+   * @param mapExpr The map field to set entries in.
+   * @param key The key to set.
+   * @param value The value to set.
+   * @param moreKeyValues Additional key-value pairs to set.
+   * @return A new {@link Expression} representing the map with the entries set.
+   */
+  @BetaApi
+  public static Expression mapSet(
+      Expression mapExpr, String key, Object value, Object... moreKeyValues) {
+    return mapSet(
+        mapExpr,
+        constant(key),
+        toExprOrConstant(value),
+        toArrayOfExprOrConstant(moreKeyValues).toArray(new Expression[0]));
+  }
+
+  /**
+   * Creates an expression that returns a new map with the specified entries added or updated.
+   *
+   * <ul>
+   *   <li>Only performs shallow updates to the map.
+   *   <li>Setting a value to {@code null} will retain the key with a {@code null} value. To remove
+   *       a key entirely, use {@code mapRemove}.
+   * </ul>
+   *
+   * @param mapField The map field to set entries in.
+   * @param key The key to set. Must be an expression representing a string.
+   * @param value The value to set.
+   * @param moreKeyValues Additional key-value pairs to set.
+   * @return A new {@link Expression} representing the map with the entries set.
+   */
+  @BetaApi
+  public static Expression mapSet(
+      String mapField, Expression key, Expression value, Expression... moreKeyValues) {
+    return mapSet(field(mapField), key, value, moreKeyValues);
+  }
+
+  /**
+   * Creates an expression that returns a new map with the specified entries added or updated.
+   *
+   * <ul>
+   *   <li>Only performs shallow updates to the map.
+   *   <li>Setting a value to {@code null} will retain the key with a {@code null} value. To remove
+   *       a key entirely, use {@code mapRemove}.
+   * </ul>
+   *
+   * @param mapField The map field to set entries in.
+   * @param key The key to set. Must be an expression representing a string.
+   * @param value The value to set.
+   * @param moreKeyValues Additional key-value pairs to set.
+   * @return A new {@link Expression} representing the map with the entries set.
+   */
+  @BetaApi
+  public static Expression mapSet(
+      String mapField, String key, Object value, Object... moreKeyValues) {
+    return mapSet(field(mapField), key, value, moreKeyValues);
+  }
+
+  /**
+   * Creates an expression that returns the keys of a map.
+   *
+   * <p>While the backend generally preserves insertion order, relying on the order of the output
+   * array is not guaranteed and should be avoided.
+   *
+   * @param mapExpr The expression representing the map to get the keys of.
+   * @return A new {@link Expression} representing the keys of the map.
+   */
+  @BetaApi
+  public static Expression mapKeys(Expression mapExpr) {
+    return new FunctionExpression("map_keys", ImmutableList.of(mapExpr));
+  }
+
+  /**
+   * Creates an expression that returns the keys of a map.
+   *
+   * <p>While the backend generally preserves insertion order, relying on the order of the output
+   * array is not guaranteed and should be avoided.
+   *
+   * @param mapField The map field to get the keys of.
+   * @return A new {@link Expression} representing the keys of the map.
+   */
+  @BetaApi
+  public static Expression mapKeys(String mapField) {
+    return mapKeys(field(mapField));
+  }
+
+  /**
+   * Creates an expression that returns the values of a map.
+   *
+   * <p>While the backend generally preserves insertion order, relying on the order of the output
+   * array is not guaranteed and should be avoided.
+   *
+   * @param mapExpr The expression representing the map to get the values of.
+   * @return A new {@link Expression} representing the values of the map.
+   */
+  @BetaApi
+  public static Expression mapValues(Expression mapExpr) {
+    return new FunctionExpression("map_values", ImmutableList.of(mapExpr));
+  }
+
+  /**
+   * Creates an expression that returns the values of a map.
+   *
+   * <p>While the backend generally preserves insertion order, relying on the order of the output
+   * array is not guaranteed and should be avoided.
+   *
+   * @param mapField The map field to get the values of.
+   * @return A new {@link Expression} representing the values of the map.
+   */
+  @BetaApi
+  public static Expression mapValues(String mapField) {
+    return mapValues(field(mapField));
+  }
+
+  /**
+   * Creates an expression that returns the entries of a map as an array of maps, where each map
+   * contains a "k" property for the key and a "v" property for the value.
+   *
+   * <p>While the backend generally preserves insertion order, relying on the order of the output
+   * array is not guaranteed and should be avoided.
+   *
+   * @param mapExpr The expression representing the map to get the entries of.
+   * @return A new {@link Expression} representing the entries of the map.
+   */
+  @BetaApi
+  public static Expression mapEntries(Expression mapExpr) {
+    return new FunctionExpression("map_entries", ImmutableList.of(mapExpr));
+  }
+
+  /**
+   * Creates an expression that returns the entries of a map as an array of maps.
+   *
+   * <p>While the backend generally preserves insertion order, relying on the order of the output
+   * array is not guaranteed and should be avoided.
+   *
+   * @param mapField The map field to get the entries of.
+   * @return A new {@link Expression} representing the entries of the map.
+   */
+  @BetaApi
+  public static Expression mapEntries(String mapField) {
+    return mapEntries(field(mapField));
   }
 
   /**
@@ -3278,7 +3802,7 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the truncated timestamp.
    */
   @BetaApi
-  public static Expression timestampTruncate(
+  public static Expression timestampTruncateWithTimezone(
       Expression timestamp, String granularity, String timezone) {
     return new FunctionExpression(
         "timestamp_trunc", ImmutableList.of(timestamp, constant(granularity), constant(timezone)));
@@ -3298,7 +3822,7 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the truncated timestamp.
    */
   @BetaApi
-  public static Expression timestampTruncate(
+  public static Expression timestampTruncateWithTimezone(
       Expression timestamp, Expression granularity, String timezone) {
     return new FunctionExpression(
         "timestamp_trunc", ImmutableList.of(timestamp, granularity, constant(timezone)));
@@ -3318,9 +3842,9 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the truncated timestamp.
    */
   @BetaApi
-  public static Expression timestampTruncate(
+  public static Expression timestampTruncateWithTimezone(
       String fieldName, String granularity, String timezone) {
-    return timestampTruncate(field(fieldName), constant(granularity), timezone);
+    return timestampTruncateWithTimezone(field(fieldName), constant(granularity), timezone);
   }
 
   /**
@@ -3337,9 +3861,364 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the truncated timestamp.
    */
   @BetaApi
-  public static Expression timestampTruncate(
+  public static Expression timestampTruncateWithTimezone(
       String fieldName, Expression granularity, String timezone) {
-    return timestampTruncate(field(fieldName), granularity, timezone);
+    return timestampTruncateWithTimezone(field(fieldName), granularity, timezone);
+  }
+
+  /**
+   * Creates an expression that truncates a timestamp to a specified granularity in a given
+   * timezone.
+   *
+   * @param timestamp The timestamp expression.
+   * @param granularity The granularity expression to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone expression to use for truncation. Valid values are from the TZ
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public static Expression timestampTruncateWithTimezone(
+      Expression timestamp, Expression granularity, Expression timezone) {
+    return new FunctionExpression(
+        "timestamp_trunc", ImmutableList.of(timestamp, granularity, timezone));
+  }
+
+  /**
+   * Creates an expression that truncates a timestamp to a specified granularity in a given
+   * timezone.
+   *
+   * @param timestamp The timestamp expression.
+   * @param granularity The granularity to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone expression to use for truncation. Valid values are from the TZ
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public static Expression timestampTruncateWithTimezone(
+      Expression timestamp, String granularity, Expression timezone) {
+    return timestampTruncateWithTimezone(timestamp, constant(granularity), timezone);
+  }
+
+  /**
+   * Creates an expression that truncates a timestamp to a specified granularity in a given
+   * timezone.
+   *
+   * @param fieldName The name of the field containing the timestamp.
+   * @param granularity The granularity to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone expression to use for truncation. Valid values are from the TZ
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public static Expression timestampTruncateWithTimezone(
+      String fieldName, String granularity, Expression timezone) {
+    return timestampTruncateWithTimezone(field(fieldName), constant(granularity), timezone);
+  }
+
+  /**
+   * Creates an expression that truncates a timestamp to a specified granularity in a given
+   * timezone.
+   *
+   * @param fieldName The name of the field containing the timestamp.
+   * @param granularity The granularity expression to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone expression to use for truncation. Valid values are from the TZ
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public static Expression timestampTruncateWithTimezone(
+      String fieldName, Expression granularity, Expression timezone) {
+    return timestampTruncateWithTimezone(field(fieldName), granularity, timezone);
+  }
+
+  /**
+   * Creates an expression that calculates the difference between two timestamps.
+   *
+   * @param end The ending timestamp expression.
+   * @param start The starting timestamp expression.
+   * @param unit The unit of time for the difference. Valid values include "microsecond",
+   *     "millisecond", "second", "minute", "hour" and "day".
+   * @return A new {@link Expression} representing the difference.
+   */
+  @BetaApi
+  public static Expression timestampDiff(Expression end, Expression start, Expression unit) {
+    return new FunctionExpression("timestamp_diff", ImmutableList.of(end, start, unit));
+  }
+
+  /**
+   * Creates an expression that calculates the difference between two timestamps.
+   *
+   * @param end The ending timestamp expression.
+   * @param start The starting timestamp expression.
+   * @param unit The unit of time for the difference. Valid values include "microsecond",
+   *     "millisecond", "second", "minute", "hour" and "day".
+   * @return A new {@link Expression} representing the difference.
+   */
+  @BetaApi
+  public static Expression timestampDiff(Expression end, Expression start, String unit) {
+    return timestampDiff(end, start, constant(unit));
+  }
+
+  /**
+   * Creates an expression that calculates the difference between two timestamps.
+   *
+   * @param endFieldName The ending timestamp field name.
+   * @param startFieldName The starting timestamp field name.
+   * @param unit The unit of time for the difference. Valid values include "microsecond",
+   *     "millisecond", "second", "minute", "hour" and "day".
+   * @return A new {@link Expression} representing the difference.
+   */
+  @BetaApi
+  public static Expression timestampDiff(String endFieldName, String startFieldName, String unit) {
+    return timestampDiff(field(endFieldName), field(startFieldName), constant(unit));
+  }
+
+  /**
+   * Creates an expression that calculates the difference between two timestamps.
+   *
+   * @param endFieldName The ending timestamp field name.
+   * @param start The starting timestamp expression.
+   * @param unit The unit of time for the difference. Valid values include "microsecond",
+   *     "millisecond", "second", "minute", "hour" and "day".
+   * @return A new {@link Expression} representing the difference.
+   */
+  @BetaApi
+  public static Expression timestampDiff(String endFieldName, Expression start, String unit) {
+    return timestampDiff(field(endFieldName), start, constant(unit));
+  }
+
+  /**
+   * Creates an expression that calculates the difference between two timestamps.
+   *
+   * @param end The ending timestamp expression.
+   * @param startFieldName The starting timestamp field name.
+   * @param unit The unit of time for the difference. Valid values include "microsecond",
+   *     "millisecond", "second", "minute", "hour" and "day".
+   * @return A new {@link Expression} representing the difference.
+   */
+  @BetaApi
+  public static Expression timestampDiff(Expression end, String startFieldName, String unit) {
+    return timestampDiff(end, field(startFieldName), constant(unit));
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from a timestamp.
+   *
+   * @param timestamp The timestamp expression.
+   * @param part The part to extract from the timestamp. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
+   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
+   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public static Expression timestampExtract(Expression timestamp, Expression part) {
+    return new FunctionExpression("timestamp_extract", ImmutableList.of(timestamp, part));
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from a timestamp.
+   *
+   * @param timestamp The timestamp expression.
+   * @param part The part to extract from the timestamp. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
+   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
+   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public static Expression timestampExtract(Expression timestamp, String part) {
+    return timestampExtract(timestamp, constant(part));
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from a timestamp.
+   *
+   * @param fieldName The name of the field containing the timestamp.
+   * @param part The part to extract from the timestamp. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
+   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
+   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public static Expression timestampExtract(String fieldName, Expression part) {
+    return timestampExtract(field(fieldName), part);
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from a timestamp.
+   *
+   * @param fieldName The name of the field containing the timestamp.
+   * @param part The part to extract from the timestamp. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
+   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
+   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public static Expression timestampExtract(String fieldName, String part) {
+    return timestampExtract(field(fieldName), constant(part));
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from a timestamp in a given timezone.
+   *
+   * @param timestamp The timestamp expression.
+   * @param part The part to extract from the timestamp. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
+   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
+   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone expression to use for extraction.Valid values are from the TZ
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if
+   *     not specified.
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public static Expression timestampExtractWithTimezone(
+      Expression timestamp, Expression part, Expression timezone) {
+    return new FunctionExpression("timestamp_extract", ImmutableList.of(timestamp, part, timezone));
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from a timestamp in a given timezone.
+   *
+   * @param timestamp The timestamp expression.
+   * @param part The part to extract from the timestamp. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
+   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
+   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone to use for extraction.Valid values are from the TZ database (e.g.,
+   *     "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not specified.
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public static Expression timestampExtractWithTimezone(
+      Expression timestamp, Expression part, String timezone) {
+    return timestampExtractWithTimezone(timestamp, part, constant(timezone));
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from a timestamp in a given timezone.
+   *
+   * @param timestamp The timestamp expression.
+   * @param part The part to extract from the timestamp. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
+   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
+   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone to use for extraction.Valid values are from the TZ database (e.g.,
+   *     "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not specified.
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public static Expression timestampExtractWithTimezone(
+      Expression timestamp, String part, String timezone) {
+    return timestampExtractWithTimezone(timestamp, constant(part), constant(timezone));
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from a timestamp in a given timezone.
+   *
+   * @param fieldName The name of the field containing the timestamp.
+   * @param part The part to extract from the timestamp. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
+   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
+   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone to use for extraction.Valid values are from the TZ database (e.g.,
+   *     "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not specified.
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public static Expression timestampExtractWithTimezone(
+      String fieldName, Expression part, String timezone) {
+    return timestampExtractWithTimezone(field(fieldName), part, constant(timezone));
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from a timestamp in a given timezone.
+   *
+   * @param fieldName The name of the field containing the timestamp.
+   * @param part The part to extract from the timestamp. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
+   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
+   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone to use for extraction.Valid values are from the TZ database (e.g.,
+   *     "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not specified.
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public static Expression timestampExtractWithTimezone(
+      String fieldName, String part, String timezone) {
+    return timestampExtractWithTimezone(field(fieldName), constant(part), constant(timezone));
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from a timestamp in a given timezone.
+   *
+   * @param timestamp The timestamp expression.
+   * @param part The part to extract from the timestamp. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
+   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
+   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone expression to use for extraction.Valid values are from the TZ
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if
+   *     not specified.
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public static Expression timestampExtractWithTimezone(
+      Expression timestamp, String part, Expression timezone) {
+    return timestampExtractWithTimezone(timestamp, constant(part), timezone);
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from a timestamp in a given timezone.
+   *
+   * @param fieldName The name of the field containing the timestamp.
+   * @param part The part to extract from the timestamp. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
+   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
+   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone expression to use for extraction.Valid values are from the TZ
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if
+   *     not specified.
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public static Expression timestampExtractWithTimezone(
+      String fieldName, Expression part, Expression timezone) {
+    return timestampExtractWithTimezone(field(fieldName), part, timezone);
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from a timestamp in a given timezone.
+   *
+   * @param fieldName The name of the field containing the timestamp.
+   * @param part The part to extract from the timestamp. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "dayofweek", "day", "dayofyear", "week",
+   *     "week(monday)", "week(tuesday)", "week(wednesday)", "week(thursday)", "week(friday)",
+   *     "week(saturday)", "week(sunday)", "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone expression to use for extraction.Valid values are from the TZ
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if
+   *     not specified.
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public static Expression timestampExtractWithTimezone(
+      String fieldName, String part, Expression timezone) {
+    return timestampExtractWithTimezone(field(fieldName), constant(part), timezone);
   }
 
   // Conditional Functions
@@ -4793,6 +5672,167 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that removes whitespace from the beginning of this string or blob
+   * expression.
+   *
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public Expression ltrim() {
+    return ltrim(this);
+  }
+
+  /**
+   * Creates an expression that removes the specified set of characters from the beginning of this
+   * string or blob expression.
+   *
+   * @param characters The characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public Expression ltrimValue(String characters) {
+    return ltrimValue(this, characters);
+  }
+
+  /**
+   * Creates an expression that removes the specified characters or bytes from the beginning of this
+   * string or blob expression.
+   *
+   * @param characters The expression representing the characters or bytes to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public Expression ltrimValue(Expression characters) {
+    return ltrimValue(this, characters);
+  }
+
+  /**
+   * Creates an expression that removes whitespace from the end of this string or blob expression.
+   *
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public Expression rtrim() {
+    return rtrim(this);
+  }
+
+  /**
+   * Creates an expression that removes the specified set of characters from the end of this string
+   * or blob expression.
+   *
+   * @param characters The characters to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public Expression rtrimValue(String characters) {
+    return rtrimValue(this, characters);
+  }
+
+  /**
+   * Creates an expression that removes the specified characters or bytes from the end of this
+   * string or blob expression.
+   *
+   * @param characters The expression representing the characters or bytes to remove.
+   * @return A new {@link Expression} representing the trimmed string or blob.
+   */
+  @BetaApi
+  public Expression rtrimValue(Expression characters) {
+    return rtrimValue(this, characters);
+  }
+
+  /**
+   * Creates an expression that repeats a string or blob a specified number of times.
+   *
+   * @param repetitions The number of times to repeat the string or blob.
+   * @return A new {@link Expression} representing the repeated string or blob.
+   */
+  @BetaApi
+  public Expression stringRepeat(Number repetitions) {
+    return stringRepeat(this, repetitions);
+  }
+
+  /**
+   * Creates an expression that repeats a string or blob a specified number of times.
+   *
+   * @param repetitions The expression representing the number of times to repeat.
+   * @return A new {@link Expression} representing the repeated string or blob.
+   */
+  @BetaApi
+  public Expression stringRepeat(Expression repetitions) {
+    return stringRepeat(this, repetitions);
+  }
+
+  /**
+   * Creates an expression that replaces all occurrences of a substring or byte sequence.
+   *
+   * @param find The match pattern.
+   * @param replacement The replacement string/bytes.
+   * @return A new {@link Expression} representing the replaced value.
+   */
+  @BetaApi
+  public Expression stringReplaceAll(String find, String replacement) {
+    return stringReplaceAll(this, find, replacement);
+  }
+
+  /**
+   * Creates an expression that replaces all occurrences of a substring or byte sequence.
+   *
+   * @param find The expression representing the match pattern.
+   * @param replacement The expression representing the replacement value.
+   * @return A new {@link Expression} representing the replaced value.
+   */
+  @BetaApi
+  public Expression stringReplaceAll(Expression find, Expression replacement) {
+    return stringReplaceAll(this, find, replacement);
+  }
+
+  /**
+   * Creates an expression that replaces the first occurrence of a substring or byte sequence.
+   *
+   * @param find The match pattern.
+   * @param replacement The replacement string/bytes.
+   * @return A new {@link Expression} representing the replaced value.
+   */
+  @BetaApi
+  public Expression stringReplaceOne(String find, String replacement) {
+    return stringReplaceOne(this, find, replacement);
+  }
+
+  /**
+   * Creates an expression that replaces the first occurrence of a substring or byte sequence.
+   *
+   * @param find The expression representing the match pattern.
+   * @param replacement The expression representing the replacement value.
+   * @return A new {@link Expression} representing the replaced value.
+   */
+  @BetaApi
+  public Expression stringReplaceOne(Expression find, Expression replacement) {
+    return stringReplaceOne(this, find, replacement);
+  }
+
+  /**
+   * Creates an expression that returns the index of the first occurrence of a substring or bytes.
+   *
+   * @param search The search pattern.
+   * @return A new {@link Expression} representing the index.
+   */
+  @BetaApi
+  public Expression stringIndexOf(String search) {
+    return stringIndexOf(this, search);
+  }
+
+  /**
+   * Creates an expression that returns the index of the first occurrence of a substring or bytes.
+   *
+   * @param search The expression representing the search pattern.
+   * @return A new {@link Expression} representing the index.
+   */
+  @BetaApi
+  public Expression stringIndexOf(Expression search) {
+    return stringIndexOf(this, search);
+  }
+
+  /**
    * Creates an expression that splits this string or blob expression by a delimiter.
    *
    * @param delimiter The delimiter to split by.
@@ -5075,6 +6115,80 @@ public abstract class Expression {
   @BetaApi
   public final Expression mapRemove(String key) {
     return mapRemove(this, key);
+  }
+
+  /**
+   * Creates an expression that returns a new map with the specified entries added or updated.
+   *
+   * <p>Note that {@code mapSet} only performs shallow updates to the map. Setting a value to {@code
+   * null} will retain the key with a {@code null} value. To remove a key entirely, use {@code
+   * mapRemove}.
+   *
+   * @param key The key to set.
+   * @param value The value to set.
+   * @param moreKeyValues Additional key-value pairs to set.
+   * @return A new {@link Expression} representing the map with the entries set.
+   */
+  @BetaApi
+  public final Expression mapSet(Expression key, Expression value, Expression... moreKeyValues) {
+    return mapSet(this, key, value, moreKeyValues);
+  }
+
+  /**
+   * Creates an expression that returns a new map with the specified entries added or updated.
+   *
+   * @param key The key to set.
+   * @param value The value to set.
+   * @param moreKeyValues Additional key-value pairs to set.
+   * @return A new {@link Expression} representing the map with the entries set.
+   */
+  @BetaApi
+  public final Expression mapSet(String key, Object value, Object... moreKeyValues) {
+    return mapSet(
+        this,
+        constant(key),
+        toExprOrConstant(value),
+        toArrayOfExprOrConstant(moreKeyValues).toArray(new Expression[0]));
+  }
+
+  /**
+   * Creates an expression that returns the keys of this map expression.
+   *
+   * <p>While the backend generally preserves insertion order, relying on the order of the output
+   * array is not guaranteed and should be avoided.
+   *
+   * @return A new {@link Expression} representing the keys of the map.
+   */
+  @BetaApi
+  public final Expression mapKeys() {
+    return mapKeys(this);
+  }
+
+  /**
+   * Creates an expression that returns the values of this map expression.
+   *
+   * <p>While the backend generally preserves insertion order, relying on the order of the output
+   * array is not guaranteed and should be avoided.
+   *
+   * @return A new {@link Expression} representing the values of the map.
+   */
+  @BetaApi
+  public final Expression mapValues() {
+    return mapValues(this);
+  }
+
+  /**
+   * Creates an expression that returns the entries of this map expression as an array of maps,
+   * where each map contains a "k" property for the key and a "v" property for the value.
+   *
+   * <p>While the backend generally preserves insertion order, relying on the order of the output
+   * array is not guaranteed and should be avoided.
+   *
+   * @return A new {@link Expression} representing the entries of the map.
+   */
+  @BetaApi
+  public final Expression mapEntries() {
+    return mapEntries(this);
   }
 
   /**
@@ -5625,6 +6739,215 @@ public abstract class Expression {
   @BetaApi
   public final Expression timestampTruncate(Expression granularity) {
     return timestampTruncate(this, granularity);
+  }
+
+  /**
+   * Creates an expression that truncates this timestamp expression to a specified granularity in a
+   * given timezone.
+   *
+   * @param granularity The granularity to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone to use for truncation. Valid values are from the TZ database
+   *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not
+   *     specified.
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public final Expression timestampTruncateWithTimezone(String granularity, String timezone) {
+    return timestampTruncateWithTimezone(this, granularity, timezone);
+  }
+
+  /**
+   * Creates an expression that truncates this timestamp expression to a specified granularity in a
+   * given timezone.
+   *
+   * @param granularity The granularity expression to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone to use for truncation. Valid values are from the TZ database
+   *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public final Expression timestampTruncateWithTimezone(Expression granularity, String timezone) {
+    return timestampTruncateWithTimezone(this, granularity, timezone);
+  }
+
+  /**
+   * Creates an expression that truncates this timestamp expression to a specified granularity in a
+   * given timezone.
+   *
+   * @param granularity The granularity to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone expression to use for truncation. Valid values are from the TZ
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public final Expression timestampTruncateWithTimezone(String granularity, Expression timezone) {
+    return timestampTruncateWithTimezone(this, granularity, timezone);
+  }
+
+  /**
+   * Creates an expression that truncates this timestamp expression to a specified granularity in a
+   * given timezone.
+   *
+   * @param granularity The granularity expression to truncate to. Valid values are "microsecond",
+   *     "millisecond", "second", "minute", "hour", "day", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone expression to use for truncation. Valid values are from the TZ
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1".
+   * @return A new {@link Expression} representing the truncated timestamp.
+   */
+  @BetaApi
+  public final Expression timestampTruncateWithTimezone(
+      Expression granularity, Expression timezone) {
+    return timestampTruncateWithTimezone(this, granularity, timezone);
+  }
+
+  /**
+   * Calculates the difference between this timestamp and another timestamp.
+   *
+   * @param start The starting timestamp expression.
+   * @param unit The unit of time for the difference. Valid values include "microsecond",
+   *     "millisecond", "second", "minute", "hour" and "day".
+   * @return A new {@link Expression} representing the difference.
+   */
+  @BetaApi
+  public final Expression timestampDiff(Expression start, Expression unit) {
+    return timestampDiff(this, start, unit);
+  }
+
+  /**
+   * Calculates the difference between this timestamp and another timestamp.
+   *
+   * @param start The starting timestamp expression.
+   * @param unit The unit of time for the difference. Valid values include "microsecond",
+   *     "millisecond", "second", "minute", "hour" and "day".
+   * @return A new {@link Expression} representing the difference.
+   */
+  @BetaApi
+  public final Expression timestampDiff(Expression start, String unit) {
+    return timestampDiff(this, start, unit);
+  }
+
+  /**
+   * Calculates the difference between this timestamp and another timestamp.
+   *
+   * @param startFieldName The name of the field containing the starting timestamp.
+   * @param unit The unit of time for the difference. Valid values include "microsecond",
+   *     "millisecond", "second", "minute", "hour" and "day".
+   * @return A new {@link Expression} representing the difference.
+   */
+  @BetaApi
+  public final Expression timestampDiff(String startFieldName, String unit) {
+    return timestampDiff(this, startFieldName, unit);
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from this timestamp expression.
+   *
+   * @param part The part to extract. Valid values are "microsecond", "millisecond", "second",
+   *     "minute", "hour", "dayofweek", "day", "dayofyear", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public final Expression timestampExtract(Expression part) {
+    return timestampExtract(this, part);
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from this timestamp expression.
+   *
+   * @param part The part to extract. Valid values are "microsecond", "millisecond", "second",
+   *     "minute", "hour", "dayofweek", "day", "dayofyear", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public final Expression timestampExtract(String part) {
+    return timestampExtract(this, part);
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from this timestamp expression in a given
+   * timezone.
+   *
+   * @param part The part to extract. Valid values are "microsecond", "millisecond", "second",
+   *     "minute", "hour", "dayofweek", "day", "dayofyear", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone to use for extraction. Valid values are from the TZ database
+   *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not
+   *     specified.
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public final Expression timestampExtractWithTimezone(Expression part, String timezone) {
+    return timestampExtractWithTimezone(this, part, timezone);
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from this timestamp expression in a given
+   * timezone.
+   *
+   * @param part The part to extract. Valid values are "microsecond", "millisecond", "second",
+   *     "minute", "hour", "dayofweek", "day", "dayofyear", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone to use for extraction. Valid values are from the TZ database
+   *     (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if not
+   *     specified.
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public final Expression timestampExtractWithTimezone(String part, String timezone) {
+    return timestampExtractWithTimezone(this, part, timezone);
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from this timestamp expression in a given
+   * timezone.
+   *
+   * @param part The part to extract. Valid values are "microsecond", "millisecond", "second",
+   *     "minute", "hour", "dayofweek", "day", "dayofyear", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone expression to use for extraction. Valid values are from the TZ
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if
+   *     not specified.
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public final Expression timestampExtractWithTimezone(Expression part, Expression timezone) {
+    return timestampExtractWithTimezone(this, part, timezone);
+  }
+
+  /**
+   * Creates an expression that extracts a specified part from this timestamp expression in a given
+   * timezone.
+   *
+   * @param part The part to extract. Valid values are "microsecond", "millisecond", "second",
+   *     "minute", "hour", "dayofweek", "day", "dayofyear", "week", "week(monday)", "week(tuesday)",
+   *     "week(wednesday)", "week(thursday)", "week(friday)", "week(saturday)", "week(sunday)",
+   *     "isoweek", "month", "quarter", "year", and "isoyear".
+   * @param timezone The timezone expression to use for extraction. Valid values are from the TZ
+   *     database (e.g., "America/Los_Angeles") or in the format "Etc/GMT-1". Defaults to "UTC" if
+   *     not specified.
+   * @return A new {@link Expression} representing the extracted part.
+   */
+  @BetaApi
+  public final Expression timestampExtractWithTimezone(String part, Expression timezone) {
+    return timestampExtractWithTimezone(this, part, timezone);
   }
 
   /**
