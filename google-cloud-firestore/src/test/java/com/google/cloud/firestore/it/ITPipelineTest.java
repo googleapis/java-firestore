@@ -49,6 +49,8 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayMi
 import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayMinimumN;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayReverse;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.arraySlice;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayTransform;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayTransformWithIndex;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.ceil;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.concat;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.conditional;
@@ -92,6 +94,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.truncTo
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixMicrosToTimestamp;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixMillisToTimestamp;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.unixSecondsToTimestamp;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.variable;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.vectorLength;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.xor;
 import static com.google.common.truth.Truth.assertThat;
@@ -1415,8 +1418,8 @@ public class ITPipelineTest extends ITBaseTest {
                 field("tags")
                     .arrayFilter("tag", notEqual(variable("tag"), "magic"))
                     .as("notMagicTags"),
-                arrayFilter("tags", "tag", notEqual(field("tag"), "epic")).as("notEpicTags"),
-                arrayFilter("tags", "tag", equal(field("tag"), "fantasy")).as("noMatchingTags"))
+                arrayFilter("tags", "tag", notEqual(variable("tag"), "epic")).as("notEpicTags"),
+                arrayFilter("tags", "tag", equal(variable("tag"), "fantasy")).as("noMatchingTags"))
             .execute()
             .get()
             .getResults();
@@ -1437,17 +1440,103 @@ public class ITPipelineTest extends ITBaseTest {
             .replaceWith(
                 Expression.map(
                     ImmutableMap.of(
-                        "arr", ImmutableList.of(1, "foo", Expression.nullValue(), 20.0, "bar", 30, "40", Expression.nullValue()))))
+                        "arr",
+                        ImmutableList.of(
+                            1,
+                            "foo",
+                            Expression.nullValue(),
+                            20.0,
+                            "bar",
+                            30,
+                            "40",
+                            Expression.nullValue()))))
             .select(
                 field("arr")
-                    .arrayFilter("element", greaterThan(field("element"), 10))
+                    .arrayFilter("element", greaterThan(variable("element"), 10))
                     .as("filtered"))
             .execute()
             .get()
             .getResults();
 
     Map<String, Object> result = data(results).get(0);
-    assertThat((List<?>) result.get("filtered")).containsExactly(20.0, 30).inOrder();
+    assertThat((List<?>) result.get("filtered")).containsExactly(20.0, 30L).inOrder();
+  }
+
+  @Test
+  public void testSupportsArrayTransformAndArrayTransformWithIndex() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .limit(1)
+            .replaceWith(Expression.map(map("arr", Lists.newArrayList(10, 20, 30))))
+            .select(
+                arrayTransform("arr", "element", multiply(variable("element"), 10))
+                    .as("staticTransform"),
+                field("arr")
+                    .arrayTransform("element", multiply(variable("element"), 10))
+                    .as("instanceTransform"),
+                arrayTransformWithIndex(
+                        "arr", "element", "i", add(variable("element"), variable("i")))
+                    .as("staticTransformWithIndex"),
+                field("arr")
+                    .arrayTransformWithIndex(
+                        "element", "i", add(variable("element"), variable("i")))
+                    .as("instanceTransformWithIndex"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    assertThat((List<?>) result.get("staticTransform")).containsExactly(100L, 200L, 300L).inOrder();
+    assertThat((List<?>) result.get("instanceTransform"))
+        .containsExactly(100L, 200L, 300L)
+        .inOrder();
+    assertThat((List<?>) result.get("staticTransformWithIndex"))
+        .containsExactly(10L, 21L, 32L)
+        .inOrder();
+    assertThat((List<?>) result.get("instanceTransformWithIndex"))
+        .containsExactly(10L, 21L, 32L)
+        .inOrder();
+  }
+
+  @Test
+  public void testSupportsArrayTransformWithEmptyArrayAndNulls() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .createFrom(collection)
+            .limit(1)
+            .replaceWith(
+                Expression.map(map("arr", Lists.newArrayList(1, null, 3), "empty", emptyList())))
+            .select(
+                field("arr")
+                    .arrayTransform("element", add(variable("element"), 1))
+                    .as("transformedWithNulls"),
+                field("empty")
+                    .arrayTransform("element", add(variable("element"), 1))
+                    .as("transformedEmpty"),
+                field("arr")
+                    .arrayTransformWithIndex(
+                        "element", "idx", add(variable("element"), variable("idx")))
+                    .as("transformedWithIndex"),
+                field("empty")
+                    .arrayTransformWithIndex(
+                        "element", "idx", add(variable("element"), variable("idx")))
+                    .as("transformedEmptyWithIndex"))
+            .execute()
+            .get()
+            .getResults();
+
+    Map<String, Object> result = data(results).get(0);
+    assertThat((List<?>) result.get("transformedWithNulls"))
+        .containsExactly(2L, null, 4L)
+        .inOrder();
+    assertThat((List<?>) result.get("transformedEmpty")).isEmpty();
+    assertThat((List<?>) result.get("transformedWithIndex"))
+        .containsExactly(1L, null, 5L)
+        .inOrder();
+    assertThat((List<?>) result.get("transformedEmptyWithIndex")).isEmpty();
   }
 
   @Test
@@ -1492,16 +1581,16 @@ public class ITPipelineTest extends ITBaseTest {
   @Test
   public void arraySliceThrowsErrorForNegativeLength() throws Exception {
     ExecutionException exception =
-            assertThrows(
-                    ExecutionException.class,
-                    () ->
-                            firestore
-                                    .pipeline()
-                                    .createFrom(collection)
-                                    .where(equal("title", "The Lord of the Rings"))
-                                    .select(arraySlice("tags", 1, -1).as("negativeLengthSlice"))
-                                    .execute()
-                                    .get());
+        assertThrows(
+            ExecutionException.class,
+            () ->
+                firestore
+                    .pipeline()
+                    .createFrom(collection)
+                    .where(equal("title", "The Lord of the Rings"))
+                    .select(arraySlice("tags", 1, -1).as("negativeLengthSlice"))
+                    .execute()
+                    .get());
     assertThat(exception).hasMessageThat().contains("length must be non-negative");
   }
 

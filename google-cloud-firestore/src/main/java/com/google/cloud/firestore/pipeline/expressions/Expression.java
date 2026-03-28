@@ -2117,6 +2117,69 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that applies a provided transformation to each element in an array.
+   *
+   * @param array The expression representing the array to transform.
+   * @param elementAlias The alias for the current element in the transform expression.
+   * @param transform The expression used to transform the elements.
+   * @return A new {@link Expression} representing the transformed array.
+   */
+  @BetaApi
+  public static Expression arrayTransform(
+      Expression array, String elementAlias, Expression transform) {
+    return new FunctionExpression(
+        "array_transform", ImmutableList.of(array, constant(elementAlias), transform));
+  }
+
+  /**
+   * Creates an expression that applies a provided transformation to each element in an array.
+   *
+   * @param arrayFieldName The field name of the array to transform.
+   * @param elementAlias The alias for the current element in the transform expression.
+   * @param transform The expression used to transform the elements.
+   * @return A new {@link Expression} representing the transformed array.
+   */
+  @BetaApi
+  public static Expression arrayTransform(
+      String arrayFieldName, String elementAlias, Expression transform) {
+    return arrayTransform(field(arrayFieldName), elementAlias, transform);
+  }
+
+  /**
+   * Creates an expression that applies a provided transformation to each element in an array,
+   * providing the element's index to the transformation expression.
+   *
+   * @param array The expression representing the array to transform.
+   * @param elementAlias The alias for the current element in the transform expression.
+   * @param indexAlias The alias for the current index.
+   * @param transform The expression used to transform the elements.
+   * @return A new {@link Expression} representing the transformed array.
+   */
+  @BetaApi
+  public static Expression arrayTransformWithIndex(
+      Expression array, String elementAlias, String indexAlias, Expression transform) {
+    return new FunctionExpression(
+        "array_transform",
+        ImmutableList.of(array, constant(elementAlias), constant(indexAlias), transform));
+  }
+
+  /**
+   * Creates an expression that applies a provided transformation to each element in an array,
+   * providing the element's index to the transformation expression.
+   *
+   * @param arrayFieldName The field name of the array to transform.
+   * @param elementAlias The alias for the current element in the transform expression.
+   * @param indexAlias The alias for the current index.
+   * @param transform The expression used to transform the elements.
+   * @return A new {@link Expression} representing the transformed array.
+   */
+  @BetaApi
+  public static Expression arrayTransformWithIndex(
+      String arrayFieldName, String elementAlias, String indexAlias, Expression transform) {
+    return arrayTransformWithIndex(field(arrayFieldName), elementAlias, indexAlias, transform);
+  }
+
+  /**
    * Creates an expression that returns a slice of an array.
    *
    * @param array The expression representing the array to slice.
@@ -5403,6 +5466,33 @@ public abstract class Expression {
   @BetaApi
   public final Expression arrayFilter(String alias, BooleanExpression filter) {
     return arrayFilter(this, alias, filter);
+  }
+
+  /**
+   * Creates an expression that applies a provided transformation to each element in an array.
+   *
+   * @param elementAlias The alias for the current element in the transform expression.
+   * @param transform The expression used to transform the elements.
+   * @return A new {@link Expression} representing the transformed array.
+   */
+  @BetaApi
+  public final Expression arrayTransform(String elementAlias, Expression transform) {
+    return arrayTransform(this, elementAlias, transform);
+  }
+
+  /**
+   * Creates an expression that applies a provided transformation to each element in an array,
+   * providing the element's index to the transformation expression.
+   *
+   * @param elementAlias The alias for the current element in the transform expression.
+   * @param indexAlias The alias for the current index.
+   * @param transform The expression used to transform the elements.
+   * @return A new {@link Expression} representing the transformed array.
+   */
+  @BetaApi
+  public final Expression arrayTransformWithIndex(
+      String elementAlias, String indexAlias, Expression transform) {
+    return arrayTransformWithIndex(this, elementAlias, indexAlias, transform);
   }
 
   /**
