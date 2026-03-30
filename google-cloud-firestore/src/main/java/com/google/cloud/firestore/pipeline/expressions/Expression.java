@@ -284,7 +284,7 @@ public abstract class Expression {
    * contrast, {@link ifAbsent} only triggers for missing fields.
    *
    * @param ifExpr The expression to check.
-   * @param elseExpression The default value.
+   * @param elseExpression The default expression that will be evaluated and returned.
    * @return A new {@link Expression} representing the ifNull operation.
    */
   @BetaApi
@@ -299,7 +299,7 @@ public abstract class Expression {
    * contrast, {@link ifAbsent} only triggers for missing fields.
    *
    * @param ifExpr The expression to check.
-   * @param elseValue The default value.
+   * @param elseValue The default value that will be returned.
    * @return A new {@link Expression} representing the ifNull operation.
    */
   @BetaApi
@@ -314,7 +314,7 @@ public abstract class Expression {
    * contrast, {@link ifAbsent} only triggers for missing fields.
    *
    * @param ifFieldName The field to check.
-   * @param elseExpression The default value.
+   * @param elseExpression The default expression that will be evaluated and returned.
    * @return A new {@link Expression} representing the ifNull operation.
    */
   @BetaApi
@@ -329,7 +329,7 @@ public abstract class Expression {
    * contrast, {@link ifAbsent} only triggers for missing fields.
    *
    * @param ifFieldName The field to check.
-   * @param elseValue The default value.
+   * @param elseValue The default value that will be returned.
    * @return A new {@link Expression} representing the ifNull operation.
    */
   @BetaApi
@@ -5185,7 +5185,7 @@ public abstract class Expression {
    * <p>Note: This function provides a fallback for both absent and explicit null values. In
    * contrast, {@link ifAbsent} only triggers for missing fields.
    *
-   * @param elseValue The default value.
+   * @param elseValue The default value that will be returned.
    * @return A new {@link Expression} representing the ifNull operation.
    */
   @BetaApi
