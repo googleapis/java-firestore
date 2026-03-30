@@ -3563,7 +3563,11 @@ public class ITPipelineTest extends ITBaseTest {
               assertThat(data(results))
                   .isEqualTo(
                       Lists.newArrayList(
-                          map("title", "The Hitchhiker's Guide to the Galaxy", "awards", map("hugo", true)),
+                          map(
+                              "title",
+                              "The Hitchhiker's Guide to the Galaxy",
+                              "awards",
+                              map("hugo", true)),
                           map("title", "Dune", "awards", map("hugo", true))));
 
               transaction.update(collection.document("book1"), map("foo", "bar"));
