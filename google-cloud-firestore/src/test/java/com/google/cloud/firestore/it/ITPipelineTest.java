@@ -71,6 +71,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.logical
 import static com.google.cloud.firestore.pipeline.expressions.Expression.logicalMinimum;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.mapMerge;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.mapRemove;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.multiply;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.nor;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.notEqual;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.nullValue;
