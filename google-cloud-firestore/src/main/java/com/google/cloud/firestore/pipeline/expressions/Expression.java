@@ -7046,7 +7046,6 @@ public abstract class Expression {
    *
    * @return An {@link Expression} representing the current document.
    */
-  @BetaApi
   public static Expression currentDocument() {
     return new FunctionExpression("current_document", ImmutableList.of());
   }
@@ -7067,7 +7066,6 @@ public abstract class Expression {
    * @param name The name of the variable to retrieve.
    * @return An {@link Expression} representing the variable's value.
    */
-  @BetaApi
   public static Expression variable(String name) {
     return new Variable(name);
   }
@@ -7078,7 +7076,6 @@ public abstract class Expression {
    * @param key The key of the field to access.
    * @return An {@link Expression} representing the value of the field.
    */
-  @BetaApi
   public Expression getField(String key) {
     return new FunctionExpression("get_field", ImmutableList.of(this, constant(key)));
   }
@@ -7089,7 +7086,6 @@ public abstract class Expression {
    * @param keyExpression The expression evaluating to the key to access.
    * @return A new {@link Expression} representing the field value.
    */
-  @BetaApi
   public Expression getField(Expression keyExpression) {
     return new FunctionExpression("get_field", ImmutableList.of(this, keyExpression));
   }
@@ -7101,7 +7097,6 @@ public abstract class Expression {
    * @param key The key of the field to access.
    * @return An {@link Expression} representing the value of the field.
    */
-  @BetaApi
   public static Expression getField(String fieldName, String key) {
     return field(fieldName).getField(key);
   }
@@ -7113,7 +7108,6 @@ public abstract class Expression {
    * @param keyExpression The expression evaluating to the key.
    * @return A new {@link Expression} representing the value of the field.
    */
-  @BetaApi
   public static Expression getField(Expression expression, Expression keyExpression) {
     return expression.getField(keyExpression);
   }
@@ -7125,7 +7119,6 @@ public abstract class Expression {
    * @param keyExpression The expression evaluating to the key.
    * @return A new {@link Expression} representing the value of the field.
    */
-  @BetaApi
   public static Expression getField(String fieldName, Expression keyExpression) {
     return field(fieldName).getField(keyExpression);
   }
@@ -7137,7 +7130,6 @@ public abstract class Expression {
    * @param key The key of the field to access.
    * @return An {@link Expression} representing the value of the field.
    */
-  @BetaApi
   public static Expression getField(Expression expression, String key) {
     return new FunctionExpression("get_field", ImmutableList.of(expression, constant(key)));
   }
