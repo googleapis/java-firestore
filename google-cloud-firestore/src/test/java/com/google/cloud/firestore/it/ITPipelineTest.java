@@ -2297,7 +2297,7 @@ public class ITPipelineTest extends ITBaseTest {
             .select(
                 field("rating").equal(nullValue()).as("ratingIsNull"),
                 field("rating").equal(Double.NaN).as("ratingIsNaN"),
-                // arrayGet("title", 0) evaluates to UNSET so it is not an error
+                // arrayGet("title", 0) evaluates to ERROR
                 arrayGet("title", 0).isError().as("isError"),
                 arrayGet("title", 0).ifError(constant("was error")).as("ifError"),
                 field("foo").isAbsent().as("isAbsent"),
@@ -2318,7 +2318,9 @@ public class ITPipelineTest extends ITBaseTest {
                     "ratingIsNaN",
                     false,
                     "isError",
-                    false,
+                    true,
+                    "ifError",
+                    "was error",
                     "isAbsent",
                     true,
                     "titleIsNotNull",
@@ -3537,8 +3539,8 @@ public class ITPipelineTest extends ITBaseTest {
     assertThat(data(results))
         .isEqualTo(
             Lists.newArrayList(
-                map("title", "The Hitchhiker's Guide to the Galaxy", "awards.hugo", true),
-                map("title", "Dune", "awards.hugo", true)));
+                map("title", "The Hitchhiker's Guide to the Galaxy", "awards", map("hugo", true)),
+                map("title", "Dune", "awards", map("hugo", true))));
   }
 
   @Test
@@ -3561,8 +3563,8 @@ public class ITPipelineTest extends ITBaseTest {
               assertThat(data(results))
                   .isEqualTo(
                       Lists.newArrayList(
-                          map("title", "The Hitchhiker's Guide to the Galaxy", "awards.hugo", true),
-                          map("title", "Dune", "awards.hugo", true)));
+                          map("title", "The Hitchhiker's Guide to the Galaxy", "awards", map("hugo", true)),
+                          map("title", "Dune", "awards", map("hugo", true))));
 
               transaction.update(collection.document("book1"), map("foo", "bar"));
 
