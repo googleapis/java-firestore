@@ -4297,7 +4297,8 @@ public class ITPipelineTest extends ITBaseTest {
 
   @Test
   public void testSupportsParent() throws Exception {
-    DocumentReference docRef = collection.document("book4").collection("reviews").document("review1");
+    DocumentReference docRef =
+        collection.document("book4").collection("reviews").document("review1");
 
     Pipeline pipeline =
         firestore
