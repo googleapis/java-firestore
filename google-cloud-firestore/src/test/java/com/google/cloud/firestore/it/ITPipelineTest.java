@@ -49,6 +49,7 @@ import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayMi
 import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayMinimumN;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayReverse;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.arraySlice;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.arraySliceToEnd;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayTransform;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.arrayTransformWithIndex;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.ceil;
@@ -1562,35 +1563,35 @@ public class ITPipelineTest extends ITBaseTest {
             .createFrom(collection)
             .where(equal("title", "The Lord of the Rings"))
             .select(
-                field("tags").arraySlice(1).as("instanceMethodSlice"),
                 arraySlice("tags", 1, 1).as("staticMethodSlice"),
-                field("tags").arraySlice(1).as("instanceMethodSliceToEnd"),
-                arraySlice("tags", 1, 1).as("staticMethodSliceToEnd"),
+                arraySliceToEnd("tags", 1).as("staticMethodSliceToEnd"),
+                field("tags").arraySlice(1, 1).as("instanceMethodSlice"),
+                field("tags").arraySliceToEnd(1).as("instanceMethodSliceToEnd"),
                 field("tags").arraySlice(1, 10).as("overflowLength"),
-                field("tags").arraySlice(10).as("overflowOffset"),
-                field("tags").arraySlice(-1).as("negativeOffset"),
-                field("tags").arraySlice(-1, 1).as("negativeOffsetLength"),
-                field("tags").arraySlice(-10).as("negativeOffsetOverflow"))
+                field("tags").arraySlice(-1, 1).as("negativeOffset"),
+                field("tags").arraySliceToEnd(-1).as("negativeOffsetSliceToEnd"),
+                field("tags").arraySliceToEnd(10).as("overflowOffset"),
+                field("tags").arraySliceToEnd(-10).as("negativeOverflowOffset"))
             .execute()
             .get()
             .getResults();
 
     Map<String, Object> result = data(results).get(0);
-    assertThat((List<?>) result.get("instanceMethodSlice"))
+    assertThat((List<?>) result.get("staticMethodSlice")).containsExactly("magic").inOrder();
+    assertThat((List<?>) result.get("staticMethodSliceToEnd"))
         .containsExactly("magic", "epic")
         .inOrder();
-    assertThat((List<?>) result.get("staticMethodSlice")).containsExactly("magic").inOrder();
+    assertThat((List<?>) result.get("instanceMethodSlice")).containsExactly("magic").inOrder();
     assertThat((List<?>) result.get("instanceMethodSliceToEnd"))
-        .containsExactly("epic", "fantasy")
+        .containsExactly("magic", "epic")
         .inOrder();
-    assertThat((List<?>) result.get("staticMethodSliceToEnd"))
-        .containsExactly("epic", "fantasy")
-        .inOrder();
-    assertThat((List<?>) result.get("overflowLength")).containsExactly("epic", "fantasy").inOrder();
+    assertThat((List<?>) result.get("overflowLength")).containsExactly("magic", "epic").inOrder();
     assertThat((List<?>) result.get("overflowOffset")).isEmpty();
-    assertThat((List<?>) result.get("negativeOffset")).containsExactly("fantasy").inOrder();
-    assertThat((List<?>) result.get("negativeOffsetLength")).containsExactly("fantasy").inOrder();
-    assertThat((List<?>) result.get("negativeOffsetOverflow")).containsExactly("fantasy").inOrder();
+    assertThat((List<?>) result.get("negativeOffset")).containsExactly("epic").inOrder();
+    assertThat((List<?>) result.get("negativeOffsetSliceToEnd")).containsExactly("epic").inOrder();
+    assertThat((List<?>) result.get("negativeOverflowOffset"))
+        .containsExactly("adventure", "magic", "epic")
+        .inOrder();
   }
 
   @Test

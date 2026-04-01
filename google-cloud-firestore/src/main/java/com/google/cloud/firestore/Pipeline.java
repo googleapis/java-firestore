@@ -292,7 +292,6 @@ public final class Pipeline {
    * @param additionalExpressions Additional expressions to define using {@link AliasedExpression}.
    * @return A new Pipeline object with this stage appended to the stage list.
    */
-  @BetaApi
   public Pipeline define(AliasedExpression expression, AliasedExpression... additionalExpressions) {
     return append(
         new Define(
@@ -371,7 +370,6 @@ public final class Pipeline {
    *
    * @return A new {@link Expression} representing the pipeline as an array.
    */
-  @BetaApi
   public Expression toArrayExpression() {
     return new FunctionExpression("array", ImmutableList.of(new PipelineValueExpression(this)));
   }
@@ -470,7 +468,6 @@ public final class Pipeline {
    *
    * @return A new {@link Expression} representing the pipeline as a scalar.
    */
-  @BetaApi
   public Expression toScalarExpression() {
     return new FunctionExpression("scalar", ImmutableList.of(new PipelineValueExpression(this)));
   }

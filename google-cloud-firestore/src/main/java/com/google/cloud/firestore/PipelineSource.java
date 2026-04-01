@@ -233,7 +233,6 @@ public final class PipelineSource {
    * @param path The path of the subcollection.
    * @return A new {@code Pipeline} instance scoped to the subcollection.
    */
-  @BetaApi
   public static Pipeline subcollection(String path) {
     return new Pipeline(null, new Subcollection(path));
   }

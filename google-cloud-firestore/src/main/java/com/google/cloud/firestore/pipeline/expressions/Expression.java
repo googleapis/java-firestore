@@ -2806,21 +2806,21 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the array slice.
    */
   @BetaApi
-  public static Expression arraySlice(Expression array, Object offset, Object length) {
-    return new FunctionExpression(
-        "array_slice", ImmutableList.of(array, toExprOrConstant(offset), toExprOrConstant(length)));
+  public static Expression arraySlice(Expression array, Expression offset, Expression length) {
+    return new FunctionExpression("array_slice", ImmutableList.of(array, offset, length));
   }
 
   /**
-   * Creates an expression that returns a slice of an array to its end.
+   * Creates an expression that returns a slice of an array.
    *
    * @param array The expression representing the array to slice.
    * @param offset The starting index.
+   * @param length The number of elements to return.
    * @return A new {@link Expression} representing the array slice.
    */
   @BetaApi
-  public static Expression arraySlice(Expression array, Object offset) {
-    return new FunctionExpression("array_slice", ImmutableList.of(array, toExprOrConstant(offset)));
+  public static Expression arraySlice(Expression array, int offset, int length) {
+    return arraySlice(array, constant(offset), constant(length));
   }
 
   /**
@@ -2832,8 +2832,45 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the array slice.
    */
   @BetaApi
-  public static Expression arraySlice(String arrayFieldName, Object offset, Object length) {
+  public static Expression arraySlice(String arrayFieldName, int offset, int length) {
+    return arraySlice(field(arrayFieldName), constant(offset), constant(length));
+  }
+
+  /**
+   * Creates an expression that returns a slice of an array.
+   *
+   * @param arrayFieldName The field name of the array to slice.
+   * @param offset The starting index.
+   * @param length The number of elements to return.
+   * @return A new {@link Expression} representing the array slice.
+   */
+  @BetaApi
+  public static Expression arraySlice(String arrayFieldName, Expression offset, Expression length) {
     return arraySlice(field(arrayFieldName), offset, length);
+  }
+
+  /**
+   * Creates an expression that returns a slice of an array to its end.
+   *
+   * @param array The expression representing the array to slice.
+   * @param offset The expression representing the starting index.
+   * @return A new {@link Expression} representing the array slice.
+   */
+  @BetaApi
+  public static Expression arraySliceToEnd(Expression array, Expression offset) {
+    return new FunctionExpression("array_slice", ImmutableList.of(array, offset));
+  }
+
+  /**
+   * Creates an expression that returns a slice of an array to its end.
+   *
+   * @param array The expression representing the array to slice.
+   * @param offset The starting index.
+   * @return A new {@link Expression} representing the array slice.
+   */
+  @BetaApi
+  public static Expression arraySliceToEnd(Expression array, int offset) {
+    return arraySliceToEnd(array, constant(offset));
   }
 
   /**
@@ -2844,8 +2881,20 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the array slice.
    */
   @BetaApi
-  public static Expression arraySlice(String arrayFieldName, Object offset) {
-    return arraySlice(field(arrayFieldName), offset);
+  public static Expression arraySliceToEnd(String arrayFieldName, int offset) {
+    return arraySliceToEnd(field(arrayFieldName), constant(offset));
+  }
+
+  /**
+   * Creates an expression that returns a slice of an array to its end.
+   *
+   * @param arrayFieldName The field name of the array to slice.
+   * @param offset The expression representing the starting index.
+   * @return A new {@link Expression} representing the array slice.
+   */
+  @BetaApi
+  public static Expression arraySliceToEnd(String arrayFieldName, Expression offset) {
+    return arraySliceToEnd(field(arrayFieldName), offset);
   }
 
   /**
@@ -6771,7 +6820,19 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the array slice.
    */
   @BetaApi
-  public final Expression arraySlice(Object offset, Object length) {
+  public final Expression arraySlice(int offset, int length) {
+    return arraySlice(this, offset, length);
+  }
+
+  /**
+   * Returns a slice of this array.
+   *
+   * @param offset The starting index expressed as an Expression.
+   * @param length The number of elements to return expressed as an Expression.
+   * @return A new {@link Expression} representing the array slice.
+   */
+  @BetaApi
+  public final Expression arraySlice(Expression offset, Expression length) {
     return arraySlice(this, offset, length);
   }
 
@@ -6782,8 +6843,19 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the array slice.
    */
   @BetaApi
-  public final Expression arraySlice(Object offset) {
-    return arraySlice(this, offset);
+  public final Expression arraySliceToEnd(int offset) {
+    return arraySliceToEnd(this, offset);
+  }
+
+  /**
+   * Returns a slice of this array to its end.
+   *
+   * @param offset The starting index expressed as an Expression.
+   * @return A new {@link Expression} representing the array slice.
+   */
+  @BetaApi
+  public final Expression arraySliceToEnd(Expression offset) {
+    return arraySliceToEnd(this, offset);
   }
 
   /**
