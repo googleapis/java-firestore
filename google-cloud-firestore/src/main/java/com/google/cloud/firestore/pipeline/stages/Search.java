@@ -37,6 +37,16 @@ import java.util.stream.Collectors;
  * The Search stage executes full-text search or geo search operations.
  *
  * <p>The Search stage must be the first stage in a Pipeline.
+ *
+ * <p>Example:
+ *
+ * <pre>{@code
+ * db.pipeline().collection("restaurants").search(
+ *   Search.withQuery(documentMatches("waffles OR pancakes"))
+ *     .withSort(score().descending())
+ *     .withLimit(10)
+ * );
+ * }</pre>
  */
 @BetaApi
 public final class Search extends Stage {
@@ -141,8 +151,8 @@ public final class Search extends Stage {
   }
 
   /**
-   * Specify the maximum number of documents for the search stage to score. Documents will be
-   * processed in the pre-sort order specified by the search index.
+   * Specify the maximum number of documents to retrieve. Documents will be retrieved in the
+   * pre-sort order specified by the search index.
    */
   public Search withRetrievalDepth(long retrievalDepth) {
     return new Search(options.with("retrieval_depth", encodeValue(retrievalDepth)));

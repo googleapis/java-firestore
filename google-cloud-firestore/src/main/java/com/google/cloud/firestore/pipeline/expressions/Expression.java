@@ -3412,6 +3412,14 @@ public abstract class Expression {
    *
    * <p>This Expression can only be used within a {@code Search} stage.
    *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * db.pipeline().collection("restaurants").search(
+   *   Search.withQuery("waffles").withSort(geoDistance(field("location"), new GeoPoint(37.0, -122.0)).ascending())
+   * )
+   * }</pre>
+   *
    * @param field Specifies the field in the document which contains the first {@link GeoPoint} for
    *     distance computation.
    * @param location Compute distance to this {@link GeoPoint}.
@@ -3428,7 +3436,13 @@ public abstract class Expression {
    *
    * <p>This Expression can only be used within a {@code Search} stage.
    *
-   * @param rquery Define the search query using the search DTS.
+   * <p>Example:
+   *
+   * <pre>{@code
+   * db.pipeline().collection("restaurants").search(Search.withQuery(documentMatches("waffles OR pancakes")))
+   * }</pre>
+   *
+   * @param rquery Define the search query using the search DSL.
    * @return A new {@link BooleanExpression} representing the documentMatches operation.
    */
   @BetaApi
@@ -3441,8 +3455,14 @@ public abstract class Expression {
    *
    * <p>This Expression can only be used within a {@code Search} stage.
    *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * db.pipeline().collection("restaurants").search(Search.withQuery(matches("menu", "waffles")))
+   * }</pre>
+   *
    * @param fieldName Perform search on this field.
-   * @param rquery Define the search query using the rquery DTS.
+   * @param rquery Define the search query using the search DSL.
    */
   @InternalApi
   static BooleanExpression matches(String fieldName, String rquery) {
@@ -3455,7 +3475,7 @@ public abstract class Expression {
    * <p>This Expression can only be used within a {@code Search} stage.
    *
    * @param field Perform search on this field.
-   * @param rquery Define the search query using the rquery DTS.
+   * @param rquery Define the search query using the search DSL.
    */
   @InternalApi
   static BooleanExpression matches(Field field, String rquery) {
@@ -3464,9 +3484,17 @@ public abstract class Expression {
 
   /**
    * Evaluates to the search score that reflects the topicality of the document to all of the text
-   * predicates ({@code matches} and {@code documentMatches}) in the search query.
+   * predicates (for example: {@code documentMatches}) in the search query.
    *
    * <p>This Expression can only be used within a {@code Search} stage.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * db.pipeline().collection("restaurants").search(
+   *   Search.withQuery("waffles").withSort(score().descending())
+   * )
+   * }</pre>
    *
    * @return A new {@link Expression} representing the score operation.
    */
@@ -3481,8 +3509,16 @@ public abstract class Expression {
    *
    * <p>This Expression can only be used within a {@code Search} stage.
    *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * db.pipeline().collection("restaurants").search(
+   *   Search.withQuery("waffles").withAddFields(snippet("menu", "waffles").as("snippet"))
+   * )
+   * }</pre>
+   *
    * @param fieldName Search the specified field for matching terms.
-   * @param rquery Define the search query using the search DTS.
+   * @param rquery Define the search query using the search DSL.
    * @return A new {@link Expression} representing the snippet operation.
    */
   @BetaApi
@@ -3497,7 +3533,15 @@ public abstract class Expression {
    *
    * <p>This Expression can only be used within a {@code Search} stage.
    *
-   * @param rquery Define the search query using the search DTS.
+   * <p>Example:
+   *
+   * <pre>{@code
+   * db.pipeline().collection("restaurants").search(
+   *   Search.withQuery("waffles").withAddFields(field("menu").snippet("waffles").as("snippet"))
+   * )
+   * }</pre>
+   *
+   * @param rquery Define the search query using the search DSL.
    * @return A new {@link Expression} representing the snippet operation.
    */
   @BetaApi
