@@ -28,7 +28,7 @@ public class FunctionExpression extends Expression {
   private final List<Expression> params;
   private final java.util.Map<String, Value> options;
 
-  FunctionExpression(String name, List<? extends Expression> params) {
+  public FunctionExpression(String name, List<? extends Expression> params) {
     this(name, params, java.util.Collections.emptyMap());
   }
 
