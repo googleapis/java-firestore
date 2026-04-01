@@ -37,10 +37,13 @@ import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.cloud.firestore.pipeline.expressions.Field;
 import com.google.cloud.firestore.pipeline.expressions.FunctionExpression;
 import com.google.cloud.firestore.pipeline.expressions.Ordering;
+import com.google.cloud.firestore.pipeline.expressions.PipelineValueExpression;
 import com.google.cloud.firestore.pipeline.expressions.Selectable;
 import com.google.cloud.firestore.pipeline.stages.AddFields;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
 import com.google.cloud.firestore.pipeline.stages.AggregateOptions;
+import com.google.cloud.firestore.pipeline.stages.Define;
+import com.google.cloud.firestore.pipeline.stages.Delete;
 import com.google.cloud.firestore.pipeline.stages.Distinct;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
@@ -58,6 +61,7 @@ import com.google.cloud.firestore.pipeline.stages.StageUtils;
 import com.google.cloud.firestore.pipeline.stages.Union;
 import com.google.cloud.firestore.pipeline.stages.Unnest;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
+import com.google.cloud.firestore.pipeline.stages.Update;
 import com.google.cloud.firestore.pipeline.stages.Where;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
@@ -259,6 +263,213 @@ public final class Pipeline {
                     .add(additionalFields)
                     .build()
                     .toArray(new Selectable[0]))));
+  }
+
+  /**
+   * Defines one or more variables in the pipeline's scope. `define` is used to bind a value to a
+   * variable for internal reuse within the pipeline body (accessed via the {@link
+   * Expression#variable(String)} function).
+   *
+   * <p>This stage is useful for declaring reusable values or intermediate calculations that can be
+   * referenced multiple times in later parts of the pipeline, improving readability and
+   * maintainability.
+   *
+   * <p>Each variable is defined using an {@link AliasedExpression}, which pairs an expression with
+   * a name (alias).
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * firestore.pipeline().collection("products")
+   *     .define(
+   *         multiply(field("price"), 0.9).as("discountedPrice"),
+   *         add(field("stock"), 10).as("newStock"))
+   *     .where(lessThan(variable("discountedPrice"), 100))
+   *     .select(field("name"), variable("newStock"));
+   * }</pre>
+   *
+   * @param expression The expression to define using {@link AliasedExpression}.
+   * @param additionalExpressions Additional expressions to define using {@link AliasedExpression}.
+   * @return A new Pipeline object with this stage appended to the stage list.
+   */
+  public Pipeline define(AliasedExpression expression, AliasedExpression... additionalExpressions) {
+    return append(
+        new Define(
+            PipelineUtils.selectablesToMap(
+                ImmutableList.<AliasedExpression>builder()
+                    .add(expression)
+                    .add(additionalExpressions)
+                    .build()
+                    .toArray(new AliasedExpression[0]))));
+  }
+
+  /**
+   * Converts the pipeline into an array expression.
+   *
+   * <p><b>Result Unwrapping:</b> For simpler access, subqueries producing a single field
+   * automatically unwrap that value to the top level, ignoring the inner alias. If the subquery
+   * returns multiple fields, they are preserved as a map.
+   *
+   * <p><b>Example 1: Single field unwrapping</b>
+   *
+   * <pre>{@code
+   * // Get a list of all reviewer names for each book
+   * db.pipeline().collection("books")
+   *     .define(field("id").as("book_id"))
+   *     .addFields(
+   *         db.pipeline().collection("reviews")
+   *             .where(field("book_id").equal(variable("book_id")))
+   *             .select(field("reviewer").as("name"))
+   *             .toArrayExpression()
+   *             .as("reviewers"))
+   * }</pre>
+   *
+   * <p><i>The result set is unwrapped from {@code "reviewers": [{ "name": "Alice" }, { "name":
+   * "Bob" }]} to {@code "reviewers": ["Alice", "Bob"]}.</i>
+   *
+   * <pre>{@code
+   * // Output Document:
+   * [
+   *   {
+   *     "id": "1",
+   *     "title": "1984",
+   *     "reviewers": ["Alice", "Bob"]
+   *   }
+   * ]
+   * }</pre>
+   *
+   * <p><b>Example 2: Multiple fields (Map)</b>
+   *
+   * <pre>{@code
+   * // Get a list of reviews (reviewer and rating) for each book
+   * db.pipeline().collection("books")
+   *     .define(field("id").as("book_id"))
+   *     .addFields(
+   *         db.pipeline().collection("reviews")
+   *             .where(field("book_id").equal(variable("book_id")))
+   *             .select(field("reviewer"), field("rating"))
+   *             .toArrayExpression()
+   *             .as("reviews"))
+   * }</pre>
+   *
+   * <p><i>When the subquery produces multiple fields, they are kept as objects in the array:</i>
+   *
+   * <pre>{@code
+   * // Output Document:
+   * [
+   *   {
+   *     "id": "1",
+   *     "title": "1984",
+   *     "reviews": [
+   *       { "reviewer": "Alice", "rating": 5 },
+   *       { "reviewer": "Bob", "rating": 4 }
+   *     ]
+   *   }
+   * ]
+   * }</pre>
+   *
+   * @return A new {@link Expression} representing the pipeline as an array.
+   */
+  public Expression toArrayExpression() {
+    return new FunctionExpression("array", ImmutableList.of(new PipelineValueExpression(this)));
+  }
+
+  /**
+   * Converts this Pipeline into an expression that evaluates to a single scalar result. Used for
+   * 1:1 lookups or Aggregations when the subquery is expected to return a single value or object.
+   *
+   * <p><b>Runtime Validation:</b> The runtime will validate that the result set contains exactly
+   * one item. It throws a runtime error if the result has more than one item, and evaluates to
+   * {@code null} if the pipeline has zero results.
+   *
+   * <p><b>Result Unwrapping:</b> For simpler access, subqueries producing a single field
+   * automatically unwrap that value to the top level, ignoring the inner alias. If the subquery
+   * returns multiple fields, they are preserved as a map.
+   *
+   * <p><b>Example 1: Single field unwrapping</b>
+   *
+   * <pre>{@code
+   * // Calculate average rating for each restaurant using a subquery
+   * db.pipeline().collection("restaurants")
+   *     .define(field("id").as("rid"))
+   *     .addFields(
+   *         db.pipeline().collection("reviews")
+   *             .where(field("restaurant_id").equal(variable("rid")))
+   *             // Inner aggregation returns a single document
+   *             .aggregate(AggregateFunction.average("rating").as("value"))
+   *             // Convert Pipeline -> Scalar Expression (validates result is 1 item)
+   *             .toScalarExpression()
+   *             .as("average_rating"))
+   * }</pre>
+   *
+   * <p><i>The result set is unwrapped twice: from {@code "average_rating": [{ "value": 4.5 }]} to
+   * {@code "average_rating": { "value": 4.5 }}, and finally to {@code "average_rating": 4.5}.</i>
+   *
+   * <pre>{@code
+   * // Output Document:
+   * [
+   *   {
+   *     "id": "123",
+   *     "name": "The Burger Joint",
+   *     "cuisine": "American",
+   *     "average_rating": 4.5
+   *   },
+   *   {
+   *     "id": "456",
+   *     "name": "Sushi World",
+   *     "cuisine": "Japanese",
+   *     "average_rating": 4.8
+   *   }
+   * ]
+   * }</pre>
+   *
+   * <p><b>Example 2: Multiple fields (Map)</b>
+   *
+   * <pre>{@code
+   * // For each restaurant, calculate review statistics (average rating AND total
+   * // count)
+   * db.pipeline().collection("restaurants")
+   *     .define(field("id").as("rid"))
+   *     .addFields(
+   *         db.pipeline().collection("reviews")
+   *             .where(field("restaurant_id").equal(variable("rid")))
+   *             .aggregate(
+   *                 AggregateFunction.average("rating").as("avg_score"),
+   *                 AggregateFunction.countAll().as("review_count"))
+   *             .toScalarExpression()
+   *             .as("stats"))
+   * }</pre>
+   *
+   * <p><i>When the subquery produces multiple fields, they are wrapped in a map:</i>
+   *
+   * <pre>{@code
+   * // Output Document:
+   * [
+   *   {
+   *     "id": "123",
+   *     "name": "The Burger Joint",
+   *     "cuisine": "American",
+   *     "stats": {
+   *       "avg_score": 4.0,
+   *       "review_count": 3
+   *     }
+   *   },
+   *   {
+   *     "id": "456",
+   *     "name": "Sushi World",
+   *     "cuisine": "Japanese",
+   *     "stats": {
+   *       "avg_score": 4.8,
+   *       "review_count": 120
+   *     }
+   *   }
+   * ]
+   * }</pre>
+   *
+   * @return A new {@link Expression} representing the pipeline as a scalar.
+   */
+  public Expression toScalarExpression() {
+    return new FunctionExpression("scalar", ImmutableList.of(new PipelineValueExpression(this)));
   }
 
   /**
@@ -843,8 +1054,12 @@ public final class Pipeline {
    * @param other The other {@code Pipeline} that is part of union.
    * @return A new {@code Pipeline} object with this stage appended to the stage list.
    */
-  @BetaApi
   public Pipeline union(Pipeline other) {
+    if (other.rpcContext == null) {
+      throw new IllegalArgumentException(
+          "Union only supports combining root pipelines, doesn't support relative scope Pipeline"
+              + " like relative subcollection pipeline");
+    }
     return append(new Union(other));
   }
 
@@ -996,7 +1211,119 @@ public final class Pipeline {
   }
 
   /**
-   * Adds a generic stage to the pipeline.
+   * Performs a delete operation on documents from previous stages.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Delete all documents in the "logs" collection where "status" is "archived"
+   * firestore.pipeline()
+   *     .collection("logs")
+   *     .where(field("status").equal("archived"))
+   *     .delete()
+   *     .execute()
+   *     .get();
+   * }</pre>
+   *
+   * @return A new {@code Pipeline} object with this stage appended to the stage list.
+   */
+  @BetaApi
+  public Pipeline delete() {
+    return append(new Delete());
+  }
+
+  /**
+   * Performs an update operation using documents from previous stages.
+   *
+   * <p>This method updates the documents in place based on the data flowing through the pipeline.
+   * To specify transformations, use {@link #update(Selectable...)}.
+   *
+   * <p>Example 1: Update a collection's schema by adding a new field and removing an old one.
+   *
+   * <pre>{@code
+   * firestore.pipeline()
+   *     .collection("books")
+   *     .addFields(constant("Fiction").as("genre"))
+   *     .removeFields("old_genre")
+   *     .update()
+   *     .execute()
+   *     .get();
+   * }</pre>
+   *
+   * <p>Example 2: Update documents in place with data from literals.
+   *
+   * <pre>{@code
+   * Map<String, Object> updateData = new HashMap<>();
+   * updateData.put("__name__", firestore.collection("books").document("book1"));
+   * updateData.put("status", "Updated");
+   *
+   * firestore.pipeline()
+   *     .literals(updateData)
+   *     .update()
+   *     .execute()
+   *     .get();
+   * }</pre>
+   *
+   * @return A new {@code Pipeline} object with this stage appended to the stage list.
+   */
+  @BetaApi
+  public Pipeline update() {
+    return append(new Update());
+  }
+
+  /**
+   * Performs an update operation using documents from previous stages with specified
+   * transformations.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * // Update the "status" field to "Discounted" for all books where price > 50
+   * firestore.pipeline()
+   *     .collection("books")
+   *     .where(field("price").greaterThan(50))
+   *     .update(constant("Discounted").as("status"))
+   *     .execute()
+   *     .get();
+   * }</pre>
+   *
+   * @param transformedFields The transformations to apply.
+   * @return A new {@code Pipeline} object with this stage appended to the stage list.
+   */
+  @BetaApi
+  public Pipeline update(Selectable... transformedFields) {
+    return append(new Update().withTransformedFields(transformedFields));
+  }
+
+  /**
+   * Performs an update operation using an {@link Update} stage.
+   *
+   * <p>This method allows you to use a pre-configured {@link Update} stage.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * Update updateStage = new Update().withTransformedFields(constant("Updated").as("status"));
+   *
+   * firestore.pipeline()
+   *     .collection("books")
+   *     .where(field("title").equal("The Hitchhiker's Guide to the Galaxy"))
+   *     .update(updateStage)
+   *     .execute()
+   *     .get();
+   * }</pre>
+   *
+   * @param update The {@code Update} stage to append.
+   * @return A new {@code Pipeline} object with this stage appended to the stage list.
+   */
+  @BetaApi
+  public Pipeline update(Update update) {
+    return append(update);
+  }
+
+  /**
+   * Performs an insert operation using documents from previous stages. Adds a generic stage to the
+   * pipeline.
    *
    * <p>This method provides a flexible way to extend the pipeline's functionality by adding custom
    * stages. Each generic stage is defined by a unique `name` and a set of `params` that control its
@@ -1113,6 +1440,11 @@ public final class Pipeline {
    */
   @BetaApi
   public void execute(ApiStreamObserver<PipelineResult> observer) {
+    if (this.rpcContext == null) {
+      throw new IllegalStateException(
+          "This pipeline was created without a database (e.g., as a subcollection pipeline) and"
+              + " cannot be executed directly. It can only be used as part of another pipeline.");
+    }
     MetricsContext metricsContext =
         createMetricsContext(TelemetryConstants.METHOD_NAME_EXECUTE_PIPELINE_EXECUTE);
 
@@ -1143,6 +1475,12 @@ public final class Pipeline {
       @Nonnull PipelineExecuteOptions options,
       @Nullable final ByteString transactionId,
       @Nullable com.google.protobuf.Timestamp readTime) {
+    if (this.rpcContext == null) {
+      throw new IllegalStateException(
+          "This pipeline was created without a database (e.g., as a subcollection pipeline) and"
+              + " cannot be executed directly. It can only be used as part of another pipeline.");
+    }
+
     TraceUtil.Span span =
         rpcContext
             .getFirestore()

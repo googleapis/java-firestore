@@ -24,6 +24,8 @@ import com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions;
 import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
 import com.google.cloud.firestore.pipeline.stages.Database;
 import com.google.cloud.firestore.pipeline.stages.Documents;
+import com.google.cloud.firestore.pipeline.stages.Literals;
+import com.google.cloud.firestore.pipeline.stages.Subcollection;
 import com.google.common.base.Preconditions;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
@@ -158,6 +160,32 @@ public final class PipelineSource {
   }
 
   /**
+   * Creates a new {@link Pipeline} that operates on a static set of documents represented as Maps.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * Map<String, Object> doc1 = new HashMap<>();
+   * doc1.put("title", "Book 1");
+   * Map<String, Object> doc2 = new HashMap<>();
+   * doc2.put("title", "Book 2");
+   *
+   * Snapshot snapshot = firestore.pipeline()
+   *     .literals(doc1, doc2)
+   *     .execute()
+   *     .get();
+   * }</pre>
+   *
+   * @param data The Maps representing documents to include in the pipeline.
+   * @return A new {@code Pipeline} instance with a literals source.
+   */
+  @Nonnull
+  @BetaApi
+  public final Pipeline literals(java.util.Map<String, Object>... data) {
+    return new Pipeline(this.rpcContext, new Literals(data));
+  }
+
+  /**
    * Creates a new {@link Pipeline} from the given {@link Query}. Under the hood, this will
    * translate the query semantics (order by document ID, etc.) to an equivalent pipeline.
    *
@@ -181,5 +209,31 @@ public final class PipelineSource {
   @BetaApi
   public Pipeline createFrom(AggregateQuery query) {
     return query.pipeline();
+  }
+
+  /**
+   * Initializes a pipeline scoped to a subcollection.
+   *
+   * <p>This method allows you to start a new pipeline that operates on a subcollection of the
+   * current document. It is intended to be used as a subquery.
+   *
+   * <p><b>Note:</b> A pipeline created with `subcollection` cannot be executed directly using
+   * {@link Pipeline#execute()}. It must be used within a parent pipeline.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * firestore.pipeline().collection("books")
+   *     .addFields(
+   *         PipelineSource.subcollection("reviews")
+   *             .aggregate(AggregateFunction.average("rating").as("avg_rating"))
+   *             .toScalarExpression().as("average_rating"));
+   * }</pre>
+   *
+   * @param path The path of the subcollection.
+   * @return A new {@code Pipeline} instance scoped to the subcollection.
+   */
+  public static Pipeline subcollection(String path) {
+    return new Pipeline(null, new Subcollection(path));
   }
 }
