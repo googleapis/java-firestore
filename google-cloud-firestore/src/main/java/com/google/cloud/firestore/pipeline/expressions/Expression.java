@@ -4455,7 +4455,7 @@ public abstract class Expression {
    * db.pipeline().collection("restaurants").search(Search.withQuery(documentMatches("waffles OR pancakes")))
    * }</pre>
    *
-   * @param rquery Define the search query using the search DSL.
+   * @param rquery Define the search query using the search domain-specific language (DSL).
    * @return A new {@link BooleanExpression} representing the documentMatches operation.
    */
   @BetaApi
@@ -4475,7 +4475,7 @@ public abstract class Expression {
    * }</pre>
    *
    * @param fieldName Perform search on this field.
-   * @param rquery Define the search query using the search DSL.
+   * @param rquery Define the search query using the search domain-specific language (DSL).
    */
   @InternalApi
   static BooleanExpression matches(String fieldName, String rquery) {
@@ -4488,7 +4488,7 @@ public abstract class Expression {
    * <p>This Expression can only be used within a {@code Search} stage.
    *
    * @param field Perform search on this field.
-   * @param rquery Define the search query using the search DSL.
+   * @param rquery Define the search query using the search domain-specific language (DSL).
    */
   @InternalApi
   static BooleanExpression matches(Field field, String rquery) {
@@ -4531,7 +4531,7 @@ public abstract class Expression {
    * }</pre>
    *
    * @param fieldName Search the specified field for matching terms.
-   * @param rquery Define the search query using the search DSL.
+   * @param rquery Define the search query using the search domain-specific language (DSL).
    * @return A new {@link Expression} representing the snippet operation.
    */
   @BetaApi
@@ -4554,7 +4554,7 @@ public abstract class Expression {
    * )
    * }</pre>
    *
-   * @param rquery Define the search query using the search DSL.
+   * @param rquery Define the search query using the search domain-specific language (DSL).
    * @return A new {@link Expression} representing the snippet operation.
    */
   @BetaApi
