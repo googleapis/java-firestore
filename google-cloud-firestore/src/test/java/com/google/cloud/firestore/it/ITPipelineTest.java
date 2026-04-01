@@ -117,6 +117,7 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.firestore.GeoPoint;
@@ -158,7 +159,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ITPipelineTest extends ITBaseTest {
   private CollectionReference collection;
-  private Map<String, Map<String, Object>> bookDocs;
+  static Map<String, Map<String, Object>> bookDocs;
 
   public CollectionReference testCollectionWithDocs(Map<String, Map<String, Object>> docs)
       throws ExecutionException, InterruptedException, TimeoutException {
@@ -182,6 +183,10 @@ public class ITPipelineTest extends ITBaseTest {
       return;
     }
 
+    collection = testCollectionWithDocs(bookDocs);
+  }
+
+  static {
     bookDocs =
         ImmutableMap.<String, Map<String, Object>>builder()
             .put(
@@ -333,7 +338,6 @@ public class ITPipelineTest extends ITBaseTest {
                     .put("timestamp", new Date())
                     .build())
             .build();
-    collection = testCollectionWithDocs(bookDocs);
   }
 
   @Test
@@ -3379,6 +3383,92 @@ public class ITPipelineTest extends ITBaseTest {
   }
 
   @Test
+  public void testIfNull() throws Exception {
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .limit(1)
+            .replaceWith(Expression.map(map("title", "foo", "name", null)))
+            .select(
+                Expression.ifNull("title", "default title").as("staticMethod"),
+                field("title").ifNull("default title").as("instanceMethod"),
+                field("name").ifNull(field("title")).as("nameOrTitle"),
+                field("name").ifNull("default name").as("fieldIsNull"),
+                field("absent").ifNull("default name").as("fieldIsAbsent"))
+            .execute()
+            .get()
+            .getResults();
+
+    assertThat(data(results))
+        .containsExactly(
+            map(
+                "staticMethod", "foo",
+                "instanceMethod", "foo",
+                "nameOrTitle", "foo",
+                "fieldIsNull", "default name",
+                "fieldIsAbsent", "default name"));
+  }
+
+  @Test
+  public void testCoalesce() throws Exception {
+    assumeFalse(
+        "Coalesce is not supported against the emulator.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
+    List<PipelineResult> results =
+        firestore
+            .pipeline()
+            .collection(collection.getPath())
+            .limit(1)
+            .replaceWith(
+                Expression.map(
+                    map(
+                        "numberValue",
+                        1L,
+                        "stringValue",
+                        "hello",
+                        "booleanValue",
+                        false,
+                        "nullValue",
+                        null,
+                        "nullValue2",
+                        null)))
+            .select(
+                Expression.coalesce(field("numberValue"), field("stringValue")).as("staticMethod"),
+                field("numberValue").coalesce(field("stringValue")).as("instanceMethod"),
+                Expression.coalesce(field("nullValue"), field("stringValue")).as("firstIsNull"),
+                Expression.coalesce(field("nullValue"), field("nullValue2"), field("booleanValue"))
+                    .as("lastIsNotNull"),
+                Expression.coalesce(field("nullValue"), field("nullValue2")).as("allFieldsNull"),
+                Expression.coalesce(field("nullValue"), field("nullValue2"), constant("default"))
+                    .as("allFieldsNullWithDefault"),
+                Expression.coalesce(field("absentField"), field("numberValue"), constant("default"))
+                    .as("withAbsentField"))
+            .execute()
+            .get()
+            .getResults();
+
+    assertThat(data(results))
+        .containsExactly(
+            map(
+                "staticMethod",
+                1L,
+                "instanceMethod",
+                1L,
+                "firstIsNull",
+                "hello",
+                "lastIsNotNull",
+                false,
+                "allFieldsNull",
+                null,
+                "allFieldsNullWithDefault",
+                "default",
+                "withAbsentField",
+                1L));
+  }
+
+  @Test
   public void testJoin() throws Exception {
     // Test join with a constant delimiter
     List<PipelineResult> results =
@@ -4517,5 +4607,198 @@ public class ITPipelineTest extends ITBaseTest {
 
     assertThat(data.get("parentIdStatic")).isEqualTo("book4");
     assertThat(data.get("parentIdInstance")).isEqualTo("book4");
+  }
+
+  @Test
+  public void testDeleteStage() throws Exception {
+    CollectionReference dmlCol = testCollectionWithDocs(bookDocs);
+    if ("NIGHTLY".equals(getTargetBackend())) {
+      List<PipelineResult> results =
+          firestore
+              .pipeline()
+              .collection(dmlCol.getPath())
+              .where(equal(field("__name__").documentId(), "book1"))
+              .delete()
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(results).hasSize(1);
+      assertThat(results.get(0).getData().get("documents_modified")).isEqualTo(1L);
+      assertThat(dmlCol.document("book1").get().get().exists()).isFalse();
+    } else {
+      assertThrows(
+          ExecutionException.class,
+          () -> {
+            firestore
+                .pipeline()
+                .collection(dmlCol.getPath())
+                .where(equal(field("__name__").documentId(), "book1"))
+                .delete()
+                .execute()
+                .get()
+                .getResults();
+          });
+    }
+  }
+
+  @Test
+  public void testDeleteMultipleDocuments() throws Exception {
+    CollectionReference dmlCol = testCollectionWithDocs(bookDocs);
+    if ("NIGHTLY".equals(getTargetBackend())) {
+      List<PipelineResult> results =
+          firestore
+              .pipeline()
+              .collection(dmlCol.getPath())
+              .where(equal(field("genre"), "Science Fiction"))
+              .delete()
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(results).hasSize(1);
+      assertThat(results.get(0).getData().get("documents_modified")).isEqualTo(2L);
+      assertThat(dmlCol.document("book1").get().get().exists()).isFalse();
+      assertThat(dmlCol.document("book10").get().get().exists()).isFalse();
+    } else {
+      assertThrows(
+          ExecutionException.class,
+          () -> {
+            firestore
+                .pipeline()
+                .collection(dmlCol.getPath())
+                .where(equal(field("genre"), "Science Fiction"))
+                .delete()
+                .execute()
+                .get();
+          });
+    }
+  }
+
+  @Test
+  public void testUpdateMultipleDocuments() throws Exception {
+    CollectionReference dmlCol = testCollectionWithDocs(bookDocs);
+    if ("NIGHTLY".equals(getTargetBackend())) {
+      List<PipelineResult> results =
+          firestore
+              .pipeline()
+              .collection(dmlCol.getPath())
+              .where(equal(field("genre"), "Science Fiction"))
+              .removeFields("awards")
+              .update(constant("Updated").as("status"))
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(results).hasSize(1);
+      assertThat(results.get(0).getData().get("documents_modified")).isEqualTo(2L);
+      assertThat(dmlCol.document("book1").get().get().get("status")).isEqualTo("Updated");
+      assertThat(dmlCol.document("book1").get().get().get("awards")).isNull();
+
+      assertThat(dmlCol.document("book10").get().get().get("status")).isEqualTo("Updated");
+      assertThat(dmlCol.document("book10").get().get().get("awards")).isNull();
+    } else {
+      assertThrows(
+          ExecutionException.class,
+          () -> {
+            firestore
+                .pipeline()
+                .collection(dmlCol.getPath())
+                .where(equal(field("genre"), "Science Fiction"))
+                .removeFields("awards")
+                .update(constant("Updated").as("status"))
+                .execute()
+                .get();
+          });
+    }
+  }
+
+  @Test
+  public void testUpdateWithExpressions() throws Exception {
+    CollectionReference dmlCol = testCollectionWithDocs(bookDocs);
+    if ("NIGHTLY".equals(getTargetBackend())) {
+      List<PipelineResult> results =
+          firestore
+              .pipeline()
+              .collection(dmlCol.getPath())
+              .where(equal(field("__name__").documentId(), "book1"))
+              .update(
+                  com.google.cloud.firestore.pipeline.expressions.Expression.add(
+                          field("rating"), constant(1.0))
+                      .as("rating"))
+              .execute()
+              .get()
+              .getResults();
+
+      assertThat(results).hasSize(1);
+      DocumentSnapshot doc = dmlCol.document("book1").get().get();
+      assertThat(doc.get("rating")).isEqualTo(5.2);
+    } else {
+      assertThrows(
+          ExecutionException.class,
+          () -> {
+            firestore
+                .pipeline()
+                .collection(dmlCol.getPath())
+                .where(equal(field("__name__").documentId(), "book1"))
+                .update(
+                    com.google.cloud.firestore.pipeline.expressions.Expression.add(
+                            field("rating"), constant(1.0))
+                        .as("rating"))
+                .execute()
+                .get();
+          });
+    }
+  }
+
+  @Test
+  public void testUpdateNonExistingDocumentModifiesZeroDocuments() throws Exception {
+    CollectionReference dmlCol = firestore.collection(LocalFirestoreHelper.autoId());
+
+    java.util.Map<String, Object> book = new java.util.HashMap<>();
+    book.put("title", "Non Existing");
+    book.put("__name__", dmlCol.document("nonExisting"));
+
+    if ("NIGHTLY".equals(getTargetBackend())) {
+      List<PipelineResult> results =
+          firestore.pipeline().literals(book).update().execute().get().getResults();
+
+      assertThat(results).hasSize(1);
+      assertThat(results.get(0).getData().get("documents_modified")).isEqualTo(0L);
+    } else {
+      assertThrows(
+          ExecutionException.class,
+          () -> {
+            firestore.pipeline().literals(book).update().execute().get();
+          });
+    }
+  }
+
+  @Test
+  public void testLiteralsStage() throws Exception {
+    java.util.Map<String, Object> data1 = new java.util.HashMap<>();
+    data1.put("foo", "bar");
+    java.util.Map<String, Object> data2 = new java.util.HashMap<>();
+    data2.put("baz", "qux");
+
+    List<PipelineResult> results =
+        firestore.pipeline().literals(data1, data2).execute().get().getResults();
+
+    assertThat(results).hasSize(2);
+    assertThat(results.get(0).getData()).isEqualTo(data1);
+    assertThat(results.get(1).getData()).isEqualTo(data2);
+  }
+
+  @Test
+  public void testLiteralsWithExpressions() throws Exception {
+    java.util.Map<String, Object> data = new java.util.HashMap<>();
+    data.put("base", 10);
+    data.put("doubled", multiply(constant(10), constant(2)));
+
+    List<PipelineResult> results = firestore.pipeline().literals(data).execute().get().getResults();
+
+    assertThat(results).hasSize(1);
+    assertThat(results.get(0).getData().get("base")).isEqualTo(10L);
+    assertThat(results.get(0).getData().get("doubled")).isEqualTo(20L);
   }
 }

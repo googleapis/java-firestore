@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore.pipeline.expressions;
+package com.google.cloud.firestore.pipeline.stages;
 
+import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
-import com.google.cloud.firestore.Pipeline;
 import com.google.firestore.v1.Value;
+import java.util.ArrayList;
 
-/** Internal expression representing a pipeline value. */
 @InternalApi
-public final class PipelineValueExpression extends Expression {
-  private final Pipeline pipeline;
+public final class Delete extends Stage {
+  private Delete(InternalOptions options) {
+    super("delete", options);
+  }
 
-  public PipelineValueExpression(Pipeline pipeline) {
-    this.pipeline = pipeline;
+  @BetaApi
+  public Delete() {
+    this(InternalOptions.EMPTY);
   }
 
   @Override
-  protected Value toProto() {
-    return pipeline.toProtoValue();
+  Iterable<Value> toStageArgs() {
+    return new ArrayList<>();
   }
 }

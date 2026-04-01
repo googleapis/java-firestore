@@ -279,6 +279,100 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that returns a default value if an expression evaluates to null.
+   *
+   * <p>Note: This function provides a fallback for both absent and explicit null values. In
+   * contrast, {@link ifAbsent} only triggers for missing fields.
+   *
+   * @param ifExpr The expression to check.
+   * @param elseExpression The default expression that will be evaluated and returned.
+   * @return A new {@link Expression} representing the ifNull operation.
+   */
+  @BetaApi
+  public static Expression ifNull(Expression ifExpr, Expression elseExpression) {
+    return new FunctionExpression("if_null", ImmutableList.of(ifExpr, elseExpression));
+  }
+
+  /**
+   * Creates an expression that returns a default value if an expression evaluates to null.
+   *
+   * <p>Note: This function provides a fallback for both absent and explicit null values. In
+   * contrast, {@link ifAbsent} only triggers for missing fields.
+   *
+   * @param ifExpr The expression to check.
+   * @param elseValue The default value that will be returned.
+   * @return A new {@link Expression} representing the ifNull operation.
+   */
+  @BetaApi
+  public static Expression ifNull(Expression ifExpr, Object elseValue) {
+    return ifNull(ifExpr, toExprOrConstant(elseValue));
+  }
+
+  /**
+   * Creates an expression that returns a default value if a field is null.
+   *
+   * <p>Note: This function provides a fallback for both absent and explicit null values. In
+   * contrast, {@link ifAbsent} only triggers for missing fields.
+   *
+   * @param ifFieldName The field to check.
+   * @param elseExpression The default expression that will be evaluated and returned.
+   * @return A new {@link Expression} representing the ifNull operation.
+   */
+  @BetaApi
+  public static Expression ifNull(String ifFieldName, Expression elseExpression) {
+    return ifNull(field(ifFieldName), elseExpression);
+  }
+
+  /**
+   * Creates an expression that returns a default value if a field is null.
+   *
+   * <p>Note: This function provides a fallback for both absent and explicit null values. In
+   * contrast, {@link ifAbsent} only triggers for missing fields.
+   *
+   * @param ifFieldName The field to check.
+   * @param elseValue The default value that will be returned.
+   * @return A new {@link Expression} representing the ifNull operation.
+   */
+  @BetaApi
+  public static Expression ifNull(String ifFieldName, Object elseValue) {
+    return ifNull(field(ifFieldName), toExprOrConstant(elseValue));
+  }
+
+  /**
+   * Returns the first non-null, non-absent argument, without evaluating the rest of the arguments.
+   * When all arguments are null or absent, returns the last argument.
+   *
+   * @param expression The first expression to check for null.
+   * @param replacement The fallback expression or value if the first one is null.
+   * @param others Optional additional expressions to check if previous ones are null.
+   * @return A new {@link Expression} representing the coalesce operation.
+   */
+  @BetaApi
+  public static Expression coalesce(Expression expression, Object replacement, Object... others) {
+    ImmutableList.Builder<Expression> args = ImmutableList.builder();
+    args.add(expression);
+    args.add(toExprOrConstant(replacement));
+    for (Object other : others) {
+      args.add(toExprOrConstant(other));
+    }
+    return new FunctionExpression("coalesce", args.build());
+  }
+
+  /**
+   * Returns the first non-null, non-absent argument, without evaluating the rest of the arguments.
+   * When all arguments are null or absent, returns the last argument.
+   *
+   * @param firstFieldName The name of the first field to check for null.
+   * @param replacement The fallback expression or value if the first one is null.
+   * @param others Optional additional expressions to check if previous ones are null.
+   * @return A new {@link Expression} representing the coalesce operation.
+   */
+  @BetaApi
+  public static Expression coalesce(String firstFieldName, Object replacement, Object... others) {
+    return coalesce(field(firstFieldName), replacement, others);
+  }
+
+  /**
    * Creates an expression that joins the elements of an array into a string.
    *
    * @param arrayExpression The expression representing the array.
@@ -5261,6 +5355,33 @@ public abstract class Expression {
   }
 
   /**
+   * Creates an expression that returns a default value if this expression evaluates null.
+   *
+   * <p>Note: This function provides a fallback for both absent and explicit null values. In
+   * contrast, {@link ifAbsent} only triggers for missing fields.
+   *
+   * @param elseValue The default value that will be returned.
+   * @return A new {@link Expression} representing the ifNull operation.
+   */
+  @BetaApi
+  public Expression ifNull(Object elseValue) {
+    return Expression.ifNull(this, elseValue);
+  }
+
+  /**
+   * Returns the first non-null, non-absent argument, without evaluating the rest of the arguments.
+   * When all arguments are null or absent, returns the last argument.
+   *
+   * @param second The next expression or literal to evaluate.
+   * @param others Additional expressions or literals to evaluate.
+   * @return A new {@link Expression} representing the coalesce operation.
+   */
+  @BetaApi
+  public Expression coalesce(Object second, Object... others) {
+    return Expression.coalesce(this, second, others);
+  }
+
+  /**
    * Creates an expression that joins the elements of this array expression into a string.
    *
    * @param delimiter The delimiter to use.
@@ -7292,7 +7413,6 @@ public abstract class Expression {
    *
    * @return An {@link Expression} representing the current document.
    */
-  @BetaApi
   public static Expression currentDocument() {
     return new FunctionExpression("current_document", ImmutableList.of());
   }
@@ -7313,7 +7433,6 @@ public abstract class Expression {
    * @param name The name of the variable to retrieve.
    * @return An {@link Expression} representing the variable's value.
    */
-  @BetaApi
   public static Expression variable(String name) {
     return new Variable(name);
   }
@@ -7324,9 +7443,8 @@ public abstract class Expression {
    * @param key The key of the field to access.
    * @return An {@link Expression} representing the value of the field.
    */
-  @BetaApi
   public Expression getField(String key) {
-    return new FunctionExpression("field", ImmutableList.of(this, constant(key)));
+    return new FunctionExpression("get_field", ImmutableList.of(this, constant(key)));
   }
 
   /**
@@ -7335,9 +7453,8 @@ public abstract class Expression {
    * @param keyExpression The expression evaluating to the key to access.
    * @return A new {@link Expression} representing the field value.
    */
-  @BetaApi
   public Expression getField(Expression keyExpression) {
-    return new FunctionExpression("field", ImmutableList.of(this, keyExpression));
+    return new FunctionExpression("get_field", ImmutableList.of(this, keyExpression));
   }
 
   /**
@@ -7347,7 +7464,6 @@ public abstract class Expression {
    * @param key The key of the field to access.
    * @return An {@link Expression} representing the value of the field.
    */
-  @BetaApi
   public static Expression getField(String fieldName, String key) {
     return field(fieldName).getField(key);
   }
@@ -7359,7 +7475,6 @@ public abstract class Expression {
    * @param keyExpression The expression evaluating to the key.
    * @return A new {@link Expression} representing the value of the field.
    */
-  @BetaApi
   public static Expression getField(Expression expression, Expression keyExpression) {
     return expression.getField(keyExpression);
   }
@@ -7371,7 +7486,6 @@ public abstract class Expression {
    * @param keyExpression The expression evaluating to the key.
    * @return A new {@link Expression} representing the value of the field.
    */
-  @BetaApi
   public static Expression getField(String fieldName, Expression keyExpression) {
     return field(fieldName).getField(keyExpression);
   }
@@ -7383,9 +7497,8 @@ public abstract class Expression {
    * @param key The key of the field to access.
    * @return An {@link Expression} representing the value of the field.
    */
-  @BetaApi
   public static Expression getField(Expression expression, String key) {
-    return new FunctionExpression("field", ImmutableList.of(expression, constant(key)));
+    return new FunctionExpression("get_field", ImmutableList.of(expression, constant(key)));
   }
 
   /**
