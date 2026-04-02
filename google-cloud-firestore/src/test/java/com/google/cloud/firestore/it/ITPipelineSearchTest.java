@@ -17,9 +17,7 @@
 package com.google.cloud.firestore.it;
 
 import static com.google.cloud.firestore.it.ITQueryTest.map;
-import static com.google.cloud.firestore.pipeline.expressions.Expression.documentMatches;
-import static com.google.cloud.firestore.pipeline.expressions.Expression.field;
-import static com.google.cloud.firestore.pipeline.expressions.Expression.score;
+import static com.google.cloud.firestore.pipeline.expressions.Expression.*;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assume.assumeFalse;
 
@@ -536,7 +534,7 @@ public class ITPipelineSearchTest extends ITBaseTest {
             .collection(COLLECTION_NAME)
             .search(
                 Search.withQuery(field("location").geoDistance(queryLocation).lessThanOrEqual(5600))
-                    .withSort(field("location").geoDistance(queryLocation).ascending()));
+                    .withSort(geoDistance("location", queryLocation).ascending()));
     //                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
 
     Pipeline.Snapshot snapshot = pipeline.execute().get();

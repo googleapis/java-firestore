@@ -56,7 +56,8 @@ public final class Search extends Stage {
    * perform matching of synonyms, misspellings, lemmatization, stemming.
    */
   @BetaApi
-  public static final class QueryEnhancement {
+  @InternalApi
+  static final class QueryEnhancement {
     final String protoString;
 
     private QueryEnhancement(String protoString) {
