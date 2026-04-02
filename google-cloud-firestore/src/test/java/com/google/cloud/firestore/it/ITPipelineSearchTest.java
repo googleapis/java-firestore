@@ -19,7 +19,7 @@ package com.google.cloud.firestore.it;
 import static com.google.cloud.firestore.it.ITQueryTest.map;
 import static com.google.cloud.firestore.pipeline.expressions.Expression.*;
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.GeoPoint;
@@ -186,9 +186,10 @@ public class ITPipelineSearchTest extends ITBaseTest {
 
   @Before
   public void setupRestaurantDocs() throws Exception {
-    assumeFalse(
-        "This test suite only runs against the Enterprise edition.",
-        !getFirestoreEdition().equals(FirestoreEdition.ENTERPRISE));
+    assumeTrue(
+        "This test suite only runs against the Enterprise edition in Nightly.",
+        getFirestoreEdition().equals(FirestoreEdition.ENTERPRISE)
+            && "NIGHTLY".equalsIgnoreCase(getTargetBackend()));
 
     restaurantsCollection = firestore.collection(COLLECTION_NAME);
 
