@@ -45,14 +45,14 @@ public class PipelineProtoTest {
             .collection("foo")
             .search(
                 Search.withQuery("foo")
-                    .withLimit(1)
+//                    .withLimit(1)
                     .withRetrievalDepth(2)
-                    .withOffset(3)
-                    .withQueryEnhancement(Search.QueryEnhancement.REQUIRED)
-                    .withLanguageCode("en-US")
+//                    .withOffset(3)
+//                    .withQueryEnhancement(Search.QueryEnhancement.REQUIRED)
+//                    .withLanguageCode("en-US")
                     .withSort(field("foo").ascending())
-                    .withAddFields(constant(true).as("bar"))
-                    .withSelect(field("id")));
+                    .withAddFields(constant(true).as("bar")));
+//                    .withSelect(field("id")));
 
     com.google.firestore.v1.Pipeline protoPipeline = pipeline.toProto();
     assertThat(protoPipeline.getStagesCount()).isEqualTo(2);
@@ -73,24 +73,24 @@ public class PipelineProtoTest {
     assertThat(query.getFunctionValue().getArgs(0).getStringValue()).isEqualTo("foo");
 
     // limit
-    assertThat(optionsMap.get("limit").getIntegerValue()).isEqualTo(1L);
+//    assertThat(optionsMap.get("limit").getIntegerValue()).isEqualTo(1L);
 
     // retrieval_depth
     assertThat(optionsMap.get("retrieval_depth").getIntegerValue()).isEqualTo(2L);
 
     // offset
-    assertThat(optionsMap.get("offset").getIntegerValue()).isEqualTo(3L);
+//    assertThat(optionsMap.get("offset").getIntegerValue()).isEqualTo(3L);
 
     // query_enhancement
-    assertThat(optionsMap.get("query_enhancement").getStringValue()).isEqualTo("required");
+//    assertThat(optionsMap.get("query_enhancement").getStringValue()).isEqualTo("required");
 
     // language_code
-    assertThat(optionsMap.get("language_code").getStringValue()).isEqualTo("en-US");
+//    assertThat(optionsMap.get("language_code").getStringValue()).isEqualTo("en-US");
 
     // select
-    Value select = optionsMap.get("select");
-    assertThat(select.getMapValue().getFieldsMap().get("id").getFieldReferenceValue())
-        .isEqualTo("id");
+//    Value select = optionsMap.get("select");
+//    assertThat(select.getMapValue().getFieldsMap().get("id").getFieldReferenceValue())
+//        .isEqualTo("id");
 
     // sort
     Value sort = optionsMap.get("sort");

@@ -55,6 +55,7 @@ public final class Search extends Stage {
    * Specifies if the `matches` and `snippet` expressions will enhance the user provided query to
    * perform matching of synonyms, misspellings, lemmatization, stemming.
    */
+  @BetaApi
   public static final class QueryEnhancement {
     final String protoString;
 
@@ -118,23 +119,24 @@ public final class Search extends Stage {
     return new Search(options.with("add_fields", encodeValue(map)));
   }
 
-  /** Specify the fields to keep or add to each document. */
-  public Search withSelect(Selectable selection, Object... additionalSelections) {
-    Selectable[] allSelections = new Selectable[additionalSelections.length + 1];
-    allSelections[0] = selection;
-    for (int i = 0; i < additionalSelections.length; i++) {
-      allSelections[i + 1] = Selectable.toSelectable(additionalSelections[i]);
-    }
-    Map<String, Value> map =
-        PipelineUtils.selectablesToMap(allSelections).entrySet().stream()
-            .collect(Collectors.toMap(Map.Entry::getKey, e -> encodeValue(e.getValue())));
-    return new Search(options.with("select", encodeValue(map)));
-  }
+// TODO(search) enable with backend support
+//  /** Specify the fields to keep or add to each document. */
+//  public Search withSelect(Selectable selection, Object... additionalSelections) {
+//    Selectable[] allSelections = new Selectable[additionalSelections.length + 1];
+//    allSelections[0] = selection;
+//    for (int i = 0; i < additionalSelections.length; i++) {
+//      allSelections[i + 1] = Selectable.toSelectable(additionalSelections[i]);
+//    }
+//    Map<String, Value> map =
+//        PipelineUtils.selectablesToMap(allSelections).entrySet().stream()
+//            .collect(Collectors.toMap(Map.Entry::getKey, e -> encodeValue(e.getValue())));
+//    return new Search(options.with("select", encodeValue(map)));
+//  }
 
-  /** Specify the fields to keep or add to each document. */
-  public Search withSelect(String fieldName, Object... additionalSelections) {
-    return withSelect(field(fieldName), additionalSelections);
-  }
+//  /** Specify the fields to keep or add to each document. */
+//  public Search withSelect(String fieldName, Object... additionalSelections) {
+//    return withSelect(field(fieldName), additionalSelections);
+//  }
 
   /** Specify how the returned documents are sorted. One or more ordering are required. */
   public Search withSort(Ordering order, Ordering... additionalOrderings) {
@@ -145,10 +147,11 @@ public final class Search extends Stage {
         options.with("sort", Lists.transform(Arrays.asList(allOrderings), Ordering::toProto)));
   }
 
-  /** Specify the maximum number of documents to return from the Search stage. */
-  public Search withLimit(long limit) {
-    return new Search(options.with("limit", encodeValue(limit)));
-  }
+// TODO(search) enable with backend support
+//  /** Specify the maximum number of documents to return from the Search stage. */
+//  public Search withLimit(long limit) {
+//    return new Search(options.with("limit", encodeValue(limit)));
+//  }
 
   /**
    * Specify the maximum number of documents to retrieve. Documents will be retrieved in the
@@ -158,23 +161,26 @@ public final class Search extends Stage {
     return new Search(options.with("retrieval_depth", encodeValue(retrievalDepth)));
   }
 
-  /** Specify the number of documents to skip. */
-  public Search withOffset(long offset) {
-    return new Search(options.with("offset", encodeValue(offset)));
-  }
+  // TODO(search) enable with backend support
+//  /** Specify the number of documents to skip. */
+//  public Search withOffset(long offset) {
+//    return new Search(options.with("offset", encodeValue(offset)));
+//  }
 
-  /** Specify the BCP-47 language code of text in the search query, such as, “en-US” or “sr-Latn” */
-  public Search withLanguageCode(String value) {
-    return new Search(options.with("language_code", encodeValue(value)));
-  }
+//  TODO(search) enable with backend support
+//  /** Specify the BCP-47 language code of text in the search query, such as, “en-US” or “sr-Latn” */
+//  public Search withLanguageCode(String value) {
+//    return new Search(options.with("language_code", encodeValue(value)));
+//  }
 
-  /**
-   * Specify the query expansion behavior used by full-text search expressions in this search stage.
-   * Default: {@code .PREFERRED}
-   */
-  public Search withQueryEnhancement(QueryEnhancement queryEnhancement) {
-    return new Search(options.with("query_enhancement", queryEnhancement.toProto()));
-  }
+  // TODO(search) enable with backend support
+//  /**
+//   * Specify the query expansion behavior used by full-text search expressions in this search stage.
+//   * Default: {@code .PREFERRED}
+//   */
+//  public Search withQueryEnhancement(QueryEnhancement queryEnhancement) {
+//    return new Search(options.with("query_enhancement", queryEnhancement.toProto()));
+//  }
 
   @Override
   Iterable<Value> toStageArgs() {

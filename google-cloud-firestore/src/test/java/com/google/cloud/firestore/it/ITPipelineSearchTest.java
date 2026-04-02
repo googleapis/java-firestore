@@ -35,6 +35,7 @@ import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.PipelineResult;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.pipeline.stages.Search;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +43,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,578 +52,635 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ITPipelineSearchTest extends ITBaseTest {
 
-  private CollectionReference restaurantsCollection;
+  private final String COLLECTION_NAME = "TextSearchIntegrationTests";
 
-  private static final Map<String, Map<String, Object>> restaurantDocs = new HashMap<>();
+    private CollectionReference restaurantsCollection;
 
-  static {
-    restaurantDocs.put(
-        "sunnySideUp",
-        map(
-            "name",
-            "The Sunny Side Up",
-            "description",
-            "A cozy neighborhood diner serving classic breakfast favorites all day long, from"
-                + " fluffy pancakes to savory omelets.",
-            "location",
-            new GeoPoint(39.7541, -105.0002),
-            "menu",
-            "<h3>Breakfast Classics</h3><ul><li>Denver Omelet - $12</li><li>Buttermilk Pancakes"
-                + " - $10</li><li>Steak and Eggs - $16</li></ul><h3>Sides</h3><ul><li>Hash"
-                + " Browns - $4</li><li>Thick-cut Bacon - $5</li><li>Drip Coffee -"
-                + " $2</li></ul>",
-            "average_price_per_person",
-            15));
-    restaurantDocs.put(
-        "goldenWaffle",
-        map(
-            "name",
-            "The Golden Waffle",
-            "description",
-            "Specializing exclusively in Belgian-style waffles. Open daily from 6:00 AM to"
-                + " 11:00 AM.",
-            "location",
-            new GeoPoint(39.7183, -104.9621),
-            "menu",
-            "<h3>Signature Waffles</h3><ul><li>Strawberry Delight - $11</li><li>Chicken and"
-                + " Waffles - $14</li><li>Chocolate Chip Crunch -"
-                + " $10</li></ul><h3>Drinks</h3><ul><li>Fresh OJ - $4</li><li>Artisan Coffee -"
-                + " $3</li></ul>",
-            "average_price_per_person",
-            13));
-    restaurantDocs.put(
-        "lotusBlossomThai",
-        map(
-            "name",
-            "Lotus Blossom Thai",
-            "description",
-            "Authentic Thai cuisine featuring hand-crushed spices and traditional family"
-                + " recipes from the Chiang Mai region.",
-            "location",
-            new GeoPoint(39.7315, -104.9847),
-            "menu",
-            "<h3>Appetizers</h3><ul><li>Spring Rolls - $7</li><li>Chicken Satay -"
-                + " $9</li></ul><h3>Main Course</h3><ul><li>Pad Thai - $15</li><li>Green Curry"
-                + " - $16</li><li>Drunken Noodles - $15</li></ul>",
-            "average_price_per_person",
-            22));
-    restaurantDocs.put(
-        "mileHighCatch",
-        map(
-            "name",
-            "Mile High Catch",
-            "description",
-            "Freshly sourced seafood offering a wide variety of Pacific fish and Atlantic"
-                + " shellfish in an upscale atmosphere.",
-            "location",
-            new GeoPoint(39.7401, -104.9903),
-            "menu",
-            "<h3>From the Raw Bar</h3><ul><li>Oysters (Half Dozen) - $18</li><li>Lobster"
-                + " Cocktail - $22</li></ul><h3>Entrees</h3><ul><li>Pan-Seared Salmon -"
-                + " $28</li><li>King Crab Legs - $45</li><li>Fish and Chips - $19</li></ul>",
-            "average_price_per_person",
-            45));
-    restaurantDocs.put(
-        "peakBurgers",
-        map(
-            "name",
-            "Peak Burgers",
-            "description",
-            "Casual burger joint focused on locally sourced Colorado beef and hand-cut fries.",
-            "location",
-            new GeoPoint(39.7622, -105.0125),
-            "menu",
-            "<h3>Burgers</h3><ul><li>The Peak Double - $12</li><li>Bison Burger -"
-                + " $15</li><li>Veggie Stack - $11</li></ul><h3>Sides</h3><ul><li>Truffle Fries"
-                + " - $6</li><li>Onion Rings - $5</li></ul>",
-            "average_price_per_person",
-            18));
-    restaurantDocs.put(
-        "solTacos",
-        map(
-            "name",
-            "El Sol Tacos",
-            "description",
-            "A vibrant street-side taco stand serving up quick, delicious, and traditional"
-                + " Mexican street food.",
-            "location",
-            new GeoPoint(39.6952, -105.0274),
-            "menu",
-            "<h3>Tacos ($3.50 each)</h3><ul><li>Al Pastor</li><li>Carne Asada</li><li>Pollo"
-                + " Asado</li><li>Nopales (Cactus)</li></ul><h3>Beverages</h3><ul><li>Horchata"
-                + " - $4</li><li>Mexican Coke - $3</li></ul>",
-            "average_price_per_person",
-            12));
-    restaurantDocs.put(
-        "eastsideTacos",
-        map(
-            "name",
-            "Eastside Cantina",
-            "description",
-            "Authentic street tacos and hand-shaken margaritas on the vibrant east side of the"
-                + " city.",
-            "location",
-            new GeoPoint(39.735, -104.885),
-            "menu",
-            "<h3>Tacos</h3><ul><li>Carnitas Tacos - $4</li><li>Barbacoa Tacos -"
-                + " $4.50</li><li>Shrimp Tacos - $5</li></ul><h3>Drinks</h3><ul><li>House"
-                + " Margarita - $9</li><li>Jarritos - $3</li></ul>",
-            "average_price_per_person",
-            18));
-    restaurantDocs.put(
-        "eastsideChicken",
-        map(
-            "name",
-            "Eastside Chicken",
-            "description",
-            "Fried chicken to go - next to Eastside Cantina.",
-            "location",
-            new GeoPoint(39.735, -104.885),
-            "menu",
-            "<h3>Fried Chicken</h3><ul><li>Drumstick - $4</li><li>Wings - $1</li><li>Sandwich -"
-                + " $9</li></ul><h3>Drinks</h3><ul><li>House Margarita - $9</li><li>Jarritos -"
-                + " $3</li></ul>",
-            "average_price_per_person",
-            12));
-  }
+    private static final Map<String, Map<String, Object>> restaurantDocs = new HashMap<>();
 
-  @Override
-  public void primeBackend() throws Exception {
-    // Disable priming as it uses Watch/Listen
-  }
-
-  @Before
-  public void setupRestaurantDocs() throws Exception {
-    assumeFalse(
-        "This test suite only runs against the Enterprise edition.",
-        !getFirestoreEdition().equals(FirestoreEdition.ENTERPRISE));
-
-    restaurantsCollection = firestore.collection("SearchIntegrationTests");
-
-    WriteBatch batch = firestore.batch();
-    for (Map.Entry<String, Map<String, Object>> entry : restaurantDocs.entrySet()) {
-      batch.set(restaurantsCollection.document(entry.getKey()), entry.getValue());
+    static {
+        restaurantDocs.put(
+                "sunnySideUp",
+                map(
+                        "name",
+                        "The Sunny Side Up",
+                        "description",
+                        "A cozy neighborhood diner serving classic breakfast favorites all day long, from"
+                                + " fluffy pancakes to savory omelets.",
+                        "location",
+                        new GeoPoint(39.7541, -105.0002),
+                        "menu",
+                        "<h3>Breakfast Classics</h3><ul><li>Denver Omelet - $12</li><li>Buttermilk Pancakes"
+                                + " - $10</li><li>Steak and Eggs - $16</li></ul><h3>Sides</h3><ul><li>Hash"
+                                + " Browns - $4</li><li>Thick-cut Bacon - $5</li><li>Drip Coffee -"
+                                + " $2</li></ul>",
+                        "average_price_per_person",
+                        15));
+        restaurantDocs.put(
+                "goldenWaffle",
+                map(
+                        "name",
+                        "The Golden Waffle",
+                        "description",
+                        "Specializing exclusively in Belgian-style waffles. Open daily from 6:00 AM to"
+                                + " 11:00 AM.",
+                        "location",
+                        new GeoPoint(39.7183, -104.9621),
+                        "menu",
+                        "<h3>Signature Waffles</h3><ul><li>Strawberry Delight - $11</li><li>Chicken and"
+                                + " Waffles - $14</li><li>Chocolate Chip Crunch -"
+                                + " $10</li></ul><h3>Drinks</h3><ul><li>Fresh OJ - $4</li><li>Artisan Coffee -"
+                                + " $3</li></ul>",
+                        "average_price_per_person",
+                        13));
+        restaurantDocs.put(
+                "lotusBlossomThai",
+                map(
+                        "name",
+                        "Lotus Blossom Thai",
+                        "description",
+                        "Authentic Thai cuisine featuring hand-crushed spices and traditional family"
+                                + " recipes from the Chiang Mai region.",
+                        "location",
+                        new GeoPoint(39.7315, -104.9847),
+                        "menu",
+                        "<h3>Appetizers</h3><ul><li>Spring Rolls - $7</li><li>Chicken Satay -"
+                                + " $9</li></ul><h3>Main Course</h3><ul><li>Pad Thai - $15</li><li>Green Curry"
+                                + " - $16</li><li>Drunken Noodles - $15</li></ul>",
+                        "average_price_per_person",
+                        22));
+        restaurantDocs.put(
+                "mileHighCatch",
+                map(
+                        "name",
+                        "Mile High Catch",
+                        "description",
+                        "Freshly sourced seafood offering a wide variety of Pacific fish and Atlantic"
+                                + " shellfish in an upscale atmosphere.",
+                        "location",
+                        new GeoPoint(39.7401, -104.9903),
+                        "menu",
+                        "<h3>From the Raw Bar</h3><ul><li>Oysters (Half Dozen) - $18</li><li>Lobster"
+                                + " Cocktail - $22</li></ul><h3>Entrees</h3><ul><li>Pan-Seared Salmon -"
+                                + " $28</li><li>King Crab Legs - $45</li><li>Fish and Chips - $19</li></ul>",
+                        "average_price_per_person",
+                        45));
+        restaurantDocs.put(
+                "peakBurgers",
+                map(
+                        "name",
+                        "Peak Burgers",
+                        "description",
+                        "Casual burger joint focused on locally sourced Colorado beef and hand-cut fries.",
+                        "location",
+                        new GeoPoint(39.7622, -105.0125),
+                        "menu",
+                        "<h3>Burgers</h3><ul><li>The Peak Double - $12</li><li>Bison Burger -"
+                                + " $15</li><li>Veggie Stack - $11</li></ul><h3>Sides</h3><ul><li>Truffle Fries"
+                                + " - $6</li><li>Onion Rings - $5</li></ul>",
+                        "average_price_per_person",
+                        18));
+        restaurantDocs.put(
+                "solTacos",
+                map(
+                        "name",
+                        "El Sol Tacos",
+                        "description",
+                        "A vibrant street-side taco stand serving up quick, delicious, and traditional"
+                                + " Mexican street food.",
+                        "location",
+                        new GeoPoint(39.6952, -105.0274),
+                        "menu",
+                        "<h3>Tacos ($3.50 each)</h3><ul><li>Al Pastor</li><li>Carne Asada</li><li>Pollo"
+                                + " Asado</li><li>Nopales (Cactus)</li></ul><h3>Beverages</h3><ul><li>Horchata"
+                                + " - $4</li><li>Mexican Coke - $3</li></ul>",
+                        "average_price_per_person",
+                        12));
+        restaurantDocs.put(
+                "eastsideTacos",
+                map(
+                        "name",
+                        "Eastside Cantina",
+                        "description",
+                        "Authentic street tacos and hand-shaken margaritas on the vibrant east side of the"
+                                + " city.",
+                        "location",
+                        new GeoPoint(39.735, -104.885),
+                        "menu",
+                        "<h3>Tacos</h3><ul><li>Carnitas Tacos - $4</li><li>Barbacoa Tacos -"
+                                + " $4.50</li><li>Shrimp Tacos - $5</li></ul><h3>Drinks</h3><ul><li>House"
+                                + " Margarita - $9</li><li>Jarritos - $3</li></ul>",
+                        "average_price_per_person",
+                        18));
+        restaurantDocs.put(
+                "eastsideChicken",
+                map(
+                        "name",
+                        "Eastside Chicken",
+                        "description",
+                        "Fried chicken to go - next to Eastside Cantina.",
+                        "location",
+                        new GeoPoint(39.735, -104.885),
+                        "menu",
+                        "<h3>Fried Chicken</h3><ul><li>Drumstick - $4</li><li>Wings - $1</li><li>Sandwich -"
+                                + " $9</li></ul><h3>Drinks</h3><ul><li>House Margarita - $9</li><li>Jarritos -"
+                                + " $3</li></ul>",
+                        "average_price_per_person",
+                        12));
     }
-    batch.commit().get(10, TimeUnit.SECONDS);
-  }
 
-  private void assertResultIds(Pipeline.Snapshot snapshot, String... ids) {
-    List<String> resultIds =
-        snapshot.getResults().stream()
-            .map(PipelineResult::getId)
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
-    assertThat(resultIds).containsExactlyElementsIn(Arrays.asList(ids)).inOrder();
-  }
+    @Override
+    public void primeBackend() throws Exception {
+        // Disable priming as it uses Watch/Listen
+    }
 
-  // =========================================================================
-  // Search stage
-  // =========================================================================
+    @Before
+    public void setupRestaurantDocs() throws Exception {
+        assumeFalse(
+                "This test suite only runs against the Enterprise edition.",
+                !getFirestoreEdition().equals(FirestoreEdition.ENTERPRISE));
 
-  // --- DISABLE query expansion ---
+        restaurantsCollection = firestore.collection(COLLECTION_NAME);
 
-  // query
-  @Test
-  public void searchWithLanguageCode() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery("waffles")
-                    .withLanguageCode("en")
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+        WriteBatch batch = firestore.batch();
+        for (Map.Entry<String, Map<String, Object>> entry : restaurantDocs.entrySet()) {
+            batch.set(restaurantsCollection.document(entry.getKey()), entry.getValue());
+        }
+        batch.commit().get(10, TimeUnit.SECONDS);
+    }
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "goldenWaffle");
-  }
+    private void assertResultIds(Pipeline.Snapshot snapshot, String... ids) {
+        List<String> resultIds =
+                snapshot.getResults().stream()
+                        .map(PipelineResult::getId)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
+        assertThat(resultIds).containsExactlyElementsIn(Arrays.asList(ids)).inOrder();
+    }
 
-  @Test
-  public void searchFullDocument() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery("waffles").withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+    // =========================================================================
+    // Search stage
+    // =========================================================================
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "goldenWaffle");
-  }
+    // --- DISABLE query expansion ---
 
-  // @Test
-  // public void searchSpecificField() throws Exception {
-  //   Pipeline pipeline =
-  //       firestore
-  //           .pipeline()
-  //           .collection(restaurantsCollection.getId())
-  //           .search(
-  //               Search.withQuery(field("menu").matches("waffles"))
-  //                   .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
-  //
-  //   Pipeline.Snapshot snapshot = pipeline.execute().get();
-  //   assertResultIds(snapshot, "goldenWaffle");
-  // }
+    // query
+//  TODO(search) enable with backend support
+//  @Test
+//  public void searchWithLanguageCode() throws Exception {
+//    Pipeline pipeline =
+//        firestore
+//            .pipeline()
+//            .collection(COLLECTION_NAME)
+//            .search(
+//                Search.withQuery("waffles")
+//                    .withLanguageCode("en")
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//
+//    Pipeline.Snapshot snapshot = pipeline.execute().get();
+//    assertResultIds(snapshot, "goldenWaffle");
+//  }
 
-  @Test
-  public void geoNearQuery() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(
-                        field("location")
-                            .geoDistance(new GeoPoint(39.6985, -105.024))
-                            .lessThan(1000))
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+    @Test
+    public void searchFullDocument() throws Exception {
+        Pipeline pipeline =
+                firestore
+                        .pipeline()
+                        .collection(COLLECTION_NAME)
+                        .search(
+                                Search.withQuery("waffles"));
+//                Search.withQuery("waffles").withQueryEnhancement(Search.QueryEnhancement.DISABLED));
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "solTacos");
-  }
+        Pipeline.Snapshot snapshot = pipeline.execute().get();
+        assertResultIds(snapshot, "goldenWaffle");
+    }
 
-  @Test
-  public void conjunctionOfTextSearchPredicates() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(and(documentMatches("waffles"), documentMatches("diner")))
-                    // TODO(search) switch back to field matches when supported by the backend
-                    //                      and(field("menu").matches("waffles"),
-                    // field("description").matches("diner")))
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+    // @Test
+    // public void searchSpecificField() throws Exception {
+    //   Pipeline pipeline =
+    //       firestore
+    //           .pipeline()
+    //           .collection(COLLECTION_NAME)
+    //           .search(
+    //               Search.withQuery(field("menu").matches("waffles"))
+    //                   .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+    //
+    //   Pipeline.Snapshot snapshot = pipeline.execute().get();
+    //   assertResultIds(snapshot, "goldenWaffle");
+    // }
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "goldenWaffle", "sunnySideUp");
-  }
+    @Test
+    public void geoNearQuery() throws Exception {
+        Pipeline pipeline =
+                firestore
+                        .pipeline()
+                        .collection(COLLECTION_NAME)
+                        .search(
+                                Search.withQuery(
+                                        field("location")
+                                                .geoDistance(new GeoPoint(39.6985, -105.024))
+                                                .lessThanOrEqual(1000)));
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
 
-  // TODO(search) enable test when geo+text search indexes are supported
-  // @Test
-  // public void conjunctionOfTextSearchAndGeoNear() throws Exception {
-  //   Pipeline pipeline =
-  //       firestore
-  //           .pipeline()
-  //           .collection(restaurantsCollection.getId())
-  //           .search(
-  //               Search.withQuery(
-  //                       and(
-  //                           field("menu").matches("tacos"),
-  //                           field("location")
-  //                               .geoDistance(new GeoPoint(39.6985, -105.024))
-  //                               .lessThan(10000)))
-  //                   .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
-  //
-  //   Pipeline.Snapshot snapshot = pipeline.execute().get();
-  //   assertResultIds(snapshot, "solTacos");
-  // }
+        Pipeline.Snapshot snapshot = pipeline.execute().get();
+        assertResultIds(snapshot, "solTacos");
+    }
 
-  @Test
-  public void negateMatch() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(documentMatches("-waffles"))
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//  TODO(search) enable with backend support
+//  @Test
+//  public void conjunctionOfTextSearchPredicates() throws Exception {
+//    Pipeline pipeline =
+//        firestore
+//            .pipeline()
+//            .collection(COLLECTION_NAME)
+//            .search(
+//                Search.withQuery(
+//                        and(field("menu").matches("waffles"),
+//                            field("description").matches("diner")))
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//
+//    Pipeline.Snapshot snapshot = pipeline.execute().get();
+//    assertResultIds(snapshot, "goldenWaffle", "sunnySideUp");
+//  }
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(
-        snapshot,
-        "eastsideTacos",
-        "solTacos",
-        "peakBurgers",
-        "mileHighCatch",
-        "lotusBlossomThai",
-        "sunnySideUp");
-  }
+    // TODO(search) enable test when geo+text search indexes are supported
+    // @Test
+    // public void conjunctionOfTextSearchAndGeoNear() throws Exception {
+    //   Pipeline pipeline =
+    //       firestore
+    //           .pipeline()
+    //           .collection(COLLECTION_NAME)
+    //           .search(
+    //               Search.withQuery(
+    //                       and(
+    //                           field("menu").matches("tacos"),
+    //                           field("location")
+    //                               .geoDistance(new GeoPoint(39.6985, -105.024))
+    //                               .lessThan(10000)))
+    //                   .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+    //
+    //   Pipeline.Snapshot snapshot = pipeline.execute().get();
+    //   assertResultIds(snapshot, "solTacos");
+    // }
 
-  @Test
-  public void rquerySearchTheDocumentWithConjunctionAndDisjunction() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(documentMatches("(waffles OR pancakes) AND coffee"))
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+    @Test
+    public void negateMatch() throws Exception {
+        Pipeline pipeline =
+                firestore
+                        .pipeline()
+                        .collection(COLLECTION_NAME)
+                        .search(
+                                Search.withQuery(documentMatches("coffee -waffles")));
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "goldenWaffle", "sunnySideUp");
-  }
+        Pipeline.Snapshot snapshot = pipeline.execute().get();
+        assertResultIds(
+                snapshot,
+                "sunnySideUp");
+    }
 
-  @Test
-  public void rqueryAsQueryParam() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery("(waffles OR pancakes) AND coffee")
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//  TODO(search) enable with backend support
+//  @Test
+//  public void rquerySearchTheDocumentWithConjunctionAndDisjunction() throws Exception {
+//    Pipeline pipeline =
+//        firestore
+//            .pipeline()
+//            .collection(COLLECTION_NAME)
+//            .search(
+//                Search.withQuery(documentMatches("(waffles OR pancakes) AND coffee"))
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//
+//    Pipeline.Snapshot snapshot = pipeline.execute().get();
+//    assertResultIds(snapshot, "goldenWaffle", "sunnySideUp");
+//  }
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "goldenWaffle", "sunnySideUp");
-  }
+    @Test
+    public void rqueryAsQueryParam() throws Exception {
+        Pipeline pipeline =
+                firestore
+                        .pipeline()
+                        .collection(COLLECTION_NAME)
+                        .search(
+                                Search.withQuery("chicken wings"));
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
 
-  // TODO(search) enable when rquery supports field paths
-  // @Test
-  // public void rquerySupportsFieldPaths() throws Exception {
-  //  Pipeline pipeline =
-  //      firestore
-  //          .pipeline()
-  //          .collection(restaurantsCollection.getId())
-  //          .search(
-  //              Search.withQuery("menu:(waffles OR pancakes) AND description:\"breakfast all
-  // day\"")
-  //                  .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
-  //
-  //  Pipeline.Snapshot snapshot = pipeline.execute().get();
-  //  assertResultIds(snapshot, "sunnySideUp");
-  // }
+        Pipeline.Snapshot snapshot = pipeline.execute().get();
+        assertResultIds(snapshot, "eastsideChicken");
+    }
 
-  @Test
-  public void conjunctionOfRqueryAndExpression() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(
-                        and(
-                            documentMatches("tacos"),
-                            greaterThanOrEqual("average_price_per_person", 8),
-                            lessThanOrEqual("average_price_per_person", 15)))
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+    // TODO(search) enable when rquery supports field paths
+    // @Test
+    // public void rquerySupportsFieldPaths() throws Exception {
+    //  Pipeline pipeline =
+    //      firestore
+    //          .pipeline()
+    //          .collection(COLLECTION_NAME)
+    //          .search(
+    //              Search.withQuery("menu:(waffles OR pancakes) AND description:\"breakfast all
+    // day\"")
+    //                  .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+    //
+    //  Pipeline.Snapshot snapshot = pipeline.execute().get();
+    //  assertResultIds(snapshot, "sunnySideUp");
+    // }
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "solTacos");
-  }
+//  TODO(search) enable with backend support
+//  @Test
+//  public void conjunctionOfRqueryAndExpression() throws Exception {
+//    Pipeline pipeline =
+//        firestore
+//            .pipeline()
+//            .collection(COLLECTION_NAME)
+//            .search(
+//                Search.withQuery(
+//                        and(
+//                            documentMatches("tacos"),
+//                            greaterThanOrEqual("average_price_per_person", 8),
+//                            lessThanOrEqual("average_price_per_person", 15)))
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//
+//    Pipeline.Snapshot snapshot = pipeline.execute().get();
+//    assertResultIds(snapshot, "solTacos");
+//  }
 
-  // --- REQUIRE query expansion ---
+    // --- REQUIRE query expansion ---
 
-  @Test
-  public void requireQueryExpansion_searchFullDocument() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(documentMatches("waffles"))
-                    .withQueryEnhancement(Search.QueryEnhancement.REQUIRED));
+//  TODO(search) enable with backend support
+//  @Test
+//  public void requireQueryExpansion_searchFullDocument() throws Exception {
+//    Pipeline pipeline =
+//        firestore
+//            .pipeline()
+//            .collection(COLLECTION_NAME)
+//            .search(
+//                Search.withQuery(documentMatches("waffles"))
+//                    .withQueryEnhancement(Search.QueryEnhancement.REQUIRED));
+//
+//    Pipeline.Snapshot snapshot = pipeline.execute().get();
+//    assertResultIds(snapshot, "goldenWaffle", "sunnySideUp");
+//  }
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "goldenWaffle", "sunnySideUp");
-  }
+    // TODO(search) re-enable when backend supports field matches and QueryEnhancement
+    // @Test
+    // public void requireQueryExpansion_searchSpecificField() throws Exception {
+    //   Pipeline pipeline =
+    //       firestore
+    //           .pipeline()
+    //           .collection(COLLECTION_NAME)
+    //           .search(
+    //               Search.withQuery(field("menu").matches("waffles"))
+    //                   .withQueryEnhancement(Search.QueryEnhancement.REQUIRED));
+    //
+    //   Pipeline.Snapshot snapshot = pipeline.execute().get();
+    //   assertResultIds(snapshot, "goldenWaffle", "sunnySideUp");
+    // }
 
-  // TODO(search) re-enable when backend supports field matches
-  // @Test
-  // public void requireQueryExpansion_searchSpecificField() throws Exception {
-  //   Pipeline pipeline =
-  //       firestore
-  //           .pipeline()
-  //           .collection(restaurantsCollection.getId())
-  //           .search(
-  //               Search.withQuery(field("menu").matches("waffles"))
-  //                   .withQueryEnhancement(Search.QueryEnhancement.REQUIRED));
-  //
-  //   Pipeline.Snapshot snapshot = pipeline.execute().get();
-  //   assertResultIds(snapshot, "goldenWaffle", "sunnySideUp");
-  // }
+    // add fields
+    @Test
+    public void addFields_score() throws Exception {
+        Pipeline pipeline =
+                firestore
+                        .pipeline()
+                        .collection(COLLECTION_NAME)
+                        .search(
+                                Search.withQuery(documentMatches("waffles"))
+                                        .withAddFields(score().as("searchScore")))
+//                                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED))
+                        .select("name", "searchScore");
 
-  // add fields
-  @Test
-  public void addFields_topicalityScoreAndSnippet() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(documentMatches("waffles"))
-                    .withAddFields(
-                        score().as("searchScore"), snippet("menu", "waffles").as("snippet"))
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED))
-            .select("name", "searchScore", "snippet");
+        Pipeline.Snapshot snapshot = pipeline.execute().get();
+        assertThat(snapshot.getResults()).hasSize(1);
+        PipelineResult result = snapshot.getResults().get(0);
+        assertThat(result.getData().get("name")).isEqualTo("The Golden Waffle");
+        assertThat((Double) result.getData().get("searchScore")).isGreaterThan(0.0);
+    }
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertThat(snapshot.getResults()).hasSize(1);
-    PipelineResult result = snapshot.getResults().get(0);
-    assertThat(result.getData().get("name")).isEqualTo("The Golden Waffle");
-    assertThat((Double) result.getData().get("searchScore")).isGreaterThan(0.0);
-    assertThat(((String) result.getData().get("snippet")).length()).isGreaterThan(0);
-  }
+//    @Test
+//    public void addFields_geoDistance() throws Exception {
+//        Pipeline pipeline =
+//                firestore
+//                        .pipeline()
+//                        .collection(COLLECTION_NAME)
+//                        .search(
+//                                Search.withQuery(documentMatches("waffles"))
+//                                        .withAddFields(
+//                                                field("location").geoDistance(new GeoPoint(39.6985, -105.024)).as("geoDistance")))
+////                                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED))
+//                        .select("name", "geoDistance");
+//
+//        Pipeline.Snapshot snapshot = pipeline.execute().get();
+//        assertThat(snapshot.getResults()).hasSize(1);
+//        PipelineResult result = snapshot.getResults().get(0);
+//        assertThat(result.getData().get("name")).isEqualTo("The Golden Waffle");
+//        assertThat((Double) result.getData().get("geoDistance")).isGreaterThan(0.0);
+//    }
 
-  // select
-  @Test
-  public void select_topicalityScoreAndSnippet() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(documentMatches("waffles"))
-                    .withSelect(
-                        field("name"),
-                        field("location"),
-                        score().as("searchScore"),
-                        snippet("menu", "waffles").as("snippet"))
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+    // TODO(search) enable with backend support
+//  @Test
+//  public void addFields_multipleFields() throws Exception {
+//    Pipeline pipeline =
+//            firestore
+//                    .pipeline()
+//                    .collection(COLLECTION_NAME)
+//                    .search(
+//                            Search.withQuery(documentMatches("waffles"))
+//                                    .withAddFields(
+//                                            score().as("searchScore"), snippet("menu", "waffles").as("snippet"))
+//                                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED))
+//                    .select("name", "searchScore", "snippet");
+//
+//    Pipeline.Snapshot snapshot = pipeline.execute().get();
+//    assertThat(snapshot.getResults()).hasSize(1);
+//    PipelineResult result = snapshot.getResults().get(0);
+//    assertThat(result.getData().get("name")).isEqualTo("The Golden Waffle");
+//    assertThat((Double) result.getData().get("searchScore")).isGreaterThan(0.0);
+//    assertThat(((String) result.getData().get("snippet")).length()).isGreaterThan(0);
+//  }
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertThat(snapshot.getResults()).hasSize(1);
-    PipelineResult result = snapshot.getResults().get(0);
-    assertThat(result.getData().get("name")).isEqualTo("The Golden Waffle");
-    assertThat(result.getData().get("location")).isEqualTo(new GeoPoint(39.7183, -104.9621));
-    assertThat((Double) result.getData().get("searchScore")).isGreaterThan(0.0);
-    assertThat(((String) result.getData().get("snippet")).length()).isGreaterThan(0);
+    // select
+    // TODO(search) enable with backend support
+//  @Test
+//  public void select_topicalityScoreAndSnippet() throws Exception {
+//    Pipeline pipeline =
+//        firestore
+//            .pipeline()
+//            .collection(COLLECTION_NAME)
+//            .search(
+//                Search.withQuery(documentMatches("waffles"))
+//                    .withSelect(
+//                        field("name"),
+//                        field("location"),
+//                        score().as("searchScore"),
+//                        snippet("menu", "waffles").as("snippet"))
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//
+//    Pipeline.Snapshot snapshot = pipeline.execute().get();
+//    assertThat(snapshot.getResults()).hasSize(1);
+//    PipelineResult result = snapshot.getResults().get(0);
+//    assertThat(result.getData().get("name")).isEqualTo("The Golden Waffle");
+//    assertThat(result.getData().get("location")).isEqualTo(new GeoPoint(39.7183, -104.9621));
+//    assertThat((Double) result.getData().get("searchScore")).isGreaterThan(0.0);
+//    assertThat(((String) result.getData().get("snippet")).length()).isGreaterThan(0);
+//
+//    List<String> sortedKeys =
+//        result.getData().keySet().stream().sorted().collect(Collectors.toList());
+//    assertThat(sortedKeys).containsExactly("location", "name", "searchScore", "snippet").inOrder();
+//  }
 
-    List<String> sortedKeys =
-        result.getData().keySet().stream().sorted().collect(Collectors.toList());
-    assertThat(sortedKeys).containsExactly("location", "name", "searchScore", "snippet").inOrder();
-  }
+    // sort
+    @Test
+    public void sort_byScore() throws Exception {
+        Pipeline pipeline =
+                firestore
+                        .pipeline()
+                        .collection(COLLECTION_NAME)
+                        .search(
+                                Search.withQuery(documentMatches("tacos"))
+                                        .withSort(score().descending()));
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
 
-  // sort
-  @Test
-  public void sort_byTopicality() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(documentMatches("tacos"))
-                    .withSort(score().descending())
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+        Pipeline.Snapshot snapshot = pipeline.execute().get();
+        assertResultIds(snapshot, "eastsideTacos", "solTacos");
+    }
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "eastsideTacos", "solTacos");
-  }
+    @Test
+    public void sort_byDistance() throws Exception {
+        GeoPoint queryLocation = new GeoPoint(39.6985, -105.024);
+        Pipeline pipeline =
+                firestore
+                        .pipeline()
+                        .collection(COLLECTION_NAME)
+                        .search(
+                                Search.withQuery(field("location").geoDistance(queryLocation).lessThanOrEqual(5600))
+                                        .withSort(field("location").geoDistance(queryLocation).ascending()));
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
 
-  @Test
-  public void sort_byDistance() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(constant(true))
-                    .withSort(
-                        field("location").geoDistance(new GeoPoint(39.6985, -105.024)).ascending())
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+        Pipeline.Snapshot snapshot = pipeline.execute().get();
+        assertResultIds(snapshot, "solTacos", "lotusBlossomThai", "mileHighCatch");
+    }
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "solTacos", "eastsideTacos");
-  }
+    // TODO(search) re-enable when geo+text search indexes are supported
+    // @Test
+    // public void sort_byMultipleOrderings() throws Exception {
+    //   Pipeline pipeline =
+    //       firestore
+    //           .pipeline()
+    //           .collection(COLLECTION_NAME)
+    //           .search(
+    //               Search.withQuery(field("menu").matches("tacos OR chicken"))
+    //                   .withSort(
+    //                       field("location").geoDistance(new GeoPoint(39.6985,
+    // -105.024)).ascending(),
+    //                       score().descending())
+    //                   .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+    //
+    //   Pipeline.Snapshot snapshot = pipeline.execute().get();
+    //   assertResultIds(snapshot, "solTacos", "eastsideTacos", "eastsideChicken");
+    // }
 
-  // TODO(search) re-enable when geo+text search indexes are supported
-  // @Test
-  // public void sort_byMultipleOrderings() throws Exception {
-  //   Pipeline pipeline =
-  //       firestore
-  //           .pipeline()
-  //           .collection(restaurantsCollection.getId())
-  //           .search(
-  //               Search.withQuery(field("menu").matches("tacos OR chicken"))
-  //                   .withSort(
-  //                       field("location").geoDistance(new GeoPoint(39.6985,
-  // -105.024)).ascending(),
-  //                       score().descending())
-  //                   .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
-  //
-  //   Pipeline.Snapshot snapshot = pipeline.execute().get();
-  //   assertResultIds(snapshot, "solTacos", "eastsideTacos", "eastsideChicken");
-  // }
+    // limit
+    // TODO(search) enable with backend support
+//  @Test
+//  public void limit_limitsTheNumberOfDocumentsReturned() throws Exception {
+//    Pipeline pipeline =
+//        firestore
+//            .pipeline()
+//            .collection(COLLECTION_NAME)
+//            .search(
+//                Search.withQuery(constant(true))
+//                    .withSort(
+//                        field("location").geoDistance(new GeoPoint(39.6985, -105.024)).ascending())
+//                    .withLimit(5)
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//
+//    Pipeline.Snapshot snapshot = pipeline.execute().get();
+//    assertResultIds(snapshot, "solTacos", "lotusBlossomThai", "goldenWaffle");
+//  }
 
-  // limit
-  @Test
-  public void limit_limitsTheNumberOfDocumentsReturned() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(constant(true))
-                    .withSort(
-                        field("location").geoDistance(new GeoPoint(39.6985, -105.024)).ascending())
-                    .withLimit(5)
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//    @Test
+//    public void limit_limitsTheNumberOfDocumentsRetrieved() throws Exception {
+//        Pipeline pipeline =
+//                firestore
+//                        .pipeline()
+//                        .collection(COLLECTION_NAME)
+//                        .search(
+//                                Search.withQuery(documentMatches("chicken"))
+//                                        .withRetrievalDepth(3));
+////                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//
+//        Pipeline.Snapshot snapshot = pipeline.execute().get();
+//        assertResultIds(snapshot, "eastsideChicken", "lotusBlossomThai", "goldenWaffle");
+//
+//        pipeline =
+//                firestore
+//                        .pipeline()
+//                        .collection(COLLECTION_NAME)
+//                        .search(
+//                                Search.withQuery(documentMatches("chicken")));
+////                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//
+//        snapshot = pipeline.execute().get();
+//        assertResultIds(snapshot, "eastsideChicken", "lotusBlossomThai", "goldenWaffle", "eastsideCantina");
+//    }
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "solTacos", "lotusBlossomThai", "goldenWaffle");
-  }
+    // offset
+    // TODO(search) enable with backend support
+//  @Test
+//  public void offset_skipsNDocuments() throws Exception {
+//    Pipeline pipeline =
+//        firestore
+//            .pipeline()
+//            .collection(COLLECTION_NAME)
+//            .search(
+//                Search.withQuery(constant(true))
+//                    .withLimit(2)
+//                    .withOffset(2)
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//
+//    Pipeline.Snapshot snapshot = pipeline.execute().get();
+//    assertResultIds(snapshot, "eastsideChicken", "eastsideTacos");
+//  }
 
-  @Test
-  public void limit_limitsTheNumberOfDocumentsScored() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(documentMatches("chicken OR tacos OR fish OR waffles"))
-                    .withRetrievalDepth(6)
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+    // =========================================================================
+    // Snippet
+    // =========================================================================
 
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "eastsideChicken", "eastsideTacos", "solTacos", "mileHighCatch");
-  }
-
-  // offset
-  @Test
-  public void offset_skipsNDocuments() throws Exception {
-    Pipeline pipeline =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(constant(true))
-                    .withLimit(2)
-                    .withOffset(2)
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
-
-    Pipeline.Snapshot snapshot = pipeline.execute().get();
-    assertResultIds(snapshot, "eastsideChicken", "eastsideTacos");
-  }
-
-  // =========================================================================
-  // Snippet
-  // =========================================================================
-
-  @Test
-  public void snippetOnMultipleFields() throws Exception {
-    // Get snippet from 1 field
-    Pipeline pipeline1 =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(documentMatches("waffle"))
-                    .withAddFields(snippet("menu", "waffles").as("snippet"))
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
-
-    Pipeline.Snapshot snapshot1 = pipeline1.execute().get();
-    assertThat(snapshot1.getResults()).hasSize(1);
-    assertThat(snapshot1.getResults().get(0).getData().get("name")).isEqualTo("The Golden Waffle");
-    String snip1 = (String) snapshot1.getResults().get(0).getData().get("snippet");
-    assertThat(snip1.length()).isGreaterThan(0);
-
-    // Get snippet from 2 fields
-    Pipeline pipeline2 =
-        firestore
-            .pipeline()
-            .collection(restaurantsCollection.getId())
-            .search(
-                Search.withQuery(documentMatches("waffle"))
-                    .withAddFields(
-                        concat(field("menu"), field("description"))
-                            .snippet("waffles") // Without SnippetOptions in Java
-                            .as("snippet"))
-                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
-
-    Pipeline.Snapshot snapshot2 = pipeline2.execute().get();
-    assertThat(snapshot2.getResults()).hasSize(1);
-    assertThat(snapshot2.getResults().get(0).getData().get("name")).isEqualTo("The Golden Waffle");
-    String snip2 = (String) snapshot2.getResults().get(0).getData().get("snippet");
-    assertThat(snip2.length()).isGreaterThan(snip1.length());
-  }
+    // TODO(search) enable with backend support
+//  @Test
+//  public void snippetOnMultipleFields() throws Exception {
+//    // Get snippet from 1 field
+//    Pipeline pipeline1 =
+//        firestore
+//            .pipeline()
+//            .collection(COLLECTION_NAME)
+//            .search(
+//                Search.withQuery(documentMatches("waffle"))
+//                    .withAddFields(snippet("menu", "waffles").as("snippet"))
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//
+//    Pipeline.Snapshot snapshot1 = pipeline1.execute().get();
+//    assertThat(snapshot1.getResults()).hasSize(1);
+//    assertThat(snapshot1.getResults().get(0).getData().get("name")).isEqualTo("The Golden Waffle");
+//    String snip1 = (String) snapshot1.getResults().get(0).getData().get("snippet");
+//    assertThat(snip1.length()).isGreaterThan(0);
+//
+//    // Get snippet from 2 fields
+//    Pipeline pipeline2 =
+//        firestore
+//            .pipeline()
+//            .collection(COLLECTION_NAME)
+//            .search(
+//                Search.withQuery(documentMatches("waffle"))
+//                    .withAddFields(
+//                        concat(field("menu"), field("description"))
+//                            .snippet("waffles") // Without SnippetOptions in Java
+//                            .as("snippet"))
+//                    .withQueryEnhancement(Search.QueryEnhancement.DISABLED));
+//
+//    Pipeline.Snapshot snapshot2 = pipeline2.execute().get();
+//    assertThat(snapshot2.getResults()).hasSize(1);
+//    assertThat(snapshot2.getResults().get(0).getData().get("name")).isEqualTo("The Golden Waffle");
+//    String snip2 = (String) snapshot2.getResults().get(0).getData().get("snippet");
+//    assertThat(snip2.length()).isGreaterThan(snip1.length());
+//  }
 }
