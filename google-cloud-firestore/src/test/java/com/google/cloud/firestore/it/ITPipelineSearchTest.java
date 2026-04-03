@@ -22,9 +22,12 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assume.assumeTrue;
 
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.GeoPoint;
 import com.google.cloud.firestore.Pipeline;
 import com.google.cloud.firestore.PipelineResult;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.pipeline.stages.Search;
 import java.util.Arrays;
@@ -34,7 +37,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -42,9 +45,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ITPipelineSearchTest extends ITBaseTest {
 
-  private final String COLLECTION_NAME = "TextSearchIntegrationTests";
-
-  private CollectionReference restaurantsCollection;
+  private static final String COLLECTION_NAME = "TextSearchIntegrationTests";
 
   private static final Map<String, Map<String, Object>> restaurantDocs = new HashMap<>();
 
@@ -184,20 +185,41 @@ public class ITPipelineSearchTest extends ITBaseTest {
     // Disable priming as it uses Watch/Listen
   }
 
-  @Before
-  public void setupRestaurantDocs() throws Exception {
+  @BeforeClass
+  public static void setupRestaurantDocs() throws Exception {
     assumeTrue(
         "This test suite only runs against the Enterprise edition in Nightly.",
         getFirestoreEdition().equals(FirestoreEdition.ENTERPRISE)
             && "NIGHTLY".equalsIgnoreCase(getTargetBackend()));
 
-    restaurantsCollection = firestore.collection(COLLECTION_NAME);
+    // Initialize a temporary Firestore instance for class-level setup.
+    Firestore db = getOptionsBuilder().build().getService();
 
-    WriteBatch batch = firestore.batch();
-    for (Map.Entry<String, Map<String, Object>> entry : restaurantDocs.entrySet()) {
-      batch.set(restaurantsCollection.document(entry.getKey()), entry.getValue());
+    // Setup restaurant docs
+    try {
+      // Get the existing contents of the test collection
+      CollectionReference collection = db.collection(COLLECTION_NAME);
+      QuerySnapshot snapshot = collection.get().get();
+
+      // A batch will be used to update the test collection to the desired state
+      WriteBatch batch = db.batch();
+
+      // Delete unexpected documents
+      for (DocumentSnapshot doc : snapshot.getDocuments()) {
+        if (!restaurantDocs.containsKey(doc.getId())) {
+          batch.delete(doc.getReference());
+        }
+      }
+
+      // Add/overwrite expected documents
+      for (Map.Entry<String, Map<String, Object>> entry : restaurantDocs.entrySet()) {
+        batch.set(collection.document(entry.getKey()), entry.getValue());
+      }
+
+      batch.commit().get(10, TimeUnit.SECONDS);
+    } finally {
+      db.close();
     }
-    batch.commit().get(10, TimeUnit.SECONDS);
   }
 
   private void assertResultIds(Pipeline.Snapshot snapshot, String... ids) {
