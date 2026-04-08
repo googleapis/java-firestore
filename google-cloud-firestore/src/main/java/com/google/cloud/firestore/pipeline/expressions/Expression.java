@@ -16,6 +16,7 @@
 
 package com.google.cloud.firestore.pipeline.expressions;
 
+import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Blob;
@@ -4282,6 +4283,7 @@ public abstract class Expression {
    * @param location Compute distance to this {@link GeoPoint}.
    * @return A new {@link Expression} representing the geoDistance operation.
    */
+  @BetaApi
   public static Expression geoDistance(Field field, GeoPoint location) {
     return new FunctionExpression(
         "geo_distance", java.util.Arrays.asList(field, constant(location)));
@@ -4301,6 +4303,7 @@ public abstract class Expression {
    * @param rquery Define the search query using the search domain-specific language (DSL).
    * @return A new {@link BooleanExpression} representing the documentMatches operation.
    */
+  @BetaApi
   public static BooleanExpression documentMatches(String rquery) {
     return new BooleanFunctionExpression("document_matches", constant(rquery));
   }
@@ -4353,6 +4356,7 @@ public abstract class Expression {
    *
    * @return A new {@link Expression} representing the score operation.
    */
+  @BetaApi
   public static Expression score() {
     return new FunctionExpression("score", com.google.common.collect.ImmutableList.of());
   }
