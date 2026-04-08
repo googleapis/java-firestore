@@ -4725,7 +4725,8 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the snippet operation.
    */
   @BetaApi
-  public static Expression snippet(String fieldName, String rquery) {
+  @InternalApi
+  static Expression snippet(String fieldName, String rquery) {
     return new FunctionExpression(
         "snippet", java.util.Arrays.asList(field(fieldName), constant(rquery)));
   }
@@ -4748,7 +4749,8 @@ public abstract class Expression {
    * @return A new {@link Expression} representing the snippet operation.
    */
   @BetaApi
-  public final Expression snippet(String rquery) {
+  @InternalApi
+  final Expression snippet(String rquery) {
     return new FunctionExpression(
         "snippet",
         java.util.Arrays.asList(this, constant(rquery)),
