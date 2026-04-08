@@ -46,7 +46,7 @@ public class PipelineProtoTest {
             .search(
                 Search.withQuery("foo")
                     //                    .withLimit(1)
-                    .withRetrievalDepth(2)
+                    //                    .withRetrievalDepth(2)
                     //                    .withOffset(3)
                     //                    .withQueryEnhancement(Search.QueryEnhancement.REQUIRED)
                     //                    .withLanguageCode("en-US")
@@ -76,7 +76,7 @@ public class PipelineProtoTest {
     //    assertThat(optionsMap.get("limit").getIntegerValue()).isEqualTo(1L);
 
     // retrieval_depth
-    assertThat(optionsMap.get("retrieval_depth").getIntegerValue()).isEqualTo(2L);
+    //    assertThat(optionsMap.get("retrieval_depth").getIntegerValue()).isEqualTo(2L);
 
     // offset
     //    assertThat(optionsMap.get("offset").getIntegerValue()).isEqualTo(3L);

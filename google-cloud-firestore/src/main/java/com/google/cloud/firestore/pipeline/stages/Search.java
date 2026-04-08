@@ -154,13 +154,14 @@ public final class Search extends Stage {
   //    return new Search(options.with("limit", encodeValue(limit)));
   //  }
 
-  /**
-   * Specify the maximum number of documents to retrieve. Documents will be retrieved in the
-   * pre-sort order specified by the search index.
-   */
-  public Search withRetrievalDepth(long retrievalDepth) {
-    return new Search(options.with("retrieval_depth", encodeValue(retrievalDepth)));
-  }
+  // TODO(search) enable with backend support
+  //  /**
+  //   * Specify the maximum number of documents to retrieve. Documents will be retrieved in the
+  //   * pre-sort order specified by the search index.
+  //   */
+  //  public Search withRetrievalDepth(long retrievalDepth) {
+  //    return new Search(options.with("retrieval_depth", encodeValue(retrievalDepth)));
+  //  }
 
   // TODO(search) enable with backend support
   //  /** Specify the number of documents to skip. */
