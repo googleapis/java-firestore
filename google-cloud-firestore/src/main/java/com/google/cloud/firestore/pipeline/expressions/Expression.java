@@ -4375,7 +4375,9 @@ public abstract class Expression {
    * @param rquery Define the search query using the search domain-specific language (DSL).
    * @return A new {@link Expression} representing the snippet operation.
    */
-  public static Expression snippet(String fieldName, String rquery) {
+  @BetaApi
+  @InternalApi
+  static Expression snippet(String fieldName, String rquery) {
     return new FunctionExpression(
         "snippet", java.util.Arrays.asList(field(fieldName), constant(rquery)));
   }
@@ -4397,7 +4399,9 @@ public abstract class Expression {
    * @param rquery Define the search query using the search domain-specific language (DSL).
    * @return A new {@link Expression} representing the snippet operation.
    */
-  public final Expression snippet(String rquery) {
+  @BetaApi
+  @InternalApi
+  final Expression snippet(String rquery) {
     return new FunctionExpression(
         "snippet",
         java.util.Arrays.asList(this, constant(rquery)),
