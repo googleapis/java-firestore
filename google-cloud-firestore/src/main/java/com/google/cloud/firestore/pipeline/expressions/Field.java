@@ -40,7 +40,6 @@ import javax.annotation.Nullable;
  * Field cityField = Field.of("address.city");
  * }</pre>
  */
-@BetaApi
 public final class Field extends Expression implements Selectable {
   public static final String DOCUMENT_ID = "__name__";
   private final FieldPath path;
