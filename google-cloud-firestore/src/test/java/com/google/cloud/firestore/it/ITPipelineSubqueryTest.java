@@ -984,20 +984,20 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
 
   @Test
   public void testUnionWithSubqueryThrows() throws Exception {
-    IllegalArgumentException e =
+    ExecutionException e =
         assertThrows(
-            IllegalArgumentException.class,
+            ExecutionException.class,
             () -> {
               firestore
                   .pipeline()
                   .collection(collection.getPath())
-                  .union(PipelineSource.subcollection("subcollection"));
+                  .union(PipelineSource.subcollection("subcollection"))
+                  .execute()
+                  .get();
             });
 
-    assertThat(e)
-        .hasMessageThat()
+    assertThat(e.getCause().getMessage())
         .contains(
-            "Union only supports combining root pipelines, doesn't support relative scope Pipeline"
-                + " like relative subcollection pipeline");
+            "The 'subcollection(...)' stage can only be used at the start of a nested pipeline.");
   }
 }
