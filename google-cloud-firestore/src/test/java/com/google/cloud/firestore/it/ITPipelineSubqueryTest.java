@@ -68,9 +68,8 @@ public class ITPipelineSubqueryTest extends ITBaseTest {
   @Before
   public void setup() throws Exception {
     assumeFalse(
-        "This test suite only runs against the Enterprise edition in the Nightly environment.",
-        !getFirestoreEdition().equals(FirestoreEdition.ENTERPRISE)
-            || !"NIGHTLY".equals(getTargetBackend()));
+            "This test suite only runs against the Enterprise edition.",
+            !getFirestoreEdition().equals(FirestoreEdition.ENTERPRISE));
     if (collection != null) {
       return;
     }
