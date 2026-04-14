@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,18 +24,19 @@ import com.google.firestore.v1.Value;
 import java.util.Collections;
 import java.util.Map;
 
-public final class Distinct extends Stage {
+@InternalApi
+public final class Define extends Stage {
 
-  private final Map<String, Expression> groups;
+  private final Map<String, Expression> expressions;
 
   @InternalApi
-  public Distinct(Map<String, Expression> groups) {
-    super("distinct", InternalOptions.EMPTY);
-    this.groups = groups;
+  public Define(Map<String, Expression> expressions) {
+    super("let", InternalOptions.EMPTY);
+    this.expressions = expressions;
   }
 
   @Override
   Iterable<Value> toStageArgs() {
-    return Collections.singletonList(encodeValue(groups));
+    return Collections.singletonList(encodeValue(expressions));
   }
 }

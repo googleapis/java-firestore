@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,26 @@
  * limitations under the License.
  */
 
-package com.google.cloud.firestore.pipeline.stages;
-
-import static com.google.cloud.firestore.PipelineUtils.encodeValue;
+package com.google.cloud.firestore.pipeline.expressions;
 
 import com.google.api.core.InternalApi;
-import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.firestore.v1.Value;
-import java.util.Collections;
-import java.util.Map;
 
-public final class Distinct extends Stage {
+/**
+ * Internal expression representing a variable reference.
+ *
+ * <p>This evaluates to the value of a variable defined in a pipeline context.
+ */
+@InternalApi
+final class Variable extends Expression {
+  private final String name;
 
-  private final Map<String, Expression> groups;
-
-  @InternalApi
-  public Distinct(Map<String, Expression> groups) {
-    super("distinct", InternalOptions.EMPTY);
-    this.groups = groups;
+  Variable(String name) {
+    this.name = name;
   }
 
   @Override
-  Iterable<Value> toStageArgs() {
-    return Collections.singletonList(encodeValue(groups));
+  public Value toProto() {
+    return Value.newBuilder().setVariableReferenceValue(name).build();
   }
 }

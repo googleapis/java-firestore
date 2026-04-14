@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,23 +19,22 @@ package com.google.cloud.firestore.pipeline.stages;
 import static com.google.cloud.firestore.PipelineUtils.encodeValue;
 
 import com.google.api.core.InternalApi;
-import com.google.cloud.firestore.pipeline.expressions.Expression;
 import com.google.firestore.v1.Value;
 import java.util.Collections;
-import java.util.Map;
 
-public final class Distinct extends Stage {
+@InternalApi
+public final class Subcollection extends Stage {
 
-  private final Map<String, Expression> groups;
+  private final String path;
 
   @InternalApi
-  public Distinct(Map<String, Expression> groups) {
-    super("distinct", InternalOptions.EMPTY);
-    this.groups = groups;
+  public Subcollection(String path) {
+    super("subcollection", InternalOptions.EMPTY);
+    this.path = path;
   }
 
   @Override
   Iterable<Value> toStageArgs() {
-    return Collections.singletonList(encodeValue(groups));
+    return Collections.singletonList(encodeValue(path));
   }
 }

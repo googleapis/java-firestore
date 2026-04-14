@@ -16,7 +16,6 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.BetaApi;
 import com.google.api.core.InternalApi;
 import com.google.cloud.firestore.pipeline.stages.Collection;
 import com.google.cloud.firestore.pipeline.stages.CollectionGroup;
@@ -24,6 +23,8 @@ import com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions;
 import com.google.cloud.firestore.pipeline.stages.CollectionOptions;
 import com.google.cloud.firestore.pipeline.stages.Database;
 import com.google.cloud.firestore.pipeline.stages.Documents;
+import com.google.cloud.firestore.pipeline.stages.Literals;
+import com.google.cloud.firestore.pipeline.stages.Subcollection;
 import com.google.common.base.Preconditions;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
@@ -47,7 +48,6 @@ import javax.annotation.Nonnull;
  *   .select("name"); // Add stages to the pipeline
  * }</pre>
  */
-@BetaApi
 public final class PipelineSource {
   private final FirestoreRpcContext<?> rpcContext;
 
@@ -63,19 +63,16 @@ public final class PipelineSource {
    * @return A new {@code Pipeline} instance targeting the specified collection.
    */
   @Nonnull
-  @BetaApi
   public Pipeline collection(@Nonnull String path) {
     return collection(path, new CollectionOptions());
   }
 
   @Nonnull
-  @BetaApi
   public Pipeline collection(@Nonnull String path, CollectionOptions options) {
     return new Pipeline(this.rpcContext, new Collection(path, options));
   }
 
   @Nonnull
-  @BetaApi
   public Pipeline collection(@Nonnull CollectionReference ref) {
     if (!this.rpcContext.getFirestore().equals(ref.getFirestore())) {
       throw new IllegalArgumentException(
@@ -97,13 +94,11 @@ public final class PipelineSource {
    * @return A new {@code Pipeline} instance targeting the specified collection group.
    */
   @Nonnull
-  @BetaApi
   public Pipeline collectionGroup(@Nonnull String collectionId) {
     return collectionGroup(collectionId, new CollectionGroupOptions());
   }
 
   @Nonnull
-  @BetaApi
   public Pipeline collectionGroup(@Nonnull String collectionId, CollectionGroupOptions options) {
     Preconditions.checkArgument(
         !collectionId.contains("/"),
@@ -121,7 +116,6 @@ public final class PipelineSource {
    * @return A new {@code Pipeline} instance targeting all documents in the database.
    */
   @Nonnull
-  @BetaApi
   public Pipeline database() {
     return new Pipeline(this.rpcContext, new Database());
   }
@@ -134,7 +128,6 @@ public final class PipelineSource {
    * @return A new {@code Pipeline} instance targeting the specified documents.
    */
   @Nonnull
-  @BetaApi
   public Pipeline documents(DocumentReference... docs) {
     return new Pipeline(this.rpcContext, Documents.of(docs));
   }
@@ -147,7 +140,6 @@ public final class PipelineSource {
    * @return A new {@code Pipeline} instance targeting the specified documents.
    */
   @Nonnull
-  @BetaApi
   public Pipeline documents(String... docs) {
     return new Pipeline(
         this.rpcContext,
@@ -158,6 +150,31 @@ public final class PipelineSource {
   }
 
   /**
+   * Creates a new {@link Pipeline} that operates on a static set of documents represented as Maps.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * Map<String, Object> doc1 = new HashMap<>();
+   * doc1.put("title", "Book 1");
+   * Map<String, Object> doc2 = new HashMap<>();
+   * doc2.put("title", "Book 2");
+   *
+   * Snapshot snapshot = firestore.pipeline()
+   *     .literals(doc1, doc2)
+   *     .execute()
+   *     .get();
+   * }</pre>
+   *
+   * @param data The Maps representing documents to include in the pipeline.
+   * @return A new {@code Pipeline} instance with a literals source.
+   */
+  @Nonnull
+  public final Pipeline literals(java.util.Map<String, Object>... data) {
+    return new Pipeline(this.rpcContext, new Literals(data));
+  }
+
+  /**
    * Creates a new {@link Pipeline} from the given {@link Query}. Under the hood, this will
    * translate the query semantics (order by document ID, etc.) to an equivalent pipeline.
    *
@@ -165,7 +182,6 @@ public final class PipelineSource {
    * @return A new {@code Pipeline} that is equivalent to the given query.
    */
   @Nonnull
-  @BetaApi
   public Pipeline createFrom(Query query) {
     return query.pipeline();
   }
@@ -178,8 +194,33 @@ public final class PipelineSource {
    * @return A new {@code Pipeline} that is equivalent to the given query.
    */
   @Nonnull
-  @BetaApi
   public Pipeline createFrom(AggregateQuery query) {
     return query.pipeline();
+  }
+
+  /**
+   * Initializes a pipeline scoped to a subcollection.
+   *
+   * <p>This method allows you to start a new pipeline that operates on a subcollection of the
+   * current document. It is intended to be used as a subquery.
+   *
+   * <p><b>Note:</b> A pipeline created with `subcollection` cannot be executed directly using
+   * {@link Pipeline#execute()}. It must be used within a parent pipeline.
+   *
+   * <p>Example:
+   *
+   * <pre>{@code
+   * firestore.pipeline().collection("books")
+   *     .addFields(
+   *         PipelineSource.subcollection("reviews")
+   *             .aggregate(AggregateFunction.average("rating").as("avg_rating"))
+   *             .toScalarExpression().as("average_rating"));
+   * }</pre>
+   *
+   * @param path The path of the subcollection.
+   * @return A new {@code Pipeline} instance scoped to the subcollection.
+   */
+  public static Pipeline subcollection(String path) {
+    return new Pipeline(null, new Subcollection(path));
   }
 }
