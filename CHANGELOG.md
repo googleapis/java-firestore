@@ -1,5 +1,45 @@
 # Changelog
 
+## [3.40.0](https://github.com/googleapis/java-firestore/compare/v3.39.0...v3.40.0) (2026-04-08)
+
+
+### Features
+
+* Add `isType` expression ([#2329](https://github.com/googleapis/java-firestore/issues/2329)) ([c606ff9](https://github.com/googleapis/java-firestore/commit/c606ff989e1305214d29496734f2a34628e4c82a))
+* Add DML stages to pipelines ([#2317](https://github.com/googleapis/java-firestore/issues/2317)) ([2dc2464](https://github.com/googleapis/java-firestore/commit/2dc2464206a899794746ebbe20e3fc048770a0b2))
+* Add string pipeline expressions ([#2326](https://github.com/googleapis/java-firestore/issues/2326)) ([93db04e](https://github.com/googleapis/java-firestore/commit/93db04e4bce569c54359648b4122a732d0c9df73))
+* Add subquery support in pipeline ([#2323](https://github.com/googleapis/java-firestore/issues/2323)) ([cbf87ac](https://github.com/googleapis/java-firestore/commit/cbf87acd66f5c3fbdbd5d922e22790347f44f22d))
+* Add support for remaining `map` pipeline expressions ([#2321](https://github.com/googleapis/java-firestore/issues/2321)) ([f61c61f](https://github.com/googleapis/java-firestore/commit/f61c61f42c472d5540dd616c17db3655502ccdf6))
+* Add support for the parent expression and fix integration tests error ([#2351](https://github.com/googleapis/java-firestore/issues/2351)) ([0e30ec4](https://github.com/googleapis/java-firestore/commit/0e30ec455273719f8d29471c001f4aeb38ecf51a))
+* Add timestamp expressions ([#2342](https://github.com/googleapis/java-firestore/issues/2342)) ([f8adbaa](https://github.com/googleapis/java-firestore/commit/f8adbaa1464a55b7ec004cbe2c7b5145095b0f04))
+* Added public preview support for full-text search and geo search in Pipelines. ([#2346](https://github.com/googleapis/java-firestore/issues/2346)) ([0c81885](https://github.com/googleapis/java-firestore/commit/0c8188520dfbada0d3fef0719e4f95fc231306be))
+* **firestore:** Add `ifNull` and `coalesce` expressions ([#2349](https://github.com/googleapis/java-firestore/issues/2349)) ([51a1c43](https://github.com/googleapis/java-firestore/commit/51a1c4392c19def6aa8a15a7409c7e05476033a8))
+* **firestore:** Add array expressions ([#2350](https://github.com/googleapis/java-firestore/issues/2350)) ([1d23f18](https://github.com/googleapis/java-firestore/commit/1d23f18f70b2b232a4631fe6dab18a8ceb05cb4c))
+* **firestore:** Add logical expressions ([#2339](https://github.com/googleapis/java-firestore/issues/2339)) ([b2f79ec](https://github.com/googleapis/java-firestore/commit/b2f79ec84db91874a717dfaea8bf8f0df9f45c4d))
+* Graduate Pipeline and related APIs from beta to GA ([#2352](https://github.com/googleapis/java-firestore/issues/2352)) ([4cd5895](https://github.com/googleapis/java-firestore/commit/4cd58958191687ea03fadbcc2a4eb6e2f33730b1))
+
+## [3.39.0](https://github.com/googleapis/java-firestore/compare/v3.38.0...v3.39.0) (2026-03-23)
+
+
+### Features
+
+* Add arithmetic expressions ([#2333](https://github.com/googleapis/java-firestore/issues/2333)) ([491c211](https://github.com/googleapis/java-firestore/commit/491c211e226fcfbf007dd73e2ae6c2450f3b5311))
+* Add first, last, arrayAgg and arrayAggDistinct expressions ([#2334](https://github.com/googleapis/java-firestore/issues/2334)) ([2be5989](https://github.com/googleapis/java-firestore/commit/2be59896fef7a7bb458cfaf06344654e82acc74c))
+* Expose the variable definition in the Cloud Firestore API ([7b105c5](https://github.com/googleapis/java-firestore/commit/7b105c51347b6b6c60fdf4d59ec8c0a7780ace5b))
+* **firestore:** Add array expressions ([#2331](https://github.com/googleapis/java-firestore/issues/2331)) ([5272549](https://github.com/googleapis/java-firestore/commit/527254966b573093319cc4468c1dd6cde44d01e0))
+* **firestore:** Global option to turn on implicit orderby ([#2337](https://github.com/googleapis/java-firestore/issues/2337)) ([24d3e17](https://github.com/googleapis/java-firestore/commit/24d3e173cbcb077c6b89d4361e93f078cf23a2b7))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.68.0 ([8bcdd6b](https://github.com/googleapis/java-firestore/commit/8bcdd6bc102aaebe5194bac6f53fb75c32f86bba))
+* Fix the wrong return type for Pipeline.as(String alias) ([#2330](https://github.com/googleapis/java-firestore/issues/2330)) ([6371fd3](https://github.com/googleapis/java-firestore/commit/6371fd3332c26230500620e4df2ff71155f35cb7))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.58.0 ([#2332](https://github.com/googleapis/java-firestore/issues/2332)) ([f50a9e5](https://github.com/googleapis/java-firestore/commit/f50a9e59ab25ff30120f8ea69a8c4ed14e85061a))
+
 ## [3.38.0](https://github.com/googleapis/java-firestore/compare/v3.37.0...v3.38.0) (2026-02-26)
 
 
