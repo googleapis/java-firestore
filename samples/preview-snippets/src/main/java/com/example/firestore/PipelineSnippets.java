@@ -32,9 +32,12 @@ import com.google.cloud.firestore.PlanSummary;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
+import com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions;
+import com.google.cloud.firestore.pipeline.stages.CollectionHints;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
 import com.google.cloud.firestore.pipeline.stages.Sample;
+import com.google.cloud.firestore.pipeline.stages.Search;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -3114,5 +3117,145 @@ class PipelineSnippets {
             .get();
     // [END distinct_expressions]
     System.out.println(cities.getResults());
+  }
+
+  void searchExamples() throws ExecutionException, InterruptedException {
+    // [START search_basic]
+    Pipeline.Snapshot results1 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(documentMatches("waffles")))
+            .execute().get();
+    // [END search_basic]
+    System.out.println(results1.getResults());
+
+    // [START search_exact]
+    Pipeline.Snapshot results2 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(documentMatches("\"belgian waffles\"")))
+            .execute().get();
+    // [END search_exact]
+    System.out.println(results2.getResults());
+
+    // [START search_two_terms]
+    Pipeline.Snapshot results3 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(documentMatches("waffles eggs")))
+            .execute().get();
+    // [END search_two_terms]
+    System.out.println(results3.getResults());
+
+    // [START search_exclude_term]
+    Pipeline.Snapshot results4 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(documentMatches("-waffles")))
+            .execute().get();
+    // [END search_exclude_term]
+    System.out.println(results4.getResults());
+
+    // [START search_special_fields]
+    Pipeline.Snapshot results5 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(field("menu").regexMatch("waffles"))
+                .withAddFields(score().as("score")))
+            .execute().get();
+    // [END search_special_fields]
+    System.out.println(results5.getResults());
+  }
+
+  void subqueryExamples() throws ExecutionException, InterruptedException {
+    // [START define_example]
+    Pipeline.Snapshot results = firestore.pipeline().collection("authors")
+        .define(
+            field("id").as("currentAuthorId")
+        )
+        // [END define_example]
+        .addFields(
+            firestore.pipeline().collection("books")
+                .where(field("author_id").equal(variable("currentAuthorId")))
+                .aggregate(average("rating").as("avgRating"))
+                .toScalarExpression()
+                .as("averageBookRating")
+        )
+        .execute().get();
+    System.out.println(results.getResults());
+
+    // [START to_array_expression]
+    Pipeline.Snapshot arrayResults = firestore.pipeline().collection("projects")
+        .define(
+            field("id").as("parentId")
+        )
+        .addFields(
+            firestore.pipeline().collection("tasks")
+                .where(field("project_id").equal(variable("parentId")))
+                .select(field("title"))
+                .toArrayExpression()
+                .as("taskTitles")
+        )
+        .execute().get();
+    // [END to_array_expression]
+    System.out.println(arrayResults.getResults());
+
+    // [START to_scalar_expression]
+    Pipeline.Snapshot scalarResults = firestore.pipeline().collection("authors")
+        .define(
+            field("id").as("currentAuthorId")
+        )
+        .addFields(
+            firestore.pipeline().collection("books")
+                .where(field("author_id").equal(variable("currentAuthorId")))
+                .aggregate(average("rating").as("avgRating"))
+                .toScalarExpression()
+                .as("averageBookRating")
+        )
+        .execute().get();
+    // [END to_scalar_expression]
+    System.out.println(scalarResults.getResults());
+  }
+
+  void forceIndexExamples() throws ExecutionException, InterruptedException {
+    // [START force_index]
+    // Force Planner to use Index ID CICAgOi36pgK
+    Pipeline.Snapshot results1 =
+        firestore.pipeline()
+          .collectionGroup("customers", new CollectionGroupOptions()
+              .withHints(new CollectionHints().withForceIndex("CICAgOi36pgK")))
+          .limit(100)
+          .execute().get();
+    // [END force_index]
+    System.out.println(results1.getResults());
+
+    // [START force_scan]
+    // Force Planner to only do a collection scan
+    Pipeline.Snapshot results2 =
+        firestore.pipeline()
+          .collectionGroup("customers", new CollectionGroupOptions()
+              .withHints(new CollectionHints().withForceIndex("primary")))
+          .limit(100)
+          .execute().get();
+    // [END force_scan]
+    System.out.println(results2.getResults());
+  }
+
+  void dmlExamples() throws ExecutionException, InterruptedException {
+    // [START pipeline_update]
+    Pipeline.Snapshot snapshot = firestore.pipeline()
+       .collectionGroup("users")
+       .where(not(exists(field("preferences.color"))))
+       .addFields(constant((String) null).as("preferences.color"))
+       .removeFields("color")
+       .update()
+       .execute().get();
+    // [END pipeline_update]
+    System.out.println(snapshot.getResults());
+
+    // [START pipeline_delete]
+    Pipeline.Snapshot deleteResults = firestore.pipeline()
+      .collectionGroup("users")
+      .where(field("address.country").equal("USA"))
+      .where(field("__create_time__").add(constant(10)).lessThan(currentTimestamp()))
+      .delete()
+      .execute().get();
+    // [END pipeline_delete]
+    System.out.println(deleteResults.getResults());
   }
 }
