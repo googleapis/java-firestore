@@ -33,7 +33,7 @@
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>google-cloud-firestore-bom</artifactId>
-        <version>3.33.4</version>
+        <version>3.40.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -45,7 +45,7 @@
       <!-- Use firebase-admin SDK as usual which will pull in the private preview version of cloud SDK -->
       <groupId>com.google.firebase</groupId>
       <artifactId>firebase-admin</artifactId>
-      <version>9.7.0</version>
+      <version>9.8.0</version>
     </dependency>
   </dependencies>
 
