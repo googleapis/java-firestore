@@ -41,6 +41,7 @@ import com.google.cloud.firestore.pipeline.stages.Search;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 class PipelineSnippets {
@@ -3119,6 +3120,51 @@ class PipelineSnippets {
     System.out.println(cities.getResults());
   }
 
+  void searchBasicQuery() {
+    // [START search_basic_query]
+    firestore.collection("restaurants").add(new HashMap<String, Object>() {{
+      put("name", "Waffle Place");
+      put("description", "A cozy place for fresh waffles.");
+    }});
+    // [END search_basic_query]
+  }
+
+  void searchExactMatch() {
+    // [START search_exact_match]
+    firestore.collection("restaurants").add(new HashMap<String, Object>() {{
+      put("name", "Waffle Place");
+      put("description", "A cozy place for fresh waffles.");
+    }});
+    // [END search_exact_match]
+  }
+
+  void searchTwoTerms() {
+    // [START search_two_terms]
+    firestore.collection("restaurants").add(new HashMap<String, Object>() {{
+      put("name", "Morning Diner");
+      put("description", "Start your day with waffles and eggs.");
+    }});
+    // [END search_two_terms]
+  }
+
+  void searchExcludeTerm() {
+    // [START search_exclude_term]
+    firestore.collection("restaurants").add(new HashMap<String, Object>() {{
+      put("name", "City Coffee");
+      put("description", "Premium coffee and pastries.");
+    }});
+    // [END search_exclude_term]
+  }
+
+  void searchScore() {
+    // [START search_score]
+    firestore.collection("restaurants").add(new HashMap<String, Object>() {{
+      put("name", "The Waffle Hub");
+      put("description", "Everything waffles!");
+    }});
+    // [END search_score]
+  }
+
   void searchExamples() throws ExecutionException, InterruptedException {
     // [START search_basic]
     Pipeline.Snapshot results1 =
@@ -3160,6 +3206,51 @@ class PipelineSnippets {
             .execute().get();
     // [END search_special_fields]
     System.out.println(results5.getResults());
+  }
+
+  void defineStage() {
+    // [START define_stage]
+    firestore.collection("authors").document("author_123").set(new HashMap<String, Object>() {{
+      put("id", "author_123");
+      put("name", "Jane Austen");
+    }});
+    // [END define_stage]
+  }
+
+  void toArrayExpressionStage() {
+    // [START to_array_expression_stage]
+    firestore.collection("projects").document("project_1").set(new HashMap<String, Object>() {{
+      put("id", "project_1");
+      put("name", "Alpha Build");
+    }});
+    firestore.collection("tasks").add(new HashMap<String, Object>() {{
+      put("project_id", "project_1");
+      put("title", "System Architecture");
+    }});
+    firestore.collection("tasks").add(new HashMap<String, Object>() {{
+      put("project_id", "project_1");
+      put("title", "Database Schema Design");
+    }});
+    // [END to_array_expression_stage]
+  }
+
+  void toScalarExpressionStage() {
+    // [START to_scalar_expression_stage]
+    firestore.collection("authors").document("author_202").set(new HashMap<String, Object>() {{
+      put("id", "author_202");
+      put("name", "Charles Dickens");
+    }});
+    firestore.collection("books").add(new HashMap<String, Object>() {{
+      put("author_id", "author_202");
+      put("title", "Great Expectations");
+      put("rating", 4.8);
+    }});
+    firestore.collection("books").add(new HashMap<String, Object>() {{
+      put("author_id", "author_202");
+      put("title", "Oliver Twist");
+      put("rating", 4.5);
+    }});
+    // [END to_scalar_expression_stage]
   }
 
   void subqueryExamples() throws ExecutionException, InterruptedException {
@@ -3234,6 +3325,29 @@ class PipelineSnippets {
           .execute().get();
     // [END force_scan]
     System.out.println(results2.getResults());
+  }
+
+  void updateDmlExample() {
+    // [START update_dml_example]
+    firestore.collection("users").document("userID").set(new HashMap<String, Object>() {{
+      put("id", "userID");
+      put("preferences", new HashMap<String, Object>());
+      put("color", "#FFFFFF");
+    }});
+    // [END update_dml_example]
+  }
+
+  void deleteDmlExample() {
+    // [START delete_dml_example]
+    firestore.collection("users").document("userID").set(new HashMap<String, Object>() {{
+      put("id", "userID");
+      put("address", new HashMap<String, Object>() {{
+        put("country", "USA");
+        put("state", "CA");
+      }});
+      put("__create_time__", com.google.cloud.Timestamp.ofTimeSecondsAndNanos(946684800, 0));
+    }});
+    // [END delete_dml_example]
   }
 
   void dmlExamples() throws ExecutionException, InterruptedException {
