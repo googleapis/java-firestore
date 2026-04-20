@@ -3206,6 +3206,23 @@ class PipelineSnippets {
             .execute().get();
     // [END search_special_fields]
     System.out.println(results5.getResults());
+
+    // [START search_score_sort]
+    Pipeline.Snapshot results6 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(documentMatches("waffles"))
+                .withSort(score().descending()))
+            .execute().get();
+    // [END search_score_sort]
+    System.out.println(results6.getResults());
+
+    // [START search_geospatial]
+    Pipeline.Snapshot results7 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(documentMatches("\"belgian waffles\"")))
+            .execute().get();
+    // [END search_geospatial]
+    System.out.println(results7.getResults());
   }
 
   void defineStage() {
