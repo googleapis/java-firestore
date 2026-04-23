@@ -32,12 +32,16 @@ import com.google.cloud.firestore.PlanSummary;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.pipeline.stages.Aggregate;
+import com.google.cloud.firestore.pipeline.stages.CollectionGroupOptions;
+import com.google.cloud.firestore.pipeline.stages.CollectionHints;
 import com.google.cloud.firestore.pipeline.stages.FindNearest;
 import com.google.cloud.firestore.pipeline.stages.FindNearestOptions;
 import com.google.cloud.firestore.pipeline.stages.Sample;
+import com.google.cloud.firestore.pipeline.stages.Search;
 import com.google.cloud.firestore.pipeline.stages.UnnestOptions;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 class PipelineSnippets {
@@ -3114,5 +3118,275 @@ class PipelineSnippets {
             .get();
     // [END distinct_expressions]
     System.out.println(cities.getResults());
+  }
+
+  void searchBasicQuery() {
+    // [START search_basic_query]
+    firestore.collection("restaurants").add(new HashMap<String, Object>() {{
+      put("name", "Waffle Place");
+      put("description", "A cozy place for fresh waffles.");
+    }});
+    // [END search_basic_query]
+  }
+
+  void searchExactMatch() {
+    // [START search_exact_match]
+    firestore.collection("restaurants").add(new HashMap<String, Object>() {{
+      put("name", "Waffle Place");
+      put("description", "A cozy place for fresh waffles.");
+    }});
+    // [END search_exact_match]
+  }
+
+  void searchTwoTerms() {
+    // [START search_two_terms]
+    firestore.collection("restaurants").add(new HashMap<String, Object>() {{
+      put("name", "Morning Diner");
+      put("description", "Start your day with waffles and eggs.");
+    }});
+    // [END search_two_terms]
+  }
+
+  void searchExcludeTerm() {
+    // [START search_exclude_term]
+    firestore.collection("restaurants").add(new HashMap<String, Object>() {{
+      put("name", "City Coffee");
+      put("description", "Premium coffee and pastries.");
+    }});
+    // [END search_exclude_term]
+  }
+
+  void searchScore() {
+    // [START search_score]
+    firestore.collection("restaurants").add(new HashMap<String, Object>() {{
+      put("name", "The Waffle Hub");
+      put("description", "Everything waffles!");
+    }});
+    // [END search_score]
+  }
+
+  void searchExamples() throws ExecutionException, InterruptedException {
+    // [START search_basic]
+    Pipeline.Snapshot results1 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(documentMatches("waffles")))
+            .execute().get();
+    // [END search_basic]
+    System.out.println(results1.getResults());
+
+    // [START search_exact]
+    Pipeline.Snapshot results2 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(documentMatches("\"belgian waffles\"")))
+            .execute().get();
+    // [END search_exact]
+    System.out.println(results2.getResults());
+
+    // [START search_two_terms]
+    Pipeline.Snapshot results3 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(documentMatches("waffles eggs")))
+            .execute().get();
+    // [END search_two_terms]
+    System.out.println(results3.getResults());
+
+    // [START search_exclude_term]
+    Pipeline.Snapshot results4 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(documentMatches("-waffles")))
+            .execute().get();
+    // [END search_exclude_term]
+    System.out.println(results4.getResults());
+
+    // [START search_special_fields]
+    Pipeline.Snapshot results5 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(field("menu").regexMatch("waffles"))
+                .withAddFields(score().as("score")))
+            .execute().get();
+    // [END search_special_fields]
+    System.out.println(results5.getResults());
+
+    // [START search_score_sort]
+    Pipeline.Snapshot results6 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(documentMatches("waffles"))
+                .withSort(score().descending()))
+            .execute().get();
+    // [END search_score_sort]
+    System.out.println(results6.getResults());
+
+    // [START search_geospatial]
+    Pipeline.Snapshot results7 =
+        firestore.pipeline().collection("restaurants")
+            .search(Search.withQuery(documentMatches("\"belgian waffles\"")))
+            .execute().get();
+    // [END search_geospatial]
+    System.out.println(results7.getResults());
+  }
+
+  void defineStage() {
+    // [START define_stage]
+    firestore.collection("authors").document("author_123").set(new HashMap<String, Object>() {{
+      put("id", "author_123");
+      put("name", "Jane Austen");
+    }});
+    // [END define_stage]
+  }
+
+  void toArrayExpressionStage() {
+    // [START to_array_expression_stage]
+    firestore.collection("projects").document("project_1").set(new HashMap<String, Object>() {{
+      put("id", "project_1");
+      put("name", "Alpha Build");
+    }});
+    firestore.collection("tasks").add(new HashMap<String, Object>() {{
+      put("project_id", "project_1");
+      put("title", "System Architecture");
+    }});
+    firestore.collection("tasks").add(new HashMap<String, Object>() {{
+      put("project_id", "project_1");
+      put("title", "Database Schema Design");
+    }});
+    // [END to_array_expression_stage]
+  }
+
+  void toScalarExpressionStage() {
+    // [START to_scalar_expression_stage]
+    firestore.collection("authors").document("author_202").set(new HashMap<String, Object>() {{
+      put("id", "author_202");
+      put("name", "Charles Dickens");
+    }});
+    firestore.collection("books").add(new HashMap<String, Object>() {{
+      put("author_id", "author_202");
+      put("title", "Great Expectations");
+      put("rating", 4.8);
+    }});
+    firestore.collection("books").add(new HashMap<String, Object>() {{
+      put("author_id", "author_202");
+      put("title", "Oliver Twist");
+      put("rating", 4.5);
+    }});
+    // [END to_scalar_expression_stage]
+  }
+
+  void subqueryExamples() throws ExecutionException, InterruptedException {
+    // [START define_example]
+    Pipeline.Snapshot results = firestore.pipeline().collection("authors")
+        .define(
+            field("id").as("currentAuthorId")
+        )
+        // [END define_example]
+        .addFields(
+            firestore.pipeline().collection("books")
+                .where(field("author_id").equal(variable("currentAuthorId")))
+                .aggregate(average("rating").as("avgRating"))
+                .toScalarExpression()
+                .as("averageBookRating")
+        )
+        .execute().get();
+    System.out.println(results.getResults());
+
+    // [START to_array_expression]
+    Pipeline.Snapshot arrayResults = firestore.pipeline().collection("projects")
+        .define(
+            field("id").as("parentId")
+        )
+        .addFields(
+            firestore.pipeline().collection("tasks")
+                .where(field("project_id").equal(variable("parentId")))
+                .select(field("title"))
+                .toArrayExpression()
+                .as("taskTitles")
+        )
+        .execute().get();
+    // [END to_array_expression]
+    System.out.println(arrayResults.getResults());
+
+    // [START to_scalar_expression]
+    Pipeline.Snapshot scalarResults = firestore.pipeline().collection("authors")
+        .define(
+            field("id").as("currentAuthorId")
+        )
+        .addFields(
+            firestore.pipeline().collection("books")
+                .where(field("author_id").equal(variable("currentAuthorId")))
+                .aggregate(average("rating").as("avgRating"))
+                .toScalarExpression()
+                .as("averageBookRating")
+        )
+        .execute().get();
+    // [END to_scalar_expression]
+    System.out.println(scalarResults.getResults());
+  }
+
+  void forceIndexExamples() throws ExecutionException, InterruptedException {
+    // [START force_index]
+    // Force Planner to use Index ID CICAgOi36pgK
+    Pipeline.Snapshot results1 =
+        firestore.pipeline()
+          .collectionGroup("customers", new CollectionGroupOptions()
+              .withHints(new CollectionHints().withForceIndex("CICAgOi36pgK")))
+          .limit(100)
+          .execute().get();
+    // [END force_index]
+    System.out.println(results1.getResults());
+
+    // [START force_scan]
+    // Force Planner to only do a collection scan
+    Pipeline.Snapshot results2 =
+        firestore.pipeline()
+          .collectionGroup("customers", new CollectionGroupOptions()
+              .withHints(new CollectionHints().withForceIndex("primary")))
+          .limit(100)
+          .execute().get();
+    // [END force_scan]
+    System.out.println(results2.getResults());
+  }
+
+  void updateDmlExample() {
+    // [START update_dml_example]
+    firestore.collection("users").document("userID").set(new HashMap<String, Object>() {{
+      put("id", "userID");
+      put("preferences", new HashMap<String, Object>());
+      put("color", "#FFFFFF");
+    }});
+    // [END update_dml_example]
+  }
+
+  void deleteDmlExample() {
+    // [START delete_dml_example]
+    firestore.collection("users").document("userID").set(new HashMap<String, Object>() {{
+      put("id", "userID");
+      put("address", new HashMap<String, Object>() {{
+        put("country", "USA");
+        put("state", "CA");
+      }});
+      put("__create_time__", com.google.cloud.Timestamp.ofTimeSecondsAndNanos(946684800, 0));
+    }});
+    // [END delete_dml_example]
+  }
+
+  void dmlExamples() throws ExecutionException, InterruptedException {
+    // [START pipeline_update]
+    Pipeline.Snapshot snapshot = firestore.pipeline()
+       .collectionGroup("users")
+       .where(not(exists(field("preferences.color"))))
+       .addFields(constant((String) null).as("preferences.color"))
+       .removeFields("color")
+       .update()
+       .execute().get();
+    // [END pipeline_update]
+    System.out.println(snapshot.getResults());
+
+    // [START pipeline_delete]
+    Pipeline.Snapshot deleteResults = firestore.pipeline()
+      .collectionGroup("users")
+      .where(field("address.country").equal("USA"))
+      .where(field("__create_time__").add(constant(10)).lessThan(currentTimestamp()))
+      .delete()
+      .execute().get();
+    // [END pipeline_delete]
+    System.out.println(deleteResults.getResults());
   }
 }
