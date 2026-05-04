@@ -159,8 +159,8 @@ public final class Search extends Stage {
   /**
    * Specify the maximum number of documents to retrieve from the search index. Documents will be
    * retrieved in the pre-sort order specified by the search index. The `retrievalDepth` is a limit
-   * applied before documents are scored and sorted, which can reduce costs of expensive scoring
-   * and sorting operations.
+   * applied before documents are scored and sorted, which can reduce costs of expensive scoring and
+   * sorting operations.
    */
   public Search withRetrievalDepth(long retrievalDepth) {
     return new Search(options.with("retrieval_depth", encodeValue(retrievalDepth)));
