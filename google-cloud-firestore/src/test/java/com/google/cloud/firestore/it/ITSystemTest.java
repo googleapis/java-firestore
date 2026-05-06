@@ -37,6 +37,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 import com.google.api.core.ApiFuture;
@@ -45,6 +46,7 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.BsonBinaryData;
 import com.google.cloud.firestore.BsonObjectId;
 import com.google.cloud.firestore.BsonTimestamp;
@@ -110,6 +112,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -913,6 +916,15 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void partitionedQuery() throws Exception {
+    assumeFalse(
+        "Partitioned query is not supported with enterprise yet",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
+    // Partitioned queries are not supported in the emulator.
+    assumeFalse(
+        "Skip this test when running against the Firestore emulator because it does not support"
+            + " partitioned queries.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
     int documentCount = 2 * 128 + 127; // Minimum partition size is 128.
 
     WriteBatch batch = firestore.batch();
@@ -941,6 +953,15 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void partitionedQuery_future() throws Exception {
+    assumeFalse(
+        "Partitioned query is not supported with enterprise yet",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
+    // Partitioned queries are not supported in the emulator.
+    assumeFalse(
+        "Skip this test when running against the Firestore emulator because it does not support"
+            + " partitioned queries.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
     int documentCount = 2 * 128 + 127; // Minimum partition size is 128.
 
     WriteBatch batch = firestore.batch();
@@ -969,6 +990,15 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void emptyPartitionedQuery() throws Exception {
+    assumeFalse(
+        "Partitioned query is not supported with enterprise yet",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
+    // Partitioned queries are not supported in the emulator.
+    assumeFalse(
+        "Skip this test when running against the Firestore emulator because it does not support"
+            + " partitioned queries.",
+        isRunningAgainstFirestoreEmulator(firestore));
+
     StreamConsumer<QueryPartition> consumer = new StreamConsumer<>();
     firestore.collectionGroup(randomColl.getId()).getPartitions(3, consumer);
     final List<QueryPartition> partitions = consumer.consume().get();
@@ -1082,7 +1112,7 @@ public class ITSystemTest extends ITBaseTest {
 
     assertEquals("foo", firstTransaction.get());
     assertEquals("bar", secondTransaction.get());
-    assertEquals(3, attempts.intValue());
+    assertThat(attempts.intValue()).isAtLeast(3);
     assertEquals(3, (long) documentReference.get().get().getLong("counter"));
   }
 
@@ -1124,6 +1154,11 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void listCollections() throws Exception {
+    assumeTrue(
+        "Skip this test when running against enterprise because it does not support"
+            + " listCollections",
+        getFirestoreEdition() != FirestoreEdition.ENTERPRISE);
+
     // We test with 21 collections since 20 collections are by default returned in a single paged
     // response.
     String[] collections =
@@ -1150,6 +1185,9 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void listDocuments() throws Exception {
+    assumeTrue(
+        "Skip this test when running against enterprise because it does not support listDocuments",
+        getFirestoreEdition() != FirestoreEdition.ENTERPRISE);
     // We test with 21 documents since 20 documents are by default returned in a single paged
     // response.
     String[] documents =
@@ -1176,6 +1214,11 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void listDocumentsListsMissingDocument() throws Exception {
+    assumeFalse(
+        "Skip this test when running against enterprise because it does not support"
+            + " missing documents.",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
+
     randomColl.document("missing/foo/bar").set(SINGLE_FIELD_MAP).get();
     Iterable<DocumentReference> collectionRefs = randomColl.listDocuments();
     assertEquals(randomColl.document("missing"), collectionRefs.iterator().next());
@@ -1589,6 +1632,10 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void queryPaginationWithWhereClause() throws ExecutionException, InterruptedException {
+    // TODO(pipeline): Enable this test against production when adding implicitOrderBy.
+    assumeTrue(
+        "Skip this test when running against enterprise because it does not work yet.",
+        getFirestoreEdition() != FirestoreEdition.ENTERPRISE);
     WriteBatch batch = firestore.batch();
 
     for (int i = 0; i < 10; ++i) {
@@ -1652,9 +1699,14 @@ public class ITSystemTest extends ITBaseTest {
     batch.commit().get();
 
     QuerySnapshot querySnapshot = firestore.collectionGroup(collectionGroup).get().get();
-    assertEquals(
-        asList("cg-doc1", "cg-doc2", "cg-doc3", "cg-doc4", "cg-doc5"),
-        querySnapshotToIds(querySnapshot));
+    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
+      assertEquals(
+          asList("cg-doc1", "cg-doc2", "cg-doc3", "cg-doc4", "cg-doc5"),
+          querySnapshotToIds(querySnapshot));
+    } else {
+      assertThat(querySnapshotToIds(querySnapshot))
+          .containsExactlyElementsIn(asList("cg-doc1", "cg-doc2", "cg-doc3", "cg-doc4", "cg-doc5"));
+    }
   }
 
   @Test
@@ -1734,7 +1786,12 @@ public class ITSystemTest extends ITBaseTest {
             .whereLessThanOrEqualTo(FieldPath.documentId(), "a/b0")
             .get()
             .get();
-    assertEquals(asList("cg-doc2", "cg-doc3", "cg-doc4"), querySnapshotToIds(querySnapshot));
+    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
+      assertEquals(asList("cg-doc2", "cg-doc3", "cg-doc4"), querySnapshotToIds(querySnapshot));
+    } else {
+      assertThat(querySnapshotToIds(querySnapshot))
+          .containsExactlyElementsIn(asList("cg-doc2", "cg-doc3", "cg-doc4"));
+    }
 
     querySnapshot =
         firestore
@@ -1758,7 +1815,11 @@ public class ITSystemTest extends ITBaseTest {
     QuerySnapshot querySnapshot =
         randomColl.whereIn("zip", Arrays.<Object>asList(98101, 98103)).get().get();
 
-    assertEquals(asList("a", "c"), querySnapshotToIds(querySnapshot));
+    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
+      assertEquals(asList("a", "c"), querySnapshotToIds(querySnapshot));
+    } else {
+      assertThat(querySnapshotToIds(querySnapshot)).containsExactlyElementsIn(asList("a", "c"));
+    }
   }
 
   @Test
@@ -1773,13 +1834,37 @@ public class ITSystemTest extends ITBaseTest {
     setDocument("h", map("zip", null));
 
     QuerySnapshot querySnapshot = randomColl.whereNotEqualTo("zip", 98101).get().get();
-    assertEquals(asList("a", "b", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+    switch (getFirestoreEdition()) {
+      case STANDARD:
+        assertEquals(asList("a", "b", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+        break;
+      case ENTERPRISE:
+        assertThat(querySnapshotToIds(querySnapshot))
+            .containsExactlyElementsIn(asList("a", "b", "d", "e", "f", "g", "h"));
+        break;
+    }
 
     querySnapshot = randomColl.whereNotEqualTo("zip", Double.NaN).get().get();
-    assertEquals(asList("b", "c", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+    switch (getFirestoreEdition()) {
+      case STANDARD:
+        assertEquals(asList("b", "c", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+        break;
+      case ENTERPRISE:
+        assertThat(querySnapshotToIds(querySnapshot))
+            .containsExactlyElementsIn(asList("b", "c", "d", "e", "f", "g", "h"));
+        break;
+    }
 
     querySnapshot = randomColl.whereNotEqualTo("zip", null).get().get();
-    assertEquals(asList("a", "b", "c", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+    switch (getFirestoreEdition()) {
+      case STANDARD:
+        assertEquals(asList("a", "b", "c", "d", "e", "f", "g"), querySnapshotToIds(querySnapshot));
+        break;
+      case ENTERPRISE:
+        assertThat(querySnapshotToIds(querySnapshot))
+            .containsExactlyElementsIn(asList("a", "b", "c", "d", "e", "f", "g"));
+        break;
+    }
   }
 
   @Test
@@ -1791,7 +1876,11 @@ public class ITSystemTest extends ITBaseTest {
     QuerySnapshot querySnapshot =
         randomColl.whereNotEqualTo(FieldPath.documentId(), doc1.getId()).get().get();
 
-    assertEquals(asList("b", "c"), querySnapshotToIds(querySnapshot));
+    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
+      assertEquals(asList("b", "c"), querySnapshotToIds(querySnapshot));
+    } else {
+      assertThat(querySnapshotToIds(querySnapshot)).containsExactlyElementsIn(asList("b", "c"));
+    }
   }
 
   @Test
@@ -1803,7 +1892,11 @@ public class ITSystemTest extends ITBaseTest {
     QuerySnapshot querySnapshot =
         randomColl.whereIn(FieldPath.documentId(), Arrays.asList(doc1.getId(), doc2)).get().get();
 
-    assertEquals(asList("a", "b"), querySnapshotToIds(querySnapshot));
+    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
+      assertEquals(asList("a", "b"), querySnapshotToIds(querySnapshot));
+    } else {
+      assertThat(querySnapshotToIds(querySnapshot)).containsExactlyElementsIn(asList("a", "b"));
+    }
   }
 
   @Test
@@ -1817,15 +1910,31 @@ public class ITSystemTest extends ITBaseTest {
 
     QuerySnapshot querySnapshot =
         randomColl.whereNotIn("zip", Arrays.<Object>asList(98101, 98103)).get().get();
-    assertEquals(asList("b", "d", "e", "f"), querySnapshotToIds(querySnapshot));
+    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
+      assertEquals(asList("b", "d", "e", "f"), querySnapshotToIds(querySnapshot));
+    } else {
+      assertThat(querySnapshotToIds(querySnapshot))
+          .containsExactlyElementsIn(asList("b", "d", "e", "f"));
+    }
 
     querySnapshot = randomColl.whereNotIn("zip", Arrays.<Object>asList(Double.NaN)).get().get();
-    assertEquals(asList("b", "a", "c", "d", "e", "f"), querySnapshotToIds(querySnapshot));
+    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
+      assertEquals(asList("b", "a", "c", "d", "e", "f"), querySnapshotToIds(querySnapshot));
+    } else {
+      assertThat(querySnapshotToIds(querySnapshot))
+          .containsExactlyElementsIn(asList("b", "a", "c", "d", "e", "f"));
+    }
 
     List<Object> nullArray = new ArrayList<>();
     nullArray.add(null);
     querySnapshot = randomColl.whereNotIn("zip", nullArray).get().get();
-    assertEquals(new ArrayList<>(), querySnapshotToIds(querySnapshot));
+
+    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
+      assertEquals(new ArrayList<>(), querySnapshotToIds(querySnapshot));
+    } else {
+      assertThat(querySnapshotToIds(querySnapshot))
+          .containsExactlyElementsIn(asList("a", "b", "c", "d", "e", "f"));
+    }
   }
 
   @Test
@@ -1853,10 +1962,14 @@ public class ITSystemTest extends ITBaseTest {
     setDocument("f", map("array", asList(map("a", 42))));
     setDocument("g", map("array", 42));
 
-    QuerySnapshot querySnapshot =
-        randomColl.whereArrayContainsAny("array", Arrays.<Object>asList(42, 43)).get().get();
+    Query query = randomColl.whereArrayContainsAny("array", Arrays.<Object>asList(42, 43));
 
-    assertEquals(asList("a", "b", "d", "e"), querySnapshotToIds(querySnapshot));
+    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
+      assertEquals(asList("a", "b", "d", "e"), querySnapshotToIds(query.get().get()));
+    } else {
+      assertThat(querySnapshotToIds(query.get().get()))
+          .containsExactlyElementsIn(asList("a", "b", "d", "e"));
+    }
   }
 
   @Test
@@ -1900,10 +2013,14 @@ public class ITSystemTest extends ITBaseTest {
         ALL_SUPPORTED_TYPES_OBJECT, documentSnapshots.get(1).toObject(AllSupportedTypes.class));
     assertNotEquals(
         ALL_SUPPORTED_TYPES_OBJECT, documentSnapshots.get(2).toObject(AllSupportedTypes.class));
-    assertEquals(ref1.getId(), documentSnapshots.get(0).getId());
-    assertEquals(ref2.getId(), documentSnapshots.get(1).getId());
-    assertEquals(ref3.getId(), documentSnapshots.get(2).getId());
+
     assertEquals(3, documentSnapshots.size());
+    // Only standard edition returns the documents in the order of the request.
+    if (getFirestoreEdition() == FirestoreEdition.STANDARD) {
+      assertEquals(ref1.getId(), documentSnapshots.get(0).getId());
+      assertEquals(ref2.getId(), documentSnapshots.get(1).getId());
+      assertEquals(ref3.getId(), documentSnapshots.get(2).getId());
+    }
   }
 
   @Test
@@ -2011,6 +2128,11 @@ public class ITSystemTest extends ITBaseTest {
   @Test
   public void readOnlyTransaction_failureWhenAttemptReadOlderThan60Seconds()
       throws ExecutionException, InterruptedException, TimeoutException {
+    // Skip this test because emulator does not have this behavior.
+    assumeFalse(
+        "Skip this test when running against the emulator because it does not have this behavior.",
+        TestHelper.isRunningAgainstFirestoreEmulator(firestore));
+
     final DocumentReference documentReference = randomColl.add(SINGLE_FIELD_MAP).get();
 
     // Exception isn't thrown until 60 minutes.
@@ -2235,6 +2357,9 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void testRecursiveDeleteTopLevelCollection() throws Exception {
+    assumeFalse(
+        "Skip this test when running against enterprise because it does not support showMissing",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     setupRecursiveDeleteTest();
     firestore.recursiveDelete(randomColl).get();
     assertEquals(0, countCollectionChildren(randomColl));
@@ -2242,6 +2367,9 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void testRecursiveDeleteNestedCollection() throws Exception {
+    assumeFalse(
+        "Skip this test when running against enterprise because it does not support showMissing",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     setupRecursiveDeleteTest();
     firestore.recursiveDelete(randomColl.document("bob").collection("parentsCol")).get();
     assertEquals(2, countCollectionChildren(randomColl));
@@ -2249,6 +2377,10 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void testRecursiveDeleteNestedDocument() throws Exception {
+    assumeFalse(
+        "Skip this test when running against enterprise because it does not support showMissing",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
+
     setupRecursiveDeleteTest();
     DocumentReference document = randomColl.document("bob/parentsCol/daniel");
     firestore.recursiveDelete(document).get();
@@ -2260,6 +2392,9 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void testRecursiveDeleteLeafDocument() throws Exception {
+    assumeFalse(
+        "Skip this test when running against enterprise because it does not support showMissing",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     setupRecursiveDeleteTest();
     DocumentReference document = randomColl.document("bob/parentsCol/daniel/childCol/ernie");
     firestore.recursiveDelete(document).get();
@@ -2268,8 +2403,12 @@ public class ITSystemTest extends ITBaseTest {
     assertEquals(5, countCollectionChildren(randomColl));
   }
 
+  @Ignore("Flaky with graalvm-native-a")
   @Test
   public void testRecursiveDeleteDoesNotAffectOtherCollections() throws Exception {
+    assumeFalse(
+        "Skip this test when running against enterprise because it does not support showMissing",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     setupRecursiveDeleteTest();
 
     // Add another nested collection that shouldn't be deleted.
@@ -2283,6 +2422,11 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void testRecursiveDeleteWithCustomBulkWriterInstance() throws Exception {
+    assumeFalse(
+        "Skip this test when running against enterprise because it does not support"
+            + " bulk writer.",
+        getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
+
     setupRecursiveDeleteTest();
 
     BulkWriter bulkWriter = firestore.bulkWriter();
@@ -2388,25 +2532,29 @@ public class ITSystemTest extends ITBaseTest {
         .get();
     randomColl.document("doc5").set(Collections.singletonMap("key", 1.5)).get();
 
-    Query query1 = randomColl.whereEqualTo("key", 1);
+    Query query1 = randomColl.whereEqualTo("key", 1).orderBy(FieldPath.documentId());
     assertEquals(asList("doc1", "doc2", "doc3"), querySnapshotToIds(query1.get().get()));
 
-    Query query2 = randomColl.whereEqualTo("key", new Decimal128Value("1.5"));
+    Query query2 =
+        randomColl.whereEqualTo("key", new Decimal128Value("1.5")).orderBy(FieldPath.documentId());
     assertEquals(asList("doc4", "doc5"), querySnapshotToIds(query2.get().get()));
   }
 
   @Test
   public void canWriteAndReadBackBsonObjectId() throws Exception {
+    assumeTrue(getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     checkRoundTrip(new BsonObjectId("507f191e810c19729de860ea"));
   }
 
   @Test
   public void canWriteAndReadBackBsonTimestamp() throws Exception {
+    assumeTrue(getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     checkRoundTrip(new BsonTimestamp(123, 45));
   }
 
   @Test
   public void canWriteAndReadBackBsonBinaryData() throws Exception {
+    assumeTrue(getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     checkRoundTrip(BsonBinaryData.fromBytes(127, new byte[] {1, 2, 3}));
   }
 
@@ -2425,6 +2573,7 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void invalidBsonObjectIdGetsRejected() throws Exception {
+    assumeTrue(getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     Exception error = null;
     try {
       randomColl.document().set(Collections.singletonMap("key", new BsonObjectId("foobar"))).get();
@@ -2437,19 +2586,18 @@ public class ITSystemTest extends ITBaseTest {
 
   @Test
   public void invalidBsonBinaryDataGetsRejected() throws Exception {
+    assumeTrue(getFirestoreEdition() == FirestoreEdition.ENTERPRISE);
     Exception error = null;
     try {
       randomColl
           .document()
-          .set(
-              Collections.singletonMap("key", BsonBinaryData.fromBytes(1234, new byte[] {1, 2, 3})))
+          .set(Collections.singletonMap("key", BsonBinaryData.fromBytes(1234, new byte[] {1, 2, 3})))
           .get();
     } catch (Exception e) {
       error = e;
     }
     assertThat(error).isNotNull();
     assertThat(error.getMessage())
-        .contains(
-            "The subtype for BsonBinaryData must be a value in the inclusive [0, 255] range.");
+        .contains("The subtype for Blob must be a value in the inclusive [0, 255] range.");
   }
 }

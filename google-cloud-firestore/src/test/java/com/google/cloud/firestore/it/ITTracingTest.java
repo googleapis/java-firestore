@@ -16,11 +16,14 @@
 
 package com.google.cloud.firestore.it;
 
+import static com.google.cloud.firestore.it.ITBaseTest.getFirestoreEdition;
 import static com.google.cloud.firestore.telemetry.TelemetryConstants.*;
 import static com.google.cloud.firestore.telemetry.TraceUtil.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import com.google.cloud.firestore.BulkWriter;
 import com.google.cloud.firestore.BulkWriterOptions;
@@ -35,6 +38,7 @@ import com.google.cloud.firestore.Precondition;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteBatch;
+import com.google.cloud.firestore.it.ITBaseTest.FirestoreEdition;
 import com.google.common.base.Preconditions;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.AttributeKey;
@@ -131,7 +135,7 @@ public abstract class ITTracingTest {
           otelOptionsBuilder.setOpenTelemetry(openTelemetrySdk).build());
     }
 
-    String namedDb = System.getProperty("FIRESTORE_NAMED_DATABASE");
+    String namedDb = System.getProperty("FIRESTORE_DATABASE_ID");
     if (namedDb != null) {
       logger.log(
           Level.INFO,
@@ -146,6 +150,10 @@ public abstract class ITTracingTest {
               "Integration test using default database for test %s", testName.getMethodName()));
     }
     firestore = optionsBuilder.build().getService();
+
+    assumeFalse(
+        "ITTracingTest is not supported against the emulator.",
+        "EMULATOR".equals(ITBaseTest.getTargetBackend()));
 
     // Clean up existing maps.
     spanNameToSpanId.clear();
@@ -281,6 +289,7 @@ public abstract class ITTracingTest {
     // All Firestore-generated spans have the settings attributes.
     List<String> expectedAttributes =
         Arrays.asList(
+            "gcp.resource.name",
             "gcp.firestore.memory_utilization",
             "gcp.firestore.settings.host",
             "gcp.firestore.settings.project_id",
@@ -399,6 +408,11 @@ public abstract class ITTracingTest {
 
   @Test
   public void partitionQuery() throws Exception {
+    assumeTrue(
+        "Skip this test when running against enterprise because it does not support partition"
+            + " query",
+        getFirestoreEdition() != FirestoreEdition.ENTERPRISE);
+
     CollectionGroup collectionGroup = firestore.collectionGroup("col");
     collectionGroup.getPartitions(3).get();
 
@@ -409,6 +423,10 @@ public abstract class ITTracingTest {
 
   @Test
   public void collectionListDocuments() throws Exception {
+    assumeTrue(
+        "Skip this test when running against enterprise because it does not support listDocuments",
+        getFirestoreEdition() != FirestoreEdition.ENTERPRISE);
+
     firestore.collection("col").listDocuments();
 
     List<SpanData> spans = prepareSpans();
@@ -600,6 +618,11 @@ public abstract class ITTracingTest {
 
   @Test
   public void docListCollections() throws Exception {
+    assumeTrue(
+        "Skip this test when running against enterprise because it does not support"
+            + " listCollections",
+        getFirestoreEdition() != FirestoreEdition.ENTERPRISE);
+
     firestore.collection("col").document("doc0").listCollections();
 
     List<SpanData> spans = prepareSpans();

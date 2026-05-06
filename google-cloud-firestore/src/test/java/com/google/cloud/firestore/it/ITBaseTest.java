@@ -51,11 +51,38 @@ public abstract class ITBaseTest {
   private FirestoreOptions firestoreOptions;
   private boolean backendPrimed = false;
 
-  @Before
-  public void before() throws Exception {
+  protected enum FirestoreEdition {
+    STANDARD,
+    ENTERPRISE
+  }
+
+  static String getTargetBackend() {
+    String targetPropertyName = "FIRESTORE_TARGET_BACKEND";
+    String targetBackend = System.getProperty(targetPropertyName);
+    if (targetBackend == null) {
+      targetBackend = System.getenv(targetPropertyName);
+    }
+
+    return targetBackend;
+  }
+
+  static FirestoreEdition getFirestoreEdition() {
+    String editionPropertyName = "FIRESTORE_EDITION";
+    String firestoreEdition = System.getProperty(editionPropertyName);
+    if (firestoreEdition == null) {
+      firestoreEdition = System.getenv(editionPropertyName);
+    }
+
+    if (firestoreEdition == null) {
+      return FirestoreEdition.STANDARD;
+    }
+    return FirestoreEdition.valueOf(firestoreEdition.toUpperCase());
+  }
+
+  public static FirestoreOptions.Builder getOptionsBuilder() {
     FirestoreOptions.Builder optionsBuilder = FirestoreOptions.newBuilder();
 
-    String dbPropertyName = "FIRESTORE_NAMED_DATABASE";
+    String dbPropertyName = "FIRESTORE_DATABASE_ID";
     String namedDb = System.getProperty(dbPropertyName);
     if (namedDb == null) {
       namedDb = System.getenv(dbPropertyName);
@@ -67,11 +94,7 @@ public abstract class ITBaseTest {
       logger.log(Level.INFO, "Integration test using default database.");
     }
 
-    String targetPropertyName = "FIRESTORE_TARGET_BACKEND";
-    String targetBackend = System.getProperty(targetPropertyName);
-    if (targetBackend == null) {
-      targetBackend = System.getenv(targetPropertyName);
-    }
+    String targetBackend = getTargetBackend();
     TransportChannelProvider defaultProvider = optionsBuilder.build().getTransportChannelProvider();
     if (targetBackend != null) {
       if (targetBackend.equals("PROD")) {
@@ -82,12 +105,16 @@ public abstract class ITBaseTest {
       } else if (targetBackend.equals("NIGHTLY")) {
         optionsBuilder.setChannelProvider(
             defaultProvider.withEndpoint("test-firestore.sandbox.googleapis.com:443"));
-      } else {
-        throw new IllegalArgumentException("Illegal target backend: " + targetBackend);
+      } else if (targetBackend.equals("EMULATOR")) {
+        optionsBuilder.setEmulatorHost("localhost:8080");
       }
     }
+    return optionsBuilder;
+  }
 
-    firestoreOptions = optionsBuilder.build();
+  @Before
+  public void before() throws Exception {
+    firestoreOptions = getOptionsBuilder().build();
     logger.log(
         Level.INFO,
         "Integration test against " + firestoreOptions.getTransportChannelProvider().getEndpoint());

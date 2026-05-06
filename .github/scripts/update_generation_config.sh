@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 # This script should be run at the root of the repository.
 # This script is used to update googleapis_commitish, gapic_generator_version,
 # and libraries_bom_version in generation configuration at the time of running
@@ -15,8 +15,20 @@ set -e
 function get_latest_released_version() {
     local group_id=$1
     local artifact_id=$2
-    json_content=$(curl -s "https://search.maven.org/solrsearch/select?q=g:${group_id}+AND+a:${artifact_id}&core=gav&rows=500&wt=json")
-    latest=$(jq -r '.response.docs[] | select(.v | test("^[0-9]+(\\.[0-9]+)*$")) | .v' <<< "${json_content}" | sort -V | tail -n 1)
+    group_id_url_path="$(sed 's|\.|/|g' <<< "${group_id}")"
+    url="https://repo1.maven.org/maven2/${group_id_url_path}/${artifact_id}/maven-metadata.xml"
+    xml_content=$(curl -s --fail "${url}")
+    
+    # 1. Extract all version tags
+    # 2. Strip the XML tags to leave just the version numbers
+    # 3. Filter for strictly numbers.numbers.numbers (e.g., 2.54.0)
+    # 4. Sort by version (V) and take the last one (tail -n 1)
+    latest=$(echo "${xml_content}" \
+      | grep -oE '<version>[0-9]+\.[0-9]+\.[0-9]+</version>' \
+      | sed -E 's/<[^>]+>//g' \
+      | sort -V \
+      | tail -n 1)
+    
     if [[ -z "${latest}" ]]; then
         echo "The latest version of ${group_id}:${artifact_id} is empty."
         echo "The returned json from maven.org is invalid: ${json_content}"
@@ -36,13 +48,14 @@ function update_config() {
 }
 
 # Update an action to a new version in GitHub action.
+# the second argument must have the git tag (including "v").
 function update_action() {
     local key_word=$1
     local new_value=$2
     local file=$3
     echo "Update ${key_word} to ${new_value} in ${file}"
     # use a different delimiter because the key_word contains "/".
-    sed -i -e "s|${key_word}@v.*$|${key_word}@v${new_value}|" "${file}"
+    sed -i -e "s|${key_word}@[^ ]*$|${key_word}@${new_value}|" "${file}"
 }
 
 # The parameters of this script is:
@@ -131,12 +144,16 @@ rm -rf tmp-googleapis
 update_config "googleapis_commitish" "${latest_commit}" "${generation_config}"
 
 # Update gapic-generator-java version to the latest
-latest_version=$(get_latest_released_version "com.google.api" "gapic-generator-java")
-update_config "gapic_generator_version" "${latest_version}" "${generation_config}"
+latest_gapic_generator_version=$(get_latest_released_version "com.google.api" "gapic-generator-java")
+update_config "gapic_generator_version" "${latest_gapic_generator_version}" "${generation_config}"
 
-# Update composite action version to latest gapic-generator-java version
-update_action "googleapis/sdk-platform-java/.github/scripts" \
-  "${latest_version}" \
+# Update the GitHub Actions reference to the latest.
+# After the google-cloud-java monorepo migration of sdk-platform-java,
+# we cannot rely on the gapic-generator-java version tag. Let's use
+# the gapic-libraries-bom version
+latest_gapic_libraries_bom_version=$(get_latest_released_version "com.google.cloud" "gapic-libraries-bom")
+update_action "googleapis/google-cloud-java/sdk-platform-java/.github/scripts" \
+  "v${latest_gapic_libraries_bom_version}" \
   "${workflow}"
 
 # Update libraries-bom version to the latest

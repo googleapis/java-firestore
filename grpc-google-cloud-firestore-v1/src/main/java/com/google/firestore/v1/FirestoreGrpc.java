@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,6 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
  * truly serverless apps.
  * </pre>
  */
-@javax.annotation.Generated(
-    value = "by gRPC proto compiler",
-    comments = "Source: google/firestore/v1/firestore.proto")
 @io.grpc.stub.annotations.GrpcGenerated
 public final class FirestoreGrpc {
 
@@ -419,6 +416,50 @@ public final class FirestoreGrpc {
       }
     }
     return getRunQueryMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.v1.ExecutePipelineRequest,
+          com.google.firestore.v1.ExecutePipelineResponse>
+      getExecutePipelineMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "ExecutePipeline",
+      requestType = com.google.firestore.v1.ExecutePipelineRequest.class,
+      responseType = com.google.firestore.v1.ExecutePipelineResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.v1.ExecutePipelineRequest,
+          com.google.firestore.v1.ExecutePipelineResponse>
+      getExecutePipelineMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.v1.ExecutePipelineRequest,
+            com.google.firestore.v1.ExecutePipelineResponse>
+        getExecutePipelineMethod;
+    if ((getExecutePipelineMethod = FirestoreGrpc.getExecutePipelineMethod) == null) {
+      synchronized (FirestoreGrpc.class) {
+        if ((getExecutePipelineMethod = FirestoreGrpc.getExecutePipelineMethod) == null) {
+          FirestoreGrpc.getExecutePipelineMethod =
+              getExecutePipelineMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.v1.ExecutePipelineRequest,
+                          com.google.firestore.v1.ExecutePipelineResponse>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "ExecutePipeline"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.v1.ExecutePipelineRequest.getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.v1.ExecutePipelineResponse.getDefaultInstance()))
+                      .setSchemaDescriptor(new FirestoreMethodDescriptorSupplier("ExecutePipeline"))
+                      .build();
+        }
+      }
+    }
+    return getExecutePipelineMethod;
   }
 
   private static volatile io.grpc.MethodDescriptor<
@@ -923,6 +964,21 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
+     * Executes a pipeline query.
+     * </pre>
+     */
+    default void executePipeline(
+        com.google.firestore.v1.ExecutePipelineRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.v1.ExecutePipelineResponse>
+            responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getExecutePipelineMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Runs an aggregation query.
      * Rather than producing [Document][google.firestore.v1.Document] results like
      * [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery], this API
@@ -1229,6 +1285,23 @@ public final class FirestoreGrpc {
      *
      *
      * <pre>
+     * Executes a pipeline query.
+     * </pre>
+     */
+    public void executePipeline(
+        com.google.firestore.v1.ExecutePipelineRequest request,
+        io.grpc.stub.StreamObserver<com.google.firestore.v1.ExecutePipelineResponse>
+            responseObserver) {
+      io.grpc.stub.ClientCalls.asyncServerStreamingCall(
+          getChannel().newCall(getExecutePipelineMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
      * Runs an aggregation query.
      * Rather than producing [Document][google.firestore.v1.Document] results like
      * [Firestore.RunQuery][google.firestore.v1.Firestore.RunQuery], this API
@@ -1386,8 +1459,8 @@ public final class FirestoreGrpc {
      * </pre>
      */
     public com.google.firestore.v1.Document getDocument(
-        com.google.firestore.v1.GetDocumentRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.v1.GetDocumentRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getGetDocumentMethod(), getCallOptions(), request);
     }
 
@@ -1399,8 +1472,8 @@ public final class FirestoreGrpc {
      * </pre>
      */
     public com.google.firestore.v1.ListDocumentsResponse listDocuments(
-        com.google.firestore.v1.ListDocumentsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.v1.ListDocumentsRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getListDocumentsMethod(), getCallOptions(), request);
     }
 
@@ -1412,8 +1485,8 @@ public final class FirestoreGrpc {
      * </pre>
      */
     public com.google.firestore.v1.Document updateDocument(
-        com.google.firestore.v1.UpdateDocumentRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.v1.UpdateDocumentRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getUpdateDocumentMethod(), getCallOptions(), request);
     }
 
@@ -1425,8 +1498,8 @@ public final class FirestoreGrpc {
      * </pre>
      */
     public com.google.protobuf.Empty deleteDocument(
-        com.google.firestore.v1.DeleteDocumentRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.v1.DeleteDocumentRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getDeleteDocumentMethod(), getCallOptions(), request);
     }
 
@@ -1454,8 +1527,8 @@ public final class FirestoreGrpc {
      * </pre>
      */
     public com.google.firestore.v1.BeginTransactionResponse beginTransaction(
-        com.google.firestore.v1.BeginTransactionRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.v1.BeginTransactionRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getBeginTransactionMethod(), getCallOptions(), request);
     }
 
@@ -1467,8 +1540,8 @@ public final class FirestoreGrpc {
      * </pre>
      */
     public com.google.firestore.v1.CommitResponse commit(
-        com.google.firestore.v1.CommitRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.v1.CommitRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getCommitMethod(), getCallOptions(), request);
     }
 
@@ -1479,8 +1552,9 @@ public final class FirestoreGrpc {
      * Rolls back a transaction.
      * </pre>
      */
-    public com.google.protobuf.Empty rollback(com.google.firestore.v1.RollbackRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+    public com.google.protobuf.Empty rollback(com.google.firestore.v1.RollbackRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getRollbackMethod(), getCallOptions(), request);
     }
 
@@ -1496,6 +1570,20 @@ public final class FirestoreGrpc {
         com.google.firestore.v1.RunQueryRequest request) {
       return io.grpc.stub.ClientCalls.blockingV2ServerStreamingCall(
           getChannel(), getRunQueryMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Executes a pipeline query.
+     * </pre>
+     */
+    @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/10918")
+    public io.grpc.stub.BlockingClientCall<?, com.google.firestore.v1.ExecutePipelineResponse>
+        executePipeline(com.google.firestore.v1.ExecutePipelineRequest request) {
+      return io.grpc.stub.ClientCalls.blockingV2ServerStreamingCall(
+          getChannel(), getExecutePipelineMethod(), getCallOptions(), request);
     }
 
     /**
@@ -1531,8 +1619,8 @@ public final class FirestoreGrpc {
      * </pre>
      */
     public com.google.firestore.v1.PartitionQueryResponse partitionQuery(
-        com.google.firestore.v1.PartitionQueryRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.v1.PartitionQueryRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getPartitionQueryMethod(), getCallOptions(), request);
     }
 
@@ -1576,8 +1664,8 @@ public final class FirestoreGrpc {
      * </pre>
      */
     public com.google.firestore.v1.ListCollectionIdsResponse listCollectionIds(
-        com.google.firestore.v1.ListCollectionIdsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.v1.ListCollectionIdsRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getListCollectionIdsMethod(), getCallOptions(), request);
     }
 
@@ -1596,8 +1684,8 @@ public final class FirestoreGrpc {
      * </pre>
      */
     public com.google.firestore.v1.BatchWriteResponse batchWrite(
-        com.google.firestore.v1.BatchWriteRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.v1.BatchWriteRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getBatchWriteMethod(), getCallOptions(), request);
     }
 
@@ -1609,8 +1697,8 @@ public final class FirestoreGrpc {
      * </pre>
      */
     public com.google.firestore.v1.Document createDocument(
-        com.google.firestore.v1.CreateDocumentRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.v1.CreateDocumentRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getCreateDocumentMethod(), getCallOptions(), request);
     }
   }
@@ -1756,6 +1844,19 @@ public final class FirestoreGrpc {
         com.google.firestore.v1.RunQueryRequest request) {
       return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
           getChannel(), getRunQueryMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Executes a pipeline query.
+     * </pre>
+     */
+    public java.util.Iterator<com.google.firestore.v1.ExecutePipelineResponse> executePipeline(
+        com.google.firestore.v1.ExecutePipelineRequest request) {
+      return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
+          getChannel(), getExecutePipelineMethod(), getCallOptions(), request);
     }
 
     /**
@@ -2034,13 +2135,14 @@ public final class FirestoreGrpc {
   private static final int METHODID_COMMIT = 6;
   private static final int METHODID_ROLLBACK = 7;
   private static final int METHODID_RUN_QUERY = 8;
-  private static final int METHODID_RUN_AGGREGATION_QUERY = 9;
-  private static final int METHODID_PARTITION_QUERY = 10;
-  private static final int METHODID_LIST_COLLECTION_IDS = 11;
-  private static final int METHODID_BATCH_WRITE = 12;
-  private static final int METHODID_CREATE_DOCUMENT = 13;
-  private static final int METHODID_WRITE = 14;
-  private static final int METHODID_LISTEN = 15;
+  private static final int METHODID_EXECUTE_PIPELINE = 9;
+  private static final int METHODID_RUN_AGGREGATION_QUERY = 10;
+  private static final int METHODID_PARTITION_QUERY = 11;
+  private static final int METHODID_LIST_COLLECTION_IDS = 12;
+  private static final int METHODID_BATCH_WRITE = 13;
+  private static final int METHODID_CREATE_DOCUMENT = 14;
+  private static final int METHODID_WRITE = 15;
+  private static final int METHODID_LISTEN = 16;
 
   private static final class MethodHandlers<Req, Resp>
       implements io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -2107,6 +2209,12 @@ public final class FirestoreGrpc {
           serviceImpl.runQuery(
               (com.google.firestore.v1.RunQueryRequest) request,
               (io.grpc.stub.StreamObserver<com.google.firestore.v1.RunQueryResponse>)
+                  responseObserver);
+          break;
+        case METHODID_EXECUTE_PIPELINE:
+          serviceImpl.executePipeline(
+              (com.google.firestore.v1.ExecutePipelineRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.firestore.v1.ExecutePipelineResponse>)
                   responseObserver);
           break;
         case METHODID_RUN_AGGREGATION_QUERY:
@@ -2224,6 +2332,13 @@ public final class FirestoreGrpc {
                     com.google.firestore.v1.RunQueryRequest,
                     com.google.firestore.v1.RunQueryResponse>(service, METHODID_RUN_QUERY)))
         .addMethod(
+            getExecutePipelineMethod(),
+            io.grpc.stub.ServerCalls.asyncServerStreamingCall(
+                new MethodHandlers<
+                    com.google.firestore.v1.ExecutePipelineRequest,
+                    com.google.firestore.v1.ExecutePipelineResponse>(
+                    service, METHODID_EXECUTE_PIPELINE)))
+        .addMethod(
             getRunAggregationQueryMethod(),
             io.grpc.stub.ServerCalls.asyncServerStreamingCall(
                 new MethodHandlers<
@@ -2328,6 +2443,7 @@ public final class FirestoreGrpc {
                       .addMethod(getCommitMethod())
                       .addMethod(getRollbackMethod())
                       .addMethod(getRunQueryMethod())
+                      .addMethod(getExecutePipelineMethod())
                       .addMethod(getRunAggregationQueryMethod())
                       .addMethod(getPartitionQueryMethod())
                       .addMethod(getWriteMethod())

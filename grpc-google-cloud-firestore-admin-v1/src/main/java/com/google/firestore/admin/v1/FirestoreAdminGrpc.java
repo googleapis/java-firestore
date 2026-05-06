@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,9 +43,6 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
  * service `google.longrunning.Operations`.
  * </pre>
  */
-@javax.annotation.Generated(
-    value = "by gRPC proto compiler",
-    comments = "Source: google/firestore/admin/v1/firestore_admin.proto")
 @io.grpc.stub.annotations.GrpcGenerated
 public final class FirestoreAdminGrpc {
 
@@ -1443,6 +1440,49 @@ public final class FirestoreAdminGrpc {
     return getDeleteBackupScheduleMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.CloneDatabaseRequest, com.google.longrunning.Operation>
+      getCloneDatabaseMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "CloneDatabase",
+      requestType = com.google.firestore.admin.v1.CloneDatabaseRequest.class,
+      responseType = com.google.longrunning.Operation.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<
+          com.google.firestore.admin.v1.CloneDatabaseRequest, com.google.longrunning.Operation>
+      getCloneDatabaseMethod() {
+    io.grpc.MethodDescriptor<
+            com.google.firestore.admin.v1.CloneDatabaseRequest, com.google.longrunning.Operation>
+        getCloneDatabaseMethod;
+    if ((getCloneDatabaseMethod = FirestoreAdminGrpc.getCloneDatabaseMethod) == null) {
+      synchronized (FirestoreAdminGrpc.class) {
+        if ((getCloneDatabaseMethod = FirestoreAdminGrpc.getCloneDatabaseMethod) == null) {
+          FirestoreAdminGrpc.getCloneDatabaseMethod =
+              getCloneDatabaseMethod =
+                  io.grpc.MethodDescriptor
+                      .<com.google.firestore.admin.v1.CloneDatabaseRequest,
+                          com.google.longrunning.Operation>
+                          newBuilder()
+                      .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+                      .setFullMethodName(generateFullMethodName(SERVICE_NAME, "CloneDatabase"))
+                      .setSampledToLocalTracing(true)
+                      .setRequestMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.firestore.admin.v1.CloneDatabaseRequest
+                                  .getDefaultInstance()))
+                      .setResponseMarshaller(
+                          io.grpc.protobuf.ProtoUtils.marshaller(
+                              com.google.longrunning.Operation.getDefaultInstance()))
+                      .setSchemaDescriptor(
+                          new FirestoreAdminMethodDescriptorSupplier("CloneDatabase"))
+                      .build();
+        }
+      }
+    }
+    return getCloneDatabaseMethod;
+  }
+
   /** Creates a new async stub that supports all call types for the service */
   public static FirestoreAdminStub newStub(io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<FirestoreAdminStub> factory =
@@ -2023,6 +2063,34 @@ public final class FirestoreAdminGrpc {
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
           getDeleteBackupScheduleMethod(), responseObserver);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new database by cloning an existing one.
+     * The new database must be in the same cloud region or multi-region location
+     * as the existing database. This behaves similar to
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase]
+     * except instead of creating a new empty database, a new database is created
+     * with the database type, index configuration, and documents from an existing
+     * database.
+     * The [long-running operation][google.longrunning.Operation] can be used to
+     * track the progress of the clone, with the Operation's
+     * [metadata][google.longrunning.Operation.metadata] field type being the
+     * [CloneDatabaseMetadata][google.firestore.admin.v1.CloneDatabaseMetadata].
+     * The [response][google.longrunning.Operation.response] type is the
+     * [Database][google.firestore.admin.v1.Database] if the clone was
+     * successful. The new database is not readable or writeable until the LRO has
+     * completed.
+     * </pre>
+     */
+    default void cloneDatabase(
+        com.google.firestore.admin.v1.CloneDatabaseRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(
+          getCloneDatabaseMethod(), responseObserver);
     }
   }
 
@@ -2655,6 +2723,36 @@ public final class FirestoreAdminGrpc {
           request,
           responseObserver);
     }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new database by cloning an existing one.
+     * The new database must be in the same cloud region or multi-region location
+     * as the existing database. This behaves similar to
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase]
+     * except instead of creating a new empty database, a new database is created
+     * with the database type, index configuration, and documents from an existing
+     * database.
+     * The [long-running operation][google.longrunning.Operation] can be used to
+     * track the progress of the clone, with the Operation's
+     * [metadata][google.longrunning.Operation.metadata] field type being the
+     * [CloneDatabaseMetadata][google.firestore.admin.v1.CloneDatabaseMetadata].
+     * The [response][google.longrunning.Operation.response] type is the
+     * [Database][google.firestore.admin.v1.Database] if the clone was
+     * successful. The new database is not readable or writeable until the LRO has
+     * completed.
+     * </pre>
+     */
+    public void cloneDatabase(
+        com.google.firestore.admin.v1.CloneDatabaseRequest request,
+        io.grpc.stub.StreamObserver<com.google.longrunning.Operation> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getCloneDatabaseMethod(), getCallOptions()),
+          request,
+          responseObserver);
+    }
   }
 
   /**
@@ -2707,8 +2805,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.longrunning.Operation createIndex(
-        com.google.firestore.admin.v1.CreateIndexRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.CreateIndexRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getCreateIndexMethod(), getCallOptions(), request);
     }
 
@@ -2720,8 +2818,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.ListIndexesResponse listIndexes(
-        com.google.firestore.admin.v1.ListIndexesRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.ListIndexesRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getListIndexesMethod(), getCallOptions(), request);
     }
 
@@ -2733,8 +2831,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.Index getIndex(
-        com.google.firestore.admin.v1.GetIndexRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.GetIndexRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getGetIndexMethod(), getCallOptions(), request);
     }
 
@@ -2746,8 +2844,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.protobuf.Empty deleteIndex(
-        com.google.firestore.admin.v1.DeleteIndexRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.DeleteIndexRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getDeleteIndexMethod(), getCallOptions(), request);
     }
 
@@ -2759,8 +2857,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.Field getField(
-        com.google.firestore.admin.v1.GetFieldRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.GetFieldRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getGetFieldMethod(), getCallOptions(), request);
     }
 
@@ -2785,8 +2883,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.longrunning.Operation updateField(
-        com.google.firestore.admin.v1.UpdateFieldRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.UpdateFieldRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getUpdateFieldMethod(), getCallOptions(), request);
     }
 
@@ -2805,8 +2903,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.ListFieldsResponse listFields(
-        com.google.firestore.admin.v1.ListFieldsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.ListFieldsRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getListFieldsMethod(), getCallOptions(), request);
     }
 
@@ -2827,8 +2925,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.longrunning.Operation exportDocuments(
-        com.google.firestore.admin.v1.ExportDocumentsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.ExportDocumentsRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getExportDocumentsMethod(), getCallOptions(), request);
     }
 
@@ -2844,8 +2943,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.longrunning.Operation importDocuments(
-        com.google.firestore.admin.v1.ImportDocumentsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.ImportDocumentsRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getImportDocumentsMethod(), getCallOptions(), request);
     }
 
@@ -2863,8 +2963,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.longrunning.Operation bulkDeleteDocuments(
-        com.google.firestore.admin.v1.BulkDeleteDocumentsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.BulkDeleteDocumentsRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getBulkDeleteDocumentsMethod(), getCallOptions(), request);
     }
 
@@ -2876,8 +2977,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.longrunning.Operation createDatabase(
-        com.google.firestore.admin.v1.CreateDatabaseRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.CreateDatabaseRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getCreateDatabaseMethod(), getCallOptions(), request);
     }
 
@@ -2889,8 +2991,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.Database getDatabase(
-        com.google.firestore.admin.v1.GetDatabaseRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.GetDatabaseRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getGetDatabaseMethod(), getCallOptions(), request);
     }
 
@@ -2902,8 +3004,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.ListDatabasesResponse listDatabases(
-        com.google.firestore.admin.v1.ListDatabasesRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.ListDatabasesRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getListDatabasesMethod(), getCallOptions(), request);
     }
 
@@ -2915,8 +3017,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.longrunning.Operation updateDatabase(
-        com.google.firestore.admin.v1.UpdateDatabaseRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.UpdateDatabaseRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getUpdateDatabaseMethod(), getCallOptions(), request);
     }
 
@@ -2928,8 +3031,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.longrunning.Operation deleteDatabase(
-        com.google.firestore.admin.v1.DeleteDatabaseRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.DeleteDatabaseRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getDeleteDatabaseMethod(), getCallOptions(), request);
     }
 
@@ -2941,8 +3045,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.UserCreds createUserCreds(
-        com.google.firestore.admin.v1.CreateUserCredsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.CreateUserCredsRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getCreateUserCredsMethod(), getCallOptions(), request);
     }
 
@@ -2955,8 +3060,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.UserCreds getUserCreds(
-        com.google.firestore.admin.v1.GetUserCredsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.GetUserCredsRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getGetUserCredsMethod(), getCallOptions(), request);
     }
 
@@ -2969,8 +3074,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.ListUserCredsResponse listUserCreds(
-        com.google.firestore.admin.v1.ListUserCredsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.ListUserCredsRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getListUserCredsMethod(), getCallOptions(), request);
     }
 
@@ -2982,8 +3087,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.UserCreds enableUserCreds(
-        com.google.firestore.admin.v1.EnableUserCredsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.EnableUserCredsRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getEnableUserCredsMethod(), getCallOptions(), request);
     }
 
@@ -2995,8 +3101,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.UserCreds disableUserCreds(
-        com.google.firestore.admin.v1.DisableUserCredsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.DisableUserCredsRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getDisableUserCredsMethod(), getCallOptions(), request);
     }
 
@@ -3008,8 +3115,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.UserCreds resetUserPassword(
-        com.google.firestore.admin.v1.ResetUserPasswordRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.ResetUserPasswordRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getResetUserPasswordMethod(), getCallOptions(), request);
     }
 
@@ -3021,8 +3129,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.protobuf.Empty deleteUserCreds(
-        com.google.firestore.admin.v1.DeleteUserCredsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.DeleteUserCredsRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getDeleteUserCredsMethod(), getCallOptions(), request);
     }
 
@@ -3034,8 +3143,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.Backup getBackup(
-        com.google.firestore.admin.v1.GetBackupRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.GetBackupRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getGetBackupMethod(), getCallOptions(), request);
     }
 
@@ -3047,8 +3156,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.ListBackupsResponse listBackups(
-        com.google.firestore.admin.v1.ListBackupsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.ListBackupsRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getListBackupsMethod(), getCallOptions(), request);
     }
 
@@ -3060,8 +3169,8 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.protobuf.Empty deleteBackup(
-        com.google.firestore.admin.v1.DeleteBackupRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.DeleteBackupRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getDeleteBackupMethod(), getCallOptions(), request);
     }
 
@@ -3087,8 +3196,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.longrunning.Operation restoreDatabase(
-        com.google.firestore.admin.v1.RestoreDatabaseRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.RestoreDatabaseRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getRestoreDatabaseMethod(), getCallOptions(), request);
     }
 
@@ -3102,8 +3212,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.BackupSchedule createBackupSchedule(
-        com.google.firestore.admin.v1.CreateBackupScheduleRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.CreateBackupScheduleRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getCreateBackupScheduleMethod(), getCallOptions(), request);
     }
 
@@ -3115,8 +3226,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.BackupSchedule getBackupSchedule(
-        com.google.firestore.admin.v1.GetBackupScheduleRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.GetBackupScheduleRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getGetBackupScheduleMethod(), getCallOptions(), request);
     }
 
@@ -3128,8 +3240,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.ListBackupSchedulesResponse listBackupSchedules(
-        com.google.firestore.admin.v1.ListBackupSchedulesRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.ListBackupSchedulesRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getListBackupSchedulesMethod(), getCallOptions(), request);
     }
 
@@ -3141,8 +3254,9 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.firestore.admin.v1.BackupSchedule updateBackupSchedule(
-        com.google.firestore.admin.v1.UpdateBackupScheduleRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.UpdateBackupScheduleRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getUpdateBackupScheduleMethod(), getCallOptions(), request);
     }
 
@@ -3154,9 +3268,37 @@ public final class FirestoreAdminGrpc {
      * </pre>
      */
     public com.google.protobuf.Empty deleteBackupSchedule(
-        com.google.firestore.admin.v1.DeleteBackupScheduleRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+        com.google.firestore.admin.v1.DeleteBackupScheduleRequest request)
+        throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
           getChannel(), getDeleteBackupScheduleMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new database by cloning an existing one.
+     * The new database must be in the same cloud region or multi-region location
+     * as the existing database. This behaves similar to
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase]
+     * except instead of creating a new empty database, a new database is created
+     * with the database type, index configuration, and documents from an existing
+     * database.
+     * The [long-running operation][google.longrunning.Operation] can be used to
+     * track the progress of the clone, with the Operation's
+     * [metadata][google.longrunning.Operation.metadata] field type being the
+     * [CloneDatabaseMetadata][google.firestore.admin.v1.CloneDatabaseMetadata].
+     * The [response][google.longrunning.Operation.response] type is the
+     * [Database][google.firestore.admin.v1.Database] if the clone was
+     * successful. The new database is not readable or writeable until the LRO has
+     * completed.
+     * </pre>
+     */
+    public com.google.longrunning.Operation cloneDatabase(
+        com.google.firestore.admin.v1.CloneDatabaseRequest request) throws io.grpc.StatusException {
+      return io.grpc.stub.ClientCalls.blockingV2UnaryCall(
+          getChannel(), getCloneDatabaseMethod(), getCallOptions(), request);
     }
   }
 
@@ -3660,6 +3802,33 @@ public final class FirestoreAdminGrpc {
         com.google.firestore.admin.v1.DeleteBackupScheduleRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getDeleteBackupScheduleMethod(), getCallOptions(), request);
+    }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new database by cloning an existing one.
+     * The new database must be in the same cloud region or multi-region location
+     * as the existing database. This behaves similar to
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase]
+     * except instead of creating a new empty database, a new database is created
+     * with the database type, index configuration, and documents from an existing
+     * database.
+     * The [long-running operation][google.longrunning.Operation] can be used to
+     * track the progress of the clone, with the Operation's
+     * [metadata][google.longrunning.Operation.metadata] field type being the
+     * [CloneDatabaseMetadata][google.firestore.admin.v1.CloneDatabaseMetadata].
+     * The [response][google.longrunning.Operation.response] type is the
+     * [Database][google.firestore.admin.v1.Database] if the clone was
+     * successful. The new database is not readable or writeable until the LRO has
+     * completed.
+     * </pre>
+     */
+    public com.google.longrunning.Operation cloneDatabase(
+        com.google.firestore.admin.v1.CloneDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getCloneDatabaseMethod(), getCallOptions(), request);
     }
   }
 
@@ -4179,6 +4348,33 @@ public final class FirestoreAdminGrpc {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getDeleteBackupScheduleMethod(), getCallOptions()), request);
     }
+
+    /**
+     *
+     *
+     * <pre>
+     * Creates a new database by cloning an existing one.
+     * The new database must be in the same cloud region or multi-region location
+     * as the existing database. This behaves similar to
+     * [FirestoreAdmin.CreateDatabase][google.firestore.admin.v1.FirestoreAdmin.CreateDatabase]
+     * except instead of creating a new empty database, a new database is created
+     * with the database type, index configuration, and documents from an existing
+     * database.
+     * The [long-running operation][google.longrunning.Operation] can be used to
+     * track the progress of the clone, with the Operation's
+     * [metadata][google.longrunning.Operation.metadata] field type being the
+     * [CloneDatabaseMetadata][google.firestore.admin.v1.CloneDatabaseMetadata].
+     * The [response][google.longrunning.Operation.response] type is the
+     * [Database][google.firestore.admin.v1.Database] if the clone was
+     * successful. The new database is not readable or writeable until the LRO has
+     * completed.
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.google.longrunning.Operation>
+        cloneDatabase(com.google.firestore.admin.v1.CloneDatabaseRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getCloneDatabaseMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_CREATE_INDEX = 0;
@@ -4212,6 +4408,7 @@ public final class FirestoreAdminGrpc {
   private static final int METHODID_LIST_BACKUP_SCHEDULES = 28;
   private static final int METHODID_UPDATE_BACKUP_SCHEDULE = 29;
   private static final int METHODID_DELETE_BACKUP_SCHEDULE = 30;
+  private static final int METHODID_CLONE_DATABASE = 31;
 
   private static final class MethodHandlers<Req, Resp>
       implements io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -4400,6 +4597,11 @@ public final class FirestoreAdminGrpc {
           serviceImpl.deleteBackupSchedule(
               (com.google.firestore.admin.v1.DeleteBackupScheduleRequest) request,
               (io.grpc.stub.StreamObserver<com.google.protobuf.Empty>) responseObserver);
+          break;
+        case METHODID_CLONE_DATABASE:
+          serviceImpl.cloneDatabase(
+              (com.google.firestore.admin.v1.CloneDatabaseRequest) request,
+              (io.grpc.stub.StreamObserver<com.google.longrunning.Operation>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -4615,6 +4817,12 @@ public final class FirestoreAdminGrpc {
                 new MethodHandlers<
                     com.google.firestore.admin.v1.DeleteBackupScheduleRequest,
                     com.google.protobuf.Empty>(service, METHODID_DELETE_BACKUP_SCHEDULE)))
+        .addMethod(
+            getCloneDatabaseMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+                new MethodHandlers<
+                    com.google.firestore.admin.v1.CloneDatabaseRequest,
+                    com.google.longrunning.Operation>(service, METHODID_CLONE_DATABASE)))
         .build();
   }
 
@@ -4697,6 +4905,7 @@ public final class FirestoreAdminGrpc {
                       .addMethod(getListBackupSchedulesMethod())
                       .addMethod(getUpdateBackupScheduleMethod())
                       .addMethod(getDeleteBackupScheduleMethod())
+                      .addMethod(getCloneDatabaseMethod())
                       .build();
         }
       }

@@ -39,6 +39,7 @@ public final class Quadruple implements Comparable<Quadruple>, Serializable {
   private final int biasedExponent;
   private final long mantHi;
   private final long mantLo;
+
   /**
    * Build a new quadruple from its raw representation - sign, biased exponent, 128-bit mantissa.
    *
@@ -53,38 +54,47 @@ public final class Quadruple implements Comparable<Quadruple>, Serializable {
     this.mantHi = mantHi;
     this.mantLo = mantLo;
   }
+
   /** Return the sign of this {@link Quadruple}. */
   public boolean negative() {
     return negative;
   }
+
   /** Return the unsigned-32-bit biased exponent of this {@link Quadruple}. */
   public int biasedExponent() {
     return biasedExponent;
   }
+
   /** Return the high-order unsigned-64-bits of the mantissa of this {@link Quadruple}. */
   public long mantHi() {
     return mantHi;
   }
+
   /** Return the low-order unsigned-64-bits of the mantissa of this {@link Quadruple}. */
   public long mantLo() {
     return mantLo;
   }
+
   /** Return the (unbiased) exponent of this {@link Quadruple}. */
   public int exponent() {
     return biasedExponent - QuadrupleBuilder.EXPONENT_BIAS;
   }
+
   /** Return true if this {@link Quadruple} is -0 or +0 */
   public boolean isZero() {
     return biasedExponent == 0 && mantHi == 0 && mantLo == 0;
   }
+
   /** Return true if this {@link Quadruple} is -infinity or +infinity */
   public boolean isInfinite() {
     return biasedExponent == (int) EXPONENT_OF_INFINITY && mantHi == 0 && mantLo == 0;
   }
+
   /** Return true if this {@link Quadruple} is a NaN. */
   public boolean isNaN() {
     return biasedExponent == (int) EXPONENT_OF_INFINITY && !(mantHi == 0 && mantLo == 0);
   }
+
   // equals (and hashCode) follow Double.equals: all NaNs are equal and -0 != 0
   @Override
   public boolean equals(Object other) {
@@ -116,6 +126,7 @@ public final class Quadruple implements Comparable<Quadruple>, Serializable {
   }
 
   private static final int HASH_NAN = 31 * 31 * Integer.hashCode((int) EXPONENT_OF_INFINITY);
+
   // Compare two quadruples, with -0 < 0, and all NaNs equal and larger than all numbers.
   @Override
   public int compareTo(Quadruple other) {
@@ -211,6 +222,7 @@ public final class Quadruple implements Comparable<Quadruple>, Serializable {
     }
     return new Quadruple(value < 0, bias((int) (exponent - 1023)), mantHi, 0);
   }
+
   /**
    * Converts a decimal number to a {@link Quadruple}. The supported format (no whitespace allowed)
    * is:

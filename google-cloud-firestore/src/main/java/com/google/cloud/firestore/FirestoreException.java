@@ -16,8 +16,8 @@
 
 package com.google.cloud.firestore;
 
-import com.google.api.core.BetaApi;
 import com.google.api.gax.rpc.ApiException;
+import com.google.api.gax.rpc.StatusCode;
 import com.google.cloud.grpc.BaseGrpcServiceException;
 import io.grpc.Status;
 import java.io.IOException;
@@ -43,6 +43,8 @@ public class FirestoreException extends BaseGrpcServiceException {
         exception,
         exception.getStatusCode().getCode().getHttpStatusCode(),
         exception.isRetryable());
+
+    this.status = FirestoreException.toStatus(exception.getStatusCode());
   }
 
   private FirestoreException(IOException exception, boolean retryable) {
@@ -55,7 +57,6 @@ public class FirestoreException extends BaseGrpcServiceException {
    *
    * @return The FirestoreException
    */
-  @BetaApi
   public static FirestoreException forInvalidArgument(String message, Object... params) {
     return new FirestoreException(String.format(message, params), Status.INVALID_ARGUMENT);
   }
@@ -66,7 +67,6 @@ public class FirestoreException extends BaseGrpcServiceException {
    *
    * @return The FirestoreException
    */
-  @BetaApi
   public static FirestoreException forServerRejection(
       Status status, String message, Object... params) {
     return forServerRejection(status, null, message, params);
@@ -78,7 +78,6 @@ public class FirestoreException extends BaseGrpcServiceException {
    *
    * @return The FirestoreException
    */
-  @BetaApi
   public static FirestoreException forServerRejection(
       Status status, @Nullable Throwable cause, String message, Object... params) {
     return new FirestoreException(String.format(message, params), status, cause);
@@ -89,7 +88,6 @@ public class FirestoreException extends BaseGrpcServiceException {
    *
    * @return The FirestoreException
    */
-  @BetaApi
   public static FirestoreException forIOException(IOException exception, boolean retryable) {
     return new FirestoreException(exception, retryable);
   }
@@ -99,7 +97,6 @@ public class FirestoreException extends BaseGrpcServiceException {
    *
    * @return The FirestoreException
    */
-  @BetaApi
   public static FirestoreException forApiException(ApiException exception) {
     return new FirestoreException(exception.getMessage(), exception);
   }
@@ -109,14 +106,30 @@ public class FirestoreException extends BaseGrpcServiceException {
    *
    * @return The FirestoreException
    */
-  @BetaApi
   public static FirestoreException forApiException(ApiException exception, String message) {
     return new FirestoreException(message, exception);
   }
 
-  @BetaApi
   @Nullable
   public Status getStatus() {
     return status;
+  }
+
+  /**
+   * Converts a GAX {@code StatusCode} to a corresponding gRPC {@code Status} object. This method
+   * assumes that the names of the enum values in {@code com.google.api.gax.rpc.StatusCode.Code}
+   * directly correspond to the names of the enum values in {@code io.grpc.Status.Code}.
+   *
+   * <p>If the provided {@code StatusCode.Code} name does not have a direct matching {@code
+   * io.grpc.Status.Code}, {@code Status.UNKNOWN} with a descriptive message is returned.
+   */
+  private static Status toStatus(StatusCode statusCode) {
+    try {
+      Status.Code code = Status.Code.valueOf(statusCode.getCode().name());
+      return code.toStatus();
+    } catch (IllegalArgumentException e) {
+      return Status.UNKNOWN.withDescription(
+          "Unrecognized StatusCode.code: " + statusCode.getCode());
+    }
   }
 }

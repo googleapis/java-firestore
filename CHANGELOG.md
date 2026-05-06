@@ -1,5 +1,384 @@
 # Changelog
 
+## [3.41.0](https://github.com/googleapis/java-firestore/compare/v3.40.0...v3.41.0) (2026-04-14)
+
+
+### Features
+
+* Add `expiration_offset` to `Field` ([c29d25d](https://github.com/googleapis/java-firestore/commit/c29d25db9dcbfbee4eda2db21528f99d63e5cb6e))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.71.0 ([c29d25d](https://github.com/googleapis/java-firestore/commit/c29d25db9dcbfbee4eda2db21528f99d63e5cb6e))
+
+
+### Dependencies
+
+* Update sdk-platform-java-config to 3.61.0 ([#2359](https://github.com/googleapis/java-firestore/issues/2359)) ([33e33fa](https://github.com/googleapis/java-firestore/commit/33e33fa0c55c0f210cd148bb0ed0fbeb1a883228))
+
+## [3.40.0](https://github.com/googleapis/java-firestore/compare/v3.39.0...v3.40.0) (2026-04-08)
+
+
+### Features
+
+* Add `isType` expression ([#2329](https://github.com/googleapis/java-firestore/issues/2329)) ([c606ff9](https://github.com/googleapis/java-firestore/commit/c606ff989e1305214d29496734f2a34628e4c82a))
+* Add DML stages to pipelines ([#2317](https://github.com/googleapis/java-firestore/issues/2317)) ([2dc2464](https://github.com/googleapis/java-firestore/commit/2dc2464206a899794746ebbe20e3fc048770a0b2))
+* Add string pipeline expressions ([#2326](https://github.com/googleapis/java-firestore/issues/2326)) ([93db04e](https://github.com/googleapis/java-firestore/commit/93db04e4bce569c54359648b4122a732d0c9df73))
+* Add subquery support in pipeline ([#2323](https://github.com/googleapis/java-firestore/issues/2323)) ([cbf87ac](https://github.com/googleapis/java-firestore/commit/cbf87acd66f5c3fbdbd5d922e22790347f44f22d))
+* Add support for remaining `map` pipeline expressions ([#2321](https://github.com/googleapis/java-firestore/issues/2321)) ([f61c61f](https://github.com/googleapis/java-firestore/commit/f61c61f42c472d5540dd616c17db3655502ccdf6))
+* Add support for the parent expression and fix integration tests error ([#2351](https://github.com/googleapis/java-firestore/issues/2351)) ([0e30ec4](https://github.com/googleapis/java-firestore/commit/0e30ec455273719f8d29471c001f4aeb38ecf51a))
+* Add timestamp expressions ([#2342](https://github.com/googleapis/java-firestore/issues/2342)) ([f8adbaa](https://github.com/googleapis/java-firestore/commit/f8adbaa1464a55b7ec004cbe2c7b5145095b0f04))
+* Added public preview support for full-text search and geo search in Pipelines. ([#2346](https://github.com/googleapis/java-firestore/issues/2346)) ([0c81885](https://github.com/googleapis/java-firestore/commit/0c8188520dfbada0d3fef0719e4f95fc231306be))
+* **firestore:** Add `ifNull` and `coalesce` expressions ([#2349](https://github.com/googleapis/java-firestore/issues/2349)) ([51a1c43](https://github.com/googleapis/java-firestore/commit/51a1c4392c19def6aa8a15a7409c7e05476033a8))
+* **firestore:** Add array expressions ([#2350](https://github.com/googleapis/java-firestore/issues/2350)) ([1d23f18](https://github.com/googleapis/java-firestore/commit/1d23f18f70b2b232a4631fe6dab18a8ceb05cb4c))
+* **firestore:** Add logical expressions ([#2339](https://github.com/googleapis/java-firestore/issues/2339)) ([b2f79ec](https://github.com/googleapis/java-firestore/commit/b2f79ec84db91874a717dfaea8bf8f0df9f45c4d))
+* Graduate Pipeline and related APIs from beta to GA ([#2352](https://github.com/googleapis/java-firestore/issues/2352)) ([4cd5895](https://github.com/googleapis/java-firestore/commit/4cd58958191687ea03fadbcc2a4eb6e2f33730b1))
+
+## [3.39.0](https://github.com/googleapis/java-firestore/compare/v3.38.0...v3.39.0) (2026-03-23)
+
+
+### Features
+
+* Add arithmetic expressions ([#2333](https://github.com/googleapis/java-firestore/issues/2333)) ([491c211](https://github.com/googleapis/java-firestore/commit/491c211e226fcfbf007dd73e2ae6c2450f3b5311))
+* Add first, last, arrayAgg and arrayAggDistinct expressions ([#2334](https://github.com/googleapis/java-firestore/issues/2334)) ([2be5989](https://github.com/googleapis/java-firestore/commit/2be59896fef7a7bb458cfaf06344654e82acc74c))
+* Expose the variable definition in the Cloud Firestore API ([7b105c5](https://github.com/googleapis/java-firestore/commit/7b105c51347b6b6c60fdf4d59ec8c0a7780ace5b))
+* **firestore:** Add array expressions ([#2331](https://github.com/googleapis/java-firestore/issues/2331)) ([5272549](https://github.com/googleapis/java-firestore/commit/527254966b573093319cc4468c1dd6cde44d01e0))
+* **firestore:** Global option to turn on implicit orderby ([#2337](https://github.com/googleapis/java-firestore/issues/2337)) ([24d3e17](https://github.com/googleapis/java-firestore/commit/24d3e173cbcb077c6b89d4361e93f078cf23a2b7))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.68.0 ([8bcdd6b](https://github.com/googleapis/java-firestore/commit/8bcdd6bc102aaebe5194bac6f53fb75c32f86bba))
+* Fix the wrong return type for Pipeline.as(String alias) ([#2330](https://github.com/googleapis/java-firestore/issues/2330)) ([6371fd3](https://github.com/googleapis/java-firestore/commit/6371fd3332c26230500620e4df2ff71155f35cb7))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.58.0 ([#2332](https://github.com/googleapis/java-firestore/issues/2332)) ([f50a9e5](https://github.com/googleapis/java-firestore/commit/f50a9e59ab25ff30120f8ea69a8c4ed14e85061a))
+
+## [3.38.0](https://github.com/googleapis/java-firestore/compare/v3.37.0...v3.38.0) (2026-02-26)
+
+
+### Features
+
+* Add support for `regexFind` and `regexFindAll` Pipeline expressions ([#2310](https://github.com/googleapis/java-firestore/issues/2310)) ([1d92887](https://github.com/googleapis/java-firestore/commit/1d9288719e36e76d8710233b161ae1c79d50be28))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.67.0 ([aeaf77f](https://github.com/googleapis/java-firestore/commit/aeaf77f9ed7ee6bd145f64977cd516e27f29bbe4))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.57.0 ([#2325](https://github.com/googleapis/java-firestore/issues/2325)) ([597ab41](https://github.com/googleapis/java-firestore/commit/597ab41c6387c65d3ef2455303a7f9f66b53fc59))
+
+## [3.37.0](https://github.com/googleapis/java-firestore/compare/v3.36.0...v3.37.0) (2026-02-12)
+
+
+### Features
+
+* Expose the `Database.firestore_data_access_mode` parameter ([01290af](https://github.com/googleapis/java-firestore/commit/01290afaf2f7d9333b30c1a9fc84663393a8ff4d))
+* Next release from main branch is 3.37.0 ([#2314](https://github.com/googleapis/java-firestore/issues/2314)) ([3eed2e8](https://github.com/googleapis/java-firestore/commit/3eed2e8038efc54faa13e3d072169f6d8b2caf2f))
+
+
+### Bug Fixes
+
+* Correct FirestoreAdminClient source link in documentation ([#2304](https://github.com/googleapis/java-firestore/issues/2304)) ([1f66dca](https://github.com/googleapis/java-firestore/commit/1f66dcaa3e936d77505383173ec2c2a1821bcce5))
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.66.1 ([01290af](https://github.com/googleapis/java-firestore/commit/01290afaf2f7d9333b30c1a9fc84663393a8ff4d))
+* Set max retry at 5 for executePipeline ([#2307](https://github.com/googleapis/java-firestore/issues/2307)) ([acb37fe](https://github.com/googleapis/java-firestore/commit/acb37fe918cd9c6ef1a671551c1d1789bfa36934))
+* Setup CI against enterprise ([#2299](https://github.com/googleapis/java-firestore/issues/2299)) ([510ff73](https://github.com/googleapis/java-firestore/commit/510ff732d471f07f39d3d7074de2e7317663d556))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.56.1 ([#2316](https://github.com/googleapis/java-firestore/issues/2316)) ([5f2f826](https://github.com/googleapis/java-firestore/commit/5f2f826e65e651c5728b459e5cbe6c7f35c5fc77))
+
+## [3.36.0](https://github.com/googleapis/java-firestore/compare/v3.35.1...v3.36.0) (2026-01-27)
+
+
+### Features
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.66.0 ([fa4b6a0](https://github.com/googleapis/java-firestore/commit/fa4b6a0d6f3f59e9092019207bbbb90483eb49f9))
+
+
+### Bug Fixes
+
+* Remove undesired exists() conditions from query-to-pipeline conversion ([#2293](https://github.com/googleapis/java-firestore/issues/2293)) ([09225e4](https://github.com/googleapis/java-firestore/commit/09225e4b8e6a435fb5544315980e2dd831fefd84))
+
+
+### Dependencies
+
+* Update googleapis/sdk-platform-java action to v2.66.0 ([#2297](https://github.com/googleapis/java-firestore/issues/2297)) ([14bcca5](https://github.com/googleapis/java-firestore/commit/14bcca5d450312d663142dbb7e9003d785e6a4de))
+* Update shared config to 3.56.0 ([#2300](https://github.com/googleapis/java-firestore/issues/2300)) ([b18b08d](https://github.com/googleapis/java-firestore/commit/b18b08d6a9f56948e5e4664f1e3bec7313ba7014))
+
+## [3.35.1](https://github.com/googleapis/java-firestore/compare/v3.35.0...v3.35.1) (2026-01-19)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.55.1 ([#2285](https://github.com/googleapis/java-firestore/issues/2285)) ([d3f8129](https://github.com/googleapis/java-firestore/commit/d3f8129f4121bac753ccd59600077d80d4dc5fa9))
+
+## [3.35.0](https://github.com/googleapis/java-firestore/compare/v3.34.0...v3.35.0) (2026-01-15)
+
+
+### Features
+
+* Adding gcp resource name span attribute ([#2260](https://github.com/googleapis/java-firestore/issues/2260)) ([926fd8c](https://github.com/googleapis/java-firestore/commit/926fd8c393dfd91f532b61bdf2a50ed8d19d3618))
+* Pipelines enters public preview ([#2272](https://github.com/googleapis/java-firestore/issues/2272)) ([6e30a6c](https://github.com/googleapis/java-firestore/commit/6e30a6c11efe5d428607bfd78f82ba7b49497bd9))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.65.1 ([1573a6f](https://github.com/googleapis/java-firestore/commit/1573a6f8b7d08e6670f26e2fe1af730700000aac))
+
+## [3.34.0](https://github.com/googleapis/java-firestore/compare/v3.33.4...v3.34.0) (2025-12-12)
+
+
+### Features
+
+* Publish the pipelines API to the stable branch ([2cab2e0](https://github.com/googleapis/java-firestore/commit/2cab2e02e5884f3efd9b0f2e212e14ef0d82d855))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.64.2 ([2cab2e0](https://github.com/googleapis/java-firestore/commit/2cab2e02e5884f3efd9b0f2e212e14ef0d82d855))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.54.2 ([#2270](https://github.com/googleapis/java-firestore/issues/2270)) ([05188e3](https://github.com/googleapis/java-firestore/commit/05188e3e779968e67861fcd69d64ae17cfb6cd0b))
+
+
+### Documentation
+
+* Minor api documentation changes ([2cab2e0](https://github.com/googleapis/java-firestore/commit/2cab2e02e5884f3efd9b0f2e212e14ef0d82d855))
+
+## [3.33.4](https://github.com/googleapis/java-firestore/compare/v3.33.3...v3.33.4) (2025-11-13)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.64.1 ([3de013f](https://github.com/googleapis/java-firestore/commit/3de013f9d19baaa1c4424a9f9de151d32a54d39a))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.54.1 ([#2254](https://github.com/googleapis/java-firestore/issues/2254)) ([21a1395](https://github.com/googleapis/java-firestore/commit/21a1395b79ede7a60d8fc1361770b599e846a080))
+
+## [3.33.3](https://github.com/googleapis/java-firestore/compare/v3.33.2...v3.33.3) (2025-10-20)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.53.0 ([#2249](https://github.com/googleapis/java-firestore/issues/2249)) ([e50d2da](https://github.com/googleapis/java-firestore/commit/e50d2da4a55f906021e3761d2ea97efd3b1ea034))
+
+## [3.33.2](https://github.com/googleapis/java-firestore/compare/v3.33.1...v3.33.2) (2025-10-07)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.62.3 ([75901e3](https://github.com/googleapis/java-firestore/commit/75901e35b05cfccf38ccf96cddcf4081d7c9566d))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.52.3 ([#2243](https://github.com/googleapis/java-firestore/issues/2243)) ([dfe553a](https://github.com/googleapis/java-firestore/commit/dfe553a6b106f8e80f62b39cb999af03651a41ff))
+
+## [3.33.1](https://github.com/googleapis/java-firestore/compare/v3.33.0...v3.33.1) (2025-09-24)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.62.2 ([3460038](https://github.com/googleapis/java-firestore/commit/3460038d48eb3a96eb10c30aad7d814c56bd8140))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.52.2 ([#2235](https://github.com/googleapis/java-firestore/issues/2235)) ([f1354dc](https://github.com/googleapis/java-firestore/commit/f1354dc35ac6dc10bdb3b3e3b6ec6eb9379cdaa8))
+
+## [3.33.0](https://github.com/googleapis/java-firestore/compare/v3.32.2...v3.33.0) (2025-09-11)
+
+
+### Features
+
+* Add Firestore CloneDatabase support ([1fa6ae8](https://github.com/googleapis/java-firestore/commit/1fa6ae824c81fd816e39651bb1c48b449d31175b))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.62.1 ([1fa6ae8](https://github.com/googleapis/java-firestore/commit/1fa6ae824c81fd816e39651bb1c48b449d31175b))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.52.1 ([#2230](https://github.com/googleapis/java-firestore/issues/2230)) ([bc07b64](https://github.com/googleapis/java-firestore/commit/bc07b647b52752db7a556f0a1ca201536bc8a21b))
+* Update googleapis/sdk-platform-java action to v2.62.1 ([#2224](https://github.com/googleapis/java-firestore/issues/2224)) ([d546b5a](https://github.com/googleapis/java-firestore/commit/d546b5a3d30086f86ed3688b725f639fbdf7c11c))
+
+## [3.32.2](https://github.com/googleapis/java-firestore/compare/v3.32.1...v3.32.2) (2025-08-26)
+
+
+### Bug Fixes
+
+* Resolve RejectedExecutionException that occurred on BulkWriter close or executor shutdown ([#2223](https://github.com/googleapis/java-firestore/issues/2223)) ([e919ebb](https://github.com/googleapis/java-firestore/commit/e919ebbef229558098535ba6456b29ed22fa1533))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.52.0 ([#2222](https://github.com/googleapis/java-firestore/issues/2222)) ([cb90035](https://github.com/googleapis/java-firestore/commit/cb90035e8fa60c162c74b009053506d8f417b3a1))
+
+## [3.32.1](https://github.com/googleapis/java-firestore/compare/v3.32.0...v3.32.1) (2025-08-13)
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.51.0 ([#2213](https://github.com/googleapis/java-firestore/issues/2213)) ([be04b4e](https://github.com/googleapis/java-firestore/commit/be04b4e87ff5d2f89a2fff8bacb806260f94a227))
+* Update googleapis/sdk-platform-java action to v2.61.0 ([#2214](https://github.com/googleapis/java-firestore/issues/2214)) ([e3aafbe](https://github.com/googleapis/java-firestore/commit/e3aafbe5c7e8d3286aca360174cb086f4d409803))
+
+## [3.32.0](https://github.com/googleapis/java-firestore/compare/v3.31.9...v3.32.0) (2025-07-28)
+
+
+### Features
+
+* Expose tags field in Database and RestoreDatabaseRequest public protos ([0f6774a](https://github.com/googleapis/java-firestore/commit/0f6774ad937d2cc84a3ee6747d07ad96a6713126))
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.60.1 ([e90f7d1](https://github.com/googleapis/java-firestore/commit/e90f7d1d992c172afb96a43003d45ca1fb3143b0))
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.60.2 ([0f6774a](https://github.com/googleapis/java-firestore/commit/0f6774ad937d2cc84a3ee6747d07ad96a6713126))
+* Implement BulkWriter shutdown logic ([#2202](https://github.com/googleapis/java-firestore/issues/2202)) ([7301774](https://github.com/googleapis/java-firestore/commit/73017741fce52fd37e08af4f3f32fb901b7214a3))
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.68.0 ([#2193](https://github.com/googleapis/java-firestore/issues/2193)) ([30c5a19](https://github.com/googleapis/java-firestore/commit/30c5a19f6d1294a4b281de9664ce42917b451a0b))
+* Update dependency com.google.cloud:google-cloud-trace to v2.68.0 ([#2194](https://github.com/googleapis/java-firestore/issues/2194)) ([5fba79d](https://github.com/googleapis/java-firestore/commit/5fba79d7f24a81886e6a5089a9166e16a9491ea0))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.50.2 ([#2200](https://github.com/googleapis/java-firestore/issues/2200)) ([e4e75cf](https://github.com/googleapis/java-firestore/commit/e4e75cff5656e047aa932dee226c4b2117eba17c))
+* Update opentelemetry.version to v1.52.0 ([#2191](https://github.com/googleapis/java-firestore/issues/2191)) ([cfb4453](https://github.com/googleapis/java-firestore/commit/cfb4453fca5ae483af7710c627996a6c0c7381a7))
+
+## [3.31.9](https://github.com/googleapis/java-firestore/compare/v3.31.8...v3.31.9) (2025-07-11)
+
+
+### Bug Fixes
+
+* Improve performance of the UTF-8 string comparison logic. ([#2182](https://github.com/googleapis/java-firestore/issues/2182)) ([869a381](https://github.com/googleapis/java-firestore/commit/869a3814511f9a6e15641b3279bb871867886940))
+
+
+### Dependencies
+
+* Update dependency com.diffplug.spotless:spotless-maven-plugin to v2.45.0 ([#2184](https://github.com/googleapis/java-firestore/issues/2184)) ([88097cb](https://github.com/googleapis/java-firestore/commit/88097cbe8878b45897c89e102fa82e1975d2d74b))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.50.1 ([#2186](https://github.com/googleapis/java-firestore/issues/2186)) ([466e597](https://github.com/googleapis/java-firestore/commit/466e597c282533c0e500b57d27f386ef9ea99e5e))
+* Update dependency org.apache.commons:commons-lang3 to v3.18.0 ([#2187](https://github.com/googleapis/java-firestore/issues/2187)) ([1f3c20b](https://github.com/googleapis/java-firestore/commit/1f3c20b1923c3ae000359be91e7e39458c36ce2e))
+* Update googleapis/sdk-platform-java action to v2.60.0 ([#2176](https://github.com/googleapis/java-firestore/issues/2176)) ([8283a08](https://github.com/googleapis/java-firestore/commit/8283a08b1749e06864b50ab1813c13e9eb61c087))
+* Update googleapis/sdk-platform-java action to v2.60.1 ([#2181](https://github.com/googleapis/java-firestore/issues/2181)) ([be9daba](https://github.com/googleapis/java-firestore/commit/be9dabab8467a5aa3986d34f393d597d670af029))
+
+
+### Documentation
+
+* Add an example to the detailed comment in compareUtf8Strings() ([#2183](https://github.com/googleapis/java-firestore/issues/2183)) ([e16b158](https://github.com/googleapis/java-firestore/commit/e16b15853d6545c3c1476086c3bc88cb46991718))
+
+## [3.31.8](https://github.com/googleapis/java-firestore/compare/v3.31.7...v3.31.8) (2025-07-02)
+
+
+### Dependencies
+
+* Update beam.version to v2.66.0 ([#2172](https://github.com/googleapis/java-firestore/issues/2172)) ([4b7f49e](https://github.com/googleapis/java-firestore/commit/4b7f49ea48a0a6e9768687e9ec2d05ca3d2dc5a0))
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.67.0 ([#2167](https://github.com/googleapis/java-firestore/issues/2167)) ([3c95bf1](https://github.com/googleapis/java-firestore/commit/3c95bf10becd5c84e1ed25fa24e78ef074e3d267))
+* Update dependency com.google.cloud:google-cloud-trace to v2.67.0 ([#2166](https://github.com/googleapis/java-firestore/issues/2166)) ([7920b5b](https://github.com/googleapis/java-firestore/commit/7920b5b0de25057fe4a58948bf7112171f795672))
+* Update dependency com.google.cloud.opentelemetry:exporter-trace to v0.36.0 ([#2159](https://github.com/googleapis/java-firestore/issues/2159)) ([edcb508](https://github.com/googleapis/java-firestore/commit/edcb508d3b144db073a8aeaaf8a37e535a00bc0d))
+* Update googleapis/sdk-platform-java action to v2.60.0 ([#2163](https://github.com/googleapis/java-firestore/issues/2163)) ([4660432](https://github.com/googleapis/java-firestore/commit/466043294afd9cc10a330c87873595b65e76bf4c))
+* Update googleapis/sdk-platform-java action to v2.60.0 ([#2173](https://github.com/googleapis/java-firestore/issues/2173)) ([4fddfea](https://github.com/googleapis/java-firestore/commit/4fddfea2b14dd7f9b54e72d2f4889e2a3d5f5d2d))
+
+## [3.31.7](https://github.com/googleapis/java-firestore/compare/v3.31.6...v3.31.7) (2025-06-25)
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.64.0 ([#2143](https://github.com/googleapis/java-firestore/issues/2143)) ([c42dcab](https://github.com/googleapis/java-firestore/commit/c42dcabb11a0374cc3ac70e46b9dde3aff5d7268))
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.66.0 ([#2154](https://github.com/googleapis/java-firestore/issues/2154)) ([15f1ceb](https://github.com/googleapis/java-firestore/commit/15f1ceb27c1ef4f460a1d490054b30a15838fc7d))
+* Update dependency com.google.cloud:google-cloud-trace to v2.64.0 ([#2144](https://github.com/googleapis/java-firestore/issues/2144)) ([213f63c](https://github.com/googleapis/java-firestore/commit/213f63cf936b5849ec416b041b570953d2e478f2))
+* Update dependency com.google.cloud:google-cloud-trace to v2.66.0 ([#2155](https://github.com/googleapis/java-firestore/issues/2155)) ([934b6e5](https://github.com/googleapis/java-firestore/commit/934b6e5a3a83acf7bb84726fc7dd44d5d7720513))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.49.2 ([#2149](https://github.com/googleapis/java-firestore/issues/2149)) ([6331e05](https://github.com/googleapis/java-firestore/commit/6331e05fdc4d030ebdaa5e0f53e3229f611736a7))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.50.0 ([#2158](https://github.com/googleapis/java-firestore/issues/2158)) ([97bd331](https://github.com/googleapis/java-firestore/commit/97bd33163c84c92688907167c8280dd9d167c005))
+* Update googleapis/sdk-platform-java action to v2.59.1 ([#2147](https://github.com/googleapis/java-firestore/issues/2147)) ([4a21735](https://github.com/googleapis/java-firestore/commit/4a21735534fd837de624044b07a5290e9dcd273b))
+* Update googleapis/sdk-platform-java action to v2.59.2 ([#2152](https://github.com/googleapis/java-firestore/issues/2152)) ([6ea90fc](https://github.com/googleapis/java-firestore/commit/6ea90fc88d0641dd5a8e182e71e08bd14345a7c0))
+* Update googleapis/sdk-platform-java action to v2.60.0 ([#2156](https://github.com/googleapis/java-firestore/issues/2156)) ([59d73bc](https://github.com/googleapis/java-firestore/commit/59d73bc388c90228a360c138c820b0e0cc416750))
+* Update opentelemetry.version to v1.51.0 ([#2145](https://github.com/googleapis/java-firestore/issues/2145)) ([2f0958d](https://github.com/googleapis/java-firestore/commit/2f0958d721095009cbc5da55b9c7837b4c307a66))
+
+## [3.31.6](https://github.com/googleapis/java-firestore/compare/v3.31.5...v3.31.6) (2025-06-04)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.59.0 ([f44e1e5](https://github.com/googleapis/java-firestore/commit/f44e1e5be5288d1af95cf9deaacf327a64bf9178))
+
+
+### Dependencies
+
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.49.0 ([#2135](https://github.com/googleapis/java-firestore/issues/2135)) ([4006eaf](https://github.com/googleapis/java-firestore/commit/4006eaf7a3758b277636d8a31233770f8354eb6e))
+* Update googleapis/sdk-platform-java action to v2.59.0 ([#2133](https://github.com/googleapis/java-firestore/issues/2133)) ([b1b78bb](https://github.com/googleapis/java-firestore/commit/b1b78bbfbee15f094c2bf4818babe1e1d556cd18))
+
+## [3.31.5](https://github.com/googleapis/java-firestore/compare/v3.31.4...v3.31.5) (2025-05-28)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.58.0 ([819dc99](https://github.com/googleapis/java-firestore/commit/819dc99ea4f90a8b5cba21cc7016921aa156f3da))
+
+
+### Dependencies
+
+* Update dependency com.diffplug.spotless:spotless-maven-plugin to v2.44.5 ([#2128](https://github.com/googleapis/java-firestore/issues/2128)) ([b100ac3](https://github.com/googleapis/java-firestore/commit/b100ac3d75e8967e18589d5d719e5bf63969c438))
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.63.0 ([#2122](https://github.com/googleapis/java-firestore/issues/2122)) ([d5f6a8e](https://github.com/googleapis/java-firestore/commit/d5f6a8ea2e463143fb0fe4328de87a9886f1e78c))
+* Update dependency com.google.cloud:google-cloud-trace to v2.63.0 ([#2123](https://github.com/googleapis/java-firestore/issues/2123)) ([504fdb4](https://github.com/googleapis/java-firestore/commit/504fdb464783af39b8844392f84bcf8800dd0862))
+* Update dependency com.google.cloud.opentelemetry:exporter-trace to v0.35.0 ([#2129](https://github.com/googleapis/java-firestore/issues/2129)) ([f5013ad](https://github.com/googleapis/java-firestore/commit/f5013add2338af8b5780df65c691999123795a37))
+
+## [3.31.4](https://github.com/googleapis/java-firestore/compare/v3.31.3...v3.31.4) (2025-05-14)
+
+
+### Bug Fixes
+
+* Status is missing while creating FirestoreException from ApiException ([#2107](https://github.com/googleapis/java-firestore/issues/2107)) ([00a6f54](https://github.com/googleapis/java-firestore/commit/00a6f54e044c963ca960ab1cec022a21cc4da29e))
+
+
+### Dependencies
+
+* Update beam.version to v2.65.0 ([#2115](https://github.com/googleapis/java-firestore/issues/2115)) ([a46be91](https://github.com/googleapis/java-firestore/commit/a46be91dab65084c8badcfd309661378e7d5c54c))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.48.0 ([#2117](https://github.com/googleapis/java-firestore/issues/2117)) ([6d74fc8](https://github.com/googleapis/java-firestore/commit/6d74fc86f9e85070207a97c13a82146475ce4a07))
+* Update googleapis/sdk-platform-java action to v2.58.0 ([#2118](https://github.com/googleapis/java-firestore/issues/2118)) ([3a5cb13](https://github.com/googleapis/java-firestore/commit/3a5cb13b1b9c73ac6a077df295d40d5673e8aaa9))
+* Update opentelemetry.version to v1.50.0 ([#2114](https://github.com/googleapis/java-firestore/issues/2114)) ([66d5e21](https://github.com/googleapis/java-firestore/commit/66d5e211533bf0d219c8e582c12632c2072e03ed))
+
+## [3.31.3](https://github.com/googleapis/java-firestore/compare/v3.31.2...v3.31.3) (2025-05-08)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.57.0 ([b01cbf9](https://github.com/googleapis/java-firestore/commit/b01cbf94cfd0e9865210c329e3a8cf0bd124c3c7))
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.62.0 ([#2105](https://github.com/googleapis/java-firestore/issues/2105)) ([06387ba](https://github.com/googleapis/java-firestore/commit/06387ba3fa34de5030332a45c1b641242fcda475))
+* Update dependency com.google.cloud:google-cloud-trace to v2.62.0 ([#2106](https://github.com/googleapis/java-firestore/issues/2106)) ([ce18e7c](https://github.com/googleapis/java-firestore/commit/ce18e7c88cfef044cc6e79a484db577423e408e4))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.47.0 ([#2103](https://github.com/googleapis/java-firestore/issues/2103)) ([9d90996](https://github.com/googleapis/java-firestore/commit/9d90996a75926907d8b4189b5e2c34a067a9501e))
+* Update googleapis/sdk-platform-java action to v2.57.0 ([#2104](https://github.com/googleapis/java-firestore/issues/2104)) ([9bfc6d3](https://github.com/googleapis/java-firestore/commit/9bfc6d3fbe69526a4fb3a7fcc058744edaecd88f))
+
+## [3.31.2](https://github.com/googleapis/java-firestore/compare/v3.31.1...v3.31.2) (2025-05-05)
+
+
+### Bug Fixes
+
+* **deps:** Update the Java code generator (gapic-generator-java) to 2.56.3 ([1c367cd](https://github.com/googleapis/java-firestore/commit/1c367cd7368e5a9985aa068036c981a6e27508f2))
+
+
+### Dependencies
+
+* Update dependency com.google.api.grpc:proto-google-cloud-trace-v1 to v2.61.0 ([#2094](https://github.com/googleapis/java-firestore/issues/2094)) ([20b64e0](https://github.com/googleapis/java-firestore/commit/20b64e0bd3437d137ba6b48ce670b6931a098559))
+* Update dependency com.google.cloud:google-cloud-trace to v2.61.0 ([#2095](https://github.com/googleapis/java-firestore/issues/2095)) ([2eeaa5b](https://github.com/googleapis/java-firestore/commit/2eeaa5bc4d8dc89b0e84f4a14f2b045d5412f379))
+* Update dependency com.google.cloud:sdk-platform-java-config to v3.46.3 ([#2099](https://github.com/googleapis/java-firestore/issues/2099)) ([025d07c](https://github.com/googleapis/java-firestore/commit/025d07c32e78b24c53227ade8a5afb06c2f6bfb9))
+
 ## [3.31.1](https://github.com/googleapis/java-firestore/compare/v3.31.0...v3.31.1) (2025-04-25)
 
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,8 @@ import com.google.firestore.admin.v1.BackupSchedule;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CloneDatabaseMetadata;
+import com.google.firestore.admin.v1.CloneDatabaseRequest;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
@@ -276,6 +278,15 @@ public abstract class FirestoreAdminStub implements BackgroundResource {
 
   public UnaryCallable<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleCallable() {
     throw new UnsupportedOperationException("Not implemented: deleteBackupScheduleCallable()");
+  }
+
+  public OperationCallable<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationCallable() {
+    throw new UnsupportedOperationException("Not implemented: cloneDatabaseOperationCallable()");
+  }
+
+  public UnaryCallable<CloneDatabaseRequest, Operation> cloneDatabaseCallable() {
+    throw new UnsupportedOperationException("Not implemented: cloneDatabaseCallable()");
   }
 
   @Override

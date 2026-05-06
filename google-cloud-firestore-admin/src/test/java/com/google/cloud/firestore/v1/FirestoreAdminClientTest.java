@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import com.google.firestore.admin.v1.BackupSchedule;
 import com.google.firestore.admin.v1.BackupScheduleName;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CloneDatabaseRequest;
 import com.google.firestore.admin.v1.CollectionGroupName;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
@@ -74,7 +75,9 @@ import com.google.firestore.admin.v1.ListIndexesResponse;
 import com.google.firestore.admin.v1.ListUserCredsRequest;
 import com.google.firestore.admin.v1.ListUserCredsResponse;
 import com.google.firestore.admin.v1.LocationName;
+import com.google.firestore.admin.v1.PitrSnapshot;
 import com.google.firestore.admin.v1.ProjectName;
+import com.google.firestore.admin.v1.RealtimeUpdatesMode;
 import com.google.firestore.admin.v1.ResetUserPasswordRequest;
 import com.google.firestore.admin.v1.RestoreDatabaseRequest;
 import com.google.firestore.admin.v1.UpdateBackupScheduleRequest;
@@ -93,6 +96,7 @@ import io.grpc.StatusRuntimeException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -153,6 +157,7 @@ public class FirestoreAdminClientTest {
             .addAllFields(new ArrayList<Index.IndexField>())
             .setMultikey(true)
             .setShardCount(-495377042)
+            .setUnique(true)
             .build();
     Operation resultOperation =
         Operation.newBuilder()
@@ -206,6 +211,7 @@ public class FirestoreAdminClientTest {
             .addAllFields(new ArrayList<Index.IndexField>())
             .setMultikey(true)
             .setShardCount(-495377042)
+            .setUnique(true)
             .build();
     Operation resultOperation =
         Operation.newBuilder()
@@ -347,6 +353,7 @@ public class FirestoreAdminClientTest {
             .addAllFields(new ArrayList<Index.IndexField>())
             .setMultikey(true)
             .setShardCount(-495377042)
+            .setUnique(true)
             .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
 
@@ -388,6 +395,7 @@ public class FirestoreAdminClientTest {
             .addAllFields(new ArrayList<Index.IndexField>())
             .setMultikey(true)
             .setShardCount(-495377042)
+            .setUnique(true)
             .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
 
@@ -980,8 +988,10 @@ public class FirestoreAdminClientTest {
             .setCmekConfig(Database.CmekConfig.newBuilder().build())
             .setPreviousId("previousId-32447886")
             .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
             .setFreeTier(true)
             .setEtag("etag3123477")
+            .setRealtimeUpdatesMode(RealtimeUpdatesMode.forNumber(0))
             .build();
     Operation resultOperation =
         Operation.newBuilder()
@@ -1045,8 +1055,10 @@ public class FirestoreAdminClientTest {
             .setCmekConfig(Database.CmekConfig.newBuilder().build())
             .setPreviousId("previousId-32447886")
             .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
             .setFreeTier(true)
             .setEtag("etag3123477")
+            .setRealtimeUpdatesMode(RealtimeUpdatesMode.forNumber(0))
             .build();
     Operation resultOperation =
         Operation.newBuilder()
@@ -1110,8 +1122,10 @@ public class FirestoreAdminClientTest {
             .setCmekConfig(Database.CmekConfig.newBuilder().build())
             .setPreviousId("previousId-32447886")
             .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
             .setFreeTier(true)
             .setEtag("etag3123477")
+            .setRealtimeUpdatesMode(RealtimeUpdatesMode.forNumber(0))
             .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
 
@@ -1161,8 +1175,10 @@ public class FirestoreAdminClientTest {
             .setCmekConfig(Database.CmekConfig.newBuilder().build())
             .setPreviousId("previousId-32447886")
             .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
             .setFreeTier(true)
             .setEtag("etag3123477")
+            .setRealtimeUpdatesMode(RealtimeUpdatesMode.forNumber(0))
             .build();
     mockFirestoreAdmin.addResponse(expectedResponse);
 
@@ -1290,8 +1306,10 @@ public class FirestoreAdminClientTest {
             .setCmekConfig(Database.CmekConfig.newBuilder().build())
             .setPreviousId("previousId-32447886")
             .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
             .setFreeTier(true)
             .setEtag("etag3123477")
+            .setRealtimeUpdatesMode(RealtimeUpdatesMode.forNumber(0))
             .build();
     Operation resultOperation =
         Operation.newBuilder()
@@ -1352,8 +1370,10 @@ public class FirestoreAdminClientTest {
             .setCmekConfig(Database.CmekConfig.newBuilder().build())
             .setPreviousId("previousId-32447886")
             .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
             .setFreeTier(true)
             .setEtag("etag3123477")
+            .setRealtimeUpdatesMode(RealtimeUpdatesMode.forNumber(0))
             .build();
     Operation resultOperation =
         Operation.newBuilder()
@@ -1411,8 +1431,10 @@ public class FirestoreAdminClientTest {
             .setCmekConfig(Database.CmekConfig.newBuilder().build())
             .setPreviousId("previousId-32447886")
             .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
             .setFreeTier(true)
             .setEtag("etag3123477")
+            .setRealtimeUpdatesMode(RealtimeUpdatesMode.forNumber(0))
             .build();
     Operation resultOperation =
         Operation.newBuilder()
@@ -2264,8 +2286,10 @@ public class FirestoreAdminClientTest {
             .setCmekConfig(Database.CmekConfig.newBuilder().build())
             .setPreviousId("previousId-32447886")
             .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
             .setFreeTier(true)
             .setEtag("etag3123477")
+            .setRealtimeUpdatesMode(RealtimeUpdatesMode.forNumber(0))
             .build();
     Operation resultOperation =
         Operation.newBuilder()
@@ -2281,6 +2305,7 @@ public class FirestoreAdminClientTest {
             .setDatabaseId("databaseId1688905718")
             .setBackup(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
             .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
             .build();
 
     Database actualResponse = client.restoreDatabaseAsync(request).get();
@@ -2294,6 +2319,7 @@ public class FirestoreAdminClientTest {
     Assert.assertEquals(request.getDatabaseId(), actualRequest.getDatabaseId());
     Assert.assertEquals(request.getBackup(), actualRequest.getBackup());
     Assert.assertEquals(request.getEncryptionConfig(), actualRequest.getEncryptionConfig());
+    Assert.assertEquals(request.getTagsMap(), actualRequest.getTagsMap());
     Assert.assertTrue(
         channelProvider.isHeaderSent(
             ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
@@ -2312,6 +2338,7 @@ public class FirestoreAdminClientTest {
               .setDatabaseId("databaseId1688905718")
               .setBackup(BackupName.of("[PROJECT]", "[LOCATION]", "[BACKUP]").toString())
               .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+              .putAllTags(new HashMap<String, String>())
               .build();
       client.restoreDatabaseAsync(request).get();
       Assert.fail("No exception raised");
@@ -2689,6 +2716,85 @@ public class FirestoreAdminClientTest {
       Assert.fail("No exception raised");
     } catch (InvalidArgumentException e) {
       // Expected exception.
+    }
+  }
+
+  @Test
+  public void cloneDatabaseTest() throws Exception {
+    Database expectedResponse =
+        Database.newBuilder()
+            .setName(DatabaseName.of("[PROJECT]", "[DATABASE]").toString())
+            .setUid("uid115792")
+            .setCreateTime(Timestamp.newBuilder().build())
+            .setUpdateTime(Timestamp.newBuilder().build())
+            .setDeleteTime(Timestamp.newBuilder().build())
+            .setLocationId("locationId1541836720")
+            .setVersionRetentionPeriod(Duration.newBuilder().build())
+            .setEarliestVersionTime(Timestamp.newBuilder().build())
+            .setKeyPrefix("keyPrefix-2076395055")
+            .setCmekConfig(Database.CmekConfig.newBuilder().build())
+            .setPreviousId("previousId-32447886")
+            .setSourceInfo(Database.SourceInfo.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
+            .setFreeTier(true)
+            .setEtag("etag3123477")
+            .setRealtimeUpdatesMode(RealtimeUpdatesMode.forNumber(0))
+            .build();
+    Operation resultOperation =
+        Operation.newBuilder()
+            .setName("cloneDatabaseTest")
+            .setDone(true)
+            .setResponse(Any.pack(expectedResponse))
+            .build();
+    mockFirestoreAdmin.addResponse(resultOperation);
+
+    CloneDatabaseRequest request =
+        CloneDatabaseRequest.newBuilder()
+            .setParent(ProjectName.of("[PROJECT]").toString())
+            .setDatabaseId("databaseId1688905718")
+            .setPitrSnapshot(PitrSnapshot.newBuilder().build())
+            .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+            .putAllTags(new HashMap<String, String>())
+            .build();
+
+    Database actualResponse = client.cloneDatabaseAsync(request).get();
+    Assert.assertEquals(expectedResponse, actualResponse);
+
+    List<AbstractMessage> actualRequests = mockFirestoreAdmin.getRequests();
+    Assert.assertEquals(1, actualRequests.size());
+    CloneDatabaseRequest actualRequest = ((CloneDatabaseRequest) actualRequests.get(0));
+
+    Assert.assertEquals(request.getParent(), actualRequest.getParent());
+    Assert.assertEquals(request.getDatabaseId(), actualRequest.getDatabaseId());
+    Assert.assertEquals(request.getPitrSnapshot(), actualRequest.getPitrSnapshot());
+    Assert.assertEquals(request.getEncryptionConfig(), actualRequest.getEncryptionConfig());
+    Assert.assertEquals(request.getTagsMap(), actualRequest.getTagsMap());
+    Assert.assertTrue(
+        channelProvider.isHeaderSent(
+            ApiClientHeaderProvider.getDefaultApiClientHeaderKey(),
+            GaxGrpcProperties.getDefaultApiClientHeaderPattern()));
+  }
+
+  @Test
+  public void cloneDatabaseExceptionTest() throws Exception {
+    StatusRuntimeException exception = new StatusRuntimeException(io.grpc.Status.INVALID_ARGUMENT);
+    mockFirestoreAdmin.addException(exception);
+
+    try {
+      CloneDatabaseRequest request =
+          CloneDatabaseRequest.newBuilder()
+              .setParent(ProjectName.of("[PROJECT]").toString())
+              .setDatabaseId("databaseId1688905718")
+              .setPitrSnapshot(PitrSnapshot.newBuilder().build())
+              .setEncryptionConfig(Database.EncryptionConfig.newBuilder().build())
+              .putAllTags(new HashMap<String, String>())
+              .build();
+      client.cloneDatabaseAsync(request).get();
+      Assert.fail("No exception raised");
+    } catch (ExecutionException e) {
+      Assert.assertEquals(InvalidArgumentException.class, e.getCause().getClass());
+      InvalidArgumentException apiException = ((InvalidArgumentException) e.getCause());
+      Assert.assertEquals(StatusCode.Code.INVALID_ARGUMENT, apiException.getStatusCode().getCode());
     }
   }
 }

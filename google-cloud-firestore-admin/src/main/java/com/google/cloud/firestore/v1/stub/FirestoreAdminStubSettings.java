@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiCallContext;
 import com.google.api.gax.rpc.ApiClientHeaderProvider;
 import com.google.api.gax.rpc.ClientContext;
+import com.google.api.gax.rpc.LibraryMetadata;
 import com.google.api.gax.rpc.OperationCallSettings;
 import com.google.api.gax.rpc.PageContext;
 import com.google.api.gax.rpc.PagedCallSettings;
@@ -58,6 +59,8 @@ import com.google.firestore.admin.v1.BackupSchedule;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CloneDatabaseMetadata;
+import com.google.firestore.admin.v1.CloneDatabaseRequest;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
@@ -161,8 +164,8 @@ import javax.annotation.Generated;
  * }</pre>
  *
  * Please refer to the [Client Side Retry
- * Guide](https://github.com/googleapis/google-cloud-java/blob/main/docs/client_retries.md) for
- * additional support in setting retries.
+ * Guide](https://docs.cloud.google.com/java/docs/client-retries) for additional support in setting
+ * retries.
  *
  * <p>To configure the RetrySettings of a Long Running Operation method, create an
  * OperationTimedPollAlgorithm object and update the RPC's polling algorithm. For example, to
@@ -191,6 +194,7 @@ import javax.annotation.Generated;
  * }</pre>
  */
 @Generated("by gapic-generator-java")
+@SuppressWarnings("CanonicalDuration")
 public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubSettings> {
   /** The default scopes of the service. */
   private static final ImmutableList<String> DEFAULT_SERVICE_SCOPES =
@@ -259,6 +263,9 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
   private final UnaryCallSettings<UpdateBackupScheduleRequest, BackupSchedule>
       updateBackupScheduleSettings;
   private final UnaryCallSettings<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleSettings;
+  private final UnaryCallSettings<CloneDatabaseRequest, Operation> cloneDatabaseSettings;
+  private final OperationCallSettings<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationSettings;
 
   private static final PagedListDescriptor<ListIndexesRequest, ListIndexesResponse, Index>
       LIST_INDEXES_PAGE_STR_DESC =
@@ -578,6 +585,17 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     return deleteBackupScheduleSettings;
   }
 
+  /** Returns the object with the settings used for calls to cloneDatabase. */
+  public UnaryCallSettings<CloneDatabaseRequest, Operation> cloneDatabaseSettings() {
+    return cloneDatabaseSettings;
+  }
+
+  /** Returns the object with the settings used for calls to cloneDatabase. */
+  public OperationCallSettings<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationSettings() {
+    return cloneDatabaseOperationSettings;
+  }
+
   public FirestoreAdminStub createStub() throws IOException {
     if (getTransportChannelProvider()
         .getTransportName()
@@ -730,6 +748,17 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     listBackupSchedulesSettings = settingsBuilder.listBackupSchedulesSettings().build();
     updateBackupScheduleSettings = settingsBuilder.updateBackupScheduleSettings().build();
     deleteBackupScheduleSettings = settingsBuilder.deleteBackupScheduleSettings().build();
+    cloneDatabaseSettings = settingsBuilder.cloneDatabaseSettings().build();
+    cloneDatabaseOperationSettings = settingsBuilder.cloneDatabaseOperationSettings().build();
+  }
+
+  @Override
+  protected LibraryMetadata getLibraryMetadata() {
+    return LibraryMetadata.newBuilder()
+        .setArtifactName("com.google.cloud:google-cloud-firestore")
+        .setRepository("googleapis/java-firestore")
+        .setVersion(Version.VERSION)
+        .build();
   }
 
   /** Builder for FirestoreAdminStubSettings. */
@@ -814,6 +843,10 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
         updateBackupScheduleSettings;
     private final UnaryCallSettings.Builder<DeleteBackupScheduleRequest, Empty>
         deleteBackupScheduleSettings;
+    private final UnaryCallSettings.Builder<CloneDatabaseRequest, Operation> cloneDatabaseSettings;
+    private final OperationCallSettings.Builder<
+            CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+        cloneDatabaseOperationSettings;
     private static final ImmutableMap<String, ImmutableSet<StatusCode.Code>>
         RETRYABLE_CODE_DEFINITIONS;
 
@@ -919,6 +952,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       listBackupSchedulesSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       updateBackupScheduleSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
       deleteBackupScheduleSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      cloneDatabaseSettings = UnaryCallSettings.newUnaryCallSettingsBuilder();
+      cloneDatabaseOperationSettings = OperationCallSettings.newBuilder();
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
@@ -952,7 +987,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               getBackupScheduleSettings,
               listBackupSchedulesSettings,
               updateBackupScheduleSettings,
-              deleteBackupScheduleSettings);
+              deleteBackupScheduleSettings,
+              cloneDatabaseSettings);
       initDefaults(this);
     }
 
@@ -1000,6 +1036,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
       listBackupSchedulesSettings = settings.listBackupSchedulesSettings.toBuilder();
       updateBackupScheduleSettings = settings.updateBackupScheduleSettings.toBuilder();
       deleteBackupScheduleSettings = settings.deleteBackupScheduleSettings.toBuilder();
+      cloneDatabaseSettings = settings.cloneDatabaseSettings.toBuilder();
+      cloneDatabaseOperationSettings = settings.cloneDatabaseOperationSettings.toBuilder();
 
       unaryMethodSettingsBuilders =
           ImmutableList.<UnaryCallSettings.Builder<?, ?>>of(
@@ -1033,7 +1071,8 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               getBackupScheduleSettings,
               listBackupSchedulesSettings,
               updateBackupScheduleSettings,
-              deleteBackupScheduleSettings);
+              deleteBackupScheduleSettings,
+              cloneDatabaseSettings);
     }
 
     private static Builder createDefault() {
@@ -1215,6 +1254,11 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
           .deleteBackupScheduleSettings()
           .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_codes"))
           .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_params"));
+
+      builder
+          .cloneDatabaseSettings()
+          .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_2_codes"))
+          .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_2_params"));
 
       builder
           .createIndexOperationSettings()
@@ -1420,6 +1464,30 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
               ProtoOperationTransformers.ResponseTransformer.create(Database.class))
           .setMetadataTransformer(
               ProtoOperationTransformers.MetadataTransformer.create(RestoreDatabaseMetadata.class))
+          .setPollingAlgorithm(
+              OperationTimedPollAlgorithm.create(
+                  RetrySettings.newBuilder()
+                      .setInitialRetryDelayDuration(Duration.ofMillis(5000L))
+                      .setRetryDelayMultiplier(1.5)
+                      .setMaxRetryDelayDuration(Duration.ofMillis(45000L))
+                      .setInitialRpcTimeoutDuration(Duration.ZERO)
+                      .setRpcTimeoutMultiplier(1.0)
+                      .setMaxRpcTimeoutDuration(Duration.ZERO)
+                      .setTotalTimeoutDuration(Duration.ofMillis(300000L))
+                      .build()));
+
+      builder
+          .cloneDatabaseOperationSettings()
+          .setInitialCallSettings(
+              UnaryCallSettings
+                  .<CloneDatabaseRequest, OperationSnapshot>newUnaryCallSettingsBuilder()
+                  .setRetryableCodes(RETRYABLE_CODE_DEFINITIONS.get("no_retry_2_codes"))
+                  .setRetrySettings(RETRY_PARAM_DEFINITIONS.get("no_retry_2_params"))
+                  .build())
+          .setResponseTransformer(
+              ProtoOperationTransformers.ResponseTransformer.create(Database.class))
+          .setMetadataTransformer(
+              ProtoOperationTransformers.MetadataTransformer.create(CloneDatabaseMetadata.class))
           .setPollingAlgorithm(
               OperationTimedPollAlgorithm.create(
                   RetrySettings.newBuilder()
@@ -1673,6 +1741,17 @@ public class FirestoreAdminStubSettings extends StubSettings<FirestoreAdminStubS
     public UnaryCallSettings.Builder<DeleteBackupScheduleRequest, Empty>
         deleteBackupScheduleSettings() {
       return deleteBackupScheduleSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to cloneDatabase. */
+    public UnaryCallSettings.Builder<CloneDatabaseRequest, Operation> cloneDatabaseSettings() {
+      return cloneDatabaseSettings;
+    }
+
+    /** Returns the builder for the settings used for calls to cloneDatabase. */
+    public OperationCallSettings.Builder<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+        cloneDatabaseOperationSettings() {
+      return cloneDatabaseOperationSettings;
     }
 
     @Override
