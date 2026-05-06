@@ -27,6 +27,7 @@ import com.google.api.gax.rpc.ServerStreamingCallable;
 import com.google.api.gax.rpc.StatusCode;
 import com.google.api.gax.rpc.StreamController;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.pipeline.expressions.AliasedAggregate;
 import com.google.cloud.firestore.telemetry.MetricsUtil.MetricsContext;
 import com.google.cloud.firestore.telemetry.TelemetryConstants;
 import com.google.cloud.firestore.telemetry.TelemetryConstants.MetricType;
@@ -82,6 +83,14 @@ public class AggregateQuery {
   @Nonnull
   public Query getQuery() {
     return query;
+  }
+
+  Pipeline pipeline() {
+    Pipeline pipeline = getQuery().pipeline();
+    return pipeline.aggregate(
+        this.aggregateFieldList.stream()
+            .map(PipelineUtils::toPipelineAggregatorTarget)
+            .toArray(AliasedAggregate[]::new));
   }
 
   /**

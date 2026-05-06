@@ -50,6 +50,8 @@ import com.google.firestore.v1.BeginTransactionResponse;
 import com.google.firestore.v1.CommitRequest;
 import com.google.firestore.v1.CommitResponse;
 import com.google.firestore.v1.DatabaseRootName;
+import com.google.firestore.v1.ExecutePipelineRequest;
+import com.google.firestore.v1.ExecutePipelineResponse;
 import com.google.firestore.v1.ListCollectionIdsRequest;
 import com.google.firestore.v1.ListDocumentsRequest;
 import com.google.firestore.v1.ListenRequest;
@@ -146,6 +148,7 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
         firestoreBuilder.runQuerySettings().retrySettings().setMaxAttempts(5);
         firestoreBuilder.runAggregationQuerySettings().retrySettings().setMaxAttempts(5);
         firestoreBuilder.batchGetDocumentsSettings().retrySettings().setMaxAttempts(5);
+        firestoreBuilder.executePipelineSettings().retrySettings().setMaxAttempts(5);
       } else {
         firestoreBuilder.applyToAllUnaryMethods(
             builder -> {
@@ -156,6 +159,7 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
         firestoreBuilder.runQuerySettings().setRetrySettings(retrySettings);
         firestoreBuilder.runAggregationQuerySettings().setRetrySettings(retrySettings);
         firestoreBuilder.batchGetDocumentsSettings().setRetrySettings(retrySettings);
+        firestoreBuilder.executePipelineSettings().setRetrySettings(retrySettings);
       }
 
       ApiTracerFactory apiTracerFactory = options.getApiTracerFactory();
@@ -234,6 +238,12 @@ public class GrpcFirestoreRpc implements FirestoreRpc {
   @Override
   public ServerStreamingCallable<RunQueryRequest, RunQueryResponse> runQueryCallable() {
     return firestoreStub.runQueryCallable();
+  }
+
+  @Override
+  public ServerStreamingCallable<ExecutePipelineRequest, ExecutePipelineResponse>
+      executePipelineCallable() {
+    return firestoreStub.executePipelineCallable();
   }
 
   @Override

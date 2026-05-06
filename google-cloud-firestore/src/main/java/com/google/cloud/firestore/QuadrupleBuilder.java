@@ -38,6 +38,7 @@ public class QuadrupleBuilder {
     q.parse(digits, exp10);
     return q;
   }
+
   // The fields containing the value of the instance
   public int exponent;
   public long mantHi;
@@ -425,6 +426,7 @@ public class QuadrupleBuilder {
     }
     return expCorr;
   }
+
   // Divides the unpacked value stored in the given buffer by 10
   // @param buffer contains the unpacked value to divide (32 least significant bits are used)
   private void divBuffBy10(long[] buffer) {
@@ -438,6 +440,7 @@ public class QuadrupleBuilder {
       }
     }
   }
+
   // Checks if the buffer is empty (contains nothing but zeros)
   // @param buffer the buffer to check
   // @return {@code true} if the buffer is empty, {@code false} otherwise
@@ -449,6 +452,7 @@ public class QuadrupleBuilder {
     }
     return true;
   }
+
   // Adds one to a decimal number represented as a sequence of decimal digits. propagates carry as
   // needed, so that {@code addCarryTo("6789") = "6790", addCarryTo("9999") = "10000"} etc.
   // @return 1 if an additional higher "1" was added in front of the number as a result of
@@ -466,6 +470,7 @@ public class QuadrupleBuilder {
     digits[0] = 1;
     return 1;
   }
+
   // Finds binary exponent, using decimal exponent and mantissa.<br>
   // exp2 = exp10 * log<sub>2</sub>(10) + log<sub>2</sub>(mant)<br>
   // @param exp10 decimal exponent
@@ -479,6 +484,7 @@ public class QuadrupleBuilder {
     double mant10d = ((double) (mant10)) / TWO_POW_63_DIV_10;
     return ((long) Math.floor(((double) (exp10)) * LOG2_10 + log2(mant10d))); // Binary exponent
   }
+
   // Calculates log<sub>2</sub> of the given x
   // @param x argument that can't be 0
   // @return the value of log<sub>2</sub>(x)
@@ -517,6 +523,7 @@ public class QuadrupleBuilder {
       this.mantLo = ((product[2] << 32L) + product[3]);
     }
   }
+
   // Calculates the required power and returns the result in the quasidecimal format (an array of
   // longs, where result[0] is the decimal exponent of the resulting value, and result[1] --
   // result[3] contain 192 bits of the mantissa divided by ten (so that 8 looks like
@@ -557,12 +564,14 @@ public class QuadrupleBuilder {
       currPowOf2 = currPowOf2 * 0.5; // Note: this is exact
     }
   }
+
   // Copies from into to.
   private void array_copy(long[] source, long[] dest) {
     for (int i = (0); i < ((dest).length); i++) {
       dest[i] = source[i];
     }
   }
+
   // Multiplies two quasidecimal numbers contained in buffers of 3 x 64 bits with exponents, puts
   // the product to <b><i>buffer4x64B</i></b><br>
   // and returns it. Both each of the buffers and the product contain 4 longs - exponent and 3 x 64
@@ -576,6 +585,7 @@ public class QuadrupleBuilder {
     // result[0] is a signed int64 value stored in an uint64
     result[0] = factor1[0] + factor2[0] + ((long) (expCorr)); // product.exp = f1.exp + f2.exp
   }
+
   // Multiplies mantissas of two packed quasidecimal values (each is an array of 4 longs, exponent +
   // 3 x 64 bits of mantissa) Returns the product as unpacked buffer of 12 x 32 (12 x 32 bits of
   // product)
@@ -604,6 +614,7 @@ public class QuadrupleBuilder {
       result[i] &= LOWER_32_BITS;
     }
   }
+
   // Corrects possible underflow of the decimal mantissa, passed in in the {@code mantissa}, by
   // multiplying it by a power of ten. The corresponding value to adjust the decimal exponent is
   // returned as the result
@@ -617,6 +628,7 @@ public class QuadrupleBuilder {
     }
     return expCorr;
   }
+
   // Checks if the unpacked quasidecimal value held in the given buffer is less than one (in this
   // format, one is represented as { 0x1999_9999L, 0x9999_9999L, 0x9999_9999L,...}
   // @param buffer a buffer containing the value to check
@@ -644,6 +656,7 @@ public class QuadrupleBuilder {
     // and it can never reach this point in real life.
     return false; // Still Java requires the return statement here.
   }
+
   // Multiplies unpacked 192-bit value by a packed 192-bit factor <br>
   // uses static arrays <b><i>buffer6x32B</i></b>
   // @param factor1 a buffer containing unpacked quasidecimal mantissa (6 x 32 bits)
@@ -669,6 +682,7 @@ public class QuadrupleBuilder {
       product[i] &= LOWER_32_BITS;
     }
   }
+
   // Multiplies the unpacked value stored in the given buffer by 10
   // @param buffer contains the unpacked value to multiply (32 least significant bits are used)
   private void multBuffBy10(long[] buffer) {
@@ -680,6 +694,7 @@ public class QuadrupleBuilder {
       buffer[i + 1] &= LOWER_32_BITS;
     }
   }
+
   // Makes sure that the (unpacked) mantissa is normalized,
   // i.e. buff[0] contains 1 in bit 32 (the implied integer part) and higher 32 of mantissa in bits
   // 31..0,
@@ -696,6 +711,7 @@ public class QuadrupleBuilder {
     }
     return expCorr;
   }
+
   // Rounds up the contents of the unpacked buffer to 128 bits by adding unity one bit lower than
   // the lowest of these 128 bits. If carry propagates up to bit 33 of buff[0], shifts the buffer
   // rightwards to keep it normalized.
@@ -726,6 +742,7 @@ public class QuadrupleBuilder {
     }
     return 0;
   }
+
   // converts 192 most significant bits of the mantissa of a number from an unpacked quasidecimal
   // form (where 32 least significant bits only used) to a packed quasidecimal form (where buff[0]
   // contains the exponent and buff[1]..buff[3] contain 3 x 64 = 192 bits of mantissa)
@@ -738,6 +755,7 @@ public class QuadrupleBuilder {
     result[2] = (unpackedMant[2] << 32L) + unpackedMant[3];
     result[3] = (unpackedMant[4] << 32L) + unpackedMant[5];
   }
+
   // Unpacks the mantissa of a 192-bit quasidecimal (4 longs: exp10, mantHi, mantMid, mantLo) to a
   // buffer of 6 longs, where the least significant 32 bits of each long contains respective 32 bits
   // of the mantissa
@@ -751,6 +769,7 @@ public class QuadrupleBuilder {
     buff_6x32[4] = ((qd192[3]) >>> (32L));
     buff_6x32[5] = qd192[3] & LOWER_32_BITS;
   }
+
   // Divides the contents of the buffer by 2^exp2<br>
   // (shifts the buffer rightwards by exp2 if the exp2 is positive, and leftwards if it's negative),
   // keeping it unpacked (only lower 32 bits of each element are used, except the buff[0] whose
@@ -778,6 +797,7 @@ public class QuadrupleBuilder {
       buffer[maxIdx] = (buffer[maxIdx] << exp2Shift) & LOWER_32_BITS;
     }
   }
+
   // Adds the summand to the idx'th word of the unpacked value stored in the buffer
   // and propagates carry as necessary
   // @param buff the buffer to add the summand to

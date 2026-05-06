@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2026 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,8 @@ import com.google.firestore.admin.v1.BackupSchedule;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsMetadata;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsRequest;
 import com.google.firestore.admin.v1.BulkDeleteDocumentsResponse;
+import com.google.firestore.admin.v1.CloneDatabaseMetadata;
+import com.google.firestore.admin.v1.CloneDatabaseRequest;
 import com.google.firestore.admin.v1.CreateBackupScheduleRequest;
 import com.google.firestore.admin.v1.CreateDatabaseMetadata;
 import com.google.firestore.admin.v1.CreateDatabaseRequest;
@@ -140,8 +142,8 @@ import javax.annotation.Generated;
  * }</pre>
  *
  * Please refer to the [Client Side Retry
- * Guide](https://github.com/googleapis/google-cloud-java/blob/main/docs/client_retries.md) for
- * additional support in setting retries.
+ * Guide](https://docs.cloud.google.com/java/docs/client-retries) for additional support in setting
+ * retries.
  *
  * <p>To configure the RetrySettings of a Long Running Operation method, create an
  * OperationTimedPollAlgorithm object and update the RPC's polling algorithm. For example, to
@@ -386,6 +388,17 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
   /** Returns the object with the settings used for calls to deleteBackupSchedule. */
   public UnaryCallSettings<DeleteBackupScheduleRequest, Empty> deleteBackupScheduleSettings() {
     return ((FirestoreAdminStubSettings) getStubSettings()).deleteBackupScheduleSettings();
+  }
+
+  /** Returns the object with the settings used for calls to cloneDatabase. */
+  public UnaryCallSettings<CloneDatabaseRequest, Operation> cloneDatabaseSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).cloneDatabaseSettings();
+  }
+
+  /** Returns the object with the settings used for calls to cloneDatabase. */
+  public OperationCallSettings<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+      cloneDatabaseOperationSettings() {
+    return ((FirestoreAdminStubSettings) getStubSettings()).cloneDatabaseOperationSettings();
   }
 
   public static final FirestoreAdminSettings create(FirestoreAdminStubSettings stub)
@@ -723,6 +736,17 @@ public class FirestoreAdminSettings extends ClientSettings<FirestoreAdminSetting
     public UnaryCallSettings.Builder<DeleteBackupScheduleRequest, Empty>
         deleteBackupScheduleSettings() {
       return getStubSettingsBuilder().deleteBackupScheduleSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to cloneDatabase. */
+    public UnaryCallSettings.Builder<CloneDatabaseRequest, Operation> cloneDatabaseSettings() {
+      return getStubSettingsBuilder().cloneDatabaseSettings();
+    }
+
+    /** Returns the builder for the settings used for calls to cloneDatabase. */
+    public OperationCallSettings.Builder<CloneDatabaseRequest, Database, CloneDatabaseMetadata>
+        cloneDatabaseOperationSettings() {
+      return getStubSettingsBuilder().cloneDatabaseOperationSettings();
     }
 
     @Override
