@@ -987,7 +987,7 @@ public final class LocalFirestoreHelper {
     public Decimal128Value decimal128Value = new Decimal128Value("1.2e3");
     public BsonObjectId bsonObjectId = new BsonObjectId("507f191e810c19729de860eb");
     public BsonTimestamp bsonTimestamp = new BsonTimestamp(100, 10);
-    public BsonBinaryData bsonBinaryData = BsonBinaryData.fromBytes(127, new byte[] {1, 2, 3});
+    public Blob bsonBinaryData = Blob.createBsonBinary(127, new byte[] {1, 2, 3});
 
     @Override
     public boolean equals(Object o) {
@@ -1152,8 +1152,7 @@ public final class LocalFirestoreHelper {
     ALL_SUPPORTED_TYPES_MAP.put("decimal128Value", new Decimal128Value("1.2e3"));
     ALL_SUPPORTED_TYPES_MAP.put("bsonObjectId", new BsonObjectId("507f191e810c19729de860eb"));
     ALL_SUPPORTED_TYPES_MAP.put("bsonTimestamp", new BsonTimestamp(100, 10));
-    ALL_SUPPORTED_TYPES_MAP.put(
-        "bsonBinaryData", BsonBinaryData.fromBytes(127, new byte[] {1, 2, 3}));
+    ALL_SUPPORTED_TYPES_MAP.put("bsonBinaryData", Blob.createBsonBinary(127, new byte[] {1, 2, 3}));
     ALL_SUPPORTED_TYPES_PROTO =
         ImmutableMap.<String, Value>builder()
             .put("foo", Value.newBuilder().setStringValue("bar").build())

@@ -43,7 +43,6 @@ class Order implements Comparator<Value> {
     BSON_TIMESTAMP,
     STRING,
     BLOB,
-    BSON_BINARY,
     REF,
     BSON_OBJECT_ID,
     GEO_POINT,
@@ -100,7 +99,7 @@ class Order implements Comparator<Value> {
       case BSON_TIMESTAMP:
         return TypeOrder.BSON_TIMESTAMP;
       case BSON_BINARY_DATA:
-        return TypeOrder.BSON_BINARY;
+        return TypeOrder.BLOB;
       case UNKNOWN:
       case NONE:
       default:
@@ -160,8 +159,7 @@ class Order implements Comparator<Value> {
         return compareBsonObjectId(left, right);
       case BSON_TIMESTAMP:
         return compareBsonTimestamp(left, right);
-      case BSON_BINARY:
-        return compareBsonBinary(left, right);
+
       default:
         throw new IllegalArgumentException("Cannot compare " + leftType);
     }
@@ -226,9 +224,23 @@ class Order implements Comparator<Value> {
   }
 
   private int compareBlobs(Value left, Value right) {
-    ByteString leftBytes = left.getBytesValue();
-    ByteString rightBytes = right.getBytesValue();
+    ByteString leftBytes = getEffectiveBytes(left);
+    ByteString rightBytes = getEffectiveBytes(right);
     return compareByteStrings(leftBytes, rightBytes);
+  }
+
+  private static ByteString getEffectiveBytes(Value value) {
+    if (value.hasBytesValue()) {
+      return ByteString.copyFrom(new byte[] {0}).concat(value.getBytesValue());
+    }
+    if (value.hasMapValue() && UserDataConverter.isBsonBinaryData(value.getMapValue())) {
+      return value
+          .getMapValue()
+          .getFieldsMap()
+          .get(MapType.RESERVED_BSON_BINARY_KEY)
+          .getBytesValue();
+    }
+    throw new IllegalArgumentException("Cannot get effective bytes for non-blob value: " + value);
   }
 
   static int compareByteStrings(ByteString leftBytes, ByteString rightBytes) {
@@ -410,14 +422,6 @@ class Order implements Comparator<Value> {
     BsonTimestamp rhs = UserDataConverter.decodeBsonTimestamp(right.getMapValue());
     int secondsDiff = Long.compare(lhs.seconds, rhs.seconds);
     return secondsDiff != 0 ? secondsDiff : Long.compare(lhs.increment, rhs.increment);
-  }
-
-  private int compareBsonBinary(Value left, Value right) {
-    ByteString lhs =
-        left.getMapValue().getFieldsMap().get(MapType.RESERVED_BSON_BINARY_KEY).getBytesValue();
-    ByteString rhs =
-        right.getMapValue().getFieldsMap().get(MapType.RESERVED_BSON_BINARY_KEY).getBytesValue();
-    return compareByteStrings(lhs, rhs);
   }
 
   private boolean isNaN(Value value) {
