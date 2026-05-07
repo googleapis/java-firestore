@@ -46,7 +46,6 @@ import com.google.api.core.SettableApiFuture;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ApiStreamObserver;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.Blob;
 import com.google.cloud.firestore.BsonBinaryData;
 import com.google.cloud.firestore.BsonObjectId;
 import com.google.cloud.firestore.BsonTimestamp;
@@ -2591,7 +2590,8 @@ public class ITSystemTest extends ITBaseTest {
     try {
       randomColl
           .document()
-          .set(Collections.singletonMap("key", BsonBinaryData.fromBytes(1234, new byte[] {1, 2, 3})))
+          .set(
+              Collections.singletonMap("key", BsonBinaryData.fromBytes(1234, new byte[] {1, 2, 3})))
           .get();
     } catch (Exception e) {
       error = e;
