@@ -1,3 +1,5 @@
+**_THIS REPOSITORY IS DEPRECATED. ALL OF ITS CONTENT AND HISTORY HAS BEEN MOVED TO [GOOGLE-CLOUD-JAVA](https://github.com/googleapis/google-cloud-java/tree/main/java-firestore)_**
+
 # Google Cloud Firestore Client for Java
 
 Java idiomatic client for [Cloud Firestore][product-docs].
